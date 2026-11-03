@@ -1,0 +1,19 @@
+{
+  "title": "The 5000-1 miracle (Leicester 2015/16)",
+  "theme": { "accent": "#2f7dff", "accent2": "#ffd400" },
+  "scenes": [
+    { "type": "story", "big": "5000-1", "bigLabel": "The odds", "audio": "../audio/leicester/01.mp3",
+      "text": "Before the season, the bookies gave them *5000 to 1.* Nobody believed in them." },
+    { "type": "story", "tag": "April 2015", "big": "BOTTOM", "bigLabel": "of the Premier League", "audio": "../audio/leicester/02.mp3",
+      "text": "Just one year before, Leicester City were *dead last* and fighting relegation." },
+    { "type": "story", "tag": "The squad", "big": "£1M", "bigLabel": "Jamie Vardy from Fleetwood Town", "audio": "../audio/leicester/03.mp3",
+      "text": "Their striker came from *non-league football.* Their best midfielder cost about *5 million.*" },
+    { "type": "story", "count": 11, "bigLabel": "games in a row with a goal", "audio": "../audio/leicester/04.mp3",
+      "text": "Then *Jamie Vardy* scored in *eleven straight* Premier League games. A new record." },
+    { "type": "story", "count": 10, "suffix": " PTS", "bigLabel": "clear at the top", "audio": "../audio/leicester/05.mp3",
+      "text": "And in May 2016, Leicester were *champions of England.* Ten points clear." },
+    { "type": "story", "big": "?", "bigLabel": "Will we ever see this again", "audio": "../audio/leicester/06.mp3",
+      "text": "The biggest *miracle* in football history. Could it *ever* happen again?" },
+    { "type": "cta", "title": "MORE|*FOOTBALL STORIES*", "sub": "Follow for Part 2 👇" }
+  ]
+}

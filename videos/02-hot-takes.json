@@ -1,0 +1,11 @@
+{
+  "title": "Hot takes that will get me cancelled",
+  "theme": { "accent": "#ff5a1f", "accent2": "#ffd400" },
+  "scenes": [
+    { "type": "hook", "kicker": "🔥 Part 1", "title": "HOT TAKES|THAT WILL GET|ME *CANCELLED*", "sub": "Agree or disagree?" },
+    { "type": "poll", "label": "Hot take #1", "statement": "Prime *Ronaldinho* was MORE FUN to watch than prime *Messi*" },
+    { "type": "poll", "label": "Hot take #2", "statement": "The *Premier League* is NOT the best league in the world" },
+    { "type": "poll", "label": "Hot take #3", "statement": "*Peak Kaká* belongs in the all-time top 10" },
+    { "type": "cta", "title": "SEND ME|*YOUR* TAKE", "sub": "Best comment = next video 👇" }
+  ]
+}

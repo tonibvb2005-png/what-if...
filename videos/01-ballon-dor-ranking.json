@@ -1,0 +1,18 @@
+{
+  "title": "Most Ballon d'Or wins ever",
+  "theme": { "accent": "#ffc61a", "accent2": "#ff7a00" },
+  "scenes": [
+    { "type": "hook", "kicker": "Ranking", "title": "MOST|*BALLON D'OR*|WINS EVER", "sub": "#1 is *untouchable*" },
+    { "type": "rank", "rank": 3, "tag": "3-time club", "entries": [
+        { "name": "Johan Cruyff", "meta": "1971 · 1973 · 1974" },
+        { "name": "Michel Platini", "meta": "1983 · 1984 · 1985" },
+        { "name": "Marco van Basten", "meta": "1988 · 1989 · 1992" } ],
+      "value": 3, "unit": "Ballon d'Ors each", "icons": true },
+    { "type": "rank", "rank": 2, "name": "Cristiano Ronaldo", "meta": "2008 · 2013 · 2014 · 2016 · 2017",
+      "value": 5, "unit": "Ballon d'Ors", "icons": true, "accent": "#ff3b5c" },
+    { "type": "hook", "title": "AND #1 IS...", "sub": "Nobody will *ever* catch him", "duration": 2.2 },
+    { "type": "rank", "rank": 1, "name": "Lionel *Messi*", "meta": "2009–12 · 2015 · 2019 · 2021 · 2023",
+      "value": 8, "unit": "Ballon d'Ors", "icons": true, "accent": "#4fc3ff", "duration": 5 },
+    { "type": "cta", "title": "WHO DESERVED|*MORE*?", "button": "FOLLOW", "sub": "Comment your pick 👇" }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "title": "Guess the player by his career - Ep. 1",
+  "theme": { "accent": "#00e58f", "accent2": "#7c4dff" },
+  "scenes": [
+    { "type": "quiz", "title": "GUESS THE *PLAYER*", "chip": "Episode 1 · Hard", "countdown": 5, "stagger": 0.45,
+      "clubs": [
+        { "club": "Malmö FF", "years": "1999–01" },
+        { "club": "Ajax", "years": "2001–04" },
+        { "club": "Juventus", "years": "2004–06" },
+        { "club": "Inter", "years": "2006–09" },
+        { "club": "Barcelona", "years": "2009–11" },
+        { "club": "AC Milan", "years": "2010–12" },
+        { "club": "PSG", "years": "2012–16" },
+        { "club": "Man United", "years": "2016–18" },
+        { "club": "LA Galaxy", "years": "2018–19" },
+        { "club": "AC Milan", "years": "2020–23" } ] },
+    { "type": "reveal", "kicker": "It's...", "name": "ZLATAN|*IBRAHIMOVIĆ*", "sub": "Did you get it? Comment *your time* 👇" },
+    { "type": "cta", "title": "EPISODE 2|*TOMORROW*", "sub": "@footballpage.tv" }
+  ]
+}
