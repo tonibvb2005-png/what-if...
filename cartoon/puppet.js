@@ -224,15 +224,16 @@ window.Puppet = (function () {
       ctx.beginPath(); ctx.moveTo(mx - w, my + lY); ctx.quadraticCurveTo(mx, my + c * 26 + wob, mx + w, my + rY);
       ctx.lineCap = 'round'; stroke(ctx, 7, OUT);
     } else {
-      ctx.beginPath(); ctx.moveTo(mx - w, my + lY);
-      ctx.quadraticCurveTo(mx, my + c * 10 - o * 14 + wob, mx + w, my + rY);
-      ctx.quadraticCurveTo(mx, my + c * 26 + o * 78 - wob, mx - w, my + lY); ctx.closePath();
-      ctx.fillStyle = '#5a0d24'; ctx.fill();
-      ctx.save(); ctx.clip();
+      // keep the mouth shape in its own path so the outline always follows it
+      const mp = new Path2D(); mp.moveTo(mx - w, my + lY);
+      mp.quadraticCurveTo(mx, my + c * 10 - o * 14 + wob, mx + w, my + rY);
+      mp.quadraticCurveTo(mx, my + c * 26 + o * 78 - wob, mx - w, my + lY); mp.closePath();
+      ctx.fillStyle = '#5a0d24'; ctx.fill(mp);
+      ctx.save(); ctx.clip(mp);
       if (e.tongue > .05) ellipse(ctx, mx, my + c * 18 + o * 50, w * .6, 22 * e.tongue, '#ff6b8a', 0);
       if (e.teeth > .05) { ctx.fillStyle = '#fff'; ctx.fillRect(mx - w, my - 40, w * 2, 40 + c * 6 - o * 6 + 16 * e.teeth); }
       ctx.restore();
-      ctx.lineJoin = 'round'; stroke(ctx, 7, OUT);
+      ctx.lineJoin = 'round'; ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke(mp);
     }
     if (ch.mustache) {
       ctx.beginPath(); ctx.moveTo(mx, my - 18); ctx.quadraticCurveTo(mx - 30, my - 34, mx - 56, my - 8); ctx.quadraticCurveTo(mx - 30, my - 14, mx, my - 6);
