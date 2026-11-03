@@ -35,7 +35,7 @@ Direction: noticeably quieter and slower, as if telling a secret, with a smile i
 ### 05 – Ranieri (dry, ironic)
 Direction: read "Claudio Ranieri? Really?" as a sceptical quote, stretching "Really" a little.
 ```
-The new manager? Claudio Ranieri. [sarcastic] Even Gary Lineker tweets: "Claudio Ranieri? ...Really?"
+The new manager? Claudio Ranieri. [sarcastic] Even Gary Linneker tweets: "Claudio Ranieri? ...Really?"
 ```
 
 ### 06 – Vardy (getting faster, rising excitement)
@@ -91,4 +91,4 @@ Direction: relaxed, inviting, with a smile in the voice.
 **Tips**
 - If a line sounds wrong, generate it 2–3 times and pick the best take. Eleven v3 varies quite a lot.
 - If the [pause] tags don't work in your model: three dots `...` also create a short pause, and a full stop plus a new sentence creates a longer one.
-- "Lineker" is pronounced *LIN-uh-ker*. If the voice gets it wrong, write `Linneker`.
+- "Lineker" is already written as `Linneker` so the voice pronounces it correctly.
