@@ -28,34 +28,32 @@
   }
   function drawBookiesBack(t, fx) {
     if (fx.hideSign) return;
-    // odds board hanging above the counter
-    const x = -330, y = 730, sw = 600, sh = 230;
-    ctx.strokeStyle = OUT; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(x - 200, y - sh / 2); ctx.lineTo(x - 200, y - 400); ctx.moveTo(x + 200, y - sh / 2); ctx.lineTo(x + 200, y - 400); ctx.stroke();
-    ctx.beginPath(); ctx.roundRect(x - sw / 2, y - sh / 2, sw, sh, 30); ctx.fillStyle = '#1a0b3d'; ctx.fill();
-    ctx.shadowColor = '#ff4fd8'; ctx.shadowBlur = 40; ctx.lineWidth = 10; ctx.strokeStyle = '#ff6fe0'; ctx.stroke(); ctx.shadowBlur = 0;
-    ctx.lineWidth = 6; ctx.strokeStyle = OUT; ctx.beginPath(); ctx.roundRect(x - sw / 2 - 8, y - sh / 2 - 8, sw + 16, sh + 16, 36); ctx.stroke();
-    neonText('LEICESTER TO WIN THE LEAGUE', x, y - 70, 34, '#ffffff', '#39d0ff', t);
+    const x = -330, y = 730, sw = 560, sh = 220;
+    ctx.strokeStyle = OUT; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(x - 190, y - sh / 2); ctx.lineTo(x - 190, y - 420); ctx.moveTo(x + 190, y - sh / 2); ctx.lineTo(x + 190, y - 420); ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(x - sw / 2, y - sh / 2, sw, sh, 18); ctx.fillStyle = '#1c2238'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(x - sw / 2 + 16, y - sh / 2 + 16, sw - 32, sh - 32, 10); ctx.lineWidth = 5; ctx.strokeStyle = '#e0b84a'; ctx.stroke();
+    txt('TITLE ODDS 2015/16', x, y - 64, 28, '#e0b84a', 800);
+    txt('LEICESTER CITY', x, y - 26, 40, '#ffffff', 900);
     const pulse = fx.signPulse != null ? Math.sin(P(fx.lt, fx.signPulse, fx.signPulse + .6) * Math.PI) : 0;
-    const flick = .85 + .15 * Math.sin(t * 23) * Math.sin(t * 7);
-    ctx.save(); ctx.translate(x, y + 30); ctx.scale(1 + pulse * .25, 1 + pulse * .25);
-    ctx.globalAlpha = flick; neonText('5000/1', 0, 0, 120, '#ffd400', '#ff7a00', t); ctx.globalAlpha = 1; ctx.restore();
+    ctx.save(); ctx.translate(x, y + 48); ctx.scale(1 + pulse * .2, 1 + pulse * .2);
+    txt('5000 / 1', 0, 0, 92, '#ff5a4f', 900); ctx.restore();
   }
   function drawCounter() {
     const x0 = -620, x1 = -60, top = 1130;
-    ctx.beginPath(); ctx.roundRect(x0, top + 30, x1 - x0, GROUND - top - 10, 18); ctx.fillStyle = '#7b3ff2'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke();
-    ctx.fillStyle = 'rgba(255,255,255,.12)'; for (let i = 0; i < 4; i++) ctx.fillRect(x0 + 30 + i * 135, top + 70, 100, 170);
-    ctx.beginPath(); ctx.roundRect(x0 - 30, top, x1 - x0 + 60, 44, 14); ctx.fillStyle = '#ffb02e'; ctx.fill(); ctx.stroke();
-    ctx.font = '900 64px Inter Display'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.lineWidth = 10; ctx.strokeStyle = OUT;
-    ctx.strokeText('BETS', (x0 + x1) / 2, top + 160); ctx.fillStyle = '#ffd400'; ctx.fillText('BETS', (x0 + x1) / 2, top + 160);
+    ctx.lineWidth = 7; ctx.strokeStyle = OUT;
+    ctx.beginPath(); ctx.roundRect(x0, top + 30, x1 - x0, GROUND - top - 10, 14); ctx.fillStyle = '#9a6238'; ctx.fill(); ctx.stroke();
+    ctx.lineWidth = 5;
+    for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.roundRect(x0 + 30 + i * 172, top + 70, 150, 170, 10); ctx.fillStyle = '#8a5530'; ctx.fill(); ctx.stroke(); }
+    ctx.lineWidth = 7;
+    ctx.beginPath(); ctx.roundRect(x0 - 30, top, x1 - x0 + 60, 44, 12); ctx.fillStyle = '#c07e4a'; ctx.fill(); ctx.stroke();
   }
   function drawSofa() {
     const x0 = -470, x1 = 470;
     ctx.lineWidth = 7; ctx.strokeStyle = OUT;
-    ctx.beginPath(); ctx.roundRect(x0 + 30, 1010, x1 - x0 - 60, 220, 50); ctx.fillStyle = '#ff8a3d'; ctx.fill(); ctx.stroke();
-    ctx.beginPath(); ctx.roundRect(x0, 1170, x1 - x0, 170, 40); ctx.fillStyle = '#ff9f5a'; ctx.fill(); ctx.stroke();
-    ctx.beginPath(); ctx.roundRect(x0 - 40, 1100, 110, 260, 40); ctx.fillStyle = '#ff7a2a'; ctx.fill(); ctx.stroke();
-    ctx.beginPath(); ctx.roundRect(x1 - 70, 1100, 110, 260, 40); ctx.fillStyle = '#ff7a2a'; ctx.fill(); ctx.stroke();
-    ctx.beginPath(); ctx.ellipse(0, GROUND + 10, 640, 60, 0, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,.12)'; ctx.fill();
+    ctx.beginPath(); ctx.roundRect(x0 + 30, 1010, x1 - x0 - 60, 220, 50); ctx.fillStyle = '#34539a'; ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(x0, 1170, x1 - x0, 170, 40); ctx.fillStyle = '#3f62ad'; ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(x0 - 40, 1100, 110, 260, 40); ctx.fillStyle = '#2d4886'; ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(x1 - 70, 1100, 110, 260, 40); ctx.fillStyle = '#2d4886'; ctx.fill(); ctx.stroke();
   }
   const TVX = -1150, TVY = 880, TVW = 860, TVH = 520;
   function drawTV(t, card, lt, d) {
@@ -170,7 +168,8 @@
   const bookies = { bookie: { x: -330 }, hero: { x: 60 }, mike: { x: 1250 }, jay: { x: 1530 } };
   const SHOTS = {
     hook: {
-      set: 'bookies', theme: 'neon', cast: bookies, noCaption: true,
+      bright: 1,
+      set: 'bookies', cast: bookies, noCaption: true,
       title: ['WHAT IF YOU BET', '<span class="gold">£1,000</span>', 'ON LEICESTER?'], titleSize: [96, 200, 104], sub: 'Stay until the end 👀',
       fx: { hideSign: true }, cam: [[0, { x: 90, y: 1000, z: 1.35 }], [1, { x: 90, y: 1000, z: 1.45 }]],
       acts: {
@@ -179,7 +178,7 @@
       }
     },
     bet: {
-      set: 'bookies', theme: 'neon', cast: bookies, tag: 'AUGUST 2015', fx: { signPulse: .72 },
+      set: 'bookies', cast: bookies, tag: 'AUGUST 2015', fx: { signPulse: .72 },
       cam: [[0, BOOK], [1, { x: -120, y: 990, z: 1.22 }]],
       acts: {
         hero: [[0, { e: 'happy', m: { lookX: -1 }, propL: 'cash' }], [.2, { p: 'giveL' }], [.42, { p: 'idle', propL: null, e: 'confident', m: { lookX: -.6 } }], [.62, { p: 'giveL', propL: null }], [.75, { p: 'hips', propL: null, e: 'confident', m: { lookX: 0 } }]],
@@ -189,7 +188,7 @@
       propFix: { hero: [[.74, 'slip']] }
     },
     laugh: {
-      set: 'bookies', theme: 'neon', cast: bookies,
+      set: 'bookies', cast: bookies,
       cam: [[0, { x: -120, y: 990, z: 1.22 }], [.05, { x: -120, y: 990, z: 1.22 }], [.18, FR], [1, { x: 1390, y: 990, z: 1.38 }]],
       acts: {
         hero: [[0, { e: 'confident', p: 'hips', propL: 'slip' }]],
@@ -199,7 +198,7 @@
       }
     },
     confident: {
-      set: 'bookies', theme: 'neon', cast: bookies, fx: { hideSign: true },
+      set: 'bookies', cast: bookies, fx: { hideSign: true },
       cam: [[0, { x: 1390, y: 990, z: 1.38 }], [.08, { x: 1390, y: 990, z: 1.38 }], [.26, HERO_CU], [1, { x: 60, y: 1050, z: 1.85 }]],
       acts: {
         hero: [[0, { e: 'confident', p: 'hips', propL: 'slip', m: { lookX: 1 } }], [.3, { m: { lookX: 0 } }], [.55, { e: 'wink', p: 'thumbsUpR', handR: 'thumb', propL: 'slip' }]],
@@ -208,7 +207,8 @@
       }
     },
     ranieri: {
-      set: 'room', theme: 'fox', cast: room, tag: 'THE NEW MANAGER', card: 'ranieri',
+      bright: 1,
+      set: 'room', cast: room, tag: 'THE NEW MANAGER', card: 'ranieri',
       cam: [[0, TV], [.55, TV], [.66, G], [1, G2]],
       acts: {
         hero: [[0, { e: 'neutral', m: { lookX: -1 } }], [.66, { e: 'confident', p: 'crossed', m: { lookX: 0 } }]],
@@ -217,7 +217,7 @@
       }
     },
     vardy: {
-      set: 'room', theme: 'fox', cast: room, tag: 'NOVEMBER 2015', card: 'vardy',
+      set: 'room', cast: room, tag: 'NOVEMBER 2015', card: 'vardy',
       cam: [[0, TV], [.58, TV], [.68, G], [1, G2]],
       acts: {
         hero: [[0, { e: 'happy', m: { lookX: -1 } }], [.68, { e: 'ecstatic', p: 'fistPumpR', handR: 'fist', m: { jump: .45, lookX: 0 } }]],
@@ -226,7 +226,7 @@
       }
     },
     christmas: {
-      set: 'room', theme: 'xmas', cast: room, tag: 'CHRISTMAS 2015', card: 'table',
+      set: 'room', cast: room, tag: 'CHRISTMAS 2015', card: 'table',
       cam: [[0, TV], [.48, TV], [.58, G], [1, G2]],
       acts: {
         hero: [[0, { e: 'happy', hat: 'santa', m: { lookX: -1 } }], [.58, { e: 'ecstatic', p: 'cheer', m: { dance: 1, lookX: 0 } }]],
@@ -235,7 +235,8 @@
       }
     },
     city: {
-      set: 'room', theme: 'tension', cast: room, tag: 'FEBRUARY 2016', card: 'city',
+      bright: .86,
+      set: 'room', cast: room, tag: 'FEBRUARY 2016', card: 'city',
       cam: [[0, TV], [.5, TV], [.6, G], [1, G2]],
       acts: {
         hero: [[0, { e: 'happy', m: { lookX: -1 } }], [.6, { e: 'ecstatic', p: 'cheer', m: { jump: 1, lookX: 0 } }]],
@@ -244,7 +245,8 @@
       }
     },
     cashout: {
-      set: 'room', theme: 'tension', cast: { mike: { x: -240 }, hero: { x: 0 }, jay: { x: 240 } }, card: 'off', phone: true,
+      bright: .8,
+      set: 'room', cast: { mike: { x: -240 }, hero: { x: 0 }, jay: { x: 240 } }, card: 'off', phone: true,
       cam: [[0, G], [.25, { x: 0, y: 1030, z: 1.5 }], [.72, { x: 0, y: 1030, z: 1.5 }], [.86, G2], [1, G2]],
       acts: {
         hero: [[0, { e: 'surprised', p: 'phone', propR: 'phoneRing', m: { lookY: .6 } }], [.25, { e: 'focused', propR: 'phone' }], [.62, { e: 'confident', m: { no: 1, lookY: 0 } }], [.84, { e: 'wink', p: 'crossed', propR: null, m: { no: 0 } }]],
@@ -253,7 +255,8 @@
       }
     },
     chelsea: {
-      set: 'room', theme: 'tension', cast: room, tag: '2 MAY 2016', card: 'chelsea',
+      bright: .7,
+      set: 'room', cast: room, tag: '2 MAY 2016', card: 'chelsea',
       cam: [[0, TV], [.28, TV], [.38, G], [.62, { x: 0, y: 1010, z: 1.45 }], [.72, TV], [1, { x: TVX, y: 930, z: 1.2 }]],
       acts: {
         hero: [[0, { e: 'tense', p: 'pleading', m: { lookX: -1, tremble: .4 } }]],
@@ -262,7 +265,8 @@
       }
     },
     champions: {
-      set: 'room', theme: 'party', cast: room, card: 'champions', minDur: 4.6, shake: 1, flash: true,
+      bright: 1.12, conf: 1,
+      set: 'room', cast: room, card: 'champions', minDur: 4.6, shake: 1, flash: true,
       cam: [[0, { x: 0, y: 985, z: 1.35 }], [1, { x: 0, y: 985, z: 1.2 }]],
       acts: {
         hero: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: 1 } }]],
@@ -271,7 +275,8 @@
       }
     },
     payout: {
-      set: 'bookies', theme: 'gold', cast: { bookie: { x: -330 }, hero: { x: 60 }, mike: { x: 330 }, jay: { x: 580 } }, counter: true, captionTop: 640, fx: { hideSign: true },
+      bright: 1.06, conf: .7,
+      set: 'bookies', cast: { bookie: { x: -330 }, hero: { x: 60 }, mike: { x: 330 }, jay: { x: 580 } }, counter: true, captionTop: 640, fx: { hideSign: true },
       cam: [[0, { x: 110, y: 1010, z: .92 }], [1, { x: 110, y: 1000, z: .98 }]],
       acts: {
         bookie: [[0, { e: 'nervous', m: { lookX: 1, tremble: .6 } }], [.5, { e: 'despair', p: 'giveBagR', propR: 'bag' }], [.68, { p: 'idle', propR: null, e: 'despair' }]],
@@ -282,7 +287,8 @@
       rain: .7
     },
     cta: {
-      set: 'bookies', theme: 'party', cast: { bookie: { x: -330 }, hero: { x: 60 }, mike: { x: 330 }, jay: { x: 580 } }, noCaption: true, minDur: 4.5, fx: { hideSign: true },
+      bright: 1.08, conf: 1,
+      set: 'bookies', cast: { bookie: { x: -330 }, hero: { x: 60 }, mike: { x: 330 }, jay: { x: 580 } }, noCaption: true, minDur: 4.5, fx: { hideSign: true },
       title: ['WHAT WOULD YOU DO', 'WITH <span class="gold">£5,000,000</span>?'], titleSize: [84, 84], follow: 'FOLLOW FOR MORE WHAT IFs',
       cam: [[0, { x: 110, y: 1000, z: .98 }], [1, { x: 110, y: 1000, z: 1.03 }]],
       acts: {
@@ -392,9 +398,10 @@
     let cam = camAt(sh.cam, lt, d);
     const shake = sh.shake ? Math.max(0, 1 - lt / 1.5) * 14 : 0;
     // 3D world with theme crossfade
-    const pth = prev ? prev.sh.theme : sh.theme;
-    const mixv = eio(P(lt, 0, .8));
-    World3D.frame(t, cam, pth, sh.theme, prev ? mixv : 1, { pulse: sh.theme === 'party' ? 1 : 0, shake: shake * .02 });
+    const br = sh.bright != null ? sh.bright : 1;
+    const pbr = prev && prev.sh.set === sh.set ? (prev.sh.bright != null ? prev.sh.bright : 1) : br;
+    const conf = sh.conf ? (sh.conf < 1 ? P(lt, sh.conf * d, sh.conf * d + .4) : 1) : 0;
+    World3D.frame(t, { x: cam.x - Math.sin(t * 50) * shake * 0, y: cam.y, z: cam.z }, sh.set, { bright: lerp(pbr, br, eio(P(lt, 0, .8))), conf });
     // 2D
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, W, H);
     ctx.setTransform(cam.z, 0, 0, cam.z, W / 2 - cam.x * cam.z + Math.sin(t * 50) * shake, H / 2 - cam.y * cam.z + Math.cos(t * 43) * shake);
@@ -414,7 +421,7 @@
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     const rain = sh.rain != null ? (sh.rain > 0 ? P(lt, sh.rain * d, sh.rain * d + .3) : 1) : 0;
     moneyRain(t, rain);
-    if (sh.flash) { const a = 1 - P(lt, 0, .5); if (a > 0) { ctx.fillStyle = `rgba(255,255,255,${a})`; ctx.fillRect(0, 0, W, H); } }
+    if (sh.flash) { const a = .85 * (1 - P(lt, 0, .3)); if (a > 0) { ctx.fillStyle = `rgba(255,255,255,${a})`; ctx.fillRect(0, 0, W, H); } }
     // iris wipe between sets
     let iris = 1;
     if (next && next.sh.set !== sh.set) iris = Math.min(iris, 1 - eio(P(lt, d - .3, d)));
