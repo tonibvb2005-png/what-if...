@@ -91,7 +91,7 @@ for (const s of spec.scenes) {
       parts.push('[fx][vb]sidechaincompress=threshold=0.015:ratio=8:attack=15:release=350[fxd]');
       parts.push('[va][fxd]amix=inputs=2:normalize=0:duration=longest,loudnorm=I=-14:TP=-1.5:LRA=11,aresample=44100,apad[aout]');
     } else {
-      parts.push(`[${vs.length ? 'vo' : 'fx'}]alimiter=limit=0.95,apad[aout]`);
+      parts.push(vs.length ? '[vo]loudnorm=I=-14:TP=-1.5:LRA=11,aresample=44100,apad[aout]' : '[fx]loudnorm=I=-20:TP=-3:LRA=15,aresample=44100,apad[aout]');
     }
     execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', silent, ...inputs, '-filter_complex', parts.join(';'), '-map', '0:v', '-map', '[aout]',
       '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-t', total.toFixed(3), '-movflags', '+faststart', out]);
