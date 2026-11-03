@@ -1,0 +1,50 @@
+{
+  "title": "Guess the player – Hard mode (3 players)",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "scenes": [
+    { "shot": "qhook", "players": [
+      { "skin": "#e8b08a", "shirt": "#12a0d7", "hair": "short", "stubble": true },
+      { "skin": "#8a5a3c", "shirt": "#d81e2c", "hair": "buzz" },
+      { "skin": "#5e3a24", "shirt": "#1a4fc0", "hair": "bald" } ] },
+
+    { "shot": "qboard", "num": 1, "countdown": 5, "clubs": [
+      { "club": "RIVER PLATE", "year": 2005, "t": "RP", "c1": "#ffffff", "c2": "#e2231a", "p": "sash" },
+      { "club": "REAL MADRID", "year": 2007, "t": "RM", "c1": "#ffffff", "c2": "#e0b84a", "p": "chief", "tc": "#e0b84a" },
+      { "club": "NAPOLI", "year": 2013, "t": "N", "c1": "#12a0d7", "c2": "#ffffff", "p": "plain" },
+      { "club": "JUVENTUS", "year": 2016, "t": "J", "c1": "#ffffff", "c2": "#111111", "p": "stripes", "tc": "#e0b84a" },
+      { "club": "AC MILAN", "year": 2018, "t": "ACM", "c1": "#d81e2c", "c2": "#111111", "p": "stripes", "loan": true },
+      { "club": "CHELSEA", "year": 2019, "t": "CFC", "c1": "#1a4fc0", "c2": "#ffffff", "p": "plain", "loan": true },
+      { "club": "JUVENTUS", "year": 2019, "t": "J", "c1": "#ffffff", "c2": "#111111", "p": "stripes", "tc": "#e0b84a" },
+      { "club": "INTER MIAMI", "year": 2020, "t": "IM", "c1": "#f7b5cd", "c2": "#231f20", "p": "half" } ] },
+    { "shot": "qreveal", "player": { "name": "GONZALO|HIGUAÍN", "fact": "36 Serie A goals in one season (2015/16)",
+      "look": { "skin": "#e8b08a", "shirt": "#12a0d7", "trim": "#ffffff", "number": "9", "hair": "short", "hairColor": "#2a1a10", "stubble": true, "pants": "#ffffff" } } },
+
+    { "shot": "qboard", "num": 2, "countdown": 5, "clubs": [
+      { "club": "AJAX", "year": 1992, "t": "A", "c1": "#ffffff", "c2": "#d2122e", "p": "vband" },
+      { "club": "SAMPDORIA", "year": 1995, "t": "S", "c1": "#1b4f9c", "c2": "#ffffff", "p": "band" },
+      { "club": "REAL MADRID", "year": 1996, "t": "RM", "c1": "#ffffff", "c2": "#e0b84a", "p": "chief", "tc": "#e0b84a" },
+      { "club": "INTER", "year": 2000, "t": "I", "c1": "#0b4ea2", "c2": "#111111", "p": "stripes" },
+      { "club": "AC MILAN", "year": 2002, "t": "ACM", "c1": "#d81e2c", "c2": "#111111", "p": "stripes" },
+      { "club": "BOTAFOGO", "year": 2012, "t": "B", "c1": "#ffffff", "c2": "#111111", "p": "stripes", "tc": "#ffffff" } ] },
+    { "shot": "qreveal", "player": { "name": "CLARENCE|SEEDORF", "fact": "Won the Champions League with 3 different clubs",
+      "look": { "skin": "#8a5a3c", "shirt": "#d81e2c", "stripes": "#111111", "trim": "#ffffff", "number": "10", "hair": "buzz", "hairColor": "#1a0f08", "pants": "#ffffff" } } },
+
+    { "shot": "qboard", "num": 3, "countdown": 5, "clubs": [
+      { "club": "BASTIA", "year": 2000, "t": "B", "c1": "#0a3d91", "c2": "#ffffff", "p": "plain" },
+      { "club": "LYON", "year": 2003, "t": "OL", "c1": "#ffffff", "c2": "#1b3f8f", "p": "sash", "tc": "#d2122e" },
+      { "club": "CHELSEA", "year": 2005, "t": "CFC", "c1": "#1a4fc0", "c2": "#ffffff", "p": "plain" },
+      { "club": "REAL MADRID", "year": 2012, "t": "RM", "c1": "#ffffff", "c2": "#e0b84a", "p": "chief", "tc": "#e0b84a", "loan": true },
+      { "club": "AC MILAN", "year": 2014, "t": "ACM", "c1": "#d81e2c", "c2": "#111111", "p": "stripes" },
+      { "club": "PANATHINAIKOS", "year": 2015, "t": "P", "c1": "#0f7a3c", "c2": "#ffffff", "p": "plain" },
+      { "club": "PERSIB", "year": 2017, "t": "P", "c1": "#1f5fc4", "c2": "#ffffff", "p": "band" },
+      { "club": "SABAIL", "year": 2019, "t": "S", "c1": "#17a3a3", "c2": "#ffffff", "p": "half" } ] },
+    { "shot": "qreveal", "player": { "name": "MICHAEL|ESSIEN", "fact": "2× Premier League champion with Chelsea",
+      "look": { "skin": "#5e3a24", "shirt": "#1a4fc0", "trim": "#ffffff", "number": "5", "hair": "bald", "hairColor": "#120a05", "pants": "#1a4fc0" } } },
+
+    { "shot": "qcta", "players": [
+      { "skin": "#e8b08a", "shirt": "#12a0d7", "trim": "#ffffff", "number": "9", "hair": "short", "hairColor": "#2a1a10", "stubble": true, "pants": "#ffffff" },
+      { "skin": "#8a5a3c", "shirt": "#d81e2c", "stripes": "#111111", "trim": "#ffffff", "number": "10", "hair": "buzz", "hairColor": "#1a0f08", "pants": "#ffffff" },
+      { "skin": "#5e3a24", "shirt": "#1a4fc0", "trim": "#ffffff", "number": "5", "hair": "bald", "hairColor": "#120a05", "pants": "#1a4fc0" } ] }
+  ]
+}

@@ -301,6 +301,143 @@
     }
   };
 
+
+  // ---------- quiz: guess the player ----------
+  const PAT = { plain: 0 };
+  function crest(x, y, c, sc = 1) {
+    ctx.save(); ctx.translate(x, y); ctx.scale(sc, sc);
+    const sh = new Path2D(); sh.moveTo(-34, -40); sh.lineTo(34, -40); sh.lineTo(34, 2); sh.quadraticCurveTo(34, 30, 0, 44); sh.quadraticCurveTo(-34, 30, -34, 2); sh.closePath();
+    ctx.fillStyle = c.c1; ctx.fill(sh);
+    ctx.save(); ctx.clip(sh); ctx.fillStyle = c.c2;
+    if (c.p === 'stripes') for (let k = -3; k <= 3; k += 2) ctx.fillRect(k * 11 - 5.5, -45, 11, 95);
+    else if (c.p === 'sash') { ctx.beginPath(); ctx.moveTo(-40, -10); ctx.lineTo(-10, -45); ctx.lineTo(10, -45); ctx.lineTo(40, -10); ctx.lineTo(40, 20); ctx.lineTo(-40, -10 + 30); ctx.closePath(); ctx.fill(); }
+    else if (c.p === 'band') ctx.fillRect(-40, -8, 80, 18);
+    else if (c.p === 'vband') ctx.fillRect(-12, -45, 24, 95);
+    else if (c.p === 'half') ctx.fillRect(0, -45, 40, 95);
+    else if (c.p === 'chief') ctx.fillRect(-40, -45, 80, 24);
+    ctx.restore();
+    ctx.lineWidth = 6; ctx.strokeStyle = OUT; ctx.lineJoin = 'round'; ctx.stroke(sh);
+    const fs = c.t.length > 2 ? 22 : 30;
+    ctx.font = `900 ${fs}px Inter Display`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.lineWidth = 6; ctx.strokeStyle = OUT; ctx.strokeText(c.t, 0, 4); ctx.fillStyle = c.tc || '#fff'; ctx.fillText(c.t, 0, 4);
+    ctx.restore();
+  }
+  function ring(x, y, r, p, num) {
+    ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fillStyle = '#1c2238'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke();
+    ctx.beginPath(); ctx.arc(x, y, r - 14, 0, Math.PI * 2); ctx.lineWidth = 14; ctx.strokeStyle = 'rgba(255,255,255,.15)'; ctx.stroke();
+    ctx.beginPath(); ctx.arc(x, y, r - 14, -Math.PI / 2, -Math.PI / 2 + Math.PI * 2 * (1 - p)); ctx.strokeStyle = '#ffd400'; ctx.lineCap = 'round'; ctx.stroke();
+    txt(String(num), x, y + 4, r * .9, '#fff', 900, 'center', 0);
+  }
+  const silCv = document.createElement('canvas'); silCv.width = W; silCv.height = H; const silCtx = silCv.getContext('2d');
+  function silhouette(ch, st, t, glow) {
+    silCtx.setTransform(1, 0, 0, 1, 0, 0); silCtx.clearRect(0, 0, W, H);
+    silCtx.setTransform(ctx.getTransform());
+    Puppet.draw(silCtx, ch, st, t);
+    silCtx.setTransform(1, 0, 0, 1, 0, 0);
+    silCtx.globalCompositeOperation = 'source-in'; silCtx.fillStyle = '#150d33'; silCtx.fillRect(0, 0, W, H); silCtx.globalCompositeOperation = 'source-over';
+    const m = ctx.getTransform(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.shadowColor = glow || '#c9b8ff'; ctx.shadowBlur = 26; ctx.drawImage(silCv, 0, 0); ctx.shadowBlur = 0;
+    ctx.setTransform(m);
+  }
+  const STUDIO = { x: 540, y: 960, z: 1 };
+  const quizDur = s => .7 + s.clubs.length * .7 + .5 + (s.countdown || 5) + .3;
+  const playerCh = (pl, x, y, scale) => Object.assign({ skin: '#ffd2b0', trim: '#ffffff', pants: '#1f2236', shoes: '#16162a', hairColor: '#2a1a10', bw: 1, blinkPh: x * .01 }, pl, { x, y, scale });
+  Object.assign(SHOTS, {
+    qhook: {
+      set: 'studio', cast: {}, cam: [[0, STUDIO], [1, STUDIO]], noCaption: true, bright: 1,
+      dur: () => 3.2,
+      draw(s, lt, d, t) {
+        const q = k => eo(P(lt, .1 + k * .2, .32 + k * .2));
+        ctx.save(); ctx.translate(540, 560); ctx.scale(lerp(2, 1, q(0)), lerp(2, 1, q(0))); ctx.globalAlpha = q(0); txt('GUESS THE', 0, 0, 120, '#fff', 900, 'center', 18); ctx.restore();
+        ctx.save(); ctx.translate(540, 690); ctx.scale(lerp(2, 1, q(1)), lerp(2, 1, q(1))); ctx.globalAlpha = q(1); txt('PLAYER', 0, 0, 170, '#ffd400', 900, 'center', 20); ctx.restore();
+        const k = eb(P(lt, .8, 1.2)); ctx.save(); ctx.translate(540, 830); ctx.scale(k, k); ctx.globalAlpha = clamp(k);
+        ctx.beginPath(); ctx.roundRect(-250, -40, 500, 80, 40); ctx.fillStyle = '#ef3b5c'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = OUT; ctx.stroke();
+        txt('HARD MODE · 3 PLAYERS', 0, 3, 40, '#fff'); ctx.restore();
+        s.players.forEach((pl, i) => {
+          const a = eb(P(lt, 1.1 + i * .25, 1.5 + i * .25));
+          const ch = playerCh(pl, 230 + i * 310, 1560 + (1 - a) * 500, .85);
+          silhouette(ch, Puppet.stateAt([[0, { e: 'neutral', p: i === 1 ? 'hips' : 'crossed' }]], lt, d), t);
+          ctx.globalAlpha = clamp(a); txt('?', 230 + i * 310, 1560 - 300 + (1 - a) * 500, 110, '#ffd400', 900, 'center', 14); ctx.globalAlpha = 1;
+        });
+        txt('CAN YOU GET ALL 3?', 540, 950, 56, '#fff', 900, 'center', 12);
+      }
+    },
+    qboard: {
+      set: 'studio', cast: {}, cam: [[0, STUDIO], [1, STUDIO]], noCaption: true, bright: .95,
+      dur: quizDur,
+      draw(s, lt, d, t) {
+        const n = s.clubs.length, rowH = 102, top = 470;
+        const k0 = eb(P(lt, 0, .35));
+        txt(`PLAYER ${s.num} / 3`, 540, 255, 46, '#ffd400', 900, 'center', 10);
+        ctx.save(); ctx.translate(540, 335); ctx.scale(k0, k0); txt('WHO IS HE?', 0, 0, 92, '#fff', 900, 'center', 16); ctx.restore();
+        const ph = eo(P(lt, .15, .5));
+        ctx.save(); ctx.globalAlpha = ph;
+        ctx.beginPath(); ctx.roundRect(70, top - 30, 940, n * rowH + 50, 30); ctx.fillStyle = 'rgba(20,14,48,.92)'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke();
+        ctx.beginPath(); ctx.roundRect(84, top - 16, 912, n * rowH + 22, 22); ctx.lineWidth = 4; ctx.strokeStyle = '#e0b84a'; ctx.stroke();
+        ctx.restore();
+        s.clubs.forEach((c, i) => {
+          const st = .7 + i * .7, k = eo(P(lt, st, st + .35)), y = top + i * rowH + rowH / 2 - 8;
+          if (k <= 0) return;
+          ctx.save(); ctx.globalAlpha = k; ctx.translate((1 - k) * 160, 0);
+          if (i) { ctx.beginPath(); ctx.moveTo(160, y - rowH + 40); ctx.lineTo(160, y - 40); ctx.lineWidth = 6; ctx.strokeStyle = 'rgba(224,184,74,.6)'; ctx.stroke(); }
+          crest(160, y, c, 1.15 * (1 + .25 * Math.sin(P(lt, st, st + .3) * Math.PI)));
+          txt(c.club, 236, y + 2, 54, '#fff', 900, 'left');
+          if (c.loan) { ctx.font = '900 54px Inter Display'; const w = ctx.measureText(c.club).width; ctx.beginPath(); ctx.roundRect(252 + w, y - 20, 96, 40, 20); ctx.fillStyle = '#7b5cff'; ctx.fill(); txt('LOAN', 300 + w, y + 2, 24, '#fff'); }
+          txt(String(c.year), 975, y + 2, 40, 'rgba(255,255,255,.7)', 800, 'right');
+          ctx.restore();
+        });
+        const cd = s.countdown || 5, ts = .7 + n * .7 + .5;
+        const rk = eb(P(lt, ts - .4, ts));
+        if (rk > 0) {
+          const ry = top + n * rowH + 140;
+          ctx.save(); ctx.translate(540, ry); ctx.scale(rk * (1 + .07 * Math.max(0, Math.sin((lt - ts) * Math.PI * 2))), rk);
+          ring(0, 0, 82, P(lt, ts, ts + cd), lt < ts ? cd : Math.max(0, Math.ceil(cd - (lt - ts)))); ctx.restore();
+          txt('COMMENT YOUR GUESS 👇', 540, ry + 125, 40, '#fff', 800, 'center', 10);
+        }
+      }
+    },
+    qreveal: {
+      set: 'studio', cast: {}, cam: [[0, STUDIO], [1, STUDIO]], noCaption: true, bright: 1.1, conf: .05, flash: true,
+      dur: () => 4.2,
+      draw(s, lt, d, t) {
+        const pl = s.player;
+        const up = eb(P(lt, .05, .5));
+        const ch = playerCh(pl.look, 540, 1640 + (1 - up) * 700, 1.25);
+        const st = Puppet.stateAt([[0, { e: 'happy', p: 'idle' }], [.18, { e: 'wink', p: pl.pose || 'thumbsUpR', handR: 'thumb', m: { jump: .25 } }]], lt, d);
+        Puppet.draw(ctx, ch, st, t);
+        const k = eo(P(lt, .1, .35));
+        txt("IT'S...", 540, 255, 46, '#ffd400', 900, 'center', 10);
+        const lines = pl.name.split('|');
+        lines.forEach((ln, i) => {
+          const q = eo(P(lt, .15 + i * .18, .37 + i * .18));
+          ctx.save(); ctx.translate(540, 360 + i * 120); ctx.scale(lerp(2.2, 1, q), lerp(2.2, 1, q)); ctx.globalAlpha = q;
+          txt(ln, 0, 0, i ? 120 : 92, i ? '#ffd400' : '#fff', 900, 'center', 18); ctx.restore();
+        });
+        const f = eo(P(lt, .8, 1.2));
+        ctx.save(); ctx.globalAlpha = f; ctx.translate(0, (1 - f) * 30);
+        ctx.beginPath(); ctx.roundRect(110, 560 + (lines.length - 1) * 120 - 10, 860, 90, 24); ctx.fillStyle = 'rgba(20,14,48,.85)'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = OUT; ctx.stroke();
+        txt(pl.fact, 540, 560 + (lines.length - 1) * 120 + 35, 36, '#fff', 800, 'center');
+        ctx.restore();
+      }
+    },
+    qcta: {
+      set: 'studio', cast: {}, cam: [[0, STUDIO], [1, STUDIO]], noCaption: true, bright: 1.05, conf: 1,
+      dur: () => 4.5,
+      draw(s, lt, d, t) {
+        const q = k => eo(P(lt, .1 + k * .2, .32 + k * .2));
+        ctx.save(); ctx.translate(540, 360); ctx.globalAlpha = q(0); txt('HOW MANY', 0, 0, 110, '#fff', 900, 'center', 18); ctx.restore();
+        ctx.save(); ctx.translate(540, 480); ctx.globalAlpha = q(1); txt('DID YOU GET?', 0, 0, 110, '#ffd400', 900, 'center', 18); ctx.restore();
+        const b = eb(P(lt, .7, 1.1)); ctx.save(); ctx.translate(540, 630); ctx.scale(b * (1 + .04 * Math.sin(lt * 8)), b);
+        ctx.beginPath(); ctx.roundRect(-300, -48, 600, 96, 48); ctx.fillStyle = '#fe2c55'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke();
+        txt('＋ FOLLOW FOR EPISODE 2', 0, 3, 42, '#fff'); ctx.restore();
+        s.players.forEach((pl, i) => {
+          const ch = playerCh(pl, 230 + i * 310, 1600, .85);
+          Puppet.draw(ctx, ch, Puppet.stateAt([[0, { e: i === 1 ? 'ecstatic' : 'happy', p: i === 1 ? 'cheer' : 'waveR', m: { wave: i === 1 ? 0 : 1, jump: i === 1 ? .4 : 0 } }]], lt, d), t);
+        });
+      }
+    }
+  });
+
   // ---------- timeline ----------
   let spec, scenes = [], total = 0;
   function camAt(keys, lt, d) {
@@ -324,7 +461,7 @@
       const sh = SHOTS[s.shot]; if (!sh) throw new Error('unknown shot ' + s.shot);
       s.sh = sh;
       const toks = tokens(s.text || '');
-      s.duration = s.duration || Math.max(sh.minDur || 0, toks.length / 2.5 + .9);
+      s.duration = s.duration || (sh.dur ? sh.dur(s) : Math.max(sh.minDur || 0, toks.length / 2.5 + .9));
       s._start = total; total += s.duration; s._end = total;
       // overlay elements
       const root = el('div', null, null); root.style.display = 'none'; s._ov = root;
@@ -387,6 +524,16 @@
         case 'champions': add(st, 'thump', -10); add(st + .02, 'cheer', -13); break;
         case 'payout': at(.62, 'thump', -12); at(.66, 'coins', -18); for (let k = 0; k < 10; k++) add(st + d * (.52 + k * .021), 'tick', -21); at(.74, 'kaching', -13); break;
         case 'cta': add(st + .9, 'pop', -14); add(st + .2, 'coins', -22); break;
+        case 'qhook': add(st + .3, 'thump', -12); add(st + .5, 'thump', -12); add(st + .9, 'pop', -15); for (let k = 0; k < 3; k++) add(st + 1.2 + k * .25, 'whoosh_soft', -20); break;
+        case 'qboard': {
+          add(st + .05, 'pop', -16);
+          s.clubs.forEach((_, k) => add(st + .7 + k * .7, 'pop', -17));
+          const ts = st + .7 + s.clubs.length * .7 + .5, cd = s.countdown || 5;
+          for (let k = 0; k < cd; k++) add(ts + k, 'tick', k >= cd - 2 ? -12 : -15);
+          break;
+        }
+        case 'qreveal': add(st, 'thump', -10); add(st + .05, 'sparkle', -15); add(st + .1, 'cheer', -22); break;
+        case 'qcta': add(st + .1, 'thump', -13); add(st + .75, 'pop', -14); break;
       }
     });
     return ev.sort((a, b) => a.t - b.t);
@@ -445,7 +592,9 @@
     for (const name in sh.cast) states[name] = Puppet.stateAt(sh.acts[name] || [[0, {}]], lt, d);
     if (sh.propFix) for (const n in sh.propFix) for (const [f, pr] of sh.propFix[n]) if (lt >= f * d) states[n].propL = pr;
     const drawC = name => { if (!sh.cast[name]) return; const c = Object.assign({}, CH[name], sh.cast[name], { y: GROUND }); Puppet.draw(ctx, c, states[name], t); };
-    if (sh.set === 'bookies') {
+    if (sh.draw) {
+      sh.draw(s, lt, d, t);
+    } else if (sh.set === 'bookies') {
       drawBookiesBack(t, Object.assign({ lt: lt / d }, sh.fx || {}));
       drawC('bookie'); drawCounter();
       ['hero', 'mike', 'jay'].forEach(drawC);

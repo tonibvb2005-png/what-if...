@@ -152,6 +152,13 @@ window.Puppet = (function () {
       ctx.beginPath(); ctx.ellipse(R * .25, -R * .3, R * .95, R * .2, -.05, Math.PI, Math.PI * 2); ctx.closePath(); ctx.fillStyle = ch.capColor; ctx.fill(); stroke(ctx, 6, OUT);
       circle(ctx, 0, -R * 1.13, 9, ch.capColor, 5);
       ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(-R * .92, -R * .1, 12, 26, 0, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.ellipse(R * .92, -R * .1, 12, 26, 0, 0, Math.PI * 2); ctx.fill();
+    } else if (ch.hair === 'short') {
+      ctx.beginPath(); ctx.moveTo(-R * .97, -R * .1); ctx.quadraticCurveTo(-R * 1.02, -R * 1.08, 0, -R * 1.07); ctx.quadraticCurveTo(R * 1.02, -R * 1.08, R * .97, -R * .1);
+      ctx.quadraticCurveTo(R * .85, -R * .5, R * .35, -R * .62); ctx.quadraticCurveTo(0, -R * .5, -R * .35, -R * .62); ctx.quadraticCurveTo(-R * .85, -R * .5, -R * .97, -R * .1);
+      ctx.fillStyle = c; ctx.fill(); stroke(ctx, 6, OUT);
+    } else if (ch.hair === 'buzz') {
+      ctx.save(); ctx.beginPath(); ctx.arc(0, 0, R - 3, 0, Math.PI * 2); ctx.clip();
+      ctx.beginPath(); ctx.ellipse(0, -R * .95, R * 1.05, R * .55, 0, 0, Math.PI * 2); ctx.fillStyle = c; ctx.globalAlpha = .55; ctx.fill(); ctx.restore();
     } else if (ch.hair === 'bald') {
       ctx.beginPath(); ctx.ellipse(-R * .35, -R * .6, 22, 12, -.5, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.fill();
     }
@@ -209,6 +216,10 @@ window.Puppet = (function () {
     ctx.beginPath(); ctx.arc(fx + m.lookX * 4, fy + 16, 9, Math.PI * .1, Math.PI * .9); stroke(ctx, 5, OUT);
     // blush
     if (e.blush > .02) for (const i of [-1, 1]) ellipse(ctx, fx + i * 52, fy + 26, 17, 9, `rgba(255,90,130,${.5 * e.blush})`, 0);
+    if (ch.stubble) {
+      ctx.save(); ctx.globalAlpha = .28; ctx.beginPath(); ctx.moveTo(-R * .9, 0); ctx.quadraticCurveTo(-R * .85, R * 1.05, 0, R * 1.0); ctx.quadraticCurveTo(R * .85, R * 1.05, R * .9, 0);
+      ctx.quadraticCurveTo(R * .5, R * .3, 0, fy + 24); ctx.quadraticCurveTo(-R * .5, R * .3, -R * .9, 0); ctx.fillStyle = ch.hairColor; ctx.fill(); ctx.restore();
+    }
     // beard
     if (ch.beard) {
       ctx.beginPath(); ctx.moveTo(-R * .92, -5); ctx.quadraticCurveTo(-R * .9, R * 1.15, 0, R * 1.08); ctx.quadraticCurveTo(R * .9, R * 1.15, R * .92, -5);
@@ -300,6 +311,11 @@ window.Puppet = (function () {
     ctx.quadraticCurveTo(tw + bulge, (sY + hipY) / 2 + 30, bwid, hipY + 14); ctx.lineTo(-bwid, hipY + 14);
     ctx.quadraticCurveTo(-tw - bulge, (sY + hipY) / 2 + 30, -tw, sY + 22); ctx.quadraticCurveTo(-tw, sY, -tw + 20, sY); ctx.closePath();
     ctx.fillStyle = ch.shirt; ctx.fill();
+    if (ch.stripes) {
+      ctx.save(); ctx.clip(); ctx.fillStyle = ch.stripes;
+      for (let k = -4; k <= 4; k++) if (k % 2) ctx.fillRect(k * 26 - 13, sY - 10, 26, hipY - sY + 40);
+      ctx.restore();
+    }
     if (ch.vest) {
       ctx.save(); ctx.clip();
       ctx.fillStyle = ch.vest; ctx.beginPath(); ctx.moveTo(-tw - 40, sY); ctx.lineTo(-14, sY); ctx.lineTo(0, sY + 120); ctx.lineTo(14, sY); ctx.lineTo(tw + 40, sY); ctx.lineTo(tw + 40, hipY + 20); ctx.lineTo(-tw - 40, hipY + 20); ctx.closePath(); ctx.fill();

@@ -4,6 +4,7 @@ window.World3D = (function () {
   const T = THREE;
   const SETS = {
     bookies: { wall: '#3f6680', wainscot: '#2f5066', floorA: '#c48a55', floorB: '#b07a48', base: '#24394a', lights: [-3.3, 13.9] },
+    studio:  { wall: '#3b2a6b', wainscot: '#2e2058', floorA: '#4a3486', floorB: '#3d2a72', base: '#22174a', lights: [0, 0] },
     room:    { wall: '#d6a273', wainscot: '#b9855a', floorA: '#8c5d3d', floorB: '#7c5135', base: '#5c3a24', lights: [0, -11.5] }
   };
   const C = h => new T.Color(h);
@@ -99,13 +100,20 @@ window.World3D = (function () {
     return g;
   }
 
+  function buildStudio() {
+    const s = SETS.studio, g = new T.Group();
+    const fl = plane(120, 40, floorMat(s), 0, 0, 0); fl.rotation.x = -Math.PI / 2; fl.position.z = 12; g.add(fl);
+    g.add(plane(120, 40, wallMat(s), 0, 20, -8));
+    [-4.2, 0, 4.2].forEach(x => g.add(cone(x, x === 0 ? '#fff3d6' : '#c9b8ff')));
+    return g;
+  }
   function init(canvas) {
     renderer = new T.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
     renderer.setPixelRatio(1); renderer.setSize(1080, 1920, false);
     scene = new T.Scene();
     camera = new T.PerspectiveCamera(46, 1080 / 1920, .1, 400);
-    groups.bookies = buildBookies(); groups.room = buildRoom();
-    scene.add(groups.bookies, groups.room);
+    groups.bookies = buildBookies(); groups.room = buildRoom(); groups.studio = buildStudio();
+    scene.add(groups.bookies, groups.room, groups.studio);
     conf = new T.InstancedMesh(new T.PlaneGeometry(.22, .36), new T.MeshBasicMaterial({ side: T.DoubleSide }), 300);
     const pal = ['#1655d6', '#ffd400', '#ffffff', '#ef3b5c', '#20c56a'];
     for (let k = 0; k < 300; k++) { confData.push({ x: (R() - .5) * 16, z: -1 + R() * 6, y0: R() * 16, v: 1.6 + R() * 2, rx: R() * 6, ry: R() * 6, w: R() * 3 + 1 }); conf.setColorAt(k, C(pal[k % pal.length])); }
