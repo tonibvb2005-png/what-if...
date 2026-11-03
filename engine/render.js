@@ -33,7 +33,7 @@ for (const s of spec.scenes) {
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
   page.on('pageerror', e => console.error('[page]', e.message));
-  await page.goto('file://' + path.join(__dirname, 'engine.html'));
+  await page.goto('file://' + (spec.page ? path.join(__dirname, '..', spec.page) : path.join(__dirname, 'engine.html')));
   const plain = JSON.parse(JSON.stringify(spec, (k, v) => (k === '_audioFile' ? undefined : v)));
   const total = await page.evaluate(sp => window.setup(sp), plain);
   const starts = await page.evaluate(() => window.sceneStarts);

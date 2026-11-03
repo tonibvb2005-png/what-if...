@@ -1,0 +1,19 @@
+{
+  "title": "What if you bet £1,000 on Leicester? (cartoon story)",
+  "page": "cartoon/index.html",
+  "scenes": [
+    { "shot": "hook",      "audio": "../audio/what-if-leicester/01.mp3", "text": "What if you bet £1,000 on Leicester City to win the Premier League? Stay until the end." },
+    { "shot": "bet",       "audio": "../audio/what-if-leicester/02.mp3", "text": "August 2015. He walks into the bookies and puts £1,000 on Leicester. The odds? 5000 to 1." },
+    { "shot": "laugh",     "audio": "../audio/what-if-leicester/03.mp3", "text": "His mates can't stop laughing. Leicester almost got relegated last season!" },
+    { "shot": "confident", "audio": "../audio/what-if-leicester/04.mp3", "text": "But he just smiles. He knows something they don't." },
+    { "shot": "ranieri",   "audio": "../audio/what-if-leicester/05.mp3", "text": "The new manager? Claudio Ranieri. Even Gary Lineker tweets: Claudio Ranieri? Really?" },
+    { "shot": "vardy",     "audio": "../audio/what-if-leicester/06.mp3", "text": "Then Jamie Vardy starts scoring. And scoring. 11 games in a row. A new Premier League record." },
+    { "shot": "christmas", "audio": "../audio/what-if-leicester/07.mp3", "text": "Christmas 2015. Leicester are top of the league. His mates stop laughing." },
+    { "shot": "city",      "audio": "../audio/what-if-leicester/08.mp3", "text": "February. Leicester smash Manchester City 3-1. Away from home." },
+    { "shot": "cashout",   "audio": "../audio/what-if-leicester/09.mp3", "text": "Then his phone rings. The bookies want to buy back his bet. His mates beg him to take the money. He says no." },
+    { "shot": "chelsea",   "audio": "../audio/what-if-leicester/10.mp3", "text": "May 2016. If Tottenham don't win at Chelsea, Leicester are champions. Chelsea 2. Tottenham 2." },
+    { "shot": "champions", "audio": "../audio/what-if-leicester/11.mp3", "text": "Leicester City are champions of England!" },
+    { "shot": "payout",    "audio": "../audio/what-if-leicester/12.mp3", "text": "So how much does he win? £1,000 at 5000 to 1... 5 million pounds." },
+    { "shot": "cta",       "audio": "../audio/what-if-leicester/13.mp3", "text": "What would you do with 5 million? Follow for more What Ifs." }
+  ]
+}
