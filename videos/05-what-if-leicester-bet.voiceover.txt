@@ -3,7 +3,7 @@ One audio file per line -> audio/what-if-leicester/01.mp3 … 13.mp3
 Voice: energetic storyteller, a bit cheeky. Build tension from line 7 to 10, explode at 11.
 Tip: a tiny pause (0.2 s) at the start and end of each file is fine – the video adapts to the length.
 
-01  What if you bet one thousand pounds on Leicester City to win the Premier League? Stay until the end.
+01  What if you bet one thousand pounds on Leicester City to win the Premier League?
 02  August 2015. He walks into the bookies and puts one thousand pounds on Leicester. The odds? Five thousand to one.
 03  His mates can't stop laughing. Leicester almost got relegated last season!
 04  But he just smiles. He knows something they don't.

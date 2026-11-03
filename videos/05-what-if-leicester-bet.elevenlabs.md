@@ -9,9 +9,9 @@ With an older model (Multilingual v2, Turbo, Flash), delete the [tags], otherwis
 ---
 
 ### 01 – Hook (curious, draws you in)
-Direction: start straight away with no breath first. Stress "one thousand" and leave a short pause before "Stay".
+Direction: start straight away with no breath first. Stress "one thousand" and lift the voice on the question at the end.
 ```
-[curious] What if you bet one thousand pounds on Leicester City... to win the Premier League? [pause] Stay until the end.
+[curious] What if you bet one thousand pounds on Leicester City... to win the Premier League?
 ```
 
 ### 02 – At the bookies (relaxed storytelling, then a punchline)

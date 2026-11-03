@@ -1,8 +1,9 @@
 {
   "title": "What if you bet £1,000 on Leicester? (cartoon story)",
+  "sfx": "cartoon/sfx",
   "page": "cartoon/index.html",
   "scenes": [
-    { "shot": "hook",      "audio": "../audio/what-if-leicester/01.mp3", "text": "What if you bet £1,000 on Leicester City to win the Premier League? Stay until the end." },
+    { "shot": "hook",      "audio": "../audio/what-if-leicester/01.mp3", "text": "What if you bet £1,000 on Leicester City to win the Premier League?" },
     { "shot": "bet",       "audio": "../audio/what-if-leicester/02.mp3", "text": "August 2015. He walks into the bookies and puts £1,000 on Leicester. The odds? 5000 to 1." },
     { "shot": "laugh",     "audio": "../audio/what-if-leicester/03.mp3", "text": "His mates can't stop laughing. Leicester almost got relegated last season!" },
     { "shot": "confident", "audio": "../audio/what-if-leicester/04.mp3", "text": "But he just smiles. He knows something they don't." },

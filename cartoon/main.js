@@ -170,7 +170,7 @@
     hook: {
       bright: 1,
       set: 'bookies', cast: bookies, noCaption: true,
-      title: ['WHAT IF YOU BET', '<span class="gold">£1,000</span>', 'ON LEICESTER?'], titleSize: [96, 200, 104], sub: 'Stay until the end 👀',
+      title: ['WHAT IF YOU BET', '<span class="gold">£1,000</span>', 'ON LEICESTER?'], titleSize: [96, 200, 104],
       fx: { hideSign: true }, cam: [[0, { x: 90, y: 1000, z: 1.35 }], [1, { x: 90, y: 1000, z: 1.45 }]],
       acts: {
         hero: [[0, { e: 'confident', p: 'holdCashUp', propR: 'cashFan' }], [.55, { e: 'wink' }]],
@@ -352,9 +352,45 @@
       }
     }
     window.sceneStarts = spec.scenes.map(s => s._start);
+    window.sfxEvents = buildSfx();
     await document.fonts.ready;
     return total;
   };
+
+  // ---------- sound effects (times in seconds, gain in dB) ----------
+  function buildSfx() {
+    const ev = [], add = (t, name, db) => { if (t >= 0) ev.push({ t: +t.toFixed(3), name, db }); };
+    spec.scenes.forEach((s, i) => {
+      const sh = s.sh, st = s._start, d = s.duration, next = spec.scenes[i + 1];
+      // camera pans
+      for (let k = 0; k < sh.cam.length - 1; k++) {
+        const [fa, a] = sh.cam[k], [fb, b] = sh.cam[k + 1];
+        if (Math.abs(b.x - a.x) > 500) add(st + fa * d - .05, (fb - fa) * d > .7 ? 'whoosh_long' : 'whoosh', -15);
+      }
+      // scene changes
+      if (next) {
+        if (next.sh.set !== sh.set) add(s._end - .35, 'whoosh_long', -15);
+        else if (!(next.sh.cam[0][1].x === sh.cam[sh.cam.length - 1][1].x)) add(s._end - .12, 'whoosh_soft', -21);
+      }
+      if (sh.tag) add(st + .05, 'pop', -19);
+      const at = (f, name, db) => add(st + f * d, name, db);
+      switch (s.shot) {
+        case 'hook': sh.title.forEach((_, k) => add(st + .1 + k * .22 + .18, 'thump', -13)); add(st + .55 * d, 'sparkle', -19); break;
+        case 'bet': at(.3, 'kaching', -17); at(.72, 'ding', -17); break;
+        case 'confident': at(.55, 'sparkle', -16); break;
+        case 'ranieri': add(st + d * .18, 'pop', -16); break;
+        case 'vardy': for (let k = 1; k <= 11; k++) add(st + d * .12 + (k - 1) / 11 * d * .5, 'tick', -17); at(.62, 'ding', -17); break;
+        case 'christmas': add(st + d * .1, 'pop', -16); at(.58, 'sparkle', -18); break;
+        case 'city': add(st + .1, 'whistle', -22); break;
+        case 'cashout': add(st + .05, 'ring', -16); add(st + 1.7, 'ring', -18); at(.62, 'click', -13); break;
+        case 'chelsea': for (let x = .1; x < d * .78; x += .85) add(st + x, 'heartbeat', -13); at(.78, 'thump', -12); at(.9, 'whistle', -18); break;
+        case 'champions': add(st, 'thump', -10); add(st + .02, 'cheer', -13); break;
+        case 'payout': at(.68, 'thump', -12); at(.72, 'coins', -18); for (let k = 0; k < 10; k++) add(st + d * (.58 + k * .024), 'tick', -21); at(.83, 'kaching', -13); break;
+        case 'cta': add(st + .9, 'pop', -14); add(st + .2, 'coins', -22); break;
+      }
+    });
+    return ev.sort((a, b) => a.t - b.t);
+  }
 
   function updateOverlay(s, lt, d) {
     const sh = s.sh;
