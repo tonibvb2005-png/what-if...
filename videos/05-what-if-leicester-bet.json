@@ -3,18 +3,267 @@
   "sfx": "cartoon/sfx",
   "page": "cartoon/index.html",
   "scenes": [
-    { "shot": "hook",      "audio": "../audio/what-if-leicester/01.mp3", "text": "What if you bet £1,000 on Leicester City to win the Premier League?" },
-    { "shot": "bet",       "audio": "../audio/what-if-leicester/02.mp3", "text": "August 2015. He walks into the bookies and puts £1,000 on Leicester. The odds? 5000 to 1." },
-    { "shot": "laugh",     "audio": "../audio/what-if-leicester/03.mp3", "text": "His mates can't stop laughing. Leicester almost got relegated last season!" },
-    { "shot": "confident", "audio": "../audio/what-if-leicester/04.mp3", "text": "But he just smiles. He knows something they don't." },
-    { "shot": "ranieri",   "audio": "../audio/what-if-leicester/05.mp3", "text": "The new manager? Claudio Ranieri. Even Gary Lineker tweets: Claudio Ranieri? Really?" },
-    { "shot": "vardy",     "audio": "../audio/what-if-leicester/06.mp3", "text": "Then Jamie Vardy starts scoring. And scoring. 11 games in a row. A new Premier League record." },
-    { "shot": "christmas", "audio": "../audio/what-if-leicester/07.mp3", "text": "Christmas 2015. Leicester are top of the league. His mates stop laughing." },
-    { "shot": "city",      "audio": "../audio/what-if-leicester/08.mp3", "text": "February. Leicester smash Manchester City 3-1. Away from home." },
-    { "shot": "cashout",   "audio": "../audio/what-if-leicester/09.mp3", "text": "Then his phone rings. The bookies want to buy back his bet. His mates beg him to take the money. He says no." },
-    { "shot": "chelsea",   "audio": "../audio/what-if-leicester/10.mp3", "text": "May 2016. If Tottenham don't win at Chelsea, Leicester are champions. Chelsea 2. Tottenham 2." },
-    { "shot": "champions", "audio": "../audio/what-if-leicester/11.mp3", "text": "Leicester City are champions of England!" },
-    { "shot": "payout",    "audio": "../audio/what-if-leicester/12.mp3", "text": "So how much does he win? £1,000 at 5000 to 1... 5 million pounds." },
-    { "shot": "cta",       "audio": "../audio/what-if-leicester/13.mp3", "text": "What would you do with 5 million? Follow for more What Ifs." }
+    {
+      "shot": "hook",
+      "audio": "../audio/what-if-leicester/01.wav",
+      "text": "What if you bet £1,000 on Leicester City to win the Premier League?",
+      "wordTimes": [
+        0.0,
+        0.3,
+        0.44,
+        0.6,
+        0.82,
+        1.88,
+        2.44,
+        2.78,
+        3.22,
+        3.66,
+        3.84,
+        4.02,
+        4.24
+      ]
+    },
+    {
+      "shot": "bet",
+      "audio": "../audio/what-if-leicester/02.wav",
+      "text": "August 2015. He walks into the bookies and puts £1,000 on Leicester. The odds? 5000 to 1.",
+      "wordTimes": [
+        0.5,
+        0.5,
+        2.22,
+        2.22,
+        2.44,
+        2.7,
+        2.88,
+        3.26,
+        3.48,
+        3.66,
+        4.68,
+        5.24,
+        6.26,
+        6.42,
+        7.36,
+        8.4,
+        8.82
+      ]
+    },
+    {
+      "shot": "laugh",
+      "audio": "../audio/what-if-leicester/03.wav",
+      "text": "His mates can't stop laughing. Leicester almost got relegated last season!",
+      "wordTimes": [
+        0.19,
+        0.87,
+        1.21,
+        1.69,
+        1.95,
+        3.01,
+        3.23,
+        3.57,
+        3.79,
+        4.39,
+        4.77
+      ]
+    },
+    {
+      "shot": "confident",
+      "audio": "../audio/what-if-leicester/04.wav",
+      "text": "But he just smiles. He knows something they don't.",
+      "wordTimes": [
+        0.21,
+        0.33,
+        0.53,
+        0.73,
+        1.97,
+        2.19,
+        2.41,
+        2.83,
+        3.21
+      ]
+    },
+    {
+      "shot": "ranieri",
+      "audio": "../audio/what-if-leicester/05.wav",
+      "text": "The new manager? Claudio Ranieri. Even Gary Lineker tweets: Claudio Ranieri? Really?",
+      "wordTimes": [
+        0.24,
+        0.32,
+        0.44,
+        1.5,
+        1.72,
+        2.34,
+        3.08,
+        3.42,
+        3.92,
+        4.8,
+        5.04,
+        6.24
+      ]
+    },
+    {
+      "shot": "vardy",
+      "audio": "../audio/what-if-leicester/06.wav",
+      "text": "Then Jamie Vardy starts scoring. And scoring. 11 games in a row. A new Premier League record.",
+      "wordTimes": [
+        0.6,
+        0.6,
+        1.26,
+        1.64,
+        2.06,
+        3.48,
+        3.48,
+        4.94,
+        5.06,
+        5.44,
+        5.64,
+        5.8,
+        6.44,
+        6.56,
+        6.9,
+        7.16,
+        7.56
+      ]
+    },
+    {
+      "shot": "christmas",
+      "audio": "../audio/what-if-leicester/07.wav",
+      "text": "Christmas 2015. Leicester are top of the league. His mates stop laughing.",
+      "wordTimes": [
+        0.61,
+        0.61,
+        2.61,
+        2.61,
+        2.97,
+        3.27,
+        3.47,
+        3.57,
+        4.47,
+        4.59,
+        4.93,
+        5.51
+      ]
+    },
+    {
+      "shot": "city",
+      "audio": "../audio/what-if-leicester/08.wav",
+      "text": "February. Leicester smash Manchester City 3-1. Away from home.",
+      "wordTimes": [
+        0.73,
+        1.46,
+        1.68,
+        2.24,
+        2.74,
+        3.46,
+        4.56,
+        4.8,
+        5.08
+      ]
+    },
+    {
+      "shot": "cashout",
+      "audio": "../audio/what-if-leicester/09.wav",
+      "text": "Then his phone rings. The bookies want to buy back his bet. His mates beg him to take the money. He says no.",
+      "wordTimes": [
+        0.21,
+        0.53,
+        0.93,
+        1.25,
+        2.09,
+        2.31,
+        2.69,
+        2.87,
+        3.05,
+        3.27,
+        3.61,
+        3.79,
+        4.11,
+        4.65,
+        4.91,
+        5.29,
+        5.53,
+        5.73,
+        5.93,
+        6.13,
+        6.95,
+        6.99,
+        7.23
+      ]
+    },
+    {
+      "shot": "chelsea",
+      "audio": "../audio/what-if-leicester/10.wav",
+      "text": "May 2016. If Tottenham don't win at Chelsea, Leicester are champions. Chelsea 2. Tottenham 2.",
+      "wordTimes": [
+        0.6,
+        0.6,
+        2.42,
+        2.42,
+        2.72,
+        3.18,
+        3.38,
+        3.52,
+        4.7,
+        4.88,
+        5.28,
+        6.88,
+        7.84,
+        8.8,
+        9.37
+      ]
+    },
+    {
+      "shot": "champions",
+      "audio": "../audio/what-if-leicester/11.wav",
+      "text": "Leicester City are champions of England!",
+      "wordTimes": [
+        0.43,
+        0.65,
+        0.95,
+        1.33,
+        1.81,
+        2.07
+      ],
+      "pad": 1.6
+    },
+    {
+      "shot": "payout",
+      "audio": "../audio/what-if-leicester/12.wav",
+      "text": "So how much does he win? £1,000 at 5000 to 1... 5 million pounds.",
+      "wordTimes": [
+        0.25,
+        0.59,
+        1.19,
+        1.35,
+        1.53,
+        1.67,
+        2.59,
+        3.29,
+        4.07,
+        4.97,
+        5.15,
+        6.29,
+        6.75,
+        7.69
+      ]
+    },
+    {
+      "shot": "cta",
+      "audio": "../audio/what-if-leicester/13.wav",
+      "text": "What would you do with 5 million? Follow for more What Ifs.",
+      "wordTimes": [
+        0.14,
+        0.34,
+        0.5,
+        0.74,
+        0.92,
+        1.1,
+        1.46,
+        1.74,
+        2.62,
+        3.1,
+        3.42,
+        3.68
+      ]
+    }
   ]
 }

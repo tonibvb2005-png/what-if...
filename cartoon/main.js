@@ -84,7 +84,7 @@
       cardBg('#0d2a8a', '#06134a');
       txt('NEW MANAGER', TVW / 2, 105, 40, '#ffd400', 800);
       txt('CLAUDIO RANIERI', TVW / 2, 175, 78, '#fff', 900, 'center', 0);
-      const k = eb(P(lt, d * .18, d * .18 + .4));
+      const k = eb(P(lt, d * .31, d * .31 + .4));
       if (k > 0) {
         ctx.save(); ctx.translate(TVW / 2, 360); ctx.scale(k, k);
         ctx.beginPath(); ctx.roundRect(-330, -95, 660, 190, 26); ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = OUT; ctx.stroke();
@@ -97,7 +97,7 @@
     } else if (card === 'vardy') {
       cardBg('#0d2a8a', '#06134a');
       txt('JAMIE VARDY', TVW / 2, 100, 60, '#fff');
-      const n = Math.max(1, Math.min(11, Math.ceil(lerp(0, 11, P(lt, d * .12, d * .62)))));
+      const n = Math.max(1, Math.min(11, Math.ceil(lerp(0, 11, P(lt, d * .12, d * .57)))));
       const pop = 1 + .15 * Math.max(0, Math.sin((lt * 11 / (d * .5)) * Math.PI * 2)) * (n < 11 ? 1 : 0);
       ctx.save(); ctx.translate(TVW / 2, 250); ctx.scale(pop, pop); txt(String(n), 0, 0, 190, '#ffd400', 900, 'center', 14); ctx.restore();
       txt('GAMES IN A ROW WITH A GOAL', TVW / 2, 370, 38, '#fff', 800);
@@ -123,9 +123,9 @@
       score('MAN CITY', 1, 3, 'LEICESTER', '#6cabdd', '#1655d6', lt, d, null);
     } else if (card === 'chelsea') {
       cardBg('#2a0d5c', '#0d0524');
-      const late = f > .78, ft = f > .9;
+      const late = f > .73, ft = f > .9;
       txt(ft ? 'FULL TIME' : 'LIVE · 2 MAY 2016', TVW / 2, 100, 40, ft ? '#ffd400' : '#fff', 800);
-      score('CHELSEA', late ? 2 : 1, 2, 'TOTTENHAM', '#034694', '#ffffff', lt, d, late ? d * .78 : null);
+      score('CHELSEA', late ? 2 : 1, 2, 'TOTTENHAM', '#034694', '#ffffff', lt, d, late ? d * .73 : null);
       if (ft) txt('LEICESTER ARE CHAMPIONS!', TVW / 2, 445, 44, '#ffd400', 900, 'center', 0);
     } else if (card === 'champions') {
       const fl = Math.sin(t * 12) > 0;
@@ -178,11 +178,11 @@
       }
     },
     bet: {
-      set: 'bookies', cast: bookies, tag: 'AUGUST 2015', fx: { signPulse: .72 },
+      set: 'bookies', cast: bookies, tag: 'AUGUST 2015', fx: { signPulse: .75 },
       cam: [[0, BOOK], [1, { x: -120, y: 990, z: 1.22 }]],
       acts: {
-        hero: [[0, { e: 'happy', m: { lookX: -1 }, propL: 'cash' }], [.2, { p: 'giveL' }], [.42, { p: 'idle', propL: null, e: 'confident', m: { lookX: -.6 } }], [.62, { p: 'giveL', propL: null }], [.75, { p: 'hips', propL: null, e: 'confident', m: { lookX: 0 } }]],
-        bookie: [[0, { e: 'neutral', m: { lookX: 1 } }], [.3, { e: 'surprised', p: 'takeR', propR: 'cash' }], [.45, { e: 'giggle', p: 'bellyLaugh', propR: null, m: { laugh: .5, lookX: 1 } }], [.62, { e: 'smirk', p: 'takeR', propR: 'slip', m: { laugh: 0 } }], [.74, { p: 'idle', propR: null }]],
+        hero: [[0, { e: 'happy', m: { lookX: -1 }, propL: 'cash' }], [.3, { p: 'giveL' }], [.46, { p: 'idle', propL: null, e: 'confident', m: { lookX: -.6 } }], [.62, { p: 'giveL', propL: null }], [.75, { p: 'hips', propL: null, e: 'confident', m: { lookX: 0 } }]],
+        bookie: [[0, { e: 'neutral', m: { lookX: 1 } }], [.4, { e: 'surprised', p: 'takeR', propR: 'cash' }], [.52, { e: 'giggle', p: 'bellyLaugh', propR: null, m: { laugh: .5, lookX: 1 } }], [.62, { e: 'smirk', p: 'takeR', propR: 'slip', m: { laugh: 0 } }], [.74, { p: 'idle', propR: null }]],
         mike: [[0, { e: 'smirk', m: { lookX: -1 } }]], jay: [[0, { e: 'smirk', m: { lookX: -1 } }]]
       },
       propFix: { hero: [[.74, 'slip']] }
@@ -201,7 +201,7 @@
       set: 'bookies', cast: bookies, fx: { hideSign: true },
       cam: [[0, { x: 1390, y: 990, z: 1.38 }], [.08, { x: 1390, y: 990, z: 1.38 }], [.26, HERO_CU], [1, { x: 60, y: 1050, z: 1.85 }]],
       acts: {
-        hero: [[0, { e: 'confident', p: 'hips', propL: 'slip', m: { lookX: 1 } }], [.3, { m: { lookX: 0 } }], [.55, { e: 'wink', p: 'thumbsUpR', handR: 'thumb', propL: 'slip' }]],
+        hero: [[0, { e: 'confident', p: 'hips', propL: 'slip', m: { lookX: 1 } }], [.3, { m: { lookX: 0 } }], [.46, { e: 'wink', p: 'thumbsUpR', handR: 'thumb', propL: 'slip' }]],
         bookie: [[0, { e: 'smirk', m: { lookX: 1 } }]],
         mike: [[0, { e: 'laugh', p: 'bellyLaugh', m: { laugh: 1 } }]], jay: [[0, { e: 'laugh', p: 'bellyLaugh', m: { laugh: 1 } }]]
       }
@@ -247,11 +247,11 @@
     cashout: {
       bright: .8,
       set: 'room', cast: { mike: { x: -240 }, hero: { x: 0 }, jay: { x: 240 } }, card: 'off', phone: true,
-      cam: [[0, G], [.25, { x: 0, y: 1030, z: 1.5 }], [.72, { x: 0, y: 1030, z: 1.5 }], [.86, G2], [1, G2]],
+      cam: [[0, G], [.25, { x: 0, y: 1030, z: 1.5 }], [.86, { x: 0, y: 1030, z: 1.5 }], [.97, G2], [1, G2]],
       acts: {
-        hero: [[0, { e: 'surprised', p: 'phone', propR: 'phoneRing', m: { lookY: .6 } }], [.25, { e: 'focused', propR: 'phone' }], [.62, { e: 'confident', m: { no: 1, lookY: 0 } }], [.84, { e: 'wink', p: 'crossed', propR: null, m: { no: 0 } }]],
-        mike: [[0, { e: 'surprised', m: { lookX: 1 } }], [.36, { e: 'pleading', p: 'pleading', po: { lean: 9 }, m: { lookX: 1, tremble: .4 } }], [.8, { e: 'despair', p: 'handsOnHead', m: { lookX: 1 } }]],
-        jay: [[0, { e: 'surprised', m: { lookX: -1 } }], [.4, { e: 'pleading', p: 'pleading', po: { lean: -9 }, m: { lookX: -1 } }], [.82, { e: 'despair', p: 'handsOnHead', m: { lookX: -1, tremble: .5 } }]]
+        hero: [[0, { e: 'surprised', p: 'phone', propR: 'phoneRing', m: { lookY: .6 } }], [.25, { e: 'focused', propR: 'phone' }], [.8, { e: 'confident', m: { no: 1, lookY: 0 } }], [.9, { e: 'wink', p: 'crossed', propR: null, m: { no: 0 } }]],
+        mike: [[0, { e: 'surprised', m: { lookX: 1 } }], [.5, { e: 'pleading', p: 'pleading', po: { lean: 9 }, m: { lookX: 1, tremble: .4 } }], [.9, { e: 'despair', p: 'handsOnHead', m: { lookX: 1 } }]],
+        jay: [[0, { e: 'surprised', m: { lookX: -1 } }], [.52, { e: 'pleading', p: 'pleading', po: { lean: -9 }, m: { lookX: -1 } }], [.91, { e: 'despair', p: 'handsOnHead', m: { lookX: -1, tremble: .5 } }]]
       }
     },
     chelsea: {
@@ -275,16 +275,16 @@
       }
     },
     payout: {
-      bright: 1.06, conf: .7,
+      bright: 1.06, conf: .64,
       set: 'bookies', cast: { bookie: { x: -330 }, hero: { x: 60 }, mike: { x: 330 }, jay: { x: 580 } }, counter: true, captionTop: 640, fx: { hideSign: true },
       cam: [[0, { x: 110, y: 1010, z: .92 }], [1, { x: 110, y: 1000, z: .98 }]],
       acts: {
-        bookie: [[0, { e: 'nervous', m: { lookX: 1, tremble: .6 } }], [.5, { e: 'despair', p: 'giveBagR', propR: 'bag' }], [.68, { p: 'idle', propR: null, e: 'despair' }]],
-        hero: [[0, { e: 'confident', p: 'hips', m: { lookX: -1 } }], [.68, { e: 'ecstatic', p: 'holdBag', propR: 'bag', m: { jump: .6, lookX: 0 } }]],
+        bookie: [[0, { e: 'nervous', m: { lookX: 1, tremble: .6 } }], [.45, { e: 'despair', p: 'giveBagR', propR: 'bag' }], [.62, { p: 'idle', propR: null, e: 'despair' }]],
+        hero: [[0, { e: 'confident', p: 'hips', m: { lookX: -1 } }], [.62, { e: 'ecstatic', p: 'holdBag', propR: 'bag', m: { jump: .6, lookX: 0 } }]],
         mike: [[0, { e: 'tense', p: 'nervous', m: { lookX: -1 } }], [.7, { e: 'shock', p: 'handsOnHead', m: { lookX: -1 } }]],
         jay: [[0, { e: 'tense', m: { lookX: -1 } }], [.72, { e: 'shock', p: 'handsOnHead', m: { lookX: -1 } }]]
       },
-      rain: .7
+      rain: .64
     },
     cta: {
       bright: 1.08, conf: 1,
@@ -344,7 +344,7 @@
         if (sh.captionTop) s._cap.style.top = sh.captionTop + 'px';
         const wts = toks.map(t => t.w.length + 3), tot = wts.reduce((a, b) => a + b, 0) || 1;
         let acc = 0; const t0 = .12, t1 = s.duration - .3;
-        toks.forEach((t, i) => { t.t = t0 + (acc / tot) * (t1 - t0); acc += wts[i]; });
+        toks.forEach((t, i) => { t.t = s.wordTimes && s.wordTimes[i] != null ? s.wordTimes[i] : t0 + (acc / tot) * (t1 - t0); acc += wts[i]; });
         s._chunks = []; let cur = [];
         toks.forEach(t => { const len = cur.reduce((a, x) => a + x.w.length + 1, 0); if (cur.length && (cur.length >= 3 || len + t.w.length > 15)) { s._chunks.push(cur); cur = []; } cur.push(t); if (/[.!?,:;]$/.test(t.w)) { s._chunks.push(cur); cur = []; } });
         if (cur.length) s._chunks.push(cur);
@@ -376,16 +376,16 @@
       const at = (f, name, db) => add(st + f * d, name, db);
       switch (s.shot) {
         case 'hook': sh.title.forEach((_, k) => add(st + .1 + k * .22 + .18, 'thump', -13)); add(st + .55 * d, 'sparkle', -19); break;
-        case 'bet': at(.3, 'kaching', -17); at(.72, 'ding', -17); break;
-        case 'confident': at(.55, 'sparkle', -16); break;
-        case 'ranieri': add(st + d * .18, 'pop', -16); break;
-        case 'vardy': for (let k = 1; k <= 11; k++) add(st + d * .12 + (k - 1) / 11 * d * .5, 'tick', -17); at(.62, 'ding', -17); break;
+        case 'bet': at(.4, 'kaching', -17); at(.75, 'ding', -17); break;
+        case 'confident': at(.46, 'sparkle', -16); break;
+        case 'ranieri': add(st + d * .31, 'pop', -16); break;
+        case 'vardy': for (let k = 1; k <= 11; k++) add(st + d * .12 + (k - 1) / 11 * d * .45, 'tick', -17); at(.57, 'ding', -17); break;
         case 'christmas': add(st + d * .1, 'pop', -16); at(.58, 'sparkle', -18); break;
         case 'city': add(st + .1, 'whistle', -22); break;
-        case 'cashout': add(st + .05, 'ring', -16); add(st + 1.7, 'ring', -18); at(.62, 'click', -13); break;
-        case 'chelsea': for (let x = .1; x < d * .78; x += .85) add(st + x, 'heartbeat', -13); at(.78, 'thump', -12); at(.9, 'whistle', -18); break;
+        case 'cashout': add(st + .05, 'ring', -16); add(st + 1.7, 'ring', -18); at(.86, 'click', -13); break;
+        case 'chelsea': for (let x = .1; x < d * .7; x += .85) add(st + x, 'heartbeat', -13); at(.73, 'thump', -12); at(.9, 'whistle', -18); break;
         case 'champions': add(st, 'thump', -10); add(st + .02, 'cheer', -13); break;
-        case 'payout': at(.68, 'thump', -12); at(.72, 'coins', -18); for (let k = 0; k < 10; k++) add(st + d * (.58 + k * .024), 'tick', -21); at(.83, 'kaching', -13); break;
+        case 'payout': at(.62, 'thump', -12); at(.66, 'coins', -18); for (let k = 0; k < 10; k++) add(st + d * (.52 + k * .021), 'tick', -21); at(.74, 'kaching', -13); break;
         case 'cta': add(st + .9, 'pop', -14); add(st + .2, 'coins', -22); break;
       }
     });
@@ -401,21 +401,21 @@
       if (s._follow) { const k = eb(P(lt, .9, 1.3)); s._follow.style.transform = `scale(${k * (1 + .05 * Math.sin(lt * 8))})`; s._follow.style.opacity = clamp(k); }
     }
     if (s._cnt) {
-      s._cntL.style.opacity = P(lt, d * .3, d * .3 + .3);
-      const v = P(lt, d * .58, d * .82), k = eo(v);
+      s._cntL.style.opacity = P(lt, d * .28, d * .28 + .3);
+      const v = P(lt, d * .52, d * .73), k = eo(v);
       const val = v <= 0 ? 0 : Math.round(lerp(1000, 5000000, k * k));
       s._cntN.textContent = '£' + val.toLocaleString('en-US');
-      s._cntN.style.opacity = P(lt, d * .55, d * .58);
-      const pop = P(lt, d * .82, d * .9); s._cntN.style.transform = `scale(${1 + Math.sin(pop * Math.PI) * .25})`;
-      if (s._cap) s._cap.style.opacity = lt < d * .55 ? 1 : 0;
+      s._cntN.style.opacity = P(lt, d * .5, d * .53);
+      const pop = P(lt, d * .73, d * .81); s._cntN.style.transform = `scale(${1 + Math.sin(pop * Math.PI) * .25})`;
+      if (s._cap) s._cap.style.opacity = lt < d * .5 ? 1 : 0;
     }
     if (s._ph) {
-      const f = lt / d, k = eb(P(f, .1, .2)), out = P(f, .78, .84);
+      const f = lt / d, k = eb(P(f, .1, .2)), out = P(f, .9, .95);
       s._ph.style.transform = `scale(${k * (1 - out)}) rotate(${Math.sin(lt * 40) * (f < .25 ? 2 : 0)}deg)`;
       s._ph.style.opacity = clamp(k) * (1 - out);
       const n = s._ph.querySelector('.n'), y = s._ph.querySelector('.y');
-      const press = P(f, .62, .66); n.style.transform = `scale(${1 + Math.sin(press * Math.PI) * .2})`; n.style.boxShadow = press > 0 ? '0 0 0 10px #ffd400' : 'none';
-      y.style.opacity = f > .62 ? .35 : 1;
+      const press = P(f, .86, .9); n.style.transform = `scale(${1 + Math.sin(press * Math.PI) * .2})`; n.style.boxShadow = press > 0 ? '0 0 0 10px #ffd400' : 'none';
+      y.style.opacity = f > .86 ? .35 : 1;
     }
     if (s._cap) {
       let idx = 0; s._chunks.forEach((ch, i) => { if (lt >= ch[0].t - .05) idx = i; });
