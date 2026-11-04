@@ -99,7 +99,11 @@ export function badges(state: AppState, lessons: Lesson[]): Badge[] {
     { id: 'solid50', emoji: '🧠', title: 'Sitzt!', description: '50 Wörter sicher im Langzeitgedächtnis', test: solid >= 50 },
     { id: 'perfect', emoji: '✨', title: 'Bez greške', description: 'Eine Lernrunde ohne Fehler', test: p.perfectSessions > 0 },
     { id: 'kurs', emoji: '✏️', title: 'Fleißig im Kurs', description: '10 eigene Wörter aus dem Kurs eingetragen', test: state.customCards.length >= 10 },
-    { id: 'dubrovnik', emoji: '🏰', title: 'Bis nach Dubrovnik', description: 'Alle Stationen der Reise abgeschlossen', test: lessons.every((l) => isLessonComplete(state, l)) },
+    { id: 'dubrovnik', emoji: '🏰', title: 'Bis nach Dubrovnik', description: 'Teil 1 der Reise abgeschlossen', test: ['l1', 'l2', 'l3', 'l4', 'l5', 'l6', 'l7', 'l8'].every(done) },
+    { id: 'doctor', emoji: '🩺', title: 'Gute Besserung', description: 'Lektion „Kod liječnika“ abgeschlossen', test: done('l9') },
+    { id: 'proverbs', emoji: '😄', title: 'Svaka čast!', description: 'Lektion „Izreke i fraze“ abgeschlossen', test: done('l14') },
+    { id: 'words150', emoji: '📖', title: '150 Wörter', description: '150 Wörter und Phrasen gelernt', test: learned >= 150 },
+    { id: 'croatia', emoji: '🇭🇷', title: 'Ganz Kroatien', description: 'Alle Stationen von Zagreb bis Osijek abgeschlossen', test: lessons.every((l) => isLessonComplete(state, l)) },
   ];
   return list.map(({ test, ...b }) => ({ ...b, earned: test }));
 }

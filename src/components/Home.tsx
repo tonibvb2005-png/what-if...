@@ -79,8 +79,10 @@ export function Home({ state, day, dueCount, onStartLesson, onReview, onOpenLess
           const learned = introducedCount(state, l.cards);
           const solid = solidCount(state, l.cards);
           const status = done ? 'done' : unlocked ? 'open' : 'locked';
+          const partTitle = l.part && l.part !== LESSONS[i - 1]?.part ? l.part : null;
           return (
             <li key={l.id} className={`stop stop-${status} ${l === current ? 'stop-current' : ''}`}>
+              {partTitle && <span className="part-title">{partTitle}</span>}
               <button type="button" onClick={() => onOpenLesson(l)} aria-label={`${l.title} – ${l.place}`}>
                 <span className="stop-node">{status === 'locked' ? '🔒' : l.emoji}</span>
                 <span className="stop-info">

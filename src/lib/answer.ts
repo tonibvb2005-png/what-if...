@@ -4,7 +4,8 @@ import type { Grade } from '../types';
 export function normalize(s: string): string {
   return s
     .toLowerCase()
-    .replace(/[.,!?¿¡;:"“”„'’…()]/g, ' ')
+    .replace(/[.,!?¿¡;:"“”„'’…()/–—]/g, ' ')
+    .replace(/\s-\s/g, ' ')
     .replace(/\s+/g, ' ')
     .trim();
 }

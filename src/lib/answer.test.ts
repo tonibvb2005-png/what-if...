@@ -7,6 +7,11 @@ describe('checkAnswer', () => {
     expect(checkAnswer('  Kako se kaže ', ['Kako se kaže …?']).grade).toBe('correct');
   });
 
+  it('accepts verb pairs with or without separators', () => {
+    expect(checkAnswer('čitati pročitati', ['čitati / pročitati']).grade).toBe('correct');
+    expect(checkAnswer('čitati - pročitati', ['čitati / pročitati']).grade).toBe('correct');
+  });
+
   it('accepts alternatives', () => {
     expect(checkAnswer('sita sam', ['Sit sam.', 'Sita sam.'])).toMatchObject({ grade: 'correct', expected: 'Sita sam.' });
   });

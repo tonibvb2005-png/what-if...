@@ -28,6 +28,8 @@ export interface Lesson {
   place: string;
   placeFact: string;
   emoji: string;
+  /** Heading of the journey part this lesson starts or belongs to. */
+  part?: string;
   grammarTitle: string;
   grammar: string;
   cards: Card[];

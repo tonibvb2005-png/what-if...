@@ -20,7 +20,8 @@ oder den `dist/`-Ordner auf einen statischen Hoster (z. B. GitHub Pages) legen u
 
 ## Funktionen
 
-- Reise durch 8 Stationen von Zagreb bis Dubrovnik – Familie, Essen bei Oma, Smalltalk, Meer, Perfekt, Futur, Feste, Gefühle
+- Teil 1 (Zagreb → Dubrovnik): Familie, Essen bei Oma, Smalltalk, Meer, Perfekt, Futur, Feste, Gefühle
+- Teil 2 (Rijeka → Osijek): Arzt & Apotheke, Wohnen, Arbeit, Einkaufen & Zahlen, Telefonieren, Redewendungen, Verbpaare & Fälle
 - Wiederholung nach Spaced-Repetition-Prinzip
 - Mini-Spiele: Karteikarte, Auswahl, Hör-Detektiv, Tippen, Satz-Puzzle, Fall-Fänger, Wort-Match
 - Eigene Wörter aus dem Kurs eintragen

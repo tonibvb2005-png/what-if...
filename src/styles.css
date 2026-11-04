@@ -351,6 +351,21 @@ button:disabled {
   bottom: 28px;
   border-left: 4px dashed var(--border);
 }
+.part-title {
+  position: relative;
+  z-index: 1;
+  display: inline-block;
+  margin: 1rem 0 0.25rem;
+  padding: 0.2rem 0.75rem;
+  border-radius: 99px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
 .stop button {
   display: flex;
   gap: 1rem;
