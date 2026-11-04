@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { Card, Grade } from '../types';
 import { type Exercise, pickOptions } from '../session/buildSession';
 import { XP } from '../game/profile';
-import { Choice, DrillExercise, IntroCard, Match, Puzzle, TypeAnswer } from './exercises/Exercises';
+import { Choice, DrillExercise, Flip, IntroCard, Match, Puzzle, TypeAnswer } from './exercises/Exercises';
 import { type ExerciseResult, SpeakButton } from './exercises/common';
 
 export interface SessionSummary {
@@ -35,6 +35,8 @@ function xpFor(ex: Exercise, grade: Grade): number {
       return XP.puzzle;
     case 'drill':
       return XP.drill;
+    case 'flip':
+      return XP.flip;
     default:
       return grade === 'correct' ? XP.correct : XP.almost;
   }
@@ -58,7 +60,6 @@ export function Session({ title, exercises, allCards, practice, onIntro, onGrade
 
   function handleResult(r: ExerciseResult) {
     if (!ex || result) return;
-    setResult(r);
     const s = stats.current;
     s.total += 1;
     if (r.grade !== 'wrong') s.correct += 1;
@@ -67,12 +68,20 @@ export function Session({ title, exercises, allCards, practice, onIntro, onGrade
     if (xp) onXp(xp);
     if ('card' in ex && !practice) onGrade(ex.card, r.grade);
 
-    // Wrong cards come back once at the end, as an easier question.
+    // Wrong cards come back once at the end (flashcards as flashcards, everything else as an easier choice).
+    let nextQueue = queue;
     if (r.grade === 'wrong' && 'card' in ex && !s.retried.has(ex.card.id)) {
       s.retried.add(ex.card.id);
       const card = ex.card;
-      setQueue((q) => [...q, { kind: 'choice', card, direction: 'de-hr', options: pickOptions(card, allCards, 'hr', Math.random) }]);
+      const retry: Exercise =
+        ex.kind === 'flip'
+          ? { ...ex }
+          : { kind: 'choice', card, direction: 'de-hr', options: pickOptions(card, allCards, 'hr', Math.random) };
+      nextQueue = [...queue, retry];
+      setQueue(nextQueue);
     }
+    if (r.skipFeedback) advance(nextQueue);
+    else setResult(r);
   }
 
   function next() {
@@ -82,8 +91,12 @@ export function Session({ title, exercises, allCards, practice, onIntro, onGrade
       stats.current.xp += XP.intro;
       onXp(XP.intro);
     }
+    advance(queue);
+  }
+
+  function advance(q: Exercise[]) {
     setResult(null);
-    if (index + 1 < queue.length) {
+    if (index + 1 < q.length) {
       setIndex(index + 1);
       return;
     }
@@ -103,6 +116,7 @@ export function Session({ title, exercises, allCards, practice, onIntro, onGrade
         <div className="summary">
           <div className="summary-emoji pop">{summary.perfect ? '🏆' : '🎉'}</div>
           <h2>{summary.perfect ? 'Bez greške – ohne Fehler!' : 'Bravo, Runde geschafft!'}</h2>
+          {summary.newWords === 0 && practice && <p className="muted">Freies Üben – dein Wiederholungsplan bleibt unverändert.</p>}
           <div className="summary-stats">
             <div>
               <strong>+{summary.xp}</strong>
@@ -113,8 +127,8 @@ export function Session({ title, exercises, allCards, practice, onIntro, onGrade
               <span>richtig</span>
             </div>
             <div>
-              <strong>{summary.newWords}</strong>
-              <span>neue Wörter</span>
+              <strong>{practice ? summary.total : summary.newWords}</strong>
+              <span>{practice ? 'Aufgaben' : 'neue Wörter'}</span>
             </div>
           </div>
           <button type="button" className="btn primary wide" onClick={onExit} autoFocus>
@@ -164,6 +178,7 @@ export function Session({ title, exercises, allCards, practice, onIntro, onGrade
         {ex.kind === 'listen' && (
           <Choice key={key} card={ex.card} options={ex.options} direction="hr-de" listen locked={locked} onResult={handleResult} />
         )}
+        {ex.kind === 'flip' && <Flip key={key} card={ex.card} direction={ex.direction} locked={locked} onResult={handleResult} />}
         {ex.kind === 'type' && <TypeAnswer key={key} card={ex.card} locked={locked} onResult={handleResult} />}
         {ex.kind === 'puzzle' && <Puzzle key={key} card={ex.card} tokens={ex.tokens} locked={locked} onResult={handleResult} />}
         {ex.kind === 'drill' && <DrillExercise key={key} drill={ex.drill} locked={locked} onResult={handleResult} />}

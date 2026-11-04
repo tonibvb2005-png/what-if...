@@ -121,6 +121,70 @@ function NumberKeys({ count, onKey, disabled }: { count: number; onKey: (i: numb
   return null;
 }
 
+/* ---------- Flashcard (flip & self-check) ---------- */
+
+export function Flip({
+  card,
+  direction,
+  locked,
+  onResult,
+}: ExerciseProps & { card: Card; direction: 'hr-de' | 'de-hr' }) {
+  const [open, setOpen] = useState(false);
+  const front = direction === 'hr-de' ? card.hr : card.de;
+  const back = direction === 'hr-de' ? card.de : card.hr;
+
+  useEffect(() => {
+    const h = (e: KeyboardEvent) => {
+      if (locked) return;
+      if (!open && (e.key === ' ' || e.key === 'Enter')) {
+        e.preventDefault();
+        setOpen(true);
+      } else if (open && e.key === '1') onResult({ grade: 'wrong', skipFeedback: true });
+      else if (open && e.key === '2') onResult({ grade: 'correct', skipFeedback: true });
+    };
+    window.addEventListener('keydown', h);
+    return () => window.removeEventListener('keydown', h);
+  }, [open, locked, onResult]);
+
+  return (
+    <div className="exercise">
+      <p className="ex-label">Karteikarte 🃏 – {direction === 'hr-de' ? 'Was bedeutet das?' : 'Wie heißt das auf Kroatisch?'}</p>
+      <button
+        type="button"
+        className={open ? 'flashcard flip-card is-open' : 'flashcard flip-card'}
+        onClick={() => setOpen(true)}
+        aria-expanded={open}
+      >
+        <span className={direction === 'hr-de' ? 'flash-hr' : 'flash-de flash-front'}>{front}</span>
+        {open ? (
+          <>
+            <span className={direction === 'hr-de' ? 'flash-de' : 'flash-hr'}>{back}</span>
+            {card.alt?.length ? <span className="flash-alt">auch: {card.alt.join(', ')}</span> : null}
+            {card.exampleHr && (
+              <span className="example">
+                <span>{card.exampleHr}</span>
+                <span className="muted">{card.exampleDe}</span>
+              </span>
+            )}
+          </>
+        ) : (
+          <span className="muted small">Erst überlegen, dann antippen zum Umdrehen</span>
+        )}
+      </button>
+      {open && (
+        <div className="row">
+          <button type="button" className="btn ghost" onClick={() => onResult({ grade: 'wrong', skipFeedback: true })}>
+            🔁 Nochmal
+          </button>
+          <button type="button" className="btn primary" onClick={() => onResult({ grade: 'correct', skipFeedback: true })}>
+            ✓ Gewusst
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* ---------- Typing ---------- */
 
 export function TypeAnswer({ card, locked, onResult }: ExerciseProps & { card: Card }) {

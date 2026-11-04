@@ -24,6 +24,7 @@ oder den `dist/`-Ordner auf einen statischen Hoster (z. B. GitHub Pages) legen u
 - Teil 2 (Rijeka → Osijek): Arzt & Apotheke, Wohnen, Arbeit, Einkaufen & Zahlen, Telefonieren, Redewendungen, Verbpaare & Fälle
 - Wiederholung nach Spaced-Repetition-Prinzip
 - Mini-Spiele: Karteikarte, Auswahl, Hör-Detektiv, Tippen, Satz-Puzzle, Fall-Fänger, Wort-Match
+- Vokabeltrainer: alle Wörter frei üben (Lektionen, Übungsart, Richtung und Anzahl wählbar) plus durchsuchbare Wörterliste
 - Eigene Wörter aus dem Kurs eintragen
 - XP, Level, Tagesziel, Streak, Abzeichen, Statistik
 - Aussprache über die Sprachausgabe des Browsers (kroatische Stimme nötig für Hörübungen)

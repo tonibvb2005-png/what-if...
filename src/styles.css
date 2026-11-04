@@ -1068,3 +1068,62 @@ button:disabled {
   padding: 0.35rem 0.7rem;
   font-size: 0.85rem;
 }
+
+/* Vocabulary trainer */
+.trainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.chips-select {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.pick {
+  border: 2px solid var(--border);
+  background: var(--surface);
+  border-radius: 99px;
+  padding: 0.3rem 0.75rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.pick.active {
+  border-color: var(--blue);
+  background: color-mix(in srgb, var(--blue) 12%, var(--surface));
+  color: var(--blue);
+}
+.segmented.wrap {
+  flex-wrap: wrap;
+}
+.segmented.wrap button {
+  flex: 1 1 40%;
+}
+.flip-card {
+  width: 100%;
+  min-height: 12rem;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.flip-card.is-open {
+  cursor: default;
+}
+.flip-card .flash-hr,
+.flip-card .flash-de {
+  display: block;
+}
+.flash-front {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+.flip-card .example {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}

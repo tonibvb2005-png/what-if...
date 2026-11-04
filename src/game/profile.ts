@@ -7,6 +7,7 @@ export const XP = {
   correct: 10,
   almost: 7,
   drill: 8,
+  flip: 5,
   puzzle: 15,
   match: 15,
   sessionBonus: 10,

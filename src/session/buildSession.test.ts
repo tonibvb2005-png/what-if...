@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildSession, pickOptions, puzzleTokens } from './buildSession';
+import { buildSession, buildVocab, pickOptions, puzzleTokens } from './buildSession';
 import { ALL_BUILTIN_CARDS, LESSONS } from '../content/lessons';
 import { newReview } from '../srs/srs';
 import type { Review } from '../types';
@@ -74,5 +74,21 @@ describe('content', () => {
       }
       for (const c of l.cards) expect(puzzleTokens(c.exampleHr ?? '').length).toBeGreaterThan(0);
     }
+  });
+});
+
+describe('buildVocab', () => {
+  it('builds the requested number of exercises in the requested mode', () => {
+    const ex = buildVocab(ALL_BUILTIN_CARDS, ALL_BUILTIN_CARDS, { mode: 'flip', direction: 'de-hr', count: 10 }, seeded(5));
+    expect(ex).toHaveLength(10);
+    expect(ex.every((e) => e.kind === 'flip' && e.direction === 'de-hr')).toBe(true);
+    expect(new Set(ex.map((e) => ('card' in e ? e.card.id : ''))).size).toBe(10);
+  });
+
+  it('uses only the given cards and never more than exist', () => {
+    const cards = LESSONS[1].cards;
+    const ex = buildVocab(cards, ALL_BUILTIN_CARDS, { mode: 'mixed', direction: 'mixed', count: 50 }, seeded(7));
+    expect(ex).toHaveLength(cards.length);
+    expect(ex.every((e) => 'card' in e && e.card.lessonId === 'l2')).toBe(true);
   });
 });

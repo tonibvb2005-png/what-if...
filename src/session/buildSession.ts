@@ -6,6 +6,7 @@ export type Exercise =
   | { kind: 'choice'; card: Card; direction: 'hr-de' | 'de-hr'; options: string[] }
   | { kind: 'listen'; card: Card; options: string[] }
   | { kind: 'type'; card: Card }
+  | { kind: 'flip'; card: Card; direction: 'hr-de' | 'de-hr' }
   | { kind: 'puzzle'; card: Card; tokens: string[] }
   | { kind: 'drill'; drill: Drill }
   | { kind: 'match'; cards: Card[] };
@@ -154,4 +155,30 @@ export function buildPractice(
     .forEach((drill) => out.splice(Math.floor(rng() * (out.length + 1)), 0, { kind: 'drill', drill }));
   if (learned.length >= 4) out.push({ kind: 'match', cards: learned.slice(0, 5) });
   return out;
+}
+
+export type VocabMode = 'mixed' | 'flip' | 'choice' | 'type';
+export type VocabDirection = 'hr-de' | 'de-hr' | 'mixed';
+
+/** Free vocabulary training over any selection of cards (does not affect the schedule). */
+export function buildVocab(
+  cards: Card[],
+  allCards: Card[],
+  opts: { mode: VocabMode; direction: VocabDirection; count: number },
+  rng: Rng = Math.random,
+): Exercise[] {
+  const picked = shuffle(cards, rng).slice(0, opts.count);
+  return picked.map((card): Exercise => {
+    const dir = opts.direction === 'mixed' ? (rng() < 0.5 ? 'hr-de' : 'de-hr') : opts.direction;
+    const mode =
+      opts.mode === 'mixed' ? (['flip', 'choice', 'choice', 'type'] as const)[Math.floor(rng() * 4)] : opts.mode;
+    if (mode === 'type') return { kind: 'type', card };
+    if (mode === 'flip') return { kind: 'flip', card, direction: dir };
+    return {
+      kind: 'choice',
+      card,
+      direction: dir,
+      options: pickOptions(card, allCards, dir === 'hr-de' ? 'de' : 'hr', rng),
+    };
+  });
 }

@@ -9,6 +9,8 @@ export interface ExerciseResult {
   note?: string;
   /** Croatian text to read out in the feedback panel. */
   speakText?: string;
+  /** Go straight to the next exercise without the feedback panel. */
+  skipFeedback?: boolean;
 }
 
 export interface ExerciseProps {

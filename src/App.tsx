@@ -6,14 +6,15 @@ import { today } from './lib/date';
 import { hasCroatianVoice, onVoicesChanged } from './lib/speech';
 import { newReview, schedule } from './srs/srs';
 import { addXp } from './game/profile';
-import { buildPractice, buildSession, dueCards, type Exercise } from './session/buildSession';
+import { buildPractice, buildSession, buildVocab, dueCards, type Exercise } from './session/buildSession';
+import { Vocab, type VocabSettings } from './components/Vocab';
 import { Home } from './components/Home';
 import { LessonView } from './components/LessonView';
 import { MyWords } from './components/MyWords';
 import { Progress } from './components/Progress';
 import { Session } from './components/Session';
 
-type Tab = 'learn' | 'words' | 'progress';
+type Tab = 'learn' | 'vocab' | 'words' | 'progress';
 
 interface ActiveSession {
   title: string;
@@ -66,6 +67,14 @@ export function App() {
       title: `${lesson.emoji} ${lesson.title}`,
       practice: true,
       exercises: buildPractice(lesson.cards, allCards, state.reviews, lesson.drills, voice),
+    });
+  }
+
+  function startVocab(cards: Card[], opts: VocabSettings) {
+    setSession({
+      title: '📚 Vokabeltrainer',
+      practice: true,
+      exercises: buildVocab(cards, allCards, { mode: opts.mode, direction: opts.direction, count: opts.count || cards.length }),
     });
   }
 
@@ -144,6 +153,7 @@ export function App() {
             onOpenLesson={setOpenLesson}
           />
         ))}
+      {tab === 'vocab' && <Vocab state={state} allCards={allCards} onStart={startVocab} />}
       {tab === 'words' && (
         <MyWords
           state={state}
@@ -164,6 +174,7 @@ export function App() {
         {(
           [
             ['learn', '🗺️', 'Lernen'],
+            ['vocab', '📚', 'Vokabeln'],
             ['words', '✏️', 'Kurs-Wörter'],
             ['progress', '📈', 'Fortschritt'],
           ] as const
