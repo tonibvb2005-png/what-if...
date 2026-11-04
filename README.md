@@ -12,7 +12,9 @@ npm test         # Unit-Tests
 npm run build    # Produktions-Build nach dist/
 ```
 
-Auf dem Handy: `npm run dev -- --host` und die angezeigte Netzwerk-Adresse öffnen,
+Am einfachsten: die App als Webseite öffnen (Link im Pull Request bzw. im Chat). Für eine einzelne HTML-Datei: `npm run build:single` → `dist/polako.html`.
+
+Auf dem Handy (selbst gehostet): `npm run dev -- --host` und die angezeigte Netzwerk-Adresse öffnen,
 oder den `dist/`-Ordner auf einen statischen Hoster (z. B. GitHub Pages) legen und
 „Zum Startbildschirm hinzufügen“ wählen.
 

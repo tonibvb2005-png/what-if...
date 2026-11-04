@@ -16,6 +16,7 @@ const EMPTY = { hr: '', de: '', exampleHr: '', exampleDe: '' };
 export function MyWords({ state, onAdd, onDelete, onLearn }: Props) {
   const [form, setForm] = useState(EMPTY);
   const [focused, setFocused] = useState<'hr' | 'exampleHr'>('hr');
+  const [pendingDelete, setPendingDelete] = useState<string | null>(null);
   const cards = state.customCards;
   const newCount = cards.filter((c) => !state.reviews[c.id]).length;
 
@@ -97,14 +98,20 @@ export function MyWords({ state, onAdd, onDelete, onLearn }: Props) {
                     <span className="muted">{c.de}</span>
                   </div>
                   <span className={`tag tag-${status}`}>{status}</span>
-                  <button
-                    type="button"
-                    className="icon-btn"
-                    aria-label={`${c.hr} löschen`}
-                    onClick={() => confirm(`„${c.hr}“ löschen?`) && onDelete(c.id)}
-                  >
-                    🗑
-                  </button>
+                  {pendingDelete === c.id ? (
+                    <button type="button" className="btn danger small-btn" onClick={() => onDelete(c.id)}>
+                      Löschen
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      className="icon-btn"
+                      aria-label={`${c.hr} löschen`}
+                      onClick={() => setPendingDelete(c.id)}
+                    >
+                      🗑
+                    </button>
+                  )}
                 </li>
               );
             })}

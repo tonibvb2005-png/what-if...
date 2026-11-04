@@ -34,21 +34,29 @@ export function Progress({ state, day, onUpdate, onReplace }: Props) {
 
   useEffect(() => onVoicesChanged(() => setVoice(hasCroatianVoice())), []);
 
-  function exportData() {
-    const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `polako-backup-${day}.json`;
-    a.click();
-    URL.revokeObjectURL(a.href);
+  const [backupMsg, setBackupMsg] = useState<string | null>(null);
+  const [showCode, setShowCode] = useState(false);
+  const [importText, setImportText] = useState('');
+  const [pendingImport, setPendingImport] = useState<AppState | null>(null);
+  const backupCode = JSON.stringify(state);
+
+  async function copyBackup() {
+    setShowCode(true);
+    try {
+      await navigator.clipboard.writeText(backupCode);
+      setBackupMsg('Sicherungscode kopiert. Speichere ihn z. B. in einer Notiz.');
+    } catch {
+      setBackupMsg('Markiere den Code unten und kopiere ihn von Hand.');
+    }
   }
 
-  async function importData(file: File) {
+  function readImport(text: string) {
     try {
-      const data = parseState(JSON.parse(await file.text()));
-      if (confirm('Fortschritt aus der Datei laden? Der aktuelle Stand wird ersetzt.')) onReplace(data);
+      setPendingImport(parseState(JSON.parse(text)));
+      setBackupMsg(null);
     } catch {
-      alert('Die Datei konnte nicht gelesen werden.');
+      setPendingImport(null);
+      setBackupMsg('Der Code konnte nicht gelesen werden. Prüfe, ob er vollständig eingefügt ist.');
     }
   }
 
@@ -163,28 +171,79 @@ export function Progress({ state, day, onUpdate, onReplace }: Props) {
           </button>
         </div>
 
-        <div>
+        <div className="backup">
           <strong>Sicherung</strong>
-          <p className="small muted">Dein Fortschritt wird nur auf diesem Gerät gespeichert. Sichere ihn ab und zu als Datei.</p>
+          <p className="small muted">
+            Dein Fortschritt wird nur in diesem Browser gespeichert. Kopiere ab und zu den Sicherungscode, um ihn auf ein
+            anderes Gerät zu übertragen oder wiederherzustellen.
+          </p>
           <div className="row">
-            <button type="button" className="btn ghost" onClick={exportData}>
-              ⬇ Exportieren
+            <button type="button" className="btn ghost" onClick={copyBackup}>
+              📋 Sicherungscode kopieren
             </button>
             <button type="button" className="btn ghost" onClick={() => fileInput.current?.click()}>
-              ⬆ Importieren
+              ⬆ Aus Datei laden
             </button>
             <input
               ref={fileInput}
+              id="backup-file"
               type="file"
-              accept="application/json"
+              accept="application/json,.json,.txt"
               hidden
-              onChange={(e) => {
+              onChange={async (e) => {
                 const f = e.target.files?.[0];
-                if (f) importData(f);
+                if (f) readImport(await f.text());
                 e.target.value = '';
               }}
             />
           </div>
+          {showCode && (
+            <textarea id="backup-code" className="code" readOnly value={backupCode} onFocus={(e) => e.target.select()} rows={3} />
+          )}
+          <label className="small" htmlFor="backup-import">
+            Sicherungscode einfügen
+          </label>
+          <textarea
+            id="backup-import"
+            className="code"
+            rows={3}
+            value={importText}
+            onChange={(e) => setImportText(e.target.value)}
+            placeholder='{"version":1, …}'
+          />
+          <button type="button" className="btn ghost" disabled={!importText.trim()} onClick={() => readImport(importText)}>
+            Code prüfen
+          </button>
+          {pendingImport && (
+            <div className="confirm-box">
+              <span>
+                Gefunden: {pendingImport.profile.xp} XP, gelernte Wörter: {Object.keys(pendingImport.reviews).length}. Der
+                aktuelle Stand wird ersetzt.
+              </span>
+              <div className="row">
+                <button type="button" className="btn ghost" onClick={() => setPendingImport(null)}>
+                  Abbrechen
+                </button>
+                <button
+                  type="button"
+                  className="btn primary"
+                  onClick={() => {
+                    onReplace(pendingImport);
+                    setPendingImport(null);
+                    setImportText('');
+                    setBackupMsg('Fortschritt geladen.');
+                  }}
+                >
+                  Ja, laden
+                </button>
+              </div>
+            </div>
+          )}
+          {backupMsg && (
+            <p className="small" role="status">
+              {backupMsg}
+            </p>
+          )}
         </div>
       </section>
     </div>
