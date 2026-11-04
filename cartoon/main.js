@@ -936,10 +936,11 @@
     if (sh.draw) {
       sh.draw(s, lt, d, t);
     } else if (sh.set === 'pitch') {
+      // the whole goal sits behind the players so nobody walks "through" a post
       drawGoalBack();
+      drawGoalFront();
       Object.keys(sh.cast).forEach(drawC);
       if (sh.ball) { const b = ballPos(sh.ball, lt); drawBall(b.x, b.y, b.moving ? t : 0); }
-      drawGoalFront();
       const sc = typeof sh.score === 'function' ? sh.score(lt) : sh.score, lb = typeof sh.label === 'function' ? sh.label(lt) : sh.label;
       if (sc) scoreboard(sc, lb);
     } else if (sh.set === 'stands') {
