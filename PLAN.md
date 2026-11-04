@@ -132,9 +132,19 @@ src/
 
 ---
 
-## 7. Offene Fragen an dich
+## 7. Entscheidungen (Lernprofil)
 
-1. Hast du **Vorkenntnisse** (z. B. Familie, Urlaub) oder starten wir bei Null?
-2. **Ziel:** Urlaub, Familie/Verwandte, Umzug, Beruf? → beeinflusst die Themenwahl.
-3. Lieber **Web-App (PWA)** oder native **Handy-App** (z. B. React Native)?
-4. Soll ich direkt mit dem **MVP (Phase 1)** loslegen?
+- **Vorkenntnisse:** Grundlagen vorhanden + wöchentlicher Kurs → Start auf Niveau A1+/A2, kein Alphabet-Modul.
+- **Ziel:** Familie in Kroatien → Themen rund um Familie, Essen bei Oma, Smalltalk, Feste, Gefühle.
+- **Plattform:** Web-App (PWA).
+- **Kurs-Begleitung:** Eigene Wörter aus dem Kurs eintragen und mitlernen („Kurs-Wörter“).
+
+## 8. Umgesetzt in Version 0.1
+
+- 8 Stationen (Zagreb → Dubrovnik) mit je 12 Wörtern/Phrasen, Beispielsätzen und Grammatik-Häppchen
+- Spaced Repetition (SM-2-Variante mit Stufen 1–5)
+- Übungen: Karteikarte, Auswahl (beide Richtungen), Hör-Detektiv, Tippen (mit č/ć/đ/š/ž-Tasten, Toleranz für fehlende Häkchen), Satz-Puzzle, Fall-Fänger, Wort-Match
+- XP, Level, Tagesziel, Streak mit Streak-Schutz, Abzeichen, 7-Tage-Statistik
+- Kurs-Wörter, Frei-üben-Modus, alle Lektionen freischaltbar
+- Offline-fähig, Export/Import des Fortschritts
+- Hinweis: Speicherung vorerst in `localStorage` statt IndexedDB (Datenmenge ist klein)

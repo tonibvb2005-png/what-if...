@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="96" fill="#0b5cad"/>
+  <g transform="translate(136 120)">
+    <rect width="240" height="272" rx="24" fill="#fff"/>
+    <g fill="#d6312b">
+      <rect x="0" y="0" width="48" height="48" rx="8"/><rect x="96" y="0" width="48" height="48"/><rect x="192" y="0" width="48" height="48" rx="8"/>
+      <rect x="48" y="48" width="48" height="48"/><rect x="144" y="48" width="48" height="48"/>
+      <rect x="0" y="96" width="48" height="48"/><rect x="96" y="96" width="48" height="48"/><rect x="192" y="96" width="48" height="48"/>
+      <rect x="48" y="144" width="48" height="48"/><rect x="144" y="144" width="48" height="48"/>
+    </g>
+    <path d="M0 192h240v56a24 24 0 0 1-24 24H24A24 24 0 0 1 0 248z" fill="#fff"/>
+    <text x="120" y="250" font-family="system-ui, sans-serif" font-size="56" font-weight="800" text-anchor="middle" fill="#0b5cad">č ž</text>
+  </g>
+</svg>
