@@ -46,7 +46,7 @@ window.Puppet = (function () {
     giveBagR: { rA: 72, rE: -15, lA: -30, lE: -20 },
     holdBag: { rA: 160, rE: 10, lA: 150, lE: 20, lL: 14, rL: 14 }
   };
-  const MD = { laugh: 0, tremble: 0, jump: 0, dance: 0, no: 0, wave: 0, lookX: 0, lookY: 0, dy: 0 };
+  const MD = { laugh: 0, tremble: 0, jump: 0, dance: 0, no: 0, wave: 0, walk: 0, sing: 0, lookX: 0, lookY: 0, dy: 0 };
 
   const lerp = (a, b, x) => a + (b - a) * x;
   function mix(a, b, x, def) { const o = {}; for (const k in def) o[k] = lerp(a[k] ?? def[k], b[k] ?? def[k], x); return o; }
@@ -115,6 +115,20 @@ window.Puppet = (function () {
         ctx.strokeStyle = '#ffd400'; ctx.lineWidth = 5; ctx.lineCap = 'round';
         for (let k = 1; k <= 2; k++) { ctx.beginPath(); ctx.arc(0, -40, 40 + k * 16, -.7, .7); ctx.stroke(); ctx.beginPath(); ctx.arc(0, -40, 40 + k * 16, Math.PI - .7, Math.PI + .7); ctx.stroke(); }
       }
+    } else if (kind === 'scarf') {
+      ctx.rotate(Math.sin(t * 4) * .25 - .3);
+      for (let k = 0; k < 6; k++) { ctx.beginPath(); ctx.rect(-14, -40 - k * 34, 28, 34); ctx.fillStyle = k % 2 ? '#ffffff' : '#c8102e'; ctx.fill(); stroke(ctx, 4, OUT); }
+    } else if (kind === 'coat') {
+      ctx.rotate(.15);
+      ctx.beginPath(); ctx.moveTo(-10, -6); ctx.lineTo(-58, 20); ctx.lineTo(-64, 170); ctx.lineTo(48, 170); ctx.lineTo(44, 20); ctx.lineTo(10, -6); ctx.closePath();
+      ctx.fillStyle = '#7a5236'; ctx.fill(); stroke(ctx, 6, OUT);
+      ctx.beginPath(); ctx.moveTo(-10, -6); ctx.lineTo(-4, 60); ctx.lineTo(10, -6); ctx.fillStyle = '#5c3c26'; ctx.fill(); stroke(ctx, 4, OUT);
+    } else if (kind === 'radio') {
+      ctx.beginPath(); ctx.moveTo(18, -40); ctx.lineTo(48, -110); stroke(ctx, 5, OUT);
+      ctx.beginPath(); ctx.roundRect(-46, -44, 92, 60, 10); ctx.fillStyle = '#c94f3a'; ctx.fill(); stroke(ctx, 6, OUT);
+      circle(ctx, -18, -14, 17, '#2a2a3a', 4); ctx.fillStyle = '#ffe9a8'; ctx.fillRect(8, -32, 30, 14); stroke(ctx, 0, OUT);
+      ctx.strokeStyle = '#ffd400'; ctx.lineWidth = 4; ctx.lineCap = 'round';
+      for (let k = 1; k <= 2; k++) { ctx.beginPath(); ctx.arc(-18, -14, 24 + k * 14 + (t * 30 % 14), -.8, .8); ctx.globalAlpha = .7; ctx.stroke(); ctx.globalAlpha = 1; }
     } else if (kind === 'bag') {
       ctx.beginPath(); ctx.moveTo(-22, 4); ctx.quadraticCurveTo(-95, 60, -80, 120); ctx.quadraticCurveTo(-60, 175, 0, 175);
       ctx.quadraticCurveTo(60, 175, 80, 120); ctx.quadraticCurveTo(95, 60, 22, 4); ctx.closePath();
@@ -274,7 +288,7 @@ window.Puppet = (function () {
 
   // Draw a character; ch has x, y (ground), scale and look; st from stateAt().
   function draw(ctx, ch, st, t) {
-    const { e, m } = st; const p = Object.assign({}, st.p);
+    let { e, m } = st; const p = Object.assign({}, st.p);
     const s = ch.scale || 1, bw = ch.bw || 1;
     const laughB = m.laugh * Math.abs(Math.sin(t * 15 + (ch.blinkPh || 0))) * -16;
     const jumpPh = Math.abs(Math.sin(t * 5.2 + (ch.blinkPh || 0)));
@@ -286,6 +300,8 @@ window.Puppet = (function () {
     if (m.dance > 0) { p.lA += m.dance * (Math.sin(t * 6.5) * 25); p.rA += m.dance * (-Math.sin(t * 6.5) * 25); }
     const lookX = m.lookX + m.no * Math.sin(t * 11) * .9;
     p.rE += m.wave * Math.sin(t * 12) * 28;
+    if (m.walk > 0) { const w = Math.sin(t * 9); p.lL += w * 24 * m.walk; p.rL -= w * 24 * m.walk; p.lK -= Math.max(0, -w) * 30 * m.walk; p.rK -= Math.max(0, w) * 30 * m.walk; p.lA += -w * 14 * m.walk; m = Object.assign({}, m, { dy: m.dy - Math.abs(w) * 10 * m.walk }); }
+    if (m.sing > 0) { e = Object.assign({}, e, { mouthOpen: e.mouthOpen + (.35 + .3 * Math.sin(t * 7)) * m.sing, squint: Math.max(e.squint, .8 * m.sing) }); p.headTilt += Math.sin(t * 3) * 8 * m.sing; p.lean += Math.sin(t * 3) * 4 * m.sing; }
     const tuck = m.jump * jumpPh;
     p.lL += tuck * 18; p.rL += tuck * 18; p.lK -= tuck * 40; p.rK -= tuck * 40;
 

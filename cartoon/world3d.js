@@ -4,6 +4,8 @@ window.World3D = (function () {
   const T = THREE;
   const SETS = {
     bookies: { wall: '#3f6680', wainscot: '#2f5066', floorA: '#c48a55', floorB: '#b07a48', base: '#24394a', lights: [-3.3, 13.9] },
+    stands:  { wall: '#232a4a', wainscot: '#1c2240', floorA: '#5b6277', floorB: '#535a6e', base: '#151a33', lights: [0, 0], stripes: 0 },
+    pitch:   { wall: '#1a2140', wainscot: '#1a2140', floorA: '#2f9a4a', floorB: '#2a8a42', base: '#14182f', lights: [-3, 3], stripes: 1 },
     studio:  { wall: '#3b2a6b', wainscot: '#2e2058', floorA: '#4a3486', floorB: '#3d2a72', base: '#22174a', lights: [0, 0] },
     room:    { wall: '#d6a273', wainscot: '#b9855a', floorA: '#8c5d3d', floorB: '#7c5135', base: '#5c3a24', lights: [0, -11.5] }
   };
@@ -16,10 +18,11 @@ window.World3D = (function () {
     float pool(vec2 p){ return .55*exp(-pow(length(p-L0)/4.5,2.)) + .45*exp(-pow(length(p-L1)/4.5,2.)); }`;
 
   function floorMat(s) {
-    const u = { a: { value: C(s.floorA) }, b: { value: C(s.floorB) }, bright: { value: 1 }, L0: { value: new T.Vector2(s.lights[0], 0) }, L1: { value: new T.Vector2(s.lights[1], 0) } };
+    const u = { a: { value: C(s.floorA) }, b: { value: C(s.floorB) }, stripes: { value: s.stripes || 0 }, bright: { value: 1 }, L0: { value: new T.Vector2(s.lights[0], 0) }, L1: { value: new T.Vector2(s.lights[1], 0) } };
     mats.push(u);
     return new T.ShaderMaterial({ uniforms: u, vertexShader: VS, fragmentShader: `varying vec3 vW; uniform vec3 a,b; ${LIGHT}
-      void main(){ vec2 g=floor(vW.xz/2.2); float ch=mod(g.x+g.y,2.);
+      uniform float stripes;
+      void main(){ vec2 g=floor(vW.xz/2.2); float ch = stripes > .5 ? mod(floor(vW.x/3.2),2.) : mod(g.x+g.y,2.);
         vec3 c=mix(a,b,ch);
         float l=.72+.38*pool(vW.xz);
         c*=l*bright*(1.-.25*smoothstep(4.,14.,vW.z));
@@ -100,6 +103,52 @@ window.World3D = (function () {
     return g;
   }
 
+
+  let crowdTex = null;
+  function crowdTexture() {
+    if (crowdTex) return crowdTex;
+    crowdTex = canvasTex(1024, 512, (c, w, h) => {
+      c.fillStyle = '#1b2142'; c.fillRect(0, 0, w, h);
+      const skins = ['#ffd2b0', '#e8b08a', '#c98d63', '#8a5a3c', '#5e3a24'];
+      let seed = 3; const r = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+      for (let row = 0; row < 10; row++) {
+        const y = 30 + row * 50;
+        c.fillStyle = row % 2 ? '#20284e' : '#252d56'; c.fillRect(0, y + 10, w, 50);
+        for (let x = 10 + (row % 2) * 16; x < w; x += 32) {
+          const body = r() < .78 ? '#c8102e' : (r() < .5 ? '#ffffff' : '#111111');
+          c.fillStyle = body; c.beginPath(); c.roundRect(x - 12, y + 18, 24, 30, 8); c.fill();
+          c.fillStyle = skins[Math.floor(r() * skins.length)]; c.beginPath(); c.arc(x, y + 10, 10, 0, Math.PI * 2); c.fill();
+          if (r() < .25) { c.fillStyle = '#c8102e'; c.fillRect(x - 3, y - 26, 6, 26); c.fillStyle = '#fff'; c.fillRect(x - 3, y - 18, 6, 6); }
+        }
+      }
+    });
+    crowdTex.wrapS = crowdTex.wrapT = THREE.RepeatWrapping; crowdTex.repeat.set(9, 2);
+    return crowdTex;
+  }
+  function buildStands() {
+    const s = SETS.stands, g = new T.Group();
+    const fl = plane(120, 40, floorMat(s), 0, 0, 0); fl.rotation.x = -Math.PI / 2; fl.position.z = 12; g.add(fl);
+    // tiered crowd rising behind the fans
+    const crowd = new T.Mesh(new T.PlaneGeometry(120, 26), new T.MeshBasicMaterial({ map: crowdTexture(), color: '#8f95ad' }));
+    crowd.position.set(0, 13, -9); crowd.rotation.x = -.25; g.add(crowd); g.userData.crowd = crowd;
+    const roof = plane(120, 6, new T.MeshBasicMaterial({ color: '#0e1226' }), 0, 27, -12); g.add(roof);
+    [-5, 5].forEach(x => g.add(cone(x, '#e8eeff')));
+    return g;
+  }
+  function buildPitch() {
+    const s = SETS.pitch, g = new T.Group();
+    const fl = plane(160, 60, floorMat(s), 0, 0, 0); fl.rotation.x = -Math.PI / 2; fl.position.z = 10; g.add(fl);
+    const boards = canvasTex(1024, 64, (c, w, h) => {
+      for (let i = 0; i < 4; i++) { c.fillStyle = i % 2 ? '#1655d6' : '#0e2a8a'; c.fillRect(i * w / 4, 0, w / 4, h); c.fillStyle = '#fff'; c.font = '900 34px Inter Display'; c.textAlign = 'center'; c.fillText('FOOTBALLPAGE.TV', i * w / 4 + w / 8, 45); }
+    });
+    boards.wrapS = THREE.RepeatWrapping; boards.repeat.set(4, 1);
+    g.add(plane(160, 1.4, new T.MeshBasicMaterial({ map: boards }), 0, .7, -12));
+    const crowd = new T.Mesh(new T.PlaneGeometry(160, 22), new T.MeshBasicMaterial({ map: crowdTexture(), color: '#7d839b' }));
+    crowd.position.set(0, 12, -16); crowd.rotation.x = -.35; g.add(crowd); g.userData.crowd = crowd;
+    g.add(plane(160, 30, new T.MeshBasicMaterial({ color: '#0b0f24' }), 0, 34, -20));
+    [-4, 4].forEach(x => g.add(cone(x, '#f0f4ff')));
+    return g;
+  }
   function buildStudio() {
     const s = SETS.studio, g = new T.Group();
     const fl = plane(120, 40, floorMat(s), 0, 0, 0); fl.rotation.x = -Math.PI / 2; fl.position.z = 12; g.add(fl);
@@ -112,8 +161,8 @@ window.World3D = (function () {
     renderer.setPixelRatio(1); renderer.setSize(1080, 1920, false);
     scene = new T.Scene();
     camera = new T.PerspectiveCamera(46, 1080 / 1920, .1, 400);
-    groups.bookies = buildBookies(); groups.room = buildRoom(); groups.studio = buildStudio();
-    scene.add(groups.bookies, groups.room, groups.studio);
+    groups.bookies = buildBookies(); groups.room = buildRoom(); groups.studio = buildStudio(); groups.stands = buildStands(); groups.pitch = buildPitch();
+    scene.add(groups.bookies, groups.room, groups.studio, groups.stands, groups.pitch);
     conf = new T.InstancedMesh(new T.PlaneGeometry(.22, .36), new T.MeshBasicMaterial({ side: T.DoubleSide }), 300);
     const pal = ['#1655d6', '#ffd400', '#ffffff', '#ef3b5c', '#20c56a'];
     for (let k = 0; k < 300; k++) { confData.push({ x: (R() - .5) * 16, z: -1 + R() * 6, y0: R() * 16, v: 1.6 + R() * 2, rx: R() * 6, ry: R() * 6, w: R() * 3 + 1 }); conf.setColorAt(k, C(pal[k % pal.length])); }
@@ -123,6 +172,7 @@ window.World3D = (function () {
   // cam: the 2D camera {x, y, z}; set: 'bookies' | 'room'; mood: {bright, conf}
   function frame(t, cam, set, mood = {}) {
     for (const k in groups) groups[k].visible = k === set;
+    const cr = groups[set] && groups[set].userData.crowd; if (cr) { cr.position.y = (set === 'pitch' ? 12 : 13) + Math.abs(Math.sin(t * (mood.crowd || 2))) * .12 * (mood.crowdAmp || 1); }
     const b = mood.bright != null ? mood.bright : 1;
     mats.forEach(u => { u.bright.value = b; });
     scene.traverse(o => { if (o.material && o.material.uniforms && o.material.uniforms.col) o.material.uniforms.bright.value = b; });

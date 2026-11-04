@@ -63,7 +63,7 @@
     ctx.beginPath(); ctx.roundRect(TVX - TVW / 2 - 26, TVY - TVH / 2 - 26, TVW + 52, TVH + 52, 34); ctx.fillStyle = '#20233a'; ctx.fill(); ctx.stroke();
     ctx.save(); ctx.beginPath(); ctx.roundRect(TVX - TVW / 2, TVY - TVH / 2, TVW, TVH, 14); ctx.clip();
     ctx.translate(TVX - TVW / 2, TVY - TVH / 2);
-    drawCard(card, t, lt, d);
+    if (typeof card === 'function') card(t, lt, d); else drawCard(card, t, lt, d);
     // scanline shine
     const g = ctx.createLinearGradient(0, 0, TVW, TVH); g.addColorStop(0, 'rgba(255,255,255,.12)'); g.addColorStop(.4, 'rgba(255,255,255,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, TVW, TVH);
     ctx.restore();
@@ -127,6 +127,8 @@
       txt(ft ? 'FULL TIME' : 'LIVE · 2 MAY 2016', TVW / 2, 100, 40, ft ? '#ffd400' : '#fff', 800);
       score('CHELSEA', late ? 2 : 1, 2, 'TOTTENHAM', '#034694', '#ffffff', lt, d, late ? d * .73 : null);
       if (ft) txt('LEICESTER ARE CHAMPIONS!', TVW / 2, 445, 44, '#ffd400', 900, 'center', 0);
+    } else if (card === 'blank') {
+      cardBg('#14162a', '#07080f');
     } else if (card === 'champions') {
       const fl = Math.sin(t * 12) > 0;
       cardBg(fl ? '#1655d6' : '#0d2a8a', '#06134a');
@@ -438,6 +440,301 @@
     }
   });
 
+
+  // ---------- Istanbul 2005 story ----------
+  let CUR = null;                       // scene being drawn (for cue lookups)
+  const cue = (name, def) => CUR && CUR.cues && CUR.cues[name] != null ? CUR.cues[name] : def * (CUR ? CUR.duration : 1);
+  function scoreCard(top, steps, extra) {
+    // steps: [[cueName|null, defFrac, ga, gb, label]]
+    return (t, lt, d) => {
+      cardBg('#7a0f22', '#2b0610');
+      let ga = steps[0][2], gb = steps[0][3], label = steps[0][4], at = -9;
+      for (const [cn, df, a, b, lb] of steps) { const tt = cn ? cue(cn, df) : df * d; if (lt >= tt) { ga = a; gb = b; label = lb; at = tt; } }
+      txt(top, TVW / 2, 100, 34, '#ffd400', 800);
+      const y = 240;
+      ctx.beginPath(); ctx.roundRect(40, y - 120, TVW - 80, 250, 30); ctx.fillStyle = 'rgba(255,255,255,.1)'; ctx.fill();
+      ctx.lineWidth = 6; ctx.strokeStyle = '#fff';
+      ctx.beginPath(); ctx.arc(150, y - 20, 48, 0, Math.PI * 2); ctx.fillStyle = '#d81e2c'; ctx.fill(); ctx.stroke();
+      ctx.save(); ctx.beginPath(); ctx.arc(150, y - 20, 45, 0, Math.PI * 2); ctx.clip(); ctx.fillStyle = '#111'; for (let k = -2; k <= 2; k += 2) ctx.fillRect(150 + k * 14 - 7, y - 70, 14, 100); ctx.restore();
+      ctx.beginPath(); ctx.arc(TVW - 150, y - 20, 48, 0, Math.PI * 2); ctx.fillStyle = '#c8102e'; ctx.fill(); ctx.stroke();
+      txt('AC MILAN', 150, y + 70, 36, '#fff'); txt('LIVERPOOL', TVW - 150, y + 70, 36, '#fff');
+      const k = 1 + .5 * Math.max(0, 1 - (lt - at) / .5);
+      ctx.save(); ctx.translate(TVW / 2, y + 10); ctx.scale(k, k); txt(`${ga} – ${gb}`, 0, 0, 120, '#ffd400', 900, 'center', 12); ctx.restore();
+      if (label) { const kk = eb(P(lt, at, at + .35)); ctx.save(); ctx.translate(TVW / 2, 445); ctx.scale(kk, kk); txt(label, 0, 0, 50, '#fff', 900, 'center', 10); ctx.restore(); }
+      if (extra) extra(t, lt, d);
+    };
+  }
+  function textCard(lines, bg = ['#0b3d2e', '#04150f']) {
+    return (t, lt, d) => {
+      cardBg(bg[0], bg[1]);
+      lines.forEach(([txtv, size, color, cn, df], i) => {
+        const tt = cn ? cue(cn, df) : (df || 0) * d; const k = eb(P(lt, tt, tt + .35)); if (k <= 0) return;
+        ctx.save(); ctx.translate(TVW / 2, 130 + i * 120); ctx.scale(k, k);
+        if (txtv === 'DUDEK_DANCE') ctx.rotate(Math.sin(t * 9) * .12);
+        txt(txtv === 'DUDEK_DANCE' ? "DUDEK'S DANCE" : txtv, 0, 0, size, color, 900, 'center', 8); ctx.restore();
+      });
+    };
+  }
+  function drawBus(t) {
+    const x0 = 1150, x1 = 1950, top = 600, bot = GROUND - 40;
+    ctx.lineWidth = 7; ctx.strokeStyle = OUT;
+    ctx.beginPath(); ctx.roundRect(x0, top, x1 - x0, bot - top, 40); ctx.fillStyle = '#ffcf4a'; ctx.fill(); ctx.stroke();
+    for (let i = 0; i < 2; i++) {
+      const wx = x0 + 50 + i * 370, wy = top + 60;
+      ctx.save(); ctx.beginPath(); ctx.roundRect(wx, wy, 330, 260, 24); ctx.clip();
+      const g = ctx.createLinearGradient(0, wy, 0, wy + 260); g.addColorStop(0, '#1d1f4a'); g.addColorStop(1, '#5a3a6a'); ctx.fillStyle = g; ctx.fillRect(wx, wy, 330, 260);
+      for (let k = 0; k < 14; k++) { const bx = wx + ((k * 97 - t * 260) % 700 + 700) % 700 - 180, bh = 60 + (k * 37) % 120; ctx.fillStyle = '#2a2448'; ctx.fillRect(bx, wy + 260 - bh, 60, bh); ctx.fillStyle = 'rgba(255,220,140,.8)'; ctx.fillRect(bx + 14, wy + 260 - bh + 16, 10, 12); }
+      ctx.restore(); ctx.beginPath(); ctx.roundRect(wx, wy, 330, 260, 24); ctx.stroke();
+    }
+    ctx.beginPath(); ctx.moveTo(x0 + 400, top); ctx.lineTo(x0 + 400, bot); ctx.lineWidth = 14; ctx.strokeStyle = '#b7bccf'; ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(x0 + 60, bot - 220, 260, 160, 30); ctx.fillStyle = '#3f62ad'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke();
+    txt('BUS HOME', x0 + 400, top + 32, 34, OUT, 900);
+  }
+  function musicNotes(t, xs) {
+    xs.forEach((x, i) => { for (let k = 0; k < 3; k++) { const ph = (t * .6 + k / 3 + i * .17) % 1; ctx.globalAlpha = Math.sin(ph * Math.PI);
+      txt(k % 2 ? '♪' : '♫', x + Math.sin(t * 2 + k) * 40 + (k - 1) * 50, 860 - ph * 260, 64, '#ffd400', 900, 'center', 8); } });
+    ctx.globalAlpha = 1;
+  }
+  const IROOM = { mike: { x: -270 }, hero: { x: 0 }, jay: { x: 270 } };
+  const IG = { x: 0, y: 985, z: 1.25 }, IG2 = { x: 0, y: 995, z: 1.33 };
+  const panTV = (a, b) => [[0, TV], [a, TV], [b, IG], [1, IG2]];
+  Object.assign(SHOTS, {
+    ihook: {
+      set: 'room', cast: IROOM, noCaption: true, bright: .95,
+      title: ['WHAT IF YOU LEFT', 'AT <span class="gold">HALF-TIME</span>?'], titleSize: [92, 110],
+      cam: [[0, { x: 0, y: 1010, z: 1.15 }], [1, { x: 0, y: 1000, z: 1.25 }]], card: 'off',
+      acts: { hero: [[0, { e: 'confident', m: { lookX: 0 } }]], mike: [[0, { e: 'smirk', p: 'crossed', m: { lookX: 1 } }], [.5, { e: 'neutral', p: 'idle', propR: 'coat', m: { lookX: 1 } }]], jay: [[0, { e: 'happy', m: { lookX: -1 } }]] }
+    },
+    iintro: {
+      set: 'room', cast: IROOM, tag: '25 MAY 2005', bright: 1,
+      card: textCard([['CHAMPIONS LEAGUE FINAL', 40, '#ffd400', null, .05], ['ISTANBUL', 96, '#fff', null, .15], ['AC MILAN vs LIVERPOOL', 54, '#fff', null, .45]], ['#0b2a7a', '#06134a']),
+      cam: panTV(.62, .72),
+      acts: { hero: [[0, { e: 'happy', m: { lookX: -1 } }], [.72, { e: 'ecstatic', p: 'cheer', m: { lookX: 0, jump: .4 } }]], mike: [[0, { e: 'happy', m: { lookX: -1 } }], [.72, { e: 'happy', p: 'fistPumpR', handR: 'fist', m: { lookX: 1 } }]], jay: [[0, { e: 'happy', m: { lookX: -1 } }], [.74, { e: 'ecstatic', p: 'cheer', m: { dance: .6 } }]] }
+    },
+    imaldini: {
+      set: 'room', cast: IROOM, tag: '1st MINUTE', bright: .95,
+      card: scoreCard('CHAMPIONS LEAGUE FINAL', [[null, 0, 0, 0, ''], ['goal', .5, 1, 0, 'MALDINI']]),
+      cam: [[0, TV], [.66, TV], [.76, IG], [1, IG2]],
+      acts: { hero: [[0, { e: 'happy', m: { lookX: -1 } }], [.76, { e: 'shock', p: 'handsOnHead', m: { lookX: 0 } }]], mike: [[0, { e: 'happy', m: { lookX: -1 } }], [.76, { e: 'shock', m: { lookX: -1 } }]], jay: [[0, { e: 'happy', m: { lookX: -1 } }], [.78, { e: 'surprised', p: 'nervous', m: { lookX: -1 } }]] }
+    },
+    icrespo: {
+      set: 'room', cast: IROOM, bright: .82,
+      card: scoreCard('CHAMPIONS LEAGUE FINAL', [[null, 0, 1, 0, ''], ['g2', .25, 2, 0, 'CRESPO'], ['g3', .5, 3, 0, 'CRESPO AGAIN'], ['ht', .68, 3, 0, 'HALF-TIME']]),
+      cam: [[0, TV], [.72, TV], [.8, IG], [1, IG2]],
+      acts: { hero: [[0, { e: 'worried', m: { lookX: -1 } }], [.8, { e: 'despair', m: { lookX: -1 } }]], mike: [[0, { e: 'worried', m: { lookX: -1 } }], [.8, { e: 'despair', p: 'handsOnHead', m: { lookX: -1 } }]], jay: [[0, { e: 'worried', m: { lookX: -1 } }], [.82, { e: 'despair', p: 'crossed', m: { lookX: -1, tremble: .4 } }]] }
+    },
+    ileave: {
+      set: 'room', cast: IROOM, bright: .8, card: scoreCard('HALF-TIME', [[null, 0, 3, 0, '']]),
+      cam: [[0, IG], [1, { x: -120, y: 990, z: 1.2 }]],
+      move: { mike: [[0, -270], ['leave', .45, -270], [1, -1250]] },
+      acts: {
+        mike: [[0, { e: 'focused', ex: { mouthCurve: -.4 }, p: 'idle', m: { lookX: 0, no: .6 } }], [.4, { e: 'focused', ex: { mouthCurve: -.4 }, p: 'idle', propR: 'coat', m: { lookX: -1, no: 0 } }], [.5, { m: { walk: 1, lookX: -1 } }]],
+        hero: [[0, { e: 'despair', m: { lookX: -1 } }], [.45, { e: 'surprised', m: { lookX: -1 } }]], jay: [[0, { e: 'despair', m: { lookX: -1 } }], [.5, { e: 'worried', m: { lookX: -1 } }]]
+      }
+    },
+    isinging: {
+      set: 'room', cast: { hero: { x: -120 }, jay: { x: 170 } }, bright: .9, card: 'off',
+      cam: [[0, { x: -120, y: 990, z: 1.2 }], [.4, { x: 20, y: 1010, z: 1.45 }], [1, { x: 20, y: 1000, z: 1.3 }]],
+      notesFrom: 'sing',
+      acts: { hero: [[0, { e: 'confident', m: { lookX: 0 } }], ['sing', .5, { e: 'happy', p: 'cheer', m: { sing: 1 } }]], jay: [[0, { e: 'surprised', m: { lookX: -1 } }], ['sing', .55, { e: 'happy', p: 'cheer', m: { sing: 1 } }]] }
+    },
+    igerrard: {
+      set: 'room', cast: { hero: { x: -120 }, jay: { x: 170 } }, tag: "54'", bright: .95,
+      card: scoreCard('SECOND HALF', [[null, 0, 3, 0, ''], ['goal', .55, 3, 1, 'GERRARD!']]),
+      cam: [[0, TV], [.7, TV], [.8, { x: 20, y: 985, z: 1.3 }], [1, { x: 20, y: 995, z: 1.38 }]],
+      acts: { hero: [[0, { e: 'tense', p: 'nervous', m: { lookX: -1 } }], [.8, { e: 'ecstatic', p: 'fistPumpR', handR: 'fist', m: { lookX: 0, jump: .4 } }]], jay: [[0, { e: 'tense', m: { lookX: -1 } }], [.8, { e: 'happy', p: 'cheer', m: { lookX: -1 } }]] }
+    },
+    ismicer: {
+      set: 'room', cast: { hero: { x: -120 }, jay: { x: 170 } }, tag: "56'", bright: 1,
+      card: scoreCard('SECOND HALF', [[null, 0, 3, 1, ''], ['goal', .6, 3, 2, 'ŠMICER!']]),
+      cam: [[0, TV], [.72, TV], [.82, { x: 20, y: 985, z: 1.3 }], [1, { x: 20, y: 995, z: 1.38 }]],
+      acts: { hero: [[0, { e: 'happy', m: { lookX: -1 } }], [.82, { e: 'ecstatic', p: 'cheer', m: { jump: 1 } }]], jay: [[0, { e: 'surprised', m: { lookX: -1 } }], [.82, { e: 'ecstatic', p: 'cheer', m: { jump: .8 } }]] }
+    },
+    ialonso: {
+      set: 'room', cast: { hero: { x: -120 }, jay: { x: 170 } }, tag: "60'", bright: 1.05,
+      card: scoreCard('SECOND HALF', [[null, 0, 3, 2, ''], ['pen', .1, 3, 2, 'PENALTY!'], ['saved', .37, 3, 2, 'SAVED...'], ['goal', .55, 3, 3, 'ALONSO! 3–3']]),
+      cam: [[0, TV], [.62, TV], [.72, { x: 20, y: 985, z: 1.25 }], [1, { x: 20, y: 990, z: 1.15 }]],
+      acts: { hero: [[0, { e: 'tense', p: 'pleading', m: { lookX: -1, tremble: .5 } }], [.72, { e: 'ecstatic', p: 'cheer', m: { jump: 1 } }]], jay: [[0, { e: 'tense', p: 'nervous', m: { lookX: -1, tremble: .5 } }], [.72, { e: 'ecstatic', p: 'cheer', m: { dance: 1 } }]] }
+    },
+    idudek: {
+      set: 'room', cast: { hero: { x: -120 }, jay: { x: 170 } }, tag: 'EXTRA TIME', bright: .78,
+      card: textCard([['SHEVCHENKO...', 70, '#fff', 'shot', .2], ['DOUBLE SAVE!', 96, '#ffd400', 'save', .7], ['JERZY DUDEK', 54, '#fff', 'save', .72]], ['#2a0d5c', '#0d0524']),
+      cam: [[0, TV], [.78, TV], [.86, { x: 20, y: 990, z: 1.35 }], [1, { x: 20, y: 990, z: 1.4 }]],
+      acts: { hero: [[0, { e: 'tense', p: 'nervous', m: { lookX: -1, tremble: .6 } }], [.86, { e: 'shock', p: 'handsOnHead', m: { lookX: 0 } }]], jay: [[0, { e: 'worried', p: 'nervous', m: { lookX: -1, tremble: .6 } }], [.86, { e: 'shock', p: 'handsOnHead', m: { lookX: -1 } }]] }
+    },
+    ipens: {
+      set: 'room', cast: { hero: { x: -120 }, jay: { x: 170 } }, tag: 'PENALTIES', bright: .7,
+      card: textCard([['DUDEK_DANCE', 84, '#ffd400', 'dance', .2], ['SHEVCHENKO', 70, '#fff', 'step', .7], ['STEPS UP...', 54, '#fff', 'step', .72]], ['#2a0d5c', '#0d0524']),
+      cam: [[0, TV], [.55, TV], [.65, { x: 20, y: 1000, z: 1.45 }], [1, { x: 20, y: 1005, z: 1.6 }]],
+      acts: { hero: [[0, { e: 'tense', p: 'pleading', m: { lookX: -1, tremble: .8 } }]], jay: [[0, { e: 'worried', p: 'nervous', m: { lookX: -1, tremble: .8 } }]] }
+    },
+    isaved: {
+      set: 'room', cast: { hero: { x: -120 }, jay: { x: 170 } }, bright: 1.12, conf: 1, flash: true, shake: 1, card: 'off',
+      cam: [[0, { x: 20, y: 985, z: 1.3 }], [1, { x: 20, y: 985, z: 1.15 }]],
+      acts: { hero: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: 1 } }]], jay: [[0, { e: 'ecstatic', p: 'cheer', m: { dance: 1 } }]] }
+    },
+    imate: {
+      set: 'room', cast: { mike: { x: 1550 } }, bright: 1, bus: true, card: 'off',
+      title: ['FOLLOW FOR MORE', '<span class="gold">WHAT IFs</span>'], titleSize: [84, 110], titleAt: 'follow',
+      cam: [[0, { x: 1550, y: 990, z: 1.3 }], [1, { x: 1550, y: 1000, z: 1.4 }]],
+      acts: { mike: [[0, { e: 'neutral', p: 'phone', propR: 'radio', m: { lookX: -.5 } }], ['radio', .45, { e: 'shock', p: 'phone', propR: 'radio', m: { lookX: 0 } }], ['follow', .75, { e: 'despair', p: 'handsOnHead', propR: null, m: { lookX: 0 } }]] }
+    }
+  });
+
+
+  // ---------- Istanbul v2: stadium, pitch action, bus ----------
+  Object.assign(CH, {
+    maldini:   { skin: '#f0c19a', shirt: '#d81e2c', stripes: '#111111', trim: '#fff', number: '3', pants: '#ffffff', shoes: '#111', hair: 'short', hairColor: '#3a2414', bw: 1, blinkPh: .4 },
+    crespo:    { skin: '#f0c19a', shirt: '#d81e2c', stripes: '#111111', trim: '#fff', pants: '#ffffff', shoes: '#111', hair: 'spiky', hairColor: '#2a1a10', stubble: true, bw: 1, blinkPh: .9 },
+    shevchenko:{ skin: '#ffd9b8', shirt: '#d81e2c', stripes: '#111111', trim: '#fff', number: '7', pants: '#ffffff', shoes: '#111', hair: 'short', hairColor: '#c9a46a', bw: 1, blinkPh: 1.7 },
+    dida:      { skin: '#6b4430', shirt: '#3a3f52', trim: '#ffd400', number: '1', pants: '#3a3f52', shoes: '#111', hair: 'buzz', hairColor: '#120a05', bw: 1.05, blinkPh: 2.2 },
+    gerrard:   { skin: '#ffd2b0', shirt: '#c8102e', trim: '#fff', number: '8', pants: '#c8102e', shoes: '#111', hair: 'short', hairColor: '#6a4a2a', bw: 1, blinkPh: .2 },
+    smicer:    { skin: '#ffd9b8', shirt: '#c8102e', trim: '#fff', pants: '#c8102e', shoes: '#111', hair: 'slick', hairColor: '#4a3020', bw: 1, blinkPh: 1.1 },
+    alonso:    { skin: '#f0c19a', shirt: '#c8102e', trim: '#fff', number: '14', pants: '#c8102e', shoes: '#111', hair: 'short', hairColor: '#2a1a10', beard: true, bw: 1, blinkPh: 2.6 },
+    dudek:     { skin: '#ffd9b8', shirt: '#2fbf71', trim: '#111', number: '1', pants: '#1f2236', shoes: '#111', hair: 'short', hairColor: '#7a5a3a', bw: 1.05, blinkPh: 1.5 }
+  });
+  Object.assign(Puppet.POSES, {});
+  const KP = { lA: 62, lE: -25, rA: 62, rE: -25, lL: 16, lK: -18, rL: 16, rK: -18 };          // keeper ready
+  const DIVE_L = { lA: 170, lE: 5, rA: 150, rE: 10, lL: 20, rL: 30, lean: -78 };
+  const DIVE_R = { lA: 150, lE: 10, rA: 170, rE: 5, lL: 30, rL: 20, lean: 78 };
+  const KICK = { lL: 70, lK: -15, rL: 6, lA: 40, rA: 50, rE: -20 };
+  const GOAL = { x0: -640, x1: -60, top: 980 };
+  function drawGoalBack() {
+    ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(255,255,255,.45)';
+    for (let x = GOAL.x0 + 20; x < GOAL.x1; x += 34) { ctx.beginPath(); ctx.moveTo(x, GOAL.top + 10); ctx.lineTo(x + 20, GROUND - 30); ctx.stroke(); }
+    for (let y = GOAL.top + 30; y < GROUND - 20; y += 34) { ctx.beginPath(); ctx.moveTo(GOAL.x0 + 10, y); ctx.lineTo(GOAL.x1 - 10, y + 6); ctx.stroke(); }
+  }
+  function drawGoalFront() {
+    ctx.lineWidth = 22; ctx.lineCap = 'round'; ctx.strokeStyle = OUT;
+    ctx.beginPath(); ctx.moveTo(GOAL.x0, GROUND); ctx.lineTo(GOAL.x0, GOAL.top); ctx.lineTo(GOAL.x1, GOAL.top); ctx.lineTo(GOAL.x1, GROUND); ctx.stroke();
+    ctx.lineWidth = 12; ctx.strokeStyle = '#ffffff'; ctx.stroke();
+  }
+  function drawBall(x, y, t, spin = 1, sc = 1) {
+    ctx.save(); ctx.translate(x, y); ctx.scale(sc, sc);
+    ctx.save(); ctx.translate(0, GROUND - y + 4); ctx.scale(1, .25); ctx.beginPath(); ctx.arc(0, 0, 26 * Math.max(.3, 1 - (GROUND - y) / 900), 0, Math.PI * 2); ctx.fillStyle = 'rgba(0,0,0,.25)'; ctx.fill(); ctx.restore();
+    ctx.rotate(t * 8 * spin);
+    ctx.beginPath(); ctx.arc(0, 0, 26, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = OUT; ctx.stroke();
+    ctx.beginPath(); for (let k = 0; k < 5; k++) { const a = k / 5 * Math.PI * 2 - Math.PI / 2; ctx.lineTo(Math.cos(a) * 10, Math.sin(a) * 10); } ctx.closePath(); ctx.fillStyle = OUT; ctx.fill();
+    ctx.restore();
+  }
+  // ball path: keys [[time, x, y, arc]]; arc lifts the segment ending at that key
+  function ballPos(keys, lt) {
+    if (lt <= keys[0][0]) return { x: keys[0][1], y: keys[0][2], moving: false };
+    for (let i = 0; i < keys.length - 1; i++) {
+      const [ta, xa, ya] = keys[i], [tb, xb, yb, arc] = keys[i + 1];
+      if (lt <= tb) { const u = (lt - ta) / (tb - ta || 1); return { x: lerp(xa, xb, u), y: lerp(ya, yb, u) - Math.sin(u * Math.PI) * (arc || 0), moving: true }; }
+    }
+    const k = keys[keys.length - 1]; return { x: k[1], y: k[2], moving: false };
+  }
+  function scoreboard(txtScore, label) {
+    const x = -330, y = 680;
+    ctx.beginPath(); ctx.roundRect(x - 220, y - 52, 440, 104, 18); ctx.fillStyle = '#1c2238'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = OUT; ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(x - 206, y - 38, 412, 76, 12); ctx.lineWidth = 4; ctx.strokeStyle = '#e0b84a'; ctx.stroke();
+    txt(txtScore, x, y + 2, 46, '#fff', 900);
+    if (label) txt(label, x, y + 82, 32, '#ffd400', 900, 'center', 8);
+  }
+  function drawRailing() {
+    ctx.lineWidth = 7; ctx.strokeStyle = OUT;
+    ctx.beginPath(); ctx.roundRect(-1600, 1210, 3400, 40, 14); ctx.fillStyle = '#c9ced8'; ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(-1600, 1250, 3400, 260, 0); ctx.fillStyle = '#c8102e'; ctx.fill(); ctx.stroke();
+    ctx.font = '900 56px Inter Display'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#fff';
+    for (let x = -1650; x < 1800; x += 1100) ctx.fillText("YOU'LL NEVER WALK ALONE", x, 1330);
+  }
+  const PITCH = { x: -60, y: 820, z: 1.0 }, STANDS = { x: 0, y: 985, z: 1.22 }, STANDS2 = { x: 0, y: 995, z: 1.32 };
+  const FANS = { mike: { x: -270 }, hero: { x: 0 }, jay: { x: 270 } }, FANS2 = { hero: { x: -120 }, jay: { x: 170 } };
+  const cueT = (n, df) => cue(n, df);
+  // cuts: [{ at: [cueName|null, defFrac] | frac, set, cam, cast, acts, move, ball, score, label, extra }]
+  const pitchCut = o => Object.assign({ set: 'pitch', cam: [[0, PITCH], [1, Object.assign({}, PITCH, { z: PITCH.z + .04 })]] }, o);
+  const standsCut = o => Object.assign({ set: 'stands', cam: [[0, STANDS], [1, STANDS2]] }, o);
+  Object.assign(SHOTS, {
+    ihook: { set: 'stands', noCaption: true, bright: 1, title: ['WHAT IF YOU LEFT', 'AT <span class="gold">HALF-TIME</span>?'], titleSize: [92, 110],
+      cuts: [standsCut({ at: 0, cam: [[0, { x: 0, y: 1000, z: 1.1 }], [1, { x: 0, y: 995, z: 1.2 }]], cast: FANS,
+        acts: { hero: [[0, { e: 'happy', p: 'cheer', propR: 'scarf', m: { sing: .6 } }]], mike: [[0, { e: 'happy', p: 'cheer', propR: 'scarf' }]], jay: [[0, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { dance: .5 } }]] } })] },
+    iintro: { set: 'pitch', tag: '25 MAY 2005', bright: 1,
+      cuts: [
+        pitchCut({ at: 0, cast: { gerrard: { x: 260, scale: .8 }, maldini: { x: -330, scale: .8 } }, score: 'MIL 0 – 0 LIV', label: 'ISTANBUL',
+          acts: { gerrard: [[0, { e: 'focused', p: 'hips', m: { lookX: -1 } }]], maldini: [[0, { e: 'confident', p: 'crossed', m: { lookX: 1 } }]] }, ball: [[0, -30, 1385]] }),
+        standsCut({ at: .58, cast: FANS, acts: { hero: [[0, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: .4 } }]], mike: [[0, { e: 'happy', p: 'fistPumpR', handR: 'fist' }]], jay: [[0, { e: 'happy', p: 'cheer', propR: 'scarf', m: { dance: .6 } }]] } })] },
+    imaldini: { set: 'pitch', tag: '1st MINUTE', bright: .95,
+      cuts: [
+        pitchCut({ at: 0, cast: { maldini: { x: 300, scale: .8 }, dudek: { x: -340, scale: .78 } },
+          score: lt => lt < cue('goal', .5) ? 'MIL 0 – 0 LIV' : 'MIL 1 – 0 LIV', label: lt => lt >= cue('goal', .5) ? 'MALDINI' : '',
+          ball: () => { const g = cue('goal', .5); return [[0, 900, 700], [g - .9, 230, 1380, 260], [g, -380, 1120, 120], [g + .5, -420, 1385, 40]]; },
+          acts: () => { const g = cue('goal', .5); return {
+            maldini: [[0, { e: 'focused', p: 'idle', m: { lookX: 1 } }], [(g - 1.1) / CUR.duration, { m: { lookX: -1 } }], [(g - .95) / CUR.duration, { p: 'idle', po: KICK }], [(g + .2) / CUR.duration, { e: 'ecstatic', p: 'cheer', po: {}, m: { jump: .6 } }]],
+            dudek: [[0, { e: 'focused', p: 'idle', po: KP, m: { lookX: 1 } }], [(g - .5) / CUR.duration, { e: 'shock', p: 'idle', po: DIVE_L, m: { dy: -60 } }], [(g + .6) / CUR.duration, { e: 'despair', p: 'idle', po: { lean: -88, lA: 160, rA: 160 }, m: { dy: 0 } }]] }; } }),
+        standsCut({ at: .78, cast: FANS, acts: { hero: [[0, { e: 'shock', p: 'handsOnHead' }]], mike: [[0, { e: 'shock', m: { lookX: 1 } }]], jay: [[0, { e: 'surprised', p: 'nervous' }]] } })] },
+    icrespo: { set: 'pitch', bright: .9,
+      cuts: [
+        pitchCut({ at: 0, cast: { crespo: { x: 280, scale: .8 }, dudek: { x: -340, scale: .78 } },
+          score: lt => lt < cue('g2', .25) ? 'MIL 1 – 0 LIV' : lt < cue('g3', .5) ? 'MIL 2 – 0 LIV' : 'MIL 3 – 0 LIV',
+          label: lt => lt >= cue('ht', .68) ? 'HALF-TIME' : lt >= cue('g2', .25) ? 'CRESPO' : '',
+          ball: () => { const a = cue('g2', .25), b = cue('g3', .5); return [[0, 210, 1385], [a - .1, 210, 1385], [a + .25, -470, 1080, 60], [a + .7, -500, 1385, 30], [b - .6, 200, 1385], [b - .1, 200, 1385], [b + .25, -200, 1150, 80], [b + .7, -230, 1385, 30]]; },
+          acts: () => { const a = cue('g2', .25), b = cue('g3', .5), D = CUR.duration; return {
+            crespo: [[0, { e: 'focused', m: { lookX: -1 } }], [(a - .15) / D, { po: KICK }], [(a + .3) / D, { e: 'happy', p: 'fistPumpR', po: {}, handR: 'fist' }], [(b - .2) / D, { e: 'focused', p: 'idle', po: KICK }], [(b + .3) / D, { e: 'ecstatic', p: 'cheer', po: {}, m: { jump: .5 } }]],
+            dudek: [[0, { e: 'tense', po: KP, m: { lookX: 1 } }], [(a + .05) / D, { e: 'shock', po: DIVE_L, m: { dy: -50 } }], [(a + .7) / D, { e: 'despair', po: KP, m: { dy: 0 } }], [(b + .05) / D, { e: 'shock', po: DIVE_R, m: { dy: -40 } }], [(b + .7) / D, { e: 'despair', p: 'handsOnHead', po: {}, m: { dy: 0 } }]] }; } }),
+        standsCut({ at: .74, cast: FANS, bright: .8, acts: { hero: [[0, { e: 'despair' }]], mike: [[0, { e: 'despair', p: 'handsOnHead' }]], jay: [[0, { e: 'despair', p: 'crossed', m: { tremble: .4 } }]] } })] },
+    ileave: { set: 'stands', bright: .78,
+      cuts: [standsCut({ at: 0, cam: [[0, STANDS], [1, { x: -140, y: 990, z: 1.18 }]], cast: FANS,
+        move: { mike: [[0, -270], ['leave', .45, -270], [1, -1300]] },
+        acts: { mike: [[0, { e: 'focused', ex: { mouthCurve: -.4 }, m: { no: .6 } }], ['leave', .42, { propR: 'coat', m: { no: 0, lookX: -1 } }], ['leave', .5, { m: { walk: 1, lookX: -1 } }]],
+                hero: [[0, { e: 'despair', m: { lookX: -1 } }], ['leave', .45, { e: 'surprised', m: { lookX: -1 } }]], jay: [[0, { e: 'despair', m: { lookX: -1 } }], ['leave', .5, { e: 'worried', m: { lookX: -1 } }]] } })] },
+    isinging: { set: 'stands', bright: .9, notesFrom: 'sing',
+      cuts: [standsCut({ at: 0, cam: [[0, { x: -140, y: 990, z: 1.18 }], [.4, { x: 20, y: 1005, z: 1.45 }], [1, { x: 20, y: 1000, z: 1.32 }]], cast: FANS2,
+        acts: { hero: [[0, { e: 'confident', m: { lookX: 0 } }], ['sing', .5, { e: 'happy', p: 'cheer', propR: 'scarf', m: { sing: 1 } }]], jay: [[0, { e: 'surprised', m: { lookX: -1 } }], ['sing', .55, { e: 'happy', p: 'cheer', propR: 'scarf', m: { sing: 1 } }]] } })] },
+    igerrard: { set: 'pitch', tag: "54'", bright: 1,
+      cuts: [
+        pitchCut({ at: 0, cast: { gerrard: { x: -180, scale: .8 }, dida: { x: -380, scale: .78 } },
+          score: lt => lt < cue('goal', .55) ? 'MIL 3 – 0 LIV' : 'MIL 3 – 1 LIV', label: lt => lt >= cue('goal', .55) ? 'GERRARD!' : '',
+          ball: () => { const g = cue('goal', .55); return [[0, 900, 1385], [g - 1.2, 700, 1385], [g - .25, -180, 980, 380], [g + .05, -520, 1100, 20], [g + .5, -540, 1385, 20]]; },
+          acts: () => { const g = cue('goal', .55), D = CUR.duration; return {
+            gerrard: [[0, { e: 'focused', m: { lookX: 1 } }], [(g - .55) / D, { e: 'focused', p: 'cheer', m: { jump: 1, lookX: 1 } }], [(g + .1) / D, { e: 'ecstatic', p: 'cheer', m: { jump: .3, lookX: 0 } }]],
+            dida: [[0, { e: 'focused', po: KP, m: { lookX: 1 } }], [(g - .15) / D, { e: 'shock', po: DIVE_L, m: { dy: -50 } }], [(g + .6) / D, { e: 'despair', po: KP, m: { dy: 0 } }]] }; } }),
+        standsCut({ at: .74, cast: FANS2, acts: { hero: [[0, { e: 'ecstatic', p: 'fistPumpR', handR: 'fist', m: { jump: .5 } }]], jay: [[0, { e: 'happy', p: 'cheer', propR: 'scarf' }]] } })] },
+    ismicer: { set: 'pitch', tag: "56'", bright: 1.02,
+      cuts: [
+        pitchCut({ at: 0, cast: { smicer: { x: 360, scale: .8 }, dida: { x: -380, scale: .78 } },
+          score: lt => lt < cue('goal', .6) ? 'MIL 3 – 1 LIV' : 'MIL 3 – 2 LIV', label: lt => lt >= cue('goal', .6) ? 'ŠMICER!' : '',
+          ball: () => { const g = cue('goal', .6); return [[0, 340, 1385], [g - .8, 340, 1385], [g, -580, 1250, 90], [g + .4, -600, 1385, 20]]; },
+          acts: () => { const g = cue('goal', .6), D = CUR.duration; return {
+            smicer: [[0, { e: 'focused', m: { lookX: -1 } }], [(g - .85) / D, { po: KICK }], [(g + .1) / D, { e: 'ecstatic', p: 'cheer', po: {}, m: { jump: .6 } }]],
+            dida: [[0, { e: 'focused', po: KP, m: { lookX: 1 } }], [(g - .35) / D, { e: 'shock', po: DIVE_L, m: { dy: -30 } }], [(g + .6) / D, { e: 'despair', po: KP, m: { dy: 0 } }]] }; } }),
+        standsCut({ at: .76, cast: FANS2, acts: { hero: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: 1 } }]], jay: [[0, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: .8 } }]] } })] },
+    ialonso: { set: 'pitch', tag: "60'", bright: 1.05,
+      cuts: [
+        pitchCut({ at: 0, cast: { alonso: { x: 260, scale: .8 }, dida: { x: -350, scale: .78 } },
+          move: { alonso: [[0, 260], ['saved', .37, 260], ['goal', .55, -60]] },
+          score: lt => lt < cue('goal', .55) ? 'MIL 3 – 2 LIV' : 'MIL 3 – 3 LIV',
+          label: lt => lt >= cue('goal', .55) ? 'ALONSO! 3–3' : lt >= cue('saved', .37) ? 'SAVED...' : lt >= cue('pen', .1) ? 'PENALTY!' : '',
+          ball: () => { const s1 = cue('saved', .37), g = cue('goal', .55); return [[0, 120, 1385], [s1 - .35, 120, 1385], [s1, -470, 1180, 40], [s1 + .6, -130, 1385, 120], [g - .2, -130, 1385], [g + .15, -330, 1080, 60], [g + .6, -360, 1385, 20]]; },
+          acts: () => { const s1 = cue('saved', .37), g = cue('goal', .55), D = CUR.duration; return {
+            alonso: [[0, { e: 'focused', m: { lookX: -1 } }], [(s1 - .45) / D, { po: KICK }], [(s1 + .1) / D, { e: 'shock', p: 'idle', po: {}, m: { walk: 1 } }], [(g - .3) / D, { e: 'focused', po: KICK, m: { walk: 0 } }], [(g + .2) / D, { e: 'ecstatic', p: 'cheer', po: {}, m: { jump: 1 } }]],
+            dida: [[0, { e: 'focused', po: KP, m: { lookX: 1 } }], [(s1 - .25) / D, { e: 'focused', po: DIVE_L, m: { dy: -40 } }], [(s1 + .5) / D, { e: 'shock', po: { lean: -85, lA: 160, rA: 160 }, m: { dy: 0 } }]] }; } }),
+        standsCut({ at: .76, cast: FANS2, bright: 1.08, acts: { hero: [[0, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: 1 } }]], jay: [[0, { e: 'ecstatic', p: 'cheer', m: { dance: 1 } }]] } })] },
+    idudek: { set: 'pitch', tag: 'EXTRA TIME', bright: .85,
+      cuts: [
+        pitchCut({ at: 0, cast: { shevchenko: { x: 60, scale: .8 }, dudek: { x: -340, scale: .78 } }, score: 'MIL 3 – 3 LIV', label: lt => lt >= cue('save', .7) ? 'DOUBLE SAVE!' : '',
+          ball: () => { const s1 = cue('save', .7); return [[0, 500, 900], [s1 - 1.0, -20, 1385, 200], [s1 - .7, -330, 1150, 30], [s1 - .35, -120, 1300, 60], [s1, -330, 1060, 30], [s1 + .6, -420, 600, 120]]; },
+          acts: () => { const s1 = cue('save', .7), D = CUR.duration; return {
+            shevchenko: [[0, { e: 'focused', m: { lookX: 1 } }], [(s1 - 1.0) / D, { po: KICK, m: { lookX: -1 } }], [(s1 - .45) / D, { e: 'focused', p: 'idle', po: KICK }], [(s1 + .2) / D, { e: 'shock', p: 'handsOnHead', po: {} }]],
+            dudek: [[0, { e: 'tense', po: KP, m: { lookX: 1 } }], [(s1 - .8) / D, { e: 'focused', po: DIVE_R, m: { dy: -20 } }], [(s1 - .25) / D, { e: 'shock', po: { lA: 160, rA: 160, lean: 20 }, m: { dy: -60 } }], [(s1 + .6) / D, { e: 'ecstatic', p: 'cheer', po: {}, m: { dy: 0 } }]] }; } }),
+        standsCut({ at: .84, cast: FANS2, acts: { hero: [[0, { e: 'shock', p: 'handsOnHead' }]], jay: [[0, { e: 'shock', p: 'handsOnHead' }]] } })] },
+    ipens: { set: 'pitch', tag: 'PENALTIES', bright: .8,
+      cuts: [
+        pitchCut({ at: 0, cast: { dudek: { x: -340, scale: .78 }, shevchenko: { x: 360, scale: .8 } }, score: 'MIL 2 – 3 LIV', label: 'PENALTIES',
+          move: { shevchenko: [[0, 360], ['step', .7, 360], [1, 220]] },
+          ball: [[0, 100, 1385]],
+          acts: { dudek: [[0, { e: 'wink', po: KP, m: { dance: 1, lookX: 1 } }], ['step', .72, { e: 'focused', po: KP, m: { dance: .4, lookX: 1 } }]], shevchenko: [[0, { e: 'neutral', m: { lookX: -1 } }], ['step', .7, { e: 'focused', m: { walk: .7, lookX: -1 } }]] } }),
+        standsCut({ at: ['step', .7, .25], cam: [[0, { x: 20, y: 1000, z: 1.45 }], [1, { x: 20, y: 1005, z: 1.6 }]], cast: FANS2, bright: .7,
+          acts: { hero: [[0, { e: 'tense', p: 'pleading', m: { tremble: .8 } }]], jay: [[0, { e: 'worried', p: 'nervous', m: { tremble: .8 } }]] } })] },
+    isaved: { set: 'pitch', bright: 1.12, flash: false,
+      cuts: [
+        pitchCut({ at: 0, cast: { dudek: { x: -340, scale: .78 }, shevchenko: { x: 220, scale: .8 } }, score: 'MIL 2 – 3 LIV', label: 'SAVED!',
+          ball: [[0, 100, 1385], [.25, 100, 1385], [.6, -470, 1250, 40], [1.1, -250, 1385, 120]],
+          acts: { shevchenko: [[0, { e: 'focused', po: KICK, m: { lookX: -1 } }], [.12, { e: 'despair', p: 'handsOnHead', po: {} }]], dudek: [[0, { e: 'focused', po: DIVE_L, m: { dy: -40 } }], [.3, { e: 'ecstatic', p: 'cheer', po: {}, m: { dy: 0, jump: 1 } }]] } }),
+        standsCut({ at: .26, cast: FANS2, conf: 1, shake: 1, flash: true, acts: { hero: [[0, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: 1 } }]], jay: [[0, { e: 'ecstatic', p: 'cheer', m: { dance: 1 } }]] } })] }
+  });
+
   // ---------- timeline ----------
   let spec, scenes = [], total = 0;
   function camAt(keys, lt, d) {
@@ -457,6 +754,7 @@
   window.setup = async function (sp) {
     spec = sp; total = 0;
     World3D.init(document.getElementById('gl'));
+    if (spec.chars) for (const n in spec.chars) Object.assign(CH[n], spec.chars[n]);
     for (const s of spec.scenes) {
       const sh = SHOTS[s.shot]; if (!sh) throw new Error('unknown shot ' + s.shot);
       s.sh = sh;
@@ -497,17 +795,21 @@
   // ---------- sound effects (times in seconds, gain in dB) ----------
   function buildSfx() {
     const ev = [], add = (t, name, db) => { if (t >= 0) ev.push({ t: +t.toFixed(3), name, db }); };
+    let C;
     spec.scenes.forEach((s, i) => {
       const sh = s.sh, st = s._start, d = s.duration, next = spec.scenes[i + 1];
+      C = (n, df) => s.cues && s.cues[n] != null ? s.cues[n] : df * d;
       // camera pans
-      for (let k = 0; k < sh.cam.length - 1; k++) {
+      if (sh.cam) for (let k = 0; k < sh.cam.length - 1; k++) {
         const [fa, a] = sh.cam[k], [fb, b] = sh.cam[k + 1];
         if (Math.abs(b.x - a.x) > 500) add(st + fa * d - .05, (fb - fa) * d > .7 ? 'whoosh_long' : 'whoosh', -15);
       }
+      // hard cuts inside a shot
+      if (sh.cuts) sh.cuts.forEach((c, k) => { if (k) add(st + cutStart(s, c) - .1, 'whoosh_soft', -19); });
       // scene changes
       if (next) {
-        if (next.sh.set !== sh.set) add(s._end - .35, 'whoosh_long', -15);
-        else if (!(next.sh.cam[0][1].x === sh.cam[sh.cam.length - 1][1].x)) add(s._end - .12, 'whoosh_soft', -21);
+        if (setOf(next, 'first') !== setOf(s, 'last')) add(s._end - .35, 'whoosh_long', -15);
+        else if (sh.cam && next.sh.cam && !(next.sh.cam[0][1].x === sh.cam[sh.cam.length - 1][1].x)) add(s._end - .12, 'whoosh_soft', -21);
       }
       if (sh.tag) add(st + .05, 'pop', -19);
       const at = (f, name, db) => add(st + f * d, name, db);
@@ -534,6 +836,17 @@
         }
         case 'qreveal': add(st, 'thump', -10); add(st + .05, 'sparkle', -15); add(st + .1, 'cheer', -22); break;
         case 'qcta': add(st + .1, 'thump', -13); add(st + .75, 'pop', -14); break;
+        case 'ihook': add(st + .28, 'thump', -13); add(st + .5, 'thump', -13); break;
+        case 'iintro': add(st + .3, 'pop', -16); break;
+        case 'imaldini': add(st + C('goal', .5), 'thump', -12); break;
+        case 'icrespo': add(st + C('g2', .25), 'thump', -13); add(st + C('g3', .5), 'thump', -12); add(st + C('ht', .68), 'whistle', -20); break;
+        case 'ileave': add(st + C('leave', .45), 'whoosh_soft', -18); break;
+        case 'igerrard': case 'ismicer': add(st + C('goal', .55), 'thump', -11); add(st + C('goal', .55) + .05, 'cheer', -18); break;
+        case 'ialonso': add(st + C('pen', .1), 'whistle', -22); add(st + C('saved', .37), 'thump', -14); add(st + C('goal', .55), 'thump', -10); add(st + C('goal', .55) + .05, 'cheer', -15); break;
+        case 'idudek': add(st + C('save', .7), 'thump', -11); add(st + C('save', .7) + .1, 'sparkle', -16); break;
+        case 'ipens': for (let x = .2; x < d - .2; x += .85) add(st + x, 'heartbeat', -13); break;
+        case 'isaved': add(st, 'thump', -9); add(st + .02, 'cheer', -11); break;
+        case 'imate': add(st + .1, 'whoosh_soft', -20); add(st + C('follow', .75) + .1, 'pop', -14); break;
       }
     });
     return ev.sort((a, b) => a.t - b.t);
@@ -543,7 +856,9 @@
     const sh = s.sh;
     if (s._tag) { const k = eb(P(lt, .05, .4)); s._tag.style.transform = `scale(${k})`; s._tag.style.opacity = clamp(k); }
     if (s._title) {
-      s._tl.forEach((e, i) => { const st = .1 + i * .22, q = eo(P(lt, st, st + .22)); e.style.opacity = clamp(q * 3); e.style.transform = `scale(${lerp(2.2, 1, q)}) rotate(${(1 - q) * -6}deg)`; });
+      const t0 = sh.titleAt ? cue(sh.titleAt, .7) : 0;
+      if (sh.titleAt && s._cap) s._cap.style.opacity = lt < t0 ? 1 : 0;
+      s._tl.forEach((e, i) => { const st = t0 + .1 + i * .22, q = eo(P(lt, st, st + .22)); e.style.opacity = clamp(q * 3); e.style.transform = `scale(${lerp(2.2, 1, q)}) rotate(${(1 - q) * -6}deg)`; });
       if (s._sub) s._sub.style.opacity = P(lt, d * .55, d * .55 + .3);
       if (s._follow) { const k = eb(P(lt, .9, 1.3)); s._follow.style.transform = `scale(${k * (1 + .05 * Math.sin(lt * 8))})`; s._follow.style.opacity = clamp(k); }
     }
@@ -573,44 +888,85 @@
     }
   }
 
+  // resolve the active cut of a multi-cut shot
+  function cutStart(s, c) {
+    if (typeof c.at === 'number') return c.at * s.duration;
+    const [n, df, off] = c.at; return (s.cues && s.cues[n] != null ? s.cues[n] : df * s.duration) + (off || 0);
+  }
+  function activeCut(s, lt) {
+    const cs = s.sh.cuts; let k = 0;
+    for (let i = 0; i < cs.length; i++) if (lt >= cutStart(s, cs[i])) k = i;
+    const t0 = cutStart(s, cs[k]), t1 = k + 1 < cs.length ? cutStart(s, cs[k + 1]) : s.duration;
+    return { cut: cs[k], t0, t1, k };
+  }
+  const setOf = (s, which) => s.sh.cuts ? s.sh.cuts[which === 'first' ? 0 : s.sh.cuts.length - 1].set : s.sh.set;
+
   window.frame = function (t) {
     let idx = spec.scenes.findIndex(s => t < s._end); if (idx < 0) idx = spec.scenes.length - 1;
-    const s = spec.scenes[idx], sh = s.sh, lt = t - s._start, d = s.duration;
+    const s = spec.scenes[idx], lt = t - s._start, d = s.duration;
+    CUR = s;
+    let sh = s.sh, clt = lt, cd = d, cutK = 0;
+    if (sh.cuts) {
+      const ac = activeCut(s, lt); cutK = ac.k;
+      sh = Object.assign({}, s.sh, ac.cut); clt = lt - ac.t0; cd = Math.max(.1, ac.t1 - ac.t0);
+      if (typeof sh.acts === 'function') sh.acts = sh.acts();
+      if (typeof sh.ball === 'function') sh.ball = sh.ball();
+    }
     spec.scenes.forEach((x, i) => { x._ov.style.display = i === idx ? 'block' : 'none'; });
     const prev = spec.scenes[idx - 1], next = spec.scenes[idx + 1];
-    let cam = camAt(sh.cam, lt, d);
-    const shake = sh.shake ? Math.max(0, 1 - lt / 1.5) * 14 : 0;
-    // 3D world with theme crossfade
+    let cam = camAt(sh.cam, clt, cd);
+    const shake = sh.shake ? Math.max(0, 1 - clt / 1.5) * 14 : 0;
     const br = sh.bright != null ? sh.bright : 1;
-    const pbr = prev && prev.sh.set === sh.set ? (prev.sh.bright != null ? prev.sh.bright : 1) : br;
+    const pbr = !sh.cuts && prev && prev.sh.set === sh.set ? (prev.sh.bright != null ? prev.sh.bright : 1) : br;
     const conf = sh.conf ? (sh.conf < 1 ? P(lt, sh.conf * d, sh.conf * d + .4) : 1) : 0;
-    World3D.frame(t, { x: cam.x - Math.sin(t * 50) * shake * 0, y: cam.y, z: cam.z }, sh.set, { bright: lerp(pbr, br, eio(P(lt, 0, .8))), conf });
+    World3D.frame(t, { x: cam.x, y: cam.y, z: cam.z }, sh.set, { bright: lerp(pbr, br, eio(P(lt, 0, .8))), conf, crowd: conf ? 9 : 2, crowdAmp: conf ? 3 : 1 });
     // 2D
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, W, H);
     ctx.setTransform(cam.z, 0, 0, cam.z, W / 2 - cam.x * cam.z + Math.sin(t * 50) * shake, H / 2 - cam.y * cam.z + Math.cos(t * 43) * shake);
-    const states = {};
-    for (const name in sh.cast) states[name] = Puppet.stateAt(sh.acts[name] || [[0, {}]], lt, d);
+    const toF = k => typeof k[0] === 'string' ? [cue(k[0], k[1]) / d, k[2]] : k;
+    const states = {}, castX = {};
+    for (const name in sh.cast) states[name] = Puppet.stateAt(((sh.acts || {})[name] || [[0, {}]]).map(toF), lt, d);
+    if (sh.move) for (const n in sh.move) {
+      const ks = sh.move[n].map(k => typeof k[0] === 'string' ? [cue(k[0], k[1]) / d, k[2]] : k);
+      let x = ks[0][1]; for (let i = 0; i < ks.length - 1; i++) if (lt / d >= ks[i][0]) x = lerp(ks[i][1], ks[i + 1][1], eio(P(lt / d, ks[i][0], ks[i + 1][0])));
+      castX[n] = x;
+    }
     if (sh.propFix) for (const n in sh.propFix) for (const [f, pr] of sh.propFix[n]) if (lt >= f * d) states[n].propL = pr;
-    const drawC = name => { if (!sh.cast[name]) return; const c = Object.assign({}, CH[name], sh.cast[name], { y: GROUND }); Puppet.draw(ctx, c, states[name], t); };
+    const drawC = name => { if (!sh.cast[name]) return; const c = Object.assign({}, CH[name], sh.cast[name], { y: GROUND }, castX[name] != null ? { x: castX[name] } : {}); Puppet.draw(ctx, c, states[name], t); };
     if (sh.draw) {
       sh.draw(s, lt, d, t);
+    } else if (sh.set === 'pitch') {
+      drawGoalBack();
+      Object.keys(sh.cast).forEach(drawC);
+      if (sh.ball) { const b = ballPos(sh.ball, lt); drawBall(b.x, b.y, b.moving ? t : 0); }
+      drawGoalFront();
+      const sc = typeof sh.score === 'function' ? sh.score(lt) : sh.score, lb = typeof sh.label === 'function' ? sh.label(lt) : sh.label;
+      if (sc) scoreboard(sc, lb);
+    } else if (sh.set === 'stands') {
+      Object.keys(sh.cast).forEach(drawC);
+      drawRailing();
+      if (sh.notesFrom && lt > cue(sh.notesFrom, .5)) musicNotes(t, Object.keys(sh.cast).map(n => sh.cast[n].x));
     } else if (sh.set === 'bookies') {
       drawBookiesBack(t, Object.assign({ lt: lt / d }, sh.fx || {}));
       drawC('bookie'); drawCounter();
       ['hero', 'mike', 'jay'].forEach(drawC);
     } else {
-      drawTV(t, sh.card === 'off' ? 'champions' : sh.card, lt, d);
+      drawTV(t, sh.card === 'off' ? 'blank' : sh.card, lt, d);
       drawSofa();
+      if (sh.bus) drawBus(t);
       ['mike', 'jay', 'hero'].forEach(drawC);
+      if (sh.notesFrom && lt > cue(sh.notesFrom, .5)) musicNotes(t, Object.keys(sh.cast).map(n => sh.cast[n].x));
     }
     ctx.setTransform(1, 0, 0, 1, 0, 0);
     const rain = sh.rain != null ? (sh.rain > 0 ? P(lt, sh.rain * d, sh.rain * d + .3) : 1) : 0;
     moneyRain(t, rain);
-    if (sh.flash) { const a = .85 * (1 - P(lt, 0, .3)); if (a > 0) { ctx.fillStyle = `rgba(255,255,255,${a})`; ctx.fillRect(0, 0, W, H); } }
+    if (sh.flash) { const a = .85 * (1 - P(clt, 0, .3)); if (a > 0) { ctx.fillStyle = `rgba(255,255,255,${a})`; ctx.fillRect(0, 0, W, H); } }
+    // hard cut inside a shot: tiny white blink
+    if (s.sh.cuts && cutK > 0 && clt < .08) { ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.fillRect(0, 0, W, H); }
     // iris wipe between sets
     let iris = 1;
-    if (next && next.sh.set !== sh.set) iris = Math.min(iris, 1 - eio(P(lt, d - .3, d)));
-    if (prev && prev.sh.set !== sh.set) iris = Math.min(iris, eio(P(lt, 0, .3)));
+    if (next && setOf(next, 'first') !== setOf(s, 'last')) iris = Math.min(iris, 1 - eio(P(lt, d - .3, d)));
+    if (prev && setOf(prev, 'last') !== setOf(s, 'first')) iris = Math.min(iris, eio(P(lt, 0, .3)));
     if (iris < 1) {
       ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.arc(W / 2, H * .55, Math.max(1, iris * 1250), 0, Math.PI * 2, true);
       ctx.fillStyle = OUT; ctx.fill('evenodd');
