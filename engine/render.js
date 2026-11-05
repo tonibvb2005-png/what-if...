@@ -9,10 +9,12 @@ const path = require('path');
   const [tlPath, wavPath, outPath, scaleArg, onlyT] = process.argv.slice(2);
   const tl = JSON.parse(fs.readFileSync(tlPath, 'utf8'));
   const scale = Number(scaleArg || 2);
-  const browser = await chromium.launch();
+  const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist'] });
   const page = await browser.newPage({ viewport: { width: 540, height: 960 }, deviceScaleFactor: scale });
   await page.goto('file://' + path.join(__dirname, 'render.html'));
-  await page.evaluate((t) => window.setup(t), tl);
+  page.on('pageerror', (e) => { console.error('PAGE ERROR', e); process.exit(1); });
+  page.on('console', (m) => { if (m.type() === 'error') console.error('console:', m.text()); });
+  await page.evaluate(([t, s]) => window.setup(t, s), [tl, scale]);
   await page.evaluate(() => document.fonts.ready);
 
   if (onlyT !== undefined) {          // Einzelbilder zur Kontrolle

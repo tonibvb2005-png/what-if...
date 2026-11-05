@@ -29,7 +29,8 @@
     ]},
     {"scene": "door", "zoom": "handle", "clock": "3:34", "place": "DEINE TÜR", "lines": [
       {"text": "Beide kommen von Mamas Nummer.", "hl": {"Mamas": "y", "Nummer": "y"}},
-      {"text": "Und die Türklinke bewegt sich.", "hl": {"Türklinke": "r"}, "handle": true, "sfx": [["creak", 0.2]], "pause": 0.6}
+      {"text": "Und die Türklinke bewegt sich.", "hl": {"Türklinke": "r"}, "handle": true, "sfx": [["creak", 0.2]], "pause": 0.3},
+      {"text": "Die Tür geht auf. Nur einen Spalt.", "hl": {"Spalt": "r"}, "reveal": true, "sfx": [["creak", 0.0], ["boom", 1.0]], "pause": 1.6}
     ]},
     {"scene": "choice", "left": "Ich stehe vor deiner Tür. Mach bitte auf.", "right": "Mach NICHT auf. Ich bin noch im Hotel.", "lines": [
       {"text": "Wem glaubst du?", "hl": {"glaubst": "y"}},

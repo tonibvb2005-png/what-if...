@@ -3,10 +3,12 @@
 <link rel="stylesheet" href="fonts/fonts.css">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  #gl { position: absolute; inset: 0; width: 540px; height: 960px; }
+  #mid { position: absolute; inset: 0; }
   html, body { width: 540px; height: 960px; overflow: hidden; background: #0b0d1c; }
   #stage { position: absolute; inset: 0; overflow: hidden; font-family: 'Montserrat', sans-serif; }
   #scene { position: absolute; inset: 0; will-change: transform; }
-  #scene > svg { position: absolute; inset: 0; width: 540px; height: 960px; }
+  #mid > svg { position: absolute; inset: 0; width: 540px; height: 960px; }
   #fx { position: absolute; inset: 0; pointer-events: none;
         background: radial-gradient(ellipse 75% 60% at 50% 48%, rgba(0,0,0,0) 55%, rgba(0,0,0,.55) 100%); }
   #grain { position: absolute; inset: 0; opacity: .085; background-size: 540px 960px; mix-blend-mode: overlay; }
@@ -33,7 +35,7 @@
   .badge .pl { font: 500 10px 'JetBrains Mono'; color: #9aa0b8; letter-spacing: 1.6px; margin-top: 5px; }
 
   /* Handy */
-  .phone { position: absolute; background: #08080c; border: 2px solid #2b2b36; border-radius: 46px; padding: 9px;
+  .phone { position: absolute; background: #08080c; border: 3px solid #3a3a46; border-radius: 46px; padding: 9px;
            box-shadow: 0 0 0 1px #000, 0 30px 80px rgba(0,0,0,.6), 0 0 60px rgba(110,140,255,.12); }
   .phone .btn { position: absolute; width: 5px; border-radius: 3px; background: #1d1d26; }
   .screen { position: relative; width: 100%; height: 100%; border-radius: 38px; overflow: hidden; background: #000; color: #fff; }
@@ -41,7 +43,8 @@
   .sbar { position: absolute; top: 14px; left: 28px; right: 24px; display: flex; justify-content: space-between; font: 700 12px 'Montserrat'; z-index: 2; }
   .bat { width: 22px; height: 11px; border: 1.5px solid #888; border-radius: 3px; padding: 1px; }
   .bat b { display: block; height: 100%; width: 22%; background: #ff3b30; border-radius: 1px; }
-  .arm { position: absolute; background: linear-gradient(90deg, #cfc3ad, #e2d8c6 45%, #cbbfa8); border-radius: 26px 26px 0 0; }
+  .arm { position: absolute; background: #d5cdbf; clip-path: polygon(6% 0, 94% 0, 100% 100%, 0 100%); transform-origin: 50% 0; }
+  .fing { position: absolute; background: #e6dfd2; border-radius: 14px; box-shadow: inset -2px -2px 0 rgba(0,0,0,.06); z-index: 2; }
 
   .lock { position: absolute; inset: 0; background: linear-gradient(170deg, #2a1d5e 0%, #4f3391 45%, #6b3f9e 75%, #3a2770 100%); text-align: center; }
   .lock .d { margin-top: 62px; font: 700 13px 'Montserrat'; opacity: .85; }
@@ -78,7 +81,9 @@
   .end .f { display: inline-block; margin-top: 22px; border: 2px solid #fff; border-radius: 22px; padding: 8px 20px; font: 800 13px 'Montserrat'; letter-spacing: 1.5px; }
   .end .q { font: italic 800 17px 'Montserrat'; color: #ffc21f; margin-top: 22px; }
 </style></head>
-<body><div id="stage"><div id="scene"></div><div id="fx"></div><div id="grain"></div><div id="overlay"></div></div>
+<body><div id="stage"><div id="scene"><canvas id="gl"></canvas><div id="mid"></div></div><div id="fx"></div><div id="grain"></div><div id="overlay"></div></div>
+<script src="node_modules/three/build/three.min.js"></script>
+<script src="world3d.js"></script>
 <script>
 let TL, GRAIN = [];
 const $ = (id) => document.getElementById(id);
@@ -86,206 +91,152 @@ const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
 const ease = (x) => { x = clamp(x); return x * x * (3 - 2 * x); };
 const outBack = (x) => { x = clamp(x); const c = 1.9; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
 const noise = (t, s = 1) => Math.sin(t * 12.9898 * s + 78.233) * Math.sin(t * 3.17 * s + 1.3);
+const lerp = (a, b, k) => a + (b - a) * k;
+const lerp2 = (p, q, k) => [lerp(p[0], q[0], k), lerp(p[1], q[1], k)];
+const lerp3 = (p, q, k) => [0, 1, 2].map(i => lerp(p[i], q[i], k));
 
-window.setup = (tl) => {
-  TL = tl;
-  for (let i = 0; i < 6; i++) {               // Film-Grain vorberechnen
-    const c = document.createElement('canvas'); c.width = 270; c.height = 480;
-    const g = c.getContext('2d'), d = g.createImageData(270, 480);
-    for (let p = 0; p < d.data.length; p += 4) { const v = Math.random() * 255; d.data[p] = d.data[p + 1] = d.data[p + 2] = v; d.data[p + 3] = 255; }
-    g.putImageData(d, 0, 0); GRAIN.push(c.toDataURL());
-  }
-};
-
-/* ------------------------------------------------ Zeichen-Bausteine (SVG) */
+/* ------------------------------------------------ 2D-Figur (SVG, Einheiten = Meter, y nach unten = -Welt-y) */
+const SKIN = '#e3e9ff', SHIRT = '#7c3347', SHIRT_HI = '#94405a', INK = '#11142a';
 const DEFS = `<defs>
   <radialGradient id="headG" cx="42%" cy="34%" r="70%"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#e3e9ff"/><stop offset="1" stop-color="#aab7e8"/></radialGradient>
-  <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#a9c8ff" stop-opacity=".55"/><stop offset="1" stop-color="#a9c8ff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#a9c8ff" stop-opacity=".5"/><stop offset="1" stop-color="#a9c8ff" stop-opacity="0"/></radialGradient>
   <radialGradient id="warm" cx="50%" cy="0%" r="70%"><stop offset="0" stop-color="#ffb35a" stop-opacity=".55"/><stop offset="1" stop-color="#ffb35a" stop-opacity="0"/></radialGradient>
-  <linearGradient id="wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d2350"/><stop offset="1" stop-color="#141937"/></linearGradient>
-  <linearGradient id="win" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5a6fc0"/><stop offset="1" stop-color="#26316e"/></linearGradient>
-  <linearGradient id="blanket" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#34418f"/><stop offset="1" stop-color="#1f2864"/></linearGradient>
-  <linearGradient id="door" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1b2049"/><stop offset="1" stop-color="#151a3c"/></linearGradient>
-  <linearGradient id="lit" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#bcd4ff" stop-opacity=".45"/><stop offset=".6" stop-color="#bcd4ff" stop-opacity="0"/></linearGradient>
-  <filter id="soft"><feGaussianBlur stdDeviation="6"/></filter>
-  <filter id="blur18"><feGaussianBlur stdDeviation="18"/></filter>
+  <linearGradient id="lit" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#bcd4ff" stop-opacity=".5"/><stop offset=".6" stop-color="#bcd4ff" stop-opacity="0"/></linearGradient>
+  <radialGradient id="cface" cx="45%" cy="40%" r="65%"><stop offset="0" stop-color="#e9ecf7"/><stop offset=".7" stop-color="#c3c8de"/><stop offset="1" stop-color="#8a8fa8"/></radialGradient>
 </defs>`;
+const sv = (p) => [p[0], -p[1]];
+const svgWrap = (cx, cy, S, body, px = 2048) => `<svg xmlns="http://www.w3.org/2000/svg" width="${px}" height="${px}" viewBox="${cx - S / 2} ${-(cy + S / 2)} ${S} ${S}">${DEFS}${body}</svg>`;
 
-function head(cx, cy, r, o = {}) {
-  const ink = '#11142a';
+function head(c, r, o = {}) {
+  const [cx, cy] = c;
   let eyes = o.eyes || 'open';
-  if (eyes !== 'closed' && o.t !== undefined && (o.t % 3.7) < 0.11) eyes = 'closed';   // Blinzeln
-  const lx = (o.look || 0) * r * 0.09, ex = r * 0.3, ey = cy - r * 0.04, er = Math.max(2.4, r * (eyes === 'wide' ? 0.085 : 0.07));
+  if (eyes !== 'closed' && o.t !== undefined && (o.t % 3.7) < 0.11) eyes = 'closed';
+  const lx = (o.look || 0) * r * 0.09, ex = r * 0.3, ey = cy - r * 0.04, er = r * (eyes === 'wide' ? 0.085 : 0.07);
   let s = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#headG)"/>`;
   if (o.lit) s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#lit)"/>`;
   if (eyes === 'closed') {
-    for (const sx of [-1, 1]) s += `<path d="M${cx + sx * ex - er * 1.7} ${ey} Q${cx + sx * ex} ${ey + er * 1.8} ${cx + sx * ex + er * 1.7} ${ey}" stroke="${ink}" stroke-width="${Math.max(2, r * 0.03)}" fill="none" stroke-linecap="round"/>`;
-  } else {
-    for (const sx of [-1, 1]) {
-      s += `<circle cx="${cx + sx * ex + lx}" cy="${ey}" r="${er}" fill="${ink}"/>`;
-      if (eyes === 'wide') s += `<circle cx="${cx + sx * ex + lx + er * .35}" cy="${ey - er * .35}" r="${er * .32}" fill="#9fd8ff"/>`;
-    }
+    for (const k of [-1, 1]) s += `<path d="M${cx + k * ex - er * 1.7} ${ey} Q${cx + k * ex} ${ey + er * 1.8} ${cx + k * ex + er * 1.7} ${ey}" stroke="${INK}" stroke-width="${r * .035}" fill="none" stroke-linecap="round"/>`;
+  } else for (const k of [-1, 1]) {
+    s += `<circle cx="${cx + k * ex + lx}" cy="${ey}" r="${er}" fill="${INK}"/>`;
+    if (eyes === 'wide') s += `<circle cx="${cx + k * ex + lx + er * .35}" cy="${ey - er * .35}" r="${er * .32}" fill="#9fd8ff"/>`;
   }
   const my = cy + r * 0.32;
-  if (o.mouth === 'o') s += `<ellipse cx="${cx + lx * .5}" cy="${my}" rx="${r * 0.055}" ry="${r * 0.04}" fill="${ink}"/>`;
-  else if (o.mouth !== 'none') s += `<path d="M${cx - r * .07} ${my} Q${cx} ${my - r * .025} ${cx + r * .07} ${my}" stroke="${ink}" stroke-width="${Math.max(1.8, r * .025)}" fill="none" stroke-linecap="round"/>`;
+  if (o.mouth === 'o') s += `<ellipse cx="${cx + lx * .5}" cy="${my}" rx="${r * .055}" ry="${r * .04}" fill="${INK}"/>`;
+  else s += `<path d="M${cx - r * .07} ${my} Q${cx} ${my - r * .025} ${cx + r * .07} ${my}" stroke="${INK}" stroke-width="${r * .028}" fill="none" stroke-linecap="round"/>`;
+  return s;
+}
+function torso(cx, top, w, h) {
+  const a = w * .09, b = w * .28, c = w * .065;
+  return `<path d="M${cx - w / 2 + a} ${top} Q${cx} ${top - a} ${cx + w / 2 - a} ${top} Q${cx + w / 2 + a * .5} ${top + a * .7} ${cx + w / 2} ${top + b} L${cx + w / 2 - c} ${top + h} L${cx - w / 2 + c} ${top + h} L${cx - w / 2} ${top + b} Q${cx - w / 2 - a * .5} ${top + a * .7} ${cx - w / 2 + a} ${top} Z" fill="${SHIRT}"/>
+    <path d="M${cx - w * .17} ${top - w * .02} Q${cx} ${top + w * .13} ${cx + w * .17} ${top - w * .02}" stroke="${SHIRT_HI}" stroke-width="${w * .055}" fill="none" stroke-linecap="round"/>`;
+}
+function arm(s, h, bend = 1) {
+  const mx = (s[0] + h[0]) / 2, my = (s[1] + h[1]) / 2, dx = h[0] - s[0], dy = h[1] - s[1], L = Math.hypot(dx, dy) || 1;
+  const off = Math.min(.07, L * .28) * bend, c = [mx - dy / L * off, my + dx / L * off];
+  return `<path d="M${s[0]} ${s[1]} Q${c[0]} ${c[1]} ${h[0]} ${h[1]}" stroke="${SKIN}" stroke-width=".026" fill="none" stroke-linecap="round"/><circle cx="${h[0]}" cy="${h[1]}" r=".02" fill="${SKIN}"/>`;
+}
+
+// Figur im Bett. Welt-Koordinaten (Meter). PZ = Tiefe der Figuren-Ebene.
+const PZ = .62, HOLD = [.15, .93];
+function character(st) {
+  const hip = [.15, .6], dyH = (1 - st.sit) * .37, dyT = (1 - st.sit) * .47, ang = .45 * (st.lean || 0);
+  const R = (p) => { const x = p[0] - hip[0], y = p[1] - hip[1], c = Math.cos(ang), s = Math.sin(ang); return [hip[0] + x * c - y * s, hip[1] + x * s + y * c]; };
+  const headC = R([.15, 1.17 - dyH]), shL = R([.078, .985 - dyT]), shR = R([.222, .985 - dyT]);
+  let s = '';
+  if (st.phone) s += `<circle cx="${st.phone[0]}" cy="${-st.phone[1]}" r=".55" fill="url(#glow)" opacity="${st.flick}"/>`;
+  const [hx, hy] = sv(hip);
+  s += `<g transform="rotate(${-ang * 180 / Math.PI} ${hx} ${hy}) translate(0 ${dyT})">${torso(.15, -1.03, .21, .47)}</g>`;
+  s += head(sv(headC), .13, { eyes: st.eyes, t: st.t, lit: st.lit, look: st.look, mouth: st.mouth });
+  if (st.sit > .02) s += `<g opacity="${clamp(st.sit * 3)}">${arm(sv(shR), sv(st.handR), -1)}${arm(sv(shL), sv(st.handL), 1)}</g>`;
+  if (st.phone) {
+    const [px, py] = sv(st.phone);
+    s += `<rect x="${px - .034}" y="${py - .056}" width=".068" height=".112" rx=".012" fill="#07080f"/>
+          <rect x="${px - .034}" y="${py - .056}" width=".068" height=".112" rx=".012" fill="none" stroke="#bcd4ff" stroke-width=".004" opacity=".6"/>
+          <circle cx="${st.handL[0]}" cy="${-st.handL[1]}" r=".02" fill="${SKIN}"/><circle cx="${st.handR[0]}" cy="${-st.handR[1]}" r=".02" fill="${SKIN}"/>`;
+  }
+  if (st.vibAt) {
+    const [vx, vy] = sv(st.vibAt);
+    s += `<path d="M${vx - .07} ${vy - .03} l-.015 -.015 M${vx + .07} ${vy - .03} l.015 -.015 M${vx - .08} ${vy} l-.02 0 M${vx + .08} ${vy} l.02 0" stroke="#d7e6ff" stroke-width=".008" stroke-linecap="round"/>`;
+  }
   return s;
 }
 
+/* ------------------------------------------------ Tür-Zustand (gilt für alle Szenen) */
+function doorState(t) {
+  let handle = 0, open = 0, knock = 0;
+  if (TL.handle.length) { const [h0, h1] = TL.handle; const p = ease((t - h0 - .3) / Math.max(.5, h1 - h0 - .3)); handle = .6 * p + (p > 0 && p < 1 ? noise(t * 20) * .03 : 0); }
+  if (TL.reveal && TL.reveal.length) { const p = ease((t - TL.reveal[0]) / 1.5); open = .45 * p; if (p > 0) handle = Math.max(handle * (1 - p), 0) + .6 * (1 - p); }
+  for (const k of TL.knocks) { const a = t - k; if (a >= 0 && a < .16) knock += Math.sin(a * 90) * (1 - a / .16); }
+  return { handle, open, knock };
+}
+
 /* ------------------------------------------------ Szenen */
-/* Figur mit Körper: Shirt, Strich-Arme (Gummi-Arme als Kurven) */
-const SKIN = '#e3e9ff', SHIRT = '#7c3347', SHIRT_HI = '#94405a';
-const rot = (p, c, a) => { const s = Math.sin(a), co = Math.cos(a); const x = p[0] - c[0], y = p[1] - c[1]; return [c[0] + x * co - y * s, c[1] + x * s + y * co]; };
-const lerp = (a, b, k) => a + (b - a) * k;
-const lerp2 = (p, q, k) => [lerp(p[0], q[0], k), lerp(p[1], q[1], k)];
-function arm(s, h, bend = 1) {
-  const mx = (s[0] + h[0]) / 2, my = (s[1] + h[1]) / 2, dx = h[0] - s[0], dy = h[1] - s[1], L = Math.hypot(dx, dy) || 1;
-  const off = Math.min(26, L * 0.28) * bend;
-  const c = [mx - dy / L * off, my + dx / L * off];
-  return `<path d="M${s[0]} ${s[1]} Q${c[0]} ${c[1]} ${h[0]} ${h[1]}" stroke="${SKIN}" stroke-width="9" fill="none" stroke-linecap="round"/>
-          <circle cx="${h[0]}" cy="${h[1]}" r="7" fill="${SKIN}"/>`;
-}
-function torso(cx, top, w, h) {
-  return `<path d="M${cx - w / 2 + 8} ${top} Q${cx} ${top - 8} ${cx + w / 2 - 8} ${top} Q${cx + w / 2 + 4} ${top + 6} ${cx + w / 2} ${top + 26} L${cx + w / 2 - 6} ${top + h} L${cx - w / 2 + 6} ${top + h} L${cx - w / 2} ${top + 26} Q${cx - w / 2 - 4} ${top + 6} ${cx - w / 2 + 8} ${top} Z" fill="${SHIRT}"/>
-          <path d="M${cx - 16} ${top - 2} Q${cx} ${top + 12} ${cx + 16} ${top - 2}" stroke="${SHIRT_HI}" stroke-width="5" fill="none" stroke-linecap="round"/>`;
-}
-function handyHeld(p, lit, flick) {
-  return `<g transform="translate(${p[0]} ${p[1]})"><rect x="-16" y="-27" width="32" height="54" rx="7" fill="#07080f"/>
-    ${lit ? `<rect x="-16" y="-27" width="32" height="54" rx="7" fill="none" stroke="#bcd4ff" stroke-width="1.5" opacity="${.6 * flick}"/>` : ''}</g>`;
-}
-
-function sceneRoom(t, sh) {
-  const L = sh.lineTimes, T1 = L.length > 1 ? L[1][0] : 1e9;
-  const awake = t > L[0][0] + (L[0][1] - L[0][0]) * 0.55;
-  const lit = t >= T1;
-  const k = t - T1;
-  const vib = lit && ((k >= 0 && k < .32) || (k >= .44 && k < .76));          // synchron zum Buzz-Sound
-  const flick = lit ? 0.85 + 0.15 * Math.abs(noise(t * 3)) : 0;
-  const sit = ease((k - 0.35) / 0.6);                    // aufsetzen
-  const lean = ease((k - 0.75) / 0.4) - ease((k - 1.45) / 0.45);  // zum Nachttisch lehnen
-  const reach = ease((k - 0.85) / 0.4);                  // Hand zum Handy
-  const back = ease((k - 1.45) / 0.5);                   // Handy zum Gesicht
-  const grabbed = k >= 1.3;
-
-  const hip = [270, 585], dy = (1 - sit) * 78, ang = -0.42 * lean;
-  const P = (x, y) => rot([x, y + dy], hip, ang);
-  const headC = P(270, 402), shL = P(236, 466), shR = P(304, 466);
-  const phoneDesk = [72 + (vib ? noise(t * 40) * 2.2 : 0), 519];
-  const holdC = [270, 488];
-  const restL = [226, 568], restR = [314, 568];
-  let handL, handR, phonePos = null;
-  handL = lerp2(lerp2(restL, [phoneDesk[0] + 4, phoneDesk[1] - 2], reach), [holdC[0] - 14, holdC[1] + 16], back);
-  handR = lerp2(restR, [holdC[0] + 14, holdC[1] + 16], back);
-  if (grabbed) phonePos = lerp2([handL[0] + 6, handL[1] - 10], holdC, back);
+async function viewRoom(t, sh) {
+  const L = sh.lineTimes, T1 = L.length > 1 ? L[1][0] : 1e9, lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([.15, 1.95, 3.95 - .25 * ease(lt / d)], [-.18, .74, .5], 48);
+  const awake = t > L[0][0] + (L[0][1] - L[0][0]) * .55, lit = t >= T1, k = t - T1;
+  const vib = lit && ((k >= 0 && k < .32) || (k >= .44 && k < .76));
+  const flick = lit ? .85 + .15 * Math.abs(noise(t * 3)) : 0;
+  const sit = ease((k - .35) / .6), lean = ease((k - .75) / .4) - ease((k - 1.45) / .45);
+  const reach = ease((k - .85) / .4), back = ease((k - 1.45) / .5), grabbed = k >= 1.3;
+  const desk = W3.toPlane([-.7, .58, .24], PZ);
+  const holdL = [HOLD[0] - .035, HOLD[1] - .035], holdR = [HOLD[0] + .035, HOLD[1] - .035];
+  const handL = lerp2(lerp2([.05, .72], [desk[0] + .01, desk[1]], reach), holdL, back);
+  const handR = lerp2([.25, .72], holdR, back);
+  const phone = grabbed ? lerp2([handL[0] + .015, handL[1] + .03], HOLD, back) : null;
   const look = !awake ? 0 : (lit && back < .5 ? -1.3 * ease(k / .3) : 0);
-  const faceLit = grabbed && back > .4;
-
-  let deskPhone = '';
-  if (!grabbed) {
-    deskPhone = `<rect x="${phoneDesk[0] - 18}" y="${phoneDesk[1] - 4}" width="36" height="8" rx="3" fill="#07080f"/>`;
-    if (lit) deskPhone = `<ellipse cx="${phoneDesk[0]}" cy="${phoneDesk[1] - 6}" rx="70" ry="44" fill="url(#glow)" opacity="${flick}"/>
-       <rect x="${phoneDesk[0] - 16}" y="${phoneDesk[1] - 5}" width="32" height="3" rx="1.5" fill="#d7e6ff" opacity="${flick}"/>` + deskPhone;
-    if (vib) deskPhone += `<path d="M${phoneDesk[0] - 26} ${phoneDesk[1] - 10} l-5 -5 M${phoneDesk[0] + 26} ${phoneDesk[1] - 10} l5 -5 M${phoneDesk[0] - 29} ${phoneDesk[1]} l-7 0 M${phoneDesk[0] + 29} ${phoneDesk[1]} l7 0" stroke="#d7e6ff" stroke-width="2.5" stroke-linecap="round"/>`;
-  }
-  const torsoSvg = `<g transform="rotate(${ang * 180 / Math.PI} ${hip[0]} ${hip[1]}) translate(0 ${dy + (1 - sit) * 34})">${torso(270, 448, 94, 150)}</g>`;
-
-  return `<svg viewBox="0 0 540 960">${DEFS}
-    <rect width="540" height="960" fill="url(#wall)"/>
-    <rect y="770" width="540" height="190" fill="#0f1229"/><rect y="768" width="540" height="4" fill="#232a58"/>
-    <rect x="40" y="165" width="150" height="180" rx="6" fill="#111536"/>
-    <rect x="50" y="175" width="130" height="160" rx="3" fill="url(#win)"/>
-    <circle cx="150" cy="212" r="16" fill="#dfe7ff" opacity=".85"/>
-    <rect x="112" y="175" width="6" height="160" fill="#111536"/><rect x="50" y="252" width="130" height="6" fill="#111536"/>
-    <polygon points="50,335 180,335 330,770 140,770" fill="#8aa2ff" opacity=".05"/>
-    <rect x="25" y="155" width="30" height="210" rx="8" fill="#252c62"/><rect x="175" y="155" width="30" height="210" rx="8" fill="#252c62"/>
-    <rect x="424" y="290" width="112" height="480" rx="3" fill="#0e1230"/>
-    <rect x="432" y="298" width="100" height="472" fill="url(#door)"/>
-    <rect x="446" y="320" width="74" height="170" rx="3" fill="none" stroke="#21275a" stroke-width="3"/>
-    <rect x="446" y="520" width="74" height="220" rx="3" fill="none" stroke="#21275a" stroke-width="3"/>
-    <rect x="438" y="530" width="20" height="5" rx="2" fill="#5a628f"/>
-    <rect x="22" y="524" width="104" height="246" rx="6" fill="#1a1f47"/><rect x="18" y="520" width="112" height="12" rx="4" fill="#262d5e"/>
-    <rect x="34" y="570" width="80" height="4" rx="2" fill="#141838"/>
-    <rect x="102" y="482" width="8" height="38" fill="#2b3264"/><path d="M86 486 L126 486 L118 452 L94 452 Z" fill="#2e3670"/>
-    ${deskPhone}
-    <rect x="140" y="380" width="260" height="170" rx="34" fill="#262d60"/>
-    <rect x="132" y="540" width="276" height="230" rx="22" fill="#1d2353"/>
-    <ellipse cx="270" cy="494" rx="104" ry="36" fill="#b3bde6"/>
-    ${faceLit ? `<circle cx="${holdC[0]}" cy="${holdC[1] - 20}" r="190" fill="url(#glow)" opacity="${flick}"/>` : ''}
-    ${torsoSvg}
-    ${head(headC[0], headC[1], 46, { eyes: awake ? 'open' : 'closed', t, lit: faceLit, look })}
-    <path d="M118 ${560 - 0} Q270 ${528} 422 560 L432 905 Q270 930 108 905 Z" fill="url(#blanket)"/>
-    <path d="M160 640 Q210 630 240 660 M330 675 Q380 640 410 660 M150 800 Q250 780 330 820" stroke="#4352a6" stroke-width="4" fill="none" opacity=".55" stroke-linecap="round"/>
-    ${sit > 0.02 ? `<g opacity="${clamp(sit * 3)}">${arm(shR, handR, -1)}${arm(shL, handL, 1)}</g>` : ''}
-    ${phonePos ? handyHeld(phonePos, true, flick) : ''}
-    ${sit > 0.02 && phonePos ? `<circle cx="${handL[0]}" cy="${handL[1]}" r="7" fill="${SKIN}"/><circle cx="${handR[0]}" cy="${handR[1]}" r="7" fill="${SKIN}"/>` : ''}
-  </svg>`;
+  W3.setState({ t, phoneOnDesk: !grabbed, phoneLit: lit, phoneVib: vib, flick, phonePos: grabbed ? [phone[0], phone[1], PZ + .12] : [-.7, .64, .26], ...doorState(t) });
+  const body = character({ sit, lean, handL, handR, phone, flick, lit: grabbed && back > .4, eyes: awake ? 'open' : 'closed', look, t, vibAt: vib ? desk : null });
+  await W3.setChar(svgWrap(.1, 1.0, 2.4, body), .1, 1.0, PZ, 2.4);
+  return '';
 }
 
-function sceneFace(t, sh) {
+async function viewFace(t, sh) {
   const lt = t - sh.start, d = sh.end - sh.start;
-  const look = lt > d * 0.55 ? Math.sin(Math.min(1, (lt - d * .55) * 3) * Math.PI / 2) * 1.2 : 0;
-  const tr = 1.2 * noise(t * 9);
-  return `<svg viewBox="0 0 540 960">${DEFS}
-    <rect width="540" height="960" fill="#151a3c"/>
-    <rect x="-20" y="80" width="580" height="560" rx="60" fill="#262d60"/>
-    <ellipse cx="270" cy="560" rx="380" ry="170" fill="#a9b3df"/>
-    <path d="M10 960 L30 700 Q60 610 170 600 Q270 640 370 600 Q480 610 510 700 L530 960 Z" fill="${SHIRT}"/>
-    <path d="M200 612 Q270 660 340 612" stroke="${SHIRT_HI}" stroke-width="12" fill="none" stroke-linecap="round"/>
-    <g transform="translate(${tr} ${tr * .6})">${head(272, 380, 225, { eyes: 'wide', mouth: 'o', look, lit: true })}</g>
-    <circle cx="270" cy="1000" r="400" fill="url(#glow)"/>
-    <path d="M-40 850 Q270 800 580 850 L580 980 L-40 980 Z" fill="url(#blanket)"/>
-    <rect x="200" y="842" width="140" height="160" rx="22" fill="#07080f"/>
-    <rect x="200" y="842" width="140" height="160" rx="22" fill="none" stroke="#bcd4ff" stroke-width="2" opacity=".5"/>
-    <path d="M150 990 Q170 900 196 880 M390 990 Q370 900 344 880" stroke="${SKIN}" stroke-width="22" fill="none" stroke-linecap="round"/>
-    <circle cx="198" cy="880" r="17" fill="${SKIN}"/><circle cx="342" cy="880" r="17" fill="${SKIN}"/>
-  </svg>`;
+  const look = lt > d * .55 ? Math.sin(Math.min(1, (lt - d * .55) * 3) * Math.PI / 2) * 1.3 : 0;
+  const tr = .002 * noise(t * 9);
+  W3.setCam([.15 + tr, 1.1, 1.36 - .08 * ease(lt / d)], [.15, 1.04, .6], 44);
+  const flick = .85 + .15 * Math.abs(noise(t * 3));
+  W3.setState({ t, phoneOnDesk: false, phoneLit: true, flick, phonePos: [HOLD[0], HOLD[1], PZ + .12], ...doorState(t) });
+  const body = character({ sit: 1, lean: 0, handL: [HOLD[0] - .035, HOLD[1] - .035], handR: [HOLD[0] + .035, HOLD[1] - .035], phone: HOLD, flick, lit: true, eyes: 'wide', mouth: 'o', look, t });
+  await W3.setChar(svgWrap(.15, 1.05, .8, body), .15, 1.05, PZ, .8);
+  return '';
 }
 
-function sceneDoor(t, sh) {
-  let dx = 0, flash = 0;
-  for (const k of TL.knocks) { const a = t - k; if (a >= 0 && a < 0.16) { dx += Math.sin(a * 90) * 4 * (1 - a / 0.16); flash = Math.max(flash, 1 - a / 0.16); } }
-  let ang = 0;
-  if (TL.handle.length) { const [h0, h1] = TL.handle; const p = ease((t - h0 - 0.3) / (h1 - h0 - 0.3)); ang = 32 * p + (p > 0 && p < 1 ? noise(t * 20) * 1.5 : 0); }
-  const feet = `<rect x="215" y="806" width="34" height="6" fill="#0d1027"/><rect x="292" y="806" width="34" height="6" fill="#0d1027"/>`;
-  return `<svg viewBox="0 0 540 960">${DEFS}
-    <rect width="540" height="960" fill="url(#wall)"/>
-    <rect y="812" width="540" height="148" fill="#0e1128"/>
-    <ellipse cx="270" cy="815" rx="190" ry="70" fill="url(#warm)"/>
-    <g transform="translate(${dx} 0)">
-      <rect x="126" y="136" width="288" height="676" rx="4" fill="#0c1030"/>
-      <rect x="140" y="150" width="260" height="656" fill="url(#door)"/>
-      <rect x="166" y="180" width="208" height="250" rx="4" fill="none" stroke="#232a5e" stroke-width="5"/>
-      <rect x="166" y="470" width="208" height="300" rx="4" fill="none" stroke="#232a5e" stroke-width="5"/>
-      <circle cx="362" cy="505" r="13" fill="#3a4176"/>
-      <g transform="rotate(${-ang} 362 505)"><rect x="300" y="499" width="64" height="12" rx="6" fill="#7a83b6"/><rect x="300" y="499" width="64" height="4" rx="2" fill="#a3abd8"/></g>
-      <rect x="150" y="806" width="240" height="6" fill="#ffbe6a"/>${feet}
-    </g>
-    <path d="M-20 905 Q270 860 560 905 L560 980 L-20 980 Z" fill="url(#blanket)"/>
-    ${flash ? `<rect width="540" height="960" fill="#000" opacity="${flash * .25}"/>` : ''}
-  </svg>`;
+function povCam(t, drift = 0) { W3.setCam([.45 + drift * .05, 1.12, 1.75 - drift * .1], [1.37, .98, -.05], 56); }
+async function viewDoor(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  if (sh.zoom === 'handle') {
+    const r0 = TL.reveal && TL.reveal.length ? TL.reveal[0] : sh.end;
+    const pIn = ease(lt / Math.max(1, r0 - sh.start)), pOut = ease((t - r0 + .2) / 1.8);
+    const pos = lerp3(lerp3([.72, 1.06, .95], [.86, 1.03, .62], pIn), [.8, 1.45, 2.15], pOut);
+    const look = lerp3([1.04, 1.0, 0], [1.0, 1.5, -.25], pOut);
+    W3.setCam(pos, look, lerp(38, 46, pOut));
+  } else povCam(t, ease(lt / d));
+  W3.setState({ t, phoneOnDesk: false, phoneLit: true, flick: .6, phonePos: [.5, .95, 1.5], ...doorState(t) });
+  await W3.setChar(null);
+  return '';
 }
 
-function phoneBox(x, y, w, h, inner, armW = 58) {
-  return `<div class="arm" style="left:${x + w / 2 - armW / 2}px;top:${y + h - 30}px;width:${armW}px;height:${960 - y - h + 60}px"></div>
+/* ------------------------------------------------ Handy-UI (HTML) */
+function phoneBox(x, y, w, h, inner) {
+  return `<div class="arm" style="left:${x + w / 2 - 30}px;top:${y + h - 20}px;width:60px;height:${960 - y - h + 80}px;transform:rotate(-5deg)"></div>
+    <div class="fing" style="left:${x - 15}px;top:${y + h * .3}px;width:27px;height:54px"></div>
+    ${[.28, .38, .48].map(f => `<div class="fing" style="left:${x + w - 12}px;top:${y + h * f}px;width:27px;height:42px"></div>`).join('')}
     <div class="phone" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px">
-      <div class="btn" style="left:-7px;top:110px;height:30px"></div><div class="btn" style="left:-7px;top:160px;height:52px"></div>
-      <div class="btn" style="right:-7px;top:140px;height:70px"></div>
       <div class="screen"><div class="island"></div>${inner}</div></div>`;
 }
+async function bgPov(t) { povCam(t, .5); W3.setState({ t, phoneOnDesk: false, phoneLit: true, flick: .8, phonePos: [.5, .95, 1.5], ...doorState(t) }); await W3.setChar(null); }
 
-const phoneBg = `<svg viewBox="0 0 540 960">${DEFS}<rect width="540" height="960" fill="#121633"/>
-  <g filter="url(#blur18)" opacity=".8"><rect x="20" y="180" width="160" height="190" fill="#2c3878"/><rect x="380" y="280" width="140" height="480" fill="#1b2050"/>
-  <ellipse cx="270" cy="760" rx="260" ry="140" fill="#26306e"/></g></svg>`;
-
-function sceneLock(t, sh) {
-  const lt = t - sh.start, p = outBack((lt - 0.15) / 0.35);
-  const n = sh.notif;
-  return phoneBg + phoneBox(118, 150, 304, 620, `<div class="lock"><div class="d">Donnerstag, 5. November</div><div class="c">${sh.clock}</div>
+async function viewLock(t, sh) {
+  await bgPov(t);
+  const lt = t - sh.start, p = outBack((lt - 0.15) / 0.35), n = sh.notif;
+  return phoneBox(118, 150, 304, 620, `<div class="lock"><div class="d">Donnerstag, 5. November</div><div class="c">${sh.clock}</div>
     <div class="notif" style="opacity:${clamp(p)};transform:translateY(${(1 - p) * -18}px) scale(${.9 + .1 * p})"><div class="ic"></div>
     <div style="flex:1"><div class="n">${n.from}<span>jetzt</span></div><div class="m">${n.text}</div></div></div></div>`);
 }
-
-function sceneChat(t, sh) {
+async function viewChat(t, sh) {
+  await bgPov(t);
   let list = '';
   for (const m of TL.msgs) {
     if (m.t > t) continue;
@@ -296,13 +247,12 @@ function sceneChat(t, sh) {
     const dots = [0, 1, 2].map(i => `<i style="opacity:${.35 + .65 * Math.max(0, Math.sin((t * 6 - i * .7)))}"></i>`).join('');
     list += `<div class="bub them typing">${dots}</div>`;
   }
-  return phoneBg + phoneBox(118, 150, 304, 620, `<div class="chat">
+  return phoneBox(118, 150, 304, 620, `<div class="chat">
     <div class="sbar"><span>${sh.clock}</span><span class="bat"><b></b></span></div>
     <div class="hd"><div class="av">${sh.contact[0]}</div><div class="nm">${sh.contact} ›</div></div>
     <div class="day">Heute ${sh.clock}</div><div class="list">${list}</div>
     <div class="inp">iMessage</div></div>`);
 }
-
 function miniChat(text, x, label, color, p) {
   return `<div style="opacity:${clamp(p)};transform:translateY(${(1 - p) * 20}px)">
     <div class="pill" style="left:${x + 100}px;top:228px;transform:translateX(-50%);background:${color}">${label}</div>
@@ -311,43 +261,76 @@ function miniChat(text, x, label, color, p) {
     <div class="chat"><div class="hd" style="top:30px"><div class="av" style="width:30px;height:30px;font-size:13px;line-height:30px">M</div><div class="nm" style="font-size:9px">Mama ›</div></div>
     <div class="list" style="padding-top:112px;padding-left:9px;padding-right:9px"><div class="bub them" style="font-size:11.5px;max-width:90%">${text}</div></div></div></div></div></div>`;
 }
-
-function sceneChoice(t, sh) {
+async function viewChoice(t, sh) {
+  await bgPov(t);
   const lt = t - sh.start;
-  return `<svg viewBox="0 0 540 960">${DEFS}<rect width="540" height="960" fill="#0f1230"/><ellipse cx="270" cy="960" rx="300" ry="160" fill="url(#warm)" opacity=".5"/></svg>
-    <div class="choice"><h1 style="opacity:${clamp(lt / .25)}">WEM GLAUBST DU?</h1>
+  return `<div class="choice"><h1 style="opacity:${clamp(lt / .25)}">WEM GLAUBST DU?</h1>
     ${miniChat(sh.left, 40, 'NACHRICHT 1', '#2f7cf6', outBack((lt - .15) / .35))}
     ${miniChat(sh.right, 300, 'NACHRICHT 2', '#ff3b30', outBack((lt - .45) / .35))}</div>`;
 }
-
-function sceneEnd(t, sh) {
+async function viewEnd(t, sh) {
   const lt = t - sh.start, a = (d) => `opacity:${clamp((lt - d) / .3)};transform:translateY(${(1 - ease((lt - d) / .3)) * 14}px)`;
   const door = `<svg viewBox="0 0 200 150" width="200" height="150" style="display:block;margin:0 auto">
-    <rect x="50" y="10" width="100" height="128" fill="#181d45" stroke="#0b0f2c" stroke-width="5"/>
-    <circle cx="136" cy="78" r="4" fill="#7a83b6"/><rect x="52" y="134" width="96" height="4" fill="#ffbe6a"/>
-    <rect x="78" y="134" width="12" height="4" fill="#0d1027"/><rect x="108" y="134" width="12" height="4" fill="#0d1027"/></svg>`;
+    <rect x="50" y="10" width="100" height="128" fill="#05060f"/>
+    <rect x="58" y="22" width="22" height="116" fill="#3a2412"/>
+    <ellipse cx="68" cy="48" rx="9" ry="13" fill="#cfd3e6"/><circle cx="65" cy="45" r="2.4" fill="#000"/><circle cx="72" cy="45" r="2.4" fill="#000"/>
+    <path d="M62 54 Q68 59 75 53" stroke="#000" stroke-width="1.6" fill="none"/>
+    <polygon points="80,10 150,10 150,138 80,138" fill="#181d45" stroke="#0b0f2c" stroke-width="4"/>
+    <circle cx="92" cy="78" r="4" fill="#7a83b6"/><rect x="52" y="134" width="96" height="4" fill="#ffbe6a"/>
+    ${[0, 1, 2, 3].map(i => `<path d="M80 ${44 + i * 5} q6 -1 11 1" stroke="#cfd3e6" stroke-width="2.2" stroke-linecap="round" fill="none"/>`).join('')}</svg>`;
   return `<div class="end"><div style="margin-top:205px;${a(0)}">${door}</div>
     <div class="s" style="${a(.1)}">${TL.title}</div><div class="p" style="${a(.2)}">TEIL ${TL.part + 1}</div>
     <div class="h" style="${a(.35)}">HEUTE NACHT</div><div style="${a(.5)}"><span class="f">FOLGE FÜR TEIL ${TL.part + 1}</span></div>
     <div class="q" style="${a(.7)}">1 oder 2? Schreib's in die Kommentare.</div></div>`;
 }
 
-const SCENES = { room: sceneRoom, face: sceneFace, door: sceneDoor, lock: sceneLock, chat: sceneChat, choice: sceneChoice, end: sceneEnd };
-const ZOOM = { room: [1.0, 1.05, '40% 55%'], face: [1.04, 1.12, '50% 45%'], door: [1.0, 1.07, '50% 70%'],
-               handle: [1.75, 1.95, '67% 52.6%'], lock: [1.0, 1.03, '50% 50%'], chat: [1.0, 1.03, '50% 50%'],
-               choice: [1.0, 1.02, '50% 50%'], end: [1, 1, '50% 50%'] };
+const VIEWS = { room: viewRoom, face: viewFace, door: viewDoor, lock: viewLock, chat: viewChat, choice: viewChoice, end: viewEnd };
+const GLSTYLE = { room: '', face: '', door: '', lock: 'blur(9px) brightness(.7)', chat: 'blur(9px) brightness(.7)', choice: 'blur(10px) brightness(.55)', end: 'none' };
+const ZOOM = { lock: [1.0, 1.03], chat: [1.0, 1.03], choice: [1.0, 1.02] };
+
+/* ------------------------------------------------ Kreatur + Finger (2D-Texturen für den Flur) */
+const CREATURE = `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="2048" viewBox="0 0 450 900">${DEFS}
+  <path d="M190 330 Q150 420 160 900 L330 900 Q340 420 300 330 Z" fill="#14100e"/>
+  <path d="M225 250 L222 340" stroke="#a9adbf" stroke-width="26"/>
+  <ellipse cx="228" cy="170" rx="72" ry="104" fill="url(#cface)"/>
+  <ellipse cx="200" cy="150" rx="22" ry="30" fill="#05050a"/><ellipse cx="258" cy="150" rx="22" ry="30" fill="#05050a"/>
+  <circle cx="203" cy="146" r="4.5" fill="#fff"/><circle cx="261" cy="146" r="4.5" fill="#fff"/>
+  <path d="M168 205 Q228 268 290 205 Q228 240 168 205 Z" fill="#05050a"/>
+  ${[0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => `<rect x="${180 + i * 11.5}" y="${210 + Math.abs(i - 4) * -1.5 + 6}" width="7" height="11" rx="2" fill="#e9e6da"/>`).join('')}
+</svg>`;
+const FINGERS = `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 200 200">
+  ${[0, 1, 2, 3].map(i => { const y = 50 + i * 30, L = [118, 140, 132, 104][i];
+    return `<path d="M0 ${y} Q${L * .5} ${y - 9} ${L} ${y + 6}" stroke="#c9cddd" stroke-width="15" fill="none" stroke-linecap="round"/>
+      <path d="M${L * .38} ${y - 6} l0 9 M${L * .7} ${y - 4} l0 9" stroke="#8d92a8" stroke-width="2"/>
+      <ellipse cx="${L - 3}" cy="${y + 5}" rx="5" ry="4" fill="#5c5a50"/>`; }).join('')}
+</svg>`;
+
+window.setup = async (tl, dpr) => {
+  TL = tl;
+  for (let i = 0; i < 6; i++) {
+    const c = document.createElement('canvas'); c.width = 270; c.height = 480;
+    const g = c.getContext('2d'), d = g.createImageData(270, 480);
+    for (let p = 0; p < d.data.length; p += 4) { const v = Math.random() * 255; d.data[p] = d.data[p + 1] = d.data[p + 2] = v; d.data[p + 3] = 255; }
+    g.putImageData(d, 0, 0); GRAIN.push(c.toDataURL());
+  }
+  await W3.init($('gl'), dpr, CREATURE, FINGERS);
+};
 
 /* ------------------------------------------------ Frame */
-window.renderFrame = (t) => {
+window.renderFrame = async (t) => {
   const sh = TL.shots.find(s => t >= s.start && t < s.end) || TL.shots[TL.shots.length - 1];
   const lt = t - sh.start, d = sh.end - sh.start;
-  const z = ZOOM[sh.zoom || sh.scene];
-  const sc = $('scene');
-  sc.innerHTML = SCENES[sh.scene](t, sh);
+  const html = await VIEWS[sh.scene](t, sh);
+  const gl = $('gl'), st = GLSTYLE[sh.scene];
+  gl.style.display = st === 'none' ? 'none' : 'block';
+  gl.style.filter = st === 'none' ? '' : st;
+  if (st !== 'none') W3.render();
+  $('mid').innerHTML = html;
+  const sc = $('scene'), z = ZOOM[sh.scene] || [1, 1];
   let shake = '';
   for (const k of TL.knocks) { const a = t - k; if (a >= 0 && a < .18) shake = `translate(${Math.sin(a * 80) * 3 * (1 - a / .18)}px, ${Math.cos(a * 70) * 2 * (1 - a / .18)}px) `; }
-  sc.style.transformOrigin = z[2];
-  sc.style.transform = shake + `scale(${z[0] + (z[1] - z[0]) * ease(lt / d * .9 + .05)})`;
+  if (TL.reveal && TL.reveal.length) { const a = t - TL.reveal[0] - 1.0; if (a >= 0 && a < .35) shake = `translate(${Math.sin(a * 60) * 4 * (1 - a / .35)}px, 0) `; }
+  sc.style.transform = shake + `scale(${z[0] + (z[1] - z[0]) * ease(lt / d)})`;
 
   let ov = '';
   if (t < 3.0) {

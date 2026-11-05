@@ -155,6 +155,7 @@ def main():
     voice_files = sorted(os.listdir(args.voice_dir)) if args.voice_dir else None
     t = LEAD_IN
     shots, words, groups, msgs, typing, knocks, handle, voice, sfx_ev = [], [], [], [], [], [], [], [], []
+    reveal = []
     li = 0
     for si, shot in enumerate(story["shots"]):
         if si:
@@ -195,6 +196,8 @@ def main():
                 sfx_ev.append((resolve(spec, L), name_))
             for spec in line.get("knocks", []):
                 knocks.append(resolve(spec, L))
+            if line.get("reveal"):
+                reveal = [L["start"], L["end"] + line.get("pause", 0)]
             if line.get("handle"):
                 handle = [L["start"], L["end"] + line.get("pause", 0)]
             t = L["end"] + line.get("pause", 0) + GAP_LINE
@@ -221,7 +224,7 @@ def main():
     tl = {"fps": args.fps, "duration": duration, "series": story["series"], "episode": story["episode"],
           "title": story["title"], "part": story["part"], "shots": shots, "words": words,
           "groups": [{"start": g["start"], "end": g["end"], "words": g["words"]} for g in groups],
-          "msgs": msgs, "typing": typing, "knocks": knocks, "handle": handle}
+          "msgs": msgs, "typing": typing, "knocks": knocks, "handle": handle, "reveal": reveal}
     tl_path = os.path.join(outdir, name + ".timeline.json")
     json.dump(tl, open(tl_path, "w"), ensure_ascii=False, indent=1)
 
