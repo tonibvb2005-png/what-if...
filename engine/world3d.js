@@ -35,75 +35,75 @@ const W3 = (() => {
     renderer.setPixelRatio(dpr); renderer.setSize(540, 960, false);
     renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.outputEncoding = THREE.sRGBEncoding; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
-    scene = new THREE.Scene(); scene.background = new THREE.Color('#0c0f26');
+    scene = new THREE.Scene(); scene.background = new THREE.Color('#14162a');
     cam = new THREE.PerspectiveCamera(55, 540 / 960, 0.03, 30);
 
     // Licht: Mond durchs Fenster, kühles Fülllicht, Handy, warmes Fluerlicht
-    scene.add(new THREE.HemisphereLight('#b4bbe0', '#1a1d30', .75));
-    const moon = new THREE.DirectionalLight('#cdd5ff', 1.5); moon.position.set(-1.4, 3.4, 3.2); moon.target.position.set(.2, 0, .6);
+    scene.add(new THREE.HemisphereLight('#c4c7da', '#1c1d28', .8));
+    const moon = new THREE.DirectionalLight('#d6daf0', 1.45); moon.position.set(-1.4, 3.4, 3.2); moon.target.position.set(.2, 0, .6);
     moon.castShadow = true; moon.shadow.mapSize.set(1024, 1024); Object.assign(moon.shadow.camera, { left: -3, right: 3, top: 3, bottom: -3, near: .5, far: 10 });
     moon.shadow.radius = 4; moon.shadow.bias = -0.0015; scene.add(moon, moon.target);
-    const fill = new THREE.DirectionalLight('#8a92c8', .3); fill.position.set(2.5, 2, 5); scene.add(fill);
+    const fill = new THREE.DirectionalLight('#9a9db8', .3); fill.position.set(2.5, 2, 5); scene.add(fill);
     phoneLight = new THREE.PointLight('#bcd3ff', 0, 2.4, 2); scene.add(phoneLight);
     warmLight = new THREE.PointLight('#ffad58', 0, 3.2, 2); warmLight.position.set(1.25, .35, .35); scene.add(warmLight);
 
     // Raum
-    const wallM = std('#292f54'), sideM = std('#22274c');
-    const floor = put(new THREE.Mesh(new THREE.PlaneGeometry(4.4, 5), std('#181a31')), 0, 0, 2.4, scene, false); floor.rotation.x = -Math.PI / 2;
-    put(rbox(2.2, .012, 1.7, .005, std('#2d3259')), .1, .006, 1.35, scene, false);
+    const wallM = std('#2c2f46'), sideM = std('#24273e');
+    const floor = put(new THREE.Mesh(new THREE.PlaneGeometry(4.4, 5), std('#191a28')), 0, 0, 2.4, scene, false); floor.rotation.x = -Math.PI / 2;
+    put(rbox(2.2, .012, 1.7, .005, std('#2f334b')), .1, .006, 1.35, scene, false);
     put(new THREE.Mesh(new THREE.BoxGeometry(3.15, 2.8, .1), wallM), -.625, 1.4, -.05, scene, false);   // links von Tür
     put(new THREE.Mesh(new THREE.BoxGeometry(.4, 2.8, .1), wallM), 2.0, 1.4, -.05, scene, false);
     put(new THREE.Mesh(new THREE.BoxGeometry(.85, .72, .1), wallM), 1.375, 2.44, -.05, scene, false);
     const lw = put(new THREE.Mesh(new THREE.PlaneGeometry(5, 2.8), sideM), -2.2, 1.4, 2.4, scene, false); lw.rotation.y = Math.PI / 2;
     const rw = put(new THREE.Mesh(new THREE.PlaneGeometry(5, 2.8), sideM), 2.2, 1.4, 2.4, scene, false); rw.rotation.y = -Math.PI / 2;
-    const ceil = put(new THREE.Mesh(new THREE.PlaneGeometry(4.4, 5), std('#16192f')), 0, 2.8, 2.4, scene, false); ceil.rotation.x = Math.PI / 2;
-    put(new THREE.Mesh(new THREE.BoxGeometry(3.1, .1, .03), std('#1d203e')), -.62, .05, .015, scene, false);
+    const ceil = put(new THREE.Mesh(new THREE.PlaneGeometry(4.4, 5), std('#171927')), 0, 2.8, 2.4, scene, false); ceil.rotation.x = Math.PI / 2;
+    put(new THREE.Mesh(new THREE.BoxGeometry(3.1, .1, .03), std('#1f2033')), -.62, .05, .015, scene, false);
 
     // Fenster mit Mond
     const glass = canvasTex(256, 280, (g, w, h) => {
-      const gr = g.createLinearGradient(0, 0, w, h); gr.addColorStop(0, '#6c80d6'); gr.addColorStop(1, '#2a3577'); g.fillStyle = gr; g.fillRect(0, 0, w, h);
+      const gr = g.createLinearGradient(0, 0, w, h); gr.addColorStop(0, '#7581b8'); gr.addColorStop(1, '#2e3460'); g.fillStyle = gr; g.fillRect(0, 0, w, h);
       g.fillStyle = 'rgba(235,240,255,.95)'; g.beginPath(); g.arc(180, 70, 26, 0, 7); g.fill();
       g.fillStyle = 'rgba(255,255,255,.5)'; for (let i = 0; i < 18; i++) { g.fillRect(Math.random() * w, Math.random() * h * .6, 2, 2); }
     });
-    put(rbox(.92, .98, .06, .02, std('#171a33')), -.95, 1.68, .03, scene, false);
+    put(rbox(.92, .98, .06, .02, std('#181a2a')), -.95, 1.68, .03, scene, false);
     put(new THREE.Mesh(new THREE.PlaneGeometry(.8, .86), basic('#ffffff', { map: glass })), -.95, 1.68, .062, scene, false);
-    put(new THREE.Mesh(new THREE.BoxGeometry(.03, .86, .02), std('#171a33')), -.95, 1.68, .07, scene, false);
-    put(new THREE.Mesh(new THREE.BoxGeometry(.8, .03, .02), std('#171a33')), -.95, 1.68, .07, scene, false);
-    put(rbox(1.0, .04, .12, .015, std('#1e2244')), -.95, 1.17, .07);
-    put(rbox(.24, 1.35, .07, .03, std('#353c6b')), -1.47, 1.62, .1);
-    put(rbox(.24, 1.35, .07, .03, std('#353c6b')), -.43, 1.62, .1);
+    put(new THREE.Mesh(new THREE.BoxGeometry(.03, .86, .02), std('#181a2a')), -.95, 1.68, .07, scene, false);
+    put(new THREE.Mesh(new THREE.BoxGeometry(.8, .03, .02), std('#181a2a')), -.95, 1.68, .07, scene, false);
+    put(rbox(1.0, .04, .12, .015, std('#202238')), -.95, 1.17, .07);
+    put(rbox(.24, 1.35, .07, .03, std('#383d5a')), -1.47, 1.62, .1);
+    put(rbox(.24, 1.35, .07, .03, std('#383d5a')), -.43, 1.62, .1);
 
     // Bett
-    put(rbox(1.38, .3, 2.0, .04, std('#1f2447')), .15, .17, 1.05);
-    put(rbox(1.3, .2, 1.95, .06, std('#c5cae0')), .15, .42, 1.05);
-    put(rbox(1.5, 1.05, .1, .05, std('#2e345d')), .15, .56, .06);
-    const pillow = put(new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16), std('#bec5e1')), .15, .62, .3); pillow.scale.set(.47, .1, .2);
-    put(rbox(1.42, .3, 1.5, .08, std('#38427a')), .15, .49, 1.33);
-    const fold = put(new THREE.Mesh(new THREE.CylinderGeometry(.05, .05, 1.42, 20), std('#485492')), .15, .63, .6); fold.rotation.z = Math.PI / 2;
+    put(rbox(1.38, .3, 2.0, .04, std('#21243a')), .15, .17, 1.05);
+    put(rbox(1.3, .2, 1.95, .06, std('#c7cad7')), .15, .42, 1.05);
+    put(rbox(1.5, 1.05, .1, .05, std('#31354e')), .15, .56, .06);
+    const pillow = put(new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16), std('#c1c5d6')), .15, .62, .3); pillow.scale.set(.47, .1, .2);
+    put(rbox(1.42, .3, 1.5, .08, std('#3d4365')), .15, .49, 1.33);
+    const fold = put(new THREE.Mesh(new THREE.CylinderGeometry(.05, .05, 1.42, 20), std('#4d557b')), .15, .63, .6); fold.rotation.z = Math.PI / 2;
 
     // Nachttisch + Lampe + Handy
-    put(rbox(.44, .56, .4, .03, std('#22274c')), -.82, .28, .22);
-    put(new THREE.Mesh(new THREE.BoxGeometry(.36, .006, .01), std('#131630')), -.82, .36, .425, scene, false);
-    put(new THREE.Mesh(new THREE.SphereGeometry(.018, 12, 8), std('#7d83a8', { m: .5, r: .4 })), -.82, .3, .43);
-    put(new THREE.Mesh(new THREE.CylinderGeometry(.07, .08, .03, 24), std('#313760')), -.95, .575, .15);
-    put(new THREE.Mesh(new THREE.CylinderGeometry(.012, .012, .22, 12), std('#313760')), -.95, .69, .15);
-    put(new THREE.Mesh(new THREE.CylinderGeometry(.075, .12, .15, 24, 1, true), std('#3f467c')), -.95, .82, .15);
-    deskPhone = put(rbox(.078, .012, .155, .004, std('#07080d', { r: .3 })), -.7, .566, .24);
+    put(rbox(.44, .56, .4, .03, std('#24273e')), -.82, .28, .22);
+    put(new THREE.Mesh(new THREE.BoxGeometry(.36, .006, .01), std('#141626')), -.82, .36, .425, scene, false);
+    put(new THREE.Mesh(new THREE.SphereGeometry(.018, 12, 8), std('#80839a', { m: .5, r: .4 })), -.82, .3, .43);
+    put(new THREE.Mesh(new THREE.CylinderGeometry(.07, .08, .03, 24), std('#343851')), -.95, .575, .15);
+    put(new THREE.Mesh(new THREE.CylinderGeometry(.012, .012, .22, 12), std('#343851')), -.95, .69, .15);
+    put(new THREE.Mesh(new THREE.CylinderGeometry(.075, .12, .15, 24, 1, true), std('#434768')), -.95, .82, .15);
+    deskPhone = put(rbox(.078, .012, .155, .004, std('#07080b', { r: .3 })), -.7, .566, .24);
     deskScreen = new THREE.Mesh(new THREE.PlaneGeometry(.068, .145), basic('#d7e6ff', { transparent: true, opacity: 0 }));
     deskScreen.rotation.x = -Math.PI / 2; deskScreen.position.y = .0065; deskPhone.add(deskScreen);
 
     // Tür (Scharnier rechts, öffnet ins Zimmer) + Rahmen
-    const trim = std('#181b35');
+    const trim = std('#191b2b');
     put(new THREE.Mesh(new THREE.BoxGeometry(.06, 2.1, .14), trim), .925, 1.05, -.02);
     put(new THREE.Mesh(new THREE.BoxGeometry(.06, 2.1, .14), trim), 1.825, 1.05, -.02);
     put(new THREE.Mesh(new THREE.BoxGeometry(.96, .06, .14), trim), 1.375, 2.1, -.02);
     doorPivot = new THREE.Group(); doorPivot.position.set(1.795, 0, -.04); scene.add(doorPivot);
-    doorMesh = put(rbox(.84, 2.045, .05, .01, std('#272c53')), -.42, 1.05, 0, doorPivot);
-    const panelM = std('#2e345f');
+    doorMesh = put(rbox(.84, 2.045, .05, .01, std('#292d45')), -.42, 1.05, 0, doorPivot);
+    const panelM = std('#31354f');
     put(rbox(.6, .7, .012, .005, panelM), -.42, 1.58, .03, doorPivot);
     put(rbox(.6, .85, .012, .005, panelM), -.42, .58, .03, doorPivot);
     handlePivot = new THREE.Group(); handlePivot.position.set(-.76, 1.0, .03); doorPivot.add(handlePivot);
-    const metal = std('#9298be', { m: .7, r: .35 });
+    const metal = std('#9598b0', { m: .7, r: .35 });
     const ros = put(new THREE.Mesh(new THREE.CylinderGeometry(.028, .028, .012, 20), metal), 0, 0, 0, handlePivot); ros.rotation.x = Math.PI / 2;
     put(rbox(.13, .024, .024, .01, metal), .06, 0, .03, handlePivot);
 

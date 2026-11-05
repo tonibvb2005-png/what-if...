@@ -189,9 +189,12 @@ def main():
             m = line.get("msg")
             if m:
                 mt = L["wordTimes"][m["atWord"]] if "atWord" in m else t
+                chat = m.get("chat", shot.get("contact"))
                 if m.get("typing"):
-                    typing.append([mt, mt + m["typing"]]); mt += m["typing"]
-                msgs.append({"from": m["from"], "text": m["text"], "t": mt})
+                    typing.append([mt, mt + m["typing"], chat]); mt += m["typing"]
+                msgs.append({"from": m["from"], "text": m["text"], "t": mt, "chat": chat})
+                if m["from"] == "them":
+                    sfx_ev.append((mt, "ping"))
             for name_, spec in line.get("sfx", []):
                 sfx_ev.append((resolve(spec, L), name_))
             for spec in line.get("knocks", []):
@@ -222,7 +225,7 @@ def main():
         a_["end"] = b_["start"]
 
     tl = {"fps": args.fps, "duration": duration, "series": story["series"], "episode": story["episode"],
-          "title": story["title"], "part": story["part"], "shots": shots, "words": words,
+          "title": story["title"], "part": story["part"], "question": story.get("question", ""), "shots": shots, "words": words,
           "groups": [{"start": g["start"], "end": g["end"], "words": g["words"]} for g in groups],
           "msgs": msgs, "typing": typing, "knocks": knocks, "handle": handle, "reveal": reveal}
     tl_path = os.path.join(outdir, name + ".timeline.json")

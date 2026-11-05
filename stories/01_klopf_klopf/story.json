@@ -3,6 +3,7 @@
   "episode": "#01",
   "title": "KLOPF KLOPF",
   "part": 1,
+  "question": "MAMA oder PAPA? Schreib's in die Kommentare.",
   "shots": [
     {"scene": "room", "clock": "3:33", "place": "DEIN ZIMMER", "lines": [
       {"text": "Stell dir vor, du wachst um 3:33 auf.", "say": "Stell dir vor, du wachst um drei Uhr dreiunddreißig auf.", "hl": {"3:33": "y", "auf": "y"}},
@@ -12,29 +13,37 @@
       {"text": "Eine Nachricht von Mama.", "hl": {"Mama": "y"}}
     ]},
     {"scene": "chat", "clock": "3:33", "contact": "Mama", "lines": [
-      {"text": "Bist du wach?", "msg": {"from": "them", "text": "Bist du wach?"}, "sfx": [["ping", 0.0]]},
+      {"text": "Bist du wach?", "msg": {"from": "them", "text": "Bist du wach?"}},
       {"text": "Du schreibst: Ja. Was ist los?", "msg": {"from": "me", "text": "Ja. Was ist los?", "atWord": 2}, "hl": {"los": "y"}},
       {"text": "Ich stehe vor deiner Tür. Mach bitte auf.", "msg": {"from": "them", "text": "Ich stehe vor deiner Tür. Mach bitte auf.", "typing": 0.9}, "hl": {"Tür": "r", "auf": "y"}, "pause": 0.5}
     ]},
     {"scene": "face", "clock": "3:33", "place": "DEIN ZIMMER", "sfx": [["boom", 0.0]], "lines": [
-      {"text": "Aber Mama ist seit Dienstag im Urlaub.", "hl": {"Urlaub": "r"}, "pause": 0.4}
+      {"text": "Aber Mama ist seit Dienstag mit Papa im Urlaub.", "hl": {"Urlaub": "r"}, "pause": 0.4}
     ]},
     {"scene": "door", "clock": "3:34", "place": "DEINE TÜR", "lines": [
       {"text": "Dann klopft es.", "hl": {"klopft": "r"}, "pause": 1.3, "sfx": [["knock", "end+0.15"], ["knock", "end+0.5"], ["knock", "end+0.85"]], "knocks": ["end+0.15", "end+0.5", "end+0.85"]},
       {"text": "Dreimal.", "hl": {"Dreimal": "r"}, "pause": 0.4}
     ]},
+    {"scene": "chat", "clock": "3:34", "contact": "Papa", "lines": [
+      {"text": "Du schreibst Papa: Ist Mama bei dir?", "msg": {"from": "me", "text": "Ist Mama bei dir?", "atWord": 3}, "hl": {"Papa": "b"}},
+      {"text": "Ja. Sie schläft neben mir.", "msg": {"from": "them", "text": "Ja. Sie schläft neben mir. Wieso?", "typing": 0.8}, "hl": {"schläft": "y"}},
+      {"text": "Du schreibst: Sie steht vor meiner Tür.", "msg": {"from": "me", "text": "Sie schreibt, sie steht vor meiner Tür.", "atWord": 2}, "hl": {"Tür": "r"}},
+      {"text": "Mach nicht auf.", "msg": {"from": "them", "text": "Mach NICHT auf.", "typing": 0.9}, "hl": {"nicht": "r"}, "pause": 0.4}
+    ]},
     {"scene": "chat", "clock": "3:34", "contact": "Mama", "lines": [
-      {"text": "Noch eine Nachricht.", "msg": {"from": "them", "text": "Mach NICHT auf. Ich bin noch im Hotel.", "atWord": 2}, "sfx": [["ping", "word2"]]},
-      {"text": "Mach nicht auf. Ich bin noch im Hotel.", "hl": {"nicht": "r", "Hotel": "y"}, "pause": 0.4}
+      {"text": "Dann schreibt wieder Mama.", "msg": {"from": "them", "text": "Papa lügt. Mach auf.", "atWord": 3}, "hl": {"Mama": "y"}},
+      {"text": "Papa lügt. Mach auf.", "hl": {"lügt": "r"}, "pause": 0.4}
     ]},
     {"scene": "door", "zoom": "handle", "clock": "3:34", "place": "DEINE TÜR", "lines": [
-      {"text": "Beide kommen von Mamas Nummer.", "hl": {"Mamas": "y", "Nummer": "y"}},
       {"text": "Und die Türklinke bewegt sich.", "hl": {"Türklinke": "r"}, "handle": true, "sfx": [["creak", 0.2]], "pause": 0.3},
       {"text": "Die Tür geht auf. Nur einen Spalt.", "hl": {"Spalt": "r"}, "reveal": true, "sfx": [["creak", 0.0], ["boom", 1.0]], "pause": 1.6}
     ]},
-    {"scene": "choice", "left": "Ich stehe vor deiner Tür. Mach bitte auf.", "right": "Mach NICHT auf. Ich bin noch im Hotel.", "lines": [
+    {"scene": "choice",
+     "left": {"label": "MAMA", "contact": "Mama", "text": "Papa lügt. Mach auf.", "color": "#2f7cf6"},
+     "right": {"label": "PAPA", "contact": "Papa", "text": "Mach NICHT auf.", "color": "#ff3b30"},
+     "lines": [
       {"text": "Wem glaubst du?", "hl": {"glaubst": "y"}},
-      {"text": "Nachricht eins oder zwei?", "say": "Nachricht eins, oder zwei?", "hl": {"eins": "b", "zwei": "r"}, "pause": 0.5}
+      {"text": "Mama oder Papa?", "hl": {"Mama": "b", "Papa": "r"}, "pause": 0.5}
     ]},
     {"scene": "end", "sfx": [["boom", 0.0]], "lines": [
       {"text": "Teil 2. Heute Nacht.", "say": "Teil zwei. Heute Nacht.", "nocap": true, "pause": 1.2}
