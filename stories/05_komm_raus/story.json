@@ -17,7 +17,7 @@
       {"text": "Komm schnell raus! Das musst du sehen!", "hl": {"raus": "r"}, "quote": {"who": "JONAS", "place": "VOR DEM ZELT", "text": "Komm schnell raus! Das musst du sehen!"}, "pause": 0.6}
     ]},
     {"scene": "tent_in", "clock": "3:33", "place": "IM ZELT", "lines": [
-      {"text": "Aber Jonas liegt neben dir.", "hl": {"neben": "r"}, "ev": [["jonasEyes", "end+0.3"]], "sfx": [["boom", "end+0.3"]], "pause": 1.0}
+      {"text": "Aber Jonas liegt neben dir.", "hl": {"neben": "r"}, "ev": [["jonasEyes", "start"]], "sfx": [["boom", "word3"]], "pause": 1.0}
     ]},
     {"scene": "jonas", "clock": "3:34", "place": "IM ZELT", "lines": [
       {"text": "Seine Augen sind weit offen. Er bewegt sich nicht.", "hl": {"offen": "r"}},

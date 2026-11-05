@@ -59,9 +59,23 @@ function lying(x, y, st) {          // Kopf auf dem Kissen, Körper im Schlafsac
   return s;
 }
 function driver(st) {               // lokale Koordinaten (Ebene gedreht), Blick zur Kamera
+  const [hl, hr] = st.hands || [[-.2, .12], [.2, .12]];
   return torso(0, -.02, .24, .5) +
     head([0, -.14], .12, { eyes: st.eyes, t: st.t, look: st.look, mouth: st.mouth, lit: st.lit }) +
-    arm([-.09, .02], [-.2, .12], 1) + arm([.09, .02], [.2, .12], -1);
+    arm([-.09, .02], hl, 1) + arm([.09, .02], hr, -1);
+}
+// Hände um den Lenkradkranz (eigene Ebene direkt vor dem Lenkrad)
+const WHEEL = [-.37, .97, -.06], GRIP = [[-.128, .068], [.128, .068]];
+function handsSvg() {
+  return svgLocal(.5, .3, GRIP.map(([x, y]) => {
+    const sx = Math.sign(x), cx = x, cy = -y;
+    return `<g transform="rotate(${sx * 30} ${cx} ${cy})">
+      <path d="M${cx - .034} ${cy - .018} Q${cx - .036} ${cy + .036} ${cx} ${cy + .036} Q${cx + .036} ${cy + .036} ${cx + .034} ${cy - .018} Z" fill="${SKIN}"/>
+      ${[0, 1, 2, 3].map(i => `<circle cx="${cx - .025 + i * .0167}" cy="${cy - .02}" r=".011" fill="${SKIN}"/>`).join('')}
+      ${[0, 1, 2].map(i => `<path d="M${cx - .017 + i * .0167} ${cy - .026} v.016" stroke="#9fa9d0" stroke-width=".003" stroke-linecap="round"/>`).join('')}
+      <path d="M${cx - sx * .03} ${cy + .01} Q${cx - sx * .02} ${cy - .03} ${cx + sx * .006} ${cy - .03}" stroke="${SKIN}" stroke-width=".016" stroke-linecap="round" fill="none"/>
+      <path d="M${cx - sx * .03} ${cy + .01} Q${cx - sx * .02} ${cy - .03} ${cx + sx * .006} ${cy - .03}" stroke="#9fa9d0" stroke-width=".003" fill="none" opacity=".6"/></g>`;
+  }).join(''), 1024);
 }
 
 /* ------------------------------------------------ KELLER */
@@ -130,7 +144,7 @@ async function tentChars(t, show) {
   const wake = lastEv('wake', t, null), jo = lastEv('jonasEyes', t, null);
   const youEyes = wake ? 'wide' : 'closed', youLook = wake && t - wake[0] > 1 ? 1.2 * Math.sin(t * .5 + 1) : 0;
   await W3.setPlane('you', { svg: svgWrap(-.43, .3, .8, lying(-.43, .22, { eyes: youEyes, t, look: youLook, mouth: wake ? 'o' : '' }), 1536), pos: [-.43, .3, -.62], color: '#a3abc8' });
-  await W3.setPlane('jonas', { svg: svgWrap(.43, .3, .8, lying(.43, .22, { eyes: jo ? 'wide' : 'closed', t: jo ? 0 : undefined, look: jo ? -.4 : 0, mouth: '', hair: true }), 1536), pos: [.43, .3, -.62], color: '#a3abc8' });
+  await W3.setPlane('jonas', { svg: svgWrap(.43, .3, .8, lying(.43, .22, { eyes: jo ? 'wide' : 'closed', look: jo ? -.4 : 0, mouth: '', hair: true }), 1536), pos: [.43, .3, -.62], color: '#a3abc8' });
 }
 function tentState(t, inside = true) {
   R3.tick(t);
@@ -140,8 +154,8 @@ function tentState(t, inside = true) {
   R3.wallShadow.position.z = .5 - .5 * sp;
   const z = lastEv('zip', t, null), zp = z ? ease((t - z[0]) / Math.max(.5, z[1] - z[0])) : 0;
   R3.zip.position.y = .1 + .75 * zp;
-  R3.handShadow.material.opacity = z ? .75 * clamp((t - z[0]) / .4) : 0;
-  R3.handShadow.position.y = .3 + .75 * zp;
+  R3.handShadow.material.opacity = 0;
+  return { zip: z, zp };
 }
 async function viewTentExt(t, sh) {
   const lt = t - sh.start, d = sh.end - sh.start, a = .78 + .16 * ease(lt / d), r = 8.6 - .7 * ease(lt / d);
@@ -165,10 +179,32 @@ async function viewJonas(t, sh) {
   await W3.setPlane('jonasClose', { svg: svgWrap(.43, .23, .36, lying(.43, .22, { eyes: 'wide', look: -.5 + .1 * Math.sin(t * 2), mouth, hair: true }), 1536), pos: [.43, .23, -.6], color: '#aab2cc' });
   return '';
 }
+// Schatten der ganzen Gestalt auf der Zelttür: beugt sich herunter, die Hand zieht den Reißverschluss hoch
+function doorShadowSvg(t, zp, op) {
+  const zy = .1 + .75 * zp - .65;                 // Reißverschluss in lokalen Koordinaten
+  const hx = .035, hy = -(zy + .03);              // Hand am Zipper (SVG: y nach unten)
+  const sway = .01 * Math.sin(t * 1.7);
+  const head = [.2 + sway, -.2], sh = [.3 + sway, -.02];
+  return svgLocal(1.9, 1.3, `<defs><clipPath id="tri"><polygon points="-.95,.65 0,-.65 .95,.65"/></clipPath>
+      <filter id="sb" filterUnits="userSpaceOnUse" x="-1" y="-1" width="2" height="2"><feGaussianBlur stdDeviation=".012"/></filter></defs>
+    <g clip-path="url(#tri)" opacity="${op}"><g filter="url(#sb)" fill="#000" stroke="#000" stroke-width="0" stroke-linecap="round" stroke-linejoin="round">
+      <g transform="rotate(-38 ${head[0]} ${head[1]})"><ellipse cx="${head[0]}" cy="${head[1]}" rx=".06" ry=".085"/></g>
+      <path d="M${head[0] - .02} ${head[1] + .08} L${sh[0]} ${sh[1]}" stroke-width=".05" fill="none"/>
+      <path d="M${sh[0] - .1} ${sh[1] + .03} Q${sh[0]} ${sh[1] - .03} ${sh[0] + .11} ${sh[1] + .04} Q${sh[0] + .1} .15 ${sh[0] + .08} .3 L${sh[0] + .12} .7 L${sh[0] + .02} .7 L${sh[0] - .02} .3 Q${sh[0] - .06} .15 ${sh[0] - .1} ${sh[1] + .03} Z" stroke="none"/>
+      <path d="M${sh[0] - .08} ${sh[1] + .04} Q${(sh[0] + hx) / 2 + .02} ${(sh[1] + hy) / 2 + .1} ${hx + .03} ${hy + .01}" stroke-width=".032" fill="none"/>
+      <ellipse cx="${hx + .02}" cy="${hy}" rx=".028" ry=".022" stroke="none"/>
+      ${[0, 1, 2, 3].map(i => `<path d="M${hx + .01} ${hy - .01 + i * .008} Q${hx - .03} ${hy - .05 + i * .012} ${hx - .055 + i * .006} ${hy - .085 + i * .02}" stroke-width=".007" fill="none"/>`).join('')}
+      <path d="M${sh[0] + .1} ${sh[1] + .05} Q${sh[0] + .2} .1 ${sh[0] + .22} .5 L${sh[0] + .24} .62" stroke-width=".028" fill="none"/>
+      ${[0, 1, 2].map(i => `<path d="M${sh[0] + .24} .62 l${-.02 + i * .02} .08" stroke-width=".007"/>`).join('')}
+    </g></g>`, 1024);
+}
 async function viewTentDoor(t, sh) {
   const lt = t - sh.start;
   W3.setCam([0, .58, -.5 - .08 * ease(lt / (sh.end - sh.start))], [0, .55, 1.15], 52);
-  tentState(t); await tentChars(t, false);
+  const { zip, zp } = tentState(t); await tentChars(t, false);
+  ensurePlane('doorShadow', 1.9, 1.3, 1024);
+  const op = zip ? .85 * clamp((t - zip[0] + 1.2) / .9) : 0;
+  await W3.setPlane('doorShadow', op > 0 ? { svg: doorShadowSvg(t, zp, op), pos: [0, .65, 1.137], rotY: Math.PI } : { visible: false });
   return '';
 }
 
@@ -188,11 +224,15 @@ function carState(t, inside) {
   R3.radio.material.color.set(lastEv('radio', t, null) ? '#ffb347' : '#5a3c14');
   return { f };
 }
+function driverHands() {               // Hand-Positionen (Lenkrad) auf die Fahrer-Ebene projiziert, lokale SVG-Koordinaten
+  return GRIP.map(([x, y]) => { const w = [WHEEL[0] - x, WHEEL[1] + y, WHEEL[2] - .03]; const p = W3.toPlane(w, .22); return [-(p[0] + .37), -(p[1] - 1.0)]; });
+}
 async function driverPlane(t, show, eyes = 'open', look = 0, mouth = '') {
-  ensurePlane('you', 1.1, 1.1); ensurePlane('youClose', .5, .5, 1536);
+  ensurePlane('you', 1.1, 1.1); ensurePlane('youClose', .5, .5, 1536); ensurePlane('hands', .5, .3, 1024);
   await W3.setPlane('youClose', { visible: false });
-  if (!show) return W3.setPlane('you', { visible: false });
-  await W3.setPlane('you', { svg: svgLocal(1.1, 1.1, driver({ eyes, t, look, mouth, lit: true })), pos: [-.37, 1.0, .22], rotY: Math.PI, color: '#b6bfdc' });
+  if (!show) { await W3.setPlane('hands', { visible: false }); return W3.setPlane('you', { visible: false }); }
+  await W3.setPlane('you', { svg: svgLocal(1.1, 1.1, driver({ eyes, t, look, mouth, lit: true, hands: driverHands() })), pos: [-.37, 1.0, .22], rotY: Math.PI, color: '#b6bfdc' });
+  await W3.setPlane('hands', { svg: handsSvg(), pos: [WHEEL[0], WHEEL[1], WHEEL[2] - .03], rotY: Math.PI, color: '#b6bfdc' });
 }
 const flashDiv = (f, k = .35) => f > .02 ? `<div style="position:absolute;inset:0;background:radial-gradient(ellipse at 50% 45%, rgba(255,255,245,${Math.min(.9, f * k)}), rgba(255,255,245,${Math.min(.5, f * k * .4)}) 60%, transparent)"></div>` : '';
 async function viewCarExt(t, sh) {
@@ -204,7 +244,7 @@ async function viewCarExt(t, sh) {
 }
 async function viewCarIn(t, sh) {
   const lt = t - sh.start, d = sh.end - sh.start, { f } = carState(t, true);
-  W3.setCam([-.36, 1.2, -.48], [-.2, 1.04, 1.5 + .2 * ease(lt / d)], 62);
+  W3.setCam([-.36, 1.3, -.6], [-.22, 1.0, 1.5 + .2 * ease(lt / d)], 60);
   await driverPlane(t, true, 'wide', f > .3 ? 1.2 : 0, f > .3 ? 'o' : '');
   return flashDiv(f, .28);
 }
@@ -237,7 +277,7 @@ async function viewRadio(t, sh) {
 const SETBG = {
   cellar: async (t) => { cellarState(t); ensurePlane('you', 2, 2); await W3.setPlane('you', { visible: false }); W3.setCam([.05, 1.6, .6], [0, 1.35, 14], 46); },
   tent: async (t) => { tentState(t); await tentChars(t, true); W3.setCam([0, .82, 1.08], [0, .04, -.7], 68); },
-  car: async (t) => { carState(t, true); await driverPlane(t, true, 'wide'); W3.setCam([-.36, 1.2, -.48], [-.2, 1.04, 1.5], 62); },
+  car: async (t) => { carState(t, true); await driverPlane(t, true, 'wide'); W3.setCam([-.36, 1.3, -.6], [-.22, 1.0, 1.5], 60); },
 };
 
 Object.assign(VIEWS, { cellar_wide: viewCellarWide, cellar_pov: viewCellarPov, switch: viewSwitch, cellar_face: viewCellarFace,
@@ -245,4 +285,4 @@ Object.assign(VIEWS, { cellar_wide: viewCellarWide, cellar_pov: viewCellarPov, s
   car_ext: viewCarExt, car_in: viewCarIn, mirror: viewMirror, car_face: viewCarFace, radio: viewRadio });
 Object.assign(GLSTYLE, { cellar_wide: '', cellar_pov: '', switch: '', cellar_face: '', tent_ext: '', tent_in: '', jonas: '', tent_door: '',
   car_ext: '', car_in: '', mirror: '', car_face: '', radio: 'blur(7px) brightness(.55)' });
-Object.assign(SET_ASSETS, { backseat: BACKSEAT, tentShadow: TENT_SHADOW, handShadow: HAND_SHADOW });
+Object.assign(SET_ASSETS, { creatureCellar: CREATURE.replace(/<rect x="0" y="290"[^>]*\/>/, ''), backseat: BACKSEAT, tentShadow: TENT_SHADOW, handShadow: HAND_SHADOW });

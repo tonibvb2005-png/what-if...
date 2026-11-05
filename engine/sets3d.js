@@ -60,7 +60,7 @@
     R.switchBtn = put(new THREE.Mesh(new THREE.BoxGeometry(.02, .05, .05), basic('#ff8a2a')), -.868, 1.15, .45, W3.scene, false);
     R.switchLight = new THREE.PointLight('#ff8a2a', .25, .9, 2); R.switchLight.position.set(-.8, 1.15, .45); sc.add(R.switchLight);
     // Gestalt im Gang (2D)
-    R.figure = put(new THREE.Mesh(new THREE.PlaneGeometry(.9, 2.3), basic('#ffffff', { map: await svgTex(A.creature, 900, 2300), transparent: true, alphaTest: .02 })), .1, 1.15, 13, sc, false);
+    R.figure = put(new THREE.Mesh(new THREE.PlaneGeometry(.9, 2.3), basic('#ffffff', { map: await svgTex(A.creatureCellar || A.creature, 900, 2300), transparent: true, alphaTest: .02 })), .1, 1.15, 13, sc, false);
     R.figure.rotation.y = Math.PI; R.figure.material.toneMapped = false;
     plane('you', 2, 2); plane('hand', .5, .5, 1024);
     R.setLight = (L, fig) => {
@@ -175,8 +175,12 @@
     const rb = put(rbox(1.44, .66, .13, .06, seat), 0, .83, 1.4, R.int); rb.rotation.x = -.15;
     put(new THREE.Mesh(new THREE.BoxGeometry(1.5, .04, .3), trim), 0, 1.0, 1.58, R.int);
     // Lenkrad, Tacho-Glühen, Radio
-    const wheel = put(new THREE.Mesh(new THREE.TorusGeometry(.18, .022, 12, 36), std('#121216')), -.37, .99, -.32, R.int); wheel.rotation.x = -1.05;
-    put(new THREE.Mesh(new THREE.CylinderGeometry(.03, .03, .3, 8), std('#121216')), -.37, .9, -.45, R.int).rotation.x = -1.05;
+    // Lenkrad direkt vor dem Fahrer (Hände greifen es, siehe sets.js)
+    const wheelM = std('#1b1b21', { r: .6 });
+    const wheel = put(new THREE.Mesh(new THREE.TorusGeometry(.15, .019, 14, 40), wheelM), -.37, .97, -.06, R.int); wheel.rotation.x = -.35;
+    const hub = put(new THREE.Mesh(new THREE.CylinderGeometry(.055, .06, .04, 20), wheelM), -.37, .955, -.07, R.int); hub.rotation.x = Math.PI / 2 - .35;
+    for (const a of [Math.PI / 2 + .1, -.35, Math.PI + .35]) { const sp = put(new THREE.Mesh(new THREE.BoxGeometry(.13, .02, .012), wheelM), -.37 + Math.cos(a) * .075, .97 + Math.sin(a) * .075 * .94, -.062, R.int); sp.rotation.z = a; }
+    const col = put(new THREE.Mesh(new THREE.CylinderGeometry(.03, .035, .48, 10), wheelM), -.37, .9, -.3, R.int); col.rotation.x = 1.35;
     put(new THREE.Mesh(new THREE.PlaneGeometry(.34, .09), basic('#3d7fd6')), -.37, .985, -.455, R.int, false).rotation.x = -.5;
     R.radio = put(new THREE.Mesh(new THREE.PlaneGeometry(.22, .07), basic('#d9922e')), .05, .9, -.45, R.int, false); R.radio.rotation.x = -.4;
     put(rbox(.24, .075, .04, .015, std('#111')), 0, 1.33, -.52, R.int);
