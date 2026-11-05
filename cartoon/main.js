@@ -636,9 +636,10 @@
   function drawRailing() {
     ctx.lineWidth = 7; ctx.strokeStyle = OUT;
     ctx.beginPath(); ctx.roundRect(-1600, 1210, 3400, 40, 14); ctx.fillStyle = '#c9ced8'; ctx.fill(); ctx.stroke();
-    ctx.beginPath(); ctx.roundRect(-1600, 1250, 3400, 260, 0); ctx.fillStyle = '#c8102e'; ctx.fill(); ctx.stroke();
-    ctx.font = '900 56px Inter Display'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#fff';
-    for (let x = -1650; x < 1800; x += 1100) ctx.fillText("YOU'LL NEVER WALK ALONE", x, 1330);
+    const rl = (spec && spec.railing) || { color: '#c8102e', text: "YOU'LL NEVER WALK ALONE" };
+    ctx.beginPath(); ctx.roundRect(-1600, 1250, 3400, 260, 0); ctx.fillStyle = rl.color; ctx.fill(); ctx.stroke();
+    ctx.font = '900 56px Inter Display'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = rl.textColor || '#fff';
+    for (let x = -1650; x < 1800; x += 1100) ctx.fillText(rl.text, x, 1330);
   }
   const PITCH = { x: -60, y: 820, z: 1.0 }, STANDS = { x: 0, y: 985, z: 1.22 }, STANDS2 = { x: 0, y: 995, z: 1.32 };
   const FANS = { mike: { x: -270 }, hero: { x: 0 }, jay: { x: 270 } }, FANS2 = { hero: { x: -120 }, jay: { x: 170 } };
@@ -735,6 +736,118 @@
         standsCut({ at: .26, cast: FANS2, conf: 1, shake: 1, flash: true, acts: { hero: [[0, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: 1 } }]], jay: [[0, { e: 'ecstatic', p: 'cheer', m: { dance: 1 } }]] } })] }
   });
 
+
+  // ---------- Barça 2014/15 story ----------
+  const BARCA = { shirt: '#a50044', stripes: '#004d98', trim: '#ffd400', pants: '#004d98', shoes: '#111' };
+  Object.assign(CH, {
+    messi:   Object.assign({}, BARCA, { skin: '#f0c19a', number: '10', hair: 'short', hairColor: '#4a2f1c', stubble: true, bw: .95, blinkPh: .3 }),
+    suarez:  Object.assign({}, BARCA, { skin: '#e8b08a', number: '9', hair: 'slick', hairColor: '#1d1410', stubble: true, bw: 1, blinkPh: 1.4 }),
+    neymar:  Object.assign({}, BARCA, { skin: '#c98d63', number: '11', hair: 'spiky', hairColor: '#c9a46a', bw: .92, blinkPh: 2.3 }),
+    rakitic: Object.assign({}, BARCA, { skin: '#ffd9b8', number: '4', hair: 'slick', hairColor: '#c9a46a', bw: 1, blinkPh: .8 }),
+    terstegen: { skin: '#ffd9b8', shirt: '#ffcc00', trim: '#111', number: '1', pants: '#111', shoes: '#111', hair: 'short', hairColor: '#c9a46a', bw: 1.05, blinkPh: 1.9 },
+    boateng: { skin: '#6b4430', shirt: '#dc052d', trim: '#fff', number: '17', pants: '#dc052d', shoes: '#111', hair: 'buzz', hairColor: '#120a05', bw: 1.1, blinkPh: .5 },
+    neuer:   { skin: '#ffd9b8', shirt: '#2fbf71', trim: '#111', number: '1', pants: '#1f2236', shoes: '#111', hair: 'short', hairColor: '#c9a46a', bw: 1.1, blinkPh: 2.7 },
+    athletic1: { skin: '#f0c19a', shirt: '#ee2523', stripes: '#ffffff', trim: '#111', pants: '#111', shoes: '#111', hair: 'short', hairColor: '#2a1a10', bw: 1, blinkPh: .1 },
+    athletic2: { skin: '#e8b08a', shirt: '#ee2523', stripes: '#ffffff', trim: '#111', pants: '#111', shoes: '#111', hair: 'spiky', hairColor: '#1d1410', bw: 1, blinkPh: 1.1 },
+    athletic3: { skin: '#ffd9b8', shirt: '#ee2523', stripes: '#ffffff', trim: '#111', pants: '#111', shoes: '#111', hair: 'buzz', hairColor: '#3a2414', bw: 1.05, blinkPh: 2.1 },
+    morata:  { skin: '#f0c19a', shirt: '#ffffff', stripes: '#111111', trim: '#e0b84a', number: '9', pants: '#ffffff', shoes: '#111', hair: 'short', hairColor: '#2a1a10', bw: 1, blinkPh: .6 },
+    buffon:  { skin: '#f0c19a', shirt: '#5b6070', trim: '#ffd400', number: '1', pants: '#5b6070', shoes: '#111', hair: 'short', hairColor: '#2a1a10', stubble: true, bw: 1.1, blinkPh: 1.6 },
+    sociedad: { skin: '#f0c19a', shirt: '#0067b1', stripes: '#ffffff', trim: '#fff', pants: '#ffffff', shoes: '#111', hair: 'spiky', hairColor: '#2a1a10', bw: 1, blinkPh: 1.2 }
+  });
+  function drawDugout() {
+    ctx.lineWidth = 7; ctx.strokeStyle = OUT;
+    ctx.beginPath(); ctx.roundRect(60, 1020, 720, 400, [60, 60, 0, 0]); ctx.fillStyle = 'rgba(200,225,255,.28)'; ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(60, 1240, 720, 180, 0); ctx.fillStyle = '#20284e'; ctx.fill(); ctx.stroke();
+    txt('BENCH', 420, 1330, 54, '#ffffff', 900);
+  }
+  function trophy(x, y, sc, t, label) {
+    ctx.save(); ctx.translate(x, y + Math.sin(t * 3 + x) * 8); ctx.scale(sc, sc);
+    ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.fillStyle = '#ffcc33';
+    ctx.beginPath(); ctx.moveTo(-60, -120); ctx.lineTo(60, -120); ctx.quadraticCurveTo(60, -20, 14, 0); ctx.lineTo(14, 40); ctx.lineTo(-14, 40); ctx.lineTo(-14, 0); ctx.quadraticCurveTo(-60, -20, -60, -120); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.arc(-70, -80, 26, Math.PI * .5, Math.PI * 1.5); ctx.stroke(); ctx.beginPath(); ctx.arc(70, -80, 26, -Math.PI * .5, Math.PI * .5); ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(-46, 40, 92, 30, 6); ctx.fillStyle = '#7a4a1a'; ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(-24, -90, 10, 24, .3, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,.55)'; ctx.fill();
+    txt(label, 0, 110, 34, '#fff', 900, 'center', 8);
+    ctx.restore();
+  }
+  const MSN = { messi: { x: -60, scale: .8 }, suarez: { x: -300, scale: .8 }, neymar: { x: 180, scale: .8 } };
+  const BFANS = { mike: { x: -270 }, hero: { x: 0 }, jay: { x: 270 } }, BFANS2 = { hero: { x: -120 }, jay: { x: 170 } };
+  const BROOM = { mike: { x: -270 }, hero: { x: 0 }, jay: { x: 270 } };
+  const kickAt = (who, ft, D) => [[0, { e: 'focused', m: { lookX: -1 } }], [(ft - .15) / D, { po: KICK }], [(ft + .3) / D, { e: 'ecstatic', p: 'cheer', po: {}, m: { jump: .6 } }]];
+  const keeperDive = (ft, D, dir = DIVE_L) => [[0, { e: 'focused', po: KP, m: { lookX: 1 } }], [(ft + .05) / D, { e: 'shock', po: dir, m: { dy: -40 } }], [(ft + .7) / D, { e: 'despair', po: KP, m: { dy: 0 } }]];
+  const shotBall = (ft, fromX, toX, toY) => [[0, fromX, 1385], [ft - .05, fromX, 1385], [ft + .35, toX, toY, 70], [ft + .8, toX - 20, 1385, 20]];
+  Object.assign(SHOTS, {
+    bhook: { set: 'stands', noCaption: true, title: ['WHAT IF YOU GAVE UP', 'ON <span class="gold">BARÇA</span>?'], titleSize: [84, 130],
+      cuts: [standsCut({ at: 0, cam: [[0, { x: 0, y: 1000, z: 1.1 }], [1, { x: 0, y: 995, z: 1.2 }]], cast: BFANS,
+        acts: { hero: [[0, { e: 'confident', p: 'crossed' }]], mike: [[0, { e: 'despair', p: 'handsOnHead' }]], jay: [[0, { e: 'worried', p: 'nervous' }]] } })] },
+    bsociedad: { set: 'pitch', tag: '4 JANUARY 2015', bright: .9,
+      cuts: [
+        pitchCut({ at: 0, cast: { sociedad: { x: 330, scale: .8 }, terstegen: { x: -340, scale: .78 } }, score: lt => lt < cue('goal', .2) ? 'RSO 0 – 0 FCB' : 'RSO 1 – 0 FCB',
+          ball: () => shotBall(cue('goal', .2) - .35, 210, -430, 1150), acts: () => ({ sociedad: kickAt('sociedad', cue('goal', .2) - .35, CUR.duration), terstegen: keeperDive(cue('goal', .2) - .35, CUR.duration) }) }),
+        pitchCut({ at: ['bench', .5], cam: [[0, { x: 420, y: 960, z: 1.15 }], [1, { x: 420, y: 960, z: 1.22 }]], cast: { messi: { x: 280, scale: .85 }, neymar: { x: 560, scale: .85 } }, score: 'RSO 1 – 0 FCB', label: 'MESSI & NEYMAR ON THE BENCH',
+          acts: { messi: [[0, { e: 'focused', ex: { mouthCurve: -.4 }, p: 'crossed', m: { lookX: -1 } }]], neymar: [[0, { e: 'worried', p: 'crossed', m: { lookX: -1 } }]] }, front: 'dugout' })] },
+    bcrisis: { set: 'room', cast: BROOM, bright: .85, tag: '5 JANUARY 2015',
+      card: textCard([['BREAKING NEWS', 40, '#ff5a4f', null, .02], ['MESSI MISSES TRAINING', 54, '#fff', null, .15], ['WANTS TO LEAVE?', 64, '#ffd400', null, .4], ['SPORTING DIRECTOR SACKED', 44, '#fff', null, .62]], ['#2a0d5c', '#0d0524']),
+      cam: [[0, TV], [.78, TV], [.88, { x: 0, y: 985, z: 1.25 }], [1, { x: 0, y: 995, z: 1.32 }]],
+      acts: { hero: [[0, { e: 'surprised', m: { lookX: -1 } }], [.88, { e: 'focused', p: 'crossed', m: { lookX: -1 } }]], mike: [[0, { e: 'worried', m: { lookX: -1 } }], [.88, { e: 'despair', p: 'handsOnHead', m: { lookX: -1 } }]], jay: [[0, { e: 'worried', m: { lookX: -1 } }], [.88, { e: 'shock', m: { lookX: -1 } }]] } },
+    bsell: { set: 'room', cast: BROOM, bright: .9, card: 'off',
+      cam: [[0, { x: -150, y: 990, z: 1.35 }], [1, { x: -150, y: 995, z: 1.45 }]],
+      acts: { mike: [[0, { e: 'focused', ex: { mouthCurve: -.3 }, m: { lookX: 0 } }], ['sell', .45, { e: 'smirk', p: 'holdCashUp', propR: 'shirt10', m: { lookX: 0 } }]], hero: [[0, { e: 'neutral', m: { lookX: -1 } }], ['sell', .5, { e: 'shock', p: 'handsOnHead', m: { lookX: -1 } }]], jay: [[0, { e: 'neutral', m: { lookX: -1 } }]] } },
+    bkeep: { set: 'room', cast: BROOM, bright: .95, card: textCard([['THE SECRET WEAPON', 46, '#ffd400', 'three', .55], ['M · S · N', 120, '#fff', 'three', .6]], ['#2a0d5c', '#0d0524']),
+      cam: [[0, { x: 0, y: 1040, z: 1.6 }], [.6, { x: 0, y: 1040, z: 1.6 }], [.7, TV], [1, TV]],
+      acts: { hero: [[0, { e: 'confident', p: 'thumbsUpR', handR: 'thumb', m: { lookX: 0 } }], [.35, { e: 'wink' }]], mike: [[0, { e: 'smirk', p: 'crossed' }]], jay: [[0, { e: 'neutral' }]] } },
+    bmsn: { set: 'pitch', tag: '2014/15', bright: 1.05,
+      cuts: [pitchCut({ at: 0, cam: [[0, { x: -60, y: 900, z: 1.15 }], [1, { x: -60, y: 905, z: 1.2 }]], cast: MSN, score: '', label: '',
+        acts: { messi: [[0, { e: 'confident', p: 'crossed' }]], suarez: [[0, { e: 'smirk', p: 'hips' }], ['bite', .5, { e: 'happy', ex: { teeth: 1, mouthOpen: .5, mouthCurve: .9 } }]], neymar: [[0, { e: 'wink', p: 'thumbsUpR', handR: 'thumb' }]] },
+        extra: lt => { const k = eb(P(lt, cue('bite', .5), cue('bite', .5) + .4)); if (k > 0) { ctx.save(); ctx.translate(-300, 760); ctx.scale(k, k); ctx.beginPath(); ctx.roundRect(-200, -40, 400, 80, 40); ctx.fillStyle = '#ef3b5c'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = OUT; ctx.stroke(); txt('4-MONTH BAN (2014)', 0, 3, 34, '#fff'); ctx.restore(); } } })] },
+    bbayern: { set: 'pitch', tag: 'SEMI-FINAL · BAYERN', bright: 1,
+      cuts: [
+        pitchCut({ at: 0, cast: { boateng: { x: 90, scale: .82 }, messi: { x: 300, scale: .8 }, neuer: { x: -340, scale: .8 } },
+          move: { messi: [[0, 300], ['skip', .4, 60], ['chip', .62, -120]] },
+          score: lt => lt < cue('chip', .62) + .4 ? 'FCB 1 – 0 BAY' : 'FCB 2 – 0 BAY', label: lt => lt >= cue('chip', .62) + .4 ? 'MESSI!' : '',
+          ball: () => { const sk = cue('skip', .4), ch = cue('chip', .62); return [[0, 240, 1385], [sk, 90, 1385], [ch - .1, -170, 1385], [ch + .45, -430, 1040, 330], [ch + .9, -450, 1385, 20]]; },
+          acts: () => { const sk = cue('skip', .4), ch = cue('chip', .62), D = CUR.duration; return {
+            messi: [[0, { e: 'focused', m: { walk: .8, lookX: -1 } }], [(ch - .15) / D, { po: KICK, m: { walk: 0 } }], [(ch + .5) / D, { e: 'ecstatic', p: 'cheer', po: {}, m: { jump: .5 } }]],
+            boateng: [[0, { e: 'focused', po: KP, m: { lookX: 1 } }], [(sk - .1) / D, { e: 'shock', p: 'faint', po: { lean: 72 }, m: { lookX: 1 } }]],
+            neuer: [[0, { e: 'focused', po: KP, m: { lookX: 1 } }], [(ch + .05) / D, { e: 'shock', po: { lA: 170, rA: 170, lE: 0, rE: 0 }, m: { dy: -50 } }], [(ch + .7) / D, { e: 'despair', p: 'handsOnHead', po: {}, m: { dy: 0 } }]] }; } })] },
+    bdouble: { set: 'pitch', tag: 'MAY 2015', bright: 1.05,
+      cuts: [
+        pitchCut({ at: 0, cast: MSN, score: 'LA LIGA', label: 'CHAMPIONS!', acts: { messi: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: .6 } }]], suarez: [[0, { e: 'happy', p: 'cheer', m: { dance: .7 } }]], neymar: [[0, { e: 'ecstatic', p: 'fistPumpR', handR: 'fist', m: { jump: .4 } }]] },
+          extra: (lt, t) => trophy(230, 560, .95, t, 'LA LIGA') }),
+        pitchCut({ at: ['cup', .4], cast: { athletic1: { x: 300, scale: .8 }, athletic2: { x: 80, scale: .8 }, athletic3: { x: -150, scale: .8 }, messi: { x: 520, scale: .8 } },
+          move: { messi: [['cup', .4, 520], ['cupgoal', .85, -150]] }, score: lt => lt < cue('cupgoal', .85) ? 'FCB 0 – 0 ATH' : 'FCB 1 – 0 ATH', label: 'COPA DEL REY FINAL',
+          ball: () => { const g = cue('cupgoal', .85), st = cue('cup', .4); return [[st, 460, 1385], [g - .1, -140, 1385], [g + .3, -470, 1200, 40], [g + .7, -490, 1385, 20]]; },
+          acts: () => { const D = CUR.duration, st = cue('cup', .4), g = cue('cupgoal', .85), pass = k => st + (g - st) * k; return {
+            messi: [[0, { e: 'focused', m: { walk: 1, lookX: -1 } }], [(g - .15) / D, { po: KICK, m: { walk: 0 } }], [(g + .3) / D, { e: 'ecstatic', p: 'cheer', po: {}, m: { jump: .5 } }]],
+            athletic1: [[0, { e: 'focused', po: KP }], [pass(.2) / D, { e: 'shock', p: 'faint', po: {} }]],
+            athletic2: [[0, { e: 'focused', po: KP }], [pass(.45) / D, { e: 'shock', p: 'faint', po: { lean: 72 } }]],
+            athletic3: [[0, { e: 'focused', po: KP }], [pass(.7) / D, { e: 'shock', p: 'faint', po: {} }]] }; } })] },
+    bberlin: { set: 'stands', tag: '6 JUNE 2015 · BERLIN', bright: .85,
+      cuts: [standsCut({ at: 0, cast: BFANS2, cam: [[0, { x: 20, y: 1000, z: 1.4 }], [1, { x: 20, y: 1005, z: 1.55 }]], acts: { hero: [[0, { e: 'tense', p: 'pleading', m: { tremble: .5 } }]], jay: [[0, { e: 'nervous', p: 'nervous', m: { tremble: .5 } }]] } })] },
+    bfinal: { set: 'pitch', tag: 'CHAMPIONS LEAGUE FINAL', bright: 1,
+      cuts: [
+        pitchCut({ at: 0, cast: { rakitic: { x: 300, scale: .8 }, buffon: { x: -340, scale: .8 } }, score: lt => lt < cue('rak', .08) + .35 ? 'JUV 0 – 0 FCB' : 'JUV 0 – 1 FCB', label: lt => lt >= cue('rak', .08) + .35 ? 'RAKITIĆ' : '',
+          ball: () => shotBall(cue('rak', .08), 180, -440, 1130), acts: () => ({ rakitic: kickAt('rakitic', cue('rak', .08), CUR.duration), buffon: keeperDive(cue('rak', .08), CUR.duration) }) }),
+        pitchCut({ at: ['mor', .3, -.4], cast: { morata: { x: 300, scale: .8 }, terstegen: { x: -340, scale: .78 } }, score: lt => lt < cue('mor', .3) + .35 ? 'JUV 0 – 1 FCB' : 'JUV 1 – 1 FCB', label: lt => lt >= cue('mor', .3) + .35 ? 'MORATA' : '',
+          ball: () => shotBall(cue('mor', .3), 180, -250, 1200), acts: () => ({ morata: kickAt('morata', cue('mor', .3), CUR.duration), terstegen: keeperDive(cue('mor', .3), CUR.duration, DIVE_R) }) }),
+        pitchCut({ at: ['sua', .55, -.4], cast: { suarez: { x: 280, scale: .8 }, buffon: { x: -340, scale: .8 } }, score: lt => lt < cue('sua', .55) + .35 ? 'JUV 1 – 1 FCB' : 'JUV 1 – 2 FCB', label: lt => lt >= cue('sua', .55) + .35 ? 'SUÁREZ' : '',
+          ball: () => shotBall(cue('sua', .55), 160, -480, 1250), acts: () => ({ suarez: kickAt('suarez', cue('sua', .55), CUR.duration), buffon: keeperDive(cue('sua', .55), CUR.duration) }) }),
+        pitchCut({ at: ['ney', .78, -.4], cast: { neymar: { x: 280, scale: .8 }, buffon: { x: -340, scale: .8 } }, score: lt => lt < cue('ney', .78) + .35 ? 'JUV 1 – 2 FCB' : 'JUV 1 – 3 FCB', label: lt => lt >= cue('ney', .78) + .35 ? "NEYMAR 90+7'" : '',
+          ball: () => shotBall(cue('ney', .78), 160, -200, 1100), acts: () => ({ neymar: kickAt('neymar', cue('ney', .78), CUR.duration), buffon: keeperDive(cue('ney', .78), CUR.duration, DIVE_R) }) })] },
+    btreble: { set: 'stands', bright: 1.12,
+      cuts: [standsCut({ at: 0, cast: BFANS2, conf: 1, shake: 1, flash: true, cam: [[0, { x: 20, y: 985, z: 1.25 }], [1, { x: 20, y: 985, z: 1.15 }]],
+        acts: { hero: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: 1 } }]], jay: [[0, { e: 'ecstatic', p: 'cheer', m: { dance: 1 } }]] },
+        extraTop: (lt, t) => { ['LIGA', 'COPA', 'UCL'].forEach((l, i) => { const k = eb(P(lt, .3 + i * .25, .7 + i * .25)); if (k > 0) trophy(-280 + i * 300, 770, .6 * k, t, l); }); } })] },
+    bgoals: { set: 'pitch', bright: 1.05,
+      cuts: [pitchCut({ at: 0, cam: [[0, { x: -60, y: 900, z: 1.15 }], [1, { x: -60, y: 905, z: 1.2 }]], cast: MSN, score: '', label: '',
+        acts: { messi: [[0, { e: 'happy', p: 'cheer' }]], suarez: [[0, { e: 'happy', p: 'fistPumpR', handR: 'fist' }]], neymar: [[0, { e: 'ecstatic', p: 'cheer', m: { dance: .6 } }]] },
+        extra: lt => { const v = Math.round(lerp(0, 122, eo(P(lt, .3, cue('num', .7))))); txt(String(v), -60, 660, 220, '#ffd400', 900, 'center', 18); txt('GOALS', -60, 800, 70, '#fff', 900, 'center', 12); } })] },
+    bmate: { set: 'room', cast: { mike: { x: -200 }, jay: { x: 150 } }, bright: 1, card: 'off',
+      title: ['FOLLOW FOR MORE', '<span class="gold">WHAT IFs</span>'], titleSize: [84, 110], titleAt: 'follow',
+      cam: [[0, { x: -30, y: 990, z: 1.3 }], [1, { x: -30, y: 995, z: 1.38 }]],
+      acts: { mike: [[0, { e: 'pleading', p: 'takeR', propR: 'shirt100', m: { lookX: 1 } }], ['follow', .75, { e: 'despair', p: 'handsOnHead', propR: null }]], jay: [[0, { e: 'smirk', p: 'crossed', m: { lookX: -1, no: .8 } }]] } }
+  });
+
   // ---------- timeline ----------
   let spec, scenes = [], total = 0;
   function camAt(keys, lt, d) {
@@ -753,7 +866,7 @@
   }
   window.setup = async function (sp) {
     spec = sp; total = 0;
-    World3D.init(document.getElementById('gl'));
+    World3D.init(document.getElementById('gl'), { crowd: spec.crowd });
     if (spec.chars) for (const n in spec.chars) Object.assign(CH[n], spec.chars[n]);
     for (const s of spec.scenes) {
       const sh = SHOTS[s.shot]; if (!sh) throw new Error('unknown shot ' + s.shot);
@@ -846,6 +959,19 @@
         case 'idudek': add(st + C('save', .7), 'thump', -11); add(st + C('save', .7) + .1, 'sparkle', -16); break;
         case 'ipens': for (let x = .2; x < d - .2; x += .85) add(st + x, 'heartbeat', -13); break;
         case 'isaved': add(st, 'thump', -9); add(st + .02, 'cheer', -11); break;
+        case 'bhook': add(st + .28, 'thump', -13); add(st + .5, 'thump', -13); break;
+        case 'bsociedad': add(st + C('goal', .2), 'thump', -14); break;
+        case 'bcrisis': add(st + .1, 'pop', -16); add(st + .4 * d, 'thump', -15); break;
+        case 'bsell': add(st + C('sell', .45), 'kaching', -18); break;
+        case 'bkeep': add(st + C('three', .6), 'sparkle', -15); break;
+        case 'bmsn': add(st + C('bite', .5), 'pop', -14); break;
+        case 'bbayern': add(st + C('skip', .4), 'whoosh_soft', -18); add(st + C('chip', .62) + .4, 'thump', -11); add(st + C('chip', .62) + .45, 'cheer', -17); break;
+        case 'bdouble': add(st + .2, 'sparkle', -16); add(st + C('cupgoal', .85) + .3, 'thump', -11); add(st + C('cupgoal', .85) + .35, 'cheer', -17); break;
+        case 'bberlin': for (let x = .2; x < d - .2; x += .85) add(st + x, 'heartbeat', -15); break;
+        case 'bfinal': [['rak', .08], ['mor', .3], ['sua', .55], ['ney', .78]].forEach(([n, df]) => add(st + C(n, df) + .35, 'thump', -12)); add(st + C('ney', .78) + .4, 'cheer', -16); break;
+        case 'btreble': add(st, 'thump', -9); add(st + .02, 'cheer', -11); [0, 1, 2].forEach(i => add(st + .4 + i * .25, 'pop', -14)); break;
+        case 'bgoals': for (let k = 0; k < 12; k++) add(st + .3 + k * .12, 'tick', -19); add(st + C('num', .7), 'ding', -15); break;
+        case 'bmate': add(st + C('follow', .75) + .1, 'pop', -14); break;
         case 'imate': add(st + .1, 'whoosh_soft', -20); add(st + C('follow', .75) + .1, 'pop', -14); break;
       }
     });
@@ -940,12 +1066,15 @@
       drawGoalBack();
       drawGoalFront();
       Object.keys(sh.cast).forEach(drawC);
+      if (sh.front === 'dugout') drawDugout();
       if (sh.ball) { const b = ballPos(sh.ball, lt); drawBall(b.x, b.y, b.moving ? t : 0); }
+      if (sh.extra) sh.extra(lt, t);
       const sc = typeof sh.score === 'function' ? sh.score(lt) : sh.score, lb = typeof sh.label === 'function' ? sh.label(lt) : sh.label;
       if (sc) scoreboard(sc, lb);
     } else if (sh.set === 'stands') {
       Object.keys(sh.cast).forEach(drawC);
       drawRailing();
+      if (sh.extraTop) sh.extraTop(clt, t);
       if (sh.notesFrom && lt > cue(sh.notesFrom, .5)) musicNotes(t, Object.keys(sh.cast).map(n => sh.cast[n].x));
     } else if (sh.set === 'bookies') {
       drawBookiesBack(t, Object.assign({ lt: lt / d }, sh.fx || {}));

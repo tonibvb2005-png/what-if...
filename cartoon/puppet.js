@@ -118,6 +118,13 @@ window.Puppet = (function () {
     } else if (kind === 'scarf') {
       ctx.rotate(Math.sin(t * 4) * .25 - .3);
       for (let k = 0; k < 6; k++) { ctx.beginPath(); ctx.rect(-14, -40 - k * 34, 28, 34); ctx.fillStyle = k % 2 ? '#ffffff' : '#c8102e'; ctx.fill(); stroke(ctx, 4, OUT); }
+    } else if (kind === 'shirt10' || kind === 'shirt100') {
+      ctx.rotate(-.1);
+      const sh = new Path2D(); sh.moveTo(-40, -110); sh.lineTo(-70, -90); sh.lineTo(-58, -60); sh.lineTo(-44, -66); sh.lineTo(-44, 0); sh.lineTo(44, 0); sh.lineTo(44, -66); sh.lineTo(58, -60); sh.lineTo(70, -90); sh.lineTo(40, -110); sh.quadraticCurveTo(0, -90, -40, -110); sh.closePath();
+      ctx.fillStyle = '#a50044'; ctx.fill(sh); ctx.save(); ctx.clip(sh); ctx.fillStyle = '#004d98'; for (let k = -2; k <= 2; k += 2) ctx.fillRect(k * 18 - 9, -115, 18, 120); ctx.restore();
+      ctx.lineWidth = 5; ctx.strokeStyle = OUT; ctx.stroke(sh);
+      ctx.beginPath(); ctx.roundRect(20, -40, 80, 44, 10); ctx.fillStyle = '#ffd400'; ctx.fill(); stroke(ctx, 5, OUT);
+      ctx.fillStyle = OUT; ctx.font = '900 26px Inter Display'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(kind === 'shirt10' ? '€10' : '€100', 60, -17);
     } else if (kind === 'coat') {
       ctx.rotate(.15);
       ctx.beginPath(); ctx.moveTo(-10, -6); ctx.lineTo(-58, 20); ctx.lineTo(-64, 170); ctx.lineTo(48, 170); ctx.lineTo(44, 20); ctx.lineTo(10, -6); ctx.closePath();

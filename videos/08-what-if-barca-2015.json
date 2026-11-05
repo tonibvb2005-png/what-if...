@@ -1,0 +1,143 @@
+{
+  "title": "What if you gave up on Barça in January 2015? (cartoon story)",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "chars": {
+    "hero": {
+      "shirt": "#a50044",
+      "stripes": "#004d98",
+      "number": "10",
+      "trim": "#ffd400"
+    },
+    "jay": {
+      "shirt": "#a50044",
+      "stripes": "#004d98",
+      "trim": "#ffd400"
+    },
+    "mike": {
+      "shirt": "#a50044",
+      "stripes": "#004d98",
+      "trim": "#ffd400"
+    }
+  },
+  "crowd": {
+    "main": [
+      "#a50044",
+      "#004d98"
+    ],
+    "alt": [
+      "#ffd400",
+      "#ffffff"
+    ],
+    "flag": [
+      "#004d98",
+      "#a50044"
+    ]
+  },
+  "railing": {
+    "color": "#004d98",
+    "text": "MÉS QUE UN CLUB"
+  },
+  "scenes": [
+    {
+      "shot": "bhook",
+      "text": "What if you gave up on Barça... in January 2015?",
+      "audio": "../audio/what-if-barca/01.wav"
+    },
+    {
+      "shot": "bsociedad",
+      "text": "January 4th. Barcelona lose 1-0 at Real Sociedad. Messi and Neymar start on the bench.",
+      "audio": "../audio/what-if-barca/02.wav",
+      "cues": {
+        "goal": 1.6,
+        "bench": 3.0
+      }
+    },
+    {
+      "shot": "bcrisis",
+      "text": "The next day, Messi misses training. The papers say he wants out. And the sporting director gets sacked.",
+      "audio": "../audio/what-if-barca/03.wav"
+    },
+    {
+      "shot": "bsell",
+      "text": "His mate has seen enough. He sells his Barça shirt. For 10 euros.",
+      "audio": "../audio/what-if-barca/04.wav",
+      "cues": {
+        "sell": 2.0
+      }
+    },
+    {
+      "shot": "bkeep",
+      "text": "But our guy keeps his. Because Barça have a secret weapon. Actually... three of them.",
+      "audio": "../audio/what-if-barca/05.wav",
+      "cues": {
+        "three": 3.2
+      }
+    },
+    {
+      "shot": "bmsn",
+      "text": "Messi. Suárez. Neymar. The striker who got banned for biting a player at the World Cup... is now part of the scariest front three on the planet.",
+      "audio": "../audio/what-if-barca/06.wav",
+      "cues": {
+        "bite": 2.6
+      }
+    },
+    {
+      "shot": "bbayern",
+      "text": "May 2015. Bayern Munich. Messi goes past Boateng, who falls to the ground... and chips it over Neuer.",
+      "audio": "../audio/what-if-barca/07.wav",
+      "cues": {
+        "skip": 2.6,
+        "chip": 4.0
+      }
+    },
+    {
+      "shot": "bdouble",
+      "text": "They win the league. Then, in the cup final, Messi dribbles past half of Athletic Bilbao... and scores.",
+      "audio": "../audio/what-if-barca/08.wav",
+      "cues": {
+        "cup": 1.6,
+        "cupgoal": 4.4
+      }
+    },
+    {
+      "shot": "bberlin",
+      "text": "June 6th. Berlin. The Champions League final, against Juventus.",
+      "audio": "../audio/what-if-barca/09.wav"
+    },
+    {
+      "shot": "bfinal",
+      "text": "Rakitić scores. Morata equalises. Then Suárez. And Neymar, in the very last minute.",
+      "audio": "../audio/what-if-barca/10.wav",
+      "cues": {
+        "rak": 0.3,
+        "mor": 1.3,
+        "sua": 2.4,
+        "ney": 3.6
+      }
+    },
+    {
+      "shot": "btreble",
+      "text": "BARCELONA WIN THE TREBLE! The first club ever to do it twice!",
+      "audio": "../audio/what-if-barca/11.wav",
+      "pad": 1.6
+    },
+    {
+      "shot": "bgoals",
+      "text": "Messi, Suárez and Neymar scored 122 goals that season.",
+      "audio": "../audio/what-if-barca/12.wav",
+      "cues": {
+        "num": 2.6
+      }
+    },
+    {
+      "shot": "bmate",
+      "text": "And his mate? He tried to buy his shirt back... for 100 euros. Follow for more What Ifs.",
+      "audio": "../audio/what-if-barca/13.wav",
+      "cues": {
+        "follow": 4.0
+      },
+      "pad": 1.2
+    }
+  ]
+}

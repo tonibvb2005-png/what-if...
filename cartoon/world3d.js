@@ -104,7 +104,7 @@ window.World3D = (function () {
   }
 
 
-  let crowdTex = null;
+  let crowdTex = null, crowdPal = { main: '#c8102e', alt: ['#ffffff', '#111111'], flag: ['#c8102e', '#ffffff'] };
   function crowdTexture() {
     if (crowdTex) return crowdTex;
     crowdTex = canvasTex(1024, 512, (c, w, h) => {
@@ -115,10 +115,10 @@ window.World3D = (function () {
         const y = 30 + row * 50;
         c.fillStyle = row % 2 ? '#20284e' : '#252d56'; c.fillRect(0, y + 10, w, 50);
         for (let x = 10 + (row % 2) * 16; x < w; x += 32) {
-          const body = r() < .78 ? '#c8102e' : (r() < .5 ? '#ffffff' : '#111111');
+          const body = r() < .78 ? (Array.isArray(crowdPal.main) ? crowdPal.main[Math.floor(r() * crowdPal.main.length)] : crowdPal.main) : crowdPal.alt[r() < .5 ? 0 : 1];
           c.fillStyle = body; c.beginPath(); c.roundRect(x - 12, y + 18, 24, 30, 8); c.fill();
           c.fillStyle = skins[Math.floor(r() * skins.length)]; c.beginPath(); c.arc(x, y + 10, 10, 0, Math.PI * 2); c.fill();
-          if (r() < .25) { c.fillStyle = '#c8102e'; c.fillRect(x - 3, y - 26, 6, 26); c.fillStyle = '#fff'; c.fillRect(x - 3, y - 18, 6, 6); }
+          if (r() < .25) { c.fillStyle = crowdPal.flag[0]; c.fillRect(x - 3, y - 26, 6, 26); c.fillStyle = crowdPal.flag[1]; c.fillRect(x - 3, y - 18, 6, 6); }
         }
       }
     });
@@ -156,7 +156,8 @@ window.World3D = (function () {
     [-4.2, 0, 4.2].forEach(x => g.add(cone(x, x === 0 ? '#fff3d6' : '#c9b8ff')));
     return g;
   }
-  function init(canvas) {
+  function init(canvas, opts = {}) {
+    if (opts.crowd) crowdPal = opts.crowd;
     renderer = new T.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
     renderer.setPixelRatio(1); renderer.setSize(1080, 1920, false);
     scene = new T.Scene();
