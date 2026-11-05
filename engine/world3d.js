@@ -1,7 +1,7 @@
 // 3D-Hintergrund (Three.js): Schlafzimmer, Tür, Flur. Figuren bleiben 2D (SVG-Textur auf Ebenen).
 const W3 = (() => {
   let renderer, scene, cam, charMesh, charCtx, charTex, deskPhone, deskScreen, phoneLight, doorPivot, doorMesh,
-      handlePivot, spill, warmLight, creature, fingers, fingersMat, creatureTex;
+      handlePivot, spill, warmLight, creature, fingers, fingersMat, creatureTex, knuckMat;
   const TEX = 2048;
 
   function rrect(w, h, r) {
@@ -29,7 +29,7 @@ const W3 = (() => {
     await img.decode(); ctx.clearRect(0, 0, size, size); ctx.drawImage(img, 0, 0, size, size);
   }
 
-  async function init(canvas, dpr, creatureSvg, fingersSvg) {
+  async function init(canvas, dpr, creatureSvg, fingersSvg, knucklesSvg) {
     THREE.ColorManagement.legacyMode = false;
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
     renderer.setPixelRatio(dpr); renderer.setSize(540, 960, false);
@@ -133,7 +133,13 @@ const W3 = (() => {
     const fimg = new Image(); fimg.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(fingersSvg); await fimg.decode(); fg.drawImage(fimg, 0, 0, 512, 512);
     const ft = new THREE.CanvasTexture(fc); ft.encoding = THREE.sRGBEncoding;
     fingersMat = basic('#34353f', { map: ft, transparent: true, opacity: 0, depthWrite: false }); fingersMat.toneMapped = false;
-    fingers = new THREE.Mesh(new THREE.PlaneGeometry(.2, .2), fingersMat); fingers.position.set(-.74, 1.66, .032); doorPivot.add(fingers);
+    fingers = new THREE.Mesh(new THREE.PlaneGeometry(.22, .22), fingersMat); fingers.position.set(-.73, 1.66, .027); doorPivot.add(fingers);
+    // Knöchel auf der Schmalseite der Tür: die Hand greift sichtbar um die Kante
+    const kc = document.createElement('canvas'); kc.width = 128; kc.height = 358; const kg = kc.getContext('2d');
+    const kimg = new Image(); kimg.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(knucklesSvg); await kimg.decode(); kg.drawImage(kimg, 0, 0, 128, 358);
+    const kt = new THREE.CanvasTexture(kc); kt.encoding = THREE.sRGBEncoding;
+    knuckMat = basic('#2a2b34', { map: kt, transparent: true, opacity: 0, depthWrite: false }); knuckMat.toneMapped = false;
+    const knuck = new THREE.Mesh(new THREE.PlaneGeometry(.052, .145), knuckMat); knuck.rotation.y = -Math.PI / 2; knuck.position.set(-.8425, 1.66, 0); doorPivot.add(knuck);
 
     // 2D-Figur als Ebene
     const ch = document.createElement('canvas'); ch.width = TEX; ch.height = TEX; charCtx = ch.getContext('2d');
@@ -168,7 +174,7 @@ const W3 = (() => {
     const o = clamp((s.open || 0) / .4);
     spill.material.opacity = .2 + .12 * o; spill.scale.set(1 + o * .3, 1, 1 + o * .6);
     warmLight.intensity = .12 + .25 * o;
-    fingersMat.opacity = clamp(((s.open || 0) - .22) / .12);
+    fingersMat.opacity = clamp(((s.open || 0) - .22) / .12); knuckMat.opacity = fingersMat.opacity;
   }
 
   function render() { renderer.render(scene, cam); }
