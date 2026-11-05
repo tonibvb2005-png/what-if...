@@ -184,12 +184,12 @@ function doorShadowSvg(t, zp, op) {
   const zy = .1 + .75 * zp - .65;                 // Reißverschluss in lokalen Koordinaten
   const hx = .035, hy = -(zy + .03);              // Hand am Zipper (SVG: y nach unten)
   const sway = .01 * Math.sin(t * 1.7);
-  const head = [.2 + sway, -.2], sh = [.3 + sway, -.02];
+  const sh = [.3 + sway, .08], head = [sh[0] - .015, sh[1] - .19];
   return svgLocal(1.9, 1.3, `<defs><clipPath id="tri"><polygon points="-.95,.65 0,-.65 .95,.65"/></clipPath>
       <filter id="sb" filterUnits="userSpaceOnUse" x="-1" y="-1" width="2" height="2"><feGaussianBlur stdDeviation=".012"/></filter></defs>
     <g clip-path="url(#tri)" opacity="${op}"><g filter="url(#sb)" fill="#000" stroke="#000" stroke-width="0" stroke-linecap="round" stroke-linejoin="round">
-      <g transform="rotate(-38 ${head[0]} ${head[1]})"><ellipse cx="${head[0]}" cy="${head[1]}" rx=".06" ry=".085"/></g>
-      <path d="M${head[0] - .02} ${head[1] + .08} L${sh[0]} ${sh[1]}" stroke-width=".05" fill="none"/>
+      <g transform="rotate(-10 ${head[0]} ${head[1]})"><ellipse cx="${head[0]}" cy="${head[1]}" rx=".062" ry=".082"/></g>
+      <path d="M${head[0] + .002} ${head[1] + .07} L${sh[0]} ${sh[1] + .01}" stroke-width=".036" fill="none"/>
       <path d="M${sh[0] - .1} ${sh[1] + .03} Q${sh[0]} ${sh[1] - .03} ${sh[0] + .11} ${sh[1] + .04} Q${sh[0] + .1} .15 ${sh[0] + .08} .3 L${sh[0] + .12} .7 L${sh[0] + .02} .7 L${sh[0] - .02} .3 Q${sh[0] - .06} .15 ${sh[0] - .1} ${sh[1] + .03} Z" stroke="none"/>
       <path d="M${sh[0] - .08} ${sh[1] + .04} Q${(sh[0] + hx) / 2 + .02} ${(sh[1] + hy) / 2 + .1} ${hx + .03} ${hy + .01}" stroke-width=".032" fill="none"/>
       <ellipse cx="${hx + .02}" cy="${hy}" rx=".028" ry=".022" stroke="none"/>
