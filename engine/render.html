@@ -165,7 +165,7 @@ function character(st) {
 function doorState(t) {
   let handle = 0, open = 0, knock = 0;
   if (TL.handle.length) { const [h0, h1] = TL.handle; const p = ease((t - h0 - .3) / Math.max(.5, h1 - h0 - .3)); handle = .6 * p + (p > 0 && p < 1 ? noise(t * 20) * .03 : 0); }
-  if (TL.reveal && TL.reveal.length) { const p = ease((t - TL.reveal[0]) / 1.5); open = .78 * p; if (p > 0) handle = Math.max(handle * (1 - p), 0) + .6 * (1 - p); }
+  if (TL.reveal && TL.reveal.length) { const p = ease((t - TL.reveal[0]) / 1.5); open = .4 * p; if (p > 0) handle = Math.max(handle * (1 - p), 0) + .6 * (1 - p); }
   for (const k of TL.knocks) { const a = t - k; if (a >= 0 && a < .16) knock += Math.sin(a * 90) * (1 - a / .16); }
   return { handle, open, knock };
 }
@@ -209,9 +209,9 @@ async function viewDoor(t, sh) {
   if (sh.zoom === 'handle') {
     const r0 = TL.reveal && TL.reveal.length ? TL.reveal[0] : sh.end;
     const pIn = ease(lt / Math.max(1, r0 - sh.start)), pOut = ease((t - r0 + .2) / 1.8);
-    const pos = lerp3(lerp3([.72, 1.06, .95], [.86, 1.03, .62], pIn), [.72, 1.3, 3.0], pOut);
-    const look = lerp3([1.04, 1.0, 0], [1.12, 1.2, -.3], pOut);
-    W3.setCam(pos, look, lerp(38, 50, pOut));
+    const pos = lerp3(lerp3([.72, 1.06, .95], [.86, 1.03, .62], pIn), [.6, 1.58, 1.95], pOut);
+    const look = lerp3([1.04, 1.0, 0], [1.1, 1.66, -.3], pOut);
+    W3.setCam(pos, look, lerp(38, 36, pOut));
   } else povCam(t, ease(lt / d));
   W3.setState({ t, phoneOnDesk: false, phoneLit: true, flick: .6, phonePos: [.5, .95, 1.5], ...doorState(t) });
   await W3.setChar(null);
@@ -317,6 +317,8 @@ const CREATURE = `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="23
   <!-- Hals, leicht verdreht -->
   <path d="M212 290 Q206 340 214 396 L236 396 Q240 340 236 290 Z" fill="url(#skinC)" stroke="rgba(255,176,96,.45)" stroke-width="3"/>
   <path d="M216 320 Q225 326 234 320 M216 350 Q225 356 234 350" stroke="#5f6377" stroke-width="2.5" fill="none"/>
+  <defs><linearGradient id="darkC" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".1"/><stop offset=".55" stop-color="#000" stop-opacity=".85"/><stop offset="1" stop-color="#000" stop-opacity="1"/></linearGradient></defs>
+  <rect x="0" y="290" width="450" height="860" fill="url(#darkC)"/>
   <!-- Kopf (schief) -->
   <g transform="rotate(-12 225 200)">
     <ellipse cx="225" cy="190" rx="66" ry="98" fill="url(#cface)"/>

@@ -109,13 +109,13 @@ const W3 = (() => {
 
     // Flur hinter der Tür (warm, unbeleuchtet gerendert)
     const hall = (w, h, c, x, y, z, rx = 0, ry = 0) => { const m = put(new THREE.Mesh(new THREE.PlaneGeometry(w, h), basic(c)), x, y, z, scene, false); m.rotation.set(rx, ry, 0); return m; };
-    const hfloor = canvasTex(64, 256, (g, w, h) => { const gr = g.createLinearGradient(0, h, 0, 0); gr.addColorStop(0, '#ffbe6a'); gr.addColorStop(.5, '#8a5428'); gr.addColorStop(1, '#3a220f'); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
+    const hfloor = canvasTex(64, 256, (g, w, h) => { const gr = g.createLinearGradient(0, h, 0, 0); gr.addColorStop(0, '#9a6430'); gr.addColorStop(.25, '#3a2412'); gr.addColorStop(1, '#0a0604'); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
     const hf = hall(1.2, 2.2, '#ffffff', 1.375, .001, -1.2, -Math.PI / 2); hf.material.map = hfloor;
-    hall(2.4, 2.8, '#4a2c16', .78, 1.4, -1.2, 0, Math.PI / 2);
-    hall(2.4, 2.8, '#3c2412', 1.97, 1.4, -1.2, 0, -Math.PI / 2);
-    hall(1.2, 2.8, '#2c1a0d', 1.375, 1.4, -2.3);
-    hall(1.2, 2.4, '#1f130a', 1.375, 2.6, -1.2, Math.PI / 2);
-    const bulb = put(new THREE.Mesh(new THREE.SphereGeometry(.05, 12, 8), basic('#ffe0a0')), 1.375, 2.45, -1.4, scene, false);
+    hall(2.4, 2.8, '#160e07', .78, 1.4, -1.2, 0, Math.PI / 2);
+    hall(2.4, 2.8, '#120b06', 1.97, 1.4, -1.2, 0, -Math.PI / 2);
+    hall(1.2, 2.8, '#080503', 1.375, 1.4, -2.3);
+    hall(1.2, 2.4, '#070403', 1.375, 2.6, -1.2, Math.PI / 2);
+    const bulb = put(new THREE.Mesh(new THREE.SphereGeometry(.05, 12, 8), basic('#140c06')), 1.375, 2.45, -1.4, scene, false);
     for (const x of [1.07, 1.24]) put(new THREE.Mesh(new THREE.BoxGeometry(.09, .022, .06), basic('#140b05')), x, .011, -.34, scene, false);
 
     // Lichtschein auf dem Zimmerboden
@@ -127,13 +127,13 @@ const W3 = (() => {
     const cc = document.createElement('canvas'); cc.width = 900; cc.height = 2300; const cg = cc.getContext('2d');
     const img = new Image(); img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(creatureSvg); await img.decode(); cg.drawImage(img, 0, 0, 900, 2300);
     creatureTex = new THREE.CanvasTexture(cc); creatureTex.encoding = THREE.sRGBEncoding;
-    creature = put(new THREE.Mesh(new THREE.PlaneGeometry(.9, 2.3), basic('#ffffff', { map: creatureTex, transparent: true, alphaTest: .02 })), 1.15, 1.15, -.38, scene, false);
+    creature = put(new THREE.Mesh(new THREE.PlaneGeometry(.9, 2.3), basic('#2c2d36', { map: creatureTex, transparent: true, alphaTest: .02 })), 1.21, 1.15, -.38, scene, false);
     creature.material.toneMapped = false;
     const fc = document.createElement('canvas'); fc.width = 512; fc.height = 512; const fg = fc.getContext('2d');
     const fimg = new Image(); fimg.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(fingersSvg); await fimg.decode(); fg.drawImage(fimg, 0, 0, 512, 512);
     const ft = new THREE.CanvasTexture(fc); ft.encoding = THREE.sRGBEncoding;
-    fingersMat = basic('#ffffff', { map: ft, transparent: true, opacity: 0, depthWrite: false }); fingersMat.toneMapped = false;
-    fingers = new THREE.Mesh(new THREE.PlaneGeometry(.2, .2), fingersMat); fingers.position.set(-.74, 1.47, .032); doorPivot.add(fingers);
+    fingersMat = basic('#34353f', { map: ft, transparent: true, opacity: 0, depthWrite: false }); fingersMat.toneMapped = false;
+    fingers = new THREE.Mesh(new THREE.PlaneGeometry(.2, .2), fingersMat); fingers.position.set(-.74, 1.66, .032); doorPivot.add(fingers);
 
     // 2D-Figur als Ebene
     const ch = document.createElement('canvas'); ch.width = TEX; ch.height = TEX; charCtx = ch.getContext('2d');
@@ -165,10 +165,10 @@ const W3 = (() => {
     handlePivot.rotation.z = -(s.handle || 0);
     doorPivot.rotation.y = s.open || 0;
     doorPivot.position.x = 1.795 + (s.knock || 0) * .006;
-    const o = clamp((s.open || 0) / .5);
-    spill.material.opacity = .28 + .55 * o; spill.scale.set(1 + o * .3, 1, 1 + o * .6);
-    warmLight.intensity = .25 + 1.6 * o;
-    fingersMat.opacity = clamp(((s.open || 0) - .2) / .1);
+    const o = clamp((s.open || 0) / .4);
+    spill.material.opacity = .2 + .12 * o; spill.scale.set(1 + o * .3, 1, 1 + o * .6);
+    warmLight.intensity = .12 + .25 * o;
+    fingersMat.opacity = clamp(((s.open || 0) - .22) / .12);
   }
 
   function render() { renderer.render(scene, cam); }
