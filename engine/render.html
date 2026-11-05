@@ -328,7 +328,9 @@ const CREATURE = `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="23
     <circle cx="201" cy="166" r="4.5" fill="#fff"/><circle cx="257" cy="166" r="4.5" fill="#fff"/>
     <clipPath id="mouthC"><path d="M168 224 Q225 284 284 224 Q225 258 168 224 Z"/></clipPath>
     <path d="M168 224 Q225 284 284 224 Q225 258 168 224 Z" fill="#05050a"/>
-    <g clip-path="url(#mouthC)">${[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => `<rect x="${172 + i * 11}" y="${226 + Math.pow(Math.abs(i - 4.5) / 4.5, 2) * -6 + 12}" width="7" height="13" rx="2" fill="#e9e6da"/>`).join('')}</g>
+    <g clip-path="url(#mouthC)">${Array.from({ length: 11 }, (_, i) => {
+      const t = .06 + i * .088, x = 284 - 116 * t, top = 224 + 68 * t * (1 - t), gap = 52 * t * (1 - t);
+      return `<rect x="${x - 3.6}" y="${top - 3}" width="7.2" height="${3 + gap * .78}" rx="1.6" fill="#e9e6da"/>`; }).join('')}</g>
   </g>
 </svg>`;
 const FINGERS = `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 220 220">
