@@ -773,6 +773,8 @@
   const MSN = { messi: { x: -60, scale: .8 }, suarez: { x: -300, scale: .8 }, neymar: { x: 180, scale: .8 } };
   const BFANS = { mike: { x: -270 }, hero: { x: 0 }, jay: { x: 270 } }, BFANS2 = { hero: { x: -120 }, jay: { x: 170 } };
   const BROOM = { mike: { x: -270 }, hero: { x: 0 }, jay: { x: 270 } };
+  const MIKE_GREEN = { shirt: '#2fae5a', stripes: null, trim: '#d9ffe8', number: null };
+  const BROOM_AFTER = { mike: Object.assign({ x: -270 }, MIKE_GREEN), hero: { x: 0 }, jay: { x: 270 } };
   const kickAt = (who, ft, D) => [[0, { e: 'focused', m: { lookX: -1 } }], [(ft - .15) / D, { po: KICK }], [(ft + .3) / D, { e: 'ecstatic', p: 'cheer', po: {}, m: { jump: .6 } }]];
   const keeperDive = (ft, D, dir = DIVE_L) => [[0, { e: 'focused', po: KP, m: { lookX: 1 } }], [(ft + .05) / D, { e: 'shock', po: dir, m: { dy: -40 } }], [(ft + .7) / D, { e: 'despair', po: KP, m: { dy: 0 } }]];
   const shotBall = (ft, fromX, toX, toY) => [[0, fromX, 1385], [ft - .05, fromX, 1385], [ft + .35, toX, toY, 70], [ft + .8, toX - 20, 1385, 20]];
@@ -790,10 +792,10 @@
       card: textCard([['BREAKING NEWS', 40, '#ff5a4f', null, .02], ['MESSI MISSES TRAINING', 54, '#fff', null, .15], ['WANTS TO LEAVE?', 64, '#ffd400', null, .4], ['SPORTING DIRECTOR SACKED', 44, '#fff', null, .62]], ['#2a0d5c', '#0d0524']),
       cam: [[0, TV], [.78, TV], [.88, { x: 0, y: 985, z: 1.25 }], [1, { x: 0, y: 995, z: 1.32 }]],
       acts: { hero: [[0, { e: 'surprised', m: { lookX: -1 } }], [.88, { e: 'focused', p: 'crossed', m: { lookX: -1 } }]], mike: [[0, { e: 'worried', m: { lookX: -1 } }], [.88, { e: 'despair', p: 'handsOnHead', m: { lookX: -1 } }]], jay: [[0, { e: 'worried', m: { lookX: -1 } }], [.88, { e: 'shock', m: { lookX: -1 } }]] } },
-    bsell: { set: 'room', cast: BROOM, bright: .9, card: 'off',
+    bsell: { set: 'room', cast: BROOM, bright: .9, card: 'off', looks: { mike: [['sell', .45, MIKE_GREEN]] },
       cam: [[0, { x: -150, y: 990, z: 1.35 }], [1, { x: -150, y: 995, z: 1.45 }]],
       acts: { mike: [[0, { e: 'focused', ex: { mouthCurve: -.3 }, m: { lookX: 0 } }], ['sell', .45, { e: 'smirk', p: 'holdCashUp', propR: 'shirt10', m: { lookX: 0 } }]], hero: [[0, { e: 'neutral', m: { lookX: -1 } }], ['sell', .5, { e: 'shock', p: 'handsOnHead', m: { lookX: -1 } }]], jay: [[0, { e: 'neutral', m: { lookX: -1 } }]] } },
-    bkeep: { set: 'room', cast: BROOM, bright: .95, card: textCard([['THE SECRET WEAPON', 46, '#ffd400', 'three', .55], ['M · S · N', 120, '#fff', 'three', .6]], ['#2a0d5c', '#0d0524']),
+    bkeep: { set: 'room', cast: BROOM_AFTER, bright: .95, card: textCard([['THE SECRET WEAPON', 46, '#ffd400', 'three', .55], ['M · S · N', 120, '#fff', 'three', .6]], ['#2a0d5c', '#0d0524']),
       cam: [[0, { x: 0, y: 1040, z: 1.6 }], [.6, { x: 0, y: 1040, z: 1.6 }], [.7, TV], [1, TV]],
       acts: { hero: [[0, { e: 'confident', p: 'thumbsUpR', handR: 'thumb', m: { lookX: 0 } }], [.35, { e: 'wink' }]], mike: [[0, { e: 'smirk', p: 'crossed' }]], jay: [[0, { e: 'neutral' }]] } },
     bmsn: { set: 'pitch', tag: '2014/15', bright: 1.05,
@@ -842,7 +844,7 @@
       cuts: [pitchCut({ at: 0, cam: [[0, { x: -60, y: 900, z: 1.15 }], [1, { x: -60, y: 905, z: 1.2 }]], cast: MSN, score: '', label: '',
         acts: { messi: [[0, { e: 'happy', p: 'cheer' }]], suarez: [[0, { e: 'happy', p: 'fistPumpR', handR: 'fist' }]], neymar: [[0, { e: 'ecstatic', p: 'cheer', m: { dance: .6 } }]] },
         extra: lt => { const v = Math.round(lerp(0, 122, eo(P(lt, .3, cue('num', .7))))); txt(String(v), -60, 660, 220, '#ffd400', 900, 'center', 18); txt('GOALS', -60, 800, 70, '#fff', 900, 'center', 12); } })] },
-    bmate: { set: 'room', cast: { mike: { x: -200 }, jay: { x: 150 } }, bright: 1, card: 'off',
+    bmate: { set: 'room', cast: { mike: Object.assign({ x: -200 }, MIKE_GREEN), jay: { x: 150 } }, bright: 1, card: 'off',
       title: ['FOLLOW FOR MORE', '<span class="gold">WHAT IFs</span>'], titleSize: [84, 110], titleAt: 'follow',
       cam: [[0, { x: -30, y: 990, z: 1.3 }], [1, { x: -30, y: 995, z: 1.38 }]],
       acts: { mike: [[0, { e: 'pleading', p: 'takeR', propR: 'shirt100', m: { lookX: 1 } }], ['follow', .75, { e: 'despair', p: 'handsOnHead', propR: null }]], jay: [[0, { e: 'smirk', p: 'crossed', m: { lookX: -1, no: .8 } }]] } }
@@ -1058,7 +1060,8 @@
       castX[n] = x;
     }
     if (sh.propFix) for (const n in sh.propFix) for (const [f, pr] of sh.propFix[n]) if (lt >= f * d) states[n].propL = pr;
-    const drawC = name => { if (!sh.cast[name]) return; const c = Object.assign({}, CH[name], sh.cast[name], { y: GROUND }, castX[name] != null ? { x: castX[name] } : {}); Puppet.draw(ctx, c, states[name], t); };
+    const drawC = name => { if (!sh.cast[name]) return; const c = Object.assign({}, CH[name], sh.cast[name], { y: GROUND }, castX[name] != null ? { x: castX[name] } : {});
+      if (sh.looks && sh.looks[name]) for (const [n, df, ov] of sh.looks[name]) if (lt >= cue(n, df)) Object.assign(c, ov); Puppet.draw(ctx, c, states[name], t); };
     if (sh.draw) {
       sh.draw(s, lt, d, t);
     } else if (sh.set === 'pitch') {

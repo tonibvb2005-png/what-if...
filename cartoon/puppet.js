@@ -149,7 +149,12 @@ window.Puppet = (function () {
 
   function hand(ctx, x, y, skin, kind, side, ang) {
     circle(ctx, x, y, 19, skin, 6);
-    if (kind === 'thumb') { ctx.beginPath(); ctx.roundRect(x - 7, y - 42, 14, 30, 7); ctx.fillStyle = skin; ctx.fill(); stroke(ctx, 5, OUT); }
+    if (kind === 'thumb') {
+      // clear thumbs-up: thumb tilted to the side, curled fingers drawn on the fist
+      ctx.save(); ctx.translate(x + 12 * side, y - 12); ctx.rotate(-.45 * side);
+      ctx.beginPath(); ctx.roundRect(-9, -34, 18, 34, 9); ctx.fillStyle = skin; ctx.fill(); stroke(ctx, 5, OUT); ctx.restore();
+      ctx.beginPath(); for (let k = -1; k <= 1; k++) { ctx.moveTo(x - 14, y + k * 8); ctx.lineTo(x + 6, y + k * 8); } ctx.lineCap = 'round'; stroke(ctx, 3.5, OUT);
+    }
     if (kind === 'fist') { ctx.beginPath(); ctx.moveTo(x - 10, y - 6); ctx.lineTo(x + 10, y - 6); stroke(ctx, 4, OUT); }
   }
 
