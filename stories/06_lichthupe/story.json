@@ -1,0 +1,47 @@
+{
+  "series": "GESCHICHTEN UM 3:33", "episode": "#06", "title": "LICHTHUPE", "part": 1,
+  "set": "car", "ambience": "car", "endArt": "mirror",
+  "question": "WEITERFAHREN oder ANHALTEN? Schreib's in die Kommentare.",
+  "shots": [
+    {"scene": "car_ext", "clock": "3:33", "place": "LANDSTRASSE", "lines": [
+      {"text": "Stell dir vor, du fährst nachts allein über eine Landstraße.", "hl": {"allein": "y", "Landstraße": "y"}},
+      {"text": "Es ist 3:33. Weit und breit kein anderes Auto.", "say": "Es ist drei Uhr dreiunddreißig. Weit und breit kein anderes Auto.", "hl": {"kein": "r"}}
+    ]},
+    {"scene": "car_in", "clock": "3:33", "place": "LANDSTRASSE", "lines": [
+      {"text": "Dann tauchen hinter dir Scheinwerfer auf.", "hl": {"Scheinwerfer": "y"}, "ev": [["follow", "start"]], "pause": 0.3}
+    ]},
+    {"scene": "mirror", "clock": "3:33", "place": "RÜCKSPIEGEL", "lines": [
+      {"text": "Er kommt immer näher.", "hl": {"näher": "r"}},
+      {"text": "Und blendet auf.", "hl": {"blendet": "r"}, "ev": [["flash", "word1"]], "pause": 0.4}
+    ]},
+    {"scene": "car_ext", "cam": "side", "clock": "3:34", "place": "LANDSTRASSE", "lines": [
+      {"text": "Immer wieder.", "ev": [["flash", "start"], ["flash", "start+0.45"], ["flash", "start+0.9"]], "pause": 0.5},
+      {"text": "Du gibst Gas. Aber er bleibt dicht hinter dir.", "hl": {"Gas": "y", "dicht": "r"}, "ev": [["flash", "end"]]}
+    ]},
+    {"scene": "radio", "clock": "3:34", "lines": [
+      {"text": "Dann rauscht das Radio.", "hl": {"Radio": "y"}, "ev": [["radio", "start"]], "sfx": [["static", 0.0]]},
+      {"text": "Eine Stimme sagt: Nicht anhalten. Egal was passiert.", "hl": {"anhalten": "r"},
+       "quote": {"who": "RADIO", "place": "FM 87,6", "text": "Nicht anhalten. Egal was passiert."}, "pause": 0.5}
+    ]},
+    {"scene": "car_face", "clock": "3:34", "place": "LANDSTRASSE", "lines": [
+      {"text": "Du fährst schneller. Dein Herz rast.", "hl": {"rast": "r"}, "pause": 0.3}
+    ]},
+    {"scene": "car_in", "clock": "3:34", "place": "LANDSTRASSE", "lines": [
+      {"text": "Das Auto hinter dir blendet ein letztes Mal auf.", "hl": {"letztes": "y"}, "ev": [["flash", "end-0.3"]], "pause": 0.3}
+    ]},
+    {"scene": "mirror", "clock": "3:34", "place": "RÜCKSPIEGEL", "lines": [
+      {"text": "Und für eine Sekunde siehst du, was er dir zeigen will.", "hl": {"zeigen": "y"}},
+      {"text": "Jemand sitzt auf deinem Rücksitz.", "hl": {"Rücksitz": "r"}, "ev": [["reveal", "start"], ["flash", "start"]], "sfx": [["boom", 0.0]], "pause": 1.6}
+    ]},
+    {"scene": "choice", "heading": "WEM GLAUBST DU?",
+     "left": {"label": "RADIO", "text": "„Nicht anhalten.“", "sub": "WEITERFAHREN", "icon": "📻", "color": "#2f7cf6"},
+     "right": {"label": "LICHTHUPE", "text": "Er will dich warnen.", "sub": "ANHALTEN", "icon": "🚗", "color": "#ff3b30"},
+     "lines": [
+      {"text": "Wem glaubst du?", "hl": {"glaubst": "y"}},
+      {"text": "Dem Radio oder dem Fahrer hinter dir?", "hl": {"Radio": "b", "Fahrer": "r"}, "pause": 0.5}
+    ]},
+    {"scene": "end", "sfx": [["boom", 0.0]], "lines": [
+      {"text": "Teil 2. Heute Nacht.", "say": "Teil zwei. Heute Nacht.", "nocap": true, "pause": 1.2}
+    ]}
+  ]
+}

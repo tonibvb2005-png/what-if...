@@ -88,6 +88,19 @@ def sfx(name):
         saw = (ph / (2 * np.pi)) % 1.0 * 2 - 1
         am = np.clip(np.sin(np.pi * t / 1.8), 0, 1) ** 1.5
         return saw * am * 0.07
+    if name == "click":    # Lichtschalter
+        n = int(.06 * SR); t = np.arange(n) / SR
+        return (rng.standard_normal(n) * np.exp(-140 * t) * .7 + np.sin(2 * np.pi * 900 * t) * np.exp(-90 * t) * .4)
+    if name == "tick":
+        n = int(.035 * SR); t = np.arange(n) / SR
+        return np.sin(2 * np.pi * 2600 * t) * np.exp(-160 * t) * .35
+    if name == "flicker":  # Glühbirne springt an
+        n = int(.35 * SR); t = np.arange(n) / SR
+        return np.sign(np.sin(2 * np.pi * 100 * t)) * (rng.random(n // 300 + 1) > .4).repeat(300)[:n] * .05 * np.exp(-4 * t)
+    if name == "zipper":   # Reißverschluss, langsam
+        n = int(2.2 * SR); t = np.arange(n) / SR
+        teeth = (np.sin(2 * np.pi * (18 + 4 * np.sin(t * 2)) * t) > .7).astype(float)
+        return rng.standard_normal(n) * teeth * .16 * np.minimum(1, t / .1) * np.minimum(1, (2.2 - t) / .2)
     if name == "tap":      # Fingernagel/Knöchel an Glas
         n = int(0.12 * SR); t = np.arange(n) / SR
         return (np.sin(2 * np.pi * 2100 * t) * .5 + np.sin(2 * np.pi * 3400 * t) * .3
@@ -116,6 +129,30 @@ def sfx(name):
         envb = np.sin(np.pi * ((t % 1.8) / 1.8)) ** 3
         return noise * envb * 2.2
     raise ValueError(name)
+
+
+def ambience(kind, dur):
+    n = int(dur * SR); t = np.arange(n) / SR; rng = np.random.default_rng(3)
+    fade = np.minimum(1, t / 1.5) * np.minimum(1, (dur - t) / 1.5)
+    if kind == "forest":   # Grillen + leiser Wind
+        out = np.zeros(n)
+        for f0, rate, ph in ((4300, 2.6, 0), (4700, 3.1, 1.3)):
+            chirp = (np.sin(2 * np.pi * rate * t + ph) > .55) * (np.sin(2 * np.pi * 34 * t) > 0)
+            out += np.sin(2 * np.pi * f0 * t) * chirp * .012
+        wind = np.convolve(rng.standard_normal(n), np.ones(900) / 900, "same") * 1.6
+        return (out + wind * (.5 + .5 * np.sin(t * .4))) * fade
+    if kind == "car":      # Motor + Abrollgeräusch
+        eng = np.sin(2 * np.pi * 38 * t) * .08 + np.sin(2 * np.pi * 76 * t) * .04
+        road = np.convolve(rng.standard_normal(n), np.ones(60) / 60, "same") * .5
+        return (eng + road) * fade
+    if kind == "cellar":   # Stromsummen + Tropfen
+        hum = np.sin(2 * np.pi * 50 * t) * .02 + np.sin(2 * np.pi * 100 * t) * .012
+        drops = np.zeros(n)
+        for d in np.arange(1.7, dur, 2.9):
+            i = int(d * SR); m = min(n - i, int(.08 * SR)); tt = np.arange(m) / SR
+            drops[i:i + m] += np.sin(2 * np.pi * (1500 - 6000 * tt) * tt) * np.exp(-50 * tt) * .08
+        return (hum + drops) * fade
+    return np.zeros(n)
 
 
 def drone(dur):
@@ -157,11 +194,15 @@ def word_times(words, start, dur):
 def resolve(spec, line):
     if isinstance(spec, (int, float)):
         return line["start"] + spec
+    if spec.startswith("shot"):
+        return line["shotStart"] + float(spec[4:] or 0)
+    if spec.startswith("start"):
+        return line["start"] + float(spec[5:] or 0)
     if spec.startswith("end"):
         return line["end"] + float(spec[3:] or 0)
     if spec.startswith("word"):
-        w, _, off = spec[4:].partition("+")
-        return line["wordTimes"][int(w)] + float(off or 0)
+        m = re.match(r"(\d+)([+-][\d.]+)?$", spec[4:])
+        return line["wordTimes"][int(m.group(1))] + float(m.group(2) or 0)
     raise ValueError(spec)
 
 
@@ -185,6 +226,7 @@ def main():
     shots, words, groups, msgs, typing, knocks, handle, voice, sfx_ev = [], [], [], [], [], [], [], [], []
     reveal = []
     taps, hums, quotes, eyes = [], [], [], None
+    ev = {}
     li = 0
     for si, shot in enumerate(story["shots"]):
         if si:
@@ -199,7 +241,7 @@ def main():
             a = trim(load_wav(path))
             li += 1
             dur = len(a) / SR
-            L = {"start": t, "end": t + dur}
+            L = {"start": t, "end": t + dur, "shotStart": s_start}
             line_times.append([t, t + dur])
             voice.append((t, a))
             toks = tokens(line["text"])
@@ -228,6 +270,17 @@ def main():
                 sfx_ev.append((resolve(spec, L), name_))
             for spec in line.get("knocks", []):
                 knocks.append(resolve(spec, L))
+            for e in line.get("ev", []):
+                vals = [resolve(e[1], L)] + [resolve(a, L) if isinstance(a, str) and re.match(r"^(start|end|word|shot)", a) else a for a in e[2:]]
+                ev.setdefault(e[0], []).append(vals)
+                if e[0] == "press":
+                    sfx_ev.append((vals[0], "click"))
+                if e[0] == "light" and vals[1] and vals[0] > 0.5:
+                    sfx_ev.append((vals[0], "flicker"))
+                if e[0] == "timer":     # tickt in den letzten 5 angezeigten Sekunden
+                    t0, frm, t1 = vals
+                    for k in range(min(5, int(frm)), 0, -1):
+                        sfx_ev.append((t0 + (frm - k) / frm * (t1 - t0), "tick"))
             for spec in line.get("taps", []):
                 taps.append(resolve(spec, L))
             if line.get("hum"):
@@ -266,14 +319,17 @@ def main():
           "title": story["title"], "part": story["part"], "question": story.get("question", ""), "shots": shots, "words": words,
           "groups": [{"start": g["start"], "end": g["end"], "words": g["words"]} for g in groups],
           "msgs": msgs, "typing": typing, "knocks": knocks, "handle": handle, "reveal": reveal,
-          "taps": taps, "hums": hums, "quotes": quotes, "eyes": eyes,
-          **{k: story[k] for k in ("item", "visitor", "endArt", "bedLegs", "openMax") if k in story}}
+          "taps": taps, "hums": hums, "quotes": quotes, "eyes": eyes, "ev": {k: sorted(v) for k, v in ev.items()},
+          **{k: story[k] for k in ("item", "visitor", "endArt", "bedLegs", "openMax", "set") if k in story}}
     tl_path = os.path.join(outdir, name + ".timeline.json")
     json.dump(tl, open(tl_path, "w"), ensure_ascii=False, indent=1)
 
     # ---- Ton mischen
     n = int(duration * SR) + SR
+    amb = ambience(story.get("ambience", ""), n / SR)
     mix = drone(n / SR)
+    mix = mix[:n] if len(mix) >= n else np.pad(mix, (0, n - len(mix)))
+    mix += np.pad(amb, (0, max(0, n - len(amb))))[:n]
     vo = np.zeros(n)
     for st, a in voice:
         i = int(st * SR); vo[i:i + len(a)] += a[: n - i]

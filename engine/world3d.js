@@ -46,7 +46,8 @@ const W3 = (() => {
     renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.outputEncoding = THREE.sRGBEncoding; renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.0;
     scene = new THREE.Scene(); scene.background = new THREE.Color('#14162a');
-    cam = new THREE.PerspectiveCamera(55, 540 / 960, 0.03, 30);
+    cam = new THREE.PerspectiveCamera(55, 540 / 960, 0.03, 400);
+    if (opts.set && opts.set !== 'bedroom') { await BUILD[opts.set](A, opts); return; }
 
     // Licht: Mond durchs Fenster, kühles Fülllicht, Handy, warmes Fluerlicht
     scene.add(new THREE.HemisphereLight('#c4c7da', '#1c1d28', .8));
@@ -176,6 +177,29 @@ const W3 = (() => {
     charMesh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), cm); scene.add(charMesh);
   }
 
+  // ---- dynamische 2D-Ebenen (Figuren), beliebig viele, mit Drehung
+  const planes = {};
+  function plane(name, w, h, px = 1536) {
+    const c = document.createElement('canvas'); c.width = px; c.height = Math.round(px * h / w);
+    const tex = new THREE.CanvasTexture(c); tex.encoding = THREE.sRGBEncoding; tex.anisotropy = 4;
+    const m = basic('#ffffff', { map: tex, transparent: true, alphaTest: .02 }); m.toneMapped = false;
+    const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, h), m); scene.add(mesh);
+    planes[name] = { c, ctx: c.getContext('2d'), tex, mesh, w, h }; return planes[name];
+  }
+  async function setPlane(name, o) {
+    const P = planes[name]; if (!P) return;
+    if (o.visible === false) { P.mesh.visible = false; return; }
+    P.mesh.visible = true;
+    if (o.pos) P.mesh.position.set(...o.pos);
+    P.mesh.rotation.set(0, o.rotY || 0, 0);
+    P.mesh.material.color.set(o.color || '#ffffff');
+    if (o.svg) {
+      const img = new Image(); img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(o.svg);
+      await img.decode(); P.ctx.clearRect(0, 0, P.c.width, P.c.height); P.ctx.drawImage(img, 0, 0, P.c.width, P.c.height); P.tex.needsUpdate = true;
+    }
+  }
+  const BUILD = {}, reg = {};
+
   // Punkt in 3D -> Punkt auf der Figuren-Ebene (z = pz), entlang des Kamerastrahls
   function toPlane(p, pz) {
     const c = cam.position, s = (pz - c.z) / (p[2] - c.z);
@@ -213,5 +237,6 @@ const W3 = (() => {
   }
 
   function render() { renderer.render(scene, cam); }
-  return { init, setCam, setChar, setState, toPlane, render, get cam() { return cam; } };
+  const H = { std, basic, put, rbox, canvasTex, svgTex, texPlane, plane };
+  return { init, setCam, setChar, setState, toPlane, render, setPlane, BUILD, reg, H, get cam() { return cam; }, get scene() { return scene; }, get renderer() { return renderer; } };
 })();

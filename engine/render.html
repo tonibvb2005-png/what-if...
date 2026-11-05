@@ -86,6 +86,23 @@
   .baby .grill { display: grid; grid-template-columns: repeat(7, 9px); gap: 9px; justify-content: center; margin-top: 26px; }
   .baby .grill b { width: 9px; height: 9px; border-radius: 50%; background: #9c9daa; display: block; }
   .ant { position: absolute; width: 14px; height: 84px; border-radius: 7px; background: linear-gradient(90deg, #c4c5cf, #e6e7ed); }
+  .timer { position: absolute; top: 112px; right: 30px; background: rgba(8,10,24,.8); border: 2px solid #ffc21f; border-radius: 8px;
+           padding: 6px 12px; font: 700 26px/1 'JetBrains Mono'; color: #ffc21f; text-align: center; }
+  .timer span { display: block; font-size: 10px; letter-spacing: 2px; color: #9aa0b8; margin-bottom: 3px; }
+  .mirror { position: absolute; left: 50px; top: 300px; width: 440px; height: 190px; border-radius: 70px; border: 10px solid #0d0d10;
+            box-shadow: 0 0 0 2000px #07080d, inset 0 0 40px rgba(0,0,0,.8); }
+  .glare { position: absolute; left: 50px; top: 300px; width: 440px; height: 190px; border-radius: 70px; mix-blend-mode: screen;
+           background: radial-gradient(circle at 34% 55%, #fffbe8 0, rgba(255,251,232,.6) 9%, transparent 30%), radial-gradient(circle at 66% 55%, #fffbe8 0, rgba(255,251,232,.6) 9%, transparent 30%), radial-gradient(ellipse at 50% 55%, rgba(255,250,230,.55), transparent 70%); }
+  .radio { position: absolute; left: 60px; top: 300px; width: 420px; height: 180px; border-radius: 22px; background: linear-gradient(#1d1e24, #111216);
+           box-shadow: 0 30px 80px rgba(0,0,0,.7), inset 0 2px 0 rgba(255,255,255,.06); padding: 22px; }
+  .radio .lcd { height: 100px; border-radius: 10px; background: #2a1a06; box-shadow: inset 0 0 22px rgba(0,0,0,.8); padding: 10px 14px; overflow: hidden; color: #ffb347;
+                font: 700 15px 'JetBrains Mono'; text-shadow: 0 0 8px rgba(255,170,60,.8); }
+  .radio .fm { font-size: 11px; opacity: .8; letter-spacing: 2px; }
+  .radio .txt { margin-top: 10px; font-size: 22px; overflow: hidden; white-space: nowrap; }
+  .radio .bars { position: absolute; right: 36px; top: 34px; display: flex; gap: 3px; align-items: flex-end; height: 30px; }
+  .radio .bars i { width: 3px; background: #ffb347; opacity: .7; display: block; }
+  .radio .knobs { display: flex; justify-content: space-between; margin-top: 12px; padding: 0 30px; }
+  .radio .knobs b { width: 26px; height: 26px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #555, #1a1a1e); display: block; }
   .end { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 30%, #1a1e3d, #0b0d1c 70%); text-align: center; color: #fff; }
   .end .s { font: 500 11px 'JetBrains Mono'; letter-spacing: 4px; color: #9aa0b8; margin-top: 18px; }
   .end .p { font: 900 112px/1 'Montserrat'; color: #ff3b30; margin-top: 8px; letter-spacing: -1px; }
@@ -96,8 +113,10 @@
 <body><div id="stage"><div id="scene"><canvas id="gl"></canvas><div id="mid"></div></div><div id="fx"></div><div id="grain"></div><div id="overlay"></div></div>
 <script src="node_modules/three/build/three.min.js"></script>
 <script src="world3d.js"></script>
+<script src="sets3d.js"></script>
 <script>
 let TL, GRAIN = [];
+const SET_ASSETS = {};
 const $ = (id) => document.getElementById(id);
 const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
 const ease = (x) => { x = clamp(x); return x * x * (3 - 2 * x); };
@@ -327,7 +346,8 @@ function phoneBox(x, y, w, h, inner) {
     <div class="phone" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px">
       <div class="screen"><div class="island"></div>${inner}</div></div>`;
 }
-async function bgPov(t) { povCam(t, .5); W3.setState({ t, phoneOnDesk: false, phoneLit: true, flick: .8, phonePos: [.5, .95, 1.5], ...doorState(t) }); await W3.setChar(null); }
+async function bgPov(t) {
+  if (TL.set && TL.set !== 'bedroom' && typeof SETBG !== 'undefined') return SETBG[TL.set](t); povCam(t, .5); W3.setState({ t, phoneOnDesk: false, phoneLit: true, flick: .8, phonePos: [.5, .95, 1.5], ...doorState(t) }); await W3.setChar(null); }
 
 async function viewLock(t, sh) {
   await bgPov(t);
@@ -402,6 +422,21 @@ async function viewEnd(t, sh) {
       <rect x="28" y="94" width="144" height="30" fill="#030306"/><rect x="24" y="94" width="8" height="34" fill="#1b1d2e"/><rect x="168" y="94" width="8" height="34" fill="#1b1d2e"/>
       <circle cx="94" cy="108" r="2.4" fill="#f4f6ff"/><circle cx="106" cy="108" r="2.4" fill="#f4f6ff"/>
       <path d="M60 124 q6 -5 14 -3 M62 126 q7 -4 16 -2 M64 128 q7 -3 15 -1" stroke="#6f7387" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>`,
+    switch: `<svg viewBox="0 0 200 150" width="200" height="150" style="display:block;margin:0 auto">
+      <polygon points="30,0 170,0 120,60 80,60" fill="#0c0c0e"/><polygon points="30,150 170,150 120,90 80,90" fill="#151517"/>
+      <rect x="80" y="60" width="40" height="30" fill="#050506"/><rect x="92" y="62" width="16" height="6" fill="#16b35a"/>
+      <path d="M98 70 l0 18 M102 70 l0 18 M96 74 q4 -3 8 0" stroke="#000" stroke-width="3"/>
+      <rect x="22" y="70" width="12" height="18" rx="2" fill="#d8d6cf"/><rect x="25" y="75" width="6" height="8" fill="#ff8a2a"/><circle cx="28" cy="79" r="14" fill="#ff8a2a" opacity=".18"/></svg>`,
+    tent: `<svg viewBox="0 0 200 150" width="200" height="150" style="display:block;margin:0 auto">
+      <polygon points="40,130 100,30 160,130" fill="#2c3a33"/><polygon points="100,30 160,130 130,130" fill="#22302a"/>
+      <path d="M100 52 L100 130" stroke="#0c0e10" stroke-width="2"/><rect x="98" y="${130 - 40}" width="4" height="6" fill="#a8aab2"/>
+      <g fill="#000" opacity=".8"><ellipse cx="126" cy="64" rx="5" ry="6"/><path d="M121 70 L131 70 L129 104 L123 104 Z"/><path d="M130 72 Q142 70 148 60" stroke="#000" stroke-width="2" fill="none"/></g>
+      <circle cx="160" cy="20" r="8" fill="#e8edff"/></svg>`,
+    mirror: `<svg viewBox="0 0 200 150" width="200" height="150" style="display:block;margin:0 auto">
+      <rect x="20" y="40" width="160" height="60" rx="26" fill="#111" /><rect x="26" y="46" width="148" height="48" rx="21" fill="#1b1e2b"/>
+      <circle cx="58" cy="70" r="8" fill="#fffbe8" opacity=".85"/><circle cx="142" cy="70" r="8" fill="#fffbe8" opacity=".85"/>
+      <ellipse cx="100" cy="66" rx="9" ry="12" fill="#cfd3e6"/><ellipse cx="96.5" cy="63" rx="2.5" ry="3.6" fill="#000"/><ellipse cx="103.5" cy="63" rx="2.5" ry="3.6" fill="#000"/>
+      <path d="M93 71 Q100 78 107 71 Q100 74 93 71 Z" fill="#000"/><rect x="96" y="20" width="8" height="22" fill="#111"/></svg>`,
     monitor: `<div style="width:170px;margin:0 auto;background:#c9cad3;border-radius:16px;padding:10px"><div style="border-radius:6px;overflow:hidden;height:110px">${nightVision(t, true, '3:35', true)}</div></div>`,
   }[TL.endArt || 'door'];
   return `<div class="end"><div style="margin-top:205px;${a(0)}">${art}</div>
@@ -522,8 +557,8 @@ window.setup = async (tl, dpr) => {
     for (let p = 0; p < d.data.length; p += 4) { const v = Math.random() * 255; d.data[p] = d.data[p + 1] = d.data[p + 2] = v; d.data[p + 3] = 255; }
     g.putImageData(d, 0, 0); GRAIN.push(c.toDataURL());
   }
-  await W3.init($('gl'), dpr, { creature: CREATURE, fingers: FINGERS, knuckles: KNUCKLES, winFig: WINFIG, winFingers: WINFINGERS, under: UNDER, kid: KID },
-    { visitor: TL.visitor || 'creature', bedLegs: !!TL.bedLegs, item: TL.item || 'phone', openMax: TL.openMax || .4 });
+  await W3.init($('gl'), dpr, { ...SET_ASSETS, creature: CREATURE, fingers: FINGERS, knuckles: KNUCKLES, winFig: WINFIG, winFingers: WINFINGERS, under: UNDER, kid: KID },
+    { set: TL.set || 'bedroom', visitor: TL.visitor || 'creature', bedLegs: !!TL.bedLegs, item: TL.item || 'phone', openMax: TL.openMax || .4 });
 };
 
 /* ------------------------------------------------ Frame */
@@ -534,6 +569,7 @@ window.renderFrame = async (t) => {
   const gl = $('gl'), st = GLSTYLE[sh.scene];
   gl.style.display = st === 'none' ? 'none' : 'block';
   gl.style.filter = st === 'none' ? '' : st;
+  gl.style.transform = sh.scene === 'mirror' ? 'scaleX(-1)' : '';
   if (st !== 'none') W3.render();
   $('mid').innerHTML = html;
   const sc = $('scene'), z = ZOOM[sh.scene] || [1, 1];
@@ -545,12 +581,13 @@ window.renderFrame = async (t) => {
   let ov = '';
   if (t < 3.0) {
     ov += `<div class="title" style="opacity:${clamp((3.0 - t) / .25)}"><div class="k">${TL.series} · ${TL.episode}</div><div class="t">${TL.title}<br>TEIL ${TL.part}</div></div>`;
-  } else if (sh.place && ['room', 'face', 'door', 'window', 'underbed'].includes(sh.scene)) {
+  } else if (sh.place && !['lock', 'chat', 'choice', 'end', 'monitor', 'radio'].includes(sh.scene)) {
     const blink = (t % 1.2) < .7 ? 1 : .25;
     ov += `<div class="badge"><div class="tm"><i style="opacity:${blink}"></i>${sh.clock}<small>UHR</small></div><div class="pl">TEIL ${TL.part} · ${sh.place}</div></div>`;
   }
+  if (TL.set === 'cellar' && typeof timerOverlay !== 'undefined') ov += timerOverlay(t, sh);
   const q = (TL.quotes || []).find(q => t >= q.start && t < q.end);
-  if (q) ov += `<div class="quote" style="opacity:${clamp((t - q.start) / .2)}"><div class="w">— ${q.who} · ${q.place} —</div><div class="tx">„${q.text}“</div></div>`;
+  if (q && sh.scene !== 'radio') ov += `<div class="quote" style="opacity:${clamp((t - q.start) / .2)}"><div class="w">— ${q.who} · ${q.place} —</div><div class="tx">„${q.text}“</div></div>`;
   const g = TL.groups.find(g => t >= g.start && t < g.end);
   if (g) {
     const top = sh.scene === 'choice' ? 720 : 568;
@@ -564,4 +601,5 @@ window.renderFrame = async (t) => {
   $('overlay').innerHTML = ov;
   $('grain').style.backgroundImage = `url(${GRAIN[Math.floor(t * 24) % GRAIN.length]})`;
 };
-</script></body></html>
+</script>
+<script src="sets.js"></script></body></html>
