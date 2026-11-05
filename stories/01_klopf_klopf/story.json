@@ -6,7 +6,7 @@
   "shots": [
     {"scene": "room", "clock": "3:33", "place": "DEIN ZIMMER", "lines": [
       {"text": "Stell dir vor, du wachst um 3:33 auf.", "say": "Stell dir vor, du wachst um drei Uhr dreiunddreißig auf.", "hl": {"3:33": "y", "auf": "y"}},
-      {"text": "Dein Handy leuchtet.", "hl": {"leuchtet": "y"}, "sfx": [["buzz", 0.0]]}
+      {"text": "Dein Handy vibriert auf dem Nachttisch.", "hl": {"vibriert": "y"}, "sfx": [["buzz", 0.0]], "pause": 0.6}
     ]},
     {"scene": "lock", "clock": "3:33", "notif": {"from": "Mama", "text": "Bist du wach?"}, "lines": [
       {"text": "Eine Nachricht von Mama.", "hl": {"Mama": "y"}}
