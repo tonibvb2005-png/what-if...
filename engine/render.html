@@ -326,8 +326,9 @@ const CREATURE = `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="23
     <ellipse cx="225" cy="190" rx="66" ry="98" fill="url(#cface)"/>
     <ellipse cx="198" cy="170" rx="21" ry="29" fill="#05050a"/><ellipse cx="254" cy="170" rx="21" ry="29" fill="#05050a"/>
     <circle cx="201" cy="166" r="4.5" fill="#fff"/><circle cx="257" cy="166" r="4.5" fill="#fff"/>
+    <clipPath id="mouthC"><path d="M168 224 Q225 284 284 224 Q225 258 168 224 Z"/></clipPath>
     <path d="M168 224 Q225 284 284 224 Q225 258 168 224 Z" fill="#05050a"/>
-    ${[0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => `<rect x="${179 + i * 11}" y="${234 - Math.abs(i - 4) * 1.5}" width="7" height="11" rx="2" fill="#e9e6da"/>`).join('')}
+    <g clip-path="url(#mouthC)">${[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map(i => `<rect x="${172 + i * 11}" y="${226 + Math.pow(Math.abs(i - 4.5) / 4.5, 2) * -6 + 12}" width="7" height="13" rx="2" fill="#e9e6da"/>`).join('')}</g>
   </g>
 </svg>`;
 const FINGERS = `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 220 220">
