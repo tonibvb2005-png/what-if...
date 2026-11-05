@@ -165,7 +165,7 @@ function character(st) {
 function doorState(t) {
   let handle = 0, open = 0, knock = 0;
   if (TL.handle.length) { const [h0, h1] = TL.handle; const p = ease((t - h0 - .3) / Math.max(.5, h1 - h0 - .3)); handle = .6 * p + (p > 0 && p < 1 ? noise(t * 20) * .03 : 0); }
-  if (TL.reveal && TL.reveal.length) { const p = ease((t - TL.reveal[0]) / 1.5); open = .45 * p; if (p > 0) handle = Math.max(handle * (1 - p), 0) + .6 * (1 - p); }
+  if (TL.reveal && TL.reveal.length) { const p = ease((t - TL.reveal[0]) / 1.5); open = .78 * p; if (p > 0) handle = Math.max(handle * (1 - p), 0) + .6 * (1 - p); }
   for (const k of TL.knocks) { const a = t - k; if (a >= 0 && a < .16) knock += Math.sin(a * 90) * (1 - a / .16); }
   return { handle, open, knock };
 }
@@ -209,9 +209,9 @@ async function viewDoor(t, sh) {
   if (sh.zoom === 'handle') {
     const r0 = TL.reveal && TL.reveal.length ? TL.reveal[0] : sh.end;
     const pIn = ease(lt / Math.max(1, r0 - sh.start)), pOut = ease((t - r0 + .2) / 1.8);
-    const pos = lerp3(lerp3([.72, 1.06, .95], [.86, 1.03, .62], pIn), [.8, 1.45, 2.15], pOut);
-    const look = lerp3([1.04, 1.0, 0], [1.0, 1.5, -.25], pOut);
-    W3.setCam(pos, look, lerp(38, 46, pOut));
+    const pos = lerp3(lerp3([.72, 1.06, .95], [.86, 1.03, .62], pIn), [.72, 1.3, 3.0], pOut);
+    const look = lerp3([1.04, 1.0, 0], [1.12, 1.2, -.3], pOut);
+    W3.setCam(pos, look, lerp(38, 50, pOut));
   } else povCam(t, ease(lt / d));
   W3.setState({ t, phoneOnDesk: false, phoneLit: true, flick: .6, phonePos: [.5, .95, 1.5], ...doorState(t) });
   await W3.setChar(null);
@@ -275,7 +275,7 @@ async function viewEnd(t, sh) {
     <rect x="50" y="10" width="100" height="128" fill="#05060f"/>
     <rect x="58" y="22" width="22" height="116" fill="#3a2412"/>
     <ellipse cx="68" cy="48" rx="9" ry="13" fill="#cfd3e6"/><circle cx="65" cy="45" r="2.4" fill="#000"/><circle cx="72" cy="45" r="2.4" fill="#000"/>
-    <path d="M62 54 Q68 59 75 53" stroke="#000" stroke-width="1.6" fill="none"/>
+    <path d="M62 54 Q68 59 75 53" stroke="#000" stroke-width="1.6" fill="none"/><path d="M68 61 L68 70 M63 70 Q68 68 74 70 L72 100 L70 136 M66 100 L64 136 M63 71 L60 112 M73 71 L78 80" stroke="#9a9eb0" stroke-width="3" stroke-linecap="round" fill="none"/>
     <polygon points="80,10 150,10 150,138 80,138" fill="#181d45" stroke="#0b0f2c" stroke-width="4"/>
     <circle cx="92" cy="78" r="4" fill="#7a83b6"/><rect x="52" y="134" width="96" height="4" fill="#ffbe6a"/>
     ${[0, 1, 2, 3].map(i => `<path d="M80 ${44 + i * 5} q6 -1 11 1" stroke="#cfd3e6" stroke-width="2.2" stroke-linecap="round" fill="none"/>`).join('')}</svg>`;
@@ -290,14 +290,41 @@ const GLSTYLE = { room: '', face: '', door: '', lock: 'blur(9px) brightness(.7)'
 const ZOOM = { lock: [1.0, 1.03], chat: [1.0, 1.03], choice: [1.0, 1.02] };
 
 /* ------------------------------------------------ Kreatur + Finger (2D-Texturen für den Flur) */
-const CREATURE = `<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="2048" viewBox="0 0 450 900">${DEFS}
-  <path d="M190 330 Q150 420 160 900 L330 900 Q340 420 300 330 Z" fill="#14100e"/>
-  <path d="M225 250 L222 340" stroke="#a9adbf" stroke-width="26"/>
-  <ellipse cx="228" cy="170" rx="72" ry="104" fill="url(#cface)"/>
-  <ellipse cx="200" cy="150" rx="22" ry="30" fill="#05050a"/><ellipse cx="258" cy="150" rx="22" ry="30" fill="#05050a"/>
-  <circle cx="203" cy="146" r="4.5" fill="#fff"/><circle cx="261" cy="146" r="4.5" fill="#fff"/>
-  <path d="M168 205 Q228 268 290 205 Q228 240 168 205 Z" fill="#05050a"/>
-  ${[0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => `<rect x="${180 + i * 11.5}" y="${210 + Math.abs(i - 4) * -1.5 + 6}" width="7" height="11" rx="2" fill="#e9e6da"/>`).join('')}
+const CREATURE = `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="2300" viewBox="0 0 450 1150">${DEFS}
+  <defs>
+    <linearGradient id="skinC" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6e7286"/><stop offset=".45" stop-color="#b3b7c8"/><stop offset="1" stop-color="#7a7e92"/></linearGradient>
+    <radialGradient id="shadowC" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#000" stop-opacity=".55"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+  </defs>
+  <ellipse cx="225" cy="1142" rx="110" ry="12" fill="url(#shadowC)"/>
+  <g stroke="rgba(255,176,96,.45)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Beine: lang, dürr, knotige Knie -->
+    <path d="M206 700 Q196 820 190 920 Q186 1030 178 1135 L196 1137 Q204 1030 208 925 Q214 820 222 705 Z" fill="url(#skinC)"/>
+    <path d="M238 700 Q250 820 256 920 Q262 1030 274 1135 L256 1138 Q246 1030 240 926 Q232 820 226 705 Z" fill="url(#skinC)"/>
+    <ellipse cx="199" cy="921" rx="11" ry="14" fill="#a3a7b9"/><ellipse cx="248" cy="921" rx="11" ry="14" fill="#a3a7b9"/>
+    <path d="M178 1133 l-22 6 l40 2 Z M274 1133 l26 6 l-44 2 Z" fill="#8a8ea2"/>
+    <!-- Linker Arm hängt bis unter die Knie -->
+    <path d="M172 396 Q150 520 146 640 Q142 760 136 860 L150 862 Q158 760 162 642 Q168 522 186 402 Z" fill="url(#skinC)"/>
+    <path d="M138 858 q-8 40 -6 70 M143 860 q-2 44 2 78 M149 860 q4 40 12 66 M134 856 q-16 28 -20 52" stroke="#a3a7b9" stroke-width="5" fill="none"/>
+    <!-- Rechter Arm greift zur Türkante -->
+    <path d="M270 400 Q330 430 372 470 Q410 440 450 404 L450 424 Q412 462 372 492 Q326 456 262 420 Z" fill="url(#skinC)"/>
+    <!-- Rumpf: schmal, eingefallen -->
+    <path d="M168 392 Q225 368 282 392 Q284 470 262 560 Q256 640 248 708 L200 708 Q192 640 186 560 Q166 470 168 392 Z" fill="url(#skinC)"/>
+  </g>
+  <g stroke="#5f6377" stroke-width="3.2" fill="none" stroke-linecap="round" opacity=".85">
+    ${[0, 1, 2, 3, 4].map(i => `<path d="M${190 + i * 2} ${438 + i * 24} Q225 ${450 + i * 24} ${260 - i * 2} ${438 + i * 24}"/>`).join('')}
+    <path d="M225 420 L225 560"/><path d="M200 400 Q225 410 250 400"/>
+  </g>
+  <!-- Hals, leicht verdreht -->
+  <path d="M212 290 Q206 340 214 396 L236 396 Q240 340 236 290 Z" fill="url(#skinC)" stroke="rgba(255,176,96,.45)" stroke-width="3"/>
+  <path d="M216 320 Q225 326 234 320 M216 350 Q225 356 234 350" stroke="#5f6377" stroke-width="2.5" fill="none"/>
+  <!-- Kopf (schief) -->
+  <g transform="rotate(-12 225 200)">
+    <ellipse cx="225" cy="190" rx="66" ry="98" fill="url(#cface)"/>
+    <ellipse cx="198" cy="170" rx="21" ry="29" fill="#05050a"/><ellipse cx="254" cy="170" rx="21" ry="29" fill="#05050a"/>
+    <circle cx="201" cy="166" r="4.5" fill="#fff"/><circle cx="257" cy="166" r="4.5" fill="#fff"/>
+    <path d="M168 224 Q225 284 284 224 Q225 258 168 224 Z" fill="#05050a"/>
+    ${[0, 1, 2, 3, 4, 5, 6, 7, 8].map(i => `<rect x="${179 + i * 11}" y="${234 - Math.abs(i - 4) * 1.5}" width="7" height="11" rx="2" fill="#e9e6da"/>`).join('')}
+  </g>
 </svg>`;
 const FINGERS = `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 200 200">
   ${[0, 1, 2, 3].map(i => { const y = 50 + i * 30, L = [118, 140, 132, 104][i];

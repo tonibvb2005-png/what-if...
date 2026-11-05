@@ -116,7 +116,7 @@ const W3 = (() => {
     hall(1.2, 2.8, '#2c1a0d', 1.375, 1.4, -2.3);
     hall(1.2, 2.4, '#1f130a', 1.375, 2.6, -1.2, Math.PI / 2);
     const bulb = put(new THREE.Mesh(new THREE.SphereGeometry(.05, 12, 8), basic('#ffe0a0')), 1.375, 2.45, -1.4, scene, false);
-    for (const x of [1.22, 1.52]) put(new THREE.Mesh(new THREE.BoxGeometry(.11, .07, .26), basic('#140b05')), x, .035, -.22, scene, false);
+    for (const x of [1.07, 1.24]) put(new THREE.Mesh(new THREE.BoxGeometry(.09, .022, .06), basic('#140b05')), x, .011, -.34, scene, false);
 
     // Lichtschein auf dem Zimmerboden
     const spillTex = canvasTex(256, 256, (g, w, h) => { const gr = g.createRadialGradient(w / 2, 0, 4, w / 2, 0, h); gr.addColorStop(0, 'rgba(255,180,90,1)'); gr.addColorStop(1, 'rgba(255,180,90,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
@@ -124,10 +124,10 @@ const W3 = (() => {
     spill.rotation.x = -Math.PI / 2; spill.position.set(1.37, .004, .65); scene.add(spill);
 
     // Das Ding im Flur (2D) + Finger an der Türkante
-    const cc = document.createElement('canvas'); cc.width = 1024; cc.height = 2048; const cg = cc.getContext('2d');
-    const img = new Image(); img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(creatureSvg); await img.decode(); cg.drawImage(img, 0, 0, 1024, 2048);
+    const cc = document.createElement('canvas'); cc.width = 900; cc.height = 2300; const cg = cc.getContext('2d');
+    const img = new Image(); img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(creatureSvg); await img.decode(); cg.drawImage(img, 0, 0, 900, 2300);
     creatureTex = new THREE.CanvasTexture(cc); creatureTex.encoding = THREE.sRGBEncoding;
-    creature = put(new THREE.Mesh(new THREE.PlaneGeometry(.9, 1.8 * 1.0), basic('#ffffff', { map: creatureTex, transparent: true, alphaTest: .02 })), 1.03, 1.32, -.38, scene, false);
+    creature = put(new THREE.Mesh(new THREE.PlaneGeometry(.9, 2.3), basic('#ffffff', { map: creatureTex, transparent: true, alphaTest: .02 })), 1.15, 1.15, -.38, scene, false);
     creature.material.toneMapped = false;
     const fc = document.createElement('canvas'); fc.width = 512; fc.height = 512; const fg = fc.getContext('2d');
     const fimg = new Image(); fimg.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(fingersSvg); await fimg.decode(); fg.drawImage(fimg, 0, 0, 512, 512);
@@ -165,7 +165,7 @@ const W3 = (() => {
     handlePivot.rotation.z = -(s.handle || 0);
     doorPivot.rotation.y = s.open || 0;
     doorPivot.position.x = 1.795 + (s.knock || 0) * .006;
-    const o = clamp((s.open || 0) / .3);
+    const o = clamp((s.open || 0) / .5);
     spill.material.opacity = .28 + .55 * o; spill.scale.set(1 + o * .3, 1, 1 + o * .6);
     warmLight.intensity = .25 + 1.6 * o;
     fingersMat.opacity = clamp(((s.open || 0) - .2) / .1);
