@@ -133,13 +133,13 @@ const W3 = (() => {
     const fimg = new Image(); fimg.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(fingersSvg); await fimg.decode(); fg.drawImage(fimg, 0, 0, 512, 512);
     const ft = new THREE.CanvasTexture(fc); ft.encoding = THREE.sRGBEncoding;
     fingersMat = basic('#34353f', { map: ft, transparent: true, opacity: 0, depthWrite: false }); fingersMat.toneMapped = false;
-    fingers = new THREE.Mesh(new THREE.PlaneGeometry(.22, .22), fingersMat); fingers.position.set(-.73, 1.66, .027); doorPivot.add(fingers);
+    fingers = new THREE.Mesh(new THREE.PlaneGeometry(.226, .22), fingersMat); fingers.position.set(-.734, 1.66, .041); doorPivot.add(fingers);
     // Knöchel auf der Schmalseite der Tür: die Hand greift sichtbar um die Kante
     const kc = document.createElement('canvas'); kc.width = 128; kc.height = 358; const kg = kc.getContext('2d');
     const kimg = new Image(); kimg.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(knucklesSvg); await kimg.decode(); kg.drawImage(kimg, 0, 0, 128, 358);
     const kt = new THREE.CanvasTexture(kc); kt.encoding = THREE.sRGBEncoding;
     knuckMat = basic('#2a2b34', { map: kt, transparent: true, opacity: 0, depthWrite: false }); knuckMat.toneMapped = false;
-    const knuck = new THREE.Mesh(new THREE.PlaneGeometry(.052, .145), knuckMat); knuck.rotation.y = -Math.PI / 2; knuck.position.set(-.8425, 1.66, 0); doorPivot.add(knuck);
+    const knuck = new THREE.Mesh(new THREE.PlaneGeometry(.068, .145), knuckMat); knuck.rotation.y = -Math.PI / 2; knuck.position.set(-.8425, 1.66, .008); doorPivot.add(knuck);
 
     // 2D-Figur als Ebene
     const ch = document.createElement('canvas'); ch.width = TEX; ch.height = TEX; charCtx = ch.getContext('2d');
