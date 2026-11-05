@@ -36,7 +36,7 @@
     {"scene": "cellar_pov", "clock": "3:34", "place": "KELLER", "lines": [
       {"text": "Dunkelheit.", "sfx": [["breath", 0.0]], "pause": 0.4},
       {"text": "Dann flackert das Licht ein letztes Mal auf.", "hl": {"flackert": "y"},
-       "ev": [["fig", "word1-0.1", 1.35], ["light", "end+0.1", 1], ["light", "end+0.6", 0]], "sfx": [["boom", "end+0.1"]], "pause": 1.4}
+       "ev": [["fig", "word1-0.1", 1.35], ["light", "end-0.25", 1], ["light", "end+0.3", 0]], "sfx": [["boom", "end-0.25"]], "pause": 1.4}
     ]},
     {"scene": "choice", "heading": "WAS MACHST DU?",
      "left": {"label": "RENNEN", "text": "Im Dunkeln an ihm vorbei zur Treppe.", "icon": "🏃", "color": "#2f7cf6"},

@@ -206,10 +206,62 @@ def resolve(spec, line):
     raise ValueError(spec)
 
 
+def align_voice(path, story):
+    """Fertige Sprachaufnahme (z. B. ElevenLabs) mit Whisper transkribieren und jedem Skriptwort
+    seinen Zeitpunkt zuordnen. Gibt pro Zeile Start, Ende und Wortzeiten (Audio-Zeit) zurück."""
+    import difflib
+    from faster_whisper import WhisperModel
+    audio = load_wav(path)
+    a16 = np.interp(np.arange(0, len(audio), SR / 16000), np.arange(len(audio)), audio).astype(np.float32)
+    model = WhisperModel("small", device="cpu", compute_type="int8")
+    segs, _ = model.transcribe(a16, language="de", word_timestamps=True)
+    hw = [(norm(w.word), w.start, w.end) for sg in segs for w in sg.words if norm(w.word)]
+    lines = [l for sh in story["shots"] for l in sh["lines"]]
+    sw, owner = [], []
+    for i, l in enumerate(lines):
+        for w in tokens(l.get("say", l["text"])):
+            sw.append(norm(w)); owner.append(i)
+    st, en = [None] * len(sw), [None] * len(sw)
+    sm = difflib.SequenceMatcher(None, sw, [h[0] for h in hw], autojunk=False)
+    for blk in sm.get_matching_blocks():
+        for k in range(blk.size):
+            st[blk.a + k], en[blk.a + k] = hw[blk.b + k][1], hw[blk.b + k][2]
+    # Lücken (z. B. "dreiunddreißig" vs. "33") zwischen Nachbarn interpolieren
+    known = [i for i in range(len(sw)) if st[i] is not None]
+    for i in range(len(sw)):
+        if st[i] is None:
+            prv = max([k for k in known if k < i], default=None); nxt = min([k for k in known if k > i], default=None)
+            a_ = en[prv] if prv is not None else 0.0
+            b_ = st[nxt] if nxt is not None else a_ + .4
+            gap = [k for k in range(len(sw)) if (prv is None or k > prv) and (nxt is None or k < nxt)]
+            j = gap.index(i); step = (b_ - a_) / (len(gap) + 0.0)
+            st[i], en[i] = a_ + j * step, a_ + (j + 1) * step
+    out = []
+    for i, l in enumerate(lines):
+        idx = [k for k in range(len(sw)) if owner[k] == i]
+        out.append({"start": st[idx[0]], "end": en[idx[-1]], "say": [sw[k] for k in idx], "times": [st[k] for k in idx]})
+    return out, audio
+
+
+def caption_times(toks, A):
+    """Untertitel-Wörter auf die Wortzeiten der gesprochenen Fassung abbilden."""
+    import difflib
+    cap = [norm(w) for w in toks]
+    res = [None] * len(cap)
+    for tag, a0, a1, b0, b1 in difflib.SequenceMatcher(None, cap, A["say"], autojunk=False).get_opcodes():
+        for k in range(a0, a1):
+            res[k] = A["times"][b0 + (k - a0)] if tag == "equal" else A["times"][min(b0, len(A["times"]) - 1)] if b1 > b0 else None
+    for k in range(len(res)):
+        if res[k] is None:
+            res[k] = res[k - 1] + .15 if k else A["start"]
+    return res
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("story")
     ap.add_argument("--voice-dir")
+    ap.add_argument("--voice-file", help="eine fertige Sprachaufnahme für das ganze Video")
     ap.add_argument("--fps", type=int, default=30)
     ap.add_argument("--stills", help="nur Einzelbilder, z. B. 1,5,9")
     ap.add_argument("--preview", action="store_true", help="halbe Auflösung, schneller")
@@ -222,6 +274,10 @@ def main():
     name = os.path.basename(sdir)
 
     voice_files = sorted(os.listdir(args.voice_dir)) if args.voice_dir else None
+    aligned = None
+    if args.voice_file:
+        aligned, full = align_voice(args.voice_file, story)
+        json.dump(aligned, open(os.path.join(outdir, name + ".align.json"), "w"), ensure_ascii=False, indent=1)
     t = LEAD_IN
     shots, words, groups, msgs, typing, knocks, handle, voice, sfx_ev = [], [], [], [], [], [], [], [], []
     reveal = []
@@ -229,23 +285,32 @@ def main():
     ev = {}
     li = 0
     for si, shot in enumerate(story["shots"]):
-        if si:
+        if aligned:
+            first = LEAD_IN + aligned[li]["start"]
+            t = 0.0 if si == 0 else max(last_end + .05, first - .3)
+        elif si:
             t += GAP_SHOT
         s_start = t
         line_times = []
         for line in shot["lines"]:
-            if voice_files:
-                path = os.path.join(args.voice_dir, voice_files[li])
-            else:
-                path = tts_piper(line.get("say", re.sub(r"[„“]", "", line["text"])), cache)
-            a = trim(load_wav(path))
-            li += 1
-            dur = len(a) / SR
-            L = {"start": t, "end": t + dur, "shotStart": s_start}
-            line_times.append([t, t + dur])
-            voice.append((t, a))
             toks = tokens(line["text"])
-            L["wordTimes"] = word_times(toks, t, dur)
+            if aligned:
+                A = aligned[li]; li += 1
+                t, dur = LEAD_IN + A["start"], A["end"] - A["start"]
+                L = {"start": t, "end": t + dur, "shotStart": s_start}
+                L["wordTimes"] = [LEAD_IN + x for x in caption_times(toks, A)]
+            else:
+                if voice_files:
+                    path = os.path.join(args.voice_dir, voice_files[li])
+                else:
+                    path = tts_piper(line.get("say", re.sub(r"[„“]", "", line["text"])), cache)
+                a = trim(load_wav(path))
+                li += 1
+                dur = len(a) / SR
+                L = {"start": t, "end": t + dur, "shotStart": s_start}
+                voice.append((t, a))
+                L["wordTimes"] = word_times(toks, t, dur)
+            line_times.append([t, t + dur]); last_end = t + dur
             hl = {norm(k): v for k, v in line.get("hl", {}).items()}
             if not line.get("nocap"):
                 g = None
@@ -294,7 +359,10 @@ def main():
                 reveal = [L["start"], L["end"] + line.get("pause", 0)]
             if line.get("handle"):
                 handle = [L["start"], L["end"] + line.get("pause", 0)]
-            t = L["end"] + line.get("pause", 0) + GAP_LINE
+            if aligned:
+                t = LEAD_IN + aligned[li]["start"] if li < len(aligned) else L["end"] + max(1.2, line.get("pause", 0))
+            else:
+                t = L["end"] + line.get("pause", 0) + GAP_LINE
             L["capEnd"] = L["end"] + 0.25
             for g in groups:
                 if "end" not in g:
@@ -310,6 +378,9 @@ def main():
         sh_ = {k: v for k, v in shot.items() if k not in ("lines", "sfx")}
         sh_.update(start=s_start, end=t, lineTimes=line_times)
         shots.append(sh_)
+    if aligned:
+        voice.append((LEAD_IN, full))
+        t = shots[-1]["end"]
     duration = t + 0.6
     shots[-1]["end"] = duration
     for a_, b_ in zip(shots, shots[1:]):
