@@ -794,7 +794,7 @@
       acts: { hero: [[0, { e: 'surprised', m: { lookX: -1 } }], [.88, { e: 'focused', p: 'crossed', m: { lookX: -1 } }]], mike: [[0, { e: 'worried', m: { lookX: -1 } }], [.88, { e: 'despair', p: 'handsOnHead', m: { lookX: -1 } }]], jay: [[0, { e: 'worried', m: { lookX: -1 } }], [.88, { e: 'shock', m: { lookX: -1 } }]] } },
     bsell: { set: 'room', cast: BROOM, bright: .9, card: 'off', looks: { mike: [['sell', .45, MIKE_GREEN]] },
       cam: [[0, { x: -150, y: 990, z: 1.35 }], [1, { x: -150, y: 995, z: 1.45 }]],
-      acts: { mike: [[0, { e: 'focused', ex: { mouthCurve: -.3 }, m: { lookX: 0 } }], ['sell', .45, { e: 'smirk', p: 'holdCashUp', propR: 'shirt10', m: { lookX: 0 } }]], hero: [[0, { e: 'neutral', m: { lookX: -1 } }], ['sell', .5, { e: 'shock', p: 'handsOnHead', m: { lookX: -1 } }]], jay: [[0, { e: 'neutral', m: { lookX: -1 } }]] } },
+      acts: { mike: [[0, { e: 'angry', ex: { anger: 0, teeth: 0, mouthOpen: .05 }, m: { lookX: 0 } }], ['sell', .45, { e: 'angry', p: 'holdCashUp', propR: 'shirt10', m: { lookX: 0 } }]], hero: [[0, { e: 'neutral', m: { lookX: -1 } }], ['sell', .5, { e: 'shock', p: 'handsOnHead', m: { lookX: -1 } }]], jay: [[0, { e: 'neutral', m: { lookX: -1 } }]] } },
     bkeep: { set: 'room', cast: BROOM_AFTER, bright: .95, card: textCard([['THE SECRET WEAPON', 46, '#ffd400', 'weapon', .5], ['M · S · N', 120, '#fff', 'three', .78]], ['#2a0d5c', '#0d0524']),
       cam: [[0, { x: 0, y: 1040, z: 1.6 }], [.4, { x: 0, y: 1040, z: 1.6 }], [.5, TV], [1, TV]],
       acts: { hero: [[0, { e: 'confident', p: 'thumbsUpR', handR: 'thumb', m: { lookX: 0 } }], [.35, { e: 'wink' }]], mike: [[0, { e: 'smirk', p: 'crossed' }]], jay: [[0, { e: 'neutral' }]] } },

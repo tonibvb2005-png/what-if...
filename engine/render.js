@@ -11,6 +11,7 @@ const path = require('path');
 const args = process.argv.slice(2);
 const opt = (name, def) => { const i = args.indexOf(name); if (i < 0) return def; const v = args[i + 1]; args.splice(i, 2); return v; };
 const stills = opt('--stills', null);
+const onlyScene = opt('--scene', null);
 const audioOnly = args.includes('--audio-only'); if (audioOnly) args.splice(args.indexOf('--audio-only'), 1);
 const FPS = parseInt(opt('--fps', '30'), 10);
 const specPath = path.resolve(args[0]);
@@ -56,7 +57,24 @@ for (const s of spec.scenes) {
   // the silent picture track is kept next to the output so audio can be re-mixed quickly (--audio-only)
   const silent = out.replace(/\.mp4$/, '.silent.mp4');
   const t0 = Date.now();
-  if (!(audioOnly && fs.existsSync(silent))) {
+  if (onlyScene != null && fs.existsSync(silent)) {
+    // re-render a single scene and splice it into the existing picture track
+    const k = parseInt(onlyScene, 10), a = Math.round(starts[k] * FPS), b = Math.round((starts[k + 1] != null ? starts[k + 1] : total) * FPS);
+    const clip = out.replace(/\.mp4$/, '.scene.mp4'), merged = out.replace(/\.mp4$/, '.merged.mp4');
+    const ffc = spawn('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
+      '-c:v', 'libx264', '-preset', 'medium', '-crf', '19', '-pix_fmt', 'yuv420p', clip], { stdio: ['pipe', 'inherit', 'inherit'] });
+    for (let i = a; i < b; i++) {
+      await page.evaluate(t => window.frame(t), i / FPS);
+      const buf = await page.screenshot({ type: 'jpeg', quality: 93 });
+      if (!ffc.stdin.write(buf)) await new Promise(r => ffc.stdin.once('drain', r));
+    }
+    ffc.stdin.end(); await new Promise(r => ffc.on('close', r));
+    execFileSync('ffmpeg', ['-y', '-loglevel', 'error', '-i', silent, '-i', clip, '-filter_complex',
+      `[0:v]trim=end_frame=${a},setpts=PTS-STARTPTS[p];[0:v]trim=start_frame=${b},setpts=PTS-STARTPTS[q];[p][1:v][q]concat=n=3:v=1:a=0[v]`,
+      '-map', '[v]', '-c:v', 'libx264', '-preset', 'medium', '-crf', '19', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', merged]);
+    fs.renameSync(merged, silent); fs.unlinkSync(clip);
+    console.log(`scene ${k}: frames ${a}-${b} replaced`);
+  } else if (!(audioOnly && fs.existsSync(silent))) {
     const ff = spawn('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'mjpeg', '-i', '-',
       '-c:v', 'libx264', '-preset', 'medium', '-crf', '19', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', silent], { stdio: ['pipe', 'inherit', 'inherit'] });
     const frames = Math.ceil(total * FPS);

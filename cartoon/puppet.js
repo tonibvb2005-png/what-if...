@@ -4,7 +4,7 @@ window.Puppet = (function () {
   const D2R = Math.PI / 180;
   const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
 
-  const ED = { eyeOpen: 1, squint: 0, pupil: 1, browY: 0, browA: 0, mouthCurve: .2, mouthOpen: 0, mouthW: .8, teeth: 0, tongue: 0, blush: 0, sweat: 0, tears: 0, wink: 0, tremble: 0, smug: 0, sparkle: 0 };
+  const ED = { eyeOpen: 1, squint: 0, pupil: 1, browY: 0, browA: 0, mouthCurve: .2, mouthOpen: 0, mouthW: .8, teeth: 0, tongue: 0, blush: 0, sweat: 0, tears: 0, wink: 0, tremble: 0, smug: 0, sparkle: 0, anger: 0 };
   const EX = {
     neutral: {},
     happy: { mouthCurve: .85, mouthOpen: .3, teeth: .7, browY: .25, eyeOpen: .95, blush: .3 },
@@ -21,6 +21,7 @@ window.Puppet = (function () {
     shock: { eyeOpen: 1.45, pupil: .5, browY: 1, browA: .2, mouthOpen: 1, mouthW: .6, mouthCurve: -.15, sweat: .6 },
     ecstatic: { eyeOpen: 1.15, sparkle: 1, mouthOpen: 1, mouthCurve: 1, mouthW: 1.3, teeth: .7, tongue: 1, browY: .85, blush: .8 },
     focused: { browA: -.55, browY: -.2, mouthCurve: .05, eyeOpen: .9, mouthW: .6 },
+    angry: { browA: -1.1, browY: -.35, eyeOpen: .95, pupil: .8, mouthCurve: -.75, mouthOpen: .28, teeth: 1, mouthW: .95, tremble: .35, blush: .7, anger: 1 },
     despair: { browA: 1, browY: .1, eyeOpen: .75, mouthCurve: -.85, mouthOpen: .5, mouthW: .9, sweat: .5, tremble: .7 }
   };
   const PD = { lA: 12, lE: -10, rA: 12, rE: -10, lL: 5, lK: 0, rL: 5, rK: 0, lean: 0, headTilt: 0 };
@@ -285,6 +286,13 @@ window.Puppet = (function () {
         ctx.beginPath(); ctx.moveTo(sx, sy - 22); ctx.quadraticCurveTo(sx + 14, sy, sx, sy + 10); ctx.quadraticCurveTo(sx - 14, sy, sx, sy - 22);
         ctx.fillStyle = '#7fd8ff'; ctx.fill(); stroke(ctx, 4, OUT); ctx.globalAlpha = 1;
       }
+    }
+    // anger mark on the forehead
+    if (e.anger > .3) {
+      ctx.save(); ctx.translate(R * .5, -R * .62); const k = 1 + .12 * Math.sin(t * 9); ctx.scale(k * e.anger, k * e.anger);
+      ctx.strokeStyle = '#e8243b'; ctx.lineWidth = 7; ctx.lineCap = 'round';
+      for (const [sx, sy] of [[-1, -1], [1, -1], [1, 1], [-1, 1]]) { ctx.beginPath(); ctx.moveTo(sx * 5, sy * 20); ctx.quadraticCurveTo(sx * 5, sy * 5, sx * 20, sy * 5); ctx.stroke(); }
+      ctx.restore();
     }
     // laughing tears
     if (e.tears > .05) {
