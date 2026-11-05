@@ -42,102 +42,324 @@
     {
       "shot": "bhook",
       "text": "What if you gave up on Barça... in January 2015?",
-      "audio": "../audio/what-if-barca/01.wav"
+      "audio": "../audio/what-if-barca/01.wav",
+      "wordTimes": [
+        0.0,
+        0.28,
+        0.4,
+        0.54,
+        0.72,
+        0.92,
+        1.28,
+        1.6,
+        2.32,
+        2.76
+      ]
     },
     {
       "shot": "bsociedad",
       "text": "January 4th. Barcelona lose 1-0 at Real Sociedad. Messi and Neymar start on the bench.",
       "audio": "../audio/what-if-barca/02.wav",
       "cues": {
-        "goal": 1.6,
-        "bench": 3.0
-      }
+        "goal": 1.78,
+        "bench": 4.72
+      },
+      "wordTimes": [
+        0.44,
+        0.44,
+        1.54,
+        1.78,
+        2.34,
+        2.9,
+        3.2,
+        3.46,
+        4.72,
+        4.88,
+        5.2,
+        5.6,
+        5.98,
+        6.24,
+        6.36
+      ]
     },
     {
       "shot": "bcrisis",
       "text": "The next day, Messi misses training. The papers say he wants out. And the sporting director gets sacked.",
-      "audio": "../audio/what-if-barca/03.wav"
+      "audio": "../audio/what-if-barca/03.wav",
+      "wordTimes": [
+        0.14,
+        0.28,
+        0.5,
+        1.22,
+        1.58,
+        1.82,
+        2.74,
+        2.84,
+        3.08,
+        3.4,
+        3.6,
+        3.88,
+        4.78,
+        4.94,
+        5.04,
+        5.36,
+        5.74,
+        5.98
+      ]
     },
     {
       "shot": "bsell",
       "text": "His mate has seen enough. He sells his Barça shirt. For 10 euros.",
       "audio": "../audio/what-if-barca/04.wav",
       "cues": {
-        "sell": 2.0
-      }
+        "sell": 1.67
+      },
+      "wordTimes": [
+        0.19,
+        0.37,
+        0.57,
+        0.79,
+        1.01,
+        1.67,
+        1.79,
+        2.09,
+        2.35,
+        2.73,
+        3.05,
+        3.63,
+        3.89
+      ]
     },
     {
       "shot": "bkeep",
       "text": "But our guy keeps his. Because Barça have a secret weapon. Actually... three of them.",
       "audio": "../audio/what-if-barca/05.wav",
       "cues": {
-        "three": 3.2
-      }
+        "weapon": 3.56,
+        "three": 5.76
+      },
+      "wordTimes": [
+        0.14,
+        0.36,
+        0.6,
+        0.84,
+        1.18,
+        2.08,
+        2.38,
+        2.9,
+        3.4,
+        3.56,
+        3.86,
+        4.88,
+        5.76,
+        6.04,
+        6.18
+      ]
     },
     {
       "shot": "bmsn",
       "text": "Messi. Suárez. Neymar. The striker who got banned for biting a player at the World Cup... is now part of the scariest front three on the planet.",
       "audio": "../audio/what-if-barca/06.wav",
       "cues": {
-        "bite": 2.6
-      }
+        "bite": 4.1
+      },
+      "wordTimes": [
+        0.56,
+        1.0,
+        2.14,
+        3.38,
+        3.4,
+        3.68,
+        3.96,
+        4.1,
+        4.54,
+        4.72,
+        5.02,
+        5.2,
+        5.42,
+        5.6,
+        5.7,
+        5.96,
+        6.28,
+        6.86,
+        7.14,
+        7.46,
+        7.74,
+        7.84,
+        8.5,
+        8.74,
+        9.12,
+        9.48,
+        9.66
+      ]
     },
     {
       "shot": "bbayern",
       "text": "May 2015. Bayern Munich. Messi goes past Boateng, who falls to the ground... and chips it over Neuer.",
       "audio": "../audio/what-if-barca/07.wav",
       "cues": {
-        "skip": 2.6,
-        "chip": 4.0
-      }
+        "skip": 3.62,
+        "chip": 5.78
+      },
+      "wordTimes": [
+        0.42,
+        0.5,
+        1.9,
+        2.02,
+        2.94,
+        3.1,
+        3.3,
+        3.62,
+        4.3,
+        4.34,
+        4.66,
+        4.86,
+        4.96,
+        5.28,
+        5.78,
+        6.12,
+        6.32,
+        6.52
+      ]
     },
     {
       "shot": "bdouble",
       "text": "They win the league. Then, in the cup final, Messi dribbles past half of Athletic Bilbao... and scores.",
       "audio": "../audio/what-if-barca/08.wav",
       "cues": {
-        "cup": 1.6,
-        "cupgoal": 4.4
-      }
+        "cup": 1.61,
+        "cupgoal": 6.19
+      },
+      "wordTimes": [
+        0.19,
+        0.33,
+        0.55,
+        0.75,
+        1.61,
+        2.03,
+        2.25,
+        2.39,
+        2.55,
+        3.47,
+        3.63,
+        3.99,
+        4.29,
+        4.61,
+        4.77,
+        5.11,
+        5.63,
+        6.19
+      ]
     },
     {
       "shot": "bberlin",
       "text": "June 6th. Berlin. The Champions League final, against Juventus.",
-      "audio": "../audio/what-if-barca/09.wav"
+      "audio": "../audio/what-if-barca/09.wav",
+      "wordTimes": [
+        0.26,
+        0.74,
+        1.8,
+        2.64,
+        2.76,
+        3.1,
+        3.46,
+        3.88,
+        4.42
+      ]
     },
     {
       "shot": "bfinal",
       "text": "Rakitić scores. Morata equalises. Then Suárez. And Neymar, in the very last minute.",
       "audio": "../audio/what-if-barca/10.wav",
       "cues": {
-        "rak": 0.3,
-        "mor": 1.3,
-        "sua": 2.4,
-        "ney": 3.6
-      }
+        "rak": 0.36,
+        "mor": 1.48,
+        "sua": 3.08,
+        "ney": 4.48
+      },
+      "wordTimes": [
+        0.36,
+        0.58,
+        1.48,
+        1.74,
+        2.96,
+        3.08,
+        3.44,
+        4.48,
+        5.0,
+        5.52,
+        5.64,
+        6.02,
+        6.48
+      ]
     },
     {
       "shot": "btreble",
       "text": "BARCELONA WIN THE TREBLE! The first club ever to do it twice!",
       "audio": "../audio/what-if-barca/11.wav",
-      "pad": 1.6
+      "pad": 1.6,
+      "wordTimes": [
+        0.3,
+        0.62,
+        1.08,
+        1.32,
+        2.04,
+        2.16,
+        2.44,
+        2.72,
+        3.04,
+        3.32,
+        3.46,
+        3.62
+      ]
     },
     {
       "shot": "bgoals",
       "text": "Messi, Suárez and Neymar scored 122 goals that season.",
       "audio": "../audio/what-if-barca/12.wav",
       "cues": {
-        "num": 2.6
-      }
+        "num": 2.2
+      },
+      "wordTimes": [
+        0.26,
+        0.94,
+        1.04,
+        1.44,
+        1.9,
+        2.2,
+        3.32,
+        3.9,
+        4.18
+      ]
     },
     {
       "shot": "bmate",
       "text": "And his mate? He tried to buy his shirt back... for 100 euros. Follow for more What Ifs.",
       "audio": "../audio/what-if-barca/13.wav",
       "cues": {
-        "follow": 4.0
+        "follow": 5.07
       },
-      "pad": 1.2
+      "pad": 1.2,
+      "wordTimes": [
+        0.17,
+        0.29,
+        0.43,
+        1.17,
+        1.51,
+        1.75,
+        1.89,
+        2.07,
+        2.23,
+        2.39,
+        2.73,
+        3.29,
+        3.85,
+        5.07,
+        5.49,
+        5.79,
+        6.07,
+        6.33
+      ]
     }
   ]
 }
