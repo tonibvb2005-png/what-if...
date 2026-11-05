@@ -74,6 +74,18 @@
   .choice h1 { position: absolute; top: 120px; left: 0; right: 0; text-align: center; font: 900 34px 'Montserrat'; color: #fff; letter-spacing: .5px; }
   .pill { position: absolute; font: 900 13px 'Montserrat'; color: #fff; padding: 6px 14px; border-radius: 20px; letter-spacing: .6px; }
 
+  .quote { position: absolute; top: 178px; left: 50%; transform: translateX(-50%); background: rgba(8,10,24,.82); border-radius: 8px;
+           padding: 8px 16px 10px; text-align: center; max-width: 440px; }
+  .quote .w { font: 500 10px 'JetBrains Mono'; color: #9aa0b8; letter-spacing: 1.6px; }
+  .quote .tx { font: italic 800 16px/1.3 'Montserrat'; color: #fff; margin-top: 4px; }
+  .baby { position: absolute; background: linear-gradient(160deg, #e6e7ed, #b9bac6); border-radius: 30px; padding: 18px;
+          box-shadow: 0 30px 80px rgba(0,0,0,.6), inset 0 -4px 0 rgba(0,0,0,.08); }
+  .baby .scr { height: 210px; border-radius: 12px; overflow: hidden; border: 6px solid #22242c; background: #000; }
+  .baby .leds { display: flex; gap: 12px; justify-content: center; margin-top: 22px; }
+  .baby .leds i { width: 13px; height: 13px; border-radius: 50%; display: block; }
+  .baby .grill { display: grid; grid-template-columns: repeat(7, 9px); gap: 9px; justify-content: center; margin-top: 26px; }
+  .baby .grill b { width: 9px; height: 9px; border-radius: 50%; background: #9c9daa; display: block; }
+  .ant { position: absolute; width: 14px; height: 84px; border-radius: 7px; background: linear-gradient(90deg, #c4c5cf, #e6e7ed); }
   .end { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 30%, #1a1e3d, #0b0d1c 70%); text-align: center; color: #fff; }
   .end .s { font: 500 11px 'JetBrains Mono'; letter-spacing: 4px; color: #9aa0b8; margin-top: 18px; }
   .end .p { font: 900 112px/1 'Montserrat'; color: #ff3b30; margin-top: 8px; letter-spacing: -1px; }
@@ -100,6 +112,7 @@ const SKIN = '#e3e9ff', SHIRT = '#7c3347', SHIRT_HI = '#94405a', INK = '#11142a'
 const DEFS = `<defs>
   <radialGradient id="headG" cx="42%" cy="34%" r="70%"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#e3e9ff"/><stop offset="1" stop-color="#aab7e8"/></radialGradient>
   <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#a9c8ff" stop-opacity=".5"/><stop offset="1" stop-color="#a9c8ff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="glowG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#9dffbd" stop-opacity=".45"/><stop offset="1" stop-color="#9dffbd" stop-opacity="0"/></radialGradient>
   <radialGradient id="warm" cx="50%" cy="0%" r="70%"><stop offset="0" stop-color="#ffb35a" stop-opacity=".55"/><stop offset="1" stop-color="#ffb35a" stop-opacity="0"/></radialGradient>
   <linearGradient id="lit" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#bcd4ff" stop-opacity=".5"/><stop offset=".6" stop-color="#bcd4ff" stop-opacity="0"/></linearGradient>
   <radialGradient id="cface" cx="45%" cy="40%" r="65%"><stop offset="0" stop-color="#e9ecf7"/><stop offset=".7" stop-color="#c3c8de"/><stop offset="1" stop-color="#8a8fa8"/></radialGradient>
@@ -143,12 +156,18 @@ function character(st) {
   const R = (p) => { const x = p[0] - hip[0], y = p[1] - hip[1], c = Math.cos(ang), s = Math.sin(ang); return [hip[0] + x * c - y * s, hip[1] + x * s + y * c]; };
   const headC = R([.15, 1.17 - dyH]), shL = R([.078, .985 - dyT]), shR = R([.222, .985 - dyT]);
   let s = '';
-  if (st.phone) s += `<circle cx="${st.phone[0]}" cy="${-st.phone[1]}" r=".55" fill="url(#glow)" opacity="${st.flick}"/>`;
+  if (st.phone) s += `<circle cx="${st.phone[0]}" cy="${-st.phone[1]}" r=".55" fill="url(#${st.item === 'baby' ? 'glowG' : 'glow'})" opacity="${st.flick}"/>`;
   const [hx, hy] = sv(hip);
   s += `<g transform="rotate(${-ang * 180 / Math.PI} ${hx} ${hy}) translate(0 ${dyT})">${torso(.15, -1.03, .21, .47)}</g>`;
   s += head(sv(headC), .13, { eyes: st.eyes, t: st.t, lit: st.lit, look: st.look, mouth: st.mouth });
   if (st.sit > .02) s += `<g opacity="${clamp(st.sit * 3)}">${arm(sv(shR), sv(st.handR), -1)}${arm(sv(shL), sv(st.handL), 1)}</g>`;
-  if (st.phone) {
+  if (st.phone && st.item === 'baby') {
+    const [px, py] = sv(st.phone);
+    s += `<rect x="${px - .04}" y="${py - .062}" width=".08" height=".11" rx=".014" fill="#c9cad3"/>
+          <rect x="${px - .032}" y="${py - .054}" width=".064" height=".048" rx=".005" fill="#7dffa4"/>
+          <path d="M${px + .028} ${py - .06} l.006 -.05" stroke="#c9cad3" stroke-width=".008" stroke-linecap="round"/>
+          <circle cx="${st.handL[0]}" cy="${-st.handL[1]}" r=".02" fill="${SKIN}"/><circle cx="${st.handR[0]}" cy="${-st.handR[1]}" r=".02" fill="${SKIN}"/>`;
+  } else if (st.phone) {
     const [px, py] = sv(st.phone);
     s += `<rect x="${px - .034}" y="${py - .056}" width=".068" height=".112" rx=".012" fill="#07080f"/>
           <rect x="${px - .034}" y="${py - .056}" width=".068" height=".112" rx=".012" fill="none" stroke="#bcd4ff" stroke-width=".004" opacity=".6"/>
@@ -165,41 +184,72 @@ function character(st) {
 function doorState(t) {
   let handle = 0, open = 0, knock = 0;
   if (TL.handle.length) { const [h0, h1] = TL.handle; const p = ease((t - h0 - .3) / Math.max(.5, h1 - h0 - .3)); handle = .6 * p + (p > 0 && p < 1 ? noise(t * 20) * .03 : 0); }
-  if (TL.reveal && TL.reveal.length) { const p = ease((t - TL.reveal[0]) / 1.5); open = .4 * p; if (p > 0) handle = Math.max(handle * (1 - p), 0) + .6 * (1 - p); }
+  if (TL.reveal && TL.reveal.length) { const p = ease((t - TL.reveal[0]) / 1.5); open = (TL.openMax || .4) * p; if (p > 0) handle = Math.max(handle * (1 - p), 0) + .6 * (1 - p); }
   for (const k of TL.knocks) { const a = t - k; if (a >= 0 && a < .16) knock += Math.sin(a * 90) * (1 - a / .16); }
   return { handle, open, knock };
 }
 
 /* ------------------------------------------------ Szenen */
 async function viewRoom(t, sh) {
-  const L = sh.lineTimes, T1 = L.length > 1 ? L[1][0] : 1e9, lt = t - sh.start, d = sh.end - sh.start;
+  const L = sh.lineTimes, lt = t - sh.start, d = sh.end - sh.start;
+  const mode = sh.mode || 'phone', trig = sh.triggerLine ?? 1;
+  const T1 = L.length > trig ? L[trig][0] : 1e9, k = t - T1;
   W3.setCam([.15, 1.95, 3.95 - .25 * ease(lt / d)], [-.18, .74, .5], 48);
-  const awake = t > L[0][0] + (L[0][1] - L[0][0]) * .55, lit = t >= T1, k = t - T1;
+  const awake = mode === 'phone' ? t > L[0][0] + (L[0][1] - L[0][0]) * .55 : t > T1 + .15;
+  const desk = W3.toPlane([-.7, mode === 'baby' ? .64 : .58, .24], PZ);
+  const holdL = [HOLD[0] - .035, HOLD[1] - .035], holdR = [HOLD[0] + .035, HOLD[1] - .035];
+  if (mode === 'wake') {          // aufwachen, aufsetzen, zum Fenster starren
+    const sit = ease((k - .7) / .8), look = awake ? -1.4 * ease((k - .2) / .4) : 0;
+    W3.setState({ t, phoneOnDesk: true, phoneLit: false, ...doorState(t), ...windowState(t, false) });
+    const body = character({ sit, lean: 0, handL: lerp2([.05, .72], [.06, .74], sit), handR: [.25, .72], phone: null, eyes: awake ? 'wide' : 'closed', look, t, mouth: awake ? 'o' : '' });
+    await W3.setChar(svgWrap(.1, 1.0, 2.4, body), .1, 1.0, PZ, 2.4);
+    return '';
+  }
+  const lit = t >= T1;
   const vib = lit && ((k >= 0 && k < .32) || (k >= .44 && k < .76));
   const flick = lit ? .85 + .15 * Math.abs(noise(t * 3)) : 0;
   const sit = ease((k - .35) / .6), lean = ease((k - .75) / .4) - ease((k - 1.45) / .45);
   const reach = ease((k - .85) / .4), back = ease((k - 1.45) / .5), grabbed = k >= 1.3;
-  const desk = W3.toPlane([-.7, .58, .24], PZ);
-  const holdL = [HOLD[0] - .035, HOLD[1] - .035], holdR = [HOLD[0] + .035, HOLD[1] - .035];
   const handL = lerp2(lerp2([.05, .72], [desk[0] + .01, desk[1]], reach), holdL, back);
   const handR = lerp2([.25, .72], holdR, back);
   const phone = grabbed ? lerp2([handL[0] + .015, handL[1] + .03], HOLD, back) : null;
   const look = !awake ? 0 : (lit && back < .5 ? -1.3 * ease(k / .3) : 0);
-  W3.setState({ t, phoneOnDesk: !grabbed, phoneLit: lit, phoneVib: vib, flick, phonePos: grabbed ? [phone[0], phone[1], PZ + .12] : [-.7, .64, .26], ...doorState(t) });
-  const body = character({ sit, lean, handL, handR, phone, flick, lit: grabbed && back > .4, eyes: awake ? 'open' : 'closed', look, t, vibAt: vib ? desk : null });
+  W3.setState({ t, phoneOnDesk: !grabbed, phoneLit: lit, phoneVib: vib, flick, phonePos: grabbed ? [phone[0], phone[1], PZ + .12] : [-.7, .66, .26], ...doorState(t) });
+  const body = character({ sit, lean, handL, handR, phone, flick, lit: grabbed && back > .4, eyes: awake ? 'open' : 'closed', look, t, vibAt: vib ? desk : null, item: TL.item });
   await W3.setChar(svgWrap(.1, 1.0, 2.4, body), .1, 1.0, PZ, 2.4);
   return '';
 }
 
 async function viewFace(t, sh) {
   const lt = t - sh.start, d = sh.end - sh.start;
-  const look = lt > d * .55 ? Math.sin(Math.min(1, (lt - d * .55) * 3) * Math.PI / 2) * 1.3 : 0;
+  const look = lt > d * .55 ? Math.sin(Math.min(1, (lt - d * .55) * 3) * Math.PI / 2) * 1.3 * (sh.lookDir || 1) : 0;
   const tr = .002 * noise(t * 9);
   W3.setCam([.15 + tr, 1.1, 1.36 - .08 * ease(lt / d)], [.15, 1.04, .6], 44);
   const flick = .85 + .15 * Math.abs(noise(t * 3));
   W3.setState({ t, phoneOnDesk: false, phoneLit: true, flick, phonePos: [HOLD[0], HOLD[1], PZ + .12], ...doorState(t) });
-  const body = character({ sit: 1, lean: 0, handL: [HOLD[0] - .035, HOLD[1] - .035], handR: [HOLD[0] + .035, HOLD[1] - .035], phone: HOLD, flick, lit: true, eyes: 'wide', mouth: 'o', look, t });
+  const body = character({ sit: 1, lean: 0, handL: [HOLD[0] - .035, HOLD[1] - .035], handR: [HOLD[0] + .035, HOLD[1] - .035], phone: HOLD, flick, lit: true, eyes: 'wide', mouth: 'o', look, t, item: TL.item });
   await W3.setChar(svgWrap(.15, 1.05, .8, body), .15, 1.05, PZ, .8);
+  return '';
+}
+
+function windowState(t, fig) {
+  let tap = 0;
+  for (const k of TL.taps || []) { const a = t - k; if (a >= 0 && a < .14) tap = Math.max(tap, Math.sin(a / .14 * Math.PI)); }
+  return { winFig: fig ? 1 : 0, tap };
+}
+async function viewWindow(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([.25 - .08 * ease(lt / d), 1.22, 1.75 - .2 * ease(lt / d)], [-.95, 1.6, 0], 46);
+  W3.setState({ t, phoneOnDesk: false, phoneLit: !!sh.phoneLit, flick: .6, phonePos: [.2, .95, 1.4], ...doorState(t), ...windowState(t, sh.figure) });
+  await W3.setChar(null);
+  return '';
+}
+async function viewUnderbed(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([.15, .15, 3.15 - .35 * ease(lt / d)], [.15, .13, 1.2], 46);
+  const eyes = TL.eyes != null ? clamp((t - TL.eyes) / .9) : 0;
+  W3.setState({ t, phoneOnDesk: false, phoneLit: true, flick: .5, phonePos: [.15, .9, .9], eyes: eyes * (.92 + .08 * Math.sin(t * 3)), ...doorState(t) });
+  await W3.setChar(null);
   return '';
 }
 
@@ -212,10 +262,61 @@ async function viewDoor(t, sh) {
     const pos = lerp3(lerp3([.72, 1.06, .95], [.86, 1.03, .62], pIn), [.6, 1.58, 1.95], pOut);
     const look = lerp3([1.04, 1.0, 0], [1.1, 1.66, -.3], pOut);
     W3.setCam(pos, look, lerp(38, 36, pOut));
+  } else if (sh.zoom === 'visitor') {
+    const p = ease(lt / d);
+    W3.setCam([.5 + .1 * p, 1.05 - .05 * p, 2.7 - .45 * p], [1.2, .78, -.2], 46);
   } else povCam(t, ease(lt / d));
   W3.setState({ t, phoneOnDesk: false, phoneLit: true, flick: .6, phonePos: [.5, .95, 1.5], ...doorState(t) });
   await W3.setChar(null);
   return '';
+}
+
+/* ------------------------------------------------ Video-Babyfon (Nachtsicht) */
+function nightVision(t, figure, clock, small = false) {
+  const fl = .9 + .1 * Math.abs(noise(t * 7));
+  const scan = Array.from({ length: 49 }, (_, i) => `<rect y="${i * 4}" width="260" height="1.4" fill="#000" opacity=".22"/>`).join('');
+  const fig = figure ? `<g transform="translate(-28 -50) scale(1.3)">
+    <path d="M86 186 L90 70 Q92 46 104 40 Q116 36 122 52 L120 70 L112 186 Z" fill="#020904"/>
+    <ellipse cx="128" cy="66" rx="13" ry="17" transform="rotate(38 128 66)" fill="#031006"/>
+    <path d="M110 60 Q132 78 142 104" stroke="#031006" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M142 104 l6 4 M141 105 l4 7 M139 105 l1 8" stroke="#2a6a3e" stroke-width="1.6" stroke-linecap="round"/>
+    <circle cx="131" cy="64" r="1.8" fill="#e6ffee"/><circle cx="125" cy="70" r="1.8" fill="#e6ffee"/></g>` : '';
+  return `<svg viewBox="0 0 260 195" width="100%" height="100%" style="display:block">
+    <rect width="260" height="195" fill="#0a1a0f"/>
+    <polygon points="0,140 260,128 260,195 0,195" fill="#0f2a17"/>
+    <rect x="18" y="26" width="46" height="52" fill="#123220"/><rect x="21" y="29" width="40" height="46" fill="#1d4a2c"/>
+    <rect x="120" y="96" width="122" height="62" rx="6" fill="#174027"/>
+    <rect x="232" y="70" width="12" height="90" rx="3" fill="#1d4c2e"/>
+    <ellipse cx="150" cy="108" rx="22" ry="8" fill="#3f8d58"/>
+    <circle cx="150" cy="101" r="11" fill="#a8ecbd"/>
+    <path d="M145 101 q2 2 4 0 M152 101 q2 2 4 0" stroke="#0a1a0f" stroke-width="1.2" fill="none"/>
+    <path d="M126 112 Q180 104 240 112 L240 150 L126 150 Z" fill="#2b6d40"/>
+    ${fig}
+    <rect width="260" height="195" fill="#7dffa4" opacity="${.05 * fl}"/>${scan}
+    ${small ? '' : `<circle cx="14" cy="13" r="3.4" fill="#ff3b30" opacity="${(t % 1.2) < .7 ? 1 : .2}"/>
+    <text x="22" y="16.5" font-family="JetBrains Mono" font-size="9" font-weight="700" fill="#d6ffe2">REC</text>
+    <text x="246" y="16.5" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#d6ffe2">0${clock}</text>
+    <text x="12" y="186" font-family="JetBrains Mono" font-size="8" fill="#d6ffe2" letter-spacing="1">CAM 1 · KINDERZIMMER</text>`}
+  </svg>`;
+}
+function handBox(x, y, w, h, device) {
+  return `<div class="arm" style="left:${x + w / 2 - 30}px;top:${y + h - 20}px;width:60px;height:${960 - y - h + 80}px;transform:rotate(-5deg)"></div>
+    <div class="fing" style="left:${x - 15}px;top:${y + h * .3}px;width:27px;height:54px"></div>
+    ${[.28, .38, .48].map(f => `<div class="fing" style="left:${x + w - 12}px;top:${y + h * f}px;width:27px;height:42px"></div>`).join('')}
+    ${device}`;
+}
+async function viewMonitor(t, sh) {
+  await bgPov(t);
+  let lvl = 0;
+  for (const [a, b] of TL.hums || []) if (t >= a && t < b) lvl = 3 + 2 * Math.abs(Math.sin(t * 5.3)) * Math.abs(Math.sin(t * 2.1));
+  const leds = [0, 1, 2, 3, 4].map(i => `<i style="background:${i < Math.round(lvl) ? (i > 2 ? '#ff6a3d' : '#5dff8f') : '#3b3d46'};box-shadow:${i < Math.round(lvl) ? '0 0 8px ' + (i > 2 ? '#ff6a3d' : '#5dff8f') : 'none'}"></i>`).join('');
+  const x = 120, y = 210, w = 300, h = 400;
+  return handBox(x, y, w, h, `<div class="ant" style="left:${x + w - 58}px;top:${y - 70}px"></div>
+    <div class="baby" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px">
+      <div class="scr">${nightVision(t, sh.figure, sh.clock)}</div>
+      <div class="leds">${leds}</div>
+      <div class="grill">${Array.from({ length: 21 }, () => '<b></b>').join('')}</div>
+    </div>`);
 }
 
 /* ------------------------------------------------ Handy-UI (HTML) */
@@ -262,12 +363,21 @@ function miniChat(o, x, p) {
     <div class="chat"><div class="hd" style="top:30px"><div class="av" style="width:30px;height:30px;font-size:13px;line-height:30px">${contact[0]}</div><div class="nm" style="font-size:9px">${contact} ›</div></div>
     <div class="list" style="padding-top:112px;padding-left:9px;padding-right:9px"><div class="bub them" style="font-size:11.5px;max-width:90%">${text}</div></div></div></div></div></div>`;
 }
+function miniCard(o, x, p, t) {
+  const inner = o.kind === 'monitor' ? `<div style="position:absolute;left:10px;right:10px;top:40px;height:135px;border-radius:8px;overflow:hidden">${nightVision(t, true, '3:35', true)}</div>`
+    : `<div style="position:absolute;left:14px;right:14px;top:60px;text-align:center;font:italic 800 17px/1.25 'Montserrat';color:#fff">${o.text}</div>`;
+  return `<div style="opacity:${clamp(p)};transform:translateY(${(1 - p) * 20}px)">
+    <div class="pill" style="left:${x + 100}px;top:228px;transform:translateX(-50%);background:${o.color};white-space:nowrap">${o.label}</div>
+    <div style="position:absolute;left:${x}px;top:272px;width:200px;height:${o.kind === 'monitor' ? 250 : 220}px;border-radius:22px;background:rgba(8,10,24,.82);border:2px solid ${o.color}">
+      ${o.icon ? `<div style="text-align:center;margin-top:14px;font-size:26px">${o.icon}</div>` : ''}${inner}
+      ${o.sub ? `<div style="position:absolute;bottom:14px;left:0;right:0;text-align:center;font:500 10px 'JetBrains Mono';letter-spacing:1.5px;color:#9aa0b8">${o.sub}</div>` : ''}</div></div>`;
+}
 async function viewChoice(t, sh) {
   await bgPov(t);
-  const lt = t - sh.start;
-  return `<div class="choice"><h1 style="opacity:${clamp(lt / .25)}">WEM GLAUBST DU?</h1>
-    ${miniChat(sh.left, 40, outBack((lt - .15) / .35))}
-    ${miniChat(sh.right, 300, outBack((lt - .45) / .35))}</div>`;
+  const lt = t - sh.start, card = (o, x, p) => o.contact ? miniChat(o, x, p) : miniCard(o, x, p, t);
+  return `<div class="choice"><h1 style="opacity:${clamp(lt / .25)}">${sh.heading || 'WEM GLAUBST DU?'}</h1>
+    ${card(sh.left, 40, outBack((lt - .15) / .35))}
+    ${card(sh.right, 300, outBack((lt - .45) / .35))}</div>`;
 }
 async function viewEnd(t, sh) {
   const lt = t - sh.start, a = (d) => `opacity:${clamp((lt - d) / .3)};transform:translateY(${(1 - ease((lt - d) / .3)) * 14}px)`;
@@ -279,15 +389,30 @@ async function viewEnd(t, sh) {
     <polygon points="80,10 150,10 150,138 80,138" fill="#181d45" stroke="#0b0f2c" stroke-width="4"/>
     <circle cx="92" cy="78" r="4" fill="#7a83b6"/><rect x="52" y="134" width="96" height="4" fill="#ffbe6a"/>
     ${[0, 1, 2, 3].map(i => `<path d="M80 ${44 + i * 5} q6 -1 11 1" stroke="#cfd3e6" stroke-width="2.2" stroke-linecap="round" fill="none"/>`).join('')}</svg>`;
-  return `<div class="end"><div style="margin-top:205px;${a(0)}">${door}</div>
+  const art = {
+    door,
+    window: `<svg viewBox="0 0 200 150" width="200" height="150" style="display:block;margin:0 auto">
+      <rect x="55" y="10" width="90" height="110" rx="4" fill="#0b0d1c"/><rect x="62" y="17" width="76" height="96" fill="#2e3460"/>
+      <circle cx="120" cy="34" r="9" fill="#dfe4ff" opacity=".85"/>
+      <path d="M70 113 Q72 88 88 84 L92 78 L108 78 L112 84 Q128 88 130 113 Z" fill="#05060a"/><ellipse cx="100" cy="66" rx="13" ry="16" fill="#05060a"/>
+      <circle cx="95" cy="64" r="1.6" fill="#fff"/><circle cx="105" cy="64" r="1.6" fill="#fff"/>
+      <rect x="98.5" y="17" width="3" height="96" fill="#0b0d1c"/><rect x="62" y="63" width="76" height="3" fill="#0b0d1c"/></svg>`,
+    underbed: `<svg viewBox="0 0 200 150" width="200" height="150" style="display:block;margin:0 auto">
+      <rect x="20" y="60" width="160" height="34" rx="6" fill="#2b3168"/><rect x="25" y="40" width="150" height="26" rx="10" fill="#3d4590"/>
+      <rect x="28" y="94" width="144" height="30" fill="#030306"/><rect x="24" y="94" width="8" height="34" fill="#1b1d2e"/><rect x="168" y="94" width="8" height="34" fill="#1b1d2e"/>
+      <circle cx="94" cy="108" r="2.4" fill="#f4f6ff"/><circle cx="106" cy="108" r="2.4" fill="#f4f6ff"/>
+      <path d="M60 124 q6 -5 14 -3 M62 126 q7 -4 16 -2 M64 128 q7 -3 15 -1" stroke="#6f7387" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>`,
+    monitor: `<div style="width:170px;margin:0 auto;background:#c9cad3;border-radius:16px;padding:10px"><div style="border-radius:6px;overflow:hidden;height:110px">${nightVision(t, true, '3:35', true)}</div></div>`,
+  }[TL.endArt || 'door'];
+  return `<div class="end"><div style="margin-top:205px;${a(0)}">${art}</div>
     <div class="s" style="${a(.1)}">${TL.title}</div><div class="p" style="${a(.2)}">TEIL ${TL.part + 1}</div>
     <div class="h" style="${a(.35)}">HEUTE NACHT</div><div style="${a(.5)}"><span class="f">FOLGE FÜR TEIL ${TL.part + 1}</span></div>
     <div class="q" style="${a(.7)}">${TL.question}</div></div>`;
 }
 
-const VIEWS = { room: viewRoom, face: viewFace, door: viewDoor, lock: viewLock, chat: viewChat, choice: viewChoice, end: viewEnd };
-const GLSTYLE = { room: '', face: '', door: '', lock: 'blur(9px) brightness(.7)', chat: 'blur(9px) brightness(.7)', choice: 'blur(10px) brightness(.55)', end: 'none' };
-const ZOOM = { lock: [1.0, 1.03], chat: [1.0, 1.03], choice: [1.0, 1.02] };
+const VIEWS = { room: viewRoom, face: viewFace, door: viewDoor, lock: viewLock, chat: viewChat, choice: viewChoice, end: viewEnd, window: viewWindow, underbed: viewUnderbed, monitor: viewMonitor };
+const GLSTYLE = { room: '', face: '', door: '', window: '', underbed: '', monitor: 'blur(9px) brightness(.6)', lock: 'blur(9px) brightness(.7)', chat: 'blur(9px) brightness(.7)', choice: 'blur(10px) brightness(.55)', end: 'none' };
+const ZOOM = { lock: [1.0, 1.03], chat: [1.0, 1.03], choice: [1.0, 1.02], monitor: [1.0, 1.04] };
 
 /* ------------------------------------------------ Kreatur + Finger (2D-Texturen für den Flur) */
 const CREATURE = `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="2300" viewBox="0 0 450 1150">${DEFS}
@@ -356,6 +481,39 @@ const KNUCKLES = `<svg xmlns="http://www.w3.org/2000/svg" width="128" height="35
   ${[24, 49, 76, 103].map(y => `<rect x="-4" y="${y - 10}" width="58" height="20" rx="10" fill="url(#kk)"/><rect x="-4" y="${y - 10}" width="58" height="20" rx="10" fill="url(#kv)"/>`).join('')}
 </svg>`;
 
+const WINFIG = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="430" viewBox="0 0 80 86">
+  <defs><radialGradient id="eg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+  <path d="M10 86 Q12 62 30 58 Q36 56 38 52 L46 52 Q48 56 54 58 Q70 62 72 86 Z" fill="#05060a"/>
+  <ellipse cx="42" cy="38" rx="12.5" ry="16.5" fill="#05060a"/>
+  <rect x="38" y="50" width="8" height="6" fill="#05060a"/>
+  <circle cx="37.5" cy="36" r="3" fill="url(#eg)"/><circle cx="46.5" cy="36" r="3" fill="url(#eg)"/>
+  <circle cx="37.5" cy="36" r=".9" fill="#fff"/><circle cx="46.5" cy="36" r=".9" fill="#fff"/>
+</svg>`;
+const WINFINGERS = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 30 30">
+  ${[[8, 22, 15], [12, 24, 9], [16, 24, 10], [20, 22, 15]].map(([x, b, top]) => `<path d="M${x} 30 L${x} ${b} Q${x - .6} ${(b + top) / 2} ${x} ${top}" stroke="#8d91a6" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+    <path d="M${x - .8} ${(b + top) / 2 + 2} h1.6 M${x - .8} ${(b + top) / 2 - 2} h1.6" stroke="#4d5064" stroke-width=".35"/>
+    <ellipse cx="${x}" cy="${top + .6}" rx=".9" ry="1.1" fill="#3a3626"/>`).join('')}
+</svg>`;
+const UNDER = `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="260" viewBox="0 0 120 34.6">
+  <defs><radialGradient id="ue" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#e8ecff" stop-opacity=".7"/><stop offset="1" stop-color="#e8ecff" stop-opacity="0"/></radialGradient></defs>
+  <ellipse cx="57" cy="15" rx="4.5" ry="3.2" fill="url(#ue)"/><ellipse cx="66" cy="15" rx="4.5" ry="3.2" fill="url(#ue)"/>
+  <ellipse cx="57" cy="15" rx="1.5" ry="1.1" fill="#f4f6ff"/><ellipse cx="66" cy="15" rx="1.5" ry="1.1" fill="#f4f6ff"/>
+  <circle cx="57.3" cy="15" r=".5" fill="#000"/><circle cx="66.3" cy="15" r=".5" fill="#000"/>
+  ${[[40, 26.5, 25], [43, 27.2, 26], [46, 27.6, 26.6], [49, 27.2, 26]].map(([x, y, y2], i) => `<path d="M${x - 12} ${y} Q${x - 4} ${y - 2.6} ${x + 5} ${y2}" stroke="#9a9eb2" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <circle cx="${x + 4}" cy="${y2}" r=".55" fill="#2e2c22"/>`).join('')}
+</svg>`;
+const KID = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="1200" viewBox="0 0 60 120">${DEFS}
+  <ellipse cx="30" cy="118" rx="14" ry="1.6" fill="#000" opacity=".5"/>
+  <path d="M25 92 L24 116 M35 92 L36 116" stroke="${SKIN}" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M20 52 Q30 47 40 52 L41 94 L19 94 Z" fill="#5b79b8"/>
+  ${[[24, 62], [33, 58], [28, 74], [36, 80], [23, 86]].map(([x, y]) => `<path d="M${x} ${y - 1.6} l.5 1.1 1.2.1 -.9.8 .3 1.2 -1.1-.6 -1.1.6 .3-1.2 -.9-.8 1.2-.1Z" fill="#dfe6ff"/>`).join('')}
+  <path d="M20 55 Q14 66 17 78 M40 55 Q45 64 38 72" stroke="${SKIN}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  <g transform="translate(32 70)"><circle cx="0" cy="0" r="6" fill="#7a5638"/><circle cx="-4.2" cy="-5" r="2.2" fill="#7a5638"/><circle cx="4.2" cy="-5" r="2.2" fill="#7a5638"/>
+    <circle cx="0" cy="9" r="7" fill="#6b4a30"/><circle cx="-2" cy="-1" r=".8" fill="#1a120b"/><circle cx="2" cy="-1" r=".8" fill="#1a120b"/><ellipse cx="0" cy="1.8" rx="1.8" ry="1.3" fill="#a88466"/></g>
+  ${head([30, 36], 12, { eyes: 'open', mouth: '' })}
+  <path d="M19 30 Q22 21 30 23 Q38 21 41 30 Q36 25 30 27 Q24 25 19 30 Z" fill="#6a4a30"/>
+</svg>`;
+
 window.setup = async (tl, dpr) => {
   TL = tl;
   for (let i = 0; i < 6; i++) {
@@ -364,7 +522,8 @@ window.setup = async (tl, dpr) => {
     for (let p = 0; p < d.data.length; p += 4) { const v = Math.random() * 255; d.data[p] = d.data[p + 1] = d.data[p + 2] = v; d.data[p + 3] = 255; }
     g.putImageData(d, 0, 0); GRAIN.push(c.toDataURL());
   }
-  await W3.init($('gl'), dpr, CREATURE, FINGERS, KNUCKLES);
+  await W3.init($('gl'), dpr, { creature: CREATURE, fingers: FINGERS, knuckles: KNUCKLES, winFig: WINFIG, winFingers: WINFINGERS, under: UNDER, kid: KID },
+    { visitor: TL.visitor || 'creature', bedLegs: !!TL.bedLegs, item: TL.item || 'phone', openMax: TL.openMax || .4 });
 };
 
 /* ------------------------------------------------ Frame */
@@ -386,10 +545,12 @@ window.renderFrame = async (t) => {
   let ov = '';
   if (t < 3.0) {
     ov += `<div class="title" style="opacity:${clamp((3.0 - t) / .25)}"><div class="k">${TL.series} · ${TL.episode}</div><div class="t">${TL.title}<br>TEIL ${TL.part}</div></div>`;
-  } else if (sh.place && ['room', 'face', 'door'].includes(sh.scene)) {
+  } else if (sh.place && ['room', 'face', 'door', 'window', 'underbed'].includes(sh.scene)) {
     const blink = (t % 1.2) < .7 ? 1 : .25;
     ov += `<div class="badge"><div class="tm"><i style="opacity:${blink}"></i>${sh.clock}<small>UHR</small></div><div class="pl">TEIL ${TL.part} · ${sh.place}</div></div>`;
   }
+  const q = (TL.quotes || []).find(q => t >= q.start && t < q.end);
+  if (q) ov += `<div class="quote" style="opacity:${clamp((t - q.start) / .2)}"><div class="w">— ${q.who} · ${q.place} —</div><div class="tx">„${q.text}“</div></div>`;
   const g = TL.groups.find(g => t >= g.start && t < g.end);
   if (g) {
     const top = sh.scene === 'choice' ? 720 : 568;

@@ -1,7 +1,8 @@
 // 3D-Hintergrund (Three.js): Schlafzimmer, Tür, Flur. Figuren bleiben 2D (SVG-Textur auf Ebenen).
 const W3 = (() => {
   let renderer, scene, cam, charMesh, charCtx, charTex, deskPhone, deskScreen, phoneLight, doorPivot, doorMesh,
-      handlePivot, spill, warmLight, creature, fingers, fingersMat, creatureTex, knuckMat;
+      handlePivot, spill, warmLight, creature, fingers, fingersMat, creatureTex, knuckMat,
+      baby, babyScreen, winFig, winFingers, under, OPTS = {};
   const TEX = 2048;
 
   function rrect(w, h, r) {
@@ -29,7 +30,16 @@ const W3 = (() => {
     await img.decode(); ctx.clearRect(0, 0, size, size); ctx.drawImage(img, 0, 0, size, size);
   }
 
-  async function init(canvas, dpr, creatureSvg, fingersSvg, knucklesSvg) {
+  async function svgTex(svg, w, h) {
+    const c = document.createElement('canvas'); c.width = w; c.height = h; const g = c.getContext('2d');
+    const img = new Image(); img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg); await img.decode(); g.drawImage(img, 0, 0, w, h);
+    const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return t;
+  }
+  const texPlane = (tex, w, h, color, o = {}) => { const m = basic(color, { map: tex, transparent: true, depthWrite: false, ...o }); m.toneMapped = false; return new THREE.Mesh(new THREE.PlaneGeometry(w, h), m); };
+
+  async function init(canvas, dpr, A, opts = {}) {
+    OPTS = opts;
+    const creatureSvg = A.creature, fingersSvg = A.fingers, knucklesSvg = A.knuckles;
     THREE.ColorManagement.legacyMode = false;
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
     renderer.setPixelRatio(dpr); renderer.setSize(540, 960, false);
@@ -74,7 +84,11 @@ const W3 = (() => {
     put(rbox(.24, 1.35, .07, .03, std('#383d5a')), -.43, 1.62, .1);
 
     // Bett
-    put(rbox(1.38, .3, 2.0, .04, std('#21243a')), .15, .17, 1.05);
+    if (opts.bedLegs) {          // Bett mit Beinen: darunter ist Platz (und Dunkelheit)
+      put(rbox(1.38, .14, 2.0, .03, std('#21243a')), .15, .29, 1.05);
+      for (const [x, z] of [[-.5, .12], [.8, .12], [-.5, 1.98], [.8, 1.98]]) put(rbox(.06, .22, .06, .01, std('#1b1d2e')), x, .11, z);
+      const dark = put(new THREE.Mesh(new THREE.BoxGeometry(1.26, .21, 1.9), basic('#030306')), .15, .105, 1.03, scene, false);
+    } else put(rbox(1.38, .3, 2.0, .04, std('#21243a')), .15, .17, 1.05);
     put(rbox(1.3, .2, 1.95, .06, std('#c7cad7')), .15, .42, 1.05);
     put(rbox(1.5, 1.05, .1, .05, std('#31354e')), .15, .56, .06);
     const pillow = put(new THREE.Mesh(new THREE.SphereGeometry(1, 32, 16), std('#c1c5d6')), .15, .62, .3); pillow.scale.set(.47, .1, .2);
@@ -91,6 +105,12 @@ const W3 = (() => {
     deskPhone = put(rbox(.078, .012, .155, .004, std('#07080b', { r: .3 })), -.7, .566, .24);
     deskScreen = new THREE.Mesh(new THREE.PlaneGeometry(.068, .145), basic('#d7e6ff', { transparent: true, opacity: 0 }));
     deskScreen.rotation.x = -Math.PI / 2; deskScreen.position.y = .0065; deskPhone.add(deskScreen);
+    // Video-Babyfon (steht auf dem Nachttisch)
+    baby = new THREE.Group(); baby.position.set(-.7, .56, .24); baby.rotation.set(-.18, .35, 0); scene.add(baby);
+    put(rbox(.1, .13, .035, .012, std('#c9cad3', { r: .5 })), 0, .07, 0, baby);
+    put(new THREE.Mesh(new THREE.CylinderGeometry(.006, .006, .09, 8), std('#c9cad3')), .04, .17, -.005, baby);
+    babyScreen = put(new THREE.Mesh(new THREE.PlaneGeometry(.08, .06), basic('#0c1a10')), 0, .095, .0185, baby, false);
+    baby.visible = opts.item === 'baby'; if (opts.item === 'baby') deskPhone.visible = false;
 
     // Tür (Scharnier rechts, öffnet ins Zimmer) + Rahmen
     const trim = std('#191b2b');
@@ -127,7 +147,9 @@ const W3 = (() => {
     const cc = document.createElement('canvas'); cc.width = 900; cc.height = 2300; const cg = cc.getContext('2d');
     const img = new Image(); img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(creatureSvg); await img.decode(); cg.drawImage(img, 0, 0, 900, 2300);
     creatureTex = new THREE.CanvasTexture(cc); creatureTex.encoding = THREE.sRGBEncoding;
-    creature = put(new THREE.Mesh(new THREE.PlaneGeometry(.9, 2.3), basic('#2c2d36', { map: creatureTex, transparent: true, alphaTest: .02 })), 1.21, 1.15, -.38, scene, false);
+    if (opts.visitor === 'kid') {
+      creature = put(new THREE.Mesh(new THREE.PlaneGeometry(.6, 1.2), basic('#6c6d7a', { map: await svgTex(A.kid, 600, 1200), transparent: true, alphaTest: .02 })), 1.2, .6, -.28, scene, false);
+    } else creature = put(new THREE.Mesh(new THREE.PlaneGeometry(.9, 2.3), basic('#2c2d36', { map: creatureTex, transparent: true, alphaTest: .02 })), 1.21, 1.15, -.38, scene, false);
     creature.material.toneMapped = false;
     const fc = document.createElement('canvas'); fc.width = 512; fc.height = 512; const fg = fc.getContext('2d');
     const fimg = new Image(); fimg.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(fingersSvg); await fimg.decode(); fg.drawImage(fimg, 0, 0, 512, 512);
@@ -140,6 +162,12 @@ const W3 = (() => {
     const kt = new THREE.CanvasTexture(kc); kt.encoding = THREE.sRGBEncoding;
     knuckMat = basic('#2a2b34', { map: kt, transparent: true, opacity: 0, depthWrite: false }); knuckMat.toneMapped = false;
     const knuck = new THREE.Mesh(new THREE.PlaneGeometry(.068, .145), knuckMat); knuck.rotation.y = -Math.PI / 2; knuck.position.set(-.8425, 1.66, .008); doorPivot.add(knuck);
+
+    // Gestalt am Fenster (auf der Scheibe) + Finger, die an das Glas klopfen
+    winFig = put(texPlane(await svgTex(A.winFig, 400, 430), .8, .86, '#ffffff', { opacity: 0 }), -.95, 1.68, .0635, scene, false);
+    winFingers = put(texPlane(await svgTex(A.winFingers, 300, 300), .3, .3, '#ffffff', { opacity: 0 }), -1.08, 1.52, .065, scene, false);
+    // Unter dem Bett: Augen und Finger in der Dunkelheit
+    under = put(texPlane(await svgTex(A.under, 900, 260), 1.2, .346, '#ffffff', { opacity: 0 }), .15, .115, 1.99, scene, false);
 
     // 2D-Figur als Ebene
     const ch = document.createElement('canvas'); ch.width = TEX; ch.height = TEX; charCtx = ch.getContext('2d');
@@ -163,7 +191,14 @@ const W3 = (() => {
 
   function setState(s) {
     // s: {phoneLit, phoneVib, phoneOnDesk, phonePos, handle, open, knock, t}
-    deskPhone.visible = s.phoneOnDesk;
+    const item = OPTS.item === 'baby' ? baby : deskPhone;
+    item.visible = !!s.phoneOnDesk; (item === baby ? deskPhone : baby).visible = false;
+    baby.position.x = -.7 + (s.phoneVib && item === baby ? Math.sin(s.t * 260) * .003 : 0);
+    babyScreen.material.color.set(s.phoneLit ? '#7dffa4' : '#0c1a10');
+    phoneLight.color.set(OPTS.item === 'baby' ? '#a8ffc4' : '#bcd3ff');
+    winFig.material.opacity = s.winFig || 0; winFingers.material.opacity = s.winFig || 0;
+    winFingers.position.z = .065 + (s.tap || 0) * .012; winFingers.position.y = 1.52 + (s.tap || 0) * .006;
+    under.material.opacity = s.eyes || 0;
     deskPhone.position.x = -.7 + (s.phoneVib ? Math.sin(s.t * 260) * .004 : 0);
     deskScreen.material.opacity = s.phoneLit ? .95 : 0;
     phoneLight.intensity = s.phoneLit ? 1.6 * (s.flick || 1) : 0;
@@ -171,10 +206,10 @@ const W3 = (() => {
     handlePivot.rotation.z = -(s.handle || 0);
     doorPivot.rotation.y = s.open || 0;
     doorPivot.position.x = 1.795 + (s.knock || 0) * .006;
-    const o = clamp((s.open || 0) / .4);
+    const o = clamp((s.open || 0) / (OPTS.openMax || .4));
     spill.material.opacity = .2 + .12 * o; spill.scale.set(1 + o * .3, 1, 1 + o * .6);
     warmLight.intensity = .12 + .25 * o;
-    fingersMat.opacity = clamp(((s.open || 0) - .22) / .12); knuckMat.opacity = fingersMat.opacity;
+    fingersMat.opacity = OPTS.visitor === 'kid' ? 0 : clamp(((s.open || 0) - .22) / .12); knuckMat.opacity = fingersMat.opacity;
   }
 
   function render() { renderer.render(scene, cam); }

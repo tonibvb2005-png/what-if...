@@ -88,6 +88,33 @@ def sfx(name):
         saw = (ph / (2 * np.pi)) % 1.0 * 2 - 1
         am = np.clip(np.sin(np.pi * t / 1.8), 0, 1) ** 1.5
         return saw * am * 0.07
+    if name == "tap":      # Fingernagel/Knöchel an Glas
+        n = int(0.12 * SR); t = np.arange(n) / SR
+        return (np.sin(2 * np.pi * 2100 * t) * .5 + np.sin(2 * np.pi * 3400 * t) * .3
+                + rng.standard_normal(n) * .4 * np.exp(-90 * t)) * env(n, .001, 45) * .5
+    if name == "static":   # Babyfon-Rauschen mit Knacken
+        n = int(1.4 * SR); t = np.arange(n) / SR
+        noise = rng.standard_normal(n)
+        noise = noise - np.convolve(noise, np.ones(6) / 6, "same")
+        gate = (rng.random(n // 400 + 1) > .25).repeat(400)[:n]
+        return noise * gate * np.minimum(1, t / .05) * np.minimum(1, (1.4 - t) / .3) * .12
+    if name == "hum":      # gesummtes Schlaflied, dumpf wie aus dem Babyfon
+        notes = [330, 392, 440, 392, 330, 294, 330, 262]
+        out = []
+        for f in notes:
+            n = int(.55 * SR); t = np.arange(n) / SR
+            vib = 1 + .006 * np.sin(2 * np.pi * 5.5 * t)
+            ph = 2 * np.pi * np.cumsum(f * vib) / SR
+            tone = np.sin(ph) * .6 + np.sin(2 * ph) * .25 + np.sin(3 * ph) * .1
+            out.append(tone * np.sin(np.pi * np.clip(t / .55, 0, 1)) ** .6)
+        s_ = np.concatenate(out)
+        s_ += rng.standard_normal(len(s_)) * .05
+        return s_ * .14
+    if name == "breath":   # langsames Atmen
+        n = int(3.6 * SR); t = np.arange(n) / SR
+        noise = np.convolve(rng.standard_normal(n), np.ones(30) / 30, "same")
+        envb = np.sin(np.pi * ((t % 1.8) / 1.8)) ** 3
+        return noise * envb * 2.2
     raise ValueError(name)
 
 
@@ -133,7 +160,8 @@ def resolve(spec, line):
     if spec.startswith("end"):
         return line["end"] + float(spec[3:] or 0)
     if spec.startswith("word"):
-        return line["wordTimes"][int(spec[4:])]
+        w, _, off = spec[4:].partition("+")
+        return line["wordTimes"][int(w)] + float(off or 0)
     raise ValueError(spec)
 
 
@@ -156,6 +184,7 @@ def main():
     t = LEAD_IN
     shots, words, groups, msgs, typing, knocks, handle, voice, sfx_ev = [], [], [], [], [], [], [], [], []
     reveal = []
+    taps, hums, quotes, eyes = [], [], [], None
     li = 0
     for si, shot in enumerate(story["shots"]):
         if si:
@@ -199,6 +228,15 @@ def main():
                 sfx_ev.append((resolve(spec, L), name_))
             for spec in line.get("knocks", []):
                 knocks.append(resolve(spec, L))
+            for spec in line.get("taps", []):
+                taps.append(resolve(spec, L))
+            if line.get("hum"):
+                hums.append([L["start"], L["end"] + line.get("pause", 0) + 2.5])
+            if line.get("quote"):
+                q = line["quote"]
+                quotes.append({"start": L["start"], "end": L["end"] + line.get("pause", 0) + .2, **q})
+            if line.get("eyes"):
+                eyes = L["start"]
             if line.get("reveal"):
                 reveal = [L["start"], L["end"] + line.get("pause", 0)]
             if line.get("handle"):
@@ -227,7 +265,9 @@ def main():
     tl = {"fps": args.fps, "duration": duration, "series": story["series"], "episode": story["episode"],
           "title": story["title"], "part": story["part"], "question": story.get("question", ""), "shots": shots, "words": words,
           "groups": [{"start": g["start"], "end": g["end"], "words": g["words"]} for g in groups],
-          "msgs": msgs, "typing": typing, "knocks": knocks, "handle": handle, "reveal": reveal}
+          "msgs": msgs, "typing": typing, "knocks": knocks, "handle": handle, "reveal": reveal,
+          "taps": taps, "hums": hums, "quotes": quotes, "eyes": eyes,
+          **{k: story[k] for k in ("item", "visitor", "endArt", "bedLegs", "openMax") if k in story}}
     tl_path = os.path.join(outdir, name + ".timeline.json")
     json.dump(tl, open(tl_path, "w"), ensure_ascii=False, indent=1)
 

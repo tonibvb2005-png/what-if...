@@ -1,0 +1,57 @@
+{
+  "series": "GESCHICHTEN UM 3:33",
+  "episode": "#02",
+  "title": "VIERTER STOCK",
+  "part": 1,
+  "bedLegs": true,
+  "endArt": "underbed",
+  "question": "RENNEN oder LIEGEN BLEIBEN? Schreib's in die Kommentare.",
+  "shots": [
+    {"scene": "room", "mode": "wake", "triggerLine": 2, "clock": "3:33", "place": "DEIN ZIMMER", "lines": [
+      {"text": "Stell dir vor, du wohnst im vierten Stock.", "hl": {"vierten": "y", "Stock": "y"}},
+      {"text": "Dein Fenster ist gekippt.", "hl": {"gekippt": "y"}},
+      {"text": "Um 3:33 klopft es. Aber nicht an der Tür.", "say": "Um drei Uhr dreiunddreißig klopft es. Aber nicht an der Tür.", "hl": {"klopft": "r", "Tür": "y"},
+       "taps": ["word2", "word2+0.28", "word2+0.56"], "sfx": [["tap", "word2"], ["tap", "word2+0.28"], ["tap", "word2+0.56"]], "pause": 0.4}
+    ]},
+    {"scene": "window", "figure": true, "clock": "3:33", "place": "DEIN FENSTER", "sfx": [["boom", 0.0]], "lines": [
+      {"text": "Es klopft an deinem Fenster.", "hl": {"Fenster": "r"}, "taps": ["word1", "word1+0.28", "word1+0.56"], "sfx": [["tap", "word1"], ["tap", "word1+0.28"], ["tap", "word1+0.56"]]},
+      {"text": "Von außen.", "hl": {"außen": "r"}, "pause": 0.7, "taps": ["end+0.2", "end+0.48"], "sfx": [["tap", "end+0.2"], ["tap", "end+0.48"]]}
+    ]},
+    {"scene": "lock", "clock": "3:33", "notif": {"from": "Lena", "text": "Bist du wach? Mach kein Licht an."}, "lines": [
+      {"text": "Eine Nachricht von Lena.", "hl": {"Lena": "y"}, "sfx": [["ping", 0.0]]}
+    ]},
+    {"scene": "chat", "clock": "3:33", "contact": "Lena", "lines": [
+      {"text": "Mach kein Licht an.", "msg": {"from": "them", "text": "Bist du wach? Mach kein Licht an."}, "hl": {"Licht": "y"}},
+      {"text": "Du schreibst: Warum?", "msg": {"from": "me", "text": "Warum?", "atWord": 2}},
+      {"text": "Da hängt jemand an eurer Hauswand.", "msg": {"from": "them", "text": "Da hängt jemand an eurer Hauswand. Direkt vor deinem Fenster.", "typing": 1.0}, "hl": {"Hauswand": "r"}, "pause": 0.4}
+    ]},
+    {"scene": "face", "clock": "3:33", "place": "DEIN ZIMMER", "lookDir": -1, "lines": [
+      {"text": "Lena wohnt im Haus gegenüber.", "hl": {"gegenüber": "y"}},
+      {"text": "Sie sieht genau auf dein Fenster.", "hl": {"Fenster": "r"}, "pause": 0.4}
+    ]},
+    {"scene": "window", "figure": false, "phoneLit": true, "clock": "3:34", "place": "DEIN FENSTER", "lines": [
+      {"text": "Dann hört das Klopfen auf.", "hl": {"auf": "y"}},
+      {"text": "Es ist still.", "pause": 0.8}
+    ]},
+    {"scene": "chat", "clock": "3:34", "contact": "Lena", "lines": [
+      {"text": "Lena schreibt: Er ist weg.", "msg": {"from": "them", "text": "Er ist weg.", "atWord": 2}, "hl": {"weg": "y"}},
+      {"text": "Du schreibst: Wohin?", "msg": {"from": "me", "text": "Wohin??", "atWord": 2}},
+      {"text": "Ich hab kurz nicht hingesehen. Dein Fenster ist jetzt offen.", "msg": {"from": "them", "text": "Ich hab kurz nicht hingesehen. Dein Fenster ist jetzt offen.", "typing": 1.0}, "hl": {"offen": "r"}, "pause": 0.5}
+    ]},
+    {"scene": "underbed", "clock": "3:34", "place": "UNTER DEINEM BETT", "lines": [
+      {"text": "Dann hörst du es.", "hl": {"hörst": "y"}},
+      {"text": "Direkt unter deinem Bett.", "hl": {"Bett": "r"}},
+      {"text": "Atmen.", "hl": {"Atmen": "r"}, "eyes": true, "sfx": [["breath", 0.0], ["boom", 0.6]], "pause": 2.0}
+    ]},
+    {"scene": "choice", "heading": "WAS MACHST DU?",
+     "left": {"label": "RENNEN", "text": "Aufspringen und zur Tür rennen.", "icon": "🏃", "color": "#2f7cf6"},
+     "right": {"label": "LIEGEN BLEIBEN", "text": "Still liegen und nicht atmen.", "icon": "🛏️", "color": "#ff3b30"},
+     "lines": [
+      {"text": "Was machst du?", "hl": {"machst": "y"}},
+      {"text": "Rennen oder still liegen bleiben?", "hl": {"Rennen": "b", "liegen": "r"}, "pause": 0.5}
+    ]},
+    {"scene": "end", "sfx": [["boom", 0.0]], "lines": [
+      {"text": "Teil 2. Heute Nacht.", "say": "Teil zwei. Heute Nacht.", "nocap": true, "pause": 1.2}
+    ]}
+  ]
+}
