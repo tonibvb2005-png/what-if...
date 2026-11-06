@@ -1,0 +1,50 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../engine/fonts/fonts.css">
+<style>*{margin:0;padding:0}body{background:#000}.pb{width:1080px;height:1080px;position:relative;overflow:hidden}</style></head><body>
+<!-- Variante A: Figur schaut aus dem Dunkeln, darüber 3:33 -->
+<div class="pb" id="A"><svg width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="55%" r="65%"><stop offset="0" stop-color="#2b3160"/><stop offset=".6" stop-color="#171b38"/><stop offset="1" stop-color="#0a0c1c"/></radialGradient>
+    <radialGradient id="head" cx="40%" cy="30%" r="75%"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#e3e9ff"/><stop offset="1" stop-color="#97a6dd"/></radialGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#a9c8ff" stop-opacity=".45"/><stop offset="1" stop-color="#a9c8ff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="vig" cx="50%" cy="50%" r="50%"><stop offset=".6" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".65"/></radialGradient>
+    <filter id="ys"><feGaussianBlur stdDeviation="14"/></filter>
+  </defs>
+  <rect width="1080" height="1080" fill="url(#bg)"/>
+  <!-- Türspalt im Hintergrund mit Augen -->
+  <rect x="800" y="440" width="64" height="520" fill="#05060c"/>
+  <circle cx="823" cy="560" r="7" fill="#f4f6ff"/><circle cx="848" cy="560" r="7" fill="#f4f6ff"/>
+  <!-- Figur: Kopf + weinrotes Shirt -->
+  <ellipse cx="540" cy="1020" rx="420" ry="190" fill="url(#glow)"/>
+  <path d="M290 1080 Q300 900 420 870 Q540 845 660 870 Q780 900 790 1080 Z" fill="#7c3347"/>
+  <path d="M470 868 Q540 905 610 868" stroke="#94405a" stroke-width="16" fill="none" stroke-linecap="round"/>
+  <circle cx="540" cy="700" r="200" fill="url(#head)"/>
+  <circle cx="470" cy="690" r="19" fill="#11142a"/><circle cx="610" cy="690" r="19" fill="#11142a"/>
+  <circle cx="478" cy="682" r="6" fill="#9fd8ff"/><circle cx="618" cy="682" r="6" fill="#9fd8ff"/>
+  <ellipse cx="540" cy="770" rx="14" ry="11" fill="#11142a"/>
+  <!-- 3:33 -->
+  <text x="540" y="345" text-anchor="middle" font-family="JetBrains Mono" font-weight="700" font-size="250" fill="#ffc21f" filter="url(#ys)" opacity=".5">3:33</text>
+  <text x="540" y="345" text-anchor="middle" font-family="JetBrains Mono" font-weight="700" font-size="250" fill="#ffc21f">3:33</text>
+  <circle cx="215" cy="200" r="24" fill="#ff3b30"/>
+  <rect width="1080" height="1080" fill="url(#vig)"/>
+</svg></div>
+<!-- Variante B: nur Uhrzeit, darunter das Grinsen aus dem Dunkeln -->
+<div class="pb" id="B"><svg width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <radialGradient id="bg2" cx="50%" cy="45%" r="65%"><stop offset="0" stop-color="#232a52"/><stop offset=".65" stop-color="#11142b"/><stop offset="1" stop-color="#06070f"/></radialGradient>
+    <filter id="fb" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="22"/></filter><filter id="ys2"><feGaussianBlur stdDeviation="16"/></filter>
+    <linearGradient id="lowF" x1="0" y1="0" x2="0" y2="1"><stop offset=".35" stop-color="#aeb2c3" stop-opacity="0"/><stop offset=".75" stop-color="#aeb2c3" stop-opacity=".9"/></linearGradient>
+    <clipPath id="hc"><ellipse cx="540" cy="760" rx="150" ry="185"/></clipPath>
+    <clipPath id="mc"><path d="M430 815 Q540 905 650 815 Q540 855 430 815 Z"/></clipPath>
+  </defs>
+  <rect width="1080" height="1080" fill="url(#bg2)"/>
+  <!-- Kapuze -->
+  <ellipse cx="540" cy="760" rx="215" ry="245" fill="#191b23"/>
+  <path d="M250 1080 Q280 940 400 930 L680 930 Q800 940 830 1080 Z" fill="#191b23"/>
+  <ellipse cx="540" cy="760" rx="150" ry="185" fill="#040406"/>
+  <g clip-path="url(#hc)"><ellipse cx="540" cy="840" rx="110" ry="150" fill="url(#lowF)" opacity=".9" filter="url(#fb)"/>
+    <path d="M430 815 Q540 905 650 815 Q540 855 430 815 Z" fill="#05050a"/><g clip-path="url(#mc)"><rect x="633.3" y="817.3" width="7.0" height="6.7" rx="1.5" fill="#e2dfd2"/><rect x="613.9" y="822.9" width="7.0" height="12.3" rx="1.5" fill="#e2dfd2"/><rect x="594.6" y="827.2" width="7.0" height="16.6" rx="1.5" fill="#e2dfd2"/><rect x="575.2" y="830.3" width="7.0" height="19.7" rx="1.5" fill="#e2dfd2"/><rect x="555.8" y="832.2" width="7.0" height="21.6" rx="1.5" fill="#e2dfd2"/><rect x="536.5" y="832.8" width="7.0" height="22.2" rx="1.5" fill="#e2dfd2"/><rect x="517.1" y="832.2" width="7.0" height="21.6" rx="1.5" fill="#e2dfd2"/><rect x="497.8" y="830.3" width="7.0" height="19.7" rx="1.5" fill="#e2dfd2"/><rect x="478.4" y="827.2" width="7.0" height="16.6" rx="1.5" fill="#e2dfd2"/><rect x="459.0" y="822.9" width="7.0" height="12.3" rx="1.5" fill="#e2dfd2"/><rect x="439.7" y="817.3" width="7.0" height="6.7" rx="1.5" fill="#e2dfd2"/></g></g>
+  <text x="540" y="430" text-anchor="middle" font-family="JetBrains Mono" font-weight="700" font-size="270" fill="#ffc21f" filter="url(#ys2)" opacity=".5">3:33</text>
+  <text x="540" y="430" text-anchor="middle" font-family="JetBrains Mono" font-weight="700" font-size="270" fill="#ffc21f">3:33</text>
+  <circle cx="205" cy="270" r="26" fill="#ff3b30"/>
+</svg></div>
+</body></html>
