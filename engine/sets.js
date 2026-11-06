@@ -290,12 +290,14 @@ Object.assign(SET_ASSETS, { creatureCellar: CREATURE.replace(/<rect x="0" y="290
 /* ======================================================================= AUFZUG */
 function person(x, st) {                 // stehende Person, Welt-Koordinaten, Kleidung frei wählbar
   const s = [], shirt = st.shirt || SHIRT;
-  s.push(`<path d="M${x - .06} -.9 L${x - .065} -.02 M${x + .06} -.9 L${x + .065} -.02" stroke="${st.pants || '#2a2c35'}" stroke-width=".05" stroke-linecap="round"/>`);
-  s.push(`<path d="M${x - .085} -.02 h.05 M${x + .035} -.02 h.05" stroke="#111" stroke-width=".035" stroke-linecap="round"/>`);
+  const ws = st.walk != null ? Math.sin(st.walk) : 0, lift = st.walk != null ? Math.max(0, Math.cos(st.walk)) * .04 : 0, lift2 = st.walk != null ? Math.max(0, -Math.cos(st.walk)) * .04 : 0;
+  const fL = [x - .065 - ws * .07, -.02 - lift], fR = [x + .065 + ws * .07, -.02 - lift2];
+  s.push(`<path d="M${x - .06} -.9 Q${x - .07} -.5 ${fL[0]} ${fL[1]} M${x + .06} -.9 Q${x + .07} -.5 ${fR[0]} ${fR[1]}" stroke="${st.pants || '#2a2c35'}" stroke-width=".05" stroke-linecap="round" fill="none"/>`);
+  s.push(`<path d="M${fL[0] - .02} ${fL[1]} h.05 M${fR[0] - .03} ${fR[1]} h.05" stroke="#111" stroke-width=".035" stroke-linecap="round"/>`);
   s.push(`<path d="M${x - .105} -1.43 Q${x} -1.47 ${x + .105} -1.43 L${x + .1} -.88 L${x - .1} -.88 Z" fill="${shirt}"/>`);
   if (st.tie) s.push(`<path d="M${x} -1.42 l.02 .05 -.014 .25 -.006 .03 -.006 -.03 -.014 -.25 Z" fill="${st.tie}"/>`);
   if (st.collar) s.push(`<path d="M${x - .045} -1.44 L${x} -1.38 L${x + .045} -1.44" stroke="${st.collar}" stroke-width=".018" fill="none"/>`);
-  const hl = st.handL || [x - .15, -.95], hr = st.handR || [x + .15, -.95];
+  const hl = st.handL || [x - .15 + ws * .05, -.95], hr = st.handR || [x + .15 - ws * .05, -.95];
   s.push(arm([x - .09, -1.39], hl, 1) + arm([x + .09, -1.39], hr, -1));
   s.push(head([x, -1.55], .13, { eyes: st.eyes, t: st.t, look: st.look, mouth: st.mouth, lit: st.lit }));
   if (st.hair) s.push(`<path d="M${x - .125} -1.58 Q${x - .12} -1.69 ${x} -1.69 Q${x + .12} -1.69 ${x + .125} -1.58 Q${x + .06} -1.64 ${x - .03} -1.62 Q${x - .09} -1.61 ${x - .125} -1.58 Z" fill="${st.hair}"/>`);
@@ -460,3 +462,96 @@ Object.assign(SETBG, {
   elevator: async (t) => { await elevChars(t, true, { x: .24, z: -.38, eyes: 'wide' }); W3.setCam([.62, 2.12, .62], [-.02, .85, -.5], 64); },
   bus: async (t) => { await busChars(t, { eyes: 'wide' }); W3.setCam([-.3, 1.7, -1.6], [.55, 1.12, .6], 52); },
 });
+
+
+/* ======================================================================= GROSSRAUMBÜRO (Bewegungsmelder) */
+const DESK_POS = [-1.25, -6.3], COPIER_POS = [-.28, 1.95];
+function youPos(t) {
+  const w = lastEv('walk', t, null);
+  if (!w) return { p: DESK_POS, sit: true, moving: false };
+  const u = clamp((t - w[0]) / (w[1] - w[0]));
+  if (u >= 1) return { p: COPIER_POS, sit: false, moving: false };
+  const a = clamp(u / .15), b = clamp((u - .15) / .85);
+  return { p: [lerp(DESK_POS[0], 0, ease(a)), lerp(DESK_POS[1], COPIER_POS[1], b)], sit: false, moving: u > 0, phase: (t - w[0]) * 9 };
+}
+function officeState(t) {
+  const off = lastEv('allOff', t, null), lv = [0, 0, 0, 0, 0];
+  R3.panels.forEach((P, i) => {
+    let near = false;
+    if (!off) for (let k = 0; k <= 1.5; k += .25) { const q = youPos(t - k).p; if (Math.hypot(q[0] - P.x, q[1] - P.z) < 1.8) near = true; }
+    let v = near ? 1 : 0;
+    for (const [gt, gi] of EV('ghost')) if (gi === i && gt <= t && (!off || gt >= off[0])) { v = (t - gt < .3) ? (Math.sin((t - gt) * 70) > 0 ? 1 : .15) : 1; }
+    lv[i] = v;
+  });
+  R3.setPanels(lv);
+  const th = lastEv('thing', t, null); R3.thing.visible = !!th; if (th) R3.thing.material.color.setScalar(.08 + .6 * lv[3]);
+  const pr = lastEv('print', t, null);
+  const printing = pr && t < pr[1];
+  R3.scan.position.x = printing ? Math.sin((t - pr[0]) * 3.2) * .4 : 0; R3.scan.visible = !!printing; R3.scanLight.intensity = printing ? 1.6 : 0;
+  R3.sheet.position.z = 3.08 - (pr && t >= pr[1] ? .1 * clamp((t - pr[1]) / .6) : 0);
+  return { lv, off };
+}
+async function officeYou(t, close = false, opts = {}) {
+  ensurePlane('you', 2, 2); ensurePlane('youClose', .7, .7, 1536);
+  const st = youPos(t), { lv } = officeState(t);
+  const lit = Math.max(...lv.slice(0, 5).map((v, i) => Math.hypot(st.p[0] - R3.panels[i].x, st.p[1] - R3.panels[i].z) < 2 ? v : 0));
+  const col = st.sit ? '#c6d4ff' : lit > .5 ? '#e6e9f2' : (lv[4] > .5 ? '#d0d6e8' : '#3a3c48');
+  await W3.setPlane('youClose', { visible: false });
+  if (close) {
+    await W3.setPlane('you', { visible: false });
+    return W3.setPlane('youClose', { svg: svgWrap(st.p[0], 1.35, .7, person(st.p[0], { ...YOU_OFFICE, eyes: 'wide', mouth: 'o', t, look: opts.look || 0 })), pos: [st.p[0], 1.35, st.p[1]], color: col });
+  }
+  if (opts.hide) return W3.setPlane('you', { visible: false });
+  if (st.sit) return W3.setPlane('you', { svg: svgLocal(2, 2, sitter({ shirt: YOU_OFFICE.shirt, eyes: 'open', t, lit: true })), pos: [st.p[0], 1.0, st.p[1]], rotY: Math.PI, color: col });
+  return W3.setPlane('you', { svg: svgWrap(st.p[0], 1.0, 2.0, person(st.p[0], { ...YOU_OFFICE, eyes: opts.eyes || 'open', t, look: opts.look || 0, mouth: opts.mouth || '', walk: st.moving ? st.phase : null })), pos: [st.p[0], 1.0, st.p[1]], color: col });
+}
+async function viewOoDesk(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([.45 + .1 * ease(lt / d), 1.85, -8.0], [-1.25, 1.0, -6.3], 48);
+  await officeYou(t);
+  return '';
+}
+async function viewOoWalk(t, sh) {
+  const st = youPos(t);
+  W3.setCam([st.p[0] + 1.3, 1.7, st.p[1] + 2.7], [st.p[0] - .1, 1.1, st.p[1] - 1.2], 50);
+  await officeYou(t);
+  return '';
+}
+async function viewOoCopier(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([.2 - .05 * ease(lt / d), 1.8, 3.6], [-.05, 1.2, -3], sh.zoom ? 56 : 62);
+  await officeYou(t, false, { eyes: sh.eyes, look: sh.look ?? -.6 });
+  return '';
+}
+async function viewOoPov(t, sh) {
+  const lt = t - sh.start;
+  W3.setCam([-.1, 1.6, 1.9 - .2 * ease(lt / (sh.end - sh.start))], [-.1, 1.3, -8], 46);
+  await officeYou(t, false, { hide: true });
+  return '';
+}
+async function viewOoFace(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([-.28, 1.55, 2.57 - .06 * ease(lt / d)], [-.28, 1.52, 1.95], 40);
+  await officeYou(t, true, { look: lt > d * .5 ? -1.3 : 0 });
+  return '';
+}
+function photoSvg(fig) {
+  return `<svg viewBox="0 0 300 220" width="100%" height="100%" style="display:block;filter:grayscale(1) contrast(1.15)">
+    <rect width="300" height="220" fill="#2a2a2a"/><rect y="150" width="300" height="70" fill="#3a3a3a"/>
+    <rect x="95" y="128" width="110" height="80" fill="#bdbdbd"/><rect x="95" y="124" width="110" height="8" fill="#555"/>
+    ${fig ? `<path d="M196 220 L200 70 Q204 46 218 44 Q232 46 234 70 L238 220 Z" fill="#0e0e0e"/><ellipse cx="216" cy="40" rx="15" ry="21" fill="#9a9a9a"/>
+      <ellipse cx="210" cy="37" rx="4" ry="6" fill="#000"/><ellipse cx="222" cy="37" rx="4" ry="6" fill="#000"/><path d="M206 50 Q216 57 226 50" stroke="#000" stroke-width="2" fill="none"/>
+      <path d="M204 82 Q186 96 172 98" stroke="#0e0e0e" stroke-width="7" fill="none" stroke-linecap="round"/>` : ''}
+    <path d="M125 220 L128 120 Q150 108 172 120 L175 220 Z" fill="#7a7a7a"/><circle cx="150" cy="96" r="24" fill="#d0d0d0"/>
+    <rect width="300" height="220" fill="url(#np)" opacity=".25"/>
+    <text x="10" y="212" font-family="JetBrains Mono" font-size="9" fill="#ddd">03:34  KOPIE 1/1</text></svg>`;
+}
+async function viewOoPaper(t, sh) {
+  await officeYou(t, false, {}); W3.setCam([.2, 1.8, 3.6], [-.05, 1.2, -3], 62);
+  const lt = t - sh.start, p = ease(lt / .5), fig = !!lastEv('paperFig', t, null);
+  return `<div class="paper" style="transform:translate(-50%, ${(1 - p) * 120}px) rotate(${-4 + 2 * p}deg);opacity:${clamp(lt / .3)}">
+    <div class="photo">${photoSvg(fig)}</div><div class="pl"></div><div class="pl short"></div></div>`;
+}
+Object.assign(VIEWS, { oo_desk: viewOoDesk, oo_walk: viewOoWalk, oo_copier: viewOoCopier, oo_pov: viewOoPov, oo_face: viewOoFace, oo_paper: viewOoPaper });
+Object.assign(GLSTYLE, { oo_desk: '', oo_walk: '', oo_copier: '', oo_pov: '', oo_face: '', oo_paper: 'blur(8px) brightness(.5)' });
+Object.assign(SETBG, { openoffice: async (t) => { await officeYou(t, false, { eyes: 'wide' }); W3.setCam([.2, 1.8, 3.6], [-.05, 1.2, -3], 62); } });

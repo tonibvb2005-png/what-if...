@@ -353,3 +353,62 @@
     };
   };
 })();
+
+// ======================================================================= Großraumbüro (Bewegungsmelder)
+(() => {
+  const { std, basic, put, rbox, canvasTex, svgTex, plane } = W3.H, R = W3.reg;
+  W3.BUILD.openoffice = async (A) => {
+    const sc = W3.scene;
+    sc.background = new THREE.Color('#05060a'); sc.fog = new THREE.FogExp2('#05060a', .055);
+    R.hemi = new THREE.HemisphereLight('#8f9ac0', '#101014', .16); sc.add(R.hemi);
+    const night = new THREE.DirectionalLight('#7f8fc8', .35); night.position.set(-6, 5, -10); sc.add(night);
+    const carpet = std('#2a2c33'), wallM = std('#4a4d55'), desk = std('#c9cbd0'), dark = std('#18191d');
+    const fl = put(new THREE.Mesh(new THREE.PlaneGeometry(12, 13), carpet), 0, 0, -2.2, sc, false); fl.rotation.x = -Math.PI / 2;
+    const ce = put(new THREE.Mesh(new THREE.PlaneGeometry(12, 13), std('#2e3036')), 0, 2.8, -2.2, sc, false); ce.rotation.x = Math.PI / 2;
+    for (const sx of [-1, 1]) put(new THREE.Mesh(new THREE.PlaneGeometry(13, 2.8), wallM), sx * 6, 1.4, -2.2, sc, false).rotation.y = -sx * Math.PI / 2;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(12, 2.8), wallM), 0, 1.4, 3.85, sc, false).rotation.y = Math.PI;
+    // Rückwand mit Fenstern und Stadt bei Nacht
+    const city = canvasTex(1024, 256, (g, w, h) => {
+      const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, '#0c1230'); gr.addColorStop(1, '#2a2f55'); g.fillStyle = gr; g.fillRect(0, 0, w, h);
+      let x = 0; while (x < w) { const bw = 30 + Math.random() * 70, bh = 60 + Math.random() * 170; g.fillStyle = '#0a0c16'; g.fillRect(x, h - bh, bw, bh);
+        for (let yy = h - bh + 8; yy < h - 6; yy += 12) for (let xx = x + 5; xx < x + bw - 5; xx += 10) if (Math.random() < .18) { g.fillStyle = Math.random() < .7 ? '#ffd58a' : '#bcd4ff'; g.fillRect(xx, yy, 4, 5); }
+        x += bw + 4; }
+    });
+    put(new THREE.Mesh(new THREE.PlaneGeometry(12, 1.9), basic('#ffffff', { map: city })), 0, 1.45, -8.69, sc, false);
+    put(new THREE.Mesh(new THREE.PlaneGeometry(12, .5), wallM), 0, .25, -8.7, sc, false); put(new THREE.Mesh(new THREE.PlaneGeometry(12, .45), wallM), 0, 2.6, -8.7, sc, false);
+    for (let x = -5.5; x <= 5.5; x += 1.375) put(new THREE.Mesh(new THREE.BoxGeometry(.07, 1.9, .06), dark), x, 1.45, -8.66);
+    // Schreibtischreihen links und rechts vom Gang
+    for (let z = -7.0; z <= 1.0; z += 2.0) for (const sx of [-1, 1]) for (const k of [0, 1]) {
+      const x = sx * (1.25 + k * 1.5);
+      put(rbox(1.4, .04, .75, .01, desk), x, .74, z);
+      put(new THREE.Mesh(new THREE.BoxGeometry(.04, .72, .7), std('#4c4e55')), x + sx * .68, .37, z);
+      put(new THREE.Mesh(new THREE.BoxGeometry(1.4, .4, .03), std('#3a3d48')), x, .95, z - .38);
+      put(rbox(.48, .3, .03, .01, std('#101114')), x, 1.08, z - .2); put(new THREE.Mesh(new THREE.BoxGeometry(.05, .18, .05), std('#222')), x, .85, z - .2);
+      put(rbox(.48, .1, .48, .04, std('#22283a')), x, .5, z + .5); put(rbox(.48, .5, .08, .04, std('#22283a')), x, .8, z + .74);
+    }
+    // Dein Platz: Monitor leuchtet, kleine Lampe
+    R.myMon = put(new THREE.Mesh(new THREE.PlaneGeometry(.44, .26), basic('#a8c6ff')), -1.25, 1.08, -6.98, sc, false); R.myMon.rotation.y = Math.PI;
+    R.myLamp = new THREE.PointLight('#9fbaff', 2.2, 3, 1.8); R.myLamp.position.set(-1.25, 1.2, -6.7); sc.add(R.myLamp);
+    // Kopierer am Ende des Gangs
+    put(rbox(1.0, .95, .65, .04, std('#d6d7da', { r: .5 })), 0, .48, 3.42);
+    put(rbox(1.0, .06, .65, .02, std('#3a3c42')), 0, .98, 3.42);
+    R.copierScreen = put(new THREE.Mesh(new THREE.PlaneGeometry(.18, .09), basic('#62ff9a')), .3, 1.02, 3.1, sc, false); R.copierScreen.rotation.x = -1.2;
+    R.scan = put(new THREE.Mesh(new THREE.PlaneGeometry(.9, .02), basic('#b9ffd6')), 0, .955, 3.09, sc, false);
+    R.scanLight = new THREE.PointLight('#b9ffd6', 0, 1.8, 2); R.scanLight.position.set(0, 1.0, 3.0); sc.add(R.scanLight);
+    R.sheet = put(new THREE.Mesh(new THREE.PlaneGeometry(.3, .42), basic('#f2f2ee')), 0, .7, 3.08, sc, false); R.sheet.rotation.x = -1.35;
+    // Bewegungsmelder-Lampen über dem Gang (0..3) + über dem Kopierer (4)
+    R.panels = [-6.0, -3.5, -1.0, .95, 2.9].map((z, i) => {
+      const x = i === 0 ? -1.0 : 0;
+      const m = put(new THREE.Mesh(new THREE.PlaneGeometry(.6, .6), basic('#1d1f25')), x, 2.79, z, sc, false); m.rotation.x = Math.PI / 2;
+      const l = new THREE.PointLight('#e6edff', 0, 5.5, 1.5); l.position.set(x, 2.55, z); sc.add(l);
+      if (i === 3) { l.castShadow = true; l.shadow.mapSize.set(512, 512); l.shadow.bias = -.004; }
+      return { m, l, z, x };
+    });
+    for (const [x, z] of [[-2.5, -3.5], [2.5, -3.5], [-2.5, -1], [2.5, -1], [-2.5, 1.5], [2.5, 1.5], [2.5, -6]]) put(new THREE.Mesh(new THREE.PlaneGeometry(.6, .6), basic('#1d1f25')), x, 2.79, z, sc, false).rotation.x = Math.PI / 2;
+    // Das Ding (2D) unter der Lampe hinter dir
+    R.thing = put(new THREE.Mesh(new THREE.PlaneGeometry(.9, 2.3), basic('#ffffff', { map: await svgTex(A.creatureCellar || A.creature, 900, 2300), transparent: true, alphaTest: .02 })), .16, 1.15, .95, sc, false);
+    R.thing.material.toneMapped = false; R.thing.visible = false;
+    plane('you', 2, 2); plane('youClose', .7, .7, 1536);
+    R.setPanels = (lv) => R.panels.forEach((p, i) => { const v = lv[i] || 0; p.l.intensity = 9 * v; p.m.material.color.set(v > .05 ? '#f2f5ff' : '#1d1f25'); });
+  };
+})();

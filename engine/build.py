@@ -101,6 +101,10 @@ def sfx(name):
         n = int(2.2 * SR); t = np.arange(n) / SR
         teeth = (np.sin(2 * np.pi * (18 + 4 * np.sin(t * 2)) * t) > .7).astype(float)
         return rng.standard_normal(n) * teeth * .16 * np.minimum(1, t / .1) * np.minimum(1, (2.2 - t) / .2)
+    if name == "copier":   # Kopierer: rhythmisches Rattern
+        n = int(4.0 * SR); t = np.arange(n) / SR
+        mech = np.sin(2 * np.pi * 7 * t) > .6
+        return (rng.standard_normal(n) * mech * .08 + np.sin(2 * np.pi * 140 * t) * .04) * np.minimum(1, t / .2) * np.minimum(1, (4 - t) / .3)
     if name == "ding":     # Aufzug-Gong
         out = []
         for f in (1046, 784):
@@ -157,6 +161,9 @@ def ambience(kind, dur):
         eng = np.sin(2 * np.pi * 38 * t) * .08 + np.sin(2 * np.pi * 76 * t) * .04
         road = np.convolve(rng.standard_normal(n), np.ones(60) / 60, "same") * .5
         return (eng + road) * fade
+    if kind == "office":   # Lüftung + Rechnersummen
+        return (np.convolve(rng.standard_normal(n), np.ones(400) / 400, "same") * 1.4
+                + np.sin(2 * np.pi * 120 * t) * .008 + np.sin(2 * np.pi * 50 * t) * .012) * fade
     if kind == "elevator": # Motorbrummen + Seilgeräusch
         return (np.sin(2 * np.pi * 55 * t) * .035 + np.sin(2 * np.pi * 110 * t) * .015
                 + np.convolve(rng.standard_normal(n), np.ones(200) / 200, "same") * .6) * fade

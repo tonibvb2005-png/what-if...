@@ -107,6 +107,10 @@
          box-shadow: 0 30px 80px rgba(0,0,0,.7), inset 0 0 30px rgba(0,0,0,.9); text-align: center;
          font: 800 46px/1.15 'JetBrains Mono'; letter-spacing: 3px; color: #ff9a2a; text-shadow: 0 0 10px #ff7a1a, 0 0 22px rgba(255,120,30,.5);
          -webkit-mask: radial-gradient(circle, #000 55%, rgba(0,0,0,.55) 60%) 0 0 / 5px 5px; }
+  .paper { position: absolute; left: 50%; top: 230px; width: 380px; height: 500px; background: #f1efe8; border-radius: 4px; padding: 26px;
+           box-shadow: 0 30px 80px rgba(0,0,0,.7); }
+  .paper .photo { height: 300px; border: 2px solid #222; overflow: hidden; }
+  .paper .pl { height: 8px; background: #d8d5cc; margin-top: 22px; border-radius: 4px; } .paper .pl.short { width: 55%; margin-top: 12px; }
   .cam { position: absolute; inset: 18px; border: 0; pointer-events: none; font: 700 15px 'JetBrains Mono'; color: #f2f2f2; text-shadow: 0 0 4px #000; }
   .cam:before, .cam:after { content: ''; position: absolute; width: 34px; height: 34px; border: 3px solid rgba(255,255,255,.85); }
   .cam:before { left: 12px; top: 86px; border-right: 0; border-bottom: 0; } .cam:after { right: 12px; bottom: 80px; border-left: 0; border-top: 0; }
@@ -451,6 +455,12 @@ async function viewEnd(t, sh) {
       <rect x="40" y="10" width="120" height="136" fill="#5d6068"/><rect x="62" y="40" width="76" height="106" fill="#9a9ea8"/><rect x="99" y="40" width="2" height="106" fill="#5d6068"/>
       <rect x="78" y="14" width="44" height="22" rx="3" fill="#060606"/><text x="100" y="31" text-anchor="middle" font-family="JetBrains Mono" font-weight="700" font-size="18" fill="#ff2a1a">13</text></svg>`,
     bus: `<div style="width:260px;margin:0 auto;background:#080503;border:3px solid #111;border-radius:6px;padding:8px 6px;font:700 15px 'JetBrains Mono';color:#ff9a2a;letter-spacing:1px;text-shadow:0 0 8px #ff7a1a">DREH DICH NICHT UM</div>`,
+    office: `<svg viewBox="0 0 200 150" width="200" height="150" style="display:block;margin:0 auto">
+      <rect x="30" y="18" width="40" height="6" fill="#1d1f25"/><rect x="130" y="18" width="40" height="6" fill="#f2f5ff"/>
+      <polygon points="130,24 170,24 190,140 110,140" fill="#f2f5ff" opacity=".12"/>
+      <path d="M142 140 L144 70 Q146 52 152 50 Q158 52 160 70 L162 140 Z" fill="#111"/><ellipse cx="151" cy="44" rx="8" ry="11" fill="#9a9eb0"/>
+      <ellipse cx="148" cy="42" rx="2" ry="3" fill="#000"/><ellipse cx="154" cy="42" rx="2" ry="3" fill="#000"/>
+      <rect x="50" y="110" width="40" height="30" fill="#bdbdbd"/><circle cx="70" cy="92" r="9" fill="#d0d0d0"/></svg>`,
     monitor: `<div style="width:170px;margin:0 auto;background:#c9cad3;border-radius:16px;padding:10px"><div style="border-radius:6px;overflow:hidden;height:110px">${nightVision(t, true, '3:35', true)}</div></div>`,
   }[TL.endArt || 'door'];
   return `<div class="end"><div style="margin-top:205px;${a(0)}">${art}</div>
