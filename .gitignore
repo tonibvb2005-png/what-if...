@@ -1,0 +1,5 @@
+render/node_modules/
+render/out/
+render/charsheet.html
+render/shot.cjs
+__pycache__/
