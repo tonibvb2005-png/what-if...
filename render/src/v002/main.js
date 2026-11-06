@@ -173,7 +173,7 @@ const shots = [
       place = 'ward'; world(t); const e = ease.sine(u);
       look(v3(lerp(-1.6, -1.0, e), 1.6, lerp(-4.6, -4.0, e)), v3(1.9, 1.25, -1.2), 46);
       placeChar(hero, HX0 - 0.3, HZ0 - 0.6, { ...HERO, pose: t > WT('scrub', 3) ? 'point' : 'stand', apron: false, foam: false, expr: 'determined' });
-      colleagues.forEach((c, i) => placeChar(c, -0.2 + i * 0.75, -3.6 - (i % 2) * 0.6, { pose: 'stand', expr: 'neutral' }));
+      colleagues.forEach((c, i) => placeChar(c, -0.9 + i * 0.55, -0.9 - i * 0.25 - (i % 2) * 0.3, { pose: 'stand', expr: 'neutral' }));
       return {};
   } },
   { id: 'laugh', start: S.laugh, trans: { type: 'whip', dur: 0.12 }, run(t, u) {
