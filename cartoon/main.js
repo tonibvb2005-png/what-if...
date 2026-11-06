@@ -488,7 +488,7 @@
     }
     ctx.beginPath(); ctx.moveTo(x0 + 400, top); ctx.lineTo(x0 + 400, bot); ctx.lineWidth = 14; ctx.strokeStyle = '#b7bccf'; ctx.stroke();
     ctx.beginPath(); ctx.roundRect(x0 + 60, bot - 220, 260, 160, 30); ctx.fillStyle = '#3f62ad'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke();
-    txt('BUS HOME', x0 + 400, top + 32, 34, OUT, 900);
+    txt((CUR && CUR.sh.busLabel) || 'BUS HOME', x0 + 400, top + 32, 34, OUT, 900);
   }
   function musicNotes(t, xs) {
     xs.forEach((x, i) => { for (let k = 0; k < 3; k++) { const ph = (t * .6 + k / 3 + i * .17) % 1; ctx.globalAlpha = Math.sin(ph * Math.PI);
@@ -850,6 +850,96 @@
       acts: { mike: [[0, { e: 'pleading', p: 'takeR', propR: 'shirt100', m: { lookX: 1 } }], ['follow', .75, { e: 'despair', p: 'handsOnHead', propR: null }]], jay: [[0, { e: 'smirk', p: 'crossed', m: { lookX: -1, no: .8 } }]] } }
   });
 
+
+  // ---------- Remontada 2017 story ----------
+  const PSG = { shirt: '#0b2a5b', band: '#da291c', trim: '#ffffff', pants: '#0b2a5b', shoes: '#111' };
+  Object.assign(CH, {
+    cavani:  Object.assign({}, PSG, { skin: '#f0c19a', number: '9', hair: 'slick', hairColor: '#1d1410', stubble: true, bw: 1, blinkPh: .7 }),
+    psgA:    Object.assign({}, PSG, { skin: '#f0c19a', number: '11', hair: 'short', hairColor: '#2a1a10', bw: .95, blinkPh: 1.3 }),
+    kurzawa: Object.assign({}, PSG, { skin: '#8a5a3c', number: '20', hair: 'buzz', hairColor: '#120a05', bw: 1, blinkPh: 2.1 }),
+    wallA:   Object.assign({}, PSG, { skin: '#e8b08a', hair: 'short', hairColor: '#2a1a10', bw: 1.05, blinkPh: .4 }),
+    wallB:   Object.assign({}, PSG, { skin: '#6b4430', hair: 'buzz', hairColor: '#120a05', bw: 1.1, blinkPh: 1.8 }),
+    trapp:   { skin: '#ffd9b8', shirt: '#ff8c1a', trim: '#111', number: '1', pants: '#111', shoes: '#111', hair: 'short', hairColor: '#c9a46a', bw: 1.05, blinkPh: 2.4 },
+    sergi:   Object.assign({}, BARCA, { skin: '#f0c19a', number: '20', hair: 'short', hairColor: '#2a1a10', bw: .95, blinkPh: .9 })
+  });
+  const RF = { mike: { x: -270 }, hero: { x: 0 }, jay: { x: 270 } }, RF2 = { hero: { x: -120 }, jay: { x: 170 } };
+  const goalCut = (at, scorer, keeper, kickF, score0, score1, label, toX = -440, toY = 1130, dive = DIVE_L, sx = 300) => pitchCut({ at,
+    cast: { [scorer]: { x: sx, scale: .8 }, [keeper]: { x: -340, scale: .78 } },
+    score: lt => lt < kickF() + .35 ? score0 : score1, label: lt => lt >= kickF() + .35 ? label : '',
+    ball: () => shotBall(kickF(), sx - 120, toX, toY),
+    acts: () => ({ [scorer]: kickAt(scorer, kickF(), CUR.duration), [keeper]: keeperDive(kickF(), CUR.duration, dive) }) });
+  Object.assign(SHOTS, {
+    rhook: { set: 'stands', noCaption: true, title: ['WHAT IF YOU LEFT', 'AT <span class="gold">3–1</span>?'], titleSize: [92, 150],
+      cuts: [standsCut({ at: 0, cam: [[0, { x: 0, y: 1000, z: 1.1 }], [1, { x: 0, y: 995, z: 1.2 }]], cast: RF,
+        acts: { hero: [[0, { e: 'confident', p: 'cheer', propR: 'scarf' }]], mike: [[0, { e: 'angry', p: 'crossed' }]], jay: [[0, { e: 'nervous', p: 'nervous' }]] } })] },
+    rparis: { set: 'pitch', tag: '14 FEB 2017 · PARIS', bright: .85,
+      cuts: [
+        pitchCut({ at: 0, cast: { psgA: { x: 300, scale: .8 }, terstegen: { x: -340, scale: .78 } },
+          score: lt => { const n = Math.min(4, Math.floor(P(lt, .6, CUR.duration * .62) * 4.999)); return `PSG ${n} – 0 FCB`; }, label: lt => lt > CUR.duration * .62 ? 'FIRST LEG' : '',
+          ball: () => shotBall(.6, 180, -430, 1140), acts: () => ({ psgA: kickAt('psgA', .6, CUR.duration), terstegen: keeperDive(.6, CUR.duration) }) }),
+        standsCut({ at: .72, cast: RF, bright: .75, acts: { hero: [[0, { e: 'worried' }]], mike: [[0, { e: 'despair', p: 'handsOnHead' }]], jay: [[0, { e: 'despair', p: 'crossed' }]] } })] },
+    rnobody: { set: 'room', cast: BROOM, bright: .85, card: textCard([['TEAMS THAT CAME BACK', 44, '#fff', null, .05], ['FROM 4–0 IN THE UCL', 44, '#fff', null, .12], ['0', 170, '#ffd400', null, .35]], ['#0b2a5b', '#06132e']),
+      cam: [[0, TV], [.62, TV], [.72, { x: 0, y: 985, z: 1.25 }], [1, { x: 0, y: 995, z: 1.32 }]],
+      acts: { hero: [[0, { e: 'neutral', m: { lookX: -1 } }], [.72, { e: 'confident', p: 'crossed', m: { lookX: 0 } }]], mike: [[0, { e: 'smirk', m: { lookX: -1 } }], [.72, { e: 'focused', ex: { mouthCurve: -.4 }, p: 'crossed', m: { lookX: 1, no: .7 } }]], jay: [[0, { e: 'worried', m: { lookX: -1 } }]] } },
+    rthree: { set: 'pitch', tag: '8 MARCH 2017 · CAMP NOU', bright: 1,
+      cuts: [
+        pitchCut({ at: 0, cast: { suarez: { x: -180, scale: .8 }, trapp: { x: -380, scale: .78 } }, score: lt => lt < cue('s1', .12) + .3 ? 'FCB 0 – 0 PSG' : 'FCB 1 – 0 PSG', label: lt => lt >= cue('s1', .12) + .3 ? "SUÁREZ 3'" : '',
+          ball: () => { const g = cue('s1', .12); return [[0, 700, 1385], [g - .6, 600, 1385], [g - .05, -180, 980, 330], [g + .3, -520, 1100, 20], [g + .7, -540, 1385, 20]]; },
+          acts: () => { const g = cue('s1', .12), D = CUR.duration; return { suarez: [[0, { e: 'focused', m: { lookX: 1 } }], [(g - .35) / D, { p: 'cheer', m: { jump: 1 } }], [(g + .2) / D, { e: 'ecstatic', p: 'cheer', m: { jump: .3 } }]], trapp: keeperDive(g - .1, D) }; } }),
+        pitchCut({ at: ['og', .45, -.6], cast: { kurzawa: { x: -150, scale: .8 }, trapp: { x: -380, scale: .78 } }, score: lt => lt < cue('og', .45) + .2 ? 'FCB 1 – 0 PSG' : 'FCB 2 – 0 PSG', label: lt => lt >= cue('og', .45) + .2 ? 'OWN GOAL!' : '',
+          ball: () => { const g = cue('og', .45); return [[0, 400, 1385], [g - .2, -90, 1385], [g + .2, -470, 1250, 30], [g + .6, -490, 1385, 10]]; },
+          acts: () => { const g = cue('og', .45), D = CUR.duration; return { kurzawa: [[0, { e: 'focused', po: KP, m: { lookX: 1 } }], [(g - .2) / D, { e: 'shock', po: KICK }], [(g + .3) / D, { e: 'despair', p: 'handsOnHead', po: {} }]], trapp: [[0, { e: 'focused', po: KP }], [(g + .25) / D, { e: 'angry', p: 'handsOnHead', po: {} }]] }; } }),
+        goalCut(['pen', .75, -.6], 'messi', 'trapp', () => cue('pen', .75), 'FCB 2 – 0 PSG', 'FCB 3 – 0 PSG', 'MESSI (PEN)', -480, 1200, DIVE_R, 260)] },
+    rcavani: { set: 'pitch', bright: .85,
+      cuts: [
+        goalCut(0, 'cavani', 'terstegen', () => cue('goal', .15), 'FCB 3 – 0 PSG', 'FCB 3 – 1 PSG', 'CAVANI', -300, 1180, DIVE_R),
+        pitchCut({ at: ['need', .45], cam: [[0, { x: -60, y: 820, z: 1.0 }], [1, { x: -60, y: 820, z: 1.0 }]], cast: {}, score: 'FCB 3 – 1 PSG', label: 'AGG 3–5',
+          extra: lt => { const k = eb(P(lt, cue('need', .45), cue('need', .45) + .4)); if (k > 0) { ctx.save(); ctx.translate(-60, 1050); ctx.scale(k, k); txt('NEED 3 MORE', 0, 0, 110, '#ffd400', 900, 'center', 16); txt('IN 30 MINUTES', 0, 120, 70, '#fff', 900, 'center', 12); ctx.restore(); } } })] },
+    rleave: { set: 'stands', bright: .72,
+      cuts: [standsCut({ at: 0, cam: [[0, STANDS], [1, { x: -140, y: 990, z: 1.18 }]], cast: RF,
+        move: { mike: [[0, -270], ['leave', .5, -270], [1, -1300]] },
+        acts: { mike: [[0, { e: 'angry', m: { no: .6 } }], ['leave', .45, { propR: 'scarf', m: { no: 0, lookX: -1 } }], ['leave', .55, { m: { walk: 1, lookX: -1 } }]],
+                hero: [[0, { e: 'despair', m: { lookX: -1 } }], ['leave', .5, { e: 'surprised', m: { lookX: -1 } }]], jay: [[0, { e: 'despair', m: { lookX: -1 } }]] } })] },
+    rstay: { set: 'stands', bright: .8, minDur: 2.6,
+      cuts: [standsCut({ at: 0, cast: RF2, cam: [[0, { x: -120, y: 1030, z: 1.6 }], [1, { x: -120, y: 1030, z: 1.7 }]], acts: { hero: [[0, { e: 'focused', p: 'crossed' }], [.4, { e: 'confident', p: 'crossed' }]], jay: [[0, { e: 'worried' }]] } })] },
+    rfk: { set: 'pitch', tag: "88'", bright: .95,
+      cuts: [
+        pitchCut({ at: 0, cast: { wallA: { x: -40, scale: .8 }, wallB: { x: 80, scale: .8 }, neymar: { x: 420, scale: .8 }, trapp: { x: -380, scale: .78 } },
+          score: lt => lt < cue('goal', .6) ? 'FCB 3 – 1 PSG' : 'FCB 4 – 1 PSG', label: lt => lt >= cue('goal', .6) ? 'NEYMAR FREE KICK!' : '',
+          ball: () => { const g = cue('goal', .6); return [[0, 300, 1385], [g - .6, 300, 1385], [g, -560, 1020, 420], [g + .4, -580, 1385, 20]]; },
+          acts: () => { const g = cue('goal', .6), D = CUR.duration; return {
+            neymar: [[0, { e: 'focused', m: { lookX: -1 } }], [(g - .7) / D, { po: KICK }], [(g + .1) / D, { e: 'ecstatic', p: 'cheer', po: {}, m: { jump: .6 } }]],
+            wallA: [[0, { e: 'tense', p: 'nervous', m: { lookX: 1 } }], [(g - .4) / D, { e: 'tense', p: 'nervous', m: { jump: .8 } }], [(g + .2) / D, { e: 'despair', p: 'handsOnHead', m: { jump: 0 } }]],
+            wallB: [[0, { e: 'tense', p: 'nervous', m: { lookX: 1 } }], [(g - .4) / D, { e: 'tense', p: 'nervous', m: { jump: .8 } }], [(g + .2) / D, { e: 'despair', p: 'handsOnHead', m: { jump: 0 } }]],
+            trapp: keeperDive(g - .3, D) }; } }),
+        standsCut({ at: .8, cast: RF2, acts: { hero: [[0, { e: 'ecstatic', p: 'fistPumpR', handR: 'fist', m: { jump: .5 } }]], jay: [[0, { e: 'surprised', p: 'cheer' }]] } })] },
+    rpen: { set: 'pitch', tag: "90+1'", bright: 1,
+      cuts: [
+        goalCut(0, 'neymar', 'trapp', () => cue('goal', .55), 'FCB 4 – 1 PSG', 'FCB 5 – 1 PSG', 'NEYMAR (PEN)', -180, 1220, DIVE_L, 260),
+        standsCut({ at: .8, cast: RF2, acts: { hero: [[0, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: 1 } }]], jay: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: .8 } }]] } })] },
+    rchip: { set: 'pitch', tag: "90+5'", bright: .8,
+      cuts: [
+        pitchCut({ at: 0, cast: { neymar: { x: 420, scale: .8 }, sergi: { x: -150, scale: .8 }, trapp: { x: -380, scale: .78 } }, score: 'FCB 5 – 1 PSG', label: 'LAST CHANCE',
+          ball: () => { const c = cue('chip', .55); return [[0, 330, 1385], [c, 330, 1385], [CUR.duration, -120, 1100, 360]]; },
+          acts: () => { const c = cue('chip', .55), D = CUR.duration; return { neymar: [[0, { e: 'focused', m: { lookX: -1 } }], [(c - .1) / D, { po: KICK }], [(c + .4) / D, { e: 'tense', p: 'pleading', po: {} }]], sergi: [[0, { e: 'focused', m: { lookX: 1, walk: .6 } }], [(c + .2) / D, { e: 'focused', p: 'cheer', m: { lookX: 1, walk: 0 } }]], trapp: [[0, { e: 'tense', po: KP, m: { lookX: 1 } }]] }; } }),
+        standsCut({ at: ['chip', .55, .4], cast: RF2, bright: .7, cam: [[0, { x: 20, y: 1000, z: 1.45 }], [1, { x: 20, y: 1005, z: 1.6 }]], acts: { hero: [[0, { e: 'tense', p: 'pleading', m: { tremble: .8 } }]], jay: [[0, { e: 'worried', p: 'nervous', m: { tremble: .8 } }]] } })] },
+    rgoal: { set: 'pitch', bright: 1.12,
+      cuts: [
+        pitchCut({ at: 0, cast: { sergi: { x: -150, scale: .8 }, trapp: { x: -380, scale: .78 } }, score: lt => lt < .35 ? 'FCB 5 – 1 PSG' : 'FCB 6 – 1 PSG', label: lt => lt >= .35 ? 'SERGI ROBERTO!' : '',
+          ball: [[0, -120, 1100], [.35, -470, 1180, 20], [.8, -490, 1385, 10]],
+          acts: { sergi: [[0, { e: 'focused', po: KICK, m: { dy: -40 } }], [.08, { e: 'ecstatic', p: 'cheer', po: {}, m: { jump: 1, dy: 0 } }]], trapp: [[0, { e: 'shock', po: DIVE_R, m: { dy: -30 } }], [.15, { e: 'despair', po: { lean: 85, lA: 160, rA: 160 }, m: { dy: 0 } }]] } }),
+        standsCut({ at: .3, cast: RF2, conf: 1, shake: 1, flash: true, acts: { hero: [[0, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: 1 } }]], jay: [[0, { e: 'ecstatic', p: 'cheer', m: { dance: 1 } }]] } })] },
+    rgreat: { set: 'pitch', bright: 1.08,
+      cuts: [pitchCut({ at: 0, cam: [[0, { x: -60, y: 900, z: 1.15 }], [1, { x: -60, y: 905, z: 1.2 }]], cast: { suarez: { x: -330, scale: .8 }, messi: { x: -120, scale: .8 }, neymar: { x: 90, scale: .8 }, sergi: { x: 300, scale: .8 } }, score: '', label: '',
+        acts: { messi: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: .5 } }]], suarez: [[0, { e: 'ecstatic', p: 'cheer', m: { dance: .7 } }]], neymar: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: .4 } }]], sergi: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: .8 } }]] },
+        extra: (lt, t) => { const k = eb(P(lt, .2, .6)); ctx.save(); ctx.translate(-60, 640); ctx.scale(k, k); txt('6 – 1', 0, 0, 200, '#ffd400', 900, 'center', 18); txt('AGG 6 – 5', 0, 140, 64, '#fff', 900, 'center', 12); ctx.restore(); } })] },
+    rmate: { set: 'room', cast: { mike: { x: 1550 } }, bright: 1, bus: true, busLabel: 'METRO', card: 'off',
+      title: ['FOLLOW FOR MORE', '<span class="gold">WHAT IFs</span>'], titleSize: [84, 110], titleAt: 'follow',
+      cam: [[0, { x: 1550, y: 990, z: 1.3 }], [1, { x: 1550, y: 1000, z: 1.4 }]],
+      acts: { mike: [[0, { e: 'neutral', propR: 'scarf', m: { lookX: -.5 } }], ['noise', .4, { e: 'shock', p: 'handsOnHead', propR: null, m: { lookX: 0, tremble: .5 } }], ['follow', .75, { e: 'despair', p: 'handsOnHead' }]] },
+      extraRoom: (lt, t) => { const k = P(lt, cue('noise', .4), cue('noise', .4) + .3); if (k > 0 && lt < cue('follow', .75)) { ctx.save(); ctx.globalAlpha = k; for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.arc(1250, 820, 60 + i * 40 + (t * 80 % 40), -.9, .9); ctx.lineWidth = 8; ctx.strokeStyle = '#ffd400'; ctx.stroke(); } txt('ROAR!', 1290, 700, 60, '#ffd400', 900, 'center', 10); ctx.restore(); } } }
+  });
+
   // ---------- timeline ----------
   let spec, scenes = [], total = 0;
   function camAt(keys, lt, d) {
@@ -974,6 +1064,18 @@
         case 'btreble': add(st, 'thump', -9); add(st + .02, 'cheer', -11); [0, 1, 2].forEach(i => add(st + .4 + i * .25, 'pop', -14)); break;
         case 'bgoals': for (let k = 0; k < 12; k++) add(st + .3 + k * .12, 'tick', -19); add(st + C('num', .7), 'ding', -15); break;
         case 'bmate': add(st + C('follow', .75) + .1, 'pop', -14); break;
+        case 'rhook': add(st + .28, 'thump', -13); add(st + .5, 'thump', -13); break;
+        case 'rparis': for (let k = 0; k < 4; k++) add(st + .6 + k * (d * .62 - .6) / 4 + .3, 'thump', -15); break;
+        case 'rnobody': add(st + .35 * d, 'thump', -14); break;
+        case 'rthree': add(st + C('s1', .12) + .3, 'thump', -12); add(st + C('og', .45) + .2, 'thump', -12); add(st + C('pen', .75) + .35, 'thump', -12); add(st + C('pen', .75) + .4, 'cheer', -18); break;
+        case 'rcavani': add(st + C('goal', .15) + .35, 'thump', -13); add(st + C('need', .45), 'heartbeat', -14); add(st + C('need', .45) + .85, 'heartbeat', -14); break;
+        case 'rleave': add(st + C('leave', .5), 'whoosh_soft', -18); break;
+        case 'rfk': add(st + C('goal', .6), 'thump', -11); add(st + C('goal', .6) + .05, 'cheer', -16); break;
+        case 'rpen': add(st + C('goal', .55) + .35, 'thump', -11); add(st + C('goal', .55) + .4, 'cheer', -15); break;
+        case 'rchip': for (let x = .1; x < d - .1; x += .85) add(st + x, 'heartbeat', -12); break;
+        case 'rgoal': add(st + .35, 'thump', -9); add(st + .38, 'cheer', -10); break;
+        case 'rgreat': add(st + .2, 'sparkle', -15); break;
+        case 'rmate': add(st + C('noise', .4), 'cheer', -20); add(st + C('follow', .75) + .1, 'pop', -14); break;
         case 'imate': add(st + .1, 'whoosh_soft', -20); add(st + C('follow', .75) + .1, 'pop', -14); break;
       }
     });
@@ -1088,6 +1190,7 @@
       drawSofa();
       if (sh.bus) drawBus(t);
       ['mike', 'jay', 'hero'].forEach(drawC);
+      if (sh.extraRoom) sh.extraRoom(lt, t);
       if (sh.notesFrom && lt > cue(sh.notesFrom, .5)) musicNotes(t, Object.keys(sh.cast).map(n => sh.cast[n].x));
     }
     ctx.setTransform(1, 0, 0, 1, 0, 0);

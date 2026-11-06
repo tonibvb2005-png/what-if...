@@ -1,0 +1,111 @@
+{
+  "title": "What if you left the Camp Nou at 3-1? (Remontada cartoon story)",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "chars": {
+    "hero": {
+      "shirt": "#a50044",
+      "stripes": "#004d98",
+      "number": "10",
+      "trim": "#ffd400"
+    },
+    "jay": {
+      "shirt": "#a50044",
+      "stripes": "#004d98",
+      "trim": "#ffd400"
+    },
+    "mike": {
+      "shirt": "#a50044",
+      "stripes": "#004d98",
+      "trim": "#ffd400"
+    }
+  },
+  "crowd": {
+    "main": [
+      "#a50044",
+      "#004d98"
+    ],
+    "alt": [
+      "#ffd400",
+      "#ffffff"
+    ],
+    "flag": [
+      "#004d98",
+      "#a50044"
+    ]
+  },
+  "railing": {
+    "color": "#004d98",
+    "text": "MÉS QUE UN CLUB"
+  },
+  "scenes": [
+    {
+      "shot": "rhook",
+      "text": "What if you left the Camp Nou... at 3-1?",
+      "audio": "../audio/what-if-remontada/01.wav"
+    },
+    {
+      "shot": "rparis",
+      "text": "February 2017. Paris Saint-Germain destroy Barcelona. 4-0.",
+      "audio": "../audio/what-if-remontada/02.wav"
+    },
+    {
+      "shot": "rnobody",
+      "text": "Nobody in history has ever come back from 4-0 in the Champions League.",
+      "audio": "../audio/what-if-remontada/03.wav"
+    },
+    {
+      "shot": "rthree",
+      "text": "March 8th. The second leg. Suárez scores after three minutes. Then an own goal. Then Messi from the spot. 3-0!",
+      "audio": "../audio/what-if-remontada/04.wav"
+    },
+    {
+      "shot": "rcavani",
+      "text": "But then... Cavani. 3-1. Now Barça need three more goals. In thirty minutes.",
+      "audio": "../audio/what-if-remontada/05.wav"
+    },
+    {
+      "shot": "rleave",
+      "text": "His mate has seen enough. He grabs his scarf... and leaves.",
+      "audio": "../audio/what-if-remontada/06.wav"
+    },
+    {
+      "shot": "rstay",
+      "text": "But our guy stays.",
+      "audio": "../audio/what-if-remontada/07.wav",
+      "duration": 2.6
+    },
+    {
+      "shot": "rfk",
+      "text": "88th minute. Neymar. Free kick. 4-1!",
+      "audio": "../audio/what-if-remontada/08.wav"
+    },
+    {
+      "shot": "rpen",
+      "text": "91st minute. Penalty. Neymar again. 5-1!",
+      "audio": "../audio/what-if-remontada/09.wav"
+    },
+    {
+      "shot": "rchip",
+      "text": "95th minute. Last chance. Neymar chips it into the box...",
+      "audio": "../audio/what-if-remontada/10.wav"
+    },
+    {
+      "shot": "rgoal",
+      "text": "SERGI ROBERTO! 6-1! THE REMONTADA!",
+      "audio": "../audio/what-if-remontada/11.wav",
+      "pad": 1.6
+    },
+    {
+      "shot": "rgreat",
+      "text": "The greatest comeback in Champions League history.",
+      "audio": "../audio/what-if-remontada/12.wav"
+    },
+    {
+      "shot": "rmate",
+      "text": "And his mate? He heard the noise... from the metro. Follow for more What Ifs.",
+      "audio": "../audio/what-if-remontada/13.wav",
+      "pad": 1.2
+    }
+  ]
+}

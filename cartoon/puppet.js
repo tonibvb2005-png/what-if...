@@ -347,6 +347,7 @@ window.Puppet = (function () {
     ctx.quadraticCurveTo(tw + bulge, (sY + hipY) / 2 + 30, bwid, hipY + 14); ctx.lineTo(-bwid, hipY + 14);
     ctx.quadraticCurveTo(-tw - bulge, (sY + hipY) / 2 + 30, -tw, sY + 22); ctx.quadraticCurveTo(-tw, sY, -tw + 20, sY); ctx.closePath();
     ctx.fillStyle = ch.shirt; ctx.fill();
+    if (ch.band) { ctx.save(); ctx.clip(); ctx.fillStyle = '#ffffff'; ctx.fillRect(-27, sY - 10, 54, hipY - sY + 40); ctx.fillStyle = ch.band; ctx.fillRect(-20, sY - 10, 40, hipY - sY + 40); ctx.restore(); }
     if (ch.stripes) {
       ctx.save(); ctx.clip(); ctx.fillStyle = ch.stripes;
       for (let k = -4; k <= 4; k++) if (k % 2) ctx.fillRect(k * 26 - 13, sY - 10, 26, hipY - sY + 40);
