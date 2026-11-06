@@ -188,10 +188,18 @@ const W3 = (() => {
   }
   async function setPlane(name, o) {
     const P = planes[name]; if (!P) return;
-    if (o.visible === false) { P.mesh.visible = false; return; }
+    if (o.visible === false) { P.mesh.visible = false; if (P.sh) P.sh.visible = false; return; }
     P.mesh.visible = true;
     if (o.pos) P.mesh.position.set(...o.pos);
-    P.mesh.rotation.set(0, o.rotY || 0, 0);
+    P.mesh.rotation.set(0, o.face ? Math.atan2(cam.position.x - P.mesh.position.x, cam.position.z - P.mesh.position.z) : (o.rotY || 0), 0);
+    if (o.shadow) {           // weicher Kontaktschatten unter der Figur
+      if (!P.sh) {
+        const st = canvasTex(128, 128, (g, w, h) => { const gr = g.createRadialGradient(w / 2, h / 2, 2, w / 2, h / 2, w / 2); gr.addColorStop(0, 'rgba(0,0,0,.75)'); gr.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
+        P.sh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), basic('#ffffff', { map: st, transparent: true, depthWrite: false })); P.sh.rotation.x = -Math.PI / 2; scene.add(P.sh);
+      }
+      P.sh.visible = true; P.sh.scale.set(o.shadow[0], o.shadow[1], 1);
+      P.sh.position.set(P.mesh.position.x, (o.floorY || 0) + .006, P.mesh.position.z);
+    } else if (P.sh) P.sh.visible = false;
     P.mesh.material.color.set(o.color || '#ffffff');
     if (o.svg) {
       const img = new Image(); img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(o.svg);

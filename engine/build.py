@@ -434,6 +434,14 @@ def main():
     mix += vo
     for st, nm in sfx_ev:
         s = sfx(nm); i = int(st * SR); mix[i:i + len(s)] += s[: n - i]
+    if ev.get("dread"):
+        d0 = ev["dread"][0][0]; i0 = int(d0 * SR); m = n - i0
+        if m > 0:
+            tt = np.arange(m) / SR
+            swell = np.minimum(1, tt / 3.0) * (0.75 + 0.25 * np.sin(2 * np.pi * .13 * tt))
+            rum = (np.sin(2 * np.pi * 36 * tt) * .6 + np.sin(2 * np.pi * 54.5 * tt) * .25
+                   + np.convolve(np.random.default_rng(9).standard_normal(m), np.ones(1500) / 1500, "same") * 6)
+            mix[i0:] += rum * swell * .09
     mix = np.tanh(mix * 1.1) * 0.92
     wav_path = os.path.join(outdir, name + ".wav")
     with wave.open(wav_path, "wb") as w:

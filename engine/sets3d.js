@@ -66,7 +66,7 @@
     R.setLight = (L, fig) => {
       for (const { b, l } of R.bulbs) { l.intensity = 1.5 * L; b.material.color.set(L > .05 ? '#fff1cf' : '#18140e'); }
       R.hemi.intensity = .02 + .28 * L;
-      R.figure.material.color.setRGB(.06 + .3 * L, .06 + .3 * L, .07 + .32 * L);
+      R.figure.material.color.setRGB(.03 + .16 * L, .03 + .16 * L, .04 + .18 * L);
       R.figure.position.z = fig; R.figure.visible = fig < 50;
     };
   };

@@ -93,7 +93,7 @@ async function viewCellarWide(t, sh) {
   W3.setCam([.35, 1.72, 4.3 - .35 * ease(lt / d)], [0, 1.05, -.6], 50);
   ensurePlane('you', 2, 2); ensurePlane('hand', .5, .5, 1024);
   await W3.setPlane('hand', { visible: false });
-  await W3.setPlane('you', { svg: svgWrap(0, 1.0, 2.0, standing(0, { eyes: 'open', t, look: sh.look || 0 }), 1536), pos: [0, 1.0, .35], color: L > .05 ? '#ece8df' : '#101012' });
+  await W3.setPlane('you', { svg: svgWrap(0, 1.0, 2.0, standing(0, { eyes: 'open', t, look: sh.look || 0 }), 1536), pos: [0, 1.0, .35], color: L > .05 ? '#ece8df' : '#101012', face: true, shadow: [.55, .3] });
   return '';
 }
 async function viewCellarPov(t, sh) {
@@ -218,7 +218,7 @@ function carState(t, inside) {
   f = Math.min(1.4, f);
   R3.fSpots.forEach(l => l.intensity = 7 + 160 * f);
   R3.fLamps.forEach(l => l.material.color.setScalar(1 + 2 * f));
-  const rv = lastEv('reveal', t, null), vis = rv ? (.04 + 1.1 * Math.min(1, f + (t - rv[0] < 1.2 ? .35 : 0))) : 0;
+  const rv = lastEv('reveal', t, null), vis = rv ? (.02 + .42 * Math.min(1, f + (t - rv[0] < 1.2 ? .35 : 0))) : 0;
   R3.backseat.material.color.setScalar(vis); R3.backseat.visible = vis > .01;
   R3.ext.visible = !inside; R3.int.visible = inside;
   R3.radio.material.color.set(lastEv('radio', t, null) ? '#ffb347' : '#5a3c14');
@@ -331,10 +331,10 @@ async function elevChars(t, showYou, youOpts = {}) {
   ensurePlane('you', 2, 2); ensurePlane('markus', 2, 2); ensurePlane('deskYou', 1.2, 1.2); ensurePlane('youClose', .7, .7, 1536);
   await W3.setPlane('youClose', { visible: false });
   const { fl, m13 } = elevState(t), col = fl > .5 ? '#e9ecf4' : '#5a5c66';
-  if (showYou) await W3.setPlane('you', { svg: svgWrap(youOpts.x ?? .1, 1.0, 2.0, person(youOpts.x ?? .1, { ...YOU_OFFICE, eyes: youOpts.eyes || 'open', t, look: youOpts.look || 0, mouth: youOpts.mouth || '' })), pos: [youOpts.x ?? .1, 1.0, youOpts.z ?? -.25], color: col });
+  if (showYou) await W3.setPlane('you', { svg: svgWrap(youOpts.x ?? .1, 1.0, 2.0, person(youOpts.x ?? .1, { ...YOU_OFFICE, eyes: youOpts.eyes || 'open', t, look: youOpts.look || 0, mouth: youOpts.mouth || '' })), pos: [youOpts.x ?? .1, 1.0, youOpts.z ?? -.25], color: col, face: true, shadow: [.55, .3] });
   else await W3.setPlane('you', { visible: false });
   const mp = markusPos(t), ml = lastEv('markusLook', t, null);
-  if (mp && youOpts.markus !== false) await W3.setPlane('markus', { svg: svgWrap(mp[0], 1.0, 2.0, person(mp[0], { ...MARKUS, eyes: 'open', look: ml ? 1.4 * ease((t - ml[0]) / 1.5) : 0, mouth: '' })), pos: [mp[0], 1.0, mp[1]], color: col });
+  if (mp && youOpts.markus !== false) await W3.setPlane('markus', { svg: svgWrap(mp[0], 1.0, 2.0, person(mp[0], { ...MARKUS, eyes: 'open', look: ml ? 1.4 * ease((t - ml[0]) / 1.5) : 0, mouth: '' })), pos: [mp[0], 1.0, mp[1]], color: col, face: true, shadow: [.55, .3] });
   else await W3.setPlane('markus', { visible: false });
   if (m13) await W3.setPlane('deskYou', { svg: svgLocal(1.2, 1.2, `<path d="M-.11 .2 Q0 .16 .11 .2 L.12 .6 L-.12 .6 Z" fill="${YOU_OFFICE.shirt}"/><path d="M0 .2 l.02 .05 -.014 .25 -.006 .03 -.006 -.03 -.014 -.25 Z" fill="${YOU_OFFICE.tie}"/>` + head([0, .06], .13, { eyes: 'open', look: .9, lit: true })), pos: [0, 1.0, 8.95], rotY: Math.PI, color: '#c8d4ff' });
   else await W3.setPlane('deskYou', { visible: false });
@@ -484,7 +484,7 @@ function officeState(t) {
     lv[i] = v;
   });
   R3.setPanels(lv);
-  const th = lastEv('thing', t, null); R3.thing.visible = !!th; if (th) R3.thing.material.color.setScalar(.08 + .6 * lv[3]);
+  const th = lastEv('thing', t, null); R3.thing.visible = !!th; if (th) R3.thing.material.color.setScalar(.03 + .2 * lv[3]);
   const pr = lastEv('print', t, null);
   const printing = pr && t < pr[1];
   R3.scan.position.x = printing ? Math.sin((t - pr[0]) * 3.2) * .4 : 0; R3.scan.visible = !!printing; R3.scanLight.intensity = printing ? 1.6 : 0;
@@ -503,7 +503,7 @@ async function officeYou(t, close = false, opts = {}) {
   }
   if (opts.hide) return W3.setPlane('you', { visible: false });
   if (st.sit) return W3.setPlane('you', { svg: svgLocal(2, 2, sitter({ shirt: YOU_OFFICE.shirt, eyes: 'open', t, lit: true })), pos: [st.p[0], 1.0, st.p[1]], rotY: Math.PI, color: col });
-  return W3.setPlane('you', { svg: svgWrap(st.p[0], 1.0, 2.0, person(st.p[0], { ...YOU_OFFICE, eyes: opts.eyes || 'open', t, look: opts.look || 0, mouth: opts.mouth || '', walk: st.moving ? st.phase : null })), pos: [st.p[0], 1.0, st.p[1]], color: col });
+  return W3.setPlane('you', { svg: svgWrap(st.p[0], 1.0, 2.0, person(st.p[0], { ...YOU_OFFICE, eyes: opts.eyes || 'open', t, look: opts.look || 0, mouth: opts.mouth || '', walk: st.moving ? st.phase : null })), pos: [st.p[0], 1.0, st.p[1]], color: col, face: true, shadow: [.6, .32] });
 }
 async function viewOoDesk(t, sh) {
   const lt = t - sh.start, d = sh.end - sh.start;
