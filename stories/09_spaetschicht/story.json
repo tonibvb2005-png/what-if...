@@ -32,7 +32,13 @@
        "start"
       ]
      ],
-     "pause": 0.3
+     "pause": 0.3,
+     "sfx": [
+      [
+       "steps_out",
+       "start"
+      ]
+     ]
     }
    ]
   },
@@ -53,6 +59,14 @@
       [
        "bell",
        "shot-0.1"
+      ],
+      [
+       "doorclose",
+       "shot+1.5"
+      ],
+      [
+       "steps",
+       "shot+0.1"
       ]
      ]
     },
@@ -65,18 +79,28 @@
      "ev": [
       [
        "arrive",
-       "word1"
+       "end-0.6"
       ],
       [
        "water",
-       "word2"
+       "end-0.3"
       ],
       [
        "scissors",
-       "word5"
+       "end+0.1"
       ]
      ],
-     "pause": 0.4
+     "pause": 0.4,
+     "sfx": [
+      [
+       "bottle",
+       "end-0.3"
+      ],
+      [
+       "clack",
+       "end+0.1"
+      ]
+     ]
     }
    ]
   },
@@ -97,7 +121,13 @@
        "start"
       ]
      ],
-     "pause": 0.3
+     "pause": 0.3,
+     "sfx": [
+      [
+       "scrape",
+       "start"
+      ]
+     ]
     },
     {
      "text": "Und jedes Mal fragt er: Wann hast du Feierabend?",
@@ -162,6 +192,10 @@
       [
        "beep",
        "word4"
+      ],
+      [
+       "drawer",
+       "word4+0.35"
       ]
      ]
     },
@@ -176,7 +210,13 @@
        "end"
       ]
      ],
-     "pause": 0.3
+     "pause": 0.3,
+     "sfx": [
+      [
+       "flicker",
+       "end"
+      ]
+     ]
     },
     {
      "text": "Er fragt noch mal: Wann hast du Feierabend?",
@@ -265,6 +305,10 @@
       [
        "breath",
        0.0
+      ],
+      [
+       "heart",
+       0.0
       ]
      ],
      "pause": 0.4
@@ -280,7 +324,13 @@
      "text": "Und der vor dir lehnt sich langsam über die Theke.",
      "hl": {
       "langsam": "y"
-     }
+     },
+     "sfx": [
+      [
+       "creak",
+       "word4"
+      ]
+     ]
     },
     {
      "text": "Und lächelt.",
@@ -297,6 +347,10 @@
       [
        "boom",
        "start"
+      ],
+      [
+       "snip",
+       "end+0.25"
       ]
      ],
      "pause": 1.5

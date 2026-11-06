@@ -16,6 +16,9 @@ ENGINE = os.path.join(ROOT, "engine")
 SR = 44100
 PIPER_MODEL = os.environ.get("PIPER_MODEL", os.path.join(ROOT, ".cache", "piper", "de.onnx"))
 
+# Lautstärke einzelner Effekte relativ zur Stimme (Spitze der Stimme = 0.85)
+SFX_GAIN = {"steps": .55, "steps_out": 1.4, "doorclose": .55, "bottle": .6, "clack": .5, "scrape": .7, "snip": .6, "drawer": .6, "heart": .85}
+
 GAP_LINE = 0.18   # Pause zwischen Zeilen
 GAP_SHOT = 0.30   # zusätzliche Pause bei Szenenwechsel
 LEAD_IN = 0.35    # Stille am Anfang
@@ -154,6 +157,54 @@ def sfx(name):
     if name == "beep":     # Scanner an der Kasse
         n = int(.11 * SR); t = np.arange(n) / SR
         return np.sign(np.sin(2 * np.pi * 1850 * t)) * .07 * np.minimum(1, t / .004) * np.minimum(1, (.11 - t) / .01)
+    if name in ("steps", "steps_out"):   # Schritte: drinnen auf Fliesen (hart), draußen auf Asphalt (dumpf, leiser)
+        out_ = name == "steps_out"; dur = 4.0; n = int(dur * SR); res = np.zeros(n)
+        for k, st_ in enumerate(np.arange(0.1, dur - .3, .56)):
+            m = int(.18 * SR); t = np.arange(m) / SR
+            thump = np.sin(2 * np.pi * (70 if out_ else 95) * t) * np.exp(-38 * t)
+            heel = np.convolve(rng.standard_normal(m), np.ones(4 if not out_ else 20) / (4 if not out_ else 20), "same") * np.exp(-(90 if not out_ else 60) * t)
+            g = (.35 if out_ else .6) * (.85 + .15 * (k % 2))
+            i = int(st_ * SR); res[i:i + m] += (thump * .5 + heel * (.5 if out_ else .9)) * g
+        return res * .55
+    if name == "doorclose":  # Glastür fällt ins Schloss, Glas klirrt leise nach
+        n = int(.7 * SR); t = np.arange(n) / SR
+        return (np.sin(2 * np.pi * 75 * t) * np.exp(-25 * t) * .5 + rng.standard_normal(n) * np.exp(-70 * t) * .25
+                + np.sin(2 * np.pi * 3100 * t) * np.exp(-9 * t) * .03 * (np.sin(2 * np.pi * 23 * t) > 0)) * .9
+    if name == "bottle":     # Plastikflasche wird auf die Theke gestellt
+        n = int(.25 * SR); t = np.arange(n) / SR
+        return (np.sin(2 * np.pi * 210 * t) * np.exp(-30 * t) * .4 + rng.standard_normal(n) * np.exp(-120 * t) * .25
+                + np.sin(2 * np.pi * 620 * t) * np.exp(-45 * t) * .12) * .8
+    if name == "clack":      # Metallschere klackt auf die Theke
+        n = int(.35 * SR); t = np.arange(n) / SR
+        return (np.sin(2 * np.pi * 3300 * t) * np.exp(-28 * t) * .12 + np.sin(2 * np.pi * 4900 * t) * np.exp(-35 * t) * .08
+                + np.sin(2 * np.pi * 160 * t) * np.exp(-40 * t) * .3 + rng.standard_normal(n) * np.exp(-150 * t) * .3) * .9
+    if name == "scrape":     # Schere wird langsam über die Theke geschoben
+        dur = 1.25; n = int(dur * SR); t = np.arange(n) / SR
+        nz = rng.standard_normal(n); nz = nz - np.convolve(nz, np.ones(12) / 12, "same")
+        grit = 1 + .6 * (rng.random(n // 250 + 1) > .7).repeat(250)[:n]
+        return nz * grit * np.sin(np.pi * t / dur) ** .7 * .09
+    if name == "snip":       # Schere schnappt zweimal auf und zu, metallisch
+        res = np.zeros(int(1.0 * SR))
+        for st_ in (0.0, 0.42):
+            n = int(.3 * SR); t = np.arange(n) / SR
+            sh_ = rng.standard_normal(n); sh_ = sh_ - np.convolve(sh_, np.ones(5) / 5, "same")
+            ring = np.sin(2 * np.pi * 5200 * t) * .5 + np.sin(2 * np.pi * 7400 * t) * .3
+            snd = sh_ * np.exp(-60 * t) * .35 + ring * np.exp(-22 * t) * .12
+            i = int(st_ * SR); res[i:i + n] += snd
+        return res * .8
+    if name == "drawer":     # Kassenschublade springt auf
+        n = int(.6 * SR); t = np.arange(n) / SR
+        slide = np.convolve(rng.standard_normal(n), np.ones(40) / 40, "same") * np.exp(-12 * t) * 1.6
+        return slide + np.sin(2 * np.pi * 120 * t) * np.exp(-30 * (t - .12).clip(0)) * (t > .12) * .35 + np.sin(2 * np.pi * 2900 * t) * np.exp(-14 * t) * .04
+    if name == "heart":      # Herzschlag, dumpf, wird schneller
+        dur = 3.2; n = int(dur * SR); res = np.zeros(n)
+        st_ = .05; gap = .85
+        while st_ < dur - .4:
+            for off, a in ((0, 1.0), (.17, .7)):
+                m = int(.2 * SR); t = np.arange(m) / SR
+                i = int((st_ + off) * SR); res[i:i + m] += np.sin(2 * np.pi * 52 * t) * np.exp(-22 * t) * a
+            st_ += gap; gap *= .88
+        return res * .7
     raise ValueError(name)
 
 
@@ -447,7 +498,7 @@ def main():
     vo /= (np.abs(vo).max() + 1e-9); vo *= 0.85
     mix += vo
     for st, nm in sfx_ev:
-        s = sfx(nm); i = int(st * SR); mix[i:i + len(s)] += s[: n - i]
+        s = sfx(nm) * SFX_GAIN.get(nm, 1.0); i = int(st * SR); mix[i:i + len(s)] += s[: n - i]
     if ev.get("dread"):
         d0 = ev["dread"][0][0]; i0 = int(d0 * SR); m = n - i0
         if m > 0:

@@ -624,7 +624,9 @@ const LAGER_FIG = `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="
 const CUST_HAND = (() => {
   // Ärmel unten, Handrücken, vier lange Finger nach oben; die Kuppen liegen auf den Scherengriffen (Plane-Mitte = oben)
   const F = [[-.05, .2], [-.017, .235], [.017, .23], [.05, .19]];
-  let s = `<path d="M-.085 .25 Q-.09 .17 -.07 .12 L.075 .115 Q.095 .17 .09 .25 Z" fill="${HOOD}"/>
+  let s = `<defs><filter id="hsh" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation=".008"/></filter></defs>
+    <g filter="url(#hsh)" opacity=".55" transform="translate(.012 .01)"><path d="M-.07 .25 Q-.08 .06 -.06 .0 L-.06 -.2 L.06 -.2 L.07 .0 Q.09 .06 .08 .25 Z" fill="#000"/></g>
+    <path d="M-.085 .25 Q-.09 .17 -.07 .12 L.075 .115 Q.095 .17 .09 .25 Z" fill="${HOOD}"/>
     <path d="M-.068 .125 Q-.078 .06 -.064 .01 Q0 -.012 .064 .006 Q.078 .06 .07 .12 Q0 .14 -.068 .125 Z" fill="${CSKIN}"/>
     <path d="M-.068 .125 Q-.078 .06 -.064 .01 Q0 -.012 .064 .006 Q.078 .06 .07 .12 Q0 .14 -.068 .125 Z" fill="url(#shadeR)"/>`;
   for (const [x, L] of F) {
@@ -699,7 +701,8 @@ async function viewKsCounter(t, sh) {
   W3.setCam([-.36, 1.62, -.78 + .04 * ease(lt / d)], [-.68, 1.02, -1.4], 40);
   await kioskChars(t, { you: false, cust: false });
   const sl = lastEv('slide', t, null), z = -1.22 - .1 * (sl ? ease((t - sl[0]) / 1.2) : 0);
-  await W3.setPlane('hand', { svg: CUST_HAND, pos: [-.553, 1.052, z + .1], color: '#9da1b2' });
+  // Hand liegt OBEN auf den Griffen (Ringe enden bei y≈1.055), Fingerspitzen drücken auf die Ringe – nichts geht durch die Schere
+  await W3.setPlane('hand', { svg: CUST_HAND, pos: [-.552, 1.07, z + .168], color: '#9da1b2' });
   _planes.hand.mesh.rotation.set(-Math.PI / 2, 0, 0); _planes.hand.mesh.scale.set(.5, .5, 1);
   return '';
 }
