@@ -1,7 +1,6 @@
 import * as THREE from 'three';
 import { buildTimeline } from './timeline.js';
-import { buildDesert, DECK_Y } from './desert.js';
-import { buildTomb, buildLab, buildMacro, HERO_PX } from './interiors.js';
+import { buildRome, roadY, groundY, ROAD_HALF, ROAD_Y, CAMBER, OLD_X, BUILD_Z0, BUILD_Z1 } from './rome.js';
 import { ease, clamp01, lerp, v3 } from './world.js';
 
 const W = 1080, H = 1920;
@@ -11,365 +10,259 @@ const { S } = TL;
 const wordsOf = (sid) => TL.words.filter((w) => w.sid === sid);
 const WT = (sid, k) => wordsOf(sid)[k].start;
 
-// ---------- renderer ----------
 const glCanvas = document.createElement('canvas');
 const renderer = new THREE.WebGLRenderer({ canvas: glCanvas, antialias: true, preserveDrawingBuffer: true });
-renderer.setPixelRatio(1);
-renderer.setSize(Math.round(W * RS), Math.round(H * RS), false);
+renderer.setPixelRatio(1); renderer.setSize(Math.round(W * RS), Math.round(H * RS), false);
 renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-const camera = new THREE.PerspectiveCamera(50, W / H, 0.05, 1200);
+renderer.localClippingEnabled = true;
+const camera = new THREE.PerspectiveCamera(50, W / H, 0.05, 1500);
 
-const D = buildDesert(), T = buildTomb(), L = buildLab(), M = buildMacro();
+const R = buildRome();
+const clipPlane = new THREE.Plane(new THREE.Vector3(0, 0, -1), 0);
+R.advance.material = R.advance.material.clone(); R.advance.material.clippingPlanes = [clipPlane];
 
 // ---------- compositor ----------
 const comp = document.createElement('canvas'); comp.width = W; comp.height = H;
-const cx = comp.getContext('2d');
-document.body.appendChild(comp);
-const small = document.createElement('canvas'); small.width = W / 6; small.height = H / 6;
-const sx = small.getContext('2d');
-const grains = [0, 1, 2, 3].map((s) => {
-  const c = document.createElement('canvas'); c.width = 360; c.height = 640; const x = c.getContext('2d');
-  const img = x.createImageData(360, 640);
-  for (let i = 0; i < img.data.length; i += 4) { const v = (Math.sin(i * 12.9898 + s * 78.233) * 43758.5453) % 1; const g = Math.abs(v) * 255; img.data[i] = img.data[i + 1] = img.data[i + 2] = g; img.data[i + 3] = 255; }
-  x.putImageData(img, 0, 0); return c;
-});
+const cx = comp.getContext('2d'); document.body.appendChild(comp);
+const small = document.createElement('canvas'); small.width = W / 6; small.height = H / 6; const sx = small.getContext('2d');
+const grains = [0, 1, 2, 3].map((s) => { const c = document.createElement('canvas'); c.width = 360; c.height = 640; const x = c.getContext('2d'); const img = x.createImageData(360, 640); for (let i = 0; i < img.data.length; i += 4) { const v = Math.abs((Math.sin(i * 12.9898 + s * 78.233) * 43758.5453) % 1) * 255; img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255; } x.putImageData(img, 0, 0); return c; });
 
-// ---------- helpers ----------
 function look(pos, target, fov = 50, roll = 0) {
   camera.position.copy(pos); camera.fov = fov; camera.updateProjectionMatrix();
-  camera.up.set(0, 1, 0); camera.lookAt(target);
-  if (roll) camera.rotateZ(roll);
-  camera.updateMatrixWorld(true);
-  camera.userData.target = target.clone();
+  camera.up.set(0, 1, 0); camera.lookAt(target); if (roll) camera.rotateZ(roll); camera.updateMatrixWorld(true);
 }
-function path(points, u) {
-  const c = new THREE.CatmullRomCurve3(points, false, 'centripetal');
-  return c.getPoint(clamp01(u));
-}
+const path = (pts, u) => new THREE.CatmullRomCurve3(pts, false, 'centripetal').getPoint(clamp01(u));
 const sw = (t, a, b) => clamp01((t - a) / (b - a));
 
-// ---------- desert state from global time ----------
-let whatIf = false;
-function sledgeZ(t) {
-  if (whatIf) return 0;
-  const a = S.pull + 0.35;
-  if (t < a) return 0;
-  const u = t - a;
-  return u < 1.2 ? 1.4 * u * u : 1.4 * 1.44 + 3.36 * (u - 1.2);
-}
-function desertState(t) {
-  const z = sledgeZ(t);
-  D.sledge.position.z = z;
-  const grab = WT('men', 2);
-  const tension = whatIf ? 1 : clamp01((t - grab) / 0.35);
-  D.updateRopes(tension);
-  // which way is "forward" on screen?
-  const p0 = v3(0, 0.8, z + 5.5).project(camera), p1 = v3(0, 0.8, z + 9).project(camera);
-  const fwdRight = p1.x > p0.x;
-  const laughing = t >= S.laugh && t < S.overseer + 0.4;
-  const stumbleT = WT('pull', 6);
-  const fallT = WT('whatif', 2);
-  D.workers.forEach((c, i) => {
-    let pose = t >= grab || whatIf ? 'pull' : 'stand';
-    let expr = pose === 'pull' ? (i % 3 ? 'strain' : 'neutral') : 'neutral';
-    let sweat = pose === 'pull' && i % 4 === 0;
-    if (laughing && c.k < 6) { expr = 'laugh'; pose = c.k === 1 && c.rope === 2 ? 'point' : 'pull'; sweat = false; }
-    if (!whatIf && t >= S.pull + 0.4) { expr = i % 2 ? 'happy' : 'neutral'; sweat = false; }
-    if (!whatIf && t >= stumbleT && t < S.ritual && c.k < 14) { pose = 'stumble'; expr = 'shock'; }
-    if (whatIf) { expr = 'strain'; sweat = true; if (t >= fallT + (c.k % 7) * 0.05) { pose = 'fallen'; } }
-    c.set({ pose, expr, sweat });
-    const bob = pose === 'pull' && t >= S.pull && !whatIf ? Math.abs(Math.sin(t * 7 + c.phase)) * 0.05 : 0;
-    c.mesh.position.set(c.base.x, bob, c.base.z);
-    c.face(camera, pose === 'point' || pose === 'stand' ? false : !fwdRight);
-  });
-  // hero
-  const N = D.neferu;
-  D.neferu.mesh.visible = D.nsh.visible = !whatIf;
-  let npose = 'pour', nexpr = 'bored';
-  if (t >= S.shrug && t < WT('shrug', 2)) { npose = 'shrug'; nexpr = 'bored'; }
-  else if (t >= WT('shrug', 2) && t < S.pull) { npose = 'pour'; nexpr = 'smirk'; }
-  else if (t >= S.pull) { npose = 'hold'; nexpr = 'smirk'; }
-  N.set({ pose: npose, expr: nexpr });
-  N.face(camera, !fwdRight);
-  if (!whatIf && npose === 'pour') {
-    const sp = N.worldPoint(N.meta.spout[0], N.meta.spout[1]);
-    const to = v3(sp.x, 0.03, Math.max(sp.z + 0.35, z + 5.9));
-    D.setStream(true, t, sp, to);
-  } else D.setStream(false, t);
-  D.wet.visible = !whatIf;
-  const wetGrow = clamp01((t - 0.0) / 6);
-  D.wet.scale.set(1.2 + 1.1 * wetGrow, 0.7 + 0.6 * wetGrow, 1);
-  D.tracks.forEach((tr) => { const len = Math.max(0.01, z); tr.visible = !whatIf && z > 0.05; tr.scale.y = len; tr.position.z = -5.5 + len / 2; });
-  // overseer
-  const O = D.overseer;
-  const oIn = S.overseer - 0.6;
-  const walkU = clamp01((t - oIn) / 1.3);
-  const op = v3(lerp(7.2, 4.3, ease.o(walkU)), 0, lerp(3.2, 7.4, ease.o(walkU)));
-  O.mesh.visible = D.osh.visible = !whatIf && t >= oIn - 0.2;
-  O.mesh.position.copy(op); D.osh.position.set(op.x, 0.02, op.z);
-  let opose = walkU < 1 ? (Math.floor(t * 6) % 2 ? 'walk1' : 'walk2') : 'staff', oexpr = 'angry', face = '#ffffff', steam = false;
-  if (t >= WT('overseer', 3)) { face = '#ef6b5b'; steam = true; }
-  if (t >= WT('overseer', 4)) { opose = 'fist'; oexpr = 'shout'; }
-  if (t >= S.shrug) { opose = 'staff'; oexpr = 'angry'; }
-  if (t >= S.pull) { oexpr = 'shock'; face = '#ffffff'; steam = false; }
-  O.set({ pose: opose, expr: oexpr, faceColor: face, steam });
-  O.face(camera, false);
-  D.extraG.visible = whatIf && t >= WT('whatif', 5) - 0.2;
-  if (D.extraG.visible) {
-    const u = t - (WT('whatif', 5) - 0.2);
-    D.extra.forEach((c) => { c.set({ pose: Math.floor(t * 7 + c.phase) % 2 ? 'walk1' : 'walk2', expr: 'neutral' }); c.mesh.position.set(c.base.x, 0, c.base.z + 40 - Math.min(40, u * 22)); c.face(camera, fwdRight); });
+// ---------- world state from global time ----------
+const STORM0 = S.storm - 0.5, STORM1 = S.storm + 0.9;
+let mode = 'normal'; // 'normal' | 'whatif' | 'today'
+const paveFront = (t) => mode !== 'normal' ? BUILD_Z1 : BUILD_Z0 + (BUILD_Z1 - BUILD_Z0) * ease.io(sw(t, WT('shrug', 2), S.storm - 0.2));
+function standY(x, z, t) {
+  if (Math.abs(x) <= ROAD_HALF) {
+    if (mode === 'whatif') return ROAD_Y + 0.05;
+    if (z < paveFront(t)) return roadY(x);
+    if (z < BUILD_Z1 + 5) return roadY(x) - 0.95;
+    return -0.3;
   }
-  D.dust.rotation.y = t * 0.01;
+  if (Math.abs(x) < ROAD_HALF + 0.45) return 0.6;
+  return Math.max(-0.5, groundY(x, z));
 }
-
-function tombState(t, wink) {
-  T.torches.forEach((tc, i) => { const f = 0.85 + Math.sin(t * 13 + i * 3) * 0.08 + Math.sin(t * 29 + i) * 0.06; tc.L.intensity = 22 * f; tc.fl.scale.set(1.4 * f, 2.0 * (0.9 + 0.2 * Math.sin(t * 17 + i)), 1); });
-  T.muralMat.map = wink ? T.muralB : T.muralA;
-  T.dust.rotation.y = t * 0.02; T.dust.position.y = Math.sin(t * 0.5) * 0.1;
+const C = { tmp: new THREE.Color() };
+function weather(t) {
+  let k = mode === 'today' ? 0 : sw(t, STORM0, STORM1); if (mode === 'whatif') k = 1;
+  const today = mode === 'today';
+  const U = R.sky.material.uniforms;
+  U.top.value.set(today ? 0x2f78d8 : 0x2a6fd8).lerp(C.tmp.set(0x1a2236), k);
+  U.hor.value.set(today ? 0xffe2b0 : 0xcfe8ff).lerp(C.tmp.set(0x55627a), k);
+  U.bot.value.copy(U.hor.value);
+  R.fog.color.set(today ? 0xf2dcb8 : 0xcfe6f5).lerp(C.tmp.set(0x4a5468), k);
+  R.fog.near = lerp(60, 14, k); R.fog.far = lerp(380, 120, k);
+  R.hemi.intensity = lerp(1.2, 0.75, k); R.hemi.color.set(0xd8ecff).lerp(C.tmp.set(0x8899bb), k);
+  R.sun.intensity = lerp(today ? 2.7 : 2.4, 0.15, k); R.sun.color.set(today ? 0xffd9a0 : 0xfff1d6);
+  const flashT = [WT('storm', 3), WT('mud', 9) + 0.1, WT('whatif', 9)];
+  let flash = 0; for (const f of flashT) { const d = t - f; if (d > 0 && d < 0.35) flash = Math.max(flash, (d < 0.06 ? 1 : d < 0.12 ? 0.3 : d < 0.18 ? 0.8 : 0) * (k > 0.5 ? 1 : 0)); }
+  R.hemi.intensity += flash * 2.5;
+  R.clouds.forEach((c) => (c.visible = k < 0.5));
+  R.stormClouds.forEach((c) => { c.visible = k > 0.05; c.material.opacity = k; });
+  const rainOn = k > 0.35;
+  R.rain.visible = rainOn; if (rainOn) R.updateRain(t, camera);
+  R.ditches.forEach((d) => (d.visible = k > 0.4 && mode !== 'whatif')); R.ditchWaterTex.offset.y = -t * 1.5;
+  R.runoff.visible = R.sheen.visible = k > 0.5 && mode === 'normal'; R.runTex.offset.x = -t * 1.2;
+  R.mud.visible = k > 0.4; R.mudTex.offset.y = -t * 0.8; R.ruts.forEach((r) => (r.visible = k <= 0.4));
+  R.birds.forEach((b) => { const u = b.userData; b.visible = k < 0.3; b.position.set(u.x + t * 3, u.y + Math.sin(t * 2 + u.p) * 0.6, u.z); b.scale.y = 0.6 + 0.4 * Math.abs(Math.sin(t * 6 + u.p)); });
+  return { k, flash };
 }
+function worldState(t) {
+  const today = mode === 'today', whatif = mode === 'whatif';
+  R.site.visible = !today; R.today.visible = today;
+  R.road.visible = !whatif; R.flatRoad.visible = whatif; R.advance.visible = !whatif;
+  R.roadMat.map = today ? R.paveGrassTex : R.paveTex; R.advance.material.map = R.roadMat.map;
+  const pf = paveFront(t);
+  clipPlane.constant = pf;
+  R.front.position.z = pf; R.front.visible = !today && !whatif && pf < BUILD_Z1 - 0.01;
+  R.gravelLayer.visible = R.stoneLayer.visible = !today;
+  R.kerbAdv.forEach((k) => { const len = Math.max(0.01, pf - BUILD_Z0); k.scale.z = len; k.position.z = BUILD_Z0 + len / 2; });
+  R.flatRoad.position.y = whatif ? -0.35 * ease.io(sw(t, WT('whatif', 9) - 0.1, WT('whatif', 12))) : 0;
+  R.cr.userData.wheel.rotation.z = t * 0.8; R.cr.userData.blk.position.y = 2.2 + Math.sin(t * 0.4) * 0.8;
+  const cw = R.craneWalker; const wp = new THREE.Vector3(); R.cr.userData.wheel.getWorldPosition(wp); cw.mesh.position.set(wp.x, wp.y - 1.55, wp.z); cw.set({ pose: Math.floor(t * 6) % 2 ? 'walk1' : 'walk2' }); cw.face(camera); cw.mesh.visible = !today;
+  R.banners.forEach((b, i) => { b.userData.cloth.rotation.y = Math.sin(t * 2 + i) * 0.25; });
+  const lapse = mode === 'normal' && t > WT('shrug', 2) && t < S.storm ? 1 : 0;
+  const k = sw(t, STORM0, STORM1);
+  R.workers.forEach((w) => {
+    w.mesh.visible = !today && !whatif && k < 0.6; w.shadow.visible = w.mesh.visible;
+    if (!w.mesh.visible) return;
+    let x = w.base.x, z = w.base.z; const speed = lapse ? 8 : 1;
+    if (w.job === 'carry' || w.job === 'walk' || w.job === 'basket') { z += Math.sin(t * 0.5 * speed + w.phase) * 2.2; const st = Math.floor(t * 5 * speed + w.phase) % 2; w.set({ pose: w.job === 'carry' ? 'carry' : w.job === 'basket' ? 'hold' : (st ? 'walk1' : 'walk2') }); }
+    if (w.job === 'pick') w.set({ pose: Math.floor(t * 2.2 * speed + w.phase) % 2 ? 'pick' : 'stand' });
+    const bob = Math.abs(Math.sin(t * 6 * speed + w.phase)) * 0.05;
+    const y = standY(x, z, t);
+    w.mesh.position.set(x, y + bob, z); w.shadow.position.set(x, y + 0.03, z);
+    w.face(camera, Math.sin(w.phase) > 0);
+  });
+  R.legionG.visible = (mode === 'normal' && t > S.runoff - 0.3 && t < S.whatif + 0.5) || whatif;
+  if (R.legionG.visible) {
+    const lz = whatif ? -14 : lerp(-26, -10, sw(t, S.runoff, S.whatif));
+    const stuck = whatif && t > WT('whatif', 9);
+    const sink = whatif ? 0.9 * ease.io(sw(t, WT('whatif', 9), WT('whatif', 12))) : 0;
+    R.legion.forEach((c) => {
+      c.set({ pose: stuck ? 'stuck' : (Math.floor(t * 4 + c.phase) % 2 ? 'march1' : 'march2'), expr: whatif ? (stuck ? 'shock' : 'strain') : 'determined' });
+      c.mesh.position.set(c.base.x, (whatif ? ROAD_Y + 0.05 + R.flatRoad.position.y : c.base.y) - sink, lz + c.base.z);
+      c.face(camera);
+    });
+    const lead = R.legionG.children[R.legionG.children.length - 1]; lead.position.set(2.6, roadY(2.6) - sink, lz + 2.2);
+    lead.rotation.y = Math.atan2(camera.position.x - 2.6, camera.position.z - (lz + 2.2));
+  }
+  R.stuck.forEach((c, i) => { c.mesh.visible = k > 0.4 && mode === 'normal'; const s = 0.55 + 0.25 * ease.io(sw(t, S.mud, S.mud + 1.5)); c.mesh.position.set(c.base.x, -s, c.base.z); c.set({ pose: Math.floor(t * 3 + i) % 2 ? 'stuck' : 'stumble' }); c.face(camera); });
+  const cs = ease.io(sw(t, WT('mud', 9) - 0.2, WT('mud', 9) + 1.0)) * (k > 0.4 ? 1 : 0);
+  R.mudCart.position.y = (k > 0.4 ? -0.15 : 0) - 0.75 * cs; R.mudCart.rotation.z = 0.18 * cs; R.mudCart.rotation.x = -0.1 * cs;
+  R.ox1.position.y = -0.3 * cs; R.ox1.rotation.y = Math.atan2(camera.position.x - R.ox1.position.x, camera.position.z - R.ox1.position.z); R.ox1.visible = !today;
+  const gag = sw(t, WT('laugh', 8), S.cent);
+  R.gagCart.rotation.z = Math.sin(gag * Math.PI * 5) * 0.12 * (1 - gag * 0.3) + (gag > 0.85 ? -0.3 * sw(gag, 0.85, 1) : 0);
+  R.gagCart.position.x = -1.2 * Math.max(0, gag - 0.6);
+  R.gagCart.visible = mode === 'normal' && t < S.cent + 0.5;
+  R.puddles.visible = whatif; R.puddles.material.opacity = whatif ? 0.35 + 0.65 * sw(t, S.whatif + 0.5, WT('whatif', 9)) : 0;
+  R.tourists.forEach((c, i) => { const z = c.base.z - (t - S.appia) * 0.9; c.mesh.position.set(c.base.x, roadY(c.base.x), z); if (c.spec.pose.startsWith('walk')) c.set({ pose: Math.floor(t * 4 + i) % 2 ? 'walk1' : 'walk2' }); c.face(camera); });
+  R.performer.face(camera);
+}
+function cast(t) {
+  const Hh = R.hero, Ce = R.cent;
+  const today = mode === 'today', whatif = mode === 'whatif';
+  Hh.mesh.visible = Hh.shadow.visible = !today && !whatif;
+  let hp = v3(1.2, 0, 4.2), hs = { pose: 'hold', item: 'template', expr: 'bored', wet: false };
+  if (t >= S.curve) { hp = v3(-1.3, 0, 3.0); hs = { pose: 'point', item: null, expr: 'smirk', wet: false }; }
+  if (t >= S.laugh) { hp = v3(1.2, 0, 4.2); hs = { pose: 'stand', item: 'tablet', expr: 'bored', wet: false }; }
+  if (t >= S.shrug && t < WT('shrug', 2)) hs = { pose: 'shrug', item: null, expr: 'bored', wet: false };
+  if (t >= WT('shrug', 2)) { hp = v3(-1.4, 0, lerp(4.2, 9, sw(t, WT('shrug', 2), S.storm))); hs = { pose: 'stand', item: 'tablet', expr: 'smirk', wet: false }; }
+  if (t >= S.storm) { hp = v3(-4.0, 0, -9.5); hs = { pose: 'stand', item: 'tablet', expr: 'smirk', wet: true }; }
+  if (t >= S.march) { hp = v3(-3.25, 0, -14); hs = { pose: 'stand', item: null, expr: 'smirk', wet: true }; }
+  Hh.set(hs); Hh.mesh.position.set(hp.x, standY(hp.x, hp.z, t), hp.z); Hh.shadow.position.set(hp.x, Hh.mesh.position.y + 0.03, hp.z); Hh.face(camera);
+  const cIn = S.cent - 0.7; const wu = sw(t, cIn, cIn + 1.2);
+  let cp = v3(lerp(9.5, 6.4, ease.o(wu)), 0, lerp(-1, 2.4, ease.o(wu)));
+  let cs = { pose: wu < 1 ? (Math.floor(t * 6) % 2 ? 'walk1' : 'walk2') : 'stand', expr: 'angry', faceColor: '#ffffff', steam: false, wet: false };
+  if (t >= WT('cent', 3)) { cs.faceColor = '#ef6b5b'; cs.steam = true; }
+  if (t >= WT('cent', 4)) { cs.pose = 'fist'; cs.expr = 'shout'; }
+  if (t >= S.shrug) cs = { pose: 'stand', expr: 'angry', faceColor: '#ffffff', steam: false, wet: false };
+  if (t >= S.storm) { cp = v3(-5.6, 0, -16.5); cs = { pose: 'stand', expr: 'shock', faceColor: '#ffffff', steam: false, wet: true }; }
+  Ce.mesh.visible = Ce.shadow.visible = !today && !whatif && t > cIn - 0.3;
+  Ce.set(cs); Ce.mesh.position.set(cp.x, standY(cp.x, cp.z, t), cp.z); Ce.shadow.position.set(cp.x, Ce.mesh.position.y + 0.03, cp.z); Ce.face(camera);
+  const lg = t >= S.laugh && t < S.cent + 0.3;
+  R.laughers.forEach((l, i) => { l.mesh.visible = l.shadow.visible = !today && !whatif && t < S.storm; l.set({ expr: lg ? 'laugh' : 'neutral', pose: lg ? (i === 1 ? 'point' : i === 2 ? 'laughbelly' : 'stand_shield') : (i === 0 ? 'stand_shield' : 'stand') }); l.mesh.position.y = standY(l.base.x, l.base.z, t) + (lg ? Math.abs(Math.sin(t * 9 + i)) * 0.06 : 0); l.face(camera, i === 1); });
+  const tu = sw(t, WT('curve', 6) - 0.1, WT('curve', 6) + 2.4);
+  R.tur.visible = mode === 'normal' && tu > 0 && tu < 1;
+  if (R.tur.visible) { const x = lerp(-1.4, 2.4, tu); R.tur.position.set(x, roadY(x), -1.2); R.tur.rotation.set(0, Math.PI / 2, 0); R.tur.rotateX(Math.atan(-2 * CAMBER * x / (ROAD_HALF * ROAD_HALF))); R.tur.userData.legs.forEach((l, i) => (l.position.y = 0.02 + Math.max(0, Math.sin(t * 14 + i * 1.6)) * 0.05)); }
+  R.performer.set({ expr: t > TL.speechEnd + 0.25 ? 'wink' : (t > S.today + 0.4 ? 'smirk' : 'neutral') });
+}
+function setWorld(t) { worldState(t); cast(t); return weather(t); }
 
 // ---------- shots ----------
-// each: start (s), trans {type, dur}, run(t,u,d) -> {scene, blur, fx}
-const NEF = () => v3(0.95, DECK_Y + 1.3, 4.55 + sledgeZ(0));
 const shots = [
-  { id: 'hook', start: 0, run(t, u) {
-      look(path([v3(2.75, 1.45, 8.1), v3(2.15, 1.55, 7.35)], ease.sine(u)), v3(0.95, 1.95, 5.3), 42);
-      desertState(t); return { scene: D.scene };
-  } },
-  { id: 'reveal', start: S.egypt, run(t, u) {
+  { id: 'hook', start: 0, run(t, u) { look(path([v3(2.9, 1.05, 8.6), v3(2.3, 1.2, 7.4)], ease.sine(u)), v3(1.2, 1.55, 4.2), 40); return { w: setWorld(t) }; } },
+  { id: 'rome', start: S.rome, run(t, u) {
       const e = ease.io(u);
-      const pos = path([v3(2.15, 1.55, 7.35), v3(2.4, 0.7, 8.6), v3(4.6, 0.55, 6.5), v3(6.0, 0.45, 3.5), v3(6.2, 0.4, 9.2)], e);
-      const tgt = path([v3(0.95, 1.95, 5.3), v3(1.0, 0.1, 6.2), v3(1.6, 0.5, 1.5), v3(0.5, 2.5, 0.0), v3(0, 4.4, -0.8)], e);
-      look(pos, tgt, lerp(42, 64, e)); desertState(t); return { scene: D.scene };
+      look(path([v3(2.3, 1.2, 7.4), v3(4.5, 3.2, 12), v3(4, 8, 22), v3(2.5, 11, 30)], e), path([v3(1.2, 1.55, 4.2), v3(0, 1.2, -6), v3(0, 2, -80), v3(0, 8, -300)], e), lerp(40, 52, e));
+      return { w: setWorld(t) };
   } },
-  { id: 'drone', start: S.men, run(t, u) {
+  { id: 'curve', start: S.curve, run(t) {
+      const k = ease.io(sw(t, S.curve, S.curve + 1.1));
+      const pos = path([v3(2.5, 11, 30), v3(1.5, 4, 14), v3(0.3, 1.5, 7.6)], k);
+      const tgt = path([v3(0, 8, -300), v3(0, 1, -10), v3(0, 0.15, -0.5)], k);
+      const dz = ease.io(sw(t, WT('curve', 9) - 0.1, WT('curve', 9) + 0.8));
+      pos.lerp(v3(2.6, 1.6, 3.6), dz); tgt.lerp(v3(4.6, -0.4, -3.5), dz);
+      look(pos, tgt, lerp(52, 60, k));
+      return { w: setWorld(t), blur: k > 0.1 && k < 0.8 };
+  } },
+  { id: 'laugh', start: S.laugh, trans: { type: 'whip', dur: 0.12 }, run(t, u) { look(v3(lerp(2.4, 2.9, u), 1.35, lerp(11.8, 11.2, u)), v3(5.6, 1.3, 7.3), 44, 0.12); return { w: setWorld(t) }; } },
+  { id: 'gag', start: WT('laugh', 8), trans: { type: 'whip', dur: 0.12 }, run(t, u) { look(v3(lerp(4.2, 3.8, u), 1.5, -4.2), v3(0, 1.0, -9), 46, -0.06); return { w: setWorld(t) }; } },
+  { id: 'cent', start: S.cent, trans: { type: 'whip', dur: 0.12 }, run(t, u) {
       const e = ease.io(u);
-      const pos = path([v3(6.2, 0.4, 9.2), v3(9, 4, 6), v3(10, 9, 3), v3(8.5, 12, 4)], e);
-      const tgt = path([v3(0, 4.4, -0.8), v3(0, 3, 8), v3(0, 0.5, 18), v3(0, 0, 20)], e);
-      look(pos, tgt, lerp(64, 55, e)); desertState(t); return { scene: D.scene };
+      look(v3(lerp(8.8, 7.3, e), lerp(0.45, 0.85, e), lerp(7.0, 4.9, e)), v3(lerp(7.5, 6.4, e), lerp(1.3, 1.55, e), 2.4), lerp(52, 40, e), -0.05);
+      return { w: setWorld(t) };
   } },
-  { id: 'crane', start: S.oneman, run(t, u, d) {
-      const k = Math.min(1, (t - S.oneman) / 1.1);
-      const e = ease.io(k);
-      const pos = path([v3(8.5, 12, 4), v3(6, 6, 10), v3(3.4, 2.6, 8.9)], e).add(v3(0, 0, 0)).lerp(v3(2.7, 2.3, 7.5), ease.sine(clamp01((t - S.oneman - 1.1) / Math.max(0.1, d - 1.1))));
-      const tgt = path([v3(0, 0, 20), v3(0.8, 1.5, 9), v3(0.95, 2.0, 5.2)], e);
-      look(pos, tgt, lerp(55, 44, e)); desertState(t); return { scene: D.scene, blur: k > 0.15 && k < 0.85 };
+  { id: 'shrug', start: S.shrug, trans: { type: 'fade', dur: 0.2 }, run(t) {
+      const lp = sw(t, WT('shrug', 2), S.storm);
+      if (lp <= 0) look(v3(2.4, 1.85, 7.5), v3(1.2, 1.6, 4.2), 40);
+      else { const pf = paveFront(t); look(v3(lerp(6.5, 7.5, lp), lerp(2.6, 3.6, lp), pf + 6), v3(-0.5, 0.4, pf - 2), 52, 0.04); }
+      return { w: setWorld(t), fx: { lapse: lp > 0 && lp < 1 ? 1 : 0 } };
   } },
-  { id: 'laugh', start: S.laugh, trans: { type: 'whip', dur: 0.12 }, run(t, u) {
-      look(v3(lerp(5.0, 4.3, u), 1.25, lerp(12.8, 12.2, u)), v3(1.4, 1.25, 9.7), 46, 0.13);
-      desertState(t); return { scene: D.scene };
+  { id: 'storm', start: S.storm, trans: { type: 'fade', dur: 0.2 }, run(t, u) { const e = ease.sine(u); look(v3(lerp(18, 14, e), lerp(11, 8, e), lerp(24, 20, e)), v3(3, 0, -12), 56, 0.1); return { w: setWorld(t) }; } },
+  { id: 'mud', start: S.mud, trans: { type: 'whip', dur: 0.12 }, run(t, u) { look(v3(lerp(OLD_X - 2.4, OLD_X - 1.8, u), 1.35, lerp(5.0, 4.4, u)), v3(OLD_X + 0.3, 0.3, -3.2), 54, -0.13); return { w: setWorld(t) }; } },
+  { id: 'runoff', start: S.runoff, trans: { type: 'whip', dur: 0.12 }, run(t, u) { look(v3(lerp(2.6, 2.3, u), 1.9, lerp(-3.0, -4.2, u)), v3(4.6, -0.4, -9), 56, 0.06); return { w: setWorld(t) }; } },
+  { id: 'march', start: S.march, trans: { type: 'fade', dur: 0.2 }, run(t) { const lz = lerp(-26, -10, sw(t, S.runoff, S.whatif)); look(v3(1.2, 1.25, lz + 7.5), v3(-0.3, 1.5, lz - 2), 54, 0.03); return { w: setWorld(t) }; } },
+  { id: 'whatif', start: S.whatif, rewind: 0.45, run(t, u) {
+      mode = 'whatif'; const e = ease.sine(u);
+      look(v3(lerp(-6.5, -5.5, e), lerp(5.2, 4.6, e), lerp(-1.5, -3.0, e)), v3(0, 0.6, -15), 54, -0.14);
+      const w = setWorld(t); mode = 'normal'; return { w, fx: { bw: 1 } };
   } },
-  { id: 'overseer', start: S.overseer, trans: { type: 'whip', dur: 0.12 }, run(t, u) {
-      const e = ease.io(u);
-      look(v3(lerp(6.6, 5.0, e), lerp(0.4, 0.75, e), lerp(11.6, 9.0, e)), v3(lerp(5.2, 4.3, e), lerp(1.3, 1.55, e), 7.4), lerp(52, 40, e), -0.04);
-      desertState(t); return { scene: D.scene };
+  { id: 'appia', start: S.appia, run(t, u) {
+      mode = 'today'; const e = ease.sine(u);
+      look(v3(0.8, lerp(0.75, 1.0, e), lerp(9.5, 7.5, e)), v3(-0.4, 0.9, -20), 50);
+      const w = setWorld(t); mode = 'normal'; return { w, fx: { rewind: clamp01(1 - (t - S.appia) / 0.4) } };
   } },
-  { id: 'shrug', start: S.shrug, trans: { type: 'fade', dur: 0.2 }, run(t, u) {
-      look(v3(lerp(2.75, 2.55, u), 2.15, lerp(8.0, 7.7, u)), v3(0.95, 2.05, 5.1), 40);
-      desertState(t); return { scene: D.scene };
-  } },
-  { id: 'pull', start: S.pull, trans: { type: 'whip', dur: 0.12 }, run(t, u) {
-      const z = sledgeZ(t);
-      look(v3(4.6, 0.55, z + lerp(10.5, 9.5, u)), v3(1.0, 1.2, z + 3.0), 56, 0.04);
-      desertState(t); return { scene: D.scene };
-  } },
-  { id: 'stumble', start: WT('pull', 6), trans: { type: 'whip', dur: 0.12 }, run(t, u) {
-      const z = sledgeZ(t);
-      look(v3(4.4, 1.4, z + 16.5), v3(1.0, 1.0, z + 11.5), 50, -0.12);
-      desertState(t); return { scene: D.scene };
-  } },
-  { id: 'ritual', start: S.ritual, trans: { type: 'fade', dur: 0.3 }, run(t, u) {
-      const e = ease.sine(u);
-      look(v3(lerp(-3.2, 2.4, e), lerp(2.4, 2.2, e), lerp(5.6, 5.2, e)), v3(lerp(-0.8, 0.6, e), 3.2, -4), 58);
-      tombState(t, false);
-      T.arch.forEach((a) => { a.mesh.visible = true; a.face(camera); });
-      const rt = WT('ritual', 10);
-      T.arch[0].set({ expr: t > rt ? 'happy' : 'neutral' });
-      T.arch[1].set({ expr: t > rt ? 'aha' : 'neutral' });
-      T.bubble.visible = t > rt - 0.05;
-      const pop = clamp01((t - rt + 0.05) / 0.12);
-      T.bubble.position.copy(T.arch[0].mesh.position).add(v3(0.6, 2.55, 0));
-      T.bubble.scale.set(2.0 * (0.6 + 0.4 * ease.o(pop)), 1.0 * (0.6 + 0.4 * ease.o(pop)), 1);
-      T.mural.material = T.muralMat;
-      return { scene: T.scene };
-  } },
-  { id: 'lab', start: S.lab, run(t, u) {
-      const e = ease.sine(u);
-      look(v3(lerp(0.4, 1.0, e), lerp(2.6, 2.2, e), lerp(4.8, 3.6, e)), v3(lerp(0.0, 0.6, e), 1.45, 0), 48);
-      L.mini.position.x = lerp(-0.9, 0.95, ease.io(clamp01((t - S.lab - 0.4) / 2)));
-      L.string.scale.x = Math.max(0.05, (2.05 - L.mini.position.x) / 2.2); L.string.position.x = (L.mini.position.x + 2.05) / 2;
-      L.setGauge(lerp(100, 92, e));
-      L.phys.set({ expr: t > WT('lab', 4) ? 'aha' : 'neutral', pose: t > WT('lab', 4) ? 'point' : 'stand' });
-      L.phys.face(camera);
-      return { scene: L.scene };
-  } },
-  { id: 'macro', start: S.macro, trans: { type: 'fade', dur: 0.25 }, run(t, u) {
-      const e = ease.sine(u);
-      look(v3(lerp(-5, -1.5, e), lerp(4.6, 3.4, e), lerp(7.0, 5.0, e)), v3(lerp(-1, 1.0, e), 0, lerp(-0.5, -1.5, e)), 50, 0.05);
-      const g0 = WT('macro', 2);
-      M.bridges.forEach((b) => { const k = clamp01((t - g0 - b.userData.delay * 0.5) / 0.25); b.scale.set(k, 1, k); b.visible = k > 0.01; });
-      M.sparkles.forEach((s) => { const k = clamp01((t - g0 - s.userData.delay * 0.5) / 0.25); s.material.opacity = k * (0.7 + 0.3 * Math.sin(t * 9 + s.userData.delay * 20)); });
-      M.grains.forEach((g, i) => { const k = clamp01((t - g0) / 0.6); g.position.copy(g.userData.base).multiplyScalar(1 - 0.06 * k); });
-      const r0 = WT('macro', 6);
-      M.runner.position.set(lerp(-22, 4, clamp01((t - r0) / 2.0)), 1.55, -0.5);
-      return { scene: M.scene };
-  } },
-  { id: 'gauge', start: S.half, trans: { type: 'fade', dur: 0.2 }, run(t, u) {
-      look(v3(lerp(2.6, 2.35, u), lerp(1.95, 1.85, u), lerp(1.75, 1.35, u)), v3(2.12, 1.72, 0.05), 42);
-      const k = ease.io(clamp01((t - S.half - 0.35) / 0.8));
-      L.setGauge(lerp(100, 50, k)); L.phys.face(camera);
-      return { scene: L.scene, fx: { half: clamp01((t - WT('half', 5)) / 0.15) } };
-  } },
-  { id: 'whatif', start: S.whatif, run(t, u, d) {
-      whatIf = true;
-      const e = ease.sine(u);
-      look(v3(lerp(9.5, 8.5, e), lerp(4.6, 5.4, e), lerp(23, 21.5, e)), v3(0, 0.6, 13), 54, 0.14);
-      desertState(t);
-      whatIf = false;
-      return { scene: D.scene, fx: { bw: 1, x2: clamp01((t - WT('whatif', 6)) / 0.15) } };
-  } },
-  { id: 'wall', start: S.wall, run(t, u) {
-      const hero = T.muralPoint(HERO_PX[0], HERO_PX[1]);
-      const k = ease.io(clamp01((t - S.wall) / Math.max(0.5, S.front - S.wall)));
-      const p = clamp01((t - S.front) / Math.max(0.3, TL.speechEnd - S.front));
-      const start = v3(-4.8, 4.2, 2.4);
-      let pos = start.clone().lerp(hero.clone().add(v3(0, 0, 3.4)), k);
-      pos.lerp(hero.clone().add(v3(0, 0, 2.3)), ease.io(p));
-      const tgt = v3(-4.8, 4.0, -5).lerp(hero, k);
-      look(pos, tgt, 46);
-      tombState(t, t > TL.speechEnd + 0.25);
-      T.arch.forEach((a) => (a.mesh.visible = false)); T.bubble.visible = false;
-      return { scene: T.scene, fx: { rewind: clamp01(1 - (t - S.wall) / 0.4), sparkle: t > TL.speechEnd + 0.25 ? (t - TL.speechEnd - 0.25) / 0.6 : 0 } };
+  { id: 'today', start: S.today, trans: { type: 'fade', dur: 0.25 }, run(t) {
+      mode = 'today'; const k = ease.io(sw(t, S.today, TL.speechEnd + 0.1));
+      look(v3(lerp(3.6, 2.4, k), lerp(1.7, 1.75, k), lerp(8.5, 5.4, k)), v3(lerp(0.6, 1.8, k), lerp(1.3, 1.55, k), 3.0), lerp(48, 38, k));
+      const w = setWorld(t); mode = 'normal'; return { w, fx: { sparkle: t > TL.speechEnd + 0.25 ? (t - TL.speechEnd - 0.25) / 0.6 : 0 } };
   } },
 ];
 for (let i = 0; i < shots.length; i++) shots[i].end = i + 1 < shots.length ? shots[i + 1].start : TL.duration;
-const rewindShot = shots.find((s) => s.id === 'whatif');
-rewindShot.rewind = 0.45;
+const shotAt = (t) => { let s = shots[0]; for (const x of shots) if (t >= x.start) s = x; return s; };
 
-function shotAt(t) { let s = shots[0]; for (const x of shots) if (t >= x.start) s = x; return s; }
-
-const tmpWhip = new THREE.Euler();
 function renderShot(shot, t, alpha = 1, whip = 0) {
-  const u = (t - shot.start) / (shot.end - shot.start);
-  const res = shot.run(t, u, shot.end - shot.start);
-  if (whip) { camera.rotateY(whip); }
-  // update billboards facing after whip rotation is negligible
-  renderer.render(res.scene, camera);
-  cx.save();
-  cx.globalAlpha = alpha;
-  cx.filter = res.fx && res.fx.bw ? 'grayscale(1) contrast(1.25) brightness(0.95)' : 'saturate(1.18) contrast(1.05)';
-  cx.drawImage(glCanvas, 0, 0, W, H);
-  cx.restore();
+  const res = shot.run(t, (t - shot.start) / (shot.end - shot.start), shot.end - shot.start);
+  if (whip) camera.rotateY(whip);
+  renderer.render(R.scene, camera);
+  cx.save(); cx.globalAlpha = alpha;
+  cx.filter = res.fx && res.fx.bw ? 'grayscale(1) contrast(1.25) brightness(0.95)' : 'saturate(1.2) contrast(1.05)';
+  cx.drawImage(glCanvas, 0, 0, W, H); cx.restore();
   return res;
 }
-
-function bloom() {
-  sx.filter = 'brightness(1.05) contrast(1.8) blur(5px)';
-  sx.clearRect(0, 0, small.width, small.height);
-  sx.drawImage(comp, 0, 0, small.width, small.height);
-  cx.save(); cx.globalCompositeOperation = 'screen'; cx.globalAlpha = 0.16; cx.drawImage(small, 0, 0, W, H); cx.restore();
-}
-function vignette(strength = 0.35) {
-  const g = cx.createRadialGradient(W / 2, H / 2, H * 0.3, W / 2, H / 2, H * 0.75);
-  g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, `rgba(0,0,0,${strength})`);
-  cx.fillStyle = g; cx.fillRect(0, 0, W, H);
-}
+function bloom(a = 0.16) { sx.filter = 'brightness(1.05) contrast(1.8) blur(5px)'; sx.clearRect(0, 0, small.width, small.height); sx.drawImage(comp, 0, 0, small.width, small.height); cx.save(); cx.globalCompositeOperation = 'screen'; cx.globalAlpha = a; cx.drawImage(small, 0, 0, W, H); cx.restore(); }
+function vignette(s = 0.3) { const g = cx.createRadialGradient(W / 2, H / 2, H * 0.3, W / 2, H / 2, H * 0.75); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, `rgba(0,0,0,${s})`); cx.fillStyle = g; cx.fillRect(0, 0, W, H); }
 function vhs(t, amount) {
   if (amount <= 0) return;
-  const img = cx.getImageData(0, 0, W, H);
-  cx.fillStyle = '#000'; cx.fillRect(0, 0, W, H);
-  cx.putImageData(img, 0, 0);
-  // tearing bands
-  for (let i = 0; i < 9; i++) {
-    const y = ((Math.sin(t * 50 + i * 7.3) * 0.5 + 0.5) * H) | 0, h = 10 + ((i * 37) % 60);
-    const off = Math.sin(t * 80 + i) * 60 * amount;
-    cx.drawImage(comp, 0, y, W, h, off, y, W, h);
-  }
-  cx.save(); cx.globalAlpha = 0.22 * amount; cx.fillStyle = '#000';
-  for (let y = 0; y < H; y += 6) cx.fillRect(0, y, W, 2);
-  cx.restore();
-  cx.save(); cx.globalAlpha = amount; cx.font = '800 64px Montserrat'; cx.fillStyle = '#fff'; cx.shadowColor = '#000'; cx.shadowBlur = 8;
-  cx.fillText('◀◀ REW', 70, 150); cx.restore();
+  for (let i = 0; i < 9; i++) { const y = ((Math.sin(t * 50 + i * 7.3) * 0.5 + 0.5) * H) | 0, h = 10 + ((i * 37) % 60); cx.drawImage(comp, 0, y, W, h, Math.sin(t * 80 + i) * 60 * amount, y, W, h); }
+  cx.save(); cx.globalAlpha = 0.22 * amount; cx.fillStyle = '#000'; for (let y = 0; y < H; y += 6) cx.fillRect(0, y, W, 2); cx.restore();
+  cx.save(); cx.globalAlpha = amount; cx.font = '800 64px Montserrat'; cx.fillStyle = '#fff'; cx.shadowColor = '#000'; cx.shadowBlur = 8; cx.fillText('◀◀ REW', 70, 150); cx.restore();
 }
-function grain(t, amt) {
-  cx.save(); cx.globalAlpha = amt; cx.globalCompositeOperation = 'overlay';
-  const gimg = grains[Math.floor(t * 30) % 4];
-  cx.drawImage(gimg, 0, 0, W, H); cx.restore();
-}
-function bigText(txt, k, y = 0.62, size = 260) {
-  if (k <= 0) return;
-  const s = 0.4 + 0.6 * ease.o(k) + Math.sin(k * Math.PI) * 0.15;
-  cx.save(); cx.translate(W / 2, H * y); cx.scale(s, s); cx.rotate(-0.06);
-  cx.font = `900 ${size}px Montserrat`; cx.textAlign = 'center'; cx.textBaseline = 'middle';
-  cx.lineJoin = 'round'; cx.lineWidth = 26; cx.strokeStyle = '#141010'; cx.strokeText(txt, 0, 0);
-  cx.fillStyle = '#ffd23f'; cx.fillText(txt, 0, 0); cx.restore();
-}
+function grain(t, a) { cx.save(); cx.globalAlpha = a; cx.globalCompositeOperation = 'overlay'; cx.drawImage(grains[Math.floor(t * 30) % 4], 0, 0, W, H); cx.restore(); }
 function sparkle(k) {
-  const pts = [[0.58, 0.36, 1], [0.66, 0.31, 0.6], [0.53, 0.29, 0.5]];
-  for (const [x, y, s0] of pts) {
-    const s = s0 * Math.sin(Math.min(1, k) * Math.PI) * 90;
-    cx.save(); cx.translate(W * x, H * y); cx.rotate(k * 1.5);
-    cx.beginPath(); for (let i = 0; i < 8; i++) { const r = i % 2 ? s * 0.28 : s; const a = i * Math.PI / 4; cx.lineTo(Math.cos(a) * r, Math.sin(a) * r); } cx.closePath();
+  for (const [x, y, s0] of [[0.6, 0.42, 1], [0.68, 0.37, 0.6], [0.55, 0.36, 0.5]]) {
+    const s = s0 * Math.sin(Math.min(1, k) * Math.PI) * 90; if (s <= 0) continue;
+    cx.save(); cx.translate(W * x, H * y); cx.rotate(k * 1.5); cx.beginPath(); for (let i = 0; i < 8; i++) { const r = i % 2 ? s * 0.28 : s; const a = i * Math.PI / 4; cx.lineTo(Math.cos(a) * r, Math.sin(a) * r); } cx.closePath();
     cx.fillStyle = '#fff6c0'; cx.strokeStyle = '#141010'; cx.lineWidth = 7; cx.stroke(); cx.fill(); cx.restore();
   }
 }
 function captions(t) {
-  const g = TL.groups.find((x) => t >= x.start && t < x.hide);
-  if (!g) return;
-  const k = clamp01((t - g.start) / 0.07);
-  const s = 1.12 - 0.12 * ease.o(k);
+  const g = TL.groups.find((x) => t >= x.start && t < x.hide); if (!g) return;
+  const k = clamp01((t - g.start) / 0.07), s = 1.12 - 0.12 * ease.o(k);
   cx.save(); cx.translate(W / 2, H * 0.355); cx.scale(s, s);
   cx.font = '800 66px Montserrat'; cx.textAlign = 'center'; cx.textBaseline = 'middle'; cx.lineJoin = 'round';
-  cx.shadowColor = 'rgba(0,0,0,0.55)'; cx.shadowBlur = 14; cx.shadowOffsetY = 4;
-  cx.lineWidth = 12; cx.strokeStyle = '#000'; cx.strokeText(g.text, 0, 0);
-  cx.shadowColor = 'transparent'; cx.fillStyle = '#fff'; cx.fillText(g.text, 0, 0);
-  cx.restore();
+  cx.shadowColor = 'rgba(0,0,0,0.55)'; cx.shadowBlur = 14; cx.shadowOffsetY = 4; cx.lineWidth = 12; cx.strokeStyle = '#000'; cx.strokeText(g.text, 0, 0);
+  cx.shadowColor = 'transparent'; cx.fillStyle = '#fff'; cx.fillText(g.text, 0, 0); cx.restore();
 }
 
-window.TIMELINE = TL;
+window.TIMELINE = TL; window.DURATION = TL.duration;
 window.SHOTS = shots.map((s) => ({ id: s.id, start: s.start, end: s.end, trans: s.trans ? s.trans.type : null }));
-window.DURATION = TL.duration;
 window.renderAt = function (t, opts = {}) {
-  const shot = shotAt(t);
-  const idx = shots.indexOf(shot);
-  const prev = shots[idx - 1];
+  const shot = shotAt(t), idx = shots.indexOf(shot), prev = shots[idx - 1], nxt = shots[idx + 1];
   cx.globalAlpha = 1; cx.fillStyle = '#000'; cx.fillRect(0, 0, W, H);
-  const lt = t - shot.start;
+  const lt = t - shot.start, tr = shot.trans || {};
   let res;
-  const tr = shot.trans || {};
-  if (shot.rewind && lt < shot.rewind && prev) {
-    // play the previous shot backwards, fast
-    const rt = shot.start - lt * 4;
-    res = renderShot(prev, rt);
-    bloom(); vhs(t, 1);
-  } else {
-    const subs = [];
-    let blur = false;
-    if (tr.type === 'whip' && prev && lt < tr.dur) blur = true;
-    const nxt = shots[idx + 1];
-    if (nxt && nxt.trans && nxt.trans.type === 'whip' && shot.end - t < nxt.trans.dur) blur = true;
-    const whipAt = (tt) => {
-      if (tr.type === 'whip' && prev && tt - shot.start < tr.dur) return -0.5 * (1 - (tt - shot.start) / tr.dur);
-      if (nxt && nxt.trans && nxt.trans.type === 'whip' && shot.end - tt < nxt.trans.dur) return 0.5 * (1 - (shot.end - tt) / nxt.trans.dur);
-      return 0;
-    };
-    const probe = shot.run(t, (t - shot.start) / (shot.end - shot.start), shot.end - shot.start);
+  if (shot.rewind && lt < shot.rewind && prev) { res = renderShot(prev, shot.start - lt * 4); bloom(); vhs(t, 1); }
+  else {
+    let blur = (tr.type === 'whip' && prev && lt < tr.dur) || (nxt && nxt.trans && nxt.trans.type === 'whip' && shot.end - t < nxt.trans.dur);
+    const whipAt = (tt) => { if (tr.type === 'whip' && prev && tt - shot.start < tr.dur) return -0.5 * (1 - (tt - shot.start) / tr.dur); if (nxt && nxt.trans && nxt.trans.type === 'whip' && shot.end - tt < nxt.trans.dur) return 0.5 * (1 - (shot.end - tt) / nxt.trans.dur); return 0; };
+    const probe = shot.run(t, lt / (shot.end - shot.start), shot.end - shot.start);
     if (probe.blur) blur = true;
-    const n = blur && !opts.fast ? 6 : 1;
-    for (let i = 0; i < n; i++) {
-      const tt = t + (n > 1 ? (i / (n - 1) - 0.5) / 30 * 1.6 : 0);
-      res = renderShot(shot, tt, 1 / (i + 1), whipAt(tt));
-    }
-    if (tr.type === 'fade' && prev && lt < tr.dur) {
-      // crossfade: draw previous shot on top fading out
-      renderShot(prev, t, 1 - lt / tr.dur);
-    }
+    const n = blur && !opts.fast ? 5 : 1;
+    for (let i = 0; i < n; i++) { const tt = t + (n > 1 ? (i / (n - 1) - 0.5) / 30 * 1.5 : 0); res = renderShot(shot, tt, 1 / (i + 1), whipAt(tt)); }
+    if (tr.type === 'fade' && prev && lt < tr.dur) renderShot(prev, t, 1 - lt / tr.dur);
     bloom();
     const fx = res.fx || {};
-    if (fx.bw) { grain(t, 0.35); vignette(0.55); } else vignette(0.28);
+    if (res.w && res.w.flash) { cx.save(); cx.globalAlpha = res.w.flash * 0.55; cx.fillStyle = '#eef4ff'; cx.fillRect(0, 0, W, H); cx.restore(); }
+    if (fx.bw) { grain(t, 0.35); vignette(0.55); } else vignette(res.w && res.w.k > 0.5 ? 0.45 : 0.28);
     if (fx.rewind) vhs(t, fx.rewind);
-    if (fx.half) bigText('½', fx.half, 0.8, 330);
-    if (fx.x2) bigText('×2', fx.x2, 0.62, 240);
     if (fx.sparkle) sparkle(fx.sparkle);
   }
   captions(t);

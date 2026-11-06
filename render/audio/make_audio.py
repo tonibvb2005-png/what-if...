@@ -65,7 +65,7 @@ melody = [0, 2, 1, 2, 3, 2, 1, 0, 4, 3, 2, 1, 2, -1, 0, -1,
 pl_cache = {}
 pattern = ['D', 't', 'k', 'D', 'D', 't', 'k', 't']  # 8 eighths per bar (maqsum-ish)
 music_end = DUR
-whatif0, whatif1 = S['whatif'], S['wall']
+whatif0, whatif1 = S['whatif'], S['appia']
 t = 0.0; step = 0
 while t < music_end - 0.2:
     p = pattern[step % 8]
@@ -132,38 +132,52 @@ def wind(sec):
     m = 0.6 + 0.4 * np.sin(2 * np.pi * np.arange(n) / SR * 0.23)
     return x * m * np.clip(np.arange(n) / (0.6 * SR), 0, 1)
 
-desert_end = S['ritual']
-at(fx, 0, wind(desert_end), 0.10)
-at(fx, S['whatif'], wind(S['wall'] - S['whatif']), 0.06)
-# pouring
-at(fx, 0.0, pour(S['shrug']), 0.22, 0.2)
-at(fx, WT('shrug', 2), pour(max(0.3, S['pull'] - WT('shrug', 2))), 0.16, 0.2)
-# splashes on hook
-for k in range(5): at(fx, 0.3 + k * 0.5, blip(1400, 700, 0.08), 0.08, 0.3)
+def rain(sec):
+    n = int(sec * SR); x = hp(noise(sec), 1500) * 0.5 + bp(noise(sec), 300, 1200) * 0.3
+    return x * np.clip(np.arange(n) / (1.0 * SR), 0, 1)
+def thunder(sec=2.5):
+    n = int(sec * SR); t_ = np.arange(n) / SR
+    x = lp(noise(sec), 180) * 3 + lp(noise(sec), 900) * np.exp(-t_ * 6)
+    return x * np.exp(-t_ * 1.4) * np.clip(t_ / 0.02, 0, 1)
+def step(): n = int(0.12 * SR); t_ = np.arange(n) / SR; return (lp(noise(0.12), 400) * 1.5 + np.sin(2 * np.pi * 70 * t_)) * np.exp(-t_ * 40)
+def clink(): return bp(noise(0.08), 3000, 9000) * env(int(0.08 * SR), 0.001, 0.02) + blip(2600, 2500, 0.08) * 0.4
+def creak(sec=0.6):
+    n = int(sec * SR); t_ = np.arange(n) / SR; f = 180 + 60 * np.sin(2 * np.pi * 3 * t_)
+    return signal.sawtooth(2 * np.pi * np.cumsum(f) / SR) * bp(np.ones(n), 10, 20)[:n] * 0 + bp(signal.sawtooth(2 * np.pi * np.cumsum(f) / SR), 300, 1500) * np.sin(np.pi * t_ / sec)
+
+storm0 = S['storm'] - 0.4
+at(fx, 0, wind(storm0), 0.05)
+# construction ambience: pick clinks + crane creaks until the storm
+tt = 0.3
+while tt < storm0:
+    at(fx, tt, clink(), 0.10, float(rng.uniform(-0.7, 0.7))); tt += float(rng.uniform(0.45, 1.1))
+for k in range(int(storm0 / 3.1)): at(fx, 1.0 + k * 3.1, creak(0.7), 0.05, -0.5)
+# time-lapse: rapid clinks
+tt = WT('shrug', 2)
+while tt < S['storm'] - 0.2: at(fx, tt, clink(), 0.12, float(rng.uniform(-0.6, 0.6))); tt += 0.07
 # camera moves
-at(fx, S['egypt'] + 0.2, whoosh(0.9, False), 0.20)
-at(fx, S['men'] + 0.1, whoosh(1.2, True), 0.20)
-at(fx, S['oneman'] - 0.05, whoosh(0.7, False), 0.35)
-for sid in ['laugh', 'overseer', 'pull']: at(fx, S[sid] - 0.12, whoosh(0.32), 0.38)
-at(fx, WT('pull', 6) - 0.12, whoosh(0.32), 0.38)
-at(fx, WT("men", 2), thud(), 0.18)  # ropes grabbed
-at(fx, WT('overseer', 3), hiss(1.4), 0.22)
-at(fx, WT('overseer', 4), thud(), 0.25)
+at(fx, S['rome'] + 0.2, whoosh(1.2, True), 0.22)
+at(fx, S['curve'] - 0.05, whoosh(0.9, False), 0.3)
+for sid in ['laugh', 'cent', 'mud', 'runoff']: at(fx, S[sid] - 0.12, whoosh(0.32), 0.38)
+at(fx, WT('laugh', 8) - 0.12, whoosh(0.32), 0.38)
+at(fx, WT('curve', 6), blip(500, 700, 0.08), 0.2)
+at(fx, WT('laugh', 9), blip(260, 200, 0.4) * 0.6, 0.3)
+at(fx, WT('cent', 3), hiss(1.4), 0.22)
+at(fx, WT('cent', 4), thud(), 0.25)
 at(fx, WT('shrug', 1), blip(420, 760, 0.1), 0.3)
-at(fx, S['pull'] + 0.35, slide(2.2), 0.42)
-at(fx, WT('pull', 6), blip(900, 250, 0.35), 0.25)
-at(fx, S['ritual'], boom_drum(), 0.6)
-at(fx, WT('ritual', 10), blip(300, 220, 0.25), 0.25)
-at(fx, S['lab'], blip(1800, 1800, 0.04), 0.3)
-at(fx, WT('lab', 4), ding(1046.5, 0.8), 0.18)
-at(fx, WT('macro', 2), glitter(1.4), 0.25)
-at(fx, WT('macro', 6), slide(1.6), 0.25)
-at(fx, WT('half', 5), ding(), 0.35)
+# storm
+at(fx, storm0, rain(DUR - storm0), 0.28)
+for f in [WT('storm', 3), WT('mud', 9) + 0.1, WT('whatif', 9)]: at(fx, f, thunder(), 0.7)
+at(fx, WT('mud', 9), lp(noise(1.2), 200) * env(int(1.2 * SR), 0.05, 0.4), 0.5)
+at(fx, S['runoff'], bp(noise(S['march'] - S['runoff']), 600, 3000), 0.12)
+t0 = S['runoff'] - 0.3
+while t0 < S['whatif']: at(fx, t0, step(), 0.25); t0 += 0.25
 at(fx, S['whatif'], tape_rewind(0.45), 0.6)
-at(fx, WT('whatif', 2), thud(), 0.55)
-at(fx, WT('whatif', 2) + 0.15, thud(), 0.35, 0.4)
-at(fx, WT('whatif', 2) + 0.28, thud(), 0.3, -0.4)
-at(fx, S['wall'], tape_rewind(0.4), 0.5)
+at(fx, WT('whatif', 9), thud(), 0.45)
+at(fx, S['appia'], tape_rewind(0.4), 0.5)
+# present day: birds chirps instead of rain
+fx[int(S['appia'] * SR):] *= 0.0
+for k in range(10): at(fx, S['appia'] + 0.3 + k * 0.45, blip(3200, 4200, 0.06) + 0, 0.06, float(rng.uniform(-0.8, 0.8)))
 at(fx, TL['speechEnd'] + 0.25, ding(2637, 1.0), 0.22); at(fx, TL['speechEnd'] + 0.3, ding(3520, 1.0), 0.13)
 
 mix = mus * 0.55 + fx * 0.9
