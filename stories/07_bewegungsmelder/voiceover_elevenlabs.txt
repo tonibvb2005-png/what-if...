@@ -1,0 +1,37 @@
+[calm, low voice] Stell dir vor, du machst noch Überstunden. [short pause] Ganz allein im Büro.
+[slowly] Das Licht hier hat Bewegungsmelder.
+Es geht nur dort an, wo sich jemand bewegt.
+[long pause]
+[tired] Um drei Uhr dreiunddreißig gehst du zum Kopierer.
+[slowly] Ein Licht nach dem anderen geht über dir an.
+[long pause]
+Der Kopierer rattert los.
+[short pause]
+[tense, quietly] Dann hörst du etwas. [short pause] Hinter dir.
+[short pause]
+[whispers] Ganz hinten geht ein Licht an.
+[long pause]
+[nervous] Du drehst dich um.
+[short pause]
+[slowly] Da ist niemand.
+[long pause]
+[tense] Dann geht das nächste Licht an.
+[whispers] Näher.
+[long pause]
+[nervous] Du bist allein. Das weißt du.
+[slowly, frightened] Aber irgendetwas kommt näher.
+[long pause]
+[quietly] Der Kopierer ist fertig.
+[slowly] Auf dem Blatt ist kein Text. [short pause] Nur ein Foto.
+[tense] Von dir. [short pause] Am Kopierer. [short pause] Von hinten.
+[whispers, frightened] Und direkt hinter dir steht er.
+[long pause]
+[slowly] Dann gehen alle Lichter aus.
+[long pause]
+[whispers] Nur das Licht direkt hinter dir geht an.
+[long pause]
+[calm, low voice] Rennst du los?
+[short pause]
+Oder bleibst du stocksteif stehen?
+[long pause]
+[ominous] Teil zwei. [short pause] Heute Nacht.

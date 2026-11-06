@@ -1,0 +1,26 @@
+[calm, low voice] Stell dir vor, du zeltest mit deinem besten Freund Jonas im Wald.
+[slowly] Kilometerweit ist niemand außer euch.
+[long pause]
+[quietly] Um drei Uhr dreiunddreißig wachst du auf.
+[tense] Jemand ruft deinen Namen.
+[whispers] Von draußen.
+[long pause]
+[slowly] Es ist Jonas' Stimme.
+[excited, from a distance] Komm schnell raus! Das musst du sehen!
+[long pause]
+[frightened, quietly] Aber Jonas liegt neben dir.
+[long pause]
+[slowly] Seine Augen sind weit offen. [short pause] Er bewegt sich nicht.
+[whispers] Ganz leise flüstert er: [whispers, terrified] Ich höre ihn auch.
+[long pause]
+[tense] Dann fällt ein Schatten auf die Zeltwand.
+[slowly, ominous] Groß. [short pause] Dünn. [short pause] Mit viel zu langen Armen.
+[long pause]
+[whispers] Und dann bewegt sich der Reißverschluss.
+[slowly] Langsam. [short pause] Von außen.
+[long pause]
+[calm, low voice] Was machst du?
+[short pause]
+Festhalten oder fliehen?
+[long pause]
+[ominous] Teil zwei. [short pause] Heute Nacht.

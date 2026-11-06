@@ -1,0 +1,335 @@
+{
+ "series": "GESCHICHTEN UM 3:33",
+ "episode": "#07",
+ "title": "BEWEGUNGSMELDER",
+ "part": 1,
+ "set": "openoffice",
+ "ambience": "office",
+ "endArt": "office",
+ "question": "RENNEN oder STILLSTEHEN? Schreib's in die Kommentare.",
+ "shots": [
+  {
+   "scene": "oo_desk",
+   "clock": "3:31",
+   "place": "BÜRO",
+   "lines": [
+    {
+     "text": "Stell dir vor, du machst noch Überstunden. Ganz allein im Büro.",
+     "hl": {
+      "Überstunden": "y",
+      "allein": "r"
+     }
+    },
+    {
+     "text": "Das Licht hier hat Bewegungsmelder.",
+     "hl": {
+      "Bewegungsmelder": "y"
+     }
+    },
+    {
+     "text": "Es geht nur dort an, wo sich jemand bewegt.",
+     "hl": {
+      "bewegt": "y"
+     },
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "oo_walk",
+   "clock": "3:33",
+   "place": "BÜRO",
+   "lines": [
+    {
+     "text": "Um 3:33 gehst du zum Kopierer.",
+     "say": "Um drei Uhr dreiunddreißig gehst du zum Kopierer.",
+     "hl": {
+      "Kopierer": "y"
+     },
+     "ev": [
+      [
+       "walk",
+       "start",
+       "end+3.4"
+      ]
+     ]
+    },
+    {
+     "text": "Ein Licht nach dem anderen geht über dir an.",
+     "pause": 0.6
+    }
+   ]
+  },
+  {
+   "scene": "oo_copier",
+   "clock": "3:33",
+   "place": "KOPIERER",
+   "lines": [
+    {
+     "text": "Der Kopierer rattert los.",
+     "ev": [
+      [
+       "print",
+       "word2",
+       "end+9"
+      ]
+     ],
+     "sfx": [
+      [
+       "copier",
+       "word2"
+      ]
+     ]
+    },
+    {
+     "text": "Dann hörst du etwas. Hinter dir.",
+     "hl": {
+      "Hinter": "r"
+     },
+     "pause": 0.3
+    },
+    {
+     "text": "Ganz hinten geht ein Licht an.",
+     "hl": {
+      "Licht": "y"
+     },
+     "ev": [
+      [
+       "ghost",
+       "word3",
+       0
+      ]
+     ],
+     "pause": 0.5
+    }
+   ]
+  },
+  {
+   "scene": "oo_pov",
+   "clock": "3:33",
+   "place": "BÜRO",
+   "lines": [
+    {
+     "text": "Du drehst dich um.",
+     "pause": 0.3
+    },
+    {
+     "text": "Da ist niemand.",
+     "hl": {
+      "niemand": "r"
+     },
+     "pause": 0.6
+    }
+   ]
+  },
+  {
+   "scene": "oo_copier",
+   "clock": "3:34",
+   "place": "KOPIERER",
+   "lines": [
+    {
+     "text": "Dann geht das nächste Licht an.",
+     "ev": [
+      [
+       "ghost",
+       "word3",
+       1
+      ]
+     ],
+     "sfx": [
+      [
+       "click",
+       "word3"
+      ]
+     ]
+    },
+    {
+     "text": "Näher.",
+     "hl": {
+      "Näher": "r"
+     },
+     "ev": [
+      [
+       "ghost",
+       "start",
+       2
+      ]
+     ],
+     "sfx": [
+      [
+       "click",
+       "start"
+      ],
+      [
+       "boom",
+       "start"
+      ]
+     ],
+     "pause": 0.6
+    }
+   ]
+  },
+  {
+   "scene": "oo_face",
+   "clock": "3:34",
+   "place": "KOPIERER",
+   "lines": [
+    {
+     "text": "Du bist allein. Das weißt du.",
+     "hl": {
+      "allein": "y"
+     }
+    },
+    {
+     "text": "Aber irgendetwas kommt näher.",
+     "hl": {
+      "näher": "r"
+     },
+     "pause": 0.4
+    }
+   ]
+  },
+  {
+   "scene": "oo_paper",
+   "clock": "3:34",
+   "lines": [
+    {
+     "text": "Der Kopierer ist fertig.",
+     "hl": {
+      "fertig": "y"
+     }
+    },
+    {
+     "text": "Auf dem Blatt ist kein Text. Nur ein Foto.",
+     "hl": {
+      "Foto": "y"
+     }
+    },
+    {
+     "text": "Von dir. Am Kopierer. Von hinten.",
+     "hl": {
+      "hinten": "r"
+     }
+    },
+    {
+     "text": "Und direkt hinter dir steht er.",
+     "hl": {
+      "er": "r"
+     },
+     "ev": [
+      [
+       "paperFig",
+       "word3"
+      ],
+      [
+       "dread",
+       "word3"
+      ]
+     ],
+     "sfx": [
+      [
+       "boom",
+       "word3"
+      ]
+     ],
+     "pause": 0.8
+    }
+   ]
+  },
+  {
+   "scene": "oo_copier",
+   "zoom": true,
+   "eyes": "wide",
+   "clock": "3:34",
+   "place": "KOPIERER",
+   "lines": [
+    {
+     "text": "Dann gehen alle Lichter aus.",
+     "ev": [
+      [
+       "allOff",
+       "word3"
+      ]
+     ],
+     "pause": 0.9
+    },
+    {
+     "text": "Nur das Licht direkt hinter dir geht an.",
+     "hl": {
+      "hinter": "r"
+     },
+     "ev": [
+      [
+       "ghost",
+       "end",
+       3
+      ],
+      [
+       "thing",
+       "end"
+      ]
+     ],
+     "sfx": [
+      [
+       "click",
+       "end"
+      ],
+      [
+       "boom",
+       "end"
+      ]
+     ],
+     "pause": 1.6
+    }
+   ]
+  },
+  {
+   "scene": "choice",
+   "heading": "WAS MACHST DU?",
+   "left": {
+    "label": "RENNEN",
+    "text": "Losrennen. Im Dunkeln, zur Tür.",
+    "icon": "🏃",
+    "color": "#2f7cf6"
+   },
+   "right": {
+    "label": "STILLSTEHEN",
+    "text": "Nicht bewegen. Dann bleibt dein Licht aus.",
+    "icon": "🧍",
+    "color": "#ff3b30"
+   },
+   "lines": [
+    {
+     "text": "Rennst du los?",
+     "hl": {
+      "Rennst": "b"
+     }
+    },
+    {
+     "text": "Oder bleibst du stocksteif stehen?",
+     "hl": {
+      "stocksteif": "r"
+     },
+     "pause": 0.5
+    }
+   ]
+  },
+  {
+   "scene": "end",
+   "sfx": [
+    [
+     "boom",
+     0.0
+    ]
+   ],
+   "lines": [
+    {
+     "text": "Teil 2. Heute Nacht.",
+     "say": "Teil zwei. Heute Nacht.",
+     "nocap": true,
+     "pause": 1.2
+    }
+   ]
+  }
+ ]
+}
