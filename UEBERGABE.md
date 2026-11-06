@@ -65,7 +65,7 @@ Details zum Stil stehen in `STYLE_GUIDE.md`.
 | 06 | Lichthupe | Auto, Landstraße, Verfolger, Radio, Rücksitz | Bild fertig; wartet auf Stimme |
 | 07 | **Bewegungsmelder** | dunkles Großraumbüro, Lichter folgen dir, Kopierer druckt ein Foto | Bild fertig; wartet auf Stimme |
 | 08 | Letzte Haltestelle | Nachtbus | gebaut, aber verworfen (Idee war nicht neu) |
-| 09 | **Spätschicht** | Kiosk nachts, Kunde mit Kapuze kauft Wasser + Schere, Zettel der Vorgängerin, Überwachungskamera | Bild fertig + Probevideo (Piper); wartet auf dein Feedback und deine Stimme |
+| 09 | **Spätschicht** | Kiosk nachts, Kunde mit Kapuze kauft Wasser + Schere, Zettel der Vorgängerin, Überwachungskamera | **FINAL gerendert** mit deiner ElevenLabs-Stimme (Arthur Holm), bereit zum Posten |
 
 Die Folge „Stock 13“ (Aufzug) wurde auf deinen Wunsch gelöscht und durch „Bewegungsmelder“ ersetzt.
 
@@ -163,6 +163,9 @@ python3 engine/build.py stories/07_bewegungsmelder --voice-file stories/07_beweg
     - Korrigiert nach Standbild-Prüfung: Fassade war orange (jetzt grau-navy), Hand an der Schere war zu groß/flach, Scanner sah aus wie ein Strich, Lagertür schwang in den Laden, Gestalt im Lager war auf der Kamera unsichtbar.
     - **Dein Feedback zum Probevideo:** „Richtig gutes Video“. Korrigiert: Die Hand ging beim Überreichen durch die Schere. Jetzt liegt die Hand oben auf den Griffen (Fingerspitzen auf den Ringen, Kontaktschatten), Hand und Schere gleiten gemeinsam. Außerdem lief der Kunde zu schnell zur Theke (jetzt ca. 3,3 s für 5 m).
     - **Neue Soundeffekte** (`build.py`, Lautstärke pro Effekt in `SFX_GAIN`): `steps_out` (Schritte draußen auf Asphalt), `steps` (Schritte auf Fliesen), `doorclose` (Glastür fällt zu), `bottle` (Flasche auf Theke), `clack` (Schere auf Theke), `scrape` (Schere wird rübergeschoben), `drawer` (Kassenschublade), `flicker` an der Neonröhre, `heart` (Herzschlag, wird schneller), `creak` (Theke knarzt, als er sich drüberlehnt), `snip` (Schere schnappt zweimal nach dem Lächeln).
+    - **Finales Video** mit deiner Aufnahme (`stories/09_spaetschicht/voice/voiceover.mp3`, 66,5 s, Arthur Holm, Eleven v3) gerendert: `output/09_spaetschicht.mp4`, ca. 68 s. Whisper hat alle 22 Sätze sauber zugeordnet.
+    - **Branding:** Profilbild in zwei Varianten (`branding/profilbild_A.png` Hauptfigur, `branding/profilbild_B.png` Kapuzengestalt; Vorlage `branding/profilbild.html`). Empfehlung A. Caption liegt in `branding/CAPTION_09_spaetschicht.txt`.
+    - **Stimme:** Empfehlung bleibt Arthur Holm für alle Folgen (Wiedererkennung), vor allem für Teil 2 von Zeitschalter.
     - Logik-Check: Du kennst den Kunden aus früheren Nächten; der Zettel stammt von der Vorgängerin, die ihn kannte; die Kamera (zweite Quelle) widerspricht deinen Augen. Die Frage ALARM (Kamera glauben) oder BEDIENEN (Zettel glauben) ist echt offen.
 
 ---
@@ -194,7 +197,7 @@ Teil 2 kommt heute Nacht – folgen, damit du ihn nicht verpasst.
 
 ## 8. Nächste Schritte (hier weitermachen)
 
-0. **Folge 09 „Spätschicht“:** Probevideo `output/09_spaetschicht.mp4` ansehen und Feedback geben. Danach `stories/09_spaetschicht/voiceover_elevenlabs.txt` in ElevenLabs aufnehmen, als `stories/09_spaetschicht/voice/voiceover.mp3` ablegen und final rendern:
+0. ~~Folge 09 fertigstellen~~ → erledigt, finales Video gerendert. **Posten** (Caption siehe oben). Ursprünglicher Text: Probevideo `output/09_spaetschicht.mp4` ansehen und Feedback geben. Danach `stories/09_spaetschicht/voiceover_elevenlabs.txt` in ElevenLabs aufnehmen, als `stories/09_spaetschicht/voice/voiceover.mp3` ablegen und final rendern:
    `python3 engine/build.py stories/09_spaetschicht --voice-file stories/09_spaetschicht/voice/voiceover.mp3`
    Hinweis: Mit der Piper-Stimme dauert das Video ca. 65 s, also etwas über dem Ziel von 60 s. Falls es mit ElevenLabs auch zu lang wird, kann der Satz „Seit drei Wochen ist sie verschwunden.“ oder „Aber heute Nacht geht er nicht.“ raus.
 
