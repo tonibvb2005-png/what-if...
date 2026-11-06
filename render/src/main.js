@@ -74,11 +74,11 @@ function weather(t) {
   U.bot.value.copy(U.hor.value);
   R.fog.color.set(today ? 0xf2dcb8 : 0xcfe6f5).lerp(C.tmp.set(0x4a5468), k);
   R.fog.near = lerp(60, 14, k); R.fog.far = lerp(380, 120, k);
-  R.hemi.intensity = lerp(0.55, 1.35, k); R.hemi.color.set(0xd8ecff).lerp(C.tmp.set(0x8899bb), k);
+  R.hemi.intensity = lerp(0.55, mode === 'whatif' ? 2.2 : 1.8, k); R.hemi.color.set(0xd8ecff).lerp(C.tmp.set(0x8899bb), k);
   R.sun.intensity = lerp(today ? 3.4 : 3.2, 0.05, k); R.sun.color.set(today ? 0xffcf8f : 0xfff0d8);
   R.scene.environment = today ? ENV.today : (k > 0.5 ? ENV.storm : ENV.day);
   R.scene.environmentIntensity = lerp(0.75, 0.55, k);
-  renderer.toneMappingExposure = lerp(1.15, 1.35, k);
+  renderer.toneMappingExposure = lerp(1.15, 1.5, k);
   R.roadMat.roughness = R.advance.material.roughness = lerp(0.92, 0.18, k); R.roadMat.envMapIntensity = R.advance.material.envMapIntensity = lerp(0.45, 1.0, k);
   R.roadMat.color.set(0xffffff).lerp(C.tmp.set(0x9aa4b4), k * 0.6); R.advance.material.color.copy(R.roadMat.color);
   const tint = today ? C.tmp.set(0xfff0dc) : C.tmp.set(0xffffff).lerp(new THREE.Color(0x8e9ab4), k);
@@ -90,23 +90,42 @@ function weather(t) {
   R.stormClouds.forEach((c) => { c.visible = k > 0.05; c.material.opacity = k; });
   const rainOn = k > 0.35;
   R.rain.visible = rainOn; if (rainOn) R.updateRain(t, camera);
-  R.ditches.forEach((d) => (d.visible = k > 0.4 && mode !== 'whatif')); R.ditchWaterTex.offset.y = -t * 1.5;
-  R.runoff.visible = k > 0.5 && mode === 'normal'; R.sheen.visible = false; R.runTex.offset.x = -t * 1.2;
+  R.ditches.forEach((d) => (d.visible = k > 0.4 && mode !== 'whatif')); R.ditchWaterTex.offset.y = -t * 0.9;
+  R.runoff.visible = k > 0.5 && mode === 'normal'; R.sheen.visible = false; R.runTex.offset.x = -t * 0.9; R.runNormal.offset.x = -t * 0.9;
+  R.mudNormal.offset.y = -t * 0.35; R.poolNormal.offset.set(t * 0.03, -t * 0.05);
+  R.rain.material.opacity = camera.position.y > 4 ? 0.22 : 0.5;
+  splashes(t, k);
   R.mud.visible = k > 0.4; R.mudTex.offset.y = -t * 0.8; R.ruts.forEach((r) => (r.visible = k <= 0.4));
   R.birds.forEach((b) => { const u = b.userData; b.visible = k < 0.3; b.position.set(u.x + t * 3, u.y + Math.sin(t * 2 + u.p) * 0.6, u.z); b.scale.y = 0.6 + 0.4 * Math.abs(Math.sin(t * 6 + u.p)); });
   return { k, flash, today };
 }
+function splashes(t, k) {
+  if (k < 0.5 || mode === 'today') { R.splashes.done(0); return; }
+  let n = 0; const cz = camera.position.z, cxp = camera.position.x;
+  for (let i = 0; i < 140; i++) {
+    const ph = t * 2.2 + hash1(i) ; const cyc = Math.floor(ph), q = ph - cyc;
+    const x = (hash2(i, cyc) - 0.5) * 2 * ROAD_HALF * 0.95, z = cz - 1 - hash2(cyc, i + 3) * 16;
+    if (mode === 'whatif') continue;
+    R.splashes.place(n++, x, roadY(x) + 0.025, z, (0.6 + q * 2.6) * (q < 0.92 ? 1 : 0));
+  }
+  R.splashes.done(n);
+}
+const hash1 = (i) => { const s = Math.sin(i * 91.7) * 43758.5453; return s - Math.floor(s); };
+const hash2 = (a, b) => { const s = Math.sin(a * 127.1 + b * 311.7) * 43758.5453; return s - Math.floor(s); };
 function worldState(t) {
   const today = mode === 'today', whatif = mode === 'whatif';
   R.site.visible = !today; R.today.visible = today;
   R.road.visible = !whatif; R.flatRoad.visible = whatif; R.advance.visible = !whatif;
+  R.slabs.visible = R.mudPool.visible = whatif;
+  const breakP = whatif ? sw(t, WT('whatif', 8) - 0.15, WT('whatif', 14) + 0.2) : 0;
+  if (whatif) R.slabs.update(breakP, t);
   R.roadMat.map = today ? R.paveGrassTex : R.paveTex; R.advance.material.map = R.roadMat.map;
   const pf = paveFront(t);
   clipPlane.constant = pf;
   R.front.position.z = pf; R.front.visible = !today && !whatif && pf < BUILD_Z1 - 0.01;
   R.gravelLayer.visible = R.stoneLayer.visible = !today;
   R.kerbAdv.forEach((k) => { const len = Math.max(0.01, pf - BUILD_Z0); k.scale.z = len; k.position.z = BUILD_Z0 + len / 2; });
-  R.flatRoad.position.y = whatif ? -0.35 * ease.io(sw(t, WT('whatif', 9) - 0.1, WT('whatif', 12))) : 0;
+  R.flatRoad.position.y = whatif ? -0.45 : 0;
   R.cr.userData.wheel.rotation.z = t * 0.8; R.cr.userData.blk.position.y = 2.2 + Math.sin(t * 0.4) * 0.8;
   const cw = R.craneWalker; const wp = new THREE.Vector3(); R.cr.userData.wheel.getWorldPosition(wp); cw.mesh.position.set(wp.x, wp.y - 1.55, wp.z); cw.set({ pose: Math.floor(t * 6) % 2 ? 'walk1' : 'walk2' }); cw.face(camera); cw.mesh.visible = !today;
   R.banners.forEach((b, i) => { b.userData.cloth.rotation.y = Math.sin(t * 2 + i) * 0.25; });
@@ -124,27 +143,47 @@ function worldState(t) {
     w.face(camera, Math.sin(w.phase) > 0);
   });
   R.legionG.visible = (mode === 'normal' && t > S.runoff - 0.3 && t < S.whatif + 0.5) || whatif;
+  let ringN = 0, ripN = 0;
+  const mudRing = (x, y, z, e, ph) => {
+    if (e < 0.08) return;
+    R.mudRings.place(ringN++, x, y + 0.012, z, 0.7 + 0.25 * e + Math.sin(t * 6 + ph) * 0.06);
+    for (let r = 0; r < 2; r++) { const q = (t * 0.9 + ph + r * 0.5) % 1; R.mudRipples.place(ripN++, x, y + 0.008, z, (0.8 + q * 2.0) * (q < 0.9 ? 1 : 0)); }
+  };
   if (R.legionG.visible) {
     const lz = whatif ? -14 : lerp(-26, -10, sw(t, S.runoff, S.whatif));
-    const stuck = whatif && t > WT('whatif', 9);
-    const sink = whatif ? 0.9 * ease.io(sw(t, WT('whatif', 9), WT('whatif', 12))) : 0;
-    R.legion.forEach((c) => {
-      c.set({ pose: stuck ? 'stuck' : (Math.floor(t * 4 + c.phase) % 2 ? 'march1' : 'march2'), expr: whatif ? (stuck ? 'shock' : 'strain') : 'determined' });
-      c.mesh.position.set(c.base.x, (whatif ? ROAD_Y + 0.05 + R.flatRoad.position.y : c.base.y) - sink, lz + c.base.z);
+    const top = ROAD_Y + 0.05, mudY = ROAD_Y - 0.12;
+    R.legion.forEach((c, i) => {
+      const e = whatif ? ease.io(sw(t, WT('whatif', 9) - 0.2 + (i % 5) * 0.06 + Math.floor(i / 4) * 0.03, WT('whatif', 14) + 0.3)) : 0;
+      const struggle = e > 0.12;
+      c.set({ pose: struggle ? (Math.floor(t * 5 + c.phase + i) % 2 ? 'stuck' : 'stumble') : (Math.floor(t * 4 + c.phase) % 2 ? 'march1' : 'march2'), expr: whatif ? (struggle ? 'shock' : 'strain') : 'determined', mud: whatif ? Math.round(Math.min(1, 0.15 + e * 0.9) * 8) / 8 : 0 });
+      const y = whatif ? lerp(top, mudY - 1.05, e) : c.base.y;
+      const x = c.base.x, z = lz + c.base.z;
+      c.mesh.position.set(x, y, z);
       c.face(camera);
+      if (struggle) c.mesh.rotateZ(Math.sin(t * 5.5 + i * 1.7) * 0.14 * e);
+      if (whatif) mudRing(x, mudY, z, e, i * 0.37);
     });
-    const lead = R.legionG.children[R.legionG.children.length - 1]; lead.position.set(2.6, roadY(2.6) - sink, lz + 2.2);
+    const lead = R.legionG.children[R.legionG.children.length - 1]; lead.position.set(2.6, whatif ? top : roadY(2.6), lz + 2.2);
     lead.rotation.y = Math.atan2(camera.position.x - 2.6, camera.position.z - (lz + 2.2));
   }
-  R.stuck.forEach((c, i) => { c.mesh.visible = k > 0.4 && mode === 'normal'; const s = 0.55 + 0.25 * ease.io(sw(t, S.mud, S.mud + 1.5)); c.mesh.position.set(c.base.x, -s, c.base.z); c.set({ pose: Math.floor(t * 3 + i) % 2 ? 'stuck' : 'stumble' }); c.face(camera); });
+  R.stuck.forEach((c, i) => {
+    c.mesh.visible = k > 0.4 && mode === 'normal'; if (!c.mesh.visible) return;
+    const e = ease.io(sw(t, S.mud - 0.4 + i * 0.15, S.runoff));
+    const mudY = 0.16;
+    c.set({ pose: Math.floor(t * 4 + i) % 2 ? 'stuck' : 'stumble', mud: Math.round((0.35 + 0.65 * e) * 8) / 8 });
+    c.mesh.position.set(c.base.x, mudY - 0.45 - 0.55 * e, c.base.z); c.face(camera); c.mesh.rotateZ(Math.sin(t * 5 + i * 2.1) * 0.12);
+    mudRing(c.base.x, mudY, c.base.z, 0.6 + e * 0.4, i * 0.5);
+  });
   const cs = ease.io(sw(t, WT('mud', 9) - 0.2, WT('mud', 9) + 1.0)) * (k > 0.4 ? 1 : 0);
+  if (k > 0.4 && mode === 'normal') mudRing(OLD_X, 0.16, -4, 0.4 + cs, 2.2);
+  R.mudRings.done(ringN); R.mudRipples.done(ripN);
   R.mudCart.position.y = (k > 0.4 ? -0.15 : 0) - 0.75 * cs; R.mudCart.rotation.z = 0.18 * cs; R.mudCart.rotation.x = -0.1 * cs;
   R.ox1.position.y = -0.3 * cs; R.ox1.rotation.y = Math.atan2(camera.position.x - R.ox1.position.x, camera.position.z - R.ox1.position.z); R.ox1.visible = !today;
   const gag = sw(t, WT('laugh', 8), S.cent);
   R.gagCart.rotation.z = Math.sin(gag * Math.PI * 5) * 0.12 * (1 - gag * 0.3) + (gag > 0.85 ? -0.3 * sw(gag, 0.85, 1) : 0);
   R.gagCart.position.x = -1.2 * Math.max(0, gag - 0.6);
   R.gagCart.visible = mode === 'normal' && t < S.cent + 0.5;
-  R.puddles.visible = whatif; R.puddles.material.opacity = whatif ? 0.35 + 0.65 * sw(t, S.whatif + 0.5, WT('whatif', 9)) : 0;
+  R.puddles.visible = whatif; R.puddles.position.y = ROAD_Y + 0.06; R.puddles.material.opacity = whatif ? Math.max(0, (0.25 + 0.75 * sw(t, WT('whatif', 3), WT('whatif', 7))) * (1 - breakP * 2.2)) : 0;
   R.tourists.forEach((c, i) => { const z = c.base.z - (t - S.appia) * 0.9; c.mesh.position.set(c.base.x, roadY(c.base.x), z); if (c.spec.pose.startsWith('walk')) c.set({ pose: Math.floor(t * 4 + i) % 2 ? 'walk1' : 'walk2' }); c.face(camera); });
   R.performer.face(camera);
 }
@@ -205,16 +244,16 @@ const shots = [
   { id: 'shrug', start: S.shrug, trans: { type: 'fade', dur: 0.2 }, run(t) {
       const lp = sw(t, WT('shrug', 2), S.storm);
       if (lp <= 0) look(v3(2.4, 1.85, 7.5), v3(1.2, 1.6, 4.2), 40);
-      else { const pf = paveFront(t); look(v3(lerp(6.5, 7.5, lp), lerp(2.6, 3.6, lp), pf + 6), v3(-0.5, 0.4, pf - 2), 52, 0.04); }
+      else { const pf = paveFront(t); look(v3(lerp(4.6, 5.2, lp), lerp(4.4, 5.2, lp), pf + 7.5), v3(-0.3, 0.2, pf - 1.5), 50, 0.03); }
       return { w: setWorld(t), fx: { lapse: lp > 0 && lp < 1 ? 1 : 0 } };
   } },
-  { id: 'storm', start: S.storm, trans: { type: 'fade', dur: 0.2 }, run(t, u) { const e = ease.sine(u); look(v3(lerp(18, 14, e), lerp(11, 8, e), lerp(24, 20, e)), v3(3, 0, -12), 56, 0.1); return { w: setWorld(t) }; } },
+  { id: 'storm', start: S.storm, trans: { type: 'fade', dur: 0.2 }, run(t, u) { const e = ease.sine(u); look(v3(lerp(-11.5, -10.5, e), lerp(5.6, 5.2, e), lerp(7, 5.5, e)), v3(2.5, 1.0, -24), 50, -0.04); return { w: setWorld(t), fx: { bolt: 1, softFlash: 1 } }; } },
   { id: 'mud', start: S.mud, trans: { type: 'whip', dur: 0.12 }, run(t, u) { look(v3(lerp(OLD_X - 2.4, OLD_X - 1.8, u), 1.35, lerp(5.0, 4.4, u)), v3(OLD_X + 0.3, 0.3, -3.2), 54, -0.13); return { w: setWorld(t) }; } },
   { id: 'runoff', start: S.runoff, trans: { type: 'whip', dur: 0.12 }, run(t, u) { look(v3(lerp(2.6, 2.3, u), 1.9, lerp(-3.0, -4.2, u)), v3(4.6, -0.4, -9), 56, 0.06); return { w: setWorld(t) }; } },
   { id: 'march', start: S.march, trans: { type: 'fade', dur: 0.2 }, run(t) { const lz = lerp(-26, -10, sw(t, S.runoff, S.whatif)); look(v3(1.2, 1.25, lz + 7.5), v3(-0.3, 1.5, lz - 2), 54, 0.03); return { w: setWorld(t) }; } },
   { id: 'whatif', start: S.whatif, rewind: 0.45, run(t, u) {
       mode = 'whatif'; const e = ease.sine(u);
-      look(v3(lerp(-6.5, -5.5, e), lerp(5.2, 4.6, e), lerp(-1.5, -3.0, e)), v3(0, 0.6, -15), 54, -0.14);
+      look(v3(lerp(-4.6, -4.0, e), lerp(2.7, 2.3, e), lerp(-3.5, -5.0, e)), v3(0.6, 0.1, -15), 52, -0.12);
       const w = setWorld(t); mode = 'normal'; return { w, fx: { bw: 1 } };
   } },
   { id: 'appia', start: S.appia, run(t, u) {
@@ -266,6 +305,16 @@ function vhs(t, amount) {
   cx.save(); cx.globalAlpha = 0.22 * amount; cx.fillStyle = '#000'; for (let y = 0; y < H; y += 6) cx.fillRect(0, y, W, 2); cx.restore();
   cx.save(); cx.globalAlpha = amount; cx.font = '800 64px Montserrat'; cx.fillStyle = '#fff'; cx.shadowColor = '#000'; cx.shadowBlur = 8; cx.fillText('◀◀ REW', 70, 150); cx.restore();
 }
+function bolt(t, flash, seed) {
+  if (flash <= 0.25) return;
+  cx.save(); cx.globalCompositeOperation = 'screen';
+  let x = W * (0.25 + hash1(seed) * 0.5), y = 0; const pts = [[x, y]];
+  while (y < H * 0.42) { y += 40 + hash2(seed, y) * 70; x += (hash2(y, seed) - 0.5) * 140; pts.push([x, y]); }
+  for (const [lw, col] of [[34, 'rgba(150,180,255,0.25)'], [14, 'rgba(210,225,255,0.7)'], [5, 'rgba(255,255,255,1)']]) {
+    cx.beginPath(); cx.moveTo(...pts[0]); for (const p of pts) cx.lineTo(...p); cx.lineWidth = lw * flash; cx.strokeStyle = col; cx.lineJoin = 'round'; cx.stroke();
+  }
+  cx.restore();
+}
 function grain(t, a) { cx.save(); cx.globalAlpha = a; cx.globalCompositeOperation = 'overlay'; cx.drawImage(grains[Math.floor(t * 30) % 4], 0, 0, W, H); cx.restore(); }
 function sparkle(k) {
   for (const [x, y, s0] of [[0.6, 0.42, 1], [0.68, 0.37, 0.6], [0.55, 0.36, 0.5]]) {
@@ -299,11 +348,12 @@ window.renderAt = function (t, opts = {}) {
     const n = blur && !opts.fast ? 5 : 1;
     for (let i = 0; i < n; i++) { const tt = t + (n > 1 ? (i / (n - 1) - 0.5) / 30 * 1.5 : 0); res = renderShot(shot, tt, 1 / (i + 1), whipAt(tt)); }
     if (tr.type === 'fade' && prev && lt < tr.dur) renderShot(prev, t, 1 - lt / tr.dur);
-    const fx = res.fx || {};
-    if (!fx.bw && res.w) { sunGlow(res.w.k); grade(res.w.k, res.w.today); }
+    if (!(res.fx || {}).bw && res.w) { sunGlow(res.w.k); grade(res.w.k, res.w.today); }
     bloom(0.2);
-    if (res.w && res.w.flash) { cx.save(); cx.globalAlpha = res.w.flash * 0.55; cx.fillStyle = '#eef4ff'; cx.fillRect(0, 0, W, H); cx.restore(); }
+    const fx = res.fx || {};
+    if (res.w && res.w.flash) { cx.save(); cx.globalAlpha = res.w.flash * (fx.softFlash ? 0.22 : 0.45); cx.fillStyle = '#eef4ff'; cx.fillRect(0, 0, W, H); cx.restore(); }
     if (fx.bw) { grain(t, 0.35); vignette(0.55); } else vignette(res.w && res.w.k > 0.5 ? 0.45 : 0.28);
+    if (fx.bolt && res.w) bolt(t, res.w.flash, 7);
     if (fx.rewind) vhs(t, fx.rewind);
     if (fx.sparkle) sparkle(fx.sparkle);
   }

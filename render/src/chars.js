@@ -276,6 +276,15 @@ function drawChar(c, s) {
   headwear(c, s, 'front');
   if (post) post();
   c.restore();
+  if (s.mud) {
+    c.save(); c.globalCompositeOperation = 'source-atop';
+    const y0 = FEET - s.mud * 470;
+    const g = c.createLinearGradient(0, y0 - 50, 0, y0 + 30); g.addColorStop(0, 'rgba(84,56,28,0)'); g.addColorStop(1, 'rgba(84,56,28,0.93)');
+    c.fillStyle = g; c.fillRect(0, y0 - 50, CW, FEET - y0 + 80);
+    for (let i = 0; i < 16; i++) { const x = 80 + ((i * 97) % 360), y = y0 - 20 - ((i * 53) % 140) * s.mud; c.fillStyle = 'rgba(84,56,28,0.85)'; c.beginPath(); c.ellipse(x, y, 10 + (i % 4) * 5, 7 + (i % 3) * 4, i, 0, 7); c.fill(); }
+    c.fillStyle = 'rgba(255,255,255,0.18)'; for (let i = 0; i < 8; i++) { c.beginPath(); c.ellipse(100 + i * 44, y0 + 30 + (i % 3) * 30, 12, 4, 0, 0, 7); c.fill(); }
+    c.restore();
+  }
   if (s.steam) { cloud(c, 84, 70, 1.25); cloud(c, 428, 58, 1.35); cloud(c, 256, 24, 0.9); }
   return meta;
 }

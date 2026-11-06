@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import { toon, outline, box, vnoise, hash, skyDome, cloudSprite, glowTexture, blobShadow, canvasTex } from './world.js';
 import { Char, CW, CH } from './chars.js';
+import { normalTex, waterMaterial, flowTex, ringField, slabField } from './effects.js';
 
 export const ROAD_HALF = 3.0;
 export const CAMBER = 0.32;
@@ -224,22 +225,32 @@ export function buildRome() {
   const kerbAdv = []; for (const s of [-1, 1]) { const k = new THREE.Mesh(new THREE.BoxGeometry(0.42, 0.6, 1), kerbMat); k.position.set(s * (ROAD_HALF + 0.2), 0.3, 0); outline(k, 0.04); scene.add(k); kerbAdv.push(k); }
 
   // ditch water + road runoff (storm), wet sheen
-  const ditchWaterTex = canvasTex(256, 256, (c) => { c.fillStyle = '#6fb0dc'; c.fillRect(0, 0, 256, 256); c.strokeStyle = '#ffffff'; c.lineWidth = 5; for (let i = 0; i < 20; i++) { const y = hash(i, 2) * 256; c.beginPath(); c.moveTo(hash(i, 1) * 256, y); c.lineTo(hash(i, 1) * 256 + 40, y + 6); c.stroke(); } });
-  ditchWaterTex.wrapS = ditchWaterTex.wrapT = THREE.RepeatWrapping; ditchWaterTex.repeat.set(1, 60);
+  const ditchMat = waterMaterial(0x4a7898, { repeat: [1, 120], stretch: [1, 2], opacity: 0.92 });
+  const ditchWaterTex = ditchMat.userData.normal;
   const ditches = [];
-  for (const s of [-1, 1]) { const w = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 420), new THREE.MeshBasicMaterial({ map: ditchWaterTex, transparent: true, opacity: 0.92 })); w.rotation.x = -Math.PI / 2; w.position.set(s * 4.6, -0.22, -190); scene.add(w); ditches.push(w); }
-  const runTex = canvasTex(256, 256, (c) => { c.clearRect(0, 0, 256, 256); c.strokeStyle = 'rgba(220,240,255,0.95)'; c.lineCap = 'round'; for (let i = 0; i < 40; i++) { c.lineWidth = 2 + hash(i, 4) * 3; const y = hash(i, 2) * 256, x = hash(i, 1) * 256; c.beginPath(); c.moveTo(x, y); c.lineTo(x + 50 + hash(i, 3) * 60, y + (hash(i, 5) - 0.5) * 8); c.stroke(); } });
-  runTex.wrapS = runTex.wrapT = THREE.RepeatWrapping;
-  const runoff = new THREE.Mesh(runoffGeometry(-120, BUILD_Z1), new THREE.MeshBasicMaterial({ map: runTex, transparent: true, depthWrite: false, opacity: 0.55 })); runoff.visible = false; scene.add(runoff);
+  for (const s of [-1, 1]) { const w = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 420), ditchMat); w.rotation.x = -Math.PI / 2; w.position.set(s * 4.6, -0.22, -190); w.receiveShadow = true; scene.add(w); ditches.push(w); }
+  const runTex = flowTex();
+  const runNormal = normalTex(256, [[4, 1], [9, 0.5]], [3, 1], 2.2);
+  const runoff = new THREE.Mesh(runoffGeometry(-120, BUILD_Z1), new THREE.MeshStandardMaterial({ color: 0xe8f0f8, map: runTex, normalMap: runNormal, normalScale: new THREE.Vector2(0.6, 0.6), roughness: 0.04, transparent: true, depthWrite: false, opacity: 0.95, envMapIntensity: 1.8 }));
+  runoff.visible = false; scene.add(runoff);
+  const splashes = ringField(140, 0xeef5ff, 0.04, 0.07, 0.7); scene.add(splashes);
+  const mudRings = ringField(48, 0x2e1c0c, 0.3, 0.46, 0.9); scene.add(mudRings);
+  const mudRipples = ringField(96, 0xb08a5a, 0.42, 0.5, 0.45); scene.add(mudRipples);
   const sheen = new THREE.Mesh(roadGeometry(-120, BUILD_Z1, false, 1), new THREE.MeshPhongMaterial({ color: 0x334455, transparent: true, opacity: 0.25, shininess: 120, specular: 0xffffff, depthWrite: false })); sheen.position.y = 0.012; sheen.visible = false; scene.add(sheen);
 
   const pudTex = canvasTex(512, 1024, (c) => { c.clearRect(0, 0, 512, 1024); for (let i = 0; i < 40; i++) { const x = hash(i, 1) * 512, y = hash(i, 2) * 1024, r = 30 + hash(i, 3) * 80; c.fillStyle = 'rgba(40,46,56,0.9)'; c.beginPath(); c.ellipse(x, y, r, r * (0.5 + hash(i, 4) * 0.4), hash(i, 5) * 3, 0, 7); c.fill(); c.strokeStyle = 'rgba(220,230,240,0.7)'; c.lineWidth = 4; c.stroke(); } c.strokeStyle = 'rgba(10,10,10,0.9)'; c.lineWidth = 6; for (let i = 0; i < 30; i++) { let x = hash(i, 8) * 512, y = hash(i, 9) * 1024; c.beginPath(); c.moveTo(x, y); for (let k = 0; k < 5; k++) { x += (hash(i, k) - 0.5) * 90; y += 30 + hash(k, i) * 40; c.lineTo(x, y); } c.stroke(); } });
   pudTex.wrapT = THREE.RepeatWrapping; pudTex.repeat.set(1, 8);
   const puddles = new THREE.Mesh(new THREE.PlaneGeometry(ROAD_HALF * 2, 60), new THREE.MeshPhongMaterial({ map: pudTex, transparent: true, shininess: 100, specular: 0xffffff, depthWrite: false })); puddles.rotation.x = -Math.PI / 2; puddles.position.set(0, ROAD_Y + 0.07, -20); puddles.visible = false; scene.add(puddles);
+  // what-if: paving slabs over a mud pool
+  const slabs = slabField(-ROAD_HALF, ROAD_HALF, -48, 4, ROAD_Y + 0.05, paveTex); slabs.visible = false; scene.add(slabs);
+  const poolNormal = normalTex(256, [[6, 1], [13, 0.5]], [1, 1], 3); poolNormal.repeat.set(2, 16);
+  const mudPool = new THREE.Mesh(new THREE.PlaneGeometry(ROAD_HALF * 2 + 0.2, 52), new THREE.MeshStandardMaterial({ color: 0x6a4a2a, normalMap: poolNormal, normalScale: new THREE.Vector2(0.6, 0.6), roughness: 0.12, envMapIntensity: 1.0 }));
+  mudPool.rotation.x = -Math.PI / 2; mudPool.position.set(0, ROAD_Y - 0.12, -22); mudPool.visible = false; scene.add(mudPool);
   // old dirt road -> mud river
-  const mudTex = canvasTex(256, 256, (c) => { c.fillStyle = '#7a5530'; c.fillRect(0, 0, 256, 256); for (let i = 0; i < 70; i++) { c.fillStyle = i % 2 ? '#5f4022' : '#9a7044'; c.beginPath(); c.ellipse(hash(i, 1) * 256, hash(i, 2) * 256, 10 + hash(i, 3) * 26, 4 + hash(i, 4) * 6, 0, 0, 7); c.fill(); } c.strokeStyle = 'rgba(255,240,220,0.5)'; c.lineWidth = 3; for (let i = 0; i < 18; i++) { c.beginPath(); const y = hash(i, 7) * 256; c.moveTo(hash(i, 8) * 256, y); c.quadraticCurveTo(hash(i, 8) * 256 + 20, y + 30, hash(i, 8) * 256, y + 60); c.stroke(); } });
+  const mudTex = canvasTex(256, 256, (c) => { c.fillStyle = '#7a5530'; c.fillRect(0, 0, 256, 256); for (let i = 0; i < 70; i++) { c.fillStyle = i % 2 ? '#5f4022' : '#9a7044'; c.beginPath(); c.ellipse(hash(i, 1) * 256, hash(i, 2) * 256, 10 + hash(i, 3) * 26, 4 + hash(i, 4) * 6, 0, 0, 7); c.fill(); } c.strokeStyle = 'rgba(160,120,80,0.5)'; c.lineWidth = 3; for (let i = 0; i < 18; i++) { c.beginPath(); const y = hash(i, 7) * 256; c.moveTo(hash(i, 8) * 256, y); c.quadraticCurveTo(hash(i, 8) * 256 + 20, y + 30, hash(i, 8) * 256, y + 60); c.stroke(); } });
   mudTex.wrapS = mudTex.wrapT = THREE.RepeatWrapping; mudTex.repeat.set(1, 30);
-  const mud = new THREE.Mesh(new THREE.PlaneGeometry(6.5, 300), new THREE.MeshPhongMaterial({ map: mudTex, shininess: 70, specular: 0x887766 })); mud.rotation.x = -Math.PI / 2; mud.position.set(OLD_X, 0.16, -120); mud.visible = false; scene.add(mud);
+  const mudNormal = normalTex(256, [[6, 1], [13, 0.5]], [1, 1], 3); mudNormal.repeat.set(1, 30);
+  const mud = new THREE.Mesh(new THREE.PlaneGeometry(6.5, 300), new THREE.MeshStandardMaterial({ map: mudTex, normalMap: mudNormal, normalScale: new THREE.Vector2(0.7, 0.7), roughness: 0.22, envMapIntensity: 0.8 })); mud.rotation.x = -Math.PI / 2; mud.position.set(OLD_X, 0.16, -120); mud.visible = false; scene.add(mud);
   const ruts = []; for (const dx of [-0.9, 0.9]) { const r = new THREE.Mesh(new THREE.PlaneGeometry(0.35, 300), new THREE.MeshBasicMaterial({ color: 0x8a6440 })); r.rotation.x = -Math.PI / 2; r.position.set(OLD_X + dx, 0.03, -120); scene.add(r); ruts.push(r); }
 
   // scenery
@@ -272,11 +283,11 @@ export function buildRome() {
   const cr = crane(); cr.position.set(-7.6, 0, 9); cr.rotation.y = 0.5; site.add(cr);
   for (let i = 0; i < 22; i++) { const x = -6.5 - hash(i, 1) * 3, z = 14 + hash(i, 2) * 10; const b = box(1.0 + hash(i, 3) * 0.5, 0.6, 0.8, 0x8d8f96, [x, 0.3 + (i % 3) * 0.6, z], 0.04); b.rotation.y = hash(i, 4); site.add(b); }
   for (const [x, z, r] of [[7.5, 16, 2.0], [8.6, 21, 1.6], [6.8, 26, 1.8]]) { const p = new THREE.Mesh(new THREE.ConeGeometry(r, r * 0.8, 14), toon(0xb4a48a, { map: gravelTex })); p.position.set(x, r * 0.4, z); outline(p, 0.05); p.castShadow = true; site.add(p); }
-  for (let i = 0; i < 7; i++) site.add(amphora(6.2 + (i % 4) * 0.55, 6 + Math.floor(i / 4) * 0.6, i === 5 ? 1.4 : 0));
+  for (let i = 0; i < 7; i++) site.add(amphora(9.4 + (i % 4) * 0.55, 1 + Math.floor(i / 4) * 0.6, i === 5 ? 1.4 : 0));
   for (let i = 0; i < 6; i++) { const z = 30 + i * 4.5; site.add(tent(-14 - (i % 2) * 4, z, 0.2 + (i % 2) * 0.3)); }
   const banners = []; for (const [x, z] of [[-5.2, 3], [5.4, -6], [-12, 24], [5.2, 22]]) { const b = banner(x, z); site.add(b); banners.push(b); }
-  const stoneCart = cart(); stoneCart.position.set(5.8, 0, 11); stoneCart.rotation.y = 0.12; site.add(stoneCart);
-  const ox0 = oxSprite(); ox0.position.set(6.0, 0, 14.6); site.add(ox0);
+  const stoneCart = cart(); stoneCart.position.set(9.6, 0, 16); stoneCart.rotation.y = 0.12; site.add(stoneCart);
+  const ox0 = oxSprite(); ox0.position.set(9.8, 0, 19.6); site.add(ox0);
   const fire = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowTexture('rgba(255,210,120,1)', 'rgba(255,80,0,0)'), blending: THREE.AdditiveBlending, depthWrite: false })); fire.position.set(-11, 0.6, 28); fire.scale.set(1.4, 1.8, 1); site.add(fire);
   const milestone = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.5, 2.2, 14), toon(0xffffff, { map: canvasTex(256, 256, (c) => { c.fillStyle = '#e8dcc0'; c.fillRect(0, 0, 256, 256); c.fillStyle = '#4a3a2a'; c.font = '900 52px serif'; c.textAlign = 'center'; c.fillText('ROMA', 128, 100); c.fillText('M·P·I', 128, 170); }) }));
   milestone.position.set(4.6, 1.1, -14); milestone.rotation.y = -0.9; outline(milestone, 0.04); scene.add(milestone);
@@ -350,5 +361,5 @@ export function buildRome() {
     rainGeo.attributes.position.needsUpdate = true;
   }
 
-  return { scene, puddles, sky, hemi, sun, fog, road, flatRoad, advance, gravelLayer, stoneLayer, front, kerbAdv, ditches, ditchWaterTex, runoff, runTex, sheen, mud, mudTex, ruts, site, cr, banners, stoneCart, mudCart, ox1, gagCart, tur, today, people, hero, cent, laughers, workers, craneWalker, legion, legionG, stuck, tourists, performer, rain, updateRain, clouds, stormClouds, birds, paveTex, paveGrassTex, roadMat };
+  return { scene, puddles, slabs, mudPool, poolNormal, splashes, mudRings, mudRipples, runNormal, mudNormal, ditchMat, sky, hemi, sun, fog, road, flatRoad, advance, gravelLayer, stoneLayer, front, kerbAdv, ditches, ditchWaterTex, runoff, runTex, sheen, mud, mudTex, ruts, site, cr, banners, stoneCart, mudCart, ox1, gagCart, tur, today, people, hero, cent, laughers, workers, craneWalker, legion, legionG, stuck, tourists, performer, rain, updateRain, clouds, stormClouds, birds, paveTex, paveGrassTex, roadMat };
 }
