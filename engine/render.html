@@ -466,6 +466,14 @@ async function viewEnd(t, sh) {
       <path d="M142 140 L144 70 Q146 52 152 50 Q158 52 160 70 L162 140 Z" fill="#111"/><ellipse cx="151" cy="44" rx="8" ry="11" fill="#9a9eb0"/>
       <ellipse cx="148" cy="42" rx="2" ry="3" fill="#000"/><ellipse cx="154" cy="42" rx="2" ry="3" fill="#000"/>
       <rect x="50" y="110" width="40" height="30" fill="#bdbdbd"/><circle cx="70" cy="92" r="9" fill="#d0d0d0"/></svg>`,
+    kiosk: `<svg viewBox="0 0 200 150" width="200" height="150" style="display:block;margin:0 auto">
+      <rect x="20" y="8" width="160" height="104" fill="#20232c"/><rect x="118" y="20" width="44" height="92" fill="#040406"/>
+      <ellipse cx="140" cy="44" rx="11" ry="13" fill="#191b23"/><ellipse cx="140" cy="46" rx="7.5" ry="9.5" fill="#000"/>
+      <path d="M134 50 Q140 56 146 50 Q140 52.5 134 50 Z" fill="#cfd2dc"/><path d="M131 58 Q140 55 149 58 L151 112 L129 112 Z" fill="#191b23"/>
+      <path d="M150 78 l3 18 M153 78 l5 17" stroke="#c9ccd6" stroke-width="1.6" stroke-linecap="round"/>
+      <rect x="10" y="100" width="180" height="46" rx="3" fill="#2d3039"/><rect x="8" y="98" width="184" height="5" rx="2" fill="#8c8f98"/>
+      <path d="M78 96 l26 -6 M80 92 l24 2" stroke="#d6d9e2" stroke-width="2" stroke-linecap="round"/><circle cx="74" cy="97" r="4" fill="none" stroke="#111" stroke-width="2"/><circle cx="75" cy="90" r="4" fill="none" stroke="#111" stroke-width="2"/>
+      <rect x="40" y="76" width="9" height="22" rx="3" fill="#8fb3d8" opacity=".7"/><rect x="42" y="72" width="5" height="5" fill="#2f6fd0"/></svg>`,
     monitor: `<div style="width:170px;margin:0 auto;background:#c9cad3;border-radius:16px;padding:10px"><div style="border-radius:6px;overflow:hidden;height:110px">${nightVision(t, true, '3:35', true)}</div></div>`,
   }[TL.endArt || 'door'];
   return `<div class="end"><div style="margin-top:205px;${a(0)}">${art}</div>
@@ -615,7 +623,7 @@ window.renderFrame = async (t) => {
   let ov = '';
   if (t < 3.0) {
     ov += `<div class="title" style="opacity:${clamp((3.0 - t) / .25)}"><div class="k">${TL.series} · ${TL.episode}</div><div class="t">${TL.title}<br>TEIL ${TL.part}</div></div>`;
-  } else if (sh.place && !['lock', 'chat', 'choice', 'end', 'monitor', 'radio'].includes(sh.scene)) {
+  } else if (sh.place && !['lock', 'chat', 'choice', 'end', 'monitor', 'radio', 'ks_cctv', 'ks_note'].includes(sh.scene)) {
     const blink = (t % 1.2) < .7 ? 1 : .25;
     ov += `<div class="badge"><div class="tm"><i style="opacity:${blink}"></i>${sh.clock}<small>UHR</small></div><div class="pl">TEIL ${TL.part} · ${sh.place}</div></div>`;
   }

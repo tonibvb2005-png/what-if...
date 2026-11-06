@@ -1,6 +1,6 @@
 # Übergabe: Grusel-TikTok-Kanal „Geschichten um 3:33“
 
-Stand: 6. November 2026. Dieses Dokument enthält alles, was wir zusammen erarbeitet haben, damit du in einem neuen Chat sofort an genau dieser Stelle weitermachen kannst.
+Stand: 6. November 2026 (zweite Sitzung: Folge 09 „Spätschicht“ gebaut). Dieses Dokument enthält alles, was wir zusammen erarbeitet haben, damit du in einem neuen Chat sofort an genau dieser Stelle weitermachen kannst.
 
 ---
 
@@ -65,6 +65,7 @@ Details zum Stil stehen in `STYLE_GUIDE.md`.
 | 06 | Lichthupe | Auto, Landstraße, Verfolger, Radio, Rücksitz | Bild fertig; wartet auf Stimme |
 | 07 | **Bewegungsmelder** | dunkles Großraumbüro, Lichter folgen dir, Kopierer druckt ein Foto | Bild fertig; wartet auf Stimme |
 | 08 | Letzte Haltestelle | Nachtbus | gebaut, aber verworfen (Idee war nicht neu) |
+| 09 | **Spätschicht** | Kiosk nachts, Kunde mit Kapuze kauft Wasser + Schere, Zettel der Vorgängerin, Überwachungskamera | Bild fertig + Probevideo (Piper); wartet auf dein Feedback und deine Stimme |
 
 Die Folge „Stock 13“ (Aufzug) wurde auf deinen Wunsch gelöscht und durch „Bewegungsmelder“ ersetzt.
 
@@ -81,7 +82,7 @@ engine/            Video-Engine
   render.js        Chromium/Playwright rendert Bild für Bild, ffmpeg erzeugt die MP4
   render.html      2D-Figuren, Szenen fürs Schlafzimmer, Untertitel, Overlays, Grusel-Modus
   world3d.js       3D-Grundgerüst + Schlafzimmer-Set
-  sets3d.js        3D-Sets: Keller, Zelt, Auto, Aufzug, Bus, Großraumbüro
+  sets3d.js        3D-Sets: Keller, Zelt, Auto, Aufzug, Bus, Großraumbüro, Kiosk
   sets.js          Kameras, Figuren und Abläufe für diese Sets
   fonts/           Montserrat + JetBrains Mono (lokal)
 stories/NN_name/
@@ -154,6 +155,13 @@ python3 engine/build.py stories/07_bewegungsmelder --voice-file stories/07_beweg
 11. **Zeitschalter mit deiner ElevenLabs-Stimme** fertiggestellt, Untertitel und Effekte automatisch ausgerichtet. **Gepostet.**
 12. **Aufzug und Bus** gebaut, beide verworfen. Stattdessen **„Bewegungsmelder“**: dunkles Büro, die Person geht zum Kopierer und fühlt sich verfolgt.
 13. **Figuren leicht 3D:** zur Kamera gedreht, schattiert, mit Bodenschatten. Dazu der **Grusel-Modus** ab dem Auftauchen der Kreatur.
+14. **Neue Sitzung (6. Nov.):** Du hast aus A/B/C die Idee **B) „Spätschicht“** gewählt. Gebaut als Folge 09:
+    - Neues 3D-Set `kiosk` (`sets3d.js`): Verkaufsraum mit Theke, Kasse, Scanner, Überwachungsmonitor, Kühlschrank, Regalen, Glastür mit Türglocke, offener Lagertür; außen Gehweg, Laterne, Leuchtschrift „KIOSK 24/7“, Häuser gegenüber.
+    - Neue Einstellungen (`sets.js`): `ks_ext`, `ks_wide`, `ks_counter`, `ks_note`, `ks_over`, `ks_cctv` (echter Kamerablick in Graustufen mit REC-Overlay und Bildstörung), `ks_face`, `ks_lean`.
+    - Neue Figur: der Kunde (`hooded`): zu groß, Kapuze, Gesicht im Schatten, lange knotige Finger. Von hinten, solange er von der Kamera weggeht. Erst ganz am Ende kommt nur die untere Gesichtshälfte mit Grinsen aus dem Schatten (Zähne an der Oberlippe).
+    - Neue Geräusche/Atmosphäre (`build.py`): `bell` (Türglocke), `beep` (Scanner), Ambience `kiosk` (Kühlschrank + Neonröhre). Endkarten-Motiv `kiosk` (`render.html`).
+    - Korrigiert nach Standbild-Prüfung: Fassade war orange (jetzt grau-navy), Hand an der Schere war zu groß/flach, Scanner sah aus wie ein Strich, Lagertür schwang in den Laden, Gestalt im Lager war auf der Kamera unsichtbar.
+    - Logik-Check: Du kennst den Kunden aus früheren Nächten; der Zettel stammt von der Vorgängerin, die ihn kannte; die Kamera (zweite Quelle) widerspricht deinen Augen. Die Frage ALARM (Kamera glauben) oder BEDIENEN (Zettel glauben) ist echt offen.
 
 ---
 
@@ -170,9 +178,29 @@ Teil 2 kommt heute Nacht – folgen, damit du ihn nicht verpasst.
 
 ---
 
+### Caption „Spätschicht“ (fertig)
+```
+Jede Nacht um 3:33 kauft er Wasser und eine Schere. Und fragt, wann du Feierabend hast… ✂️😶
+
+Was machst du: ALARM oder BEDIENEN? 👇
+Teil 2 kommt heute Nacht – folgen, damit du ihn nicht verpasst.
+
+#gruselgeschichte #horror #horrorstory #creepy #gruselig #fyp #fürdich #storytime #3uhr33 #nachtschicht
+```
+
+---
+
 ## 8. Nächste Schritte (hier weitermachen)
 
-1. **Neues zweites Video auswählen.** Diese drei Ideen sind ganz neu und warten auf deine Wahl:
+0. **Folge 09 „Spätschicht“:** Probevideo `output/09_spaetschicht.mp4` ansehen und Feedback geben. Danach `stories/09_spaetschicht/voiceover_elevenlabs.txt` in ElevenLabs aufnehmen, als `stories/09_spaetschicht/voice/voiceover.mp3` ablegen und final rendern:
+   `python3 engine/build.py stories/09_spaetschicht --voice-file stories/09_spaetschicht/voice/voiceover.mp3`
+   Hinweis: Mit der Piper-Stimme dauert das Video ca. 65 s, also etwas über dem Ziel von 60 s. Falls es mit ElevenLabs auch zu lang wird, kann der Satz „Seit drei Wochen ist sie verschwunden.“ oder „Aber heute Nacht geht er nicht.“ raus.
+
+### Erledigt aus der letzten Liste
+- Punkt 1 (Auswahl): **B) Spätschicht** gewählt und gebaut (siehe oben). A) „Die Pizza“ und C) „Die Sprachnachricht“ bleiben als Reserve-Ideen.
+
+
+1. ~~Neues zweites Video auswählen~~ → erledigt, B gewählt. Zur Erinnerung die drei Ideen:
    - **A) „Die Pizza“** (Empfehlung): Lieferdienst um 3:33 an ein abgelegenes Haus. Die Tür ist offen, der Tisch ist für vier gedeckt, und auf einem Namensschild steht dein Name. Frage: Reingehen oder wegfahren?
    - **B) „Spätschicht“:** Kiosk. Ein Kunde kauft jede Nacht Wasser und eine Schere und fragt: „Wann hast du Feierabend?“ Auf dem Überwachungsmonitor steht er danach hinter dir im Lager. Frage: Alarm oder bedienen?
    - **C) „Die Sprachnachricht“:** Sprachnachricht der verstorbenen Oma: „Versteck dich im Schrank.“ Schritte auf der Treppe, ihr Mantel im Schrank ist noch warm. Frage: Bleiben oder rennen?

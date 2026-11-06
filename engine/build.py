@@ -144,6 +144,16 @@ def sfx(name):
         noise = np.convolve(rng.standard_normal(n), np.ones(30) / 30, "same")
         envb = np.sin(np.pi * ((t % 1.8) / 1.8)) ** 3
         return noise * envb * 2.2
+    if name == "bell":     # Türglocke im Laden: zwei helle, metallische Anschläge
+        out = np.zeros(int(1.1 * SR))
+        for st_, f in ((0.0, 2350), (0.13, 2780), (0.31, 2350)):
+            n = int(.8 * SR); t = np.arange(n) / SR
+            tone = (np.sin(2 * np.pi * f * t) + .5 * np.sin(2 * np.pi * f * 2.76 * t) + .25 * np.sin(2 * np.pi * f * 5.4 * t)) * env(n, .002, 6) * .16
+            i = int(st_ * SR); out[i:i + n] += tone[:len(out) - i]
+        return out
+    if name == "beep":     # Scanner an der Kasse
+        n = int(.11 * SR); t = np.arange(n) / SR
+        return np.sign(np.sin(2 * np.pi * 1850 * t)) * .07 * np.minimum(1, t / .004) * np.minimum(1, (.11 - t) / .01)
     raise ValueError(name)
 
 
@@ -171,6 +181,10 @@ def ambience(kind, dur):
         eng = np.sin(2 * np.pi * 32 * t) * .07 + np.sin(2 * np.pi * 64 * t + np.sin(t * 3)) * .035
         rattle = rng.standard_normal(n) * (np.sin(2 * np.pi * 7 * t) > .92) * .03
         return (eng + rattle + np.convolve(rng.standard_normal(n), np.ones(80) / 80, "same") * .45) * fade
+    if kind == "kiosk":    # Kühlschrank-Brummen + Neonröhren-Summen
+        fridge = np.sin(2 * np.pi * 47 * t) * .025 + np.sin(2 * np.pi * 94 * t) * .012
+        buzz = (np.sin(2 * np.pi * 100 * t) * .006 + np.sin(2 * np.pi * 200 * t) * .004 + np.sin(2 * np.pi * 300 * t) * .002) * (.8 + .2 * np.sin(t * 1.7))
+        return (fridge + buzz + np.convolve(rng.standard_normal(n), np.ones(300) / 300, "same") * .5) * fade
     if kind == "cellar":   # Stromsummen + Tropfen
         hum = np.sin(2 * np.pi * 50 * t) * .02 + np.sin(2 * np.pi * 100 * t) * .012
         drops = np.zeros(n)

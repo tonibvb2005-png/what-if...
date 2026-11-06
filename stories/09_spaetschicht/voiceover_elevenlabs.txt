@@ -1,0 +1,36 @@
+[calm, low voice] Stell dir vor, du hast Nachtschicht. [short pause] Allein in einem Kiosk.
+[slowly] Jede Nacht um drei Uhr dreiunddreißig kommt derselbe Kunde.
+[long pause]
+Er kauft immer dasselbe.
+[slowly] Eine Flasche Wasser. [short pause] Und eine Schere.
+[long pause]
+[quietly] Jede Nacht eine neue Schere. [short pause] Wofür?
+[short pause]
+[tense] Und jedes Mal fragt er: [whispers, slowly] Wann hast du Feierabend?
+[long pause]
+[calm] An deiner Kasse klebt ein Zettel. [short pause] Von deiner Vorgängerin.
+[serious, quietly] Sag ihm nie, wann du Feierabend hast. [short pause] Einfach kassieren.
+[short pause]
+[slowly, ominous] Seit drei Wochen ist sie verschwunden.
+[long pause]
+[quietly] Also schweigst du. [short pause] Und kassierst.
+[tense] Aber heute Nacht geht er nicht.
+[short pause]
+Er fragt noch mal: [whispers, slowly] Wann hast du Feierabend?
+[long pause]
+[nervous] Dein Blick fällt auf den Überwachungsmonitor.
+[slowly] Vor der Kasse steht niemand.
+[long pause]
+[whispers, frightened] Aber hinter dir. [short pause] In der Tür zum Lager.
+[whispers] Steht er. [short pause] Mit einer Schere.
+[long pause]
+[frightened, quietly] Du traust dich nicht, dich umzudrehen.
+[long pause]
+[slowly, tense] Und der vor dir lehnt sich langsam über die Theke.
+[whispers] Und lächelt.
+[long pause]
+[calm, low voice] Drückst du den Alarm?
+[short pause]
+Oder bedienst du ihn weiter, wie auf dem Zettel?
+[long pause]
+[ominous] Teil zwei. [short pause] Heute Nacht.

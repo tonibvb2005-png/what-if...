@@ -1,0 +1,358 @@
+{
+ "series": "GESCHICHTEN UM 3:33",
+ "episode": "#09",
+ "title": "SPÄTSCHICHT",
+ "part": 1,
+ "set": "kiosk",
+ "ambience": "kiosk",
+ "endArt": "kiosk",
+ "question": "ALARM oder BEDIENEN? Schreib's in die Kommentare.",
+ "shots": [
+  {
+   "scene": "ks_ext",
+   "clock": "3:32",
+   "place": "KIOSK",
+   "lines": [
+    {
+     "text": "Stell dir vor, du hast Nachtschicht. Allein in einem Kiosk.",
+     "hl": {
+      "Nachtschicht": "y",
+      "Allein": "r"
+     }
+    },
+    {
+     "text": "Jede Nacht um 3:33 kommt derselbe Kunde.",
+     "say": "Jede Nacht um drei Uhr dreiunddreißig kommt derselbe Kunde.",
+     "hl": {
+      "Kunde": "y"
+     },
+     "ev": [
+      [
+       "enter",
+       "start"
+      ]
+     ],
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "ks_wide",
+   "clock": "3:33",
+   "place": "KIOSK",
+   "lines": [
+    {
+     "text": "Er kauft immer dasselbe.",
+     "ev": [
+      [
+       "door",
+       "shot-0.1"
+      ]
+     ],
+     "sfx": [
+      [
+       "bell",
+       "shot-0.1"
+      ]
+     ]
+    },
+    {
+     "text": "Eine Flasche Wasser. Und eine Schere.",
+     "hl": {
+      "Wasser": "y",
+      "Schere": "r"
+     },
+     "ev": [
+      [
+       "arrive",
+       "word1"
+      ],
+      [
+       "water",
+       "word2"
+      ],
+      [
+       "scissors",
+       "word5"
+      ]
+     ],
+     "pause": 0.4
+    }
+   ]
+  },
+  {
+   "scene": "ks_counter",
+   "clock": "3:33",
+   "place": "KASSE",
+   "lines": [
+    {
+     "text": "Jede Nacht eine neue Schere. Wofür?",
+     "hl": {
+      "neue": "y",
+      "Wofür": "r"
+     },
+     "ev": [
+      [
+       "slide",
+       "start"
+      ]
+     ],
+     "pause": 0.3
+    },
+    {
+     "text": "Und jedes Mal fragt er: Wann hast du Feierabend?",
+     "hl": {
+      "Feierabend": "r"
+     },
+     "quote": {
+      "who": "KUNDE",
+      "place": "AN DER KASSE",
+      "text": "Wann hast du Feierabend?"
+     },
+     "pause": 0.6
+    }
+   ]
+  },
+  {
+   "scene": "ks_note",
+   "clock": "3:33",
+   "lines": [
+    {
+     "text": "An deiner Kasse klebt ein Zettel. Von deiner Vorgängerin.",
+     "hl": {
+      "Zettel": "y"
+     }
+    },
+    {
+     "text": "Sag ihm nie, wann du Feierabend hast. Einfach kassieren.",
+     "hl": {
+      "nie": "r",
+      "kassieren": "y"
+     }
+    },
+    {
+     "text": "Seit drei Wochen ist sie verschwunden.",
+     "hl": {
+      "verschwunden": "r"
+     },
+     "sfx": [
+      [
+       "boom",
+       "end-0.4"
+      ]
+     ],
+     "pause": 0.6
+    }
+   ]
+  },
+  {
+   "scene": "ks_over",
+   "clock": "3:34",
+   "place": "KASSE",
+   "lines": [
+    {
+     "text": "Also schweigst du. Und kassierst.",
+     "ev": [
+      [
+       "beep",
+       "word4"
+      ]
+     ],
+     "sfx": [
+      [
+       "beep",
+       "word4"
+      ]
+     ]
+    },
+    {
+     "text": "Aber heute Nacht geht er nicht.",
+     "hl": {
+      "nicht": "r"
+     },
+     "ev": [
+      [
+       "flick",
+       "end"
+      ]
+     ],
+     "pause": 0.3
+    },
+    {
+     "text": "Er fragt noch mal: Wann hast du Feierabend?",
+     "hl": {
+      "Feierabend": "r"
+     },
+     "quote": {
+      "who": "KUNDE",
+      "place": "AN DER KASSE",
+      "text": "Wann hast du Feierabend?"
+     },
+     "pause": 0.6
+    }
+   ]
+  },
+  {
+   "scene": "ks_cctv",
+   "clock": "3:34",
+   "lines": [
+    {
+     "text": "Dein Blick fällt auf den Überwachungsmonitor.",
+     "hl": {
+      "Überwachungsmonitor": "y"
+     },
+     "pause": 0.3
+    },
+    {
+     "text": "Vor der Kasse steht niemand.",
+     "hl": {
+      "niemand": "r"
+     },
+     "pause": 0.5
+    },
+    {
+     "text": "Aber hinter dir. In der Tür zum Lager.",
+     "hl": {
+      "hinter": "r",
+      "Lager": "y"
+     },
+     "ev": [
+      [
+       "glitch",
+       "word1-0.15"
+      ],
+      [
+       "lager",
+       "word1"
+      ],
+      [
+       "dread",
+       "word1"
+      ]
+     ],
+     "sfx": [
+      [
+       "static",
+       "word1-0.2"
+      ],
+      [
+       "boom",
+       "word1"
+      ]
+     ]
+    },
+    {
+     "text": "Steht er. Mit einer Schere.",
+     "hl": {
+      "er": "r",
+      "Schere": "r"
+     },
+     "pause": 0.7
+    }
+   ]
+  },
+  {
+   "scene": "ks_face",
+   "clock": "3:34",
+   "place": "KASSE",
+   "lines": [
+    {
+     "text": "Du traust dich nicht, dich umzudrehen.",
+     "hl": {
+      "umzudrehen": "r"
+     },
+     "sfx": [
+      [
+       "breath",
+       0.0
+      ]
+     ],
+     "pause": 0.4
+    }
+   ]
+  },
+  {
+   "scene": "ks_lean",
+   "clock": "3:34",
+   "place": "KASSE",
+   "lines": [
+    {
+     "text": "Und der vor dir lehnt sich langsam über die Theke.",
+     "hl": {
+      "langsam": "y"
+     }
+    },
+    {
+     "text": "Und lächelt.",
+     "hl": {
+      "lächelt": "r"
+     },
+     "ev": [
+      [
+       "smile",
+       "start"
+      ]
+     ],
+     "sfx": [
+      [
+       "boom",
+       "start"
+      ]
+     ],
+     "pause": 1.5
+    }
+   ]
+  },
+  {
+   "scene": "choice",
+   "heading": "WAS MACHST DU?",
+   "left": {
+    "label": "ALARM",
+    "text": "Den stillen Alarm unter der Theke drücken.",
+    "sub": "DER KAMERA GLAUBEN",
+    "icon": "🚨",
+    "color": "#2f7cf6"
+   },
+   "right": {
+    "label": "BEDIENEN",
+    "text": "Wie auf dem Zettel: schweigen und kassieren.",
+    "sub": "DEM ZETTEL GLAUBEN",
+    "icon": "🧾",
+    "color": "#ff3b30"
+   },
+   "lines": [
+    {
+     "text": "Drückst du den Alarm?",
+     "hl": {
+      "Alarm": "b"
+     }
+    },
+    {
+     "text": "Oder bedienst du ihn weiter, wie auf dem Zettel?",
+     "hl": {
+      "bedienst": "r",
+      "Zettel": "y"
+     },
+     "pause": 0.5
+    }
+   ]
+  },
+  {
+   "scene": "end",
+   "sfx": [
+    [
+     "boom",
+     0.0
+    ]
+   ],
+   "lines": [
+    {
+     "text": "Teil 2. Heute Nacht.",
+     "say": "Teil zwei. Heute Nacht.",
+     "nocap": true,
+     "pause": 1.2
+    }
+   ]
+  }
+ ]
+}

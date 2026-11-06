@@ -412,3 +412,140 @@
     R.setPanels = (lv) => R.panels.forEach((p, i) => { const v = lv[i] || 0; p.l.intensity = 9 * v; p.m.material.color.set(v > .05 ? '#f2f5ff' : '#1d1f25'); });
   };
 })();
+
+// ======================================================================= Kiosk (Spätschicht)
+(() => {
+  const { std, basic, put, rbox, canvasTex, svgTex, plane } = W3.H, R = W3.reg;
+  const rng = (seed) => () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+  W3.BUILD.kiosk = async (A) => {
+    const sc = W3.scene;
+    sc.background = new THREE.Color('#05060b'); sc.fog = new THREE.FogExp2('#06070c', .045);
+    R.hemi = new THREE.HemisphereLight('#a9b2d0', '#121318', .22); sc.add(R.hemi);
+    const moon = new THREE.DirectionalLight('#8e9bd0', .25); moon.position.set(-6, 9, 8); sc.add(moon);
+    // Innenraum: x -2.2..2.2, z -2.6 (Rückwand) .. 3.2 (Schaufenster), Decke 2.7
+    const tiles = canvasTex(512, 512, (g, w, h) => {
+      for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) { g.fillStyle = (x + y) % 2 ? '#3a3d48' : '#33363f'; g.fillRect(x * 64, y * 64, 64, 64); }
+      g.strokeStyle = 'rgba(0,0,0,.35)'; g.lineWidth = 2; for (let i = 0; i <= 8; i++) { g.beginPath(); g.moveTo(i * 64, 0); g.lineTo(i * 64, h); g.moveTo(0, i * 64); g.lineTo(w, i * 64); g.stroke(); }
+    });
+    tiles.wrapS = tiles.wrapT = THREE.RepeatWrapping; tiles.repeat.set(2.2, 2.9);
+    const fl = put(new THREE.Mesh(new THREE.PlaneGeometry(4.4, 5.8), new THREE.MeshStandardMaterial({ map: tiles, roughness: .6 })), 0, 0, .3, sc, false); fl.rotation.x = -Math.PI / 2;
+    const ce = put(new THREE.Mesh(new THREE.PlaneGeometry(4.4, 5.8), std('#25272e')), 0, 2.7, .3, sc, false); ce.rotation.x = Math.PI / 2;
+    const wallM = std('#4b4f5c'), sideM = std('#454956');
+    for (const sx of [-1, 1]) put(new THREE.Mesh(new THREE.PlaneGeometry(5.8, 2.7), sideM), sx * 2.2, 1.35, .3, sc, false).rotation.y = -sx * Math.PI / 2;
+    // Rückwand mit Tür zum Lager (x .2 .. 1.0)
+    put(new THREE.Mesh(new THREE.BoxGeometry(2.4, 2.7, .08), wallM), -1.0, 1.35, -2.64, sc, false);
+    put(new THREE.Mesh(new THREE.BoxGeometry(1.2, 2.7, .08), wallM), 1.6, 1.35, -2.64, sc, false);
+    put(new THREE.Mesh(new THREE.BoxGeometry(.8, .65, .08), wallM), .6, 2.375, -2.64, sc, false);
+    const trim = std('#24262d');
+    for (const x of [.18, 1.02]) put(new THREE.Mesh(new THREE.BoxGeometry(.05, 2.05, .12), trim), x, 1.025, -2.62);
+    put(new THREE.Mesh(new THREE.BoxGeometry(.89, .05, .12), trim), .6, 2.06, -2.62);
+    // Lager: stockdunkel, nur Umrisse von Kartons
+    const lag = basic('#050507');
+    put(new THREE.Mesh(new THREE.PlaneGeometry(2, 2.1), lag), .6, 1.05, -4.2, sc, false);
+    for (const sx of [-1, 1]) put(new THREE.Mesh(new THREE.PlaneGeometry(1.6, 2.1), lag), .6 + sx * .9, 1.05, -3.4, sc, false).rotation.y = -sx * Math.PI / 2;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(2, 1.6), lag), .6, .002, -3.4, sc, false).rotation.x = -Math.PI / 2;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(2, 1.6), lag), .6, 2.08, -3.4, sc, false).rotation.x = Math.PI / 2;
+    for (const [x, y, z, s] of [[1.25, .25, -3.9, .5], [1.2, .7, -3.95, .4], [-.05, .3, -3.8, .55]]) put(new THREE.Mesh(new THREE.BoxGeometry(s, s, s), std('#2a2219')), x, y, z);
+    R.lagerDoor = new THREE.Group(); R.lagerDoor.position.set(1.0, 0, -2.66); sc.add(R.lagerDoor);
+    put(rbox(.78, 2.0, .04, .01, std('#3b3f4a')), -.39, 1.0, 0, R.lagerDoor);
+    R.lagerDoor.rotation.y = -1.15;     // steht weit offen, ins Lager hinein
+    // Regal hinter der Kasse
+    const r = rng(17), boxCols = ['#6b3b3b', '#3b4f6b', '#6b6040', '#3f5a4a', '#5a4a66', '#7a6a5a'];
+    for (const y of [1.2, 1.55, 1.9]) {
+      put(rbox(1.9, .03, .28, .01, std('#2c2e35')), -.95, y, -2.45);
+      for (let x = -1.85; x < -.05; x += .09 + r() * .05) put(new THREE.Mesh(new THREE.BoxGeometry(.07, .14 + r() * .1, .1), std(boxCols[Math.floor(r() * 6)])), x, y + .1, -2.47);
+    }
+    // Theke (x -1.7..0.1, z -1.8..-1.2, Höhe 1.0)
+    put(rbox(1.8, 1.0, .6, .02, std('#2d3039')), -.8, .5, -1.5);
+    put(rbox(1.86, .04, .66, .01, std('#8c8f98', { r: .45 })), -.8, 1.02, -1.5);
+    put(new THREE.Mesh(new THREE.BoxGeometry(1.7, .5, .01), std('#3a3e4a')), -.8, .55, -1.195);
+    // Kasse + Scanner
+    put(rbox(.34, .12, .3, .02, std('#1b1c21')), -1.3, 1.1, -1.6);
+    put(rbox(.3, .2, .03, .01, std('#1b1c21')), -1.3, 1.28, -1.68).rotation.x = .25;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(.26, .15), basic('#4e7fbf')), -1.3, 1.285, -1.664, sc, false).rotation.set(.25, Math.PI, 0);
+    put(rbox(.2, .012, .12, .004, std('#1b1c21')), -.95, 1.045, -1.55); R.scanner = put(new THREE.Mesh(new THREE.PlaneGeometry(.14, .07), basic('#202228')), -.95, 1.052, -1.55, sc, false); R.scanner.rotation.x = -Math.PI / 2;
+    // Überwachungsmonitor (zeigt zur Kassiererin)
+    put(rbox(.28, .2, .04, .01, std('#131418')), -.05, 1.15, -1.45).rotation.y = Math.PI - .5;
+    R.monScreen = put(new THREE.Mesh(new THREE.PlaneGeometry(.24, .16), basic('#9aa3b8')), -.065, 1.15, -1.473, sc, false); R.monScreen.rotation.y = Math.PI - .5;
+    put(new THREE.Mesh(new THREE.CylinderGeometry(.015, .05, .05, 12), std('#131418')), -.05, 1.05, -1.45);
+    // Ware auf der Theke: Wasserflasche + Schere (erst sichtbar, wenn er sie hinlegt)
+    R.water = new THREE.Group(); R.water.position.set(-.85, 1.04, -1.33); sc.add(R.water);
+    const bottleM = new THREE.MeshStandardMaterial({ color: '#8fb3d8', roughness: .15, transparent: true, opacity: .55 });
+    put(new THREE.Mesh(new THREE.CylinderGeometry(.04, .04, .2, 20), bottleM), 0, .1, 0, R.water);
+    put(new THREE.Mesh(new THREE.CylinderGeometry(.018, .04, .06, 20), bottleM), 0, .23, 0, R.water);
+    put(new THREE.Mesh(new THREE.CylinderGeometry(.018, .018, .025, 14), std('#2f6fd0')), 0, .27, 0, R.water);
+    put(new THREE.Mesh(new THREE.CylinderGeometry(.041, .041, .07, 20), std('#d8e2ee')), 0, .1, 0, R.water);
+    R.scissors = new THREE.Group(); R.scissors.position.set(-.55, 1.045, -1.3); sc.add(R.scissors);
+    const steel = std('#c4c8d2', { m: .8, r: .25 }), grip = std('#1d1d22');
+    for (const s of [-1, 1]) {
+      const ring = put(new THREE.Mesh(new THREE.TorusGeometry(.028, .009, 8, 20), grip), s * .025, 0, .07, R.scissors); ring.rotation.x = Math.PI / 2;
+      const bl = put(new THREE.Mesh(new THREE.BoxGeometry(.012, .006, .17), steel), s * .008, .002, -.04, R.scissors); bl.rotation.y = s * .09;
+    }
+    put(new THREE.Mesh(new THREE.CylinderGeometry(.007, .007, .014, 10), steel), 0, .004, .03, R.scissors);
+    R.water.visible = R.scissors.visible = false;
+    // Kühlschrank links (leuchtet kalt)
+    put(rbox(.6, 2.0, 2.2, .03, std('#1d1f26')), -1.9, 1.0, .9);
+    R.fridgeGlass = put(new THREE.Mesh(new THREE.PlaneGeometry(2.0, 1.75), basic('#7f9fc4', { transparent: true, opacity: .55 })), -1.595, 1.05, .9, sc, false); R.fridgeGlass.rotation.y = Math.PI / 2;
+    for (const z of [.2, .9, 1.6]) put(new THREE.Mesh(new THREE.BoxGeometry(.02, 1.8, .03), std('#2a2c33')), -1.59, 1.05, z - .35);
+    for (const y of [.5, .95, 1.4]) for (let z = .0; z < 1.85; z += .11) put(new THREE.Mesh(new THREE.CylinderGeometry(.03, .03, .2, 10), std(['#3d6fb0', '#b03d3d', '#d7dbe4', '#3da06a'][Math.floor(r() * 4)])), -1.72, y + .1, z);
+    R.fridgeLight = new THREE.PointLight('#9fc2ff', 1.1, 3.2, 1.6); R.fridgeLight.position.set(-1.3, 1.2, .9); sc.add(R.fridgeLight);
+    // Regale rechts
+    for (const z of [-.6, .7, 2.0]) {
+      put(rbox(.5, 1.6, 1.1, .02, std('#30333c')), 1.85, .8, z);
+      for (const y of [.35, .75, 1.15, 1.55]) for (let zz = z - .48; zz < z + .48; zz += .1 + r() * .04) put(new THREE.Mesh(new THREE.BoxGeometry(.18, .16 + r() * .12, .07), std(boxCols[Math.floor(r() * 6)])), 1.68, y + .1, zz);
+    }
+    // Schaufensterfront (z 3.2): Fenster links, Glastür rechts (x .7 .. 1.6)
+    const glassM = basic('#1b2236', { transparent: true, opacity: .28, depthWrite: false });
+    put(new THREE.Mesh(new THREE.PlaneGeometry(2.9, 1.9), glassM), -.75, 1.25, 3.2, sc, false);
+    R.doorPivot = new THREE.Group(); R.doorPivot.position.set(1.6, 0, 3.2); sc.add(R.doorPivot);
+    put(new THREE.Mesh(new THREE.PlaneGeometry(.86, 2.1), glassM), -.45, 1.07, 0, R.doorPivot, false);
+    put(new THREE.Mesh(new THREE.BoxGeometry(.04, 2.1, .04), trim), -.88, 1.07, 0, R.doorPivot);
+    put(new THREE.Mesh(new THREE.BoxGeometry(.03, .35, .03), std('#9da1ab', { m: .7 })), -.8, 1.05, -.03, R.doorPivot);
+    const front = std('#23262f');
+    put(new THREE.Mesh(new THREE.BoxGeometry(4.4, .3, .1), front), 0, .15, 3.2);
+    put(new THREE.Mesh(new THREE.BoxGeometry(4.4, .58, .1), front), 0, 2.41, 3.2);
+    for (const x of [-2.18, .67, 1.63, 1.9]) put(new THREE.Mesh(new THREE.BoxGeometry(x > 1.7 ? .6 : .06, 2.2, .1), front), x, 1.25, 3.2);
+    // Türglocke über der Tür
+    R.bell = put(new THREE.Mesh(new THREE.ConeGeometry(.035, .05, 12, 1, true), std('#b89a4a', { m: .7, r: .3 })), 1.45, 2.05, 3.08);
+    // Neonröhren (eine flackert)
+    R.tubes = [];
+    for (const [x, z] of [[-.7, -1.4], [0, 1.2]]) {
+      const m = put(new THREE.Mesh(new THREE.BoxGeometry(1.2, .03, .12), basic('#e8eeff')), x, 2.68, z, sc, false);
+      const l = new THREE.PointLight('#dfe6ff', 3.2, 6, 1.6); l.position.set(x, 2.45, z); sc.add(l);
+      if (z < 0) { l.castShadow = true; l.shadow.mapSize.set(512, 512); l.shadow.bias = -.004; }
+      R.tubes.push({ m, l });
+    }
+    // Außen: Gehweg, Straße, Laterne, Häuser gegenüber, Leuchtschrift
+    const out = put(new THREE.Mesh(new THREE.PlaneGeometry(80, 60), std('#14151a')), 0, -.01, 20, sc, false); out.rotation.x = -Math.PI / 2;
+    const walk = put(new THREE.Mesh(new THREE.PlaneGeometry(30, 4), std('#2a2b31')), 0, .005, 5.2, sc, false); walk.rotation.x = -Math.PI / 2;
+    put(new THREE.Mesh(new THREE.BoxGeometry(30, .12, .2), std('#3a3b42')), 0, .06, 7.2);
+    for (let x = -12; x < 12; x += 3) put(new THREE.Mesh(new THREE.PlaneGeometry(1.4, .12), basic('#77766e')), x, .006, 11, sc, false).rotation.x = -Math.PI / 2;
+    for (const [x, w, h] of [[-10, 6, 9], [-3.5, 5.5, 12], [3, 6, 8], [9.5, 5, 11]]) {
+      put(new THREE.Mesh(new THREE.BoxGeometry(w, h, 3), std('#0d0e14')), x, h / 2, 17);
+      const rr = rng(Math.abs(x * 7) + 3);
+      for (let k = 0; k < 4; k++) if (rr() < .5) put(new THREE.Mesh(new THREE.PlaneGeometry(.7, .9), basic(rr() < .7 ? '#3a3120' : '#1e2638')), x - w / 2 + .9 + rr() * (w - 1.8), 2 + rr() * (h - 3), 15.49, sc, false).rotation.y = Math.PI;
+    }
+    // Außenhülle des Kiosks
+    const shell = std('#1e2129', { r: .95 });
+    for (const sx of [-1, 1]) put(new THREE.Mesh(new THREE.PlaneGeometry(6, 3.1), shell), sx * 2.27, 1.55, .3, sc, false).rotation.y = sx * Math.PI / 2;
+    put(new THREE.Mesh(new THREE.BoxGeometry(4.7, .12, 6.1), shell), 0, 3.1, .3);
+    put(new THREE.Mesh(new THREE.BoxGeometry(4.6, .45, .12), shell), 0, 2.9, 3.27);
+    const sign = canvasTex(512, 96, (g, w, h) => {
+      g.fillStyle = '#0b0b10'; g.fillRect(0, 0, w, h);
+      g.font = '900 64px Montserrat, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+      g.shadowColor = '#ff8a3a'; g.shadowBlur = 18; g.fillStyle = '#ffb36a'; g.fillText('KIOSK  24/7', w / 2, h / 2 + 3);
+    });
+    R.sign = put(new THREE.Mesh(new THREE.PlaneGeometry(2.6, .44), basic('#ffffff', { map: sign })), -.2, 2.9, 3.34, sc, false);
+    R.signLight = new THREE.PointLight('#ff9a4a', .35, 3, 2); R.signLight.position.set(-.2, 2.6, 4.0); sc.add(R.signLight);
+    const pole = put(new THREE.Mesh(new THREE.CylinderGeometry(.06, .08, 5, 8), std('#26272c')), 4.2, 2.5, 6.9);
+    put(new THREE.Mesh(new THREE.BoxGeometry(.9, .06, .1), std('#26272c')), 3.8, 4.95, 6.9);
+    put(new THREE.Mesh(new THREE.SphereGeometry(.12, 12, 8), basic('#ffcf8a')), 3.4, 4.88, 6.9, sc, false);
+    const lamp = new THREE.PointLight('#c9b48a', 2.2, 10, 1.8); lamp.position.set(3.4, 4.6, 6.9); sc.add(lamp);
+    R.inLight = new THREE.PointLight('#c8d4ff', 1.0, 7, 1.6); R.inLight.position.set(0, 1.6, 4.2); sc.add(R.inLight);
+    // Der zweite: in der Lagertür (2D)
+    R.lagerFig = put(new THREE.Mesh(new THREE.PlaneGeometry(1.0, 2.2), basic('#ffffff', { map: await svgTex(A.lagerFig, 1000, 2200), transparent: true, alphaTest: .02 })), .62, 1.1, -2.85, sc, false);
+    R.lagerFig.material.toneMapped = false; R.lagerFig.visible = false;
+    plane('you', 2, 2); plane('youClose', .7, .7, 1536); plane('cust', 2.2, 2.2); plane('hand', .5, .5, 1024);
+    R.setTubes = (a, b) => { R.tubes[0].l.intensity = 3.2 * a; R.tubes[0].m.material.color.set(a > .5 ? '#e8eeff' : '#2a2c33'); R.tubes[1].l.intensity = 3.2 * b; R.tubes[1].m.material.color.set(b > .5 ? '#e8eeff' : '#2a2c33'); };
+  };
+})();

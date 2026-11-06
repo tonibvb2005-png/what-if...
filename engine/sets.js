@@ -555,3 +555,196 @@ async function viewOoPaper(t, sh) {
 Object.assign(VIEWS, { oo_desk: viewOoDesk, oo_walk: viewOoWalk, oo_copier: viewOoCopier, oo_pov: viewOoPov, oo_face: viewOoFace, oo_paper: viewOoPaper });
 Object.assign(GLSTYLE, { oo_desk: '', oo_walk: '', oo_copier: '', oo_pov: '', oo_face: '', oo_paper: 'blur(8px) brightness(.5)' });
 Object.assign(SETBG, { openoffice: async (t) => { await officeYou(t, false, { eyes: 'wide' }); W3.setCam([.2, 1.8, 3.6], [-.05, 1.2, -3], 62); } });
+
+
+/* ======================================================================= KIOSK (Spätschicht) */
+// Grinsen: die Zähne hängen an der Oberlippe (Oberkante des Mundes), nichts schwebt frei
+function grin(cx, cy, w, n = 11, id = 'gm') {
+  const l = cx - w / 2, r = cx + w / 2, lo = cy + w * .5, up = cy + w * .3;
+  const d = `M${l} ${cy} Q${cx} ${lo} ${r} ${cy} Q${cx} ${up} ${l} ${cy} Z`;
+  const teeth = Array.from({ length: n }, (_, i) => {
+    const t = .06 + i * (.88 / (n - 1)), x = r - w * t, top = cy + 2 * t * (1 - t) * (up - cy), gap = 2 * t * (1 - t) * (lo - up);
+    return `<rect x="${x - w * .016}" y="${top - w * .01}" width="${w * .032}" height="${w * .01 + gap * .8}" rx="${w * .007}" fill="#e2dfd2"/>`;
+  }).join('');
+  return `<clipPath id="${id}"><path d="${d}"/></clipPath><path d="${d}" fill="#05050a"/><g clip-path="url(#${id})">${teeth}</g>`;
+}
+// Der Kunde: zu groß, Kapuze, Gesicht im Schatten. Welt-Koordinaten wie person().
+const HOOD = '#191b23', HOOD_IN = '#040406', CSKIN = '#aeb2c3';
+function hooded(x, st) {
+  const s = [], hy = -1.76 + (st.lean || 0) * .12, hx = x + (st.lean || 0) * .0;
+  const ws = st.walk != null ? Math.sin(st.walk) : 0, lift = st.walk != null ? Math.max(0, Math.cos(st.walk)) * .04 : 0, lift2 = st.walk != null ? Math.max(0, -Math.cos(st.walk)) * .04 : 0;
+  const fL = [x - .065 - ws * .08, -.02 - lift], fR = [x + .065 + ws * .08, -.02 - lift2];
+  s.push(`<path d="M${x - .06} -.95 Q${x - .07} -.5 ${fL[0]} ${fL[1]} M${x + .06} -.95 Q${x + .07} -.5 ${fR[0]} ${fR[1]}" stroke="#121319" stroke-width=".055" stroke-linecap="round" fill="none"/>`);
+  s.push(`<path d="M${fL[0] - .02} ${fL[1]} h.05 M${fR[0] - .03} ${fR[1]} h.05" stroke="#08080b" stroke-width=".035" stroke-linecap="round"/>`);
+  // Hoodie (lang, schmal), leicht schattiert
+  const body = `M${x - .12} ${hy + .2} Q${x} ${hy + .15} ${x + .12} ${hy + .2} L${x + .135} -.86 Q${x} -.83 ${x - .135} -.86 Z`;
+  s.push(`<path d="${body}" fill="${HOOD}"/><path d="${body}" fill="url(#shadeR)"/>`);
+  // Arme: viel zu lang. Vorne an der Theke (counter) oder hängend
+  const sh = [[x - .1, hy + .24], [x + .1, hy + .24]];
+  const hands = st.hands || [[x - .19 + ws * .05, -.74], [x + .19 - ws * .05, -.74]];
+  if (!st.back) for (let k = 0; k < 2; k++) {
+    const [a, b] = [sh[k], hands[k]], sx = k ? 1 : -1, mx = (a[0] + b[0]) / 2 + sx * .03, my = (a[1] + b[1]) / 2;
+    s.push(`<path d="M${a[0]} ${a[1]} Q${mx} ${my} ${b[0]} ${b[1] - .03}" stroke="${HOOD}" stroke-width=".06" stroke-linecap="round" fill="none"/>`);
+    // Hand mit langen, knotigen Fingern
+    s.push(`<ellipse cx="${b[0]}" cy="${b[1]}" rx=".022" ry=".028" fill="${CSKIN}"/>`);
+    for (let i = 0; i < 4; i++) {
+      const fx = b[0] - .015 + i * .01, L = .07 + (i === 1 || i === 2 ? .02 : 0);
+      s.push(`<path d="M${fx} ${b[1] + .015} Q${fx + sx * .004} ${b[1] + .015 + L * .55} ${fx - sx * .002} ${b[1] + .015 + L}" stroke="${CSKIN}" stroke-width=".0075" stroke-linecap="round" fill="none"/>
+        <circle cx="${fx + sx * .002}" cy="${b[1] + .015 + L * .5}" r=".005" fill="#8d91a4"/>`);
+    }
+  } else for (let k = 0; k < 2; k++) {        // von hinten: Ellbogen nach vorne auf die Theke
+    const a = sh[k], sx = k ? 1 : -1;
+    s.push(`<path d="M${a[0]} ${a[1]} Q${a[0] + sx * .07} ${a[1] + .2} ${a[0] + sx * .04} ${a[1] + .42}" stroke="${HOOD}" stroke-width=".06" stroke-linecap="round" fill="none"/>`);
+  }
+  // Kapuze
+  s.push(`<ellipse cx="${hx}" cy="${hy}" rx=".155" ry=".175" fill="${HOOD}"/><ellipse cx="${hx}" cy="${hy}" rx=".155" ry=".175" fill="url(#shadeR)"/>`);
+  if (st.back) {
+    s.push(`<path d="M${hx} ${hy - .17} Q${hx + .01} ${hy} ${hx} ${hy + .17}" stroke="#101117" stroke-width=".008" fill="none"/>`);
+  } else {
+    s.push(`<ellipse cx="${hx}" cy="${hy + .02}" rx=".105" ry=".13" fill="${HOOD_IN}"/>`);
+    const sm = st.smile || 0;
+    if (sm > 0) {   // nur die untere Gesichtshälfte kommt aus dem Schatten
+      s.push(`<defs><clipPath id="hoodC"><ellipse cx="${hx}" cy="${hy + .02}" rx=".105" ry=".13"/></clipPath>
+        <linearGradient id="lowF" x1="0" y1="0" x2="0" y2="1"><stop offset=".42" stop-color="${CSKIN}" stop-opacity="0"/><stop offset=".72" stop-color="${CSKIN}" stop-opacity=".95"/></linearGradient></defs>
+        <g clip-path="url(#hoodC)" opacity="${sm}"><ellipse cx="${hx}" cy="${hy + .05}" rx=".085" ry=".12" fill="url(#lowF)"/>
+        ${grin(hx, hy + .085, .11, 11, 'hoodGrin')}</g>`);
+    }
+  }
+  return s.join('');
+}
+const LAGER_FIG = `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="2200" viewBox="-.5 -2.2 1 2.2">${DEFS}
+  <defs><linearGradient id="lgDark" x1="0" y1="0" x2="0" y2="1"><stop offset=".25" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".85"/></linearGradient></defs>
+  ${hooded(0, { smile: .85, hands: [[-.2, -.7], [.21, -.72]] })}
+  <g transform="translate(.215 -.66) rotate(8)">
+    <path d="M-.012 0 L-.004 .2 M.012 0 L.026 .19" stroke="#d6d9e2" stroke-width=".011" stroke-linecap="round"/>
+    <circle cx="-.016" cy="-.02" r=".02" fill="none" stroke="#2a2a30" stroke-width=".008"/><circle cx=".018" cy="-.02" r=".02" fill="none" stroke="#2a2a30" stroke-width=".008"/></g>
+  <rect x="-.5" y="-2.2" width="1" height="2.2" fill="url(#lgDark)"/>
+</svg>`;
+// Hand von oben (liegt flach auf der Theke): Finger zeigen zu dir, die Kuppen liegen auf der Schere
+const CUST_HAND = (() => {
+  // Ärmel unten, Handrücken, vier lange Finger nach oben; die Kuppen liegen auf den Scherengriffen (Plane-Mitte = oben)
+  const F = [[-.05, .2], [-.017, .235], [.017, .23], [.05, .19]];
+  let s = `<path d="M-.085 .25 Q-.09 .17 -.07 .12 L.075 .115 Q.095 .17 .09 .25 Z" fill="${HOOD}"/>
+    <path d="M-.068 .125 Q-.078 .06 -.064 .01 Q0 -.012 .064 .006 Q.078 .06 .07 .12 Q0 .14 -.068 .125 Z" fill="${CSKIN}"/>
+    <path d="M-.068 .125 Q-.078 .06 -.064 .01 Q0 -.012 .064 .006 Q.078 .06 .07 .12 Q0 .14 -.068 .125 Z" fill="url(#shadeR)"/>`;
+  for (const [x, L] of F) {
+    const y0 = .012, j1 = y0 - L * .4, j2 = y0 - L * .72, tip = y0 - L;
+    const d = `M${x} ${y0} Q${x + .003} ${(y0 + j1) / 2} ${x + .002} ${j1} Q${x} ${(j1 + j2) / 2} ${x - .001} ${j2} Q${x - .003} ${(j2 + tip) / 2} ${x - .004} ${tip}`;
+    s += `<path d="${d}" stroke="#000" stroke-opacity=".35" stroke-width=".016" stroke-linecap="round" fill="none" transform="translate(.005 .004)"/>
+      <path d="${d}" stroke="${CSKIN}" stroke-width=".014" stroke-linecap="round" fill="none"/>
+      <path d="M${x - .005} ${j1} h.012 M${x - .006} ${j2} h.011" stroke="#80849a" stroke-width=".0022" stroke-linecap="round"/>
+      <path d="M${x - .007} ${tip + .006} q.003 -.006 .006 0" stroke="#5a5648" stroke-width=".003" fill="none"/>`;
+  }
+  s += `<path d="M.064 .07 Q.1 .04 .108 -.02" stroke="${CSKIN}" stroke-width=".016" stroke-linecap="round" fill="none"/>`;
+  return svgLocal(.5, .5, s, 1024);
+})();
+
+const CASHIER = [-.6, -2.05], CUST_AT = [-.6, -.88];
+const KP = [[3.4, 9.0], [1.15, 3.75], [1.15, 2.5], [-.2, .2], CUST_AT];
+function along(pts, u) {
+  const seg = pts.slice(1).map((p, i) => Math.hypot(p[0] - pts[i][0], p[1] - pts[i][1])), L = seg.reduce((a, b) => a + b, 0);
+  let d = clamp(u) * L;
+  for (let i = 0; i < seg.length; i++) { if (d <= seg[i] || i === seg.length - 1) { const k = clamp(d / seg[i]); return lerp2(pts[i], pts[i + 1], k); } d -= seg[i]; }
+}
+function custPos(t) {
+  const en = lastEv('enter', t, null); if (!en) return null;
+  const dr = EV('door')[0], ar = EV('arrive')[0];
+  if (!dr || t < dr[0]) { const u = clamp((t - en[0]) / Math.max(.5, (dr ? dr[0] : en[0] + 4) - en[0])); return { p: lerp2(KP[0], KP[1], u), moving: u < 1, phase: (t - en[0]) * 8 }; }
+  if (!ar || t < ar[0]) { const u = clamp((t - dr[0]) / Math.max(.5, (ar ? ar[0] : dr[0] + 3) - dr[0])); return { p: along(KP.slice(1), ease(u) * .3 + u * .7), moving: true, phase: (t - en[0]) * 8 }; }
+  return { p: CUST_AT, moving: false };
+}
+function kioskState(t, cctv = false) {
+  const dr = EV('door')[0];
+  let a = 0; if (dr) { const k = t - dr[0]; a = 1.15 * (ease((k + .5) / .5) - ease((k - 1.2) / .8)); }
+  R3.doorPivot.rotation.y = a;
+  R3.bell.rotation.z = dr && t - dr[0] > -.2 && t - dr[0] < 1.5 ? Math.sin((t - dr[0]) * 30) * .4 * Math.exp(-(t - dr[0]) * 2) : 0;
+  R3.water.visible = !!lastEv('water', t, null);
+  const sc = lastEv('scissors', t, null), sl = lastEv('slide', t, null);
+  R3.scissors.visible = !!sc; R3.scissors.position.z = -1.22 - .1 * (sl ? ease((t - sl[0]) / 1.2) : 0);
+  let f2 = 1; for (const [ft] of EV('flick')) { const k = t - ft; if (k >= 0 && k < .7) f2 = Math.sin(k * 55) > .1 ? 1 : .08; }
+  R3.setTubes(1, f2);
+  const beep = EV('beep').some(b => t >= b[0] && t < b[0] + .15); R3.scanner.material.color.set(beep ? '#ff4a3a' : '#202228');
+  const lg = lastEv('lager', t, null);
+  R3.lagerFig.visible = !!lg; if (lg) R3.lagerFig.material.color.setScalar((cctv ? 1.0 : .3) * clamp((t - lg[0]) / .25));
+  return { lg, f2 };
+}
+async function kioskChars(t, o = {}) {
+  ensurePlane('you', 2, 2); ensurePlane('youClose', .7, .7, 1536); ensurePlane('cust', 2.2, 2.2); ensurePlane('hand', .5, .5, 1024);
+  const st = kioskState(t, o.cctv);
+  await W3.setPlane('youClose', { visible: false }); await W3.setPlane('hand', { visible: false });
+  if (o.you !== false) await W3.setPlane('you', { svg: svgWrap(CASHIER[0], 1.0, 2.0, person(CASHIER[0], { eyes: o.eyes || 'open', t, look: o.look || 0, mouth: o.mouth || '', handL: [CASHIER[0] - .17, -1.02], handR: [CASHIER[0] + .17, -1.02] })), pos: [CASHIER[0], 1.0, CASHIER[1]], color: o.cctv ? '#d8dbe4' : '#e6e9f2', face: true });
+  else await W3.setPlane('you', { visible: false });
+  const c = custPos(t);
+  if (c && o.cust !== false) {
+    const at = !c.moving && c.p === CUST_AT, lean = o.lean || 0;
+    const hands = at ? [[c.p[0] - .2, -1.04], [c.p[0] + .2, -1.04]] : null;
+    await W3.setPlane('cust', { svg: svgWrap(c.p[0], 1.1, 2.2, hooded(c.p[0], { walk: c.moving ? c.phase : null, back: !!o.back, smile: o.smile || 0, lean, hands })), pos: [c.p[0], 1.1 - lean * .1, c.p[1] - lean * .3], color: o.custCol || '#8a8ea0', face: true, shadow: [.6, .32] });
+  } else await W3.setPlane('cust', { visible: false });
+  return st;
+}
+async function viewKsExt(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start, p = ease(lt / d);
+  W3.setCam([4.6 - .6 * p, 1.9, 11.5 - 1.2 * p], [.3, 1.3, 2.2], 42);
+  await kioskChars(t, { custCol: '#4a4e5e', back: true });
+  return '';
+}
+async function viewKsWide(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([-1.55 + .1 * ease(lt / d), 2.15, 2.7 - .2 * ease(lt / d)], [-.25, 1.05, -1.3], 52);
+  await kioskChars(t, { look: .8, back: true });
+  return '';
+}
+async function viewKsCounter(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([-.36, 1.62, -.78 + .04 * ease(lt / d)], [-.68, 1.02, -1.4], 40);
+  await kioskChars(t, { you: false, cust: false });
+  const sl = lastEv('slide', t, null), z = -1.22 - .1 * (sl ? ease((t - sl[0]) / 1.2) : 0);
+  await W3.setPlane('hand', { svg: CUST_HAND, pos: [-.553, 1.052, z + .1], color: '#9da1b2' });
+  _planes.hand.mesh.rotation.set(-Math.PI / 2, 0, 0); _planes.hand.mesh.scale.set(.5, .5, 1);
+  return '';
+}
+async function viewKsOver(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([-.32, 1.78, .45 - .15 * ease(lt / d)], [-.62, 1.42, -2.2], 46);
+  await kioskChars(t, { back: true, custCol: '#6a6e80', eyes: sh.eyes || 'open', look: -.3 });
+  return '';
+}
+async function viewKsCctv(t, sh) {
+  W3.setCam([-1.95, 2.55, 2.95], [-.1, .95, -1.95], 60);
+  const st = await kioskChars(t, { cust: false, cctv: true, look: .5 });
+  let gl = 0; for (const [gt] of EV('glitch')) { const k = t - gt; if (k >= 0 && k < .45) gl = Math.max(gl, Math.sin(k / .45 * Math.PI)); }
+  const lines = gl ? `<div style="position:absolute;inset:0;opacity:${.6 * gl};background:repeating-linear-gradient(0deg, rgba(255,255,255,.35) 0 2px, transparent 2px ${3 + Math.floor(Math.random() * 6)}px);transform:translateX(${(Math.random() - .5) * 30 * gl}px)"></div>` : '';
+  return `<div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg, rgba(0,0,0,.18) 0 1px, transparent 1px 3px)"></div>${lines}${camOverlay(t, 'CAM 1 · KASSE')}`;
+}
+async function viewKsFace(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([-.6, 1.52, -1.38 - .06 * ease(lt / d)], [-.6, 1.48, -2.05], 40);
+  await kioskChars(t, { you: false, cust: false });
+  await W3.setPlane('youClose', { svg: svgWrap(CASHIER[0], 1.35, .7, person(CASHIER[0], { eyes: 'wide', mouth: 'o', t, look: lt > d * .4 ? 1.35 : .3 })), pos: [CASHIER[0], 1.35, CASHIER[1]], color: '#dfe3ee' });
+  return '';
+}
+async function viewKsLean(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start, lean = ease((lt - .2) / Math.max(1, d * .6));
+  W3.setCam([-.6, 1.5, -2.0], [-.6, 1.5, -.85], 46 - 4 * ease(lt / d));
+  const sm = lastEv('smile', t, null);
+  await kioskChars(t, { you: false, lean, smile: sm ? clamp((t - sm[0]) / .8) : 0, custCol: '#7a7e90' });
+  return '';
+}
+function stickyNote(t, sh) {
+  const lt = t - sh.start, p = ease(lt / .45);
+  return `<div style="position:absolute;left:50%;top:250px;width:360px;height:360px;transform:translate(-50%, ${(1 - p) * 90}px) rotate(${-5 + 2 * p}deg);opacity:${clamp(lt / .3)};
+      background:linear-gradient(170deg,#f2dd7a,#e3c95c);box-shadow:0 30px 70px rgba(0,0,0,.7), inset 0 -18px 30px rgba(120,90,0,.12);padding:46px 34px;color:#1d2a5a;
+      font:italic 800 31px/1.28 'Montserrat';letter-spacing:-.3px">
+    <div style="position:absolute;top:0;left:0;right:0;height:38px;background:rgba(0,0,0,.05)"></div>
+    Sag ihm <span style="color:#c4281c;text-decoration:underline">NIE</span>,<br>wann du Feier&shy;abend hast!<br>
+    <span style="font-size:25px">Einfach kassieren.</span>
+    <div style="position:absolute;right:34px;bottom:30px;font-size:24px">– Mia</div></div>`;
+}
+async function viewKsNote(t, sh) {
+  await SETBG.kiosk(t);
+  return stickyNote(t, sh);
+}
+Object.assign(VIEWS, { ks_ext: viewKsExt, ks_wide: viewKsWide, ks_counter: viewKsCounter, ks_over: viewKsOver, ks_cctv: viewKsCctv, ks_face: viewKsFace, ks_lean: viewKsLean, ks_note: viewKsNote });
+Object.assign(GLSTYLE, { ks_ext: '', ks_wide: '', ks_counter: '', ks_over: '', ks_cctv: 'grayscale(1) contrast(1.3) brightness(1.05)', ks_face: '', ks_lean: '', ks_note: 'blur(9px) brightness(.55)' });
+Object.assign(SETBG, { kiosk: async (t) => { await kioskChars(t, { eyes: 'wide', look: .8 }); W3.setCam([-1.55, 2.15, 2.6], [-.25, 1.05, -1.3], 52); } });
+Object.assign(SET_ASSETS, { lagerFig: LAGER_FIG });
