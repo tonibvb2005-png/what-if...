@@ -412,6 +412,11 @@ export class Char {
     this.set({});
   }
   set(ch) { Object.assign(this.spec, ch); const { tex, meta } = charTex(this.spec); if (this.mat.map !== tex) { this.mat.map = tex; this.mat.needsUpdate = true; this.depth.map = tex; this.depth.needsUpdate = true; } this.meta = meta; }
+  worldPoint(px, py) {
+    const w = this.h * CW / CH;
+    const v = new THREE.Vector3((px / CW - 0.5) * w, (FEET - py) / CH * this.h, 0.01);
+    this.mesh.updateMatrixWorld(true); return this.mesh.localToWorld(v);
+  }
   face(camera, flip = false) {
     const p = new THREE.Vector3(); this.mesh.getWorldPosition(p);
     let yaw = Math.atan2(camera.position.x - p.x, camera.position.z - p.z);
