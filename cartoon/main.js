@@ -869,7 +869,7 @@
     ball: () => shotBall(kickF(), sx - 120, toX, toY),
     acts: () => ({ [scorer]: kickAt(scorer, kickF(), CUR.duration), [keeper]: keeperDive(kickF(), CUR.duration, dive) }) });
   Object.assign(SHOTS, {
-    rhook: { set: 'stands', noCaption: true, title: ['WHAT IF YOU LEFT', 'AT <span class="gold">3–1</span>?'], titleSize: [92, 150],
+    rhook: { set: 'stands', noCaption: true, title: ['<span class="gold">LA REMONTADA</span>', 'WHAT IF YOU LEFT', 'AT <span class="gold">3–1</span>?'], titleSize: [104, 84, 140],
       cuts: [standsCut({ at: 0, cam: [[0, { x: 0, y: 1000, z: 1.1 }], [1, { x: 0, y: 995, z: 1.2 }]], cast: RF,
         acts: { hero: [[0, { e: 'confident', p: 'cheer', propR: 'scarf' }]], mike: [[0, { e: 'angry', p: 'crossed' }]], jay: [[0, { e: 'nervous', p: 'nervous' }]] } })] },
     rparis: { set: 'pitch', tag: '14 FEB 2017 · PARIS', bright: .85,
@@ -1064,7 +1064,7 @@
         case 'btreble': add(st, 'thump', -9); add(st + .02, 'cheer', -11); [0, 1, 2].forEach(i => add(st + .4 + i * .25, 'pop', -14)); break;
         case 'bgoals': for (let k = 0; k < 12; k++) add(st + .3 + k * .12, 'tick', -19); add(st + C('num', .7), 'ding', -15); break;
         case 'bmate': add(st + C('follow', .75) + .1, 'pop', -14); break;
-        case 'rhook': add(st + .28, 'thump', -13); add(st + .5, 'thump', -13); break;
+        case 'rhook': add(st + .28, 'thump', -13); add(st + .5, 'thump', -13); add(st + .72, 'thump', -13); break;
         case 'rparis': for (let k = 0; k < 4; k++) add(st + .6 + k * (d * .62 - .6) / 4 + .3, 'thump', -15); break;
         case 'rnobody': add(st + .35 * d, 'thump', -14); break;
         case 'rthree': add(st + C('s1', .12) + .3, 'thump', -12); add(st + C('og', .45) + .2, 'thump', -12); add(st + C('pen', .75) + .35, 'thump', -12); add(st + C('pen', .75) + .4, 'cheer', -18); break;
