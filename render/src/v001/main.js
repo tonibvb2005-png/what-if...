@@ -1,12 +1,13 @@
 import * as THREE from 'three';
-import { buildTimeline } from './timeline.js';
+import { buildTimeline } from '../timeline.js';
+import { SCRIPT } from './script.js';
 import { buildRome, roadY, groundY, ROAD_HALF, ROAD_Y, CAMBER, OLD_X, BUILD_Z0, BUILD_Z1 } from './rome.js';
-import { ease, clamp01, lerp, v3, skyDome } from './world.js';
-import { tintChars } from './chars.js';
+import { ease, clamp01, lerp, v3, skyDome } from '../world.js';
+import { tintChars } from '../chars.js';
 
 const W = 1080, H = 1920;
 const RS = window.RENDER_SCALE || 0.75;
-const TL = buildTimeline();
+const TL = buildTimeline(SCRIPT, 38.6);
 const { S } = TL;
 const wordsOf = (sid) => TL.words.filter((w) => w.sid === sid);
 const WT = (sid, k) => wordsOf(sid)[k].start;

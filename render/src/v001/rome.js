@@ -1,8 +1,8 @@
 // Roman road construction site, 312 BC, plus storm and present-day variants.
 import * as THREE from 'three';
-import { toon, outline, box, vnoise, hash, skyDome, cloudSprite, glowTexture, blobShadow, canvasTex } from './world.js';
-import { Char, CW, CH } from './chars.js';
-import { normalTex, waterMaterial, flowTex, ringField, slabField } from './effects.js';
+import { toon, outline, box, vnoise, hash, skyDome, cloudSprite, glowTexture, blobShadow, canvasTex } from '../world.js';
+import { Char, CW, CH } from '../chars.js';
+import { normalTex, waterMaterial, flowTex, ringField, slabField } from '../effects.js';
 
 export const ROAD_HALF = 3.0;
 export const CAMBER = 0.32;

@@ -7,7 +7,7 @@ const fs = require('fs');
   const p = await b.newPage();
   p.on('console', (m) => { if (m.type() === 'error' || m.text().startsWith('LOG')) console.log('console:', m.text()); });
   p.on('pageerror', (e) => console.log('ERR', e.message));
-  await p.goto(`http://localhost:8765/index.html?scale=${scale}`);
+  await p.goto(`http://localhost:8765/index.html?v=${process.env.VID || '001'}&scale=${scale}`);
   await p.waitForFunction(() => document.title === 'ready', null, { timeout: 180000 });
   const times = ts === 'shots' ? await p.evaluate(() => null) : ts.split(',').map(Number);
   console.log('duration', await p.evaluate(() => window.DURATION));
