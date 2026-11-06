@@ -104,9 +104,9 @@ function splashes(t, k) {
   let n = 0; const cz = camera.position.z, cxp = camera.position.x;
   for (let i = 0; i < 140; i++) {
     const ph = t * 2.2 + hash1(i) ; const cyc = Math.floor(ph), q = ph - cyc;
-    const x = (hash2(i, cyc) - 0.5) * 2 * ROAD_HALF * 0.95, z = cz - 1 - hash2(cyc, i + 3) * 16;
+    const x = (hash2(i, cyc) - 0.5) * 2 * ROAD_HALF * 0.95, z = cz - 4 - hash2(cyc, i + 3) * 18;
     if (mode === 'whatif') continue;
-    R.splashes.place(n++, x, roadY(x) + 0.025, z, (0.6 + q * 2.6) * (q < 0.92 ? 1 : 0));
+    R.splashes.place(n++, x, roadY(x) + 0.025, z, (0.4 + q * 1.3) * (q < 0.85 ? 1 : 0));
   }
   R.splashes.done(n);
 }
@@ -139,6 +139,7 @@ function worldState(t) {
     if (w.job === 'pick') w.set({ pose: Math.floor(t * 2.2 * speed + w.phase) % 2 ? 'pick' : 'stand' });
     const bob = Math.abs(Math.sin(t * 6 * speed + w.phase)) * 0.05;
     const y = standY(x, z, t);
+    if (camera.position.distanceTo(new THREE.Vector3(x, y + 1, z)) < 4.5) { w.mesh.visible = w.shadow.visible = false; return; }
     w.mesh.position.set(x, y + bob, z); w.shadow.position.set(x, y + 0.03, z);
     w.face(camera, Math.sin(w.phase) > 0);
   });
