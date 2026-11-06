@@ -484,30 +484,28 @@ function officeState(t) {
     lv[i] = v;
   });
   R3.setPanels(lv);
-  const th = lastEv('thing', t, null); R3.thing.visible = !!th; if (th) R3.thing.material.color.setScalar(.03 + .2 * lv[3]);
+  const th = lastEv('thing', t, null); R3.thing.visible = !!th;
+  if (th) { R3.thing.material.color.setScalar(.5 + .4 * lv[3]); lv[3] *= .42; R3.setPanels(lv); R3.panels[3].l.color.set('#9fb4e0'); }
   const pr = lastEv('print', t, null);
   const printing = pr && t < pr[1];
   R3.scan.position.x = printing ? Math.sin((t - pr[0]) * 3.2) * .4 : 0; R3.scan.visible = !!printing; R3.scanLight.intensity = printing ? 1.6 : 0;
   R3.sheet.position.z = 3.08 - (pr && t >= pr[1] ? .1 * clamp((t - pr[1]) / .6) : 0);
   return { lv, off };
 }
-async function officeYou(t, close = false, opts = {}) {
+async function officeYou(t, close = false, opts = {}) {       // echte 3D-Figur
   ensurePlane('you', 2, 2); ensurePlane('youClose', .7, .7, 1536);
-  const st = youPos(t), { lv } = officeState(t);
-  const lit = Math.max(...lv.slice(0, 5).map((v, i) => Math.hypot(st.p[0] - R3.panels[i].x, st.p[1] - R3.panels[i].z) < 2 ? v : 0));
-  const col = st.sit ? '#c6d4ff' : lit > .5 ? '#e6e9f2' : (lv[4] > .5 ? '#d0d6e8' : '#3a3c48');
-  await W3.setPlane('youClose', { visible: false });
-  if (close) {
-    await W3.setPlane('you', { visible: false });
-    return W3.setPlane('youClose', { svg: svgWrap(st.p[0], 1.35, .7, person(st.p[0], { ...YOU_OFFICE, eyes: 'wide', mouth: 'o', t, look: opts.look || 0 })), pos: [st.p[0], 1.35, st.p[1]], color: col });
-  }
-  if (opts.hide) return W3.setPlane('you', { visible: false });
-  if (st.sit) return W3.setPlane('you', { svg: svgLocal(2, 2, sitter({ shirt: YOU_OFFICE.shirt, eyes: 'open', t, lit: true })), pos: [st.p[0], 1.0, st.p[1]], rotY: Math.PI, color: col });
-  return W3.setPlane('you', { svg: svgWrap(st.p[0], 1.0, 2.0, person(st.p[0], { ...YOU_OFFICE, eyes: opts.eyes || 'open', t, look: opts.look || 0, mouth: opts.mouth || '', walk: st.moving ? st.phase : null })), pos: [st.p[0], 1.0, st.p[1]], color: col, face: true, shadow: [.6, .32] });
+  await W3.setPlane('you', { visible: false }); await W3.setPlane('youClose', { visible: false });
+  officeState(t);
+  const H = R3.heroBuild(), st = youPos(t), nx = youPos(t + .08).p;
+  const dx = nx[0] - st.p[0], dz = nx[1] - st.p[1];
+  const yaw = st.sit ? Math.PI : (st.moving && Math.hypot(dx, dz) > 1e-4 ? Math.atan2(dx, dz) : 0);
+  const pos = st.sit ? [DESK_POS[0], 0, DESK_POS[1] - .12] : [st.p[0], 0, st.p[1]];
+  H.setPose({ visible: !opts.hide, pos, yaw, sit: st.sit, walk: st.moving ? st.phase : null,
+    look: opts.look || 0, eyes: close || opts.eyes === 'wide' ? 'wide' : 'open', mouth: close || opts.mouth === 'o' ? 'o' : '' });
 }
 async function viewOoDesk(t, sh) {
   const lt = t - sh.start, d = sh.end - sh.start;
-  W3.setCam([.45 + .1 * ease(lt / d), 1.85, -8.0], [-1.25, 1.0, -6.3], 48);
+  W3.setCam([.35 + .1 * ease(lt / d), 1.75, -8.1], [-1.2, 1.0, -6.4], 46);
   await officeYou(t);
   return '';
 }
@@ -520,7 +518,7 @@ async function viewOoWalk(t, sh) {
 async function viewOoCopier(t, sh) {
   const lt = t - sh.start, d = sh.end - sh.start;
   W3.setCam([.2 - .05 * ease(lt / d), 1.8, 3.6], [-.05, 1.2, -3], sh.zoom ? 56 : 62);
-  await officeYou(t, false, { eyes: sh.eyes, look: sh.look ?? -.6 });
+  await officeYou(t, false, { eyes: sh.eyes, look: sh.look ?? -.2 });
   return '';
 }
 async function viewOoPov(t, sh) {
@@ -531,19 +529,27 @@ async function viewOoPov(t, sh) {
 }
 async function viewOoFace(t, sh) {
   const lt = t - sh.start, d = sh.end - sh.start;
-  W3.setCam([-.28, 1.55, 2.57 - .06 * ease(lt / d)], [-.28, 1.52, 1.95], 40);
-  await officeYou(t, true, { look: lt > d * .5 ? -1.3 : 0 });
+  W3.setCam([-.28, 1.52, 2.78 - .06 * ease(lt / d)], [-.28, 1.48, 1.95], 36);
+  await officeYou(t, true, { look: lt > d * .5 ? -.7 : 0 });
   return '';
 }
-function photoSvg(fig) {
-  return `<svg viewBox="0 0 300 220" width="100%" height="100%" style="display:block;filter:grayscale(1) contrast(1.15)">
-    <rect width="300" height="220" fill="#2a2a2a"/><rect y="150" width="300" height="70" fill="#3a3a3a"/>
-    <rect x="95" y="128" width="110" height="80" fill="#bdbdbd"/><rect x="95" y="124" width="110" height="8" fill="#555"/>
-    ${fig ? `<path d="M196 220 L200 70 Q204 46 218 44 Q232 46 234 70 L238 220 Z" fill="#0e0e0e"/><ellipse cx="216" cy="40" rx="15" ry="21" fill="#9a9a9a"/>
-      <ellipse cx="210" cy="37" rx="4" ry="6" fill="#000"/><ellipse cx="222" cy="37" rx="4" ry="6" fill="#000"/><path d="M206 50 Q216 57 226 50" stroke="#000" stroke-width="2" fill="none"/>
-      <path d="M204 82 Q186 96 172 98" stroke="#0e0e0e" stroke-width="7" fill="none" stroke-linecap="round"/>` : ''}
-    <path d="M125 220 L128 120 Q150 108 172 120 L175 220 Z" fill="#7a7a7a"/><circle cx="150" cy="96" r="24" fill="#d0d0d0"/>
-    <rect width="300" height="220" fill="url(#np)" opacity=".25"/>
+function photoSvg(fig) {            // Schwarzweiß-Foto: du von hinten am Kopierer (unsere Statur), dahinter die Gestalt
+  return `<svg viewBox="0 0 300 220" width="100%" height="100%" style="display:block;filter:grayscale(1) contrast(1.1)">
+    <defs><radialGradient id="ph" cx="45%" cy="40%" r="60%"><stop offset="0" stop-color="#e6e6e6"/><stop offset="1" stop-color="#9a9a9a"/></radialGradient>
+      <radialGradient id="pv" cx="50%" cy="45%" r="70%"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".75"/></radialGradient></defs>
+    <rect width="300" height="220" fill="#1e1e1e"/><rect y="150" width="300" height="70" fill="#2c2c2c"/>
+    <polygon points="110,0 190,0 230,150 70,150" fill="#fff" opacity=".06"/>
+    <rect x="88" y="138" width="124" height="82" rx="4" fill="#b8b8b8"/><rect x="88" y="132" width="124" height="9" rx="2" fill="#4a4a4a"/>
+    ${fig ? `<g opacity=".92">
+      <path d="M206 220 Q204 150 208 108 Q211 86 220 82 Q229 86 232 108 Q236 150 234 220 Z" fill="#0a0a0a"/>
+      <ellipse cx="220" cy="64" rx="13" ry="19" fill="#3a3a3a"/><circle cx="215" cy="61" r="1.6" fill="#f5f5f5"/><circle cx="225" cy="61" r="1.6" fill="#f5f5f5"/>
+      <path d="M210 100 Q190 104 176 100 Q170 98 166 100" stroke="#0a0a0a" stroke-width="4.5" fill="none" stroke-linecap="round"/>
+      ${[0, 1, 2, 3].map(i => `<path d="M166 100 q-8 ${-3 + i * 2} -13 ${-1 + i * 3}" stroke="#0a0a0a" stroke-width="1.4" stroke-linecap="round"/>`).join('')}</g>` : ''}
+    <path d="M134 220 L136 172 Q137 160 150 158 Q163 160 164 172 L166 220 Z" fill="#2a2a2a"/>
+    <path d="M128 172 Q131 128 150 126 Q169 128 172 172 L170 176 L130 176 Z" fill="#c8c8c8"/>
+    <path d="M131 134 Q122 150 124 172 M169 134 Q178 150 176 172" stroke="#d6d6d6" stroke-width="6" fill="none" stroke-linecap="round"/>
+    <rect x="145" y="114" width="10" height="12" fill="#d6d6d6"/><circle cx="150" cy="98" r="20" fill="url(#ph)"/>
+    <rect width="300" height="220" fill="url(#pv)"/>
     <text x="10" y="212" font-family="JetBrains Mono" font-size="9" fill="#ddd">03:34  KOPIE 1/1</text></svg>`;
 }
 async function viewOoPaper(t, sh) {
@@ -555,3 +561,23 @@ async function viewOoPaper(t, sh) {
 Object.assign(VIEWS, { oo_desk: viewOoDesk, oo_walk: viewOoWalk, oo_copier: viewOoCopier, oo_pov: viewOoPov, oo_face: viewOoFace, oo_paper: viewOoPaper });
 Object.assign(GLSTYLE, { oo_desk: '', oo_walk: '', oo_copier: '', oo_pov: '', oo_face: '', oo_paper: 'blur(8px) brightness(.5)' });
 Object.assign(SETBG, { openoffice: async (t) => { await officeYou(t, false, { eyes: 'wide' }); W3.setCam([.2, 1.8, 3.6], [-.05, 1.2, -3], 62); } });
+
+const THING_DARK = `<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="2300" viewBox="0 0 100 230">
+  <defs><linearGradient id="tdRim" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2a2f3e"/><stop offset=".25" stop-color="#05060a"/><stop offset=".8" stop-color="#05060a"/><stop offset="1" stop-color="#1c202c"/></linearGradient>
+    <radialGradient id="tdFace" cx="50%" cy="38%" r="60%"><stop offset="0" stop-color="#3b3f4c"/><stop offset=".7" stop-color="#14161d"/><stop offset="1" stop-color="#07080b"/></radialGradient>
+    <filter id="tdB"><feGaussianBlur stdDeviation=".6"/></filter>
+    <radialGradient id="tdE" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff" stop-opacity=".9"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+  <g filter="url(#tdB)">
+    <path d="M38 230 L40 120 Q41 70 50 62 Q59 70 60 120 L62 230 Z" fill="url(#tdRim)"/>
+    <path d="M42 74 Q24 92 16 128 Q12 146 10 168" stroke="#05060a" stroke-width="3.2" fill="none" stroke-linecap="round"/>
+    <path d="M58 74 Q70 84 74 100 Q78 112 70 118" stroke="#05060a" stroke-width="3" fill="none" stroke-linecap="round"/>
+    ${[0, 1, 2, 3].map(i => `<path d="M10 168 q-3 ${5 + i} -1 ${10 + i * 2}" stroke="#0a0b10" stroke-width=".9" fill="none" stroke-linecap="round"/>`).join('')}
+    <path d="M47 50 L48 64 L52 64 L53 50 Z" fill="#05060a"/>
+    <g transform="rotate(-14 50 34)"><ellipse cx="50" cy="34" rx="11" ry="16" fill="url(#tdFace)"/>
+      <path d="M42 41 Q50 47 58 41" stroke="#000" stroke-width="1.2" fill="none" opacity=".8"/></g>
+  </g>
+  <circle cx="45.5" cy="31" r="2.6" fill="url(#tdE)"/><circle cx="54" cy="29.5" r="2.6" fill="url(#tdE)"/>
+  <circle cx="45.5" cy="31" r=".7" fill="#fff"/><circle cx="54" cy="29.5" r=".7" fill="#fff"/>
+</svg>`;
+const YOU3D = { shirt: '#8590a8', tie: '#7c3347', pants: '#2a2c35' };
+Object.assign(SET_ASSETS, { thingDark: THING_DARK });

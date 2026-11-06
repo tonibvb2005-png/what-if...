@@ -18,7 +18,13 @@
      "hl": {
       "allein": "y",
       "Landstraße": "y"
-     }
+     },
+     "sfx": [
+      [
+       "whoosh",
+       "start+1.0"
+      ]
+     ]
     },
     {
      "text": "Es ist 3:33. Weit und breit kein anderes Auto.",
@@ -97,7 +103,13 @@
        "start+0.9"
       ]
      ],
-     "pause": 0.5
+     "pause": 0.5,
+     "sfx": [
+      [
+       "whoosh",
+       "start"
+      ]
+     ]
     },
     {
      "text": "Du gibst Gas. Aber er bleibt dicht hinter dir.",
@@ -109,6 +121,12 @@
       [
        "flash",
        "end"
+      ]
+     ],
+     "sfx": [
+      [
+       "rev",
+       "start"
       ]
      ]
     }
@@ -160,7 +178,17 @@
      "hl": {
       "rast": "r"
      },
-     "pause": 0.3
+     "pause": 0.3,
+     "sfx": [
+      [
+       "heartbeat",
+       "start"
+      ],
+      [
+       "rev",
+       "start+0.3"
+      ]
+     ]
     }
    ]
   },
@@ -180,7 +208,17 @@
        "end-0.3"
       ]
      ],
-     "pause": 0.3
+     "pause": 0.3,
+     "sfx": [
+      [
+       "heartbeat",
+       "start"
+      ],
+      [
+       "boom",
+       "end-0.3"
+      ]
+     ]
     }
    ]
   },
@@ -193,7 +231,13 @@
      "text": "Und für eine Sekunde siehst du, was er dir zeigen will.",
      "hl": {
       "zeigen": "y"
-     }
+     },
+     "sfx": [
+      [
+       "heartbeat",
+       "start"
+      ]
+     ]
     },
     {
      "text": "Jemand sitzt auf deinem Rücksitz.",

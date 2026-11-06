@@ -406,9 +406,67 @@
     });
     for (const [x, z] of [[-2.5, -3.5], [2.5, -3.5], [-2.5, -1], [2.5, -1], [-2.5, 1.5], [2.5, 1.5], [2.5, -6]]) put(new THREE.Mesh(new THREE.PlaneGeometry(.6, .6), basic('#1d1f25')), x, 2.79, z, sc, false).rotation.x = Math.PI / 2;
     // Das Ding (2D) unter der Lampe hinter dir
-    R.thing = put(new THREE.Mesh(new THREE.PlaneGeometry(.9, 2.3), basic('#ffffff', { map: await svgTex(A.creatureCellar || A.creature, 900, 2300), transparent: true, alphaTest: .02 })), .16, 1.15, .95, sc, false);
+    R.thing = put(new THREE.Mesh(new THREE.PlaneGeometry(1.0, 2.3), basic('#ffffff', { map: await svgTex(A.thingDark || A.creature, 1000, 2300), transparent: true, alphaTest: .02 })), .12, 1.15, 1.05, sc, false);
     R.thing.material.toneMapped = false; R.thing.visible = false;
     plane('you', 2, 2); plane('youClose', .7, .7, 1536);
+    R.heroBuild = () => { if (!R.hero) R.hero = W3.H.makeChar(YOU3D); return R.hero; };
     R.setPanels = (lv) => R.panels.forEach((p, i) => { const v = lv[i] || 0; p.l.intensity = 9 * v; p.m.material.color.set(v > .05 ? '#f2f5ff' : '#1d1f25'); });
+  };
+})();
+
+// ======================================================================= 3D-Figur (gleiche Statur wie die 2D-Figur)
+(() => {
+  const { std, basic } = W3.H;
+  W3.H.makeChar = (o = {}) => {
+    const skin = std(o.skin || '#8f9bc4', { r: .65, e: '#1c2440', ei: .9 }), shirt = std(o.shirt || '#8590a8', { r: .9, e: '#141a2c', ei: .8 }), pants = std(o.pants || '#2a2c35'),
+      shoe = std('#111216'), tie = std(o.tie || '#7c3347'), ink = basic('#0c0e1c');
+    const cap = (r, l, m) => { const x = new THREE.Mesh(new THREE.CapsuleGeometry(r, l, 6, 14), m); x.castShadow = true; x.receiveShadow = true; return x; };
+    const root = new THREE.Group(), hips = new THREE.Group(); root.add(hips); hips.position.y = .9;
+    const J = {};
+    for (const s of [-1, 1]) {                      // Beine
+      const hip = new THREE.Group(); hip.position.set(s * .062, 0, 0); hips.add(hip);
+      const th = cap(.046, .36, pants); th.position.y = -.21; hip.add(th);
+      const knee = new THREE.Group(); knee.position.y = -.42; hip.add(knee);
+      const sh = cap(.04, .36, pants); sh.position.y = -.21; knee.add(sh);
+      const ft = new THREE.Mesh(new THREE.BoxGeometry(.075, .045, .15), shoe); ft.position.set(0, -.445, .035); ft.castShadow = true; knee.add(ft);
+      J[s < 0 ? 'hipL' : 'hipR'] = hip; J[s < 0 ? 'kneeL' : 'kneeR'] = knee;
+    }
+    const torso = cap(.105, .3, shirt); torso.scale.set(1.05, 1, .72); torso.position.y = .27; hips.add(torso);
+    const tieM = new THREE.Mesh(new THREE.BoxGeometry(.03, .24, .012), tie); tieM.position.set(0, .34, .08); hips.add(tieM);
+    const collar = new THREE.Mesh(new THREE.TorusGeometry(.045, .012, 8, 18, Math.PI), std('#e8edf6')); collar.position.set(0, .5, .035); collar.rotation.set(-.3, 0, Math.PI); hips.add(collar);
+    const neck = new THREE.Mesh(new THREE.CylinderGeometry(.03, .034, .08, 10), skin); neck.position.y = .54; hips.add(neck);
+    const head = new THREE.Group(); head.position.y = .65; hips.add(head);
+    const hs = new THREE.Mesh(new THREE.SphereGeometry(.13, 32, 24), skin); hs.castShadow = true; head.add(hs);
+    const eyes = [-1, 1].map(s => { const e = new THREE.Mesh(new THREE.SphereGeometry(.0105, 12, 8), ink); e.position.set(s * .04, .005, .124); head.add(e);
+      const hl = new THREE.Mesh(new THREE.SphereGeometry(.0035, 8, 6), basic('#9fd8ff')); hl.position.set(s * .04 + .004, .009, .133); hl.visible = false; head.add(hl); return { e, hl }; });
+    const mouth = new THREE.Mesh(new THREE.SphereGeometry(.009, 10, 8), ink); mouth.scale.set(1, .75, .5); mouth.position.set(0, -.045, .124); head.add(mouth);
+    const mline = new THREE.Mesh(new THREE.TorusGeometry(.013, .0028, 6, 14, Math.PI * .8), ink); mline.position.set(0, -.04, .126); mline.rotation.z = Math.PI * 1.1; head.add(mline);
+    for (const s of [-1, 1]) {                      // Arme
+      const sho = new THREE.Group(); sho.position.set(s * .125, .47, 0); hips.add(sho);
+      const up = cap(.03, .24, skin); up.position.y = -.14; sho.add(up);
+      const el = new THREE.Group(); el.position.y = -.28; sho.add(el);
+      const lo = cap(.027, .22, skin); lo.position.y = -.13; el.add(lo);
+      const hand = new THREE.Mesh(new THREE.SphereGeometry(.036, 14, 10), skin); hand.position.y = -.27; hand.castShadow = true; el.add(hand);
+      J[s < 0 ? 'shoL' : 'shoR'] = sho; J[s < 0 ? 'elL' : 'elR'] = el;
+    }
+    W3.scene.add(root);
+    const setPose = (p = {}) => {
+      root.visible = p.visible !== false;
+      if (p.pos) root.position.set(...p.pos);
+      root.rotation.y = p.yaw || 0;
+      const w = p.walk, sw = w != null ? Math.sin(w) : 0;
+      hips.position.y = p.sit ? .52 : .9 + (w != null ? Math.abs(Math.cos(w)) * .018 : 0);
+      J.hipL.rotation.x = p.sit ? -1.5 : sw * .45; J.hipR.rotation.x = p.sit ? -1.5 : -sw * .45;
+      J.kneeL.rotation.x = p.sit ? 1.5 : Math.max(0, -sw) * .7; J.kneeR.rotation.x = p.sit ? 1.5 : Math.max(0, sw) * .7;
+      const armF = p.sit ? -1.0 : 0;
+      J.shoL.rotation.set(armF - sw * .38, 0, -.1); J.shoR.rotation.set(armF + sw * .38, 0, .1);
+      J.elL.rotation.x = p.sit ? -.7 : -.18 - Math.max(0, sw) * .3; J.elR.rotation.x = p.sit ? -.7 : -.18 - Math.max(0, -sw) * .3;
+      head.rotation.set(p.nod || 0, p.look || 0, 0);
+      const es = p.eyes === 'wide' ? 1.3 : 1;
+      eyes.forEach(({ e, hl }) => { e.scale.set(es, p.eyes === 'closed' ? .18 : es, es); hl.visible = p.eyes === 'wide'; });
+      mouth.visible = p.mouth === 'o'; mline.visible = p.mouth !== 'o';
+    };
+    setPose();
+    return { root, setPose, head };
   };
 })();

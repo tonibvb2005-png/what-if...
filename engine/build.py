@@ -101,6 +101,37 @@ def sfx(name):
         n = int(2.2 * SR); t = np.arange(n) / SR
         teeth = (np.sin(2 * np.pi * (18 + 4 * np.sin(t * 2)) * t) > .7).astype(float)
         return rng.standard_normal(n) * teeth * .16 * np.minimum(1, t / .1) * np.minimum(1, (2.2 - t) / .2)
+    if name == "twig":     # Ast knackt
+        n = int(.25 * SR); t = np.arange(n) / SR
+        return (rng.standard_normal(n) * np.exp(-55 * t) * .9 + np.sin(2 * np.pi * 380 * t) * np.exp(-40 * t) * .3) * (t < .02 + 0.0 + 1)
+    if name == "steps":    # Schritte im Laub, langsam ums Zelt
+        out = np.zeros(int(3.6 * SR))
+        for k in range(6):
+            i = int((.15 + k * .58) * SR); m = int(.22 * SR); tt = np.arange(m) / SR
+            crunch = np.convolve(rng.standard_normal(m), np.ones(4) / 4, "same") * (rng.random(m // 120 + 1) > .45).repeat(120)[:m]
+            out[i:i + m] += crunch * np.exp(-12 * tt) * (.5 + .15 * k)
+        return out * .5
+    if name == "owl":      # Käuzchen in der Ferne
+        out = []
+        for d, f in ((.45, 420), (.12, 0), (.7, 400)):
+            n = int(d * SR); t = np.arange(n) / SR
+            out.append(np.sin(2 * np.pi * f * t * (1 - .04 * t)) * np.sin(np.pi * t / max(d, 1e-3)) ** 1.5 * .09 if f else np.zeros(n))
+        return np.convolve(np.concatenate(out), np.ones(30) / 30, "same")
+    if name == "heartbeat":
+        out = np.zeros(int(4.2 * SR))
+        for k in range(6):
+            for off, a_ in ((0, 1), (.18, .7)):
+                i = int((k * .68 + off) * SR); m = int(.16 * SR); tt = np.arange(m) / SR
+                out[i:i + m] += np.sin(2 * np.pi * 52 * tt) * np.exp(-26 * tt) * a_ * (.6 + .08 * k)
+        return out * .9
+    if name == "rev":      # Motor heult auf
+        n = int(1.8 * SR); t = np.arange(n) / SR
+        f = 34 + 40 * np.clip(t / 1.0, 0, 1) - 12 * np.clip((t - 1.0) / .8, 0, 1)
+        ph = 2 * np.pi * np.cumsum(f) / SR
+        return (np.sign(np.sin(ph)) * .05 + np.sin(2 * ph) * .05) * np.sin(np.pi * t / 1.8)
+    if name == "whoosh":   # vorbeirauschend
+        n = int(1.2 * SR); t = np.arange(n) / SR
+        return np.convolve(rng.standard_normal(n), np.ones(25) / 25, "same") * np.sin(np.pi * t / 1.2) ** 2 * 1.6
     if name == "copier":   # Kopierer: rhythmisches Rattern
         n = int(4.0 * SR); t = np.arange(n) / SR
         mech = np.sin(2 * np.pi * 7 * t) > .6

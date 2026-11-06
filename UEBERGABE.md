@@ -153,7 +153,7 @@ python3 engine/build.py stories/07_bewegungsmelder --voice-file stories/07_beweg
     - Auto: Lenkrad mit greifenden Händen.
 11. **Zeitschalter mit deiner ElevenLabs-Stimme** fertiggestellt, Untertitel und Effekte automatisch ausgerichtet. **Gepostet.**
 12. **Aufzug und Bus** gebaut, beide verworfen. Stattdessen **„Bewegungsmelder“**: dunkles Büro, die Person geht zum Kopierer und fühlt sich verfolgt.
-13. **Figuren leicht 3D:** zur Kamera gedreht, schattiert, mit Bodenschatten. Dazu der **Grusel-Modus** ab dem Auftauchen der Kreatur.
+13. **Figuren leicht 3D** (Zwischenschritt): zur Kamera gedreht, schattiert, mit Bodenschatten. Dazu der **Grusel-Modus** ab dem Auftauchen der Kreatur.
 
 ---
 
@@ -179,3 +179,10 @@ Teil 2 kommt heute Nacht – folgen, damit du ihn nicht verpasst.
 2. **Stimmen aufnehmen** für 07 Bewegungsmelder, 05 Komm raus, 06 Lichthupe und 01 Klopf Klopf. Die Skripte mit Regieanweisungen liegen jeweils in `voiceover_elevenlabs.txt`. Für alle vier Folgen sind sie fertig.
 3. **Teil 2 von „Zeitschalter“** schreiben, weil der gepostete Teil 1 ihn verspricht. Die Kommentar-Mehrheit (Rennen oder Drücken) entscheidet das Ende.
 4. Optional einen **echten Kanalnamen** festlegen und die Platzhalter-Serie „GESCHICHTEN UM 3:33“ in allen `story.json`-Dateien ersetzen.
+14. **Bewegungsmelder überarbeitet:**
+    - Die Hauptfigur ist jetzt eine echte 3D-Figur. Das behebt das Stuhl-Flackern, und sie wirkt aus der Seitenansicht nicht mehr flach.
+    - Das Foto zeigt Figuren mit unserer Statur.
+    - Die Kreatur am Ende ist nur noch eine dunkle Silhouette mit glimmenden Augen.
+15. **Neue Geräusche:**
+    - Komm raus: Käuzchen, knackende Äste, Schritte im Laub.
+    - Lichthupe: Herzschlag, aufheulender Motor, vorbeirauschende Bäume.

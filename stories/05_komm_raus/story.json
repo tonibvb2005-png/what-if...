@@ -24,7 +24,13 @@
      "text": "Kilometerweit ist niemand außer euch.",
      "hl": {
       "niemand": "r"
-     }
+     },
+     "sfx": [
+      [
+       "owl",
+       "start+0.4"
+      ]
+     ]
     }
    ]
   },
@@ -47,7 +53,13 @@
      "text": "Jemand ruft deinen Namen.",
      "hl": {
       "Namen": "y"
-     }
+     },
+     "sfx": [
+      [
+       "twig",
+       "end+0.15"
+      ]
+     ]
     },
     {
      "text": "Von draußen.",
@@ -67,7 +79,13 @@
      "text": "Es ist Jonas' Stimme.",
      "hl": {
       "Jonas'": "y"
-     }
+     },
+     "sfx": [
+      [
+       "steps",
+       "start"
+      ]
+     ]
     },
     {
      "text": "Komm schnell raus! Das musst du sehen!",
@@ -118,7 +136,13 @@
      "text": "Seine Augen sind weit offen. Er bewegt sich nicht.",
      "hl": {
       "offen": "r"
-     }
+     },
+     "sfx": [
+      [
+       "twig",
+       "end"
+      ]
+     ]
     },
     {
      "text": "Ganz leise flüstert er: Ich höre ihn auch.",
@@ -154,6 +178,12 @@
        "dread",
        "word2"
       ]
+     ],
+     "sfx": [
+      [
+       "steps",
+       "start"
+      ]
      ]
     },
     {
@@ -162,7 +192,13 @@
       "langen": "r",
       "Armen": "r"
      },
-     "pause": 0.6
+     "pause": 0.6,
+     "sfx": [
+      [
+       "twig",
+       "word1"
+      ]
+     ]
     }
    ]
   },
