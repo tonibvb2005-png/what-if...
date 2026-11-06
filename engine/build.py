@@ -142,11 +142,29 @@ def sfx(name):
         s_ = np.concatenate(out)
         s_ += rng.standard_normal(len(s_)) * .05
         return s_ * .14
-    if name == "breath":   # langsames Atmen
-        n = int(3.6 * SR); t = np.arange(n) / SR
-        noise = np.convolve(rng.standard_normal(n), np.ones(30) / 30, "same")
-        envb = np.sin(np.pi * ((t % 1.8) / 1.8)) ** 3
-        return noise * envb * 2.2
+    if name == "breath":   # nervöses Atmen, ganz nah: zittrig ein, gepresst aus, kurze Pause, noch einmal
+        def shaped(n_, bands, seed):
+            r_ = np.random.default_rng(seed); spec = np.fft.rfft(r_.standard_normal(n_)); f = np.fft.rfftfreq(n_, 1 / SR)
+            g = sum(a * np.exp(-((f - c) / w) ** 2) for c, w, a in bands) + 1e-4
+            out_ = np.fft.irfft(spec * g, n_); return out_ / (np.abs(out_).max() + 1e-9)
+        def shake(n_, rate, depth, seed):   # Zittern in der Atemluft
+            r_ = np.random.default_rng(seed); k = max(2, int(n_ / SR * rate))
+            pts = 1 + depth * r_.uniform(-1, 1, k + 1)
+            return np.interp(np.arange(n_), np.linspace(0, n_, k + 1), pts)
+        parts = []
+        for i, (kind, dur, sh_) in enumerate((("in", .85, .45), ("out", 1.05, .2), ("gap", .3, 0), ("in", .7, .6), ("out", 1.2, .25))):
+            n_ = int(dur * SR); t = np.arange(n_) / SR
+            if kind == "gap": parts.append(np.zeros(n_)); continue
+            if kind == "in":   # Einatmen: heller, durch den Mund gezogen, steigt an
+                x = shaped(n_, [(1900, 700, 1.0), (3200, 900, .55), (900, 300, .35), (6000, 1500, .15)], 30 + i)
+                e = np.sin(np.pi / 2 * np.clip(t / dur, 0, 1)) ** 1.6 * np.minimum(1, (dur - t) / .06)
+                amp = .32
+            else:              # Ausatmen: dunkler, weicher, fällt ab
+                x = shaped(n_, [(700, 280, 1.0), (1300, 450, .6), (2600, 800, .25)], 50 + i)
+                e = np.minimum(1, t / .07) * np.exp(-2.1 * t) * (1 - t / dur) ** .5
+                amp = .36
+            parts.append(x * e * shake(n_, 11, sh_, 70 + i) * amp)
+        return np.concatenate(parts)
     if name == "bell":     # Türglocke im Laden: zwei helle, metallische Anschläge
         out = np.zeros(int(1.1 * SR))
         for st_, f in ((0.0, 2350), (0.13, 2780), (0.31, 2350)):
