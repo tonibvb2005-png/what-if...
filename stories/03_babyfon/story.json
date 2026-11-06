@@ -1,0 +1,286 @@
+{
+ "series": "GESCHICHTEN UM 3:33",
+ "episode": "#03",
+ "title": "BABYFON",
+ "part": 1,
+ "item": "baby",
+ "visitor": "kid",
+ "openMax": 0.95,
+ "endArt": "monitor",
+ "question": "TÜR oder MONITOR? Schreib's in die Kommentare.",
+ "shots": [
+  {
+   "scene": "room",
+   "mode": "baby",
+   "triggerLine": 2,
+   "clock": "3:33",
+   "place": "DEIN ZIMMER",
+   "lines": [
+    {
+     "text": "Stell dir vor, deine Eltern sind auf einer Hochzeit.",
+     "hl": {
+      "Hochzeit": "y"
+     }
+    },
+    {
+     "text": "Du passt auf deinen kleinen Bruder Ben auf.",
+     "hl": {
+      "Ben": "y"
+     }
+    },
+    {
+     "text": "Um 3:33 rauscht das Babyfon auf deinem Nachttisch.",
+     "say": "Um drei Uhr dreiunddreißig rauscht das Babyfon auf deinem Nachttisch.",
+     "hl": {
+      "rauscht": "y",
+      "Babyfon": "y"
+     },
+     "sfx": [
+      [
+       "static",
+       0.0
+      ]
+     ],
+     "pause": 0.6
+    }
+   ]
+  },
+  {
+   "scene": "monitor",
+   "figure": false,
+   "clock": "3:33",
+   "lines": [
+    {
+     "text": "Ben schläft. Alles ist ruhig.",
+     "hl": {
+      "ruhig": "y"
+     }
+    },
+    {
+     "text": "Doch dann summt jemand.",
+     "hl": {
+      "summt": "r"
+     },
+     "hum": true,
+     "sfx": [
+      [
+       "hum",
+       0.3
+      ]
+     ]
+    },
+    {
+     "text": "Ein Schlaflied.",
+     "hl": {
+      "Schlaflied": "r"
+     },
+     "pause": 1.4
+    }
+   ]
+  },
+  {
+   "scene": "chat",
+   "clock": "3:34",
+   "contact": "Mama",
+   "lines": [
+    {
+     "text": "Du schreibst Mama: Seid ihr schon zu Hause?",
+     "msg": {
+      "from": "me",
+      "text": "Seid ihr schon zu Hause?",
+      "atWord": 3
+     },
+     "hl": {
+      "Mama": "b"
+     }
+    },
+    {
+     "text": "Nein, wir kommen erst morgen früh.",
+     "msg": {
+      "from": "them",
+      "text": "Nein, wir kommen erst morgen früh. Wieso? 😊",
+      "typing": 1.0
+     },
+     "hl": {
+      "morgen": "y",
+      "früh": "y"
+     },
+     "pause": 0.4
+    }
+   ]
+  },
+  {
+   "scene": "door",
+   "clock": "3:34",
+   "place": "DEINE TÜR",
+   "lines": [
+    {
+     "text": "Dann klopft es an deiner Tür.",
+     "hl": {
+      "klopft": "r"
+     },
+     "pause": 1.1,
+     "sfx": [
+      [
+       "knock",
+       "end+0.15"
+      ],
+      [
+       "knock",
+       "end+0.55"
+      ]
+     ],
+     "knocks": [
+      "end+0.15",
+      "end+0.55"
+     ]
+    },
+    {
+     "text": "Ganz leise.",
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "door",
+   "zoom": "visitor",
+   "clock": "3:34",
+   "place": "DEINE TÜR",
+   "lines": [
+    {
+     "text": "Die Tür geht auf.",
+     "reveal": true,
+     "sfx": [
+      [
+       "creak",
+       0.0
+      ]
+     ],
+     "pause": 0.9
+    },
+    {
+     "text": "Ben steht da. Mit seinem Teddy.",
+     "hl": {
+      "Ben": "y",
+      "Teddy": "y"
+     }
+    },
+    {
+     "text": "Ich kann nicht schlafen. Der Mann singt so laut.",
+     "hl": {
+      "Mann": "r"
+     },
+     "quote": {
+      "who": "BEN",
+      "place": "AN DEINER TÜR",
+      "text": "Ich kann nicht schlafen. Der Mann singt so laut."
+     },
+     "pause": 0.6
+    }
+   ]
+  },
+  {
+   "scene": "face",
+   "clock": "3:35",
+   "place": "DEIN ZIMMER",
+   "lines": [
+    {
+     "text": "Du schaust auf das Babyfon.",
+     "hl": {
+      "Babyfon": "y"
+     },
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "monitor",
+   "figure": true,
+   "clock": "3:35",
+   "sfx": [
+    [
+     "boom",
+     1.4
+    ]
+   ],
+   "lines": [
+    {
+     "text": "Ben liegt in seinem Bett.",
+     "hl": {
+      "Bett": "y"
+     },
+     "ev": [
+      [
+       "dread",
+       "start"
+      ]
+     ]
+    },
+    {
+     "text": "Und über ihn beugt sich jemand.",
+     "hl": {
+      "jemand": "r"
+     },
+     "hum": true,
+     "sfx": [
+      [
+       "hum",
+       0.0
+      ]
+     ],
+     "pause": 1.4
+    }
+   ]
+  },
+  {
+   "scene": "choice",
+   "heading": "WER IST DER ECHTE BEN?",
+   "left": {
+    "label": "TÜR",
+    "text": "„Ich kann nicht schlafen.“",
+    "icon": "🧸",
+    "sub": "BEN AN DEINER TÜR",
+    "color": "#2f7cf6"
+   },
+   "right": {
+    "label": "MONITOR",
+    "kind": "monitor",
+    "sub": "BEN IM BETT",
+    "color": "#ff3b30"
+   },
+   "lines": [
+    {
+     "text": "Welcher ist der echte Ben?",
+     "hl": {
+      "echte": "y"
+     }
+    },
+    {
+     "text": "Der an deiner Tür oder der im Bett?",
+     "hl": {
+      "Tür": "b",
+      "Bett": "r"
+     },
+     "pause": 0.5
+    }
+   ]
+  },
+  {
+   "scene": "end",
+   "sfx": [
+    [
+     "boom",
+     0.0
+    ]
+   ],
+   "lines": [
+    {
+     "text": "Teil 2. Heute Nacht.",
+     "say": "Teil zwei. Heute Nacht.",
+     "nocap": true,
+     "pause": 1.2
+    }
+   ]
+  }
+ ]
+}

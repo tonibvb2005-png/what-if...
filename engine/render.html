@@ -1,0 +1,639 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="fonts/fonts.css">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  #gl { position: absolute; inset: 0; width: 540px; height: 960px; }
+  #mid { position: absolute; inset: 0; }
+  html, body { width: 540px; height: 960px; overflow: hidden; background: #0b0d1c; }
+  #stage { position: absolute; inset: 0; overflow: hidden; font-family: 'Montserrat', sans-serif; }
+  #scene { position: absolute; inset: 0; will-change: transform; }
+  #mid > svg { position: absolute; inset: 0; width: 540px; height: 960px; }
+  #fx { position: absolute; inset: 0; pointer-events: none;
+        background: radial-gradient(ellipse 75% 60% at 50% 48%, rgba(0,0,0,0) 55%, rgba(0,0,0,.55) 100%); }
+  #dread { position: absolute; inset: 0; pointer-events: none; opacity: 0;
+           background: radial-gradient(ellipse 62% 50% at 50% 46%, rgba(0,0,0,0) 35%, rgba(0,4,10,.78) 100%), linear-gradient(rgba(10,40,45,.16), rgba(40,0,10,.14)); }
+  #grain { position: absolute; inset: 0; opacity: .085; background-size: 540px 960px; mix-blend-mode: overlay; }
+  #overlay { position: absolute; inset: 0; }
+
+  /* Untertitel */
+  .cap { position: absolute; left: 30px; right: 30px; top: 0; text-align: center;
+         font: italic 900 37px/1.12 'Montserrat'; text-transform: uppercase; color: #fff;
+         -webkit-text-stroke: 8px #000; paint-order: stroke fill; letter-spacing: .3px;
+         text-shadow: 0 4px 0 rgba(0,0,0,.55); }
+  .cap span { display: inline-block; margin: 0 5px; }
+  .y { color: #ffc21f; } .r { color: #ff3b30; } .b { color: #4d9bff; }
+
+  /* Titelkarte + Uhr-Badge */
+  .title { position: absolute; top: 118px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.84);
+           border-radius: 10px; padding: 10px 22px 12px; text-align: center; white-space: nowrap; }
+  .title .k { color: #ff3b30; font: 800 11px 'Montserrat'; letter-spacing: .6px; }
+  .title .t { color: #fff; font: 900 25px/1.1 'Montserrat'; margin-top: 4px; }
+  .badge { position: absolute; top: 112px; left: 30px; background: rgba(8,10,24,.78); border-radius: 8px;
+           padding: 8px 14px 9px 12px; }
+  .badge .tm { font: 700 27px/1 'JetBrains Mono'; color: #ffc21f; display: flex; align-items: center; gap: 6px; }
+  .badge .tm i { width: 8px; height: 8px; border-radius: 50%; background: #ff3b30; display: inline-block; margin-top: -12px; }
+  .badge .tm small { font: 700 11px 'JetBrains Mono'; margin-top: 8px; }
+  .badge .pl { font: 500 10px 'JetBrains Mono'; color: #9aa0b8; letter-spacing: 1.6px; margin-top: 5px; }
+
+  /* Handy */
+  .phone { position: absolute; background: #08080c; border: 3px solid #3a3a46; border-radius: 46px; padding: 9px;
+           box-shadow: 0 0 0 1px #000, 0 30px 80px rgba(0,0,0,.6), 0 0 60px rgba(110,140,255,.12); }
+  .phone .btn { position: absolute; width: 5px; border-radius: 3px; background: #1d1d26; }
+  .screen { position: relative; width: 100%; height: 100%; border-radius: 38px; overflow: hidden; background: #000; color: #fff; }
+  .island { position: absolute; top: 11px; left: 50%; transform: translateX(-50%); width: 92px; height: 26px; border-radius: 14px; background: #000; z-index: 3; }
+  .sbar { position: absolute; top: 14px; left: 28px; right: 24px; display: flex; justify-content: space-between; font: 700 12px 'Montserrat'; z-index: 2; }
+  .bat { width: 22px; height: 11px; border: 1.5px solid #888; border-radius: 3px; padding: 1px; }
+  .bat b { display: block; height: 100%; width: 22%; background: #ff3b30; border-radius: 1px; }
+  .arm { position: absolute; background: #d5cdbf; clip-path: polygon(6% 0, 94% 0, 100% 100%, 0 100%); transform-origin: 50% 0; }
+  .fing { position: absolute; background: #e6dfd2; border-radius: 14px; box-shadow: inset -2px -2px 0 rgba(0,0,0,.06); z-index: 2; }
+
+  .lock { position: absolute; inset: 0; background: linear-gradient(170deg, #2a1d5e 0%, #4f3391 45%, #6b3f9e 75%, #3a2770 100%); text-align: center; }
+  .lock .d { margin-top: 62px; font: 700 13px 'Montserrat'; opacity: .85; }
+  .lock .c { font: 900 86px/1 'Montserrat'; letter-spacing: -2px; margin-top: 4px; }
+  .notif { position: absolute; left: 12px; right: 12px; top: 190px; border-radius: 18px; background: rgba(255,255,255,.17);
+           padding: 11px 12px; display: flex; gap: 10px; text-align: left; backdrop-filter: blur(6px); }
+  .notif .ic { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(#5dea74, #23c043); flex: none; position: relative; }
+  .notif .ic:after { content: ''; position: absolute; left: 8px; top: 9px; width: 18px; height: 14px; background: #fff; border-radius: 50%; }
+  .notif .n { font: 800 13px 'Montserrat'; display: flex; justify-content: space-between; }
+  .notif .n span { font-weight: 700; opacity: .6; font-size: 11px; }
+  .notif .m { font: 700 12.5px 'Montserrat'; opacity: .92; margin-top: 2px; }
+
+  .chat .hd { position: absolute; top: 44px; left: 0; right: 0; text-align: center; padding-bottom: 8px; border-bottom: 1px solid #1c1c22; }
+  .chat .av { width: 42px; height: 42px; border-radius: 50%; margin: 0 auto; background: linear-gradient(#9b9ba6, #6b6b76);
+              font: 800 18px/42px 'Montserrat'; color: #fff; }
+  .chat .nm { font: 700 11px 'Montserrat'; margin-top: 4px; }
+  .chat .day { text-align: center; font: 700 9.5px 'Montserrat'; color: #8a8a92; margin: 128px 0 8px; }
+  .chat .list { padding: 0 12px; display: flex; flex-direction: column; gap: 7px; }
+  .bub { max-width: 74%; padding: 8px 12px; border-radius: 17px; font: 700 13.5px/1.28 'Montserrat'; transform-origin: left bottom; }
+  .bub.them { background: #2a2a2f; align-self: flex-start; border-bottom-left-radius: 5px; }
+  .bub.me { background: #1f8bff; align-self: flex-end; border-bottom-right-radius: 5px; transform-origin: right bottom; }
+  .bub.typing { display: flex; gap: 5px; padding: 12px 14px; }
+  .bub.typing i { width: 7px; height: 7px; border-radius: 50%; background: #9a9aa2; display: block; }
+  .chat .inp { position: absolute; bottom: 18px; left: 12px; right: 12px; height: 32px; border-radius: 16px; border: 1px solid #2c2c33;
+               font: 600 11px/30px 'Montserrat'; color: #66666e; padding-left: 14px; }
+
+  .choice h1 { position: absolute; top: 120px; left: 0; right: 0; text-align: center; font: 900 34px 'Montserrat'; color: #fff; letter-spacing: .5px; }
+  .pill { position: absolute; font: 900 13px 'Montserrat'; color: #fff; padding: 6px 14px; border-radius: 20px; letter-spacing: .6px; }
+
+  .quote { position: absolute; top: 178px; left: 50%; transform: translateX(-50%); background: rgba(8,10,24,.82); border-radius: 8px;
+           padding: 8px 16px 10px; text-align: center; max-width: 440px; }
+  .quote .w { font: 500 10px 'JetBrains Mono'; color: #9aa0b8; letter-spacing: 1.6px; }
+  .quote .tx { font: italic 800 16px/1.3 'Montserrat'; color: #fff; margin-top: 4px; }
+  .baby { position: absolute; background: linear-gradient(160deg, #e6e7ed, #b9bac6); border-radius: 30px; padding: 18px;
+          box-shadow: 0 30px 80px rgba(0,0,0,.6), inset 0 -4px 0 rgba(0,0,0,.08); }
+  .baby .scr { height: 210px; border-radius: 12px; overflow: hidden; border: 6px solid #22242c; background: #000; }
+  .baby .leds { display: flex; gap: 12px; justify-content: center; margin-top: 22px; }
+  .baby .leds i { width: 13px; height: 13px; border-radius: 50%; display: block; }
+  .baby .grill { display: grid; grid-template-columns: repeat(7, 9px); gap: 9px; justify-content: center; margin-top: 26px; }
+  .baby .grill b { width: 9px; height: 9px; border-radius: 50%; background: #9c9daa; display: block; }
+  .ant { position: absolute; width: 14px; height: 84px; border-radius: 7px; background: linear-gradient(90deg, #c4c5cf, #e6e7ed); }
+  .timer { position: absolute; top: 112px; right: 30px; background: rgba(8,10,24,.8); border: 2px solid #ffc21f; border-radius: 8px;
+           padding: 6px 12px; font: 700 26px/1 'JetBrains Mono'; color: #ffc21f; text-align: center; }
+  .timer span { display: block; font-size: 10px; letter-spacing: 2px; color: #9aa0b8; margin-bottom: 3px; }
+  .mirror { position: absolute; left: 50px; top: 300px; width: 440px; height: 190px; border-radius: 70px; border: 10px solid #0d0d10;
+            box-shadow: 0 0 0 2000px #07080d, inset 0 0 40px rgba(0,0,0,.8); }
+  .glare { position: absolute; left: 50px; top: 300px; width: 440px; height: 190px; border-radius: 70px; mix-blend-mode: screen;
+           background: radial-gradient(circle at 34% 55%, #fffbe8 0, rgba(255,251,232,.6) 9%, transparent 30%), radial-gradient(circle at 66% 55%, #fffbe8 0, rgba(255,251,232,.6) 9%, transparent 30%), radial-gradient(ellipse at 50% 55%, rgba(255,250,230,.55), transparent 70%); }
+  .radio { position: absolute; left: 60px; top: 300px; width: 420px; height: 180px; border-radius: 22px; background: linear-gradient(#1d1e24, #111216);
+           box-shadow: 0 30px 80px rgba(0,0,0,.7), inset 0 2px 0 rgba(255,255,255,.06); padding: 22px; }
+  .radio .lcd { height: 100px; border-radius: 10px; background: #2a1a06; box-shadow: inset 0 0 22px rgba(0,0,0,.8); padding: 10px 14px; overflow: hidden; color: #ffb347;
+                font: 700 15px 'JetBrains Mono'; text-shadow: 0 0 8px rgba(255,170,60,.8); }
+  .radio .fm { font-size: 11px; opacity: .8; letter-spacing: 2px; }
+  .radio .txt { margin-top: 10px; font-size: 22px; overflow: hidden; white-space: nowrap; }
+  .radio .bars { position: absolute; right: 36px; top: 34px; display: flex; gap: 3px; align-items: flex-end; height: 30px; }
+  .radio .bars i { width: 3px; background: #ffb347; opacity: .7; display: block; }
+  .radio .knobs { display: flex; justify-content: space-between; margin-top: 12px; padding: 0 30px; }
+  .radio .knobs b { width: 26px; height: 26px; border-radius: 50%; background: radial-gradient(circle at 40% 35%, #555, #1a1a1e); display: block; }
+  .led { position: absolute; left: 22px; right: 22px; top: 300px; padding: 22px 10px; background: #080503; border: 4px solid #151515; border-radius: 10px;
+         box-shadow: 0 30px 80px rgba(0,0,0,.7), inset 0 0 30px rgba(0,0,0,.9); text-align: center;
+         font: 800 46px/1.15 'JetBrains Mono'; letter-spacing: 3px; color: #ff9a2a; text-shadow: 0 0 10px #ff7a1a, 0 0 22px rgba(255,120,30,.5);
+         -webkit-mask: radial-gradient(circle, #000 55%, rgba(0,0,0,.55) 60%) 0 0 / 5px 5px; }
+  .paper { position: absolute; left: 50%; top: 230px; width: 380px; height: 500px; background: #f1efe8; border-radius: 4px; padding: 26px;
+           box-shadow: 0 30px 80px rgba(0,0,0,.7); }
+  .paper .photo { height: 300px; border: 2px solid #222; overflow: hidden; }
+  .paper .pl { height: 8px; background: #d8d5cc; margin-top: 22px; border-radius: 4px; } .paper .pl.short { width: 55%; margin-top: 12px; }
+  .cam { position: absolute; inset: 18px; border: 0; pointer-events: none; font: 700 15px 'JetBrains Mono'; color: #f2f2f2; text-shadow: 0 0 4px #000; }
+  .cam:before, .cam:after { content: ''; position: absolute; width: 34px; height: 34px; border: 3px solid rgba(255,255,255,.85); }
+  .cam:before { left: 12px; top: 86px; border-right: 0; border-bottom: 0; } .cam:after { right: 12px; bottom: 80px; border-left: 0; border-top: 0; }
+  .cam i { position: absolute; left: 26px; top: 102px; width: 11px; height: 11px; border-radius: 50%; background: #ff3b30; }
+  .cam b { position: absolute; left: 44px; top: 98px; } .cam span { position: absolute; right: 26px; top: 98px; }
+  .cam em { position: absolute; left: 26px; bottom: 96px; font-style: normal; font-weight: 500; font-size: 13px; }
+  .end { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 30%, #1a1e3d, #0b0d1c 70%); text-align: center; color: #fff; }
+  .end .s { font: 500 11px 'JetBrains Mono'; letter-spacing: 4px; color: #9aa0b8; margin-top: 18px; }
+  .end .p { font: 900 112px/1 'Montserrat'; color: #ff3b30; margin-top: 8px; letter-spacing: -1px; }
+  .end .h { font: 800 17px 'Montserrat'; letter-spacing: 3px; margin-top: 6px; }
+  .end .f { display: inline-block; margin-top: 22px; border: 2px solid #fff; border-radius: 22px; padding: 8px 20px; font: 800 13px 'Montserrat'; letter-spacing: 1.5px; }
+  .end .q { font: italic 800 17px 'Montserrat'; color: #ffc21f; margin-top: 22px; }
+</style></head>
+<body><div id="stage"><div id="scene"><canvas id="gl"></canvas><div id="mid"></div></div><div id="fx"></div><div id="dread"></div><div id="grain"></div><div id="overlay"></div></div>
+<script src="node_modules/three/build/three.min.js"></script>
+<script src="world3d.js"></script>
+<script src="sets3d.js"></script>
+<script>
+let TL, GRAIN = [];
+const SET_ASSETS = {};
+const $ = (id) => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const ease = (x) => { x = clamp(x); return x * x * (3 - 2 * x); };
+const outBack = (x) => { x = clamp(x); const c = 1.9; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+const noise = (t, s = 1) => Math.sin(t * 12.9898 * s + 78.233) * Math.sin(t * 3.17 * s + 1.3);
+const lerp = (a, b, k) => a + (b - a) * k;
+const lerp2 = (p, q, k) => [lerp(p[0], q[0], k), lerp(p[1], q[1], k)];
+const lerp3 = (p, q, k) => [0, 1, 2].map(i => lerp(p[i], q[i], k));
+
+/* ------------------------------------------------ 2D-Figur (SVG, Einheiten = Meter, y nach unten = -Welt-y) */
+const SKIN = '#e3e9ff', SHIRT = '#7c3347', SHIRT_HI = '#94405a', INK = '#11142a';
+const DEFS = `<defs>
+  <radialGradient id="headG" cx="42%" cy="34%" r="70%"><stop offset="0" stop-color="#ffffff"/><stop offset=".55" stop-color="#e3e9ff"/><stop offset="1" stop-color="#aab7e8"/></radialGradient>
+  <radialGradient id="glow" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#a9c8ff" stop-opacity=".5"/><stop offset="1" stop-color="#a9c8ff" stop-opacity="0"/></radialGradient>
+  <radialGradient id="glowG" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#9dffbd" stop-opacity=".45"/><stop offset="1" stop-color="#9dffbd" stop-opacity="0"/></radialGradient>
+  <radialGradient id="warm" cx="50%" cy="0%" r="70%"><stop offset="0" stop-color="#ffb35a" stop-opacity=".55"/><stop offset="1" stop-color="#ffb35a" stop-opacity="0"/></radialGradient>
+  <linearGradient id="lit" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#bcd4ff" stop-opacity=".5"/><stop offset=".6" stop-color="#bcd4ff" stop-opacity="0"/></linearGradient>
+  <linearGradient id="shadeR" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff" stop-opacity=".12"/><stop offset=".45" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#0a0c24" stop-opacity=".42"/></linearGradient>
+  <radialGradient id="spec" cx="34%" cy="26%" r="22%"><stop offset="0" stop-color="#fff" stop-opacity=".55"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+    <radialGradient id="cface" cx="45%" cy="40%" r="65%"><stop offset="0" stop-color="#e9ecf7"/><stop offset=".7" stop-color="#c3c8de"/><stop offset="1" stop-color="#8a8fa8"/></radialGradient>
+</defs>`;
+const sv = (p) => [p[0], -p[1]];
+const svgWrap = (cx, cy, S, body, px = 2048) => `<svg xmlns="http://www.w3.org/2000/svg" width="${px}" height="${px}" viewBox="${cx - S / 2} ${-(cy + S / 2)} ${S} ${S}">${DEFS}${body}</svg>`;
+
+function head(c, r, o = {}) {
+  const [cx, cy] = c;
+  let eyes = o.eyes || 'open';
+  if (eyes !== 'closed' && o.t !== undefined && (o.t % 3.7) < 0.11) eyes = 'closed';
+  const lx = (o.look || 0) * r * 0.09, ex = r * 0.3, ey = cy - r * 0.04, er = r * (eyes === 'wide' ? 0.085 : 0.07);
+  let s = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#headG)"/><circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#shadeR)"/><circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#spec)"/>`;
+  if (o.lit) s += `<circle cx="${cx}" cy="${cy}" r="${r}" fill="url(#lit)"/>`;
+  if (eyes === 'closed') {
+    for (const k of [-1, 1]) s += `<path d="M${cx + k * ex - er * 1.7} ${ey} Q${cx + k * ex} ${ey + er * 1.8} ${cx + k * ex + er * 1.7} ${ey}" stroke="${INK}" stroke-width="${r * .035}" fill="none" stroke-linecap="round"/>`;
+  } else for (const k of [-1, 1]) {
+    s += `<circle cx="${cx + k * ex + lx}" cy="${ey}" r="${er}" fill="${INK}"/>`;
+    if (eyes === 'wide') s += `<circle cx="${cx + k * ex + lx + er * .35}" cy="${ey - er * .35}" r="${er * .32}" fill="#9fd8ff"/>`;
+  }
+  const my = cy + r * 0.32;
+  if (o.mouth === 'o') s += `<ellipse cx="${cx + lx * .5}" cy="${my}" rx="${r * .055}" ry="${r * .04}" fill="${INK}"/>`;
+  else s += `<path d="M${cx - r * .07} ${my} Q${cx} ${my - r * .025} ${cx + r * .07} ${my}" stroke="${INK}" stroke-width="${r * .028}" fill="none" stroke-linecap="round"/>`;
+  return s;
+}
+function torso(cx, top, w, h) {
+  const a = w * .09, b = w * .28, c = w * .065;
+  return `<path d="M${cx - w / 2 + a} ${top} Q${cx} ${top - a} ${cx + w / 2 - a} ${top} Q${cx + w / 2 + a * .5} ${top + a * .7} ${cx + w / 2} ${top + b} L${cx + w / 2 - c} ${top + h} L${cx - w / 2 + c} ${top + h} L${cx - w / 2} ${top + b} Q${cx - w / 2 - a * .5} ${top + a * .7} ${cx - w / 2 + a} ${top} Z" fill="${SHIRT}"/>
+    <path d="M${cx - w / 2 + a} ${top} Q${cx} ${top - a} ${cx + w / 2 - a} ${top} Q${cx + w / 2 + a * .5} ${top + a * .7} ${cx + w / 2} ${top + b} L${cx + w / 2 - c} ${top + h} L${cx - w / 2 + c} ${top + h} L${cx - w / 2} ${top + b} Q${cx - w / 2 - a * .5} ${top + a * .7} ${cx - w / 2 + a} ${top} Z" fill="url(#shadeR)"/>
+    <path d="M${cx - w * .17} ${top - w * .02} Q${cx} ${top + w * .13} ${cx + w * .17} ${top - w * .02}" stroke="${SHIRT_HI}" stroke-width="${w * .055}" fill="none" stroke-linecap="round"/>`;
+}
+function arm(s, h, bend = 1) {
+  const mx = (s[0] + h[0]) / 2, my = (s[1] + h[1]) / 2, dx = h[0] - s[0], dy = h[1] - s[1], L = Math.hypot(dx, dy) || 1;
+  const off = Math.min(.07, L * .28) * bend, c = [mx - dy / L * off, my + dx / L * off];
+  return `<path d="M${s[0]} ${s[1]} Q${c[0]} ${c[1]} ${h[0]} ${h[1]}" stroke="${SKIN}" stroke-width=".026" fill="none" stroke-linecap="round"/><circle cx="${h[0]}" cy="${h[1]}" r=".02" fill="${SKIN}"/>`;
+}
+
+// Figur im Bett. Welt-Koordinaten (Meter). PZ = Tiefe der Figuren-Ebene.
+const PZ = .62, HOLD = [.15, .93];
+function character(st) {
+  const hip = [.15, .6], dyH = (1 - st.sit) * .37, dyT = (1 - st.sit) * .47, ang = .45 * (st.lean || 0);
+  const R = (p) => { const x = p[0] - hip[0], y = p[1] - hip[1], c = Math.cos(ang), s = Math.sin(ang); return [hip[0] + x * c - y * s, hip[1] + x * s + y * c]; };
+  const headC = R([.15, 1.17 - dyH]), shL = R([.078, .985 - dyT]), shR = R([.222, .985 - dyT]);
+  let s = '';
+  if (st.phone) s += `<circle cx="${st.phone[0]}" cy="${-st.phone[1]}" r=".55" fill="url(#${st.item === 'baby' ? 'glowG' : 'glow'})" opacity="${st.flick}"/>`;
+  const [hx, hy] = sv(hip);
+  s += `<g transform="rotate(${-ang * 180 / Math.PI} ${hx} ${hy}) translate(0 ${dyT})">${torso(.15, -1.03, .21, .47)}</g>`;
+  s += head(sv(headC), .13, { eyes: st.eyes, t: st.t, lit: st.lit, look: st.look, mouth: st.mouth });
+  if (st.sit > .02) s += `<g opacity="${clamp(st.sit * 3)}">${arm(sv(shR), sv(st.handR), -1)}${arm(sv(shL), sv(st.handL), 1)}</g>`;
+  if (st.phone && st.item === 'baby') {
+    const [px, py] = sv(st.phone);
+    s += `<rect x="${px - .04}" y="${py - .062}" width=".08" height=".11" rx=".014" fill="#c9cad3"/>
+          <rect x="${px - .032}" y="${py - .054}" width=".064" height=".048" rx=".005" fill="#7dffa4"/>
+          <path d="M${px + .028} ${py - .06} l.006 -.05" stroke="#c9cad3" stroke-width=".008" stroke-linecap="round"/>
+          <circle cx="${st.handL[0]}" cy="${-st.handL[1]}" r=".02" fill="${SKIN}"/><circle cx="${st.handR[0]}" cy="${-st.handR[1]}" r=".02" fill="${SKIN}"/>`;
+  } else if (st.phone) {
+    const [px, py] = sv(st.phone);
+    s += `<rect x="${px - .034}" y="${py - .056}" width=".068" height=".112" rx=".012" fill="#07080f"/>
+          <rect x="${px - .034}" y="${py - .056}" width=".068" height=".112" rx=".012" fill="none" stroke="#bcd4ff" stroke-width=".004" opacity=".6"/>
+          <circle cx="${st.handL[0]}" cy="${-st.handL[1]}" r=".02" fill="${SKIN}"/><circle cx="${st.handR[0]}" cy="${-st.handR[1]}" r=".02" fill="${SKIN}"/>`;
+  }
+  if (st.vibAt) {
+    const [vx, vy] = sv(st.vibAt);
+    s += `<path d="M${vx - .07} ${vy - .03} l-.015 -.015 M${vx + .07} ${vy - .03} l.015 -.015 M${vx - .08} ${vy} l-.02 0 M${vx + .08} ${vy} l.02 0" stroke="#d7e6ff" stroke-width=".008" stroke-linecap="round"/>`;
+  }
+  return s;
+}
+
+/* ------------------------------------------------ Tür-Zustand (gilt für alle Szenen) */
+function doorState(t) {
+  let handle = 0, open = 0, knock = 0;
+  if (TL.handle.length) { const [h0, h1] = TL.handle; const p = ease((t - h0 - .3) / Math.max(.5, h1 - h0 - .3)); handle = .6 * p + (p > 0 && p < 1 ? noise(t * 20) * .03 : 0); }
+  if (TL.reveal && TL.reveal.length) { const p = ease((t - TL.reveal[0]) / 1.5); open = (TL.openMax || .4) * p; if (p > 0) handle = Math.max(handle * (1 - p), 0) + .6 * (1 - p); }
+  for (const k of TL.knocks) { const a = t - k; if (a >= 0 && a < .16) knock += Math.sin(a * 90) * (1 - a / .16); }
+  return { handle, open, knock };
+}
+
+/* ------------------------------------------------ Szenen */
+async function viewRoom(t, sh) {
+  const L = sh.lineTimes, lt = t - sh.start, d = sh.end - sh.start;
+  const mode = sh.mode || 'phone', trig = sh.triggerLine ?? 1;
+  const T1 = L.length > trig ? L[trig][0] : 1e9, k = t - T1;
+  W3.setCam([.15, 1.95, 3.95 - .25 * ease(lt / d)], [-.18, .74, .5], 48);
+  const awake = mode === 'phone' ? t > L[0][0] + (L[0][1] - L[0][0]) * .55 : t > T1 + .15;
+  const desk = W3.toPlane([-.7, mode === 'baby' ? .64 : .58, .24], PZ);
+  const holdL = [HOLD[0] - .035, HOLD[1] - .035], holdR = [HOLD[0] + .035, HOLD[1] - .035];
+  if (mode === 'wake') {          // aufwachen, aufsetzen, zum Fenster starren
+    const sit = ease((k - .7) / .8), look = awake ? -1.4 * ease((k - .2) / .4) : 0;
+    W3.setState({ t, phoneOnDesk: true, phoneLit: false, ...doorState(t), ...windowState(t, false) });
+    const body = character({ sit, lean: 0, handL: lerp2([.05, .72], [.06, .74], sit), handR: [.25, .72], phone: null, eyes: awake ? 'wide' : 'closed', look, t, mouth: awake ? 'o' : '' });
+    await W3.setChar(svgWrap(.1, 1.0, 2.4, body), .1, 1.0, PZ, 2.4);
+    return '';
+  }
+  const lit = t >= T1;
+  const vib = lit && ((k >= 0 && k < .32) || (k >= .44 && k < .76));
+  const flick = lit ? .85 + .15 * Math.abs(noise(t * 3)) : 0;
+  const sit = ease((k - .35) / .6), lean = ease((k - .75) / .4) - ease((k - 1.45) / .45);
+  const reach = ease((k - .85) / .4), back = ease((k - 1.45) / .5), grabbed = k >= 1.3;
+  const handL = lerp2(lerp2([.05, .72], [desk[0] + .01, desk[1]], reach), holdL, back);
+  const handR = lerp2([.25, .72], holdR, back);
+  const phone = grabbed ? lerp2([handL[0] + .015, handL[1] + .03], HOLD, back) : null;
+  const look = !awake ? 0 : (lit && back < .5 ? -1.3 * ease(k / .3) : 0);
+  W3.setState({ t, phoneOnDesk: !grabbed, phoneLit: lit, phoneVib: vib, flick, phonePos: grabbed ? [phone[0], phone[1], PZ + .12] : [-.7, .66, .26], ...doorState(t) });
+  const body = character({ sit, lean, handL, handR, phone, flick, lit: grabbed && back > .4, eyes: awake ? 'open' : 'closed', look, t, vibAt: vib ? desk : null, item: TL.item });
+  await W3.setChar(svgWrap(.1, 1.0, 2.4, body), .1, 1.0, PZ, 2.4);
+  return '';
+}
+
+async function viewFace(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  const look = lt > d * .55 ? Math.sin(Math.min(1, (lt - d * .55) * 3) * Math.PI / 2) * 1.3 * (sh.lookDir || 1) : 0;
+  const tr = .002 * noise(t * 9);
+  W3.setCam([.15 + tr, 1.1, 1.36 - .08 * ease(lt / d)], [.15, 1.04, .6], 44);
+  const flick = .85 + .15 * Math.abs(noise(t * 3));
+  W3.setState({ t, phoneOnDesk: false, phoneLit: true, flick, phonePos: [HOLD[0], HOLD[1], PZ + .12], ...doorState(t) });
+  const body = character({ sit: 1, lean: 0, handL: [HOLD[0] - .035, HOLD[1] - .035], handR: [HOLD[0] + .035, HOLD[1] - .035], phone: HOLD, flick, lit: true, eyes: 'wide', mouth: 'o', look, t, item: TL.item });
+  await W3.setChar(svgWrap(.15, 1.05, .8, body), .15, 1.05, PZ, .8);
+  return '';
+}
+
+function windowState(t, fig) {
+  let tap = 0;
+  for (const k of TL.taps || []) { const a = t - k; if (a >= 0 && a < .14) tap = Math.max(tap, Math.sin(a / .14 * Math.PI)); }
+  return { winFig: fig ? 1 : 0, tap };
+}
+async function viewWindow(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([.25 - .08 * ease(lt / d), 1.22, 1.75 - .2 * ease(lt / d)], [-.95, 1.6, 0], 46);
+  W3.setState({ t, phoneOnDesk: false, phoneLit: !!sh.phoneLit, flick: .6, phonePos: [.2, .95, 1.4], ...doorState(t), ...windowState(t, sh.figure) });
+  await W3.setChar(null);
+  return '';
+}
+async function viewUnderbed(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([.15, .15, 3.15 - .35 * ease(lt / d)], [.15, .13, 1.2], 46);
+  const eyes = TL.eyes != null ? clamp((t - TL.eyes) / .9) : 0;
+  W3.setState({ t, phoneOnDesk: false, phoneLit: true, flick: .5, phonePos: [.15, .9, .9], eyes: eyes * (.92 + .08 * Math.sin(t * 3)), ...doorState(t) });
+  await W3.setChar(null);
+  return '';
+}
+
+function povCam(t, drift = 0) { W3.setCam([.45 + drift * .05, 1.12, 1.75 - drift * .1], [1.37, .98, -.05], 56); }
+async function viewDoor(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  if (sh.zoom === 'handle') {
+    const r0 = TL.reveal && TL.reveal.length ? TL.reveal[0] : sh.end;
+    const pIn = ease(lt / Math.max(1, r0 - sh.start)), pOut = ease((t - r0 + .2) / 1.8);
+    const pos = lerp3(lerp3([.72, 1.06, .95], [.86, 1.03, .62], pIn), [.6, 1.58, 1.95], pOut);
+    const look = lerp3([1.04, 1.0, 0], [1.1, 1.66, -.3], pOut);
+    W3.setCam(pos, look, lerp(38, 36, pOut));
+  } else if (sh.zoom === 'visitor') {
+    const p = ease(lt / d);
+    W3.setCam([.5 + .1 * p, 1.05 - .05 * p, 2.7 - .45 * p], [1.2, .78, -.2], 46);
+  } else povCam(t, ease(lt / d));
+  W3.setState({ t, phoneOnDesk: false, phoneLit: true, flick: .6, phonePos: [.5, .95, 1.5], ...doorState(t) });
+  await W3.setChar(null);
+  return '';
+}
+
+/* ------------------------------------------------ Video-Babyfon (Nachtsicht) */
+function nightVision(t, figure, clock, small = false) {
+  const fl = .9 + .1 * Math.abs(noise(t * 7));
+  const scan = Array.from({ length: 49 }, (_, i) => `<rect y="${i * 4}" width="260" height="1.4" fill="#000" opacity=".22"/>`).join('');
+  const fig = figure ? `<g transform="translate(-28 -50) scale(1.3)">
+    <path d="M86 186 L90 70 Q92 46 104 40 Q116 36 122 52 L120 70 L112 186 Z" fill="#020904"/>
+    <ellipse cx="128" cy="66" rx="13" ry="17" transform="rotate(38 128 66)" fill="#031006"/>
+    <path d="M110 60 Q132 78 142 104" stroke="#031006" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <path d="M142 104 l6 4 M141 105 l4 7 M139 105 l1 8" stroke="#2a6a3e" stroke-width="1.6" stroke-linecap="round"/>
+    <circle cx="131" cy="64" r="1.8" fill="#e6ffee"/><circle cx="125" cy="70" r="1.8" fill="#e6ffee"/></g>` : '';
+  return `<svg viewBox="0 0 260 195" width="100%" height="100%" style="display:block">
+    <rect width="260" height="195" fill="#0a1a0f"/>
+    <polygon points="0,140 260,128 260,195 0,195" fill="#0f2a17"/>
+    <rect x="18" y="26" width="46" height="52" fill="#123220"/><rect x="21" y="29" width="40" height="46" fill="#1d4a2c"/>
+    <rect x="120" y="96" width="122" height="62" rx="6" fill="#174027"/>
+    <rect x="232" y="70" width="12" height="90" rx="3" fill="#1d4c2e"/>
+    <ellipse cx="150" cy="108" rx="22" ry="8" fill="#3f8d58"/>
+    <circle cx="150" cy="101" r="11" fill="#a8ecbd"/>
+    <path d="M145 101 q2 2 4 0 M152 101 q2 2 4 0" stroke="#0a1a0f" stroke-width="1.2" fill="none"/>
+    <path d="M126 112 Q180 104 240 112 L240 150 L126 150 Z" fill="#2b6d40"/>
+    ${fig}
+    <rect width="260" height="195" fill="#7dffa4" opacity="${.05 * fl}"/>${scan}
+    ${small ? '' : `<circle cx="14" cy="13" r="3.4" fill="#ff3b30" opacity="${(t % 1.2) < .7 ? 1 : .2}"/>
+    <text x="22" y="16.5" font-family="JetBrains Mono" font-size="9" font-weight="700" fill="#d6ffe2">REC</text>
+    <text x="246" y="16.5" text-anchor="end" font-family="JetBrains Mono" font-size="9" fill="#d6ffe2">0${clock}</text>
+    <text x="12" y="186" font-family="JetBrains Mono" font-size="8" fill="#d6ffe2" letter-spacing="1">CAM 1 · KINDERZIMMER</text>`}
+  </svg>`;
+}
+function handBox(x, y, w, h, device) {
+  return `<div class="arm" style="left:${x + w / 2 - 30}px;top:${y + h - 20}px;width:60px;height:${960 - y - h + 80}px;transform:rotate(-5deg)"></div>
+    <div class="fing" style="left:${x - 15}px;top:${y + h * .3}px;width:27px;height:54px"></div>
+    ${[.28, .38, .48].map(f => `<div class="fing" style="left:${x + w - 12}px;top:${y + h * f}px;width:27px;height:42px"></div>`).join('')}
+    ${device}`;
+}
+async function viewMonitor(t, sh) {
+  await bgPov(t);
+  let lvl = 0;
+  for (const [a, b] of TL.hums || []) if (t >= a && t < b) lvl = 3 + 2 * Math.abs(Math.sin(t * 5.3)) * Math.abs(Math.sin(t * 2.1));
+  const leds = [0, 1, 2, 3, 4].map(i => `<i style="background:${i < Math.round(lvl) ? (i > 2 ? '#ff6a3d' : '#5dff8f') : '#3b3d46'};box-shadow:${i < Math.round(lvl) ? '0 0 8px ' + (i > 2 ? '#ff6a3d' : '#5dff8f') : 'none'}"></i>`).join('');
+  const x = 120, y = 210, w = 300, h = 400;
+  return handBox(x, y, w, h, `<div class="ant" style="left:${x + w - 58}px;top:${y - 70}px"></div>
+    <div class="baby" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px">
+      <div class="scr">${nightVision(t, sh.figure, sh.clock)}</div>
+      <div class="leds">${leds}</div>
+      <div class="grill">${Array.from({ length: 21 }, () => '<b></b>').join('')}</div>
+    </div>`);
+}
+
+/* ------------------------------------------------ Handy-UI (HTML) */
+function phoneBox(x, y, w, h, inner) {
+  return `<div class="arm" style="left:${x + w / 2 - 30}px;top:${y + h - 20}px;width:60px;height:${960 - y - h + 80}px;transform:rotate(-5deg)"></div>
+    <div class="fing" style="left:${x - 15}px;top:${y + h * .3}px;width:27px;height:54px"></div>
+    ${[.28, .38, .48].map(f => `<div class="fing" style="left:${x + w - 12}px;top:${y + h * f}px;width:27px;height:42px"></div>`).join('')}
+    <div class="phone" style="left:${x}px;top:${y}px;width:${w}px;height:${h}px">
+      <div class="screen"><div class="island"></div>${inner}</div></div>`;
+}
+async function bgPov(t) {
+  if (TL.set && TL.set !== 'bedroom' && typeof SETBG !== 'undefined') return SETBG[TL.set](t); povCam(t, .5); W3.setState({ t, phoneOnDesk: false, phoneLit: true, flick: .8, phonePos: [.5, .95, 1.5], ...doorState(t) }); await W3.setChar(null); }
+
+async function viewLock(t, sh) {
+  await bgPov(t);
+  const lt = t - sh.start, p = outBack((lt - 0.15) / 0.35), n = sh.notif;
+  return phoneBox(118, 150, 304, 620, `<div class="lock"><div class="d">Donnerstag, 5. November</div><div class="c">${sh.clock}</div>
+    <div class="notif" style="opacity:${clamp(p)};transform:translateY(${(1 - p) * -18}px) scale(${.9 + .1 * p})"><div class="ic"></div>
+    <div style="flex:1"><div class="n">${n.from}<span>jetzt</span></div><div class="m">${n.text}</div></div></div></div>`);
+}
+async function viewChat(t, sh) {
+  await bgPov(t);
+  let list = '';
+  for (const m of TL.msgs) {
+    if (m.t > t || m.chat !== sh.contact) continue;
+    const p = outBack((t - m.t) / 0.22);
+    list += `<div class="bub ${m.from}" style="transform:scale(${.6 + .4 * p});opacity:${clamp(p * 1.5)}">${m.text}</div>`;
+  }
+  for (const [a, b, c] of TL.typing) if (t >= a && t < b && c === sh.contact) {
+    const dots = [0, 1, 2].map(i => `<i style="opacity:${.35 + .65 * Math.max(0, Math.sin((t * 6 - i * .7)))}"></i>`).join('');
+    list += `<div class="bub them typing">${dots}</div>`;
+  }
+  return phoneBox(118, 150, 304, 620, `<div class="chat">
+    <div class="sbar"><span>${sh.clock}</span><span class="bat"><b></b></span></div>
+    <div class="hd"><div class="av">${sh.contact[0]}</div><div class="nm">${sh.contact} ›</div></div>
+    <div class="day">Heute ${sh.clock}</div><div class="list">${list}</div>
+    <div class="inp">iMessage</div></div>`);
+}
+function miniChat(o, x, p) {
+  const { text, label, color, contact } = o;
+  return `<div style="opacity:${clamp(p)};transform:translateY(${(1 - p) * 20}px)">
+    <div class="pill" style="left:${x + 100}px;top:228px;transform:translateX(-50%);background:${color}">${label}</div>
+    <div class="phone" style="left:${x}px;top:272px;width:200px;height:400px;border-radius:34px;padding:7px">
+    <div class="screen" style="border-radius:28px"><div class="island" style="width:62px;height:18px;top:8px"></div>
+    <div class="chat"><div class="hd" style="top:30px"><div class="av" style="width:30px;height:30px;font-size:13px;line-height:30px">${contact[0]}</div><div class="nm" style="font-size:9px">${contact} ›</div></div>
+    <div class="list" style="padding-top:112px;padding-left:9px;padding-right:9px"><div class="bub them" style="font-size:11.5px;max-width:90%">${text}</div></div></div></div></div></div>`;
+}
+function miniCard(o, x, p, t) {
+  const inner = o.kind === 'monitor' ? `<div style="position:absolute;left:10px;right:10px;top:40px;height:135px;border-radius:8px;overflow:hidden">${nightVision(t, true, '3:35', true)}</div>`
+    : `<div style="position:absolute;left:14px;right:14px;top:60px;text-align:center;font:italic 800 17px/1.25 'Montserrat';color:#fff">${o.text}</div>`;
+  return `<div style="opacity:${clamp(p)};transform:translateY(${(1 - p) * 20}px)">
+    <div class="pill" style="left:${x + 100}px;top:228px;transform:translateX(-50%);background:${o.color};white-space:nowrap">${o.label}</div>
+    <div style="position:absolute;left:${x}px;top:272px;width:200px;height:${o.kind === 'monitor' ? 250 : 220}px;border-radius:22px;background:rgba(8,10,24,.82);border:2px solid ${o.color}">
+      ${o.icon ? `<div style="text-align:center;margin-top:14px;font-size:26px">${o.icon}</div>` : ''}${inner}
+      ${o.sub ? `<div style="position:absolute;bottom:14px;left:0;right:0;text-align:center;font:500 10px 'JetBrains Mono';letter-spacing:1.5px;color:#9aa0b8">${o.sub}</div>` : ''}</div></div>`;
+}
+async function viewChoice(t, sh) {
+  await bgPov(t);
+  const lt = t - sh.start, card = (o, x, p) => o.contact ? miniChat(o, x, p) : miniCard(o, x, p, t);
+  return `<div class="choice"><h1 style="opacity:${clamp(lt / .25)}">${sh.heading || 'WEM GLAUBST DU?'}</h1>
+    ${card(sh.left, 40, outBack((lt - .15) / .35))}
+    ${card(sh.right, 300, outBack((lt - .45) / .35))}</div>`;
+}
+async function viewEnd(t, sh) {
+  const lt = t - sh.start, a = (d) => `opacity:${clamp((lt - d) / .3)};transform:translateY(${(1 - ease((lt - d) / .3)) * 14}px)`;
+  const door = `<svg viewBox="0 0 200 150" width="200" height="150" style="display:block;margin:0 auto">
+    <rect x="50" y="10" width="100" height="128" fill="#05060f"/>
+    <rect x="58" y="22" width="22" height="116" fill="#3a2412"/>
+    <ellipse cx="68" cy="48" rx="9" ry="13" fill="#cfd3e6"/><circle cx="65" cy="45" r="2.4" fill="#000"/><circle cx="72" cy="45" r="2.4" fill="#000"/>
+    <path d="M62 54 Q68 59 75 53" stroke="#000" stroke-width="1.6" fill="none"/><path d="M68 61 L68 70 M63 70 Q68 68 74 70 L72 100 L70 136 M66 100 L64 136 M63 71 L60 112 M73 71 L78 80" stroke="#9a9eb0" stroke-width="3" stroke-linecap="round" fill="none"/>
+    <polygon points="80,10 150,10 150,138 80,138" fill="#181d45" stroke="#0b0f2c" stroke-width="4"/>
+    <circle cx="92" cy="78" r="4" fill="#7a83b6"/><rect x="52" y="134" width="96" height="4" fill="#ffbe6a"/>
+    ${[0, 1, 2, 3].map(i => `<path d="M80 ${44 + i * 5} q6 -1 11 1" stroke="#cfd3e6" stroke-width="2.2" stroke-linecap="round" fill="none"/>`).join('')}</svg>`;
+  const art = {
+    door,
+    window: `<svg viewBox="0 0 200 150" width="200" height="150" style="display:block;margin:0 auto">
+      <rect x="55" y="10" width="90" height="110" rx="4" fill="#0b0d1c"/><rect x="62" y="17" width="76" height="96" fill="#2e3460"/>
+      <circle cx="120" cy="34" r="9" fill="#dfe4ff" opacity=".85"/>
+      <path d="M70 113 Q72 88 88 84 L92 78 L108 78 L112 84 Q128 88 130 113 Z" fill="#05060a"/><ellipse cx="100" cy="66" rx="13" ry="16" fill="#05060a"/>
+      <circle cx="95" cy="64" r="1.6" fill="#fff"/><circle cx="105" cy="64" r="1.6" fill="#fff"/>
+      <rect x="98.5" y="17" width="3" height="96" fill="#0b0d1c"/><rect x="62" y="63" width="76" height="3" fill="#0b0d1c"/></svg>`,
+    underbed: `<svg viewBox="0 0 200 150" width="200" height="150" style="display:block;margin:0 auto">
+      <rect x="20" y="60" width="160" height="34" rx="6" fill="#2b3168"/><rect x="25" y="40" width="150" height="26" rx="10" fill="#3d4590"/>
+      <rect x="28" y="94" width="144" height="30" fill="#030306"/><rect x="24" y="94" width="8" height="34" fill="#1b1d2e"/><rect x="168" y="94" width="8" height="34" fill="#1b1d2e"/>
+      <circle cx="94" cy="108" r="2.4" fill="#f4f6ff"/><circle cx="106" cy="108" r="2.4" fill="#f4f6ff"/>
+      <path d="M60 124 q6 -5 14 -3 M62 126 q7 -4 16 -2 M64 128 q7 -3 15 -1" stroke="#6f7387" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>`,
+    switch: `<svg viewBox="0 0 200 150" width="200" height="150" style="display:block;margin:0 auto">
+      <polygon points="30,0 170,0 120,60 80,60" fill="#0c0c0e"/><polygon points="30,150 170,150 120,90 80,90" fill="#151517"/>
+      <rect x="80" y="60" width="40" height="30" fill="#050506"/><rect x="92" y="62" width="16" height="6" fill="#16b35a"/>
+      <path d="M98 70 l0 18 M102 70 l0 18 M96 74 q4 -3 8 0" stroke="#000" stroke-width="3"/>
+      <rect x="22" y="70" width="12" height="18" rx="2" fill="#d8d6cf"/><rect x="25" y="75" width="6" height="8" fill="#ff8a2a"/><circle cx="28" cy="79" r="14" fill="#ff8a2a" opacity=".18"/></svg>`,
+    tent: `<svg viewBox="0 0 200 150" width="200" height="150" style="display:block;margin:0 auto">
+      <polygon points="40,130 100,30 160,130" fill="#2c3a33"/><polygon points="100,30 160,130 130,130" fill="#22302a"/>
+      <path d="M100 52 L100 130" stroke="#0c0e10" stroke-width="2"/><rect x="98" y="${130 - 40}" width="4" height="6" fill="#a8aab2"/>
+      <g fill="#000" opacity=".8"><ellipse cx="126" cy="64" rx="5" ry="6"/><path d="M121 70 L131 70 L129 104 L123 104 Z"/><path d="M130 72 Q142 70 148 60" stroke="#000" stroke-width="2" fill="none"/></g>
+      <circle cx="160" cy="20" r="8" fill="#e8edff"/></svg>`,
+    mirror: `<svg viewBox="0 0 200 150" width="200" height="150" style="display:block;margin:0 auto">
+      <rect x="20" y="40" width="160" height="60" rx="26" fill="#111" /><rect x="26" y="46" width="148" height="48" rx="21" fill="#1b1e2b"/>
+      <circle cx="58" cy="70" r="8" fill="#fffbe8" opacity=".85"/><circle cx="142" cy="70" r="8" fill="#fffbe8" opacity=".85"/>
+      <ellipse cx="100" cy="66" rx="9" ry="12" fill="#cfd3e6"/><ellipse cx="96.5" cy="63" rx="2.5" ry="3.6" fill="#000"/><ellipse cx="103.5" cy="63" rx="2.5" ry="3.6" fill="#000"/>
+      <path d="M93 71 Q100 78 107 71 Q100 74 93 71 Z" fill="#000"/><rect x="96" y="20" width="8" height="22" fill="#111"/></svg>`,
+    elevator: `<svg viewBox="0 0 200 150" width="200" height="150" style="display:block;margin:0 auto">
+      <rect x="40" y="10" width="120" height="136" fill="#5d6068"/><rect x="62" y="40" width="76" height="106" fill="#9a9ea8"/><rect x="99" y="40" width="2" height="106" fill="#5d6068"/>
+      <rect x="78" y="14" width="44" height="22" rx="3" fill="#060606"/><text x="100" y="31" text-anchor="middle" font-family="JetBrains Mono" font-weight="700" font-size="18" fill="#ff2a1a">13</text></svg>`,
+    bus: `<div style="width:260px;margin:0 auto;background:#080503;border:3px solid #111;border-radius:6px;padding:8px 6px;font:700 15px 'JetBrains Mono';color:#ff9a2a;letter-spacing:1px;text-shadow:0 0 8px #ff7a1a">DREH DICH NICHT UM</div>`,
+    office: `<svg viewBox="0 0 200 150" width="200" height="150" style="display:block;margin:0 auto">
+      <rect x="30" y="18" width="40" height="6" fill="#1d1f25"/><rect x="130" y="18" width="40" height="6" fill="#f2f5ff"/>
+      <polygon points="130,24 170,24 190,140 110,140" fill="#f2f5ff" opacity=".12"/>
+      <path d="M142 140 L144 70 Q146 52 152 50 Q158 52 160 70 L162 140 Z" fill="#111"/><ellipse cx="151" cy="44" rx="8" ry="11" fill="#9a9eb0"/>
+      <ellipse cx="148" cy="42" rx="2" ry="3" fill="#000"/><ellipse cx="154" cy="42" rx="2" ry="3" fill="#000"/>
+      <rect x="50" y="110" width="40" height="30" fill="#bdbdbd"/><circle cx="70" cy="92" r="9" fill="#d0d0d0"/></svg>`,
+    monitor: `<div style="width:170px;margin:0 auto;background:#c9cad3;border-radius:16px;padding:10px"><div style="border-radius:6px;overflow:hidden;height:110px">${nightVision(t, true, '3:35', true)}</div></div>`,
+  }[TL.endArt || 'door'];
+  return `<div class="end"><div style="margin-top:205px;${a(0)}">${art}</div>
+    <div class="s" style="${a(.1)}">${TL.title}</div><div class="p" style="${a(.2)}">TEIL ${TL.part + 1}</div>
+    <div class="h" style="${a(.35)}">HEUTE NACHT</div><div style="${a(.5)}"><span class="f">FOLGE FÜR TEIL ${TL.part + 1}</span></div>
+    <div class="q" style="${a(.7)}">${TL.question}</div></div>`;
+}
+
+const VIEWS = { room: viewRoom, face: viewFace, door: viewDoor, lock: viewLock, chat: viewChat, choice: viewChoice, end: viewEnd, window: viewWindow, underbed: viewUnderbed, monitor: viewMonitor };
+const GLSTYLE = { room: '', face: '', door: '', window: '', underbed: '', monitor: 'blur(9px) brightness(.6)', lock: 'blur(9px) brightness(.7)', chat: 'blur(9px) brightness(.7)', choice: 'blur(10px) brightness(.55)', end: 'none' };
+const ZOOM = { lock: [1.0, 1.03], chat: [1.0, 1.03], choice: [1.0, 1.02], monitor: [1.0, 1.04] };
+
+/* ------------------------------------------------ Kreatur + Finger (2D-Texturen für den Flur) */
+const CREATURE = `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="2300" viewBox="0 0 450 1150">${DEFS}
+  <defs>
+    <linearGradient id="skinC" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#6e7286"/><stop offset=".45" stop-color="#b3b7c8"/><stop offset="1" stop-color="#7a7e92"/></linearGradient>
+    <radialGradient id="shadowC" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#000" stop-opacity=".55"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+  </defs>
+  <ellipse cx="225" cy="1142" rx="110" ry="12" fill="url(#shadowC)"/>
+  <g stroke="rgba(255,176,96,.45)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Beine: lang, dürr, knotige Knie -->
+    <path d="M206 700 Q196 820 190 920 Q186 1030 178 1135 L196 1137 Q204 1030 208 925 Q214 820 222 705 Z" fill="url(#skinC)"/>
+    <path d="M238 700 Q250 820 256 920 Q262 1030 274 1135 L256 1138 Q246 1030 240 926 Q232 820 226 705 Z" fill="url(#skinC)"/>
+    <ellipse cx="199" cy="921" rx="11" ry="14" fill="#a3a7b9"/><ellipse cx="248" cy="921" rx="11" ry="14" fill="#a3a7b9"/>
+    <path d="M178 1133 l-22 6 l40 2 Z M274 1133 l26 6 l-44 2 Z" fill="#8a8ea2"/>
+    <!-- Linker Arm hängt bis unter die Knie -->
+    <path d="M172 396 Q150 520 146 640 Q142 760 136 860 L150 862 Q158 760 162 642 Q168 522 186 402 Z" fill="url(#skinC)"/>
+    <path d="M138 858 q-8 40 -6 70 M143 860 q-2 44 2 78 M149 860 q4 40 12 66 M134 856 q-16 28 -20 52" stroke="#a3a7b9" stroke-width="5" fill="none"/>
+
+    <!-- Rumpf: schmal, eingefallen -->
+    <path d="M168 392 Q225 368 282 392 Q284 470 262 560 Q256 640 248 708 L200 708 Q192 640 186 560 Q166 470 168 392 Z" fill="url(#skinC)"/>
+  </g>
+  <g stroke="#5f6377" stroke-width="3.2" fill="none" stroke-linecap="round" opacity=".85">
+    ${[0, 1, 2, 3, 4].map(i => `<path d="M${190 + i * 2} ${438 + i * 24} Q225 ${450 + i * 24} ${260 - i * 2} ${438 + i * 24}"/>`).join('')}
+    <path d="M225 420 L225 560"/><path d="M200 400 Q225 410 250 400"/>
+  </g>
+  <!-- Hals, leicht verdreht -->
+  <path d="M212 290 Q206 340 214 396 L236 396 Q240 340 236 290 Z" fill="url(#skinC)" stroke="rgba(255,176,96,.45)" stroke-width="3"/>
+  <path d="M216 320 Q225 326 234 320 M216 350 Q225 356 234 350" stroke="#5f6377" stroke-width="2.5" fill="none"/>
+  <defs><linearGradient id="darkC" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".1"/><stop offset=".55" stop-color="#000" stop-opacity=".85"/><stop offset="1" stop-color="#000" stop-opacity="1"/></linearGradient></defs>
+  <rect x="0" y="290" width="450" height="860" fill="url(#darkC)"/>
+  <defs><linearGradient id="armFade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b3b7c8"/><stop offset="1" stop-color="#2a2c36"/></linearGradient></defs>
+  <path d="M186 600 Q170 470 172 352 Q178 326 206 318 L240 314 L240 336 L210 340 Q192 346 192 360 Q192 470 206 596 Z" fill="url(#armFade)" opacity=".85"/>
+  <ellipse cx="184" cy="344" rx="14" ry="11" fill="#a3a7b9" opacity=".8"/>
+  <!-- Kopf (schief) -->
+  <g transform="rotate(-12 225 200)">
+    <ellipse cx="225" cy="190" rx="66" ry="98" fill="url(#cface)"/>
+    <ellipse cx="198" cy="170" rx="21" ry="29" fill="#05050a"/><ellipse cx="254" cy="170" rx="21" ry="29" fill="#05050a"/>
+    <circle cx="201" cy="166" r="4.5" fill="#fff"/><circle cx="257" cy="166" r="4.5" fill="#fff"/>
+    <clipPath id="mouthC"><path d="M168 224 Q225 284 284 224 Q225 258 168 224 Z"/></clipPath>
+    <path d="M168 224 Q225 284 284 224 Q225 258 168 224 Z" fill="#05050a"/>
+    <g clip-path="url(#mouthC)">${Array.from({ length: 11 }, (_, i) => {
+      const t = .06 + i * .088, x = 284 - 116 * t, top = 224 + 68 * t * (1 - t), gap = 52 * t * (1 - t);
+      return `<rect x="${x - 3.6}" y="${top - 3}" width="7.2" height="${3 + gap * .78}" rx="1.6" fill="#e9e6da"/>`; }).join('')}</g>
+  </g>
+</svg>`;
+const FINGERS = `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 220 220">
+  <defs><filter id="fs" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter>
+  <linearGradient id="fk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#8a8ea2"/><stop offset=".25" stop-color="#b9bdcc"/><stop offset="1" stop-color="#a3a7b9"/></linearGradient></defs>
+  ${(() => { const F = [[62, 118], [88, 146], [116, 138], [144, 104]]; let sh = '', fi = '';
+    for (const [y, L] of F) {
+      // Finger: dick am Knöchel (Türkante), zwei Gelenke, Spitze krallt nach unten
+      const j1 = L * .38, j2 = L * .72;
+      const d = `M0 ${y - 9} Q${j1 * .5} ${y - 11} ${j1} ${y - 7} Q${(j1 + j2) / 2} ${y - 7} ${j2} ${y - 3} Q${L - 6} ${y} ${L} ${y + 7} Q${L - 2} ${y + 12} ${L - 9} ${y + 9} Q${(j1 + j2) / 2} ${y + 5} ${j1} ${y + 6} Q${j1 * .5} ${y + 8} 0 ${y + 10} Z`;
+      sh += `<path d="${d}" transform="translate(4 7)" fill="#000" opacity=".6"/>`;
+      fi += `<path d="${d}" fill="url(#fk)" stroke="#6a6e82" stroke-width=".8"/>
+        <path d="M${j1 - 2} ${y - 6} q3 6 0 12 M${j1 + 3} ${y - 6} q3 6 0 12 M${j2 - 2} ${y - 3} q2 5 0 10" stroke="#5f6377" stroke-width="1.4" fill="none"/>
+        <ellipse cx="${j1}" cy="${y - 1}" rx="6" ry="5" fill="#c6c9d6" opacity=".7"/>
+        <path d="M${L - 8} ${y + 2} Q${L - 2} ${y + 4} ${L - 1} ${y + 9}" stroke="#3a3528" stroke-width="3.2" fill="none" stroke-linecap="round"/>`;
+    }
+    return `<g filter="url(#fs)">${sh}</g>
+      ${fi}`; })()}
+</svg>`;
+const KNUCKLES = `<svg xmlns="http://www.w3.org/2000/svg" width="128" height="358" viewBox="0 0 50 140">
+  <defs><linearGradient id="kk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#5d6175"/><stop offset=".55" stop-color="#b3b7c8"/><stop offset="1" stop-color="#a6aabb"/></linearGradient>
+  <linearGradient id="kv" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".25"/><stop offset=".45" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".3"/></linearGradient></defs>
+  ${[24, 49, 76, 103].map(y => `<rect x="-4" y="${y - 10}" width="58" height="20" rx="10" fill="url(#kk)"/><rect x="-4" y="${y - 10}" width="58" height="20" rx="10" fill="url(#kv)"/>`).join('')}
+</svg>`;
+
+const WINFIG = `<svg xmlns="http://www.w3.org/2000/svg" width="400" height="430" viewBox="0 0 80 86">
+  <defs><radialGradient id="eg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#fff" stop-opacity=".8"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+  <path d="M10 86 Q12 62 30 58 Q36 56 38 52 L46 52 Q48 56 54 58 Q70 62 72 86 Z" fill="#05060a"/>
+  <ellipse cx="42" cy="38" rx="12.5" ry="16.5" fill="#05060a"/>
+  <rect x="38" y="50" width="8" height="6" fill="#05060a"/>
+  <circle cx="37.5" cy="36" r="3" fill="url(#eg)"/><circle cx="46.5" cy="36" r="3" fill="url(#eg)"/>
+  <circle cx="37.5" cy="36" r=".9" fill="#fff"/><circle cx="46.5" cy="36" r=".9" fill="#fff"/>
+</svg>`;
+const WINFINGERS = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 30 30">
+  ${[[8, 22, 15], [12, 24, 9], [16, 24, 10], [20, 22, 15]].map(([x, b, top]) => `<path d="M${x} 30 L${x} ${b} Q${x - .6} ${(b + top) / 2} ${x} ${top}" stroke="#8d91a6" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+    <path d="M${x - .8} ${(b + top) / 2 + 2} h1.6 M${x - .8} ${(b + top) / 2 - 2} h1.6" stroke="#4d5064" stroke-width=".35"/>
+    <ellipse cx="${x}" cy="${top + .6}" rx=".9" ry="1.1" fill="#3a3626"/>`).join('')}
+</svg>`;
+const UNDER = `<svg xmlns="http://www.w3.org/2000/svg" width="900" height="260" viewBox="0 0 120 34.6">
+  <defs><radialGradient id="ue" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#e8ecff" stop-opacity=".7"/><stop offset="1" stop-color="#e8ecff" stop-opacity="0"/></radialGradient></defs>
+  <ellipse cx="57" cy="15" rx="4.5" ry="3.2" fill="url(#ue)"/><ellipse cx="66" cy="15" rx="4.5" ry="3.2" fill="url(#ue)"/>
+  <ellipse cx="57" cy="15" rx="1.5" ry="1.1" fill="#f4f6ff"/><ellipse cx="66" cy="15" rx="1.5" ry="1.1" fill="#f4f6ff"/>
+  <circle cx="57.3" cy="15" r=".5" fill="#000"/><circle cx="66.3" cy="15" r=".5" fill="#000"/>
+  ${[[40, 26.5, 25], [43, 27.2, 26], [46, 27.6, 26.6], [49, 27.2, 26]].map(([x, y, y2], i) => `<path d="M${x - 12} ${y} Q${x - 4} ${y - 2.6} ${x + 5} ${y2}" stroke="#9a9eb2" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    <circle cx="${x + 4}" cy="${y2}" r=".55" fill="#2e2c22"/>`).join('')}
+</svg>`;
+const KID = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="1200" viewBox="0 0 60 120">${DEFS}
+  <ellipse cx="30" cy="118" rx="14" ry="1.6" fill="#000" opacity=".5"/>
+  <path d="M25 92 L24 116 M35 92 L36 116" stroke="${SKIN}" stroke-width="2.2" stroke-linecap="round"/>
+  <path d="M20 52 Q30 47 40 52 L41 94 L19 94 Z" fill="#5b79b8"/>
+  ${[[24, 62], [33, 58], [28, 74], [36, 80], [23, 86]].map(([x, y]) => `<path d="M${x} ${y - 1.6} l.5 1.1 1.2.1 -.9.8 .3 1.2 -1.1-.6 -1.1.6 .3-1.2 -.9-.8 1.2-.1Z" fill="#dfe6ff"/>`).join('')}
+  <path d="M20 55 Q14 66 17 78 M40 55 Q45 64 38 72" stroke="${SKIN}" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+  <g transform="translate(32 70)"><circle cx="0" cy="0" r="6" fill="#7a5638"/><circle cx="-4.2" cy="-5" r="2.2" fill="#7a5638"/><circle cx="4.2" cy="-5" r="2.2" fill="#7a5638"/>
+    <circle cx="0" cy="9" r="7" fill="#6b4a30"/><circle cx="-2" cy="-1" r=".8" fill="#1a120b"/><circle cx="2" cy="-1" r=".8" fill="#1a120b"/><ellipse cx="0" cy="1.8" rx="1.8" ry="1.3" fill="#a88466"/></g>
+  ${head([30, 36], 12, { eyes: 'open', mouth: '' })}
+  <path d="M19 30 Q22 21 30 23 Q38 21 41 30 Q36 25 30 27 Q24 25 19 30 Z" fill="#6a4a30"/>
+</svg>`;
+
+window.setup = async (tl, dpr) => {
+  TL = tl;
+  for (let i = 0; i < 6; i++) {
+    const c = document.createElement('canvas'); c.width = 270; c.height = 480;
+    const g = c.getContext('2d'), d = g.createImageData(270, 480);
+    for (let p = 0; p < d.data.length; p += 4) { const v = Math.random() * 255; d.data[p] = d.data[p + 1] = d.data[p + 2] = v; d.data[p + 3] = 255; }
+    g.putImageData(d, 0, 0); GRAIN.push(c.toDataURL());
+  }
+  await W3.init($('gl'), dpr, { ...SET_ASSETS, creature: CREATURE, fingers: FINGERS, knuckles: KNUCKLES, winFig: WINFIG, winFingers: WINFINGERS, under: UNDER, kid: KID },
+    { set: TL.set || 'bedroom', visitor: TL.visitor || 'creature', bedLegs: !!TL.bedLegs, item: TL.item || 'phone', openMax: TL.openMax || .4 });
+};
+
+/* ------------------------------------------------ Frame */
+window.renderFrame = async (t) => {
+  const sh = TL.shots.find(s => t >= s.start && t < s.end) || TL.shots[TL.shots.length - 1];
+  const lt = t - sh.start, d = sh.end - sh.start;
+  const html = await VIEWS[sh.scene](t, sh);
+  const gl = $('gl'), st = GLSTYLE[sh.scene];
+  gl.style.display = st === 'none' ? 'none' : 'block';
+  const dr = TL.ev && TL.ev.dread ? TL.ev.dread[0][0] : null, dk = dr != null && t >= dr && sh.scene !== 'end' ? ease((t - dr) / 1.6) : 0;
+  const dreadF = dk ? ` saturate(${1 - .5 * dk}) contrast(${1 + .2 * dk}) brightness(${1 - .22 * dk})` : '';
+  gl.style.filter = st === 'none' ? '' : (st + dreadF).trim();
+  $('dread').style.opacity = dk;
+  $('grain').style.opacity = .085 + .07 * dk;
+  gl.style.transform = sh.scene === 'mirror' ? 'scaleX(-1)' : '';
+  if (st !== 'none') W3.render();
+  $('mid').innerHTML = html;
+  const sc = $('scene'), z = ZOOM[sh.scene] || [1, 1];
+  let shake = '';
+  for (const k of TL.knocks) { const a = t - k; if (a >= 0 && a < .18) shake = `translate(${Math.sin(a * 80) * 3 * (1 - a / .18)}px, ${Math.cos(a * 70) * 2 * (1 - a / .18)}px) `; }
+  if (TL.reveal && TL.reveal.length) { const a = t - TL.reveal[0] - 1.0; if (a >= 0 && a < .35) shake = `translate(${Math.sin(a * 60) * 4 * (1 - a / .35)}px, 0) `; }
+  if (dk && !shake) shake = `translate(${noise(t * 1.7) * 2.2 * dk}px, ${noise(t * 1.3 + 4) * 1.6 * dk}px) `;
+  sc.style.transform = shake + `scale(${z[0] + (z[1] - z[0]) * ease(lt / d)})`;
+
+  let ov = '';
+  if (t < 3.0) {
+    ov += `<div class="title" style="opacity:${clamp((3.0 - t) / .25)}"><div class="k">${TL.series} · ${TL.episode}</div><div class="t">${TL.title}<br>TEIL ${TL.part}</div></div>`;
+  } else if (sh.place && !['lock', 'chat', 'choice', 'end', 'monitor', 'radio'].includes(sh.scene)) {
+    const blink = (t % 1.2) < .7 ? 1 : .25;
+    ov += `<div class="badge"><div class="tm"><i style="opacity:${blink}"></i>${sh.clock}<small>UHR</small></div><div class="pl">TEIL ${TL.part} · ${sh.place}</div></div>`;
+  }
+  if (TL.set === 'cellar' && typeof timerOverlay !== 'undefined') ov += timerOverlay(t, sh);
+  const q = (TL.quotes || []).find(q => t >= q.start && t < q.end);
+  if (q && sh.scene !== 'radio') ov += `<div class="quote" style="opacity:${clamp((t - q.start) / .2)}"><div class="w">— ${q.who} · ${q.place} —</div><div class="tx">„${q.text}“</div></div>`;
+  const g = TL.groups.find(g => t >= g.start && t < g.end);
+  if (g) {
+    const top = sh.scene === 'choice' ? 720 : 568;
+    const ws = g.words.map(i => TL.words[i]).filter(w => w.t <= t + 0.02);
+    const last = ws.length - 1;
+    ov += `<div class="cap" style="top:${top}px">` + ws.map((w, i) => {
+      const p = i === last ? outBack((t - w.t) / .12) : 1;
+      return `<span class="${w.c}" style="transform:scale(${.8 + .2 * p})">${w.w}</span>`;
+    }).join('') + `</div>`;
+  }
+  $('overlay').innerHTML = ov;
+  $('grain').style.backgroundImage = `url(${GRAIN[Math.floor(t * 24) % GRAIN.length]})`;
+};
+</script>
+<script src="sets.js"></script></body></html>
