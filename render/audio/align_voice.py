@@ -13,7 +13,10 @@ def norm(w):
 voice, tl_path, out = sys.argv[1:4]
 words = json.load(open(tl_path))['timeline']['words']
 model = WhisperModel('small.en', device='cpu', compute_type='int8')
-segs, _ = model.transcribe(voice, word_timestamps=True, language='en', vad_filter=False)
+import subprocess, numpy as np
+raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', voice, '-f', 's16le', '-ac', '1', '-ar', '16000', '-'], capture_output=True, check=True).stdout
+audio = np.frombuffer(raw, np.int16).astype(np.float32) / 32768.0
+segs, _ = model.transcribe(audio, word_timestamps=True, language='en', vad_filter=False)
 heard = [w for s in segs for w in s.words]
 H = []
 for w in heard:
