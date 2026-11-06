@@ -186,3 +186,7 @@ Teil 2 kommt heute Nacht – folgen, damit du ihn nicht verpasst.
 15. **Neue Geräusche:**
     - Komm raus: Käuzchen, knackende Äste, Schritte im Laub.
     - Lichthupe: Herzschlag, aufheulender Motor, vorbeirauschende Bäume.
+16. **Echte Tonaufnahmen statt Computer-Geräuschen** (dein Feedback: zu künstlich, lautes Rauschen bei Lichthupe):
+    - Die Aufnahmen kommen aus dem Internet Archive (SSE-Bibliothek, aporee) und von OpenGameArt, alle CC0 oder Public Domain. Sie liegen in `engine/sfx/`, Herkunft und Lizenz stehen in `engine/sfx/LIZENZEN.md`.
+    - `build.py` nimmt automatisch die echte Aufnahme, wenn es zu einem Geräuschnamen eine Datei gibt. Atmosphären (`amb_car`, `amb_forest`) werden geloopt und liegen etwa 13 dB unter der Stimme.
+    - Regel: **Neue Geräusche immer als echte Aufnahme** (CC0/Public Domain) holen. Gute Quelle ist archive.org mit `SSE_Library_*`, `Red_Library_*` und `aporee_*`. Wikimedia Commons sperrt Downloads oft (Fehler 429).

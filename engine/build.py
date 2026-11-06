@@ -56,7 +56,27 @@ def env(n, attack=0.005, decay=10.0):
     return np.minimum(1, t / attack) * np.exp(-decay * t)
 
 
+SFX_DIR = os.path.join(ENGINE, "sfx")
+# Spitzenpegel der echten Aufnahmen (0..1); Atmosphären: Ziel-Lautstärke (RMS)
+REC_PEAK = {"steps": .32, "twig": .38, "zipper": .42, "heartbeat": .5, "rev": .34, "static": .2, "carby": .3}
+AMB_RMS = {"car": .028, "forest": .04}
+_rec_cache = {}
+
+
+def rec(name):
+    path = os.path.join(SFX_DIR, name + ".ogg")
+    if not os.path.exists(path):
+        return None
+    if name not in _rec_cache:
+        a = load_wav(path)
+        _rec_cache[name] = a / (np.abs(a).max() + 1e-9) * REC_PEAK.get(name, .35)
+    return _rec_cache[name]
+
+
 def sfx(name):
+    r = rec(name)
+    if r is not None:
+        return r
     rng = np.random.default_rng(len(name))
     if name == "knock":
         n = int(0.35 * SR); t = np.arange(n) / SR
@@ -181,6 +201,15 @@ def sfx(name):
 def ambience(kind, dur):
     n = int(dur * SR); t = np.arange(n) / SR; rng = np.random.default_rng(3)
     fade = np.minimum(1, t / 1.5) * np.minimum(1, (dur - t) / 1.5)
+    path = os.path.join(SFX_DIR, "amb_" + kind + ".ogg")
+    if os.path.exists(path):          # echte Aufnahme, nahtlos geloopt (Überblendung 2 s)
+        a = load_wav(path); x = int(2 * SR); out = np.zeros(n); pos = 0
+        while pos < n:
+            seg = a[: min(len(a), n - pos)].copy()
+            if pos: seg[:x] *= np.linspace(0, 1, x)[: len(seg[:x])]; out[pos:pos + x] *= np.linspace(1, 0, x)[: len(out[pos:pos + x])]
+            out[pos:pos + len(seg)] += seg; pos += len(a) - x
+        out *= AMB_RMS.get(kind, .03) / (np.sqrt(np.mean(out ** 2)) + 1e-9)
+        return out * fade
     if kind == "forest":   # Grillen + leiser Wind
         out = np.zeros(n)
         for f0, rate, ph in ((4300, 2.6, 0), (4700, 3.1, 1.3)):
@@ -220,7 +249,7 @@ def drone(dur):
     tone = (np.sin(2 * np.pi * 55 * t) * 0.5 + np.sin(2 * np.pi * 82.4 * t + 1) * 0.3
             + np.sin(2 * np.pi * 110.7 * t) * 0.12) * (0.75 + 0.25 * np.sin(2 * np.pi * 0.11 * t))
     fade = np.minimum(1, t / 2.0) * np.minimum(1, (dur - t) / 1.5)
-    return (tone * 0.06 + brown * 0.05) * fade
+    return (tone * 0.06 + brown * 0.018) * fade
 
 
 # ---------------------------------------------------------------- Timeline
