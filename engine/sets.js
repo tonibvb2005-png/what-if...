@@ -286,3 +286,177 @@ Object.assign(VIEWS, { cellar_wide: viewCellarWide, cellar_pov: viewCellarPov, s
 Object.assign(GLSTYLE, { cellar_wide: '', cellar_pov: '', switch: '', cellar_face: '', tent_ext: '', tent_in: '', jonas: '', tent_door: '',
   car_ext: '', car_in: '', mirror: '', car_face: '', radio: 'blur(7px) brightness(.55)' });
 Object.assign(SET_ASSETS, { creatureCellar: CREATURE.replace(/<rect x="0" y="290"[^>]*\/>/, ''), backseat: BACKSEAT, tentShadow: TENT_SHADOW, handShadow: HAND_SHADOW });
+
+/* ======================================================================= AUFZUG */
+function person(x, st) {                 // stehende Person, Welt-Koordinaten, Kleidung frei wählbar
+  const s = [], shirt = st.shirt || SHIRT;
+  s.push(`<path d="M${x - .06} -.9 L${x - .065} -.02 M${x + .06} -.9 L${x + .065} -.02" stroke="${st.pants || '#2a2c35'}" stroke-width=".05" stroke-linecap="round"/>`);
+  s.push(`<path d="M${x - .085} -.02 h.05 M${x + .035} -.02 h.05" stroke="#111" stroke-width=".035" stroke-linecap="round"/>`);
+  s.push(`<path d="M${x - .105} -1.43 Q${x} -1.47 ${x + .105} -1.43 L${x + .1} -.88 L${x - .1} -.88 Z" fill="${shirt}"/>`);
+  if (st.tie) s.push(`<path d="M${x} -1.42 l.02 .05 -.014 .25 -.006 .03 -.006 -.03 -.014 -.25 Z" fill="${st.tie}"/>`);
+  if (st.collar) s.push(`<path d="M${x - .045} -1.44 L${x} -1.38 L${x + .045} -1.44" stroke="${st.collar}" stroke-width=".018" fill="none"/>`);
+  const hl = st.handL || [x - .15, -.95], hr = st.handR || [x + .15, -.95];
+  s.push(arm([x - .09, -1.39], hl, 1) + arm([x + .09, -1.39], hr, -1));
+  s.push(head([x, -1.55], .13, { eyes: st.eyes, t: st.t, look: st.look, mouth: st.mouth, lit: st.lit }));
+  if (st.hair) s.push(`<path d="M${x - .125} -1.58 Q${x - .12} -1.69 ${x} -1.69 Q${x + .12} -1.69 ${x + .125} -1.58 Q${x + .06} -1.64 ${x - .03} -1.62 Q${x - .09} -1.61 ${x - .125} -1.58 Z" fill="${st.hair}"/>`);
+  return s.join('');
+}
+const YOU_OFFICE = { shirt: '#c9d2e4', tie: '#7c3347', collar: '#e8edf6', pants: '#2a2c35' };
+const MARKUS = { shirt: '#383c48', tie: '#1a1c22', collar: '#d7dbe4', pants: '#26282f', hair: '#2b1f17' };
+function elevState(t) {
+  const f = lastEv('floor', t, [0, '12', 0]); const key = f[1] + '|' + f[2] + '|' + (f[3] || 0);
+  if (R3._floorKey !== key) { R3.setFloor(f[1], f[2], f[3]); R3._floorKey = key; }
+  const b = EV('btn').filter(e => e[0] <= t).map(e => e[1]); const bk = b.join(',');
+  if (R3._btnKey !== bk) { R3.setButtons(b); R3._btnKey = bk; }
+  const d = lastEv('doors', t, [-9, 0]); const prevOpen = EV('doors').filter(e => e[0] < d[0]).slice(-1)[0]?.[1] ?? 0;
+  const op = lerp(prevOpen, d[1], ease((t - d[0]) / .9));
+  R3.doors[0].position.x = -.225 - .44 * op; R3.doors[1].position.x = .225 + .44 * op;
+  let fl = 1; for (const [ft] of EV('flicker')) { const a = t - ft; if (a >= 0 && a < .8) fl = Math.sin(a * 60) > .2 ? 1 : .15; }
+  R3.cabLight.intensity = 1.6 * fl; R3.panelLight.material.color.set(fl > .5 ? '#eef2ff' : '#3a3c44');
+  const m13 = lastEv('floor13', t, null);
+  R3.endDesk.visible = !!m13;
+  R3.tubes.forEach((tb, i) => { const on = !m13 ? 1 : i === 1 ? (Math.sin(t * 23) * Math.sin(t * 7.1) > .1 ? .8 : 0) : 0; tb.l.intensity = 6 * on; tb.m.material.color.set(on ? '#eef3ff' : '#25272c'); });
+  R3.hemi.intensity = m13 ? .12 : .3;
+  return { op, fl, m13 };
+}
+function markusPos(t) {
+  const m = lastEv('markus', t, null); if (!m) return null;
+  const prev = EV('markus').filter(e => e[0] < m[0]).slice(-1)[0];
+  const P = { 1: [-.05, 1.15], 2: [-.14, -.12] }, a = prev ? P[prev[1]] : P[1], b = P[m[1]];
+  const k = ease((t - m[0]) / 1.1); return [lerp(a[0], b[0], k), lerp(a[1], b[1], k)];
+}
+async function elevChars(t, showYou, youOpts = {}) {
+  ensurePlane('you', 2, 2); ensurePlane('markus', 2, 2); ensurePlane('deskYou', 1.2, 1.2); ensurePlane('youClose', .7, .7, 1536);
+  await W3.setPlane('youClose', { visible: false });
+  const { fl, m13 } = elevState(t), col = fl > .5 ? '#e9ecf4' : '#5a5c66';
+  if (showYou) await W3.setPlane('you', { svg: svgWrap(youOpts.x ?? .1, 1.0, 2.0, person(youOpts.x ?? .1, { ...YOU_OFFICE, eyes: youOpts.eyes || 'open', t, look: youOpts.look || 0, mouth: youOpts.mouth || '' })), pos: [youOpts.x ?? .1, 1.0, youOpts.z ?? -.25], color: col });
+  else await W3.setPlane('you', { visible: false });
+  const mp = markusPos(t), ml = lastEv('markusLook', t, null);
+  if (mp && youOpts.markus !== false) await W3.setPlane('markus', { svg: svgWrap(mp[0], 1.0, 2.0, person(mp[0], { ...MARKUS, eyes: 'open', look: ml ? 1.4 * ease((t - ml[0]) / 1.5) : 0, mouth: '' })), pos: [mp[0], 1.0, mp[1]], color: col });
+  else await W3.setPlane('markus', { visible: false });
+  if (m13) await W3.setPlane('deskYou', { svg: svgLocal(1.2, 1.2, `<path d="M-.11 .2 Q0 .16 .11 .2 L.12 .6 L-.12 .6 Z" fill="${YOU_OFFICE.shirt}"/><path d="M0 .2 l.02 .05 -.014 .25 -.006 .03 -.006 -.03 -.014 -.25 Z" fill="${YOU_OFFICE.tie}"/>` + head([0, .06], .13, { eyes: 'open', look: .9, lit: true })), pos: [0, 1.0, 8.95], rotY: Math.PI, color: '#c8d4ff' });
+  else await W3.setPlane('deskYou', { visible: false });
+}
+function camOverlay(t, label) {
+  const sec = Math.floor(t) % 60, ts = `2026-11-06  03:3${3 + Math.floor((t + 20) / 60)}:${String(sec).padStart(2, '0')}`;
+  return `<div class="cam"><i></i><b>REC</b><span>${label}</span><em>${ts}</em></div>`;
+}
+async function viewOffice(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start; elevState(t);
+  W3.setCam([-.9 + .15 * ease(lt / d), 1.6, 3.9 - .3 * ease(lt / d)], [.35, 1.2, .9], 48);
+  await elevChars(t, true, { x: .55, z: 1.25, look: -.6 });
+  return '';
+}
+async function viewElevIn(t, sh) {
+  elevState(t);
+  W3.setCam([.62, 2.12, .62], [-.08, .85, -.5], 64);
+  const ml = lastEv('markusLook', t, null);
+  await elevChars(t, true, { x: .24, z: -.38, eyes: ml ? 'wide' : 'open', mouth: ml ? 'o' : '', look: lastEv('markus', t, null) ? -.8 : 0 });
+  return camOverlay(t, 'AUFZUG 2 · CAM 1');
+}
+async function viewElevPov(t, sh) {
+  const lt = t - sh.start; elevState(t);
+  const zp = ease((lt - 2) / Math.max(1, sh.end - sh.start - 2));
+  W3.setCam([0, 1.62, -.3 + .1 * ease(lt / (sh.end - sh.start))], [0, 1.2 - .12 * zp, 9], 46 - 32 * zp);
+  await elevChars(t, false, { markus: true });
+  return '';
+}
+async function viewElevDisplay(t, sh) {
+  elevState(t);
+  W3.setCam([0, 1.85, -.25], [0, 2.12, .72], 34);
+  await elevChars(t, false, { markus: false });
+  return '';
+}
+async function viewElevFace(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start, { fl } = elevState(t);
+  W3.setCam([.12, 1.55, .42 - .06 * ease(lt / d)], [.12, 1.52, -.3], 40);
+  await elevChars(t, false, { markus: false });
+  const ml = lastEv('markusLook', t, null);
+  await W3.setPlane('youClose', { svg: svgWrap(.12, 1.35, .7, person(.12, { ...YOU_OFFICE, eyes: 'wide', mouth: 'o', t, look: lt > d * .5 ? (sh.lookDir || -1) * 1.3 : 0 })), pos: [.12, 1.35, -.3], color: fl > .5 ? '#e9ecf4' : '#5a5c66' });
+  return '';
+}
+
+/* ======================================================================= NACHTBUS */
+function sitter(st) {                    // sitzend, lokale Koordinaten, Blick zur Kamera
+  return `<path d="M-.12 -.12 Q0 -.17 .12 -.12 L.13 .42 L-.13 .42 Z" fill="${st.shirt || '#4a5a7a'}"/>` +
+    arm([-.1, -.08], [-.08, .3], 1) + arm([.1, -.08], [.08, .3], -1) +
+    head([0, -.27], .12, { eyes: st.eyes, t: st.t, look: st.look, mouth: st.mouth, lit: st.lit });
+}
+function busState(t, inside) {
+  R3.tick(t); R3.ext.visible = !inside; R3.int.visible = inside;
+  const l = lastEv('led', t, [0, 'LINIE N7  ·  NACHTBUS', 0]); const g = l[2] || 0;
+  const key = l[1] + (g ? Math.floor(t * 8) : '');
+  if (R3._ledKey !== key) { R3.setLed(l[1], g ? g * (.6 + .4 * Math.random()) : 0); R3._ledKey = key; }
+  let fl = 1; for (const [ft] of EV('flick')) { const a = t - ft; if (a >= 0 && a < .9) fl = Math.sin(a * 50) > .1 ? 1 : .1; }
+  R3.cabin.intensity = 1.1 * fl; R3.strip.material.color.set(fl > .5 ? '#c9d6ff' : '#2a2d36');
+  const empty = lastEv('empty', t, null);
+  R3.busWheel.rotation.z = empty ? .35 * Math.sin((t - empty[0]) * 1.3) : .05 * Math.sin(t * .8);
+  return { fl, empty };
+}
+async function busChars(t, opts = {}) {
+  ensurePlane('you', 1.4, 1.4); ensurePlane('driver', 1.2, 1.2); ensurePlane('youClose', .6, .6, 1536); ensurePlane('refl', .9, .7, 1536);
+  await W3.setPlane('youClose', { visible: false }); await W3.setPlane('refl', { visible: false });
+  const { empty, fl } = busState(t, true), col = fl > .5 ? '#d6ddf0' : '#6a6f80';
+  if (opts.you !== false) await W3.setPlane('you', { svg: svgLocal(1.4, 1.4, sitter({ eyes: opts.eyes || 'open', t, look: opts.look || 0, mouth: opts.mouth || '' })), pos: [.72, 1.0, .12], rotY: Math.PI, color: col });
+  else await W3.setPlane('you', { visible: false });
+  if (!empty && opts.driver !== false) await W3.setPlane('driver', { svg: svgLocal(1.2, 1.2, `<path d="M-.14 0 Q0 -.06 .14 0 L.16 .5 L-.16 .5 Z" fill="#3d4f7a"/>
+      <circle cx="0" cy="-.14" r=".12" fill="url(#headG)"/><path d="M-.125 -.17 Q0 -.31 .125 -.17 Z" fill="#1e2a46"/><rect x="-.135" y="-.185" width=".27" height=".03" rx=".01" fill="#141c30"/>
+      <ellipse cx="-.12" cy="-.13" rx=".02" ry=".03" fill="#c9d0ef"/><ellipse cx=".12" cy="-.13" rx=".02" ry=".03" fill="#c9d0ef"/>`), pos: [-.65, 1.32, -4.62], color: col });
+  else await W3.setPlane('driver', { visible: false });
+}
+async function viewBusExt(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start; busState(t, false);
+  ensurePlane('you', 1.4, 1.4); ensurePlane('driver', 1.2, 1.2); await W3.setPlane('you', { visible: false }); await W3.setPlane('driver', { visible: false });
+  W3.setCam([-9 + .8 * ease(lt / d), 3.0, -15 + ease(lt / d)], [0, 1.3, -1.5], 42);
+  return '';
+}
+async function viewBusIn(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([-.3, 1.7, -1.6 + .15 * ease(lt / d)], [.55, 1.12, .6], 52);
+  const q = (TL.quotes || []).find(q => t >= q.start && t < q.end);
+  await busChars(t, { eyes: sh.eyes || (q ? 'wide' : 'open'), look: sh.look || 0, mouth: q ? 'o' : '' });
+  return '';
+}
+async function viewBusFront(t, sh) {
+  const lt = t - sh.start;
+  W3.setCam([.62, 1.3, .0 - .2 * ease(lt / (sh.end - sh.start))], [-.45, 1.25, -5], 50);
+  await busChars(t, { you: false });
+  return '';
+}
+async function viewBusDisplay(t, sh) {
+  W3.setCam([0, 1.7, -2.0], [0, 2.0, -3.95], 40);
+  await busChars(t, { you: false, driver: false });
+  const l = lastEv('led', t, [0, 'LINIE N7  ·  NACHTBUS', 0]);
+  let tx = l[1]; if (l[2]) tx = tx.split('').map(ch => ch !== ' ' && Math.random() < l[2] ? '█▓▒#%&'[Math.floor(Math.random() * 6)] : ch).join('');
+  const lines = tx.length > 12 ? (() => { const w = tx.split(' '); const h = Math.ceil(w.length / 2); return [w.slice(0, h).join(' '), w.slice(h).join(' ')]; })() : [tx];
+  return `<div class="led">${lines.map(x => `<div>${x}</div>`).join('')}</div>`;
+}
+async function viewBusWindow(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([.32, 1.4, .2 + .05 * ease(lt / d)], [1.2, 1.43, .42], 46);
+  await busChars(t, { you: false });
+  const rf = lastEv('reflFig', t, null), fo = rf ? clamp((t - rf[0]) / .8) : 0;
+  const body = `<g opacity=".38">${head([-.1, .02], .09, { eyes: 'wide', t })}<path d="M-.19 .14 Q-.1 .1 -.01 .14 L0 .35 L-.2 .35 Z" fill="#4a5a7a"/></g>
+    <g opacity="${.62 * fo}"><ellipse cx=".16" cy="-.02" rx=".085" ry=".12" fill="url(#cface)"/>
+      <ellipse cx=".13" cy="-.04" rx=".02" ry=".03" fill="#000"/><ellipse cx=".19" cy="-.04" rx=".02" ry=".03" fill="#000"/>
+      <path d="M.13 .04 Q.16 .07 .2 .035" stroke="#000" stroke-width=".006" fill="none"/>
+      <path d="M.09 .1 Q.16 .08 .24 .12 L.26 .35 L.07 .35 Z" fill="#14151b"/></g>`;
+  await W3.setPlane('refl', { svg: svgLocal(.9, .7, body), pos: [1.175, 1.43, .45], rotY: -Math.PI / 2 });
+  return '';
+}
+async function viewBusFace(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([.72, 1.3, -.3 - .05 * ease(lt / d)], [.72, 1.27, .12], 40);
+  await busChars(t, { you: false });
+  const { fl } = busState(t, true);
+  await W3.setPlane('youClose', { svg: svgLocal(.6, .6, `<g transform="translate(0 .25)">${sitter({ eyes: 'wide', mouth: 'o', t, look: lt > d * .5 ? (sh.lookDir || 1) * 1.3 : 0 })}</g>`), pos: [.72, 1.27, .12], rotY: Math.PI, color: fl > .5 ? '#d6ddf0' : '#6a6f80' });
+  return '';
+}
+
+Object.assign(VIEWS, { office: viewOffice, elev_in: viewElevIn, elev_pov: viewElevPov, elev_display: viewElevDisplay, elev_face: viewElevFace,
+  bus_ext: viewBusExt, bus_in: viewBusIn, bus_front: viewBusFront, bus_display: viewBusDisplay, bus_window: viewBusWindow, bus_face: viewBusFace });
+Object.assign(GLSTYLE, { office: '', elev_in: '', elev_pov: '', elev_display: '', elev_face: '', bus_ext: '', bus_in: '', bus_front: '', bus_display: 'blur(6px) brightness(.5)', bus_window: '', bus_face: '' });
+Object.assign(SETBG, {
+  elevator: async (t) => { await elevChars(t, true, { x: .24, z: -.38, eyes: 'wide' }); W3.setCam([.62, 2.12, .62], [-.02, .85, -.5], 64); },
+  bus: async (t) => { await busChars(t, { eyes: 'wide' }); W3.setCam([-.3, 1.7, -1.6], [.55, 1.12, .6], 52); },
+});

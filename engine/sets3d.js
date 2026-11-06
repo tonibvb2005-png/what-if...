@@ -205,3 +205,151 @@
     };
   };
 })();
+
+// ======================================================================= Weitere Sets
+(() => {
+  const { std, basic, put, rbox, canvasTex, plane } = W3.H, R = W3.reg;
+  const dynTex = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return { c, g: c.getContext('2d'), t }; };
+
+  /* =============================================================== AUFZUG + BÜROFLUR */
+  W3.BUILD.elevator = async () => {
+    const sc = W3.scene;
+    sc.background = new THREE.Color('#05060a'); sc.fog = new THREE.FogExp2('#05060a', .07);
+    R.hemi = new THREE.HemisphereLight('#c8ccd8', '#141418', .3); sc.add(R.hemi);
+    const steel = std('#5f636d', { m: .35, r: .4 }), dark = std('#232428'), wall = std('#5d6068');
+    // Kabine (x -.8..8, z -.75..75)
+    const fl = put(new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.5), dark), 0, .002, 0, sc, false); fl.rotation.x = -Math.PI / 2;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(1.6, 2.3), steel), 0, 1.15, -.75, sc, false);
+    for (const sx of [-1, 1]) put(new THREE.Mesh(new THREE.PlaneGeometry(1.5, 2.3), steel), sx * .8, 1.15, 0, sc, false).rotation.y = -sx * Math.PI / 2;
+    const ce = put(new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.5), std('#3a3c43')), 0, 2.3, 0, sc, false); ce.rotation.x = Math.PI / 2;
+    R.panelLight = put(new THREE.Mesh(new THREE.PlaneGeometry(1.0, .7), basic('#cfd6ea')), 0, 2.29, 0, sc, false); R.panelLight.rotation.x = Math.PI / 2;
+    R.cabLight = new THREE.PointLight('#e8eeff', 3, 4, 1.6); R.cabLight.position.set(0, 2.1, 0); sc.add(R.cabLight);
+    const rail = put(new THREE.Mesh(new THREE.CylinderGeometry(.018, .018, 1.4, 10), std('#b9bcc4', { m: .7, r: .25 })), 0, .95, -.7); rail.rotation.z = Math.PI / 2;
+    // Bedienfeld rechts
+    put(rbox(.02, .5, .22, .006, std('#a3a6ae', { m: .6, r: .3 })), .79, 1.2, .45);
+    R.btn = dynTex(128, 300); R.btnPlane = put(new THREE.Mesh(new THREE.PlaneGeometry(.2, .46), basic('#ffffff', { map: R.btn.t, transparent: true })), .778, 1.2, .45, sc, false); R.btnPlane.rotation.y = -Math.PI / 2;
+    // Front: Türrahmen, Türen, Anzeige über der Tür
+    put(new THREE.Mesh(new THREE.BoxGeometry(.35, 2.3, .06), steel), -.625, 1.15, .75); put(new THREE.Mesh(new THREE.BoxGeometry(.35, 2.3, .06), steel), .625, 1.15, .75);
+    put(new THREE.Mesh(new THREE.BoxGeometry(1.6, .25, .06), steel), 0, 2.175, .75);
+    R.doors = [-1, 1].map(sx => put(rbox(.46, 2.04, .04, .005, std('#9a9ea8', { m: .45, r: .3 })), sx * .225, 1.02, .76));
+    R.disp = dynTex(256, 128); R.dispPlane = put(new THREE.Mesh(new THREE.PlaneGeometry(.3, .15), basic('#ffffff', { map: R.disp.t })), 0, 2.15, .715, sc, false); R.dispPlane.rotation.y = Math.PI;
+    // Flur draußen (z .8 .. 9)
+    const offW = std('#3f424b'), cf = std('#d0d2d6');
+    const ofl = put(new THREE.Mesh(new THREE.PlaneGeometry(4, 9), std('#26272d')), 0, 0, 5, sc, false); ofl.rotation.x = -Math.PI / 2;
+    const oce = put(new THREE.Mesh(new THREE.PlaneGeometry(4, 9), std('#1f2025')), 0, 2.6, 5, sc, false); oce.rotation.x = Math.PI / 2;
+    for (const sx of [-1, 1]) put(new THREE.Mesh(new THREE.PlaneGeometry(9, 2.6), offW), sx * 2, 1.3, 5, sc, false).rotation.y = -sx * Math.PI / 2;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(4, 2.6), offW), 0, 1.3, 9.4, sc, false).rotation.y = Math.PI;
+    for (const [x, w] of [[-1.4, 1.2], [1.4, 1.2]]) put(new THREE.Mesh(new THREE.BoxGeometry(w, 2.6, .1), offW), x, 1.3, .83);
+    put(new THREE.Mesh(new THREE.BoxGeometry(1.6, .3, .1), offW), 0, 2.45, .83);
+    R.call = put(new THREE.Mesh(new THREE.CircleGeometry(.025, 16), basic('#ffb347')), .95, 1.15, .885, sc, false);
+    put(rbox(.09, .16, .02, .005, std('#a3a6ae', { m: .6 })), .95, 1.15, .878);
+    // Neonröhren
+    R.tubes = [];
+    for (const z of [2.2, 4.6, 7.0]) {
+      const m = put(new THREE.Mesh(new THREE.BoxGeometry(.18, .03, 1.2), basic('#eef3ff')), 0, 2.58, z, sc, false);
+      const l = new THREE.PointLight('#dfe8ff', 6, 6, 1.6); l.position.set(0, 2.4, z); sc.add(l); R.tubes.push({ m, l });
+    }
+    // Schreibtische
+    for (const z of [2.6, 4.6, 6.6]) for (const sx of [-1, 1]) {
+      put(rbox(1.2, .05, .7, .01, cf), sx * 1.25, .74, z); put(new THREE.Mesh(new THREE.BoxGeometry(.04, .72, .6), std('#555')), sx * 1.25 - sx * .55, .37, z);
+      put(rbox(.45, .3, .03, .01, std('#15161a')), sx * 1.25, 1.0, z - .15); put(new THREE.Mesh(new THREE.BoxGeometry(.06, .2, .06), std('#222')), sx * 1.25, .85, z - .15);
+      put(rbox(.5, .5, .5, .05, std('#2c3550')), sx * 1.25, .45, z + .55);
+    }
+    // Der Schreibtisch am Ende (Stock 13)
+    R.endDesk = new THREE.Group(); sc.add(R.endDesk);
+    put(rbox(1.3, .05, .7, .01, cf), 0, .74, 8.6, R.endDesk); put(new THREE.Mesh(new THREE.BoxGeometry(1.2, .7, .04), std('#4a4b52')), 0, .37, 8.25, R.endDesk);
+    R.endMon = put(new THREE.Mesh(new THREE.PlaneGeometry(.42, .27), basic('#9cc2ff')), .3, 1.02, 8.38, R.endDesk, false); R.endMon.rotation.y = Math.PI;
+    put(new THREE.Mesh(new THREE.BoxGeometry(.45, .3, .02), std('#111')), .3, 1.02, 8.4, R.endDesk);
+    R.endLamp = new THREE.PointLight('#ffcf8a', 7, 3.5, 1.6); R.endLamp.position.set(-.35, 1.2, 8.4); R.endDesk.add(R.endLamp);
+    put(new THREE.Mesh(new THREE.ConeGeometry(.08, .12, 16, 1, true), std('#2d2e33')), -.35, 1.15, 8.5, R.endDesk);
+    plane('you', 2, 2); plane('markus', 2, 2); plane('deskYou', 1.2, 1.2); plane('youClose', .7, .7, 1536);
+    R.setFloor = (txt, arrow, red) => {
+      const { g, c, t } = R.disp; g.fillStyle = '#060606'; g.fillRect(0, 0, c.width, c.height);
+      g.fillStyle = red ? '#ff2a1a' : '#ff5a2a'; g.shadowColor = '#ff3a1a'; g.shadowBlur = 14;
+      g.font = 'bold 96px "JetBrains Mono", monospace'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(txt, 150, 68);
+      if (arrow) { g.beginPath(); const y0 = arrow > 0 ? 34 : 94, y1 = arrow > 0 ? 94 : 34; g.moveTo(222, y0); g.lineTo(196, y1); g.lineTo(248, y1); g.fill(); }
+      g.shadowBlur = 0; t.needsUpdate = true;
+    };
+    R.setButtons = (lit) => {
+      const { g, c, t } = R.btn; g.clearRect(0, 0, c.width, c.height);
+      for (let i = 0; i <= 12; i++) {
+        const col = i % 2, row = Math.floor(i / 2), x = 36 + col * 56, y = 270 - row * 40;
+        g.beginPath(); g.arc(x, y, 15, 0, 7); g.fillStyle = '#c9ccd3'; g.fill();
+        g.lineWidth = 3; g.strokeStyle = lit.includes(i) ? '#ffb347' : '#7a7d85'; g.stroke();
+        g.fillStyle = '#26272b'; g.font = 'bold 15px sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(i === 0 ? 'E' : String(i), x, y + 1);
+      }
+      g.fillStyle = '#26272b'; g.fillRect(28, 12, 72, 22); g.fillStyle = '#9aa0a8'; for (let i = 0; i < 4; i++) g.fillRect(34 + i * 16, 18, 8, 10);
+      t.needsUpdate = true;
+    };
+    R.setButtons([]); R.setFloor('12', 0);
+  };
+
+  /* =============================================================== NACHTBUS */
+  W3.BUILD.bus = async () => {
+    const sc = W3.scene;
+    sc.background = new THREE.Color('#04050a'); sc.fog = new THREE.FogExp2('#05060b', .05);
+    R.hemi = new THREE.HemisphereLight('#9aa4c8', '#0c0c10', .22); sc.add(R.hemi);
+    // Straße + Laternen (bewegen sich, der Bus steht)
+    const road = put(new THREE.Mesh(new THREE.PlaneGeometry(14, 400), std('#1a1b20')), 0, -.4, 0, sc, false); road.rotation.x = -Math.PI / 2;
+    R.lamps = [];
+    for (let i = 0; i < 6; i++) {
+      const g = new THREE.Group(); sc.add(g);
+      put(new THREE.Mesh(new THREE.CylinderGeometry(.06, .08, 5.5, 8), std('#2a2b30')), 0, 2.35, 0, g);
+      put(new THREE.Mesh(new THREE.SphereGeometry(.16, 12, 8), basic('#ffcf8a')), 0, 5.1, 0, g, false);
+      const l = new THREE.PointLight('#ffc27a', 22, 10, 1.6); l.position.set(0, 4.8, 0); g.add(l);
+      R.lamps.push({ g, side: i % 2 ? 1 : -1, z0: i * 9 });
+    }
+    // Außenhülle
+    R.ext = new THREE.Group(); sc.add(R.ext);
+    put(rbox(2.5, 2.7, 11, .2, std('#a48b2c', { r: .5 })), 0, 1.0, 0, R.ext);
+    for (const sx of [-1, 1]) for (let i = 0; i < 6; i++) put(new THREE.Mesh(new THREE.PlaneGeometry(1.4, .9), basic('#a9b8d6')), sx * 1.26, 1.6, -3.6 + i * 1.5, R.ext, false).rotation.y = sx * Math.PI / 2;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(2.2, 1.1), basic('#0e1018')), 0, 1.6, -5.51, R.ext, false).rotation.y = Math.PI;
+    R.extSign = put(new THREE.Mesh(new THREE.PlaneGeometry(1.6, .25), basic('#ff9a2a')), 0, 2.2, -5.52, R.ext, false); R.extSign.rotation.y = Math.PI;
+    for (const x of [-.9, .9]) { const l = new THREE.SpotLight('#fff1d2', 120, 50, .5, .5, 1.5); l.position.set(x, .3, -5.6); l.target.position.set(x, -.4, -25); R.ext.add(l, l.target); }
+    // Innenraum (x -1.2..1.2, z -5..5)
+    R.int = new THREE.Group(); sc.add(R.int);
+    const seatM = std('#243050'), pole = std('#b8992a', { m: .3, r: .45 }), wallM = std('#4c5058'), trim = std('#2a2c33');
+    const fl = put(new THREE.Mesh(new THREE.PlaneGeometry(2.4, 10), std('#3a3b42')), 0, 0, 0, R.int, false); fl.rotation.x = -Math.PI / 2;
+    const ce = put(new THREE.Mesh(new THREE.PlaneGeometry(2.4, 10), std('#4e5159')), 0, 2.25, 0, R.int, false); ce.rotation.x = Math.PI / 2;
+    R.strip = put(new THREE.Mesh(new THREE.BoxGeometry(.12, .02, 9), basic('#c9d6ff')), 0, 2.24, 0, R.int, false);
+    R.cabin = new THREE.PointLight('#c4d0ff', 2.2, 10, 1.4); R.cabin.position.set(0, 2.0, .5); R.int.add(R.cabin);
+    for (const sx of [-1, 1]) {
+      put(new THREE.Mesh(new THREE.PlaneGeometry(10, .95), wallM), sx * 1.2, .475, 0, R.int, false).rotation.y = -sx * Math.PI / 2;
+      put(new THREE.Mesh(new THREE.PlaneGeometry(10, .25), wallM), sx * 1.2, 2.12, 0, R.int, false).rotation.y = -sx * Math.PI / 2;
+      const gl = put(new THREE.Mesh(new THREE.PlaneGeometry(10, 1.05), basic('#05070c', { transparent: true, opacity: .55 })), sx * 1.2, 1.47, 0, R.int, false); gl.rotation.y = -sx * Math.PI / 2;
+      for (let z = -4.5; z <= 4.5; z += 1.5) put(new THREE.Mesh(new THREE.BoxGeometry(.06, 1.1, .06), trim), sx * 1.19, 1.47, z, R.int);
+      for (let z = -3.2; z <= 4.2; z += .85) {
+        put(rbox(.9, .14, .45, .05, seatM), sx * .72, .48, z, R.int);
+        const b = put(rbox(.9, .62, .1, .05, seatM), sx * .72, .82, z + .23, R.int); b.rotation.x = -.08;
+        put(new THREE.Mesh(new THREE.CylinderGeometry(.015, .015, .9, 8), pole), sx * .72, 1.15, z + .29, R.int).rotation.z = Math.PI / 2;
+      }
+      put(new THREE.Mesh(new THREE.CylinderGeometry(.02, .02, 9.5, 8), pole), sx * .4, 2.05, 0, R.int).rotation.x = Math.PI / 2;
+    }
+    for (let z = -2.8; z <= 4; z += 1.7) put(new THREE.Mesh(new THREE.CylinderGeometry(.022, .022, 2.25, 10), pole), .27, 1.12, z, R.int);
+    put(new THREE.Mesh(new THREE.PlaneGeometry(2.4, 2.3), wallM), 0, 1.15, 5, R.int, false).rotation.y = Math.PI;
+    // Fahrerkabine vorne
+    put(new THREE.Mesh(new THREE.BoxGeometry(1.0, 1.25, .05), trim), -.65, .62, -4.1, R.int);
+    put(new THREE.Mesh(new THREE.BoxGeometry(1.0, .9, .02), basic('#0b0d14', { transparent: true, opacity: .4 })), -.65, 1.7, -4.1, R.int, false);
+    put(rbox(.55, .15, .5, .05, seatM), -.65, .55, -4.55, R.int); put(rbox(.55, .7, .1, .05, seatM), -.65, .95, -4.3, R.int);
+    R.busWheel = put(new THREE.Mesh(new THREE.TorusGeometry(.26, .025, 12, 36), std('#141418')), -.65, 1.05, -4.95, R.int); R.busWheel.rotation.x = -1.1;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(2.4, 1.3), basic('#0a0c14')), 0, 1.5, -5.05, R.int, false);
+    put(rbox(2.4, .8, .5, .05, std('#1c1d22')), 0, .7, -5.0, R.int);
+    // LED-Anzeige
+    R.led = dynTex(1024, 128); R.ledPlane = put(new THREE.Mesh(new THREE.PlaneGeometry(1.5, .19), basic('#ffffff', { map: R.led.t })), 0, 2.08, -3.95, R.int, false);
+    put(rbox(1.6, .26, .06, .01, std('#111')), 0, 2.08, -3.99, R.int);
+    plane('you', 1.4, 1.4); plane('driver', 1.2, 1.2); plane('youClose', .6, .6, 1536); plane('refl', .9, .7, 1536);
+    R.setLed = (txt, glitch = 0) => {
+      const { g, c, t } = R.led; const s = document.createElement('canvas'); s.width = 256; s.height = 32; const sg = s.getContext('2d');
+      sg.fillStyle = '#000'; sg.fillRect(0, 0, 256, 32); sg.fillStyle = '#fff'; sg.font = 'bold 22px sans-serif'; sg.textBaseline = 'middle'; sg.textAlign = 'center';
+      let tx = txt; if (glitch) tx = tx.split('').map(ch => Math.random() < glitch && ch !== ' ' ? '█▓▒#%&'[Math.floor(Math.random() * 6)] : ch).join('');
+      sg.fillText(tx, 128, 17); const d = sg.getImageData(0, 0, 256, 32).data;
+      g.fillStyle = '#080503'; g.fillRect(0, 0, c.width, c.height);
+      for (let y = 0; y < 32; y++) for (let x = 0; x < 256; x++) { const on = d[(y * 256 + x) * 4] > 100; g.fillStyle = on ? '#ff9a2a' : '#1d1206'; g.beginPath(); g.arc(x * 4 + 2, y * 4 + 2, 1.5, 0, 7); g.fill(); }
+      t.needsUpdate = true;
+    };
+    R.setLed('LINIE N7  ·  NACHTBUS');
+    R.tick = (t, speed = 11) => {
+      for (const L of R.lamps) { const z = ((L.z0 + t * speed) % 54) - 30; L.g.position.set(L.side * 2.6, -.4, z); }
+    };
+  };
+})();

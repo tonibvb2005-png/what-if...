@@ -101,6 +101,18 @@ def sfx(name):
         n = int(2.2 * SR); t = np.arange(n) / SR
         teeth = (np.sin(2 * np.pi * (18 + 4 * np.sin(t * 2)) * t) > .7).astype(float)
         return rng.standard_normal(n) * teeth * .16 * np.minimum(1, t / .1) * np.minimum(1, (2.2 - t) / .2)
+    if name == "ding":     # Aufzug-Gong
+        out = []
+        for f in (1046, 784):
+            n = int(.7 * SR); t = np.arange(n) / SR
+            out.append((np.sin(2 * np.pi * f * t) + .3 * np.sin(2 * np.pi * 2 * f * t)) * env(n, .004, 4.5) * .3)
+        return np.concatenate([out[0][:int(.32 * SR)] + 0, out[1]])
+    if name == "doors":    # Aufzugtüren gleiten
+        n = int(1.0 * SR); t = np.arange(n) / SR
+        return np.convolve(rng.standard_normal(n), np.ones(80) / 80, "same") * np.sin(np.pi * t) * 1.2 + np.sin(2 * np.pi * 60 * t) * .03 * np.sin(np.pi * t)
+    if name == "intercom": # Lautsprecher knackt
+        n = int(.5 * SR); t = np.arange(n) / SR
+        return rng.standard_normal(n) * (rng.random(n // 200 + 1) > .5).repeat(200)[:n] * .15 * np.exp(-3 * t)
     if name == "tap":      # Fingernagel/Knöchel an Glas
         n = int(0.12 * SR); t = np.arange(n) / SR
         return (np.sin(2 * np.pi * 2100 * t) * .5 + np.sin(2 * np.pi * 3400 * t) * .3
@@ -145,6 +157,13 @@ def ambience(kind, dur):
         eng = np.sin(2 * np.pi * 38 * t) * .08 + np.sin(2 * np.pi * 76 * t) * .04
         road = np.convolve(rng.standard_normal(n), np.ones(60) / 60, "same") * .5
         return (eng + road) * fade
+    if kind == "elevator": # Motorbrummen + Seilgeräusch
+        return (np.sin(2 * np.pi * 55 * t) * .035 + np.sin(2 * np.pi * 110 * t) * .015
+                + np.convolve(rng.standard_normal(n), np.ones(200) / 200, "same") * .6) * fade
+    if kind == "bus":      # Dieselmotor + Klappern
+        eng = np.sin(2 * np.pi * 32 * t) * .07 + np.sin(2 * np.pi * 64 * t + np.sin(t * 3)) * .035
+        rattle = rng.standard_normal(n) * (np.sin(2 * np.pi * 7 * t) > .92) * .03
+        return (eng + rattle + np.convolve(rng.standard_normal(n), np.ones(80) / 80, "same") * .45) * fade
     if kind == "cellar":   # Stromsummen + Tropfen
         hum = np.sin(2 * np.pi * 50 * t) * .02 + np.sin(2 * np.pi * 100 * t) * .012
         drops = np.zeros(n)

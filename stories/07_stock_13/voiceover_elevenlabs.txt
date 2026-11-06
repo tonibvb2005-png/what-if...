@@ -1,0 +1,33 @@
+[calm, low voice] Stell dir vor, du machst Überstunden. [short pause] Allein im zwölften Stock.
+[tired] Um drei Uhr dreiunddreißig willst du endlich nach Hause.
+[short pause]
+Du steigst in den Aufzug und drückst auf Erdgeschoss.
+[long pause]
+[slowly] Das Gebäude hat zwölf Stockwerke.
+[tense] Aber der Aufzug fährt nach oben.
+[short pause]
+[whispers] Dreizehn.
+[long pause]
+[quietly] Die Tür geht auf.
+[short pause]
+[slowly] Ein dunkler Flur. Ganz hinten steht ein Schreibtisch.
+[nervous] Dein Schreibtisch.
+[short pause]
+[whispers, slowly] Und daran sitzt du.
+[long pause]
+[tense] Dann steigt jemand ein.
+[relieved, then unsure] Markus, dein Kollege.
+[slowly] Er drückt keinen Knopf. [short pause] Er starrt nur geradeaus.
+[long pause]
+[quietly] Dann knackt der Notruf-Lautsprecher.
+[flat, robotic] Laut Sensor ist nur eine Person im Aufzug.
+[long pause]
+[whispers] Nur eine.
+[short pause]
+[slowly, frightened] Markus dreht langsam den Kopf zu dir.
+[long pause]
+[calm, low voice] Steigst du aus?
+[short pause]
+Oder bleibst du mit ihm im Aufzug?
+[long pause]
+[ominous] Teil zwei. [short pause] Heute Nacht.

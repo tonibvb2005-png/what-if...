@@ -1,0 +1,46 @@
+{
+  "series": "GESCHICHTEN UM 3:33", "episode": "#08", "title": "LETZTE HALTESTELLE", "part": 1,
+  "set": "bus", "ambience": "bus", "endArt": "bus",
+  "question": "UMDREHEN oder SITZEN BLEIBEN? Schreib's in die Kommentare.",
+  "shots": [
+    {"scene": "bus_ext", "clock": "3:33", "place": "NACHTBUS N7", "lines": [
+      {"text": "Stell dir vor, du nimmst den letzten Nachtbus nach Hause.", "hl": {"Nachtbus": "y"}},
+      {"text": "Du bist der einzige Fahrgast.", "hl": {"einzige": "r"}}
+    ]},
+    {"scene": "bus_in", "clock": "3:33", "place": "NACHTBUS N7", "lines": [
+      {"text": "Um 3:33 knackt der Lautsprecher.", "say": "Um drei Uhr dreiunddreißig knackt der Lautsprecher.", "sfx": [["intercom", "word2"]]},
+      {"text": "Der Fahrer sagt: Bitte nicht umdrehen, bis ich anhalte.", "hl": {"umdrehen": "r"},
+       "quote": {"who": "FAHRER", "place": "DURCHSAGE", "text": "Bitte nicht umdrehen, bis ich anhalte."}, "pause": 0.5}
+    ]},
+    {"scene": "bus_face", "clock": "3:34", "place": "NACHTBUS N7", "lookDir": 1, "lines": [
+      {"text": "Du starrst nach vorne.", "hl": {"vorne": "y"}},
+      {"text": "Dann siehst du es. In der dunklen Scheibe.", "hl": {"Scheibe": "y"}}
+    ]},
+    {"scene": "bus_window", "clock": "3:34", "place": "FENSTER", "lines": [
+      {"text": "Dein Spiegelbild.", "pause": 0.3},
+      {"text": "Und direkt hinter dir: noch jemand.", "hl": {"jemand": "r"}, "ev": [["reflFig", "word4"]], "sfx": [["boom", "word4"]], "pause": 0.9}
+    ]},
+    {"scene": "bus_display", "clock": "3:34", "lines": [
+      {"text": "Dann springt die Anzeige um.", "ev": [["led", "word3", "NÄCHSTER HALT: ???", 0.6]]},
+      {"text": "Kein Halt mehr. Nur noch: Dreh dich nicht um.", "hl": {"Dreh": "r"}, "ev": [["led", "word4", "DREH DICH NICHT UM", 0]], "pause": 0.6}
+    ]},
+    {"scene": "bus_front", "clock": "3:35", "place": "NACHTBUS N7", "lines": [
+      {"text": "Du schaust nach vorne zum Fahrer.", "hl": {"Fahrer": "y"}},
+      {"text": "Der Fahrersitz ist leer.", "hl": {"leer": "r"}, "ev": [["flick", "start"], ["empty", "start+0.35"]], "sfx": [["boom", "start+0.35"]]},
+      {"text": "Aber das Lenkrad dreht sich.", "hl": {"dreht": "y"}, "pause": 0.6}
+    ]},
+    {"scene": "bus_face", "clock": "3:35", "place": "NACHTBUS N7", "lines": [
+      {"text": "Und hinter dir atmet jemand.", "hl": {"atmet": "r"}, "sfx": [["breath", "start"]], "pause": 1.5}
+    ]},
+    {"scene": "choice", "heading": "WAS MACHST DU?",
+     "left": {"label": "UMDREHEN", "text": "Nachsehen, wer hinter dir sitzt.", "icon": "👀", "color": "#2f7cf6"},
+     "right": {"label": "SITZEN BLEIBEN", "text": "Nach vorne starren, bis der Bus hält.", "icon": "🚌", "color": "#ff3b30"},
+     "lines": [
+      {"text": "Drehst du dich um?", "hl": {"um": "b"}},
+      {"text": "Oder bleibst du sitzen, bis er anhält?", "hl": {"sitzen": "r"}, "pause": 0.5}
+    ]},
+    {"scene": "end", "sfx": [["boom", 0.0]], "lines": [
+      {"text": "Teil 2. Heute Nacht.", "say": "Teil zwei. Heute Nacht.", "nocap": true, "pause": 1.2}
+    ]}
+  ]
+}
