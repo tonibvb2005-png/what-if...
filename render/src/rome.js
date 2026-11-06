@@ -42,7 +42,7 @@ function voronoiTex(size, cells, colorFn, edgeCol, edgeW, seed = 1) {
   x.putImageData(img, 0, 0);
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 8; return t;
 }
-const basalt = (k) => { const v = 0.75 + hash(k, 2) * 0.35; return [92 * v + 10 * hash(k, 5), 96 * v, 108 * v + 14 * hash(k, 7)]; };
+const basalt = (k) => { const v = 0.72 + hash(k, 2) * 0.38; return [118 * v + 14 * hash(k, 5), 110 * v + 6 * hash(k, 6), 100 * v]; };
 function speckTex(size, base, specks, n, seed) {
   return canvasTex(size, size, (x) => { x.fillStyle = base; x.fillRect(0, 0, size, size); for (let i = 0; i < n; i++) { x.fillStyle = specks[i % specks.length]; const r = 1 + hash(i, seed) * 4; x.beginPath(); x.arc(hash(i, seed + 1) * size, hash(i, seed + 2) * size, r, 0, 7); x.fill(); } });
 }
@@ -162,10 +162,11 @@ export function buildRome() {
   const scene = new THREE.Scene();
   const fog = new THREE.Fog(0xcfe6f5, 60, 380); scene.fog = fog;
   const sky = skyDome(0x2a6fd8, 0xcfe8ff, 0xcfe6f5); scene.add(sky);
-  const hemi = new THREE.HemisphereLight(0xd8ecff, 0x7aa050, 1.2); scene.add(hemi);
-  const sun = new THREE.DirectionalLight(0xfff1d6, 2.4);
-  sun.position.set(-35, 50, 40); sun.target.position.set(0, 0, 0); sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
-  Object.assign(sun.shadow.camera, { left: -30, right: 30, top: 30, bottom: -40, near: 1, far: 200 }); sun.shadow.bias = -0.0006; sun.shadow.normalBias = 0.04;
+  const hemi = new THREE.HemisphereLight(0xd8ecff, 0x7aa050, 0.55); scene.add(hemi);
+  const sun = new THREE.DirectionalLight(0xfff0d8, 3.2);
+  sun.position.set(-40, 34, 30); sun.target.position.set(0, 0, 0); sun.castShadow = true; sun.shadow.mapSize.set(4096, 4096);
+  Object.assign(sun.shadow.camera, { left: -22, right: 22, top: 22, bottom: -22, near: 1, far: 220 }); sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.03; sun.shadow.radius = 3;
+  sun.userData.dir = sun.position.clone().normalize();
   scene.add(sun, sun.target);
 
   // ground: near (fine) + far (coarse)
@@ -180,12 +181,15 @@ export function buildRome() {
     tmp.lerp(vnoise(x * 0.4, z * 0.4) > 0.5 ? dirt : dirt2, k);
     return tmp;
   }
+  const grassDetail = canvasTex(512, 512, (c) => { c.fillStyle = '#e8e8e8'; c.fillRect(0, 0, 512, 512); for (let i = 0; i < 5000; i++) { const v = 200 + hash(i, 1) * 55; c.strokeStyle = `rgb(${v},${v},${v})`; c.lineWidth = 2; const x = hash(i, 2) * 512, y = hash(i, 3) * 512; c.beginPath(); c.moveTo(x, y); c.lineTo(x + (hash(i, 4) - 0.5) * 6, y - 6 - hash(i, 5) * 8); c.stroke(); } for (let i = 0; i < 300; i++) { c.fillStyle = `rgba(90,80,60,${0.1 + hash(i, 6) * 0.2})`; c.beginPath(); c.arc(hash(i, 7) * 512, hash(i, 8) * 512, 2 + hash(i, 9) * 5, 0, 7); c.fill(); } });
+  grassDetail.wrapS = grassDetail.wrapT = THREE.RepeatWrapping;
   function makeGround(w, d, sx, sz, cx, cz, lower) {
     const g = new THREE.PlaneGeometry(w, d, sx, sz); g.rotateX(-Math.PI / 2); g.translate(cx, 0, cz);
     const p = g.attributes.position; const col = [];
     for (let i = 0; i < p.count; i++) { const x = p.getX(i), z = p.getZ(i); p.setY(i, groundY(x, z) - lower); const c = colorAt(x, z); col.push(c.r, c.g, c.b); }
     g.setAttribute('color', new THREE.Float32BufferAttribute(col, 3)); g.computeVertexNormals();
-    const m = new THREE.Mesh(g, toon(0xffffff, { vertexColors: true })); m.receiveShadow = true; return m;
+    const uv = g.attributes.uv; for (let i = 0; i < uv.count; i++) uv.setXY(i, p.getX(i) / 3, p.getZ(i) / 3);
+    const m = new THREE.Mesh(g, toon(0xffffff, { vertexColors: true, map: grassDetail, roughness: 0.95 })); m.receiveShadow = true; return m;
   }
   const near = makeGround(44, 220, 176, 440, 4, -50, 0); scene.add(near);
   const far = makeGround(1000, 1000, 160, 160, 0, -200, 0.12); scene.add(far);
@@ -195,7 +199,7 @@ export function buildRome() {
   const paveGrassTex = voronoiTex(1024, 9, basalt, [88, 130, 60], 0.11, 2);
   const gravelTex = speckTex(512, '#b4a48a', ['#8a7a64', '#d8ccb4', '#6a5a4a', '#c4b090'], 2600, 4); gravelTex.wrapS = gravelTex.wrapT = THREE.RepeatWrapping;
   const stoneTex = voronoiTex(512, 5, (k) => { const v = 0.8 + hash(k, 3) * 0.3; return [170 * v, 150 * v, 120 * v]; }, [70, 55, 40], 0.1, 5);
-  const roadMat = toon(0xffffff, { map: paveTex });
+  const roadMat = toon(0xffffff, { map: paveTex, roughness: 0.92, envMapIntensity: 0.45 });
   const road = new THREE.Mesh(roadGeometry(-400, BUILD_Z0, false, 1), roadMat); road.receiveShadow = true; scene.add(road);
   const flatRoad = new THREE.Mesh(roadGeometry(-400, BUILD_Z1, true, 1), roadMat); flatRoad.receiveShadow = true; flatRoad.visible = false; scene.add(flatRoad);
   // paving that advances during the time-lapse
@@ -226,7 +230,7 @@ export function buildRome() {
   for (const s of [-1, 1]) { const w = new THREE.Mesh(new THREE.PlaneGeometry(1.5, 420), new THREE.MeshBasicMaterial({ map: ditchWaterTex, transparent: true, opacity: 0.92 })); w.rotation.x = -Math.PI / 2; w.position.set(s * 4.6, -0.22, -190); scene.add(w); ditches.push(w); }
   const runTex = canvasTex(256, 256, (c) => { c.clearRect(0, 0, 256, 256); c.strokeStyle = 'rgba(220,240,255,0.95)'; c.lineCap = 'round'; for (let i = 0; i < 40; i++) { c.lineWidth = 2 + hash(i, 4) * 3; const y = hash(i, 2) * 256, x = hash(i, 1) * 256; c.beginPath(); c.moveTo(x, y); c.lineTo(x + 50 + hash(i, 3) * 60, y + (hash(i, 5) - 0.5) * 8); c.stroke(); } });
   runTex.wrapS = runTex.wrapT = THREE.RepeatWrapping;
-  const runoff = new THREE.Mesh(runoffGeometry(-120, BUILD_Z1), new THREE.MeshBasicMaterial({ map: runTex, transparent: true, depthWrite: false, opacity: 0.9 })); runoff.visible = false; scene.add(runoff);
+  const runoff = new THREE.Mesh(runoffGeometry(-120, BUILD_Z1), new THREE.MeshBasicMaterial({ map: runTex, transparent: true, depthWrite: false, opacity: 0.55 })); runoff.visible = false; scene.add(runoff);
   const sheen = new THREE.Mesh(roadGeometry(-120, BUILD_Z1, false, 1), new THREE.MeshPhongMaterial({ color: 0x334455, transparent: true, opacity: 0.25, shininess: 120, specular: 0xffffff, depthWrite: false })); sheen.position.y = 0.012; sheen.visible = false; scene.add(sheen);
 
   const pudTex = canvasTex(512, 1024, (c) => { c.clearRect(0, 0, 512, 1024); for (let i = 0; i < 40; i++) { const x = hash(i, 1) * 512, y = hash(i, 2) * 1024, r = 30 + hash(i, 3) * 80; c.fillStyle = 'rgba(40,46,56,0.9)'; c.beginPath(); c.ellipse(x, y, r, r * (0.5 + hash(i, 4) * 0.4), hash(i, 5) * 3, 0, 7); c.fill(); c.strokeStyle = 'rgba(220,230,240,0.7)'; c.lineWidth = 4; c.stroke(); } c.strokeStyle = 'rgba(10,10,10,0.9)'; c.lineWidth = 6; for (let i = 0; i < 30; i++) { let x = hash(i, 8) * 512, y = hash(i, 9) * 1024; c.beginPath(); c.moveTo(x, y); for (let k = 0; k < 5; k++) { x += (hash(i, k) - 0.5) * 90; y += 30 + hash(k, i) * 40; c.lineTo(x, y); } c.stroke(); } });
@@ -309,7 +313,7 @@ export function buildRome() {
   const workers = [];
   const jobs = ['carry', 'pick', 'basket', 'carry', 'pick', 'basket', 'walk'];
   for (let i = 0; i < 26; i++) {
-    const side = i % 2 ? 1 : -1; const x = side * (1.0 + hash(i, 1) * 1.8); const z = BUILD_Z0 + 6 + hash(i, 2) * 22;
+    const side = i % 2 ? 1 : -1; const front = i % 3 === 0; const x = front ? side * (4.4 + hash(i, 1) * 3.5) : side * (1.0 + hash(i, 1) * 1.8); const z = front ? -2 - hash(i, 2) * 14 : 11 + hash(i, 2) * 18;
     const job = jobs[i % jobs.length];
     const spec = { outfit: 'worker', tunic: tunics[i % 6], ...hats[(i * 5) % 6], expr: job === 'carry' ? 'strain' : (i % 3 ? 'neutral' : 'happy'), pose: job === 'basket' ? 'hold' : job, item: job === 'basket' ? 'basket' : null, sweat: job === 'carry' };
     const w = add(spec, x + (z > BUILD_Z1 ? side * 1.2 : 0), z, 1.85, { job, phase: hash(i, 7) * 6.28, path: hash(i, 8) * 6 });

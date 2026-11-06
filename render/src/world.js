@@ -5,7 +5,7 @@ const g = new Uint8Array([95, 95, 95, 255, 175, 175, 175, 255, 255, 255, 255, 25
 export const gradientMap = new THREE.DataTexture(g, 3, 1);
 gradientMap.minFilter = gradientMap.magFilter = THREE.NearestFilter; gradientMap.needsUpdate = true;
 
-export function toon(color, extra = {}) { return new THREE.MeshToonMaterial({ color, gradientMap, ...extra }); }
+export function toon(color, extra = {}) { return new THREE.MeshStandardMaterial({ color, roughness: 0.82, metalness: 0, ...extra }); }
 const outlineMat = new THREE.MeshBasicMaterial({ color: 0x17110c, side: THREE.BackSide });
 
 // inverted hull outline using per-axis scaling (works for convex, centered primitives)

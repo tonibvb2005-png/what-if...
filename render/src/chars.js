@@ -290,15 +290,20 @@ export function charTex(spec) {
 }
 
 const geoCache = new Map();
+export const allChars = [];
+export function tintChars(col) { for (const c of allChars) c.mat.color.copy(col); }
 export class Char {
   constructor(spec, height = 1.9) {
     this.spec = { ...spec }; this.h = height;
     if (!geoCache.has(height)) { const w = height * CW / CH; const g = new THREE.PlaneGeometry(w, height); g.translate(0, height / 2 - height * (CH - FEET) / CH, 0); geoCache.set(height, g); }
     this.mat = new THREE.MeshBasicMaterial({ transparent: true, alphaTest: 0.5, side: THREE.DoubleSide });
     this.mesh = new THREE.Mesh(geoCache.get(height), this.mat);
+    this.depth = new THREE.MeshDepthMaterial({ depthPacking: THREE.RGBADepthPacking, alphaTest: 0.5 });
+    this.mesh.customDepthMaterial = this.depth; this.mesh.castShadow = true;
+    allChars.push(this);
     this.set({});
   }
-  set(ch) { Object.assign(this.spec, ch); const { tex, meta } = charTex(this.spec); if (this.mat.map !== tex) { this.mat.map = tex; this.mat.needsUpdate = true; } this.meta = meta; }
+  set(ch) { Object.assign(this.spec, ch); const { tex, meta } = charTex(this.spec); if (this.mat.map !== tex) { this.mat.map = tex; this.mat.needsUpdate = true; this.depth.map = tex; this.depth.needsUpdate = true; } this.meta = meta; }
   face(camera, flip = false) {
     const p = new THREE.Vector3(); this.mesh.getWorldPosition(p);
     let yaw = Math.atan2(camera.position.x - p.x, camera.position.z - p.z);

@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import { buildTimeline } from './timeline.js';
 import { buildRome, roadY, groundY, ROAD_HALF, ROAD_Y, CAMBER, OLD_X, BUILD_Z0, BUILD_Z1 } from './rome.js';
-import { ease, clamp01, lerp, v3 } from './world.js';
+import { ease, clamp01, lerp, v3, skyDome } from './world.js';
+import { tintChars } from './chars.js';
 
 const W = 1080, H = 1920;
 const RS = window.RENDER_SCALE || 0.75;
@@ -15,9 +16,19 @@ const renderer = new THREE.WebGLRenderer({ canvas: glCanvas, antialias: true, pr
 renderer.setPixelRatio(1); renderer.setSize(Math.round(W * RS), Math.round(H * RS), false);
 renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.localClippingEnabled = true;
+renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.15;
 const camera = new THREE.PerspectiveCamera(50, W / H, 0.05, 1500);
 
-const R = buildRome();
+const R = buildRome(); console.log('LOG world built');
+const pmrem = new THREE.PMREMGenerator(renderer);
+function makeEnv(top, hor, ground, sunCol, sunI) {
+  const s = new THREE.Scene(); const d = skyDome(top, hor, ground, 50); s.add(d);
+  const sunM = new THREE.Mesh(new THREE.SphereGeometry(4, 12, 8), new THREE.MeshBasicMaterial({ color: new THREE.Color(sunCol).multiplyScalar(sunI) }));
+  sunM.position.copy(R.sun.userData.dir).multiplyScalar(40); s.add(sunM);
+  return pmrem.fromScene(s, 0.02).texture;
+}
+const ENV = { day: makeEnv(0x4a86e0, 0xdcefff, 0x8aa860, 0xfff2d8, 6), storm: makeEnv(0x2a3248, 0x6a7890, 0x3a4430, 0x9aa8c0, 1), today: makeEnv(0x4a86e0, 0xffe0b0, 0x8aa860, 0xffd9a0, 7) };
+R.scene.environmentIntensity = 0.75; console.log('LOG env done');
 const clipPlane = new THREE.Plane(new THREE.Vector3(0, 0, -1), 0);
 R.advance.material = R.advance.material.clone(); R.advance.material.clippingPlanes = [clipPlane];
 
@@ -30,6 +41,11 @@ const grains = [0, 1, 2, 3].map((s) => { const c = document.createElement('canva
 function look(pos, target, fov = 50, roll = 0) {
   camera.position.copy(pos); camera.fov = fov; camera.updateProjectionMatrix();
   camera.up.set(0, 1, 0); camera.lookAt(target); if (roll) camera.rotateZ(roll); camera.updateMatrixWorld(true);
+  // keep the shadow map centred on what the camera sees (crisp shadows everywhere)
+  const dir = target.clone().sub(pos); const dist = Math.min(dir.length(), 16); dir.setY(0).normalize();
+  const focus = pos.clone().addScaledVector(dir, dist * 0.8); focus.y = 0;
+  R.sun.target.position.copy(focus); R.sun.position.copy(focus).addScaledVector(R.sun.userData.dir, 90);
+  R.sun.target.updateMatrixWorld();
 }
 const path = (pts, u) => new THREE.CatmullRomCurve3(pts, false, 'centripetal').getPoint(clamp01(u));
 const sw = (t, a, b) => clamp01((t - a) / (b - a));
@@ -58,20 +74,27 @@ function weather(t) {
   U.bot.value.copy(U.hor.value);
   R.fog.color.set(today ? 0xf2dcb8 : 0xcfe6f5).lerp(C.tmp.set(0x4a5468), k);
   R.fog.near = lerp(60, 14, k); R.fog.far = lerp(380, 120, k);
-  R.hemi.intensity = lerp(1.2, 0.75, k); R.hemi.color.set(0xd8ecff).lerp(C.tmp.set(0x8899bb), k);
-  R.sun.intensity = lerp(today ? 2.7 : 2.4, 0.15, k); R.sun.color.set(today ? 0xffd9a0 : 0xfff1d6);
+  R.hemi.intensity = lerp(0.55, 1.35, k); R.hemi.color.set(0xd8ecff).lerp(C.tmp.set(0x8899bb), k);
+  R.sun.intensity = lerp(today ? 3.4 : 3.2, 0.05, k); R.sun.color.set(today ? 0xffcf8f : 0xfff0d8);
+  R.scene.environment = today ? ENV.today : (k > 0.5 ? ENV.storm : ENV.day);
+  R.scene.environmentIntensity = lerp(0.75, 0.55, k);
+  renderer.toneMappingExposure = lerp(1.15, 1.35, k);
+  R.roadMat.roughness = R.advance.material.roughness = lerp(0.92, 0.18, k); R.roadMat.envMapIntensity = R.advance.material.envMapIntensity = lerp(0.45, 1.0, k);
+  R.roadMat.color.set(0xffffff).lerp(C.tmp.set(0x9aa4b4), k * 0.6); R.advance.material.color.copy(R.roadMat.color);
+  const tint = today ? C.tmp.set(0xfff0dc) : C.tmp.set(0xffffff).lerp(new THREE.Color(0x8e9ab4), k);
   const flashT = [WT('storm', 3), WT('mud', 9) + 0.1, WT('whatif', 9)];
   let flash = 0; for (const f of flashT) { const d = t - f; if (d > 0 && d < 0.35) flash = Math.max(flash, (d < 0.06 ? 1 : d < 0.12 ? 0.3 : d < 0.18 ? 0.8 : 0) * (k > 0.5 ? 1 : 0)); }
-  R.hemi.intensity += flash * 2.5;
+  R.hemi.intensity += flash * 3.5;
+  tint.lerp(new THREE.Color(0xffffff), flash * 0.8); tintChars(tint);
   R.clouds.forEach((c) => (c.visible = k < 0.5));
   R.stormClouds.forEach((c) => { c.visible = k > 0.05; c.material.opacity = k; });
   const rainOn = k > 0.35;
   R.rain.visible = rainOn; if (rainOn) R.updateRain(t, camera);
   R.ditches.forEach((d) => (d.visible = k > 0.4 && mode !== 'whatif')); R.ditchWaterTex.offset.y = -t * 1.5;
-  R.runoff.visible = R.sheen.visible = k > 0.5 && mode === 'normal'; R.runTex.offset.x = -t * 1.2;
+  R.runoff.visible = k > 0.5 && mode === 'normal'; R.sheen.visible = false; R.runTex.offset.x = -t * 1.2;
   R.mud.visible = k > 0.4; R.mudTex.offset.y = -t * 0.8; R.ruts.forEach((r) => (r.visible = k <= 0.4));
   R.birds.forEach((b) => { const u = b.userData; b.visible = k < 0.3; b.position.set(u.x + t * 3, u.y + Math.sin(t * 2 + u.p) * 0.6, u.z); b.scale.y = 0.6 + 0.4 * Math.abs(Math.sin(t * 6 + u.p)); });
-  return { k, flash };
+  return { k, flash, today };
 }
 function worldState(t) {
   const today = mode === 'today', whatif = mode === 'whatif';
@@ -218,6 +241,24 @@ function renderShot(shot, t, alpha = 1, whip = 0) {
   return res;
 }
 function bloom(a = 0.16) { sx.filter = 'brightness(1.05) contrast(1.8) blur(5px)'; sx.clearRect(0, 0, small.width, small.height); sx.drawImage(comp, 0, 0, small.width, small.height); cx.save(); cx.globalCompositeOperation = 'screen'; cx.globalAlpha = a; cx.drawImage(small, 0, 0, W, H); cx.restore(); }
+const sunV = new THREE.Vector3();
+function sunGlow(k) {
+  if (k > 0.4) return;
+  sunV.copy(R.sun.userData.dir).multiplyScalar(500).add(camera.position).project(camera);
+  if (sunV.z > 1) return;
+  const x = (sunV.x * 0.5 + 0.5) * W, y = (-sunV.y * 0.5 + 0.5) * H;
+  const a = (1 - k / 0.4) * 0.55;
+  const g = cx.createRadialGradient(x, y, 0, x, y, H * 0.55); g.addColorStop(0, `rgba(255,236,200,${a})`); g.addColorStop(0.25, `rgba(255,220,170,${a * 0.35})`); g.addColorStop(1, 'rgba(255,210,160,0)');
+  cx.save(); cx.globalCompositeOperation = 'screen'; cx.fillStyle = g; cx.fillRect(0, 0, W, H); cx.restore();
+}
+function grade(k, today) {
+  cx.save(); cx.globalCompositeOperation = 'soft-light'; cx.globalAlpha = 0.22;
+  const g = cx.createLinearGradient(0, 0, 0, H);
+  if (k > 0.5) { g.addColorStop(0, '#5a7aaa'); g.addColorStop(1, '#203048'); }
+  else if (today) { g.addColorStop(0, '#ffcf90'); g.addColorStop(1, '#a0603a'); }
+  else { g.addColorStop(0, '#fff2d0'); g.addColorStop(1, '#6a88b0'); }
+  cx.fillStyle = g; cx.fillRect(0, 0, W, H); cx.restore();
+}
 function vignette(s = 0.3) { const g = cx.createRadialGradient(W / 2, H / 2, H * 0.3, W / 2, H / 2, H * 0.75); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, `rgba(0,0,0,${s})`); cx.fillStyle = g; cx.fillRect(0, 0, W, H); }
 function vhs(t, amount) {
   if (amount <= 0) return;
@@ -258,8 +299,9 @@ window.renderAt = function (t, opts = {}) {
     const n = blur && !opts.fast ? 5 : 1;
     for (let i = 0; i < n; i++) { const tt = t + (n > 1 ? (i / (n - 1) - 0.5) / 30 * 1.5 : 0); res = renderShot(shot, tt, 1 / (i + 1), whipAt(tt)); }
     if (tr.type === 'fade' && prev && lt < tr.dur) renderShot(prev, t, 1 - lt / tr.dur);
-    bloom();
     const fx = res.fx || {};
+    if (!fx.bw && res.w) { sunGlow(res.w.k); grade(res.w.k, res.w.today); }
+    bloom(0.2);
     if (res.w && res.w.flash) { cx.save(); cx.globalAlpha = res.w.flash * 0.55; cx.fillStyle = '#eef4ff'; cx.fillRect(0, 0, W, H); cx.restore(); }
     if (fx.bw) { grain(t, 0.35); vignette(0.55); } else vignette(res.w && res.w.k > 0.5 ? 0.45 : 0.28);
     if (fx.rewind) vhs(t, fx.rewind);

@@ -1,13 +1,11 @@
 <!doctype html>
 <html><head><meta charset="utf-8">
-<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js"}}</script>
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js","three/addons/":"/node_modules/three/examples/jsm/"}}</script>
 <style>body{margin:0;background:#111} canvas{width:270px}</style>
 </head><body>
 <script type="module">
-const f800 = new FontFace('Montserrat', 'url(/node_modules/@fontsource/montserrat/files/montserrat-latin-800-normal.woff2)', { weight: '800' });
-const f900 = new FontFace('Montserrat', 'url(/node_modules/@fontsource/montserrat/files/montserrat-latin-900-normal.woff2)', { weight: '900' });
-const f700 = new FontFace('Montserrat', 'url(/node_modules/@fontsource/montserrat/files/montserrat-latin-700-normal.woff2)', { weight: '700' });
-await Promise.all([f700, f800, f900].map((f) => f.load().then((x) => document.fonts.add(x))));
+const base = '/node_modules/@fontsource/montserrat/files/montserrat-latin-';
+await Promise.all(['700', '800', '900'].map((w) => new FontFace('Montserrat', `url(${base}${w}-normal.woff2)`, { weight: w }).load().then((x) => document.fonts.add(x))));
 const q = new URLSearchParams(location.search);
 if (q.get('scale')) window.RENDER_SCALE = +q.get('scale');
 if (q.get('voice')) window.VOICE_TIMINGS = await (await fetch(q.get('voice'))).json();
