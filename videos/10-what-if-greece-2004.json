@@ -1,0 +1,123 @@
+{
+  "title": "What if you bet €1,000 on Greece at Euro 2004? (cartoon story)",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "chars": {
+    "hero": {
+      "shirt": "#0d5eaf",
+      "number": "9",
+      "trim": "#ffffff"
+    }
+  },
+  "bet": {
+    "top": "WINNER · EURO 2004",
+    "team": "GREECE",
+    "odds": "150 / 1",
+    "cur": "€",
+    "stake": 1000,
+    "mult": 150,
+    "slip": "150/1",
+    "champ": [
+      "GREECE",
+      "CHAMPIONS OF EUROPE!"
+    ]
+  },
+  "scenes": [
+    {
+      "shot": "hook",
+      "text": "What if you bet €1,000 on Greece... to win Euro 2004?",
+      "override": {
+        "title": [
+          "WHAT IF YOU BET",
+          "<span class=\"gold\">€1,000</span>",
+          "ON GREECE?"
+        ],
+        "titleSize": [
+          96,
+          200,
+          120
+        ]
+      },
+      "audio": "../audio/what-if-greece/01.wav"
+    },
+    {
+      "shot": "bet",
+      "text": "June 2004. He walks into the bookies and puts €1,000 on Greece. The odds? 150 to 1.",
+      "override": {
+        "tag": "JUNE 2004"
+      },
+      "audio": "../audio/what-if-greece/02.wav"
+    },
+    {
+      "shot": "laugh",
+      "text": "His mates can't stop laughing. Greece have never won a single game at a major tournament!",
+      "audio": "../audio/what-if-greece/03.wav"
+    },
+    {
+      "shot": "confident",
+      "text": "But he just smiles. He knows something they don't.",
+      "audio": "../audio/what-if-greece/04.wav"
+    },
+    {
+      "shot": "gotto",
+      "text": "Their coach? A German called Otto Rehhagel. His plan? Defend. Defend. And defend again.",
+      "audio": "../audio/what-if-greece/05.wav"
+    },
+    {
+      "shot": "gopener",
+      "text": "The opening game. Against hosts Portugal. Greece win 2-1!",
+      "audio": "../audio/what-if-greece/06.wav"
+    },
+    {
+      "shot": "gfrance",
+      "text": "Quarter-final. France, the defending champions. Charisteas. Header. 1-0!",
+      "audio": "../audio/what-if-greece/07.wav"
+    },
+    {
+      "shot": "gczech",
+      "text": "Semi-final. Czech Republic. Extra time... Dellas! Silver goal! Greece are in the final!",
+      "audio": "../audio/what-if-greece/08.wav"
+    },
+    {
+      "shot": "cashout",
+      "text": "Then his phone rings. The bookies want to buy back his bet. His mates beg him to take the money. He says no.",
+      "audio": "../audio/what-if-greece/09.wav"
+    },
+    {
+      "shot": "gfinal",
+      "text": "July 4th. The final in Lisbon. Portugal again. Ronaldo. Figo. A whole country against them.",
+      "audio": "../audio/what-if-greece/10.wav"
+    },
+    {
+      "shot": "ggoal",
+      "text": "57 minutes. Corner. Charisteas... HEADER! 1-0 GREECE!",
+      "audio": "../audio/what-if-greece/11.wav"
+    },
+    {
+      "shot": "champions",
+      "text": "GREECE ARE CHAMPIONS OF EUROPE!",
+      "audio": "../audio/what-if-greece/12.wav",
+      "pad": 1.6
+    },
+    {
+      "shot": "payout",
+      "text": "So... how much does he win? €1,000 at 150 to 1... 150,000 euros.",
+      "audio": "../audio/what-if-greece/13.wav"
+    },
+    {
+      "shot": "cta",
+      "text": "What would you do with 150,000 euros? Follow for more What Ifs.",
+      "override": {
+        "title": [
+          "WHAT WOULD YOU DO",
+          "WITH <span class=\"gold\">€150,000</span>?"
+        ],
+        "titleSize": [
+          84,
+          90
+        ]
+      },
+      "audio": "../audio/what-if-greece/14.wav"
+    }
+  ]
+}

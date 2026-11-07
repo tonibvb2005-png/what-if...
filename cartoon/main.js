@@ -21,6 +21,8 @@
     bookie: { skin: '#ffd9b8', shirt: '#ffffff', vest: '#6a2bd1', bowtie: '#e8364f', trim: '#ffffff', pants: '#222', shoes: '#111', hair: 'slick', hairColor: '#1d1d1d', mustache: true, glasses: true, bw: 1.1, scale: 1, blinkPh: .7 }
   };
 
+  // ---------- bet configuration (per spec; defaults = Leicester) ----------
+  const BET = () => Object.assign({ top: 'TITLE ODDS 2015/16', team: 'LEICESTER CITY', odds: '5000 / 1', cur: '£', stake: 1000, mult: 5000, slip: '5000/1', champ: ['LEICESTER CITY', 'CHAMPIONS!'] }, (spec && spec.bet) || {});
   // ---------- sets ----------
   function neonText(txt, x, y, size, color, glow, t) {
     ctx.font = `900 ${size}px Inter Display`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
@@ -32,11 +34,11 @@
     ctx.strokeStyle = OUT; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(x - 190, y - sh / 2); ctx.lineTo(x - 190, y - 420); ctx.moveTo(x + 190, y - sh / 2); ctx.lineTo(x + 190, y - 420); ctx.stroke();
     ctx.beginPath(); ctx.roundRect(x - sw / 2, y - sh / 2, sw, sh, 18); ctx.fillStyle = '#1c2238'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke();
     ctx.beginPath(); ctx.roundRect(x - sw / 2 + 16, y - sh / 2 + 16, sw - 32, sh - 32, 10); ctx.lineWidth = 5; ctx.strokeStyle = '#e0b84a'; ctx.stroke();
-    txt('TITLE ODDS 2015/16', x, y - 64, 28, '#e0b84a', 800);
-    txt('LEICESTER CITY', x, y - 26, 40, '#ffffff', 900);
+    txt(BET().top, x, y - 64, 28, '#e0b84a', 800);
+    txt(BET().team, x, y - 26, 40, '#ffffff', 900);
     const pulse = fx.signPulse != null ? Math.sin(P(fx.lt, fx.signPulse, fx.signPulse + .6) * Math.PI) : 0;
     ctx.save(); ctx.translate(x, y + 48); ctx.scale(1 + pulse * .2, 1 + pulse * .2);
-    txt('5000 / 1', 0, 0, 92, '#ff5a4f', 900); ctx.restore();
+    txt(BET().odds, 0, 0, 92, '#ff5a4f', 900); ctx.restore();
   }
   function drawCounter() {
     const x0 = -620, x1 = -60, top = 1130;
@@ -132,7 +134,7 @@
     } else if (card === 'champions') {
       const fl = Math.sin(t * 12) > 0;
       cardBg(fl ? '#1655d6' : '#0d2a8a', '#06134a');
-      txt('LEICESTER CITY', TVW / 2, 200, 84, '#fff'); txt('CHAMPIONS!', TVW / 2, 320, 110, '#ffd400', 900, 'center', 10);
+      txt(BET().champ[0], TVW / 2, 200, 84, '#fff'); txt(BET().champ[1], TVW / 2, 320, BET().champ[1].length > 12 ? 70 : 110, '#ffd400', 900, 'center', 10);
     }
   }
   function score(a, ga, gb, b, ca, cb, lt, d, flashAt) {
@@ -155,7 +157,7 @@
       const y = ((n.y0 + t * n.v) % 2300) - 250, x = n.x + Math.sin(t * 2 + n.ph) * 40;
       ctx.save(); ctx.translate(x, y); ctx.rotate(Math.sin(t * 3 + n.ph) * .8); ctx.scale(n.s, n.s * Math.abs(Math.cos(t * 4 + n.ph)) + .2);
       ctx.beginPath(); ctx.roundRect(-50, -26, 100, 52, 6); ctx.fillStyle = '#4cc26a'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = OUT; ctx.stroke();
-      txt('£', 0, 2, 34, '#1e5c30');
+      txt(BET().cur, 0, 2, 34, '#1e5c30');
       ctx.restore();
     }
     ctx.restore();
@@ -940,6 +942,60 @@
       extraRoom: (lt, t) => { const k = P(lt, cue('noise', .4), cue('noise', .4) + .3); if (k > 0 && lt < cue('follow', .75)) { ctx.save(); ctx.globalAlpha = k; for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.arc(1250, 820, 60 + i * 40 + (t * 80 % 40), -.9, .9); ctx.lineWidth = 8; ctx.strokeStyle = '#ffd400'; ctx.stroke(); } txt('ROAR!', 1290, 700, 60, '#ffd400', 900, 'center', 10); ctx.restore(); } } }
   });
 
+
+  // ---------- Greece Euro 2004 story ----------
+  function teamScore(top, A, cA, B, cB, steps, bg = ['#0b2a7a', '#06134a']) {
+    return (t, lt, d) => {
+      cardBg(bg[0], bg[1]);
+      let ga = steps[0][2], gb = steps[0][3], label = steps[0][4], at = -9;
+      for (const [cn, df, a, b, lb] of steps) { const tt = cn ? cue(cn, df) : df * d; if (lt >= tt) { ga = a; gb = b; label = lb; at = tt; } }
+      txt(top, TVW / 2, 100, 34, '#ffd400', 800);
+      const y = 240;
+      ctx.beginPath(); ctx.roundRect(40, y - 120, TVW - 80, 250, 30); ctx.fillStyle = 'rgba(255,255,255,.1)'; ctx.fill();
+      ctx.lineWidth = 6; ctx.strokeStyle = '#fff';
+      ctx.beginPath(); ctx.arc(150, y - 20, 48, 0, Math.PI * 2); ctx.fillStyle = cA; ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.arc(TVW - 150, y - 20, 48, 0, Math.PI * 2); ctx.fillStyle = cB; ctx.fill(); ctx.stroke();
+      txt(A, 150, y + 70, 36, '#fff'); txt(B, TVW - 150, y + 70, 36, '#fff');
+      const k = 1 + .5 * Math.max(0, 1 - (lt - at) / .5);
+      ctx.save(); ctx.translate(TVW / 2, y + 10); ctx.scale(k, k); txt(`${ga} – ${gb}`, 0, 0, 120, '#ffd400', 900, 'center', 12); ctx.restore();
+      if (label) { const kk = eb(P(lt, at, at + .35)); ctx.save(); ctx.translate(TVW / 2, 445); ctx.scale(kk, kk); txt(label, 0, 0, 46, '#fff', 900, 'center', 10); ctx.restore(); }
+    };
+  }
+  const GRE = '#0d5eaf', POR = '#c8102e', FRA = '#1f3a93', CZE = '#d7141a';
+  const reactPan = (a, b) => [[0, TV], [a, TV], [b, G], [1, G2]];
+  Object.assign(SHOTS, {
+    gotto: { set: 'room', cast: room, tag: 'THE COACH',
+      card: textCard([['GREECE · EURO 2004', 40, '#ffd400', null, .03], ['OTTO REHHAGEL', 70, '#fff', null, .1], ['THE PLAN:', 40, '#ffd400', 'plan', .5], ['DEFEND · DEFEND · DEFEND', 46, '#fff', 'defend', .65]], ['#0b2a7a', '#06134a']),
+      cam: reactPan(.78, .86),
+      acts: { hero: [[0, { e: 'neutral', m: { lookX: -1 } }], [.86, { e: 'confident', p: 'crossed', m: { lookX: 0 } }]],
+              mike: [[0, { e: 'smirk', m: { lookX: -1 } }], [.86, { e: 'laugh', p: 'pointR', m: { laugh: .8, lookX: 1 } }]],
+              jay: [[0, { e: 'giggle', m: { lookX: -1 } }], [.86, { e: 'laugh', p: 'bellyLaugh', m: { laugh: .8 } }]] } },
+    gopener: { set: 'room', cast: room, tag: '12 JUNE 2004 · PORTO',
+      card: teamScore('OPENING GAME', 'PORTUGAL', POR, 'GREECE', GRE, [[null, 0, 0, 0, ''], ['win', .6, 1, 2, 'FULL TIME']]),
+      cam: reactPan(.68, .76),
+      acts: { hero: [[0, { e: 'happy', m: { lookX: -1 } }], [.76, { e: 'ecstatic', p: 'fistPumpR', handR: 'fist', m: { jump: .4, lookX: 0 } }]],
+              mike: [[0, { e: 'smirk', m: { lookX: -1 } }], [.76, { e: 'surprised', m: { lookX: 1 } }]], jay: [[0, { e: 'giggle', m: { lookX: -1 } }], [.78, { e: 'surprised', m: { lookX: -1 } }]] } },
+    gfrance: { set: 'room', cast: room, tag: 'QUARTER-FINAL',
+      card: teamScore('vs THE CHAMPIONS', 'FRANCE', FRA, 'GREECE', GRE, [[null, 0, 0, 0, ''], ['goal', .6, 0, 1, 'CHARISTEAS!']]),
+      cam: reactPan(.7, .78),
+      acts: { hero: [[0, { e: 'tense', m: { lookX: -1 } }], [.78, { e: 'ecstatic', p: 'cheer', m: { jump: .8 } }]],
+              mike: [[0, { e: 'smirk', m: { lookX: -1 } }], [.78, { e: 'worried', p: 'crossed', m: { lookX: -1 } }]], jay: [[0, { e: 'neutral', m: { lookX: -1 } }], [.8, { e: 'nervous', p: 'nervous', m: { lookX: -1 } }]] } },
+    gczech: { set: 'room', cast: room, tag: 'SEMI-FINAL', bright: .9,
+      card: teamScore('EXTRA TIME', 'GREECE', GRE, 'CZECH REP.', CZE, [[null, 0, 0, 0, ''], ['goal', .55, 1, 0, 'DELLAS! SILVER GOAL']]),
+      cam: reactPan(.72, .8),
+      acts: { hero: [[0, { e: 'tense', p: 'pleading', m: { lookX: -1, tremble: .4 } }], [.8, { e: 'ecstatic', p: 'cheer', m: { dance: 1 } }]],
+              mike: [[0, { e: 'tense', m: { lookX: -1 } }], [.8, { e: 'shock', p: 'handsOnHead', m: { lookX: -1 } }]], jay: [[0, { e: 'tense', p: 'nervous', m: { lookX: -1 } }], [.82, { e: 'nervous', p: 'nervous', m: { lookX: -1, tremble: .7 } }]] } },
+    gfinal: { set: 'room', cast: room, tag: '4 JULY 2004 · LISBON', bright: .72,
+      card: teamScore('EURO 2004 FINAL', 'PORTUGAL', POR, 'GREECE', GRE, [[null, 0, 0, 0, 'RONALDO · FIGO · 62,000 FANS']]),
+      cam: [[0, TV], [.5, TV], [.62, { x: 0, y: 1010, z: 1.45 }], [1, { x: 0, y: 1015, z: 1.55 }]],
+      acts: { hero: [[0, { e: 'tense', p: 'pleading', m: { lookX: -1, tremble: .5 } }]], mike: [[0, { e: 'tense', p: 'nervous', m: { lookX: -1, tremble: .7 } }]], jay: [[0, { e: 'worried', p: 'nervous', m: { lookX: -1, tremble: .7 } }]] } },
+    ggoal: { set: 'room', cast: room, tag: "57'", bright: .8,
+      card: teamScore('EURO 2004 FINAL', 'PORTUGAL', POR, 'GREECE', GRE, [[null, 0, 0, 0, 'CORNER...'], ['goal', .6, 0, 1, 'CHARISTEAS!']]),
+      cam: [[0, TV], [.7, TV], [.78, G], [1, G2]],
+      acts: { hero: [[0, { e: 'tense', p: 'pleading', m: { lookX: -1, tremble: .6 } }], [.78, { e: 'ecstatic', p: 'cheer', m: { jump: 1 } }]],
+              mike: [[0, { e: 'tense', m: { lookX: -1 } }], [.78, { e: 'shock', p: 'handsOnHead', m: { lookX: -1 } }]], jay: [[0, { e: 'tense', m: { lookX: -1 } }], [.78, { e: 'shock', m: { lookX: -1 } }]] } }
+  });
+
   // ---------- timeline ----------
   let spec, scenes = [], total = 0;
   function camAt(keys, lt, d) {
@@ -960,8 +1016,10 @@
     spec = sp; total = 0;
     World3D.init(document.getElementById('gl'), { crowd: spec.crowd });
     if (spec.chars) for (const n in spec.chars) Object.assign(CH[n], spec.chars[n]);
+    window.BETCFG = { cur: BET().cur, slip: BET().slip };
     for (const s of spec.scenes) {
-      const sh = SHOTS[s.shot]; if (!sh) throw new Error('unknown shot ' + s.shot);
+      const base = SHOTS[s.shot]; if (!base) throw new Error('unknown shot ' + s.shot);
+      const sh = s.override ? Object.assign({}, base, s.override) : base;
       s.sh = sh;
       const toks = tokens(s.text || '');
       s.duration = s.duration || (sh.dur ? sh.dur(s) : Math.max(sh.minDur || 0, toks.length / 2.5 + .9));
@@ -975,7 +1033,7 @@
         if (sh.sub) s._sub = el('div', 'sub', esc(sh.sub), s._title);
         if (sh.follow) s._follow = el('div', 'follow', '＋ ' + esc(sh.follow), s._title);
       }
-      if (sh.counter) { s._cnt = el('div', 'title', null, root); s._cntL = el('div', 'sub', '£1,000 × 5000 =', s._cnt); s._cntN = el('div', 'gold', '£0', s._cnt); s._cntN.style.fontSize = '150px'; }
+      if (sh.counter) { s._cnt = el('div', 'title', null, root); s._cntL = el('div', 'sub', `${BET().cur}${BET().stake.toLocaleString('en-US')} × ${BET().mult} =`, s._cnt); s._cntN = el('div', 'gold', BET().cur + '0', s._cnt); s._cntN.style.fontSize = '150px'; }
       if (sh.phone) {
         s._ph = el('div', 'phoneui', `<div class="who">📞 INCOMING CALL · THE BOOKIES</div><div class="q">CASH OUT YOUR BET?</div><div class="btns"><div class="b y">YES</div><div class="b n">NO</div></div>`, root);
       }
@@ -1076,6 +1134,11 @@
         case 'rgoal': add(st + .35, 'thump', -9); add(st + .38, 'cheer', -10); break;
         case 'rgreat': add(st + .2, 'sparkle', -15); break;
         case 'rmate': add(st + C('noise', .4), 'cheer', -20); add(st + C('follow', .75) + .1, 'pop', -14); break;
+        case 'gotto': add(st + C('defend', .65), 'thump', -15); break;
+        case 'gopener': add(st + C('win', .6), 'thump', -12); add(st + C('win', .6) + .1, 'whistle', -20); break;
+        case 'gfrance': case 'ggoal': add(st + C('goal', .6), 'thump', -11); add(st + C('goal', .6) + .05, 'cheer', -17); break;
+        case 'gczech': add(st + C('goal', .55), 'thump', -11); add(st + C('goal', .55) + .05, 'cheer', -17); break;
+        case 'gfinal': for (let x = .2; x < d - .2; x += .85) add(st + x, 'heartbeat', -14); break;
         case 'imate': add(st + .1, 'whoosh_soft', -20); add(st + C('follow', .75) + .1, 'pop', -14); break;
       }
     });
@@ -1095,8 +1158,8 @@
     if (s._cnt) {
       s._cntL.style.opacity = P(lt, d * .28, d * .28 + .3);
       const v = P(lt, d * .52, d * .73), k = eo(v);
-      const val = v <= 0 ? 0 : Math.round(lerp(1000, 5000000, k * k));
-      s._cntN.textContent = '£' + val.toLocaleString('en-US');
+      const B = BET(), val = v <= 0 ? 0 : Math.round(lerp(B.stake, B.stake * B.mult, k * k));
+      s._cntN.textContent = B.cur + val.toLocaleString('en-US');
       s._cntN.style.opacity = P(lt, d * .5, d * .53);
       const pop = P(lt, d * .73, d * .81); s._cntN.style.transform = `scale(${1 + Math.sin(pop * Math.PI) * .25})`;
       if (s._cap) s._cap.style.opacity = lt < d * .5 ? 1 : 0;

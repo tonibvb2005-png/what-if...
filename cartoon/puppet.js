@@ -101,13 +101,13 @@ window.Puppet = (function () {
         ctx.save(); ctx.rotate(i * .32 + wig - .2); ctx.translate(0, -34);
         ctx.beginPath(); ctx.roundRect(-26, -44, 52, 88, 6); ctx.fillStyle = '#4cc26a'; ctx.fill(); stroke(ctx, 5, OUT);
         ctx.beginPath(); ctx.roundRect(-17, -35, 34, 70, 4); stroke(ctx, 3, '#2a7a40');
-        ctx.fillStyle = '#1e5c30'; ctx.font = '900 34px Inter Display'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('£', 0, 2);
+        ctx.fillStyle = '#1e5c30'; ctx.font = '900 34px Inter Display'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText((window.BETCFG && window.BETCFG.cur) || '£', 0, 2);
         ctx.restore();
       }
     } else if (kind === 'slip') {
       ctx.rotate(-.2); ctx.beginPath(); ctx.roundRect(-30, -80, 60, 84, 4); ctx.fillStyle = '#fff'; ctx.fill(); stroke(ctx, 5, OUT);
       ctx.fillStyle = '#7b5cff'; ctx.fillRect(-20, -68, 40, 8); ctx.fillStyle = '#bbb'; ctx.fillRect(-20, -52, 34, 5); ctx.fillRect(-20, -42, 28, 5);
-      ctx.fillStyle = '#e8364f'; ctx.font = '900 16px Inter Display'; ctx.textAlign = 'center'; ctx.fillText('5000/1', 0, -16);
+      ctx.fillStyle = '#e8364f'; ctx.font = '900 16px Inter Display'; ctx.textAlign = 'center'; ctx.fillText((window.BETCFG && window.BETCFG.slip) || '5000/1', 0, -16);
     } else if (kind === 'phone' || kind === 'phoneRing') {
       if (kind === 'phoneRing') { ctx.rotate(Math.sin(t * 50) * .12); }
       ctx.beginPath(); ctx.roundRect(-26, -84, 52, 92, 10); ctx.fillStyle = '#20233a'; ctx.fill(); stroke(ctx, 5, OUT);
@@ -143,7 +143,7 @@ window.Puppet = (function () {
       ctx.fillStyle = '#c98a3c'; ctx.fill(); stroke(ctx, 6, OUT);
       ctx.beginPath(); ctx.ellipse(0, 6, 30, 12, 0, 0, Math.PI * 2); ctx.fillStyle = '#a86c26'; ctx.fill(); stroke(ctx, 5, OUT);
       ctx.fillStyle = '#ffd400'; ctx.strokeStyle = OUT; ctx.lineWidth = 6; ctx.font = '900 84px Inter Display'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-      ctx.strokeText('£', 0, 105); ctx.fillText('£', 0, 105);
+      const cs = (window.BETCFG && window.BETCFG.cur) || '£'; ctx.strokeText(cs, 0, 105); ctx.fillText(cs, 0, 105);
     }
     ctx.restore();
   }
