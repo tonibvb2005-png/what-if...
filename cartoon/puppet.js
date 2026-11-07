@@ -118,7 +118,7 @@ window.Puppet = (function () {
       }
     } else if (kind === 'scarf') {
       ctx.rotate(Math.sin(t * 4) * .25 - .3);
-      for (let k = 0; k < 6; k++) { ctx.beginPath(); ctx.rect(-14, -40 - k * 34, 28, 34); ctx.fillStyle = k % 2 ? '#ffffff' : '#c8102e'; ctx.fill(); stroke(ctx, 4, OUT); }
+      for (let k = 0; k < 6; k++) { ctx.beginPath(); ctx.rect(-14, -40 - k * 34, 28, 34); const sc = window.SCARF || ['#c8102e', '#ffffff']; ctx.fillStyle = k % 2 ? sc[1] : sc[0]; ctx.fill(); stroke(ctx, 4, OUT); }
     } else if (kind === 'shirt10' || kind === 'shirt100') {
       ctx.rotate(-.1);
       const sh = new Path2D(); sh.moveTo(-40, -110); sh.lineTo(-70, -90); sh.lineTo(-58, -60); sh.lineTo(-44, -66); sh.lineTo(-44, 0); sh.lineTo(44, 0); sh.lineTo(44, -66); sh.lineTo(58, -60); sh.lineTo(70, -90); sh.lineTo(40, -110); sh.quadraticCurveTo(0, -90, -40, -110); sh.closePath();

@@ -996,6 +996,37 @@
               mike: [[0, { e: 'tense', m: { lookX: -1 } }], [.78, { e: 'shock', p: 'handsOnHead', m: { lookX: -1 } }]], jay: [[0, { e: 'tense', m: { lookX: -1 } }], [.78, { e: 'shock', m: { lookX: -1 } }]] } }
   });
 
+
+  // ---------- Greece: the final in the stadium ----------
+  Object.assign(CH, {
+    charisteas: { skin: '#f0c19a', shirt: '#0d5eaf', trim: '#ffffff', number: '9', pants: '#0d5eaf', shoes: '#111', hair: 'short', hairColor: '#2a1a10', stubble: true, bw: 1.05, blinkPh: .5 },
+    ronaldo:    { skin: '#e8b08a', shirt: '#c8102e', trim: '#0f8a3c', number: '17', pants: '#0f8a3c', shoes: '#111', hair: 'spiky', hairColor: '#3a2414', bw: .92, blinkPh: 1.2 },
+    figo:       { skin: '#f0c19a', shirt: '#c8102e', trim: '#0f8a3c', number: '7', pants: '#0f8a3c', shoes: '#111', hair: 'slick', hairColor: '#2a1a10', stubble: true, bw: 1, blinkPh: 2.0 },
+    ricardo:    { skin: '#f0c19a', shirt: '#2b2f3a', trim: '#ffd400', number: '1', pants: '#2b2f3a', shoes: '#111', hair: 'buzz', hairColor: '#2a1a10', bw: 1.05, blinkPh: 2.6 }
+  });
+  const GFANS = { mike: { x: -270 }, hero: { x: 0 }, jay: { x: 270 } };
+  Object.assign(SHOTS, {
+    gfinal2: { set: 'stands', tag: '4 JULY 2004 · LISBON', bright: .78,
+      cuts: [
+        standsCut({ at: 0, cast: GFANS, cam: [[0, { x: 0, y: 995, z: 1.25 }], [1, { x: 0, y: 1000, z: 1.35 }]],
+          acts: { hero: [[0, { e: 'tense', p: 'pleading', m: { tremble: .5 } }]], mike: [[0, { e: 'tense', p: 'nervous', m: { tremble: .6 } }]], jay: [[0, { e: 'worried', p: 'nervous', m: { tremble: .6 } }]] } }),
+        pitchCut({ at: ['stars', .5], cast: { ronaldo: { x: -120, scale: .82 }, figo: { x: 180, scale: .82 } }, score: 'POR 0 – 0 GRE', label: 'EURO 2004 FINAL',
+          acts: { ronaldo: [[0, { e: 'confident', p: 'hips', m: { lookX: 1 } }]], figo: [[0, { e: 'focused', p: 'crossed', m: { lookX: -1 } }]] } })] },
+    ggoal2: { set: 'pitch', tag: "57'", bright: 1,
+      cuts: [
+        pitchCut({ at: 0, cast: { charisteas: { x: -170, scale: .82 }, ricardo: { x: -380, scale: .78 } },
+          score: lt => lt < cue('goal', .62) ? 'POR 0 – 0 GRE' : 'POR 0 – 1 GRE', label: lt => lt >= cue('goal', .62) ? 'CHARISTEAS!' : 'CORNER...',
+          ball: () => { const g = cue('goal', .62); return [[0, 980, 1385], [g - 1.3, 900, 1385], [g - .25, -170, 975, 420], [g + .05, -470, 1110, 20], [g + .5, -490, 1385, 20]]; },
+          acts: () => { const g = cue('goal', .62), D = CUR.duration; return {
+            charisteas: [[0, { e: 'focused', m: { lookX: 1 } }], [(g - .55) / D, { e: 'focused', p: 'cheer', m: { jump: 1, lookX: 1 } }], [(g + .1) / D, { e: 'ecstatic', p: 'cheer', m: { jump: .4, lookX: 0 } }]],
+            ricardo: [[0, { e: 'focused', po: KP, m: { lookX: 1 } }], [(g - .2) / D, { e: 'shock', po: { lA: 170, rA: 170, lE: 0, rE: 0 }, m: { dy: -50 } }], [(g + .6) / D, { e: 'despair', p: 'handsOnHead', po: {}, m: { dy: 0 } }]] }; } }),
+        standsCut({ at: ['goal', .62, .45], cast: GFANS, acts: { hero: [[0, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: 1 } }]], mike: [[0, { e: 'shock', p: 'handsOnHead' }]], jay: [[0, { e: 'shock', p: 'cheer' }]] } })] },
+    gchamp: { set: 'stands', bright: 1.12, minDur: 4.6,
+      cuts: [standsCut({ at: 0, cast: GFANS, conf: 1, shake: 1, flash: true, cam: [[0, { x: 0, y: 985, z: 1.2 }], [1, { x: 0, y: 985, z: 1.1 }]],
+        acts: { hero: [[0, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: 1 } }]], mike: [[0, { e: 'shock', p: 'handsOnHead', m: { lookX: 1 } }]], jay: [[0, { e: 'shock', p: 'handsOnHead', m: { lookX: -1 } }], [.45, { e: 'shock', p: 'faint', m: { lookX: 0 } }]] },
+      })] }
+  });
+
   // ---------- timeline ----------
   let spec, scenes = [], total = 0;
   function camAt(keys, lt, d) {
@@ -1017,6 +1048,7 @@
     World3D.init(document.getElementById('gl'), { crowd: spec.crowd });
     if (spec.chars) for (const n in spec.chars) Object.assign(CH[n], spec.chars[n]);
     window.BETCFG = { cur: BET().cur, slip: BET().slip };
+    window.SCARF = spec.scarf || null;
     for (const s of spec.scenes) {
       const base = SHOTS[s.shot]; if (!base) throw new Error('unknown shot ' + s.shot);
       const sh = s.override ? Object.assign({}, base, s.override) : base;
@@ -1139,6 +1171,9 @@
         case 'gfrance': case 'ggoal': add(st + C('goal', .6), 'thump', -11); add(st + C('goal', .6) + .05, 'cheer', -17); break;
         case 'gczech': add(st + C('goal', .55), 'thump', -11); add(st + C('goal', .55) + .05, 'cheer', -17); break;
         case 'gfinal': for (let x = .2; x < d - .2; x += .85) add(st + x, 'heartbeat', -14); break;
+        case 'gfinal2': for (let x = .2; x < d - .2; x += .85) add(st + x, 'heartbeat', -14); break;
+        case 'ggoal2': add(st + C('goal', .62), 'thump', -10); add(st + C('goal', .62) + .05, 'cheer', -14); break;
+        case 'gchamp': add(st, 'thump', -9); add(st + .02, 'cheer', -11); break;
         case 'imate': add(st + .1, 'whoosh_soft', -20); add(st + C('follow', .75) + .1, 'pop', -14); break;
       }
     });

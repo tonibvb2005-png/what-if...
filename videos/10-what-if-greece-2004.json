@@ -84,17 +84,17 @@
       "audio": "../audio/what-if-greece/09.wav"
     },
     {
-      "shot": "gfinal",
+      "shot": "gfinal2",
       "text": "July 4th. The final in Lisbon. Portugal again. Ronaldo. Figo. A whole country against them.",
       "audio": "../audio/what-if-greece/10.wav"
     },
     {
-      "shot": "ggoal",
+      "shot": "ggoal2",
       "text": "57 minutes. Corner. Charisteas... HEADER! 1-0 GREECE!",
       "audio": "../audio/what-if-greece/11.wav"
     },
     {
-      "shot": "champions",
+      "shot": "gchamp",
       "text": "GREECE ARE CHAMPIONS OF EUROPE!",
       "audio": "../audio/what-if-greece/12.wav",
       "pad": 1.6
@@ -119,5 +119,28 @@
       },
       "audio": "../audio/what-if-greece/14.wav"
     }
+  ],
+  "crowd": {
+    "main": [
+      "#0d5eaf",
+      "#0d5eaf",
+      "#ffffff"
+    ],
+    "alt": [
+      "#c8102e",
+      "#0f8a3c"
+    ],
+    "flag": [
+      "#0d5eaf",
+      "#ffffff"
+    ]
+  },
+  "railing": {
+    "color": "#0d5eaf",
+    "text": "GREECE · EURO 2004"
+  },
+  "scarf": [
+    "#0d5eaf",
+    "#ffffff"
   ]
 }
