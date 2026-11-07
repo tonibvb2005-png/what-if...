@@ -61,7 +61,7 @@ Details zum Stil stehen in `STYLE_GUIDE.md`.
 | 02 | Vierter Stock | Schlafzimmer, Gestalt klopft ans Fenster, Augen unter dem Bett | fertig gerendert (ältere Idee) |
 | 03 | Babyfon | Schlafzimmer, Video-Babyfon, Ben an der Tür | fertig gerendert (ältere Idee) |
 | 04 | **Zeitschalter** | Keller mit Zeitschalter-Licht und Countdown | **GEPOSTET, abgehakt** (mit ElevenLabs-Stimme) |
-| 05 | Komm raus | Zelt im Wald, Jonas, Schatten an der Zeltwand, Reißverschluss | Bild fertig; wartet auf Stimme |
+| 05 | Komm raus | Zelt im Wald, Jonas, Schatten an der Zeltwand, Reißverschluss | **FINAL mit ElevenLabs-Stimme** (stories/05_komm_raus/voice/voiceover.mp3) |
 | 06 | Lichthupe | Auto, Landstraße, Verfolger, Radio, Rücksitz | Bild fertig; wartet auf Stimme |
 | 07 | **Bewegungsmelder** | dunkles Großraumbüro, Lichter folgen dir, Kopierer druckt ein Foto | Bild fertig; wartet auf Stimme |
 | 08 | Letzte Haltestelle | Nachtbus | gebaut, aber verworfen (Idee war nicht neu) |
