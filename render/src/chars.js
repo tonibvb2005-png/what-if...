@@ -51,6 +51,9 @@ function brush(c, x, y, a = 0) { c.save(); c.translate(x, y); c.rotate(a); rrect
 function foam(c, x, y, n = 9) { for (let i = 0; i < n; i++) { const a = i * 2.4, r = 18 + (i % 3) * 10; circ(c, x + Math.cos(a) * (30 + i * 4), y + Math.sin(a) * 18 - i * 3, r, '#ffffff', 5); } }
 function baby(c, x, y) { c.beginPath(); c.ellipse(x, y, 70, 46, -0.2, 0, Math.PI * 2); fillStroke(c, '#f6f1e4', 8); circ(c, x - 34, y - 18, 30, '#ffffff', 7); c.beginPath(); c.arc(x - 40, y - 16, 6, 0.1, 3); stroke(c, 4); c.beginPath(); c.arc(x - 26, y - 16, 6, 0.1, 3); stroke(c, 4); c.beginPath(); c.ellipse(x - 34, y - 46, 40, 16, 0, Math.PI, 0); fillStroke(c, '#f6c6d0', 6); }
 function notebook(c, x, y) { rrect(c, x - 40, y - 52, 80, 104, 6); fillStroke(c, '#5a3a22', 7); c.fillStyle = '#f3ead2'; c.fillRect(x - 30, y - 42, 60, 84); for (let i = 0; i < 5; i++) line(c, [[x - 22, y - 30 + i * 16], [x + 20, y - 30 + i * 16]], 3, '#8a8a8a'); }
+function handset(c, x, y, a = -0.5) { c.save(); c.translate(x, y); c.rotate(a); rrect(c, -16, -70, 32, 140, 14); fillStroke(c, s_phoneCol, 7); rrect(c, -26, -86, 52, 34, 14); fillStroke(c, s_phoneCol, 7); rrect(c, -26, 52, 52, 34, 14); fillStroke(c, s_phoneCol, 7); c.restore(); }
+let s_phoneCol = '#1e1e22';
+function papers(c, x, y) { for (let i = 0; i < 6; i++) { c.save(); c.translate(x + (i % 2) * 6 - 3, y - i * 14); c.rotate((i % 3 - 1) * 0.05); rrect(c, -70, -10, 140, 22, 3); fillStroke(c, i % 2 ? '#f6f2e6' : '#ece6d2', 5); c.restore(); } }
 function mug(c, x, y) { rrect(c, x - 26, y - 34, 52, 68, 8); fillStroke(c, '#c88a4a', 8); }
 
 // ---------- outfits ----------
@@ -178,6 +181,25 @@ const OUT = {
     rrect(c, BX + 24, BT + 110, 50, 44, 5); fillStroke(c, '#3aa58f', 5); rrect(c, BX - 74, BT + 110, 44, 30, 5); fillStroke(c, '#ffffff', 4);
     c.fillStyle = '#2f8c79'; c.fillRect(BX - 100, BB - 80, 200, 90); shade(c); c.restore(); bodyPath(c); stroke(c);
   },
+  soviet(c, s) {
+    const w = s.general ? 214 : BW; const olive = s.olive || '#66703f';
+    rrect(c, BX - w / 2, BT, w, BB - BT, w / 2); c.fillStyle = olive; c.fill();
+    c.save(); rrect(c, BX - w / 2, BT, w, BB - BT, w / 2); c.clip();
+    c.fillStyle = 'rgba(0,0,0,0.12)'; c.fillRect(BX - 3, BT + 40, 6, 260);
+    for (let i = 0; i < 4; i++) dot(c, BX, BT + 70 + i * 52, 7, '#d8b44a');
+    for (const sd of [-1, 1]) { rrect(c, BX + sd * 50 - 28, BT + 70, 56, 46, 6); fillStroke(c, olive, 5); rrect(c, BX + sd * 50 - 30, BT + 64, 60, 16, 4); fillStroke(c, olive, 5); rrect(c, BX + sd * 54 - 30, BT + 190, 60, 50, 6); fillStroke(c, olive, 5); }
+    const ribbons = ['#c83a2a', '#e8c24a', '#3a6ab0', '#2a8a4a', '#e8e8e8', '#8a2a6a'];
+    const rows = s.general ? 4 : 2;
+    for (let r = 0; r < rows; r++) for (let k = 0; k < 3; k++) { c.fillStyle = ribbons[(r * 3 + k) % 6]; c.fillRect(BX - 92 + k * 22, BT + 40 - r * 14 + (s.general ? 30 : 0), 20, 12); }
+    if (s.general) for (let k = 0; k < 4; k++) { c.fillStyle = '#f0c24a'; c.beginPath(); for (let j = 0; j < 10; j++) { const a = j * Math.PI / 5 - Math.PI / 2, rr = j % 2 ? 7 : 16; c.lineTo(BX + 50 + (k % 2) * 34 + Math.cos(a) * rr, BT + 150 + Math.floor(k / 2) * 40 + Math.sin(a) * rr); } c.fill(); }
+    c.fillStyle = '#6a3a1a'; c.fillRect(BX - w / 2, BB - 116, w, 22); rrect(c, BX - 20, BB - 120, 40, 30, 4); fillStroke(c, '#d8b44a', 5);
+    shade(c, w); c.restore();
+    rrect(c, BX - w / 2, BT, w, BB - BT, w / 2); stroke(c);
+    // collar + shoulder boards
+    c.beginPath(); c.moveTo(BX - 50, BT + 4); c.lineTo(BX, BT + 40); c.lineTo(BX + 50, BT + 4); stroke(c, 7);
+    for (const sd of [-1, 1]) { rrect(c, BX + sd * 22 - 12, BT + 8, 24, 16, 3); fillStroke(c, '#b8262b', 4);
+      c.save(); c.translate(BX + sd * 76, BT + 34); c.rotate(sd * 0.35); rrect(c, -34, -12, 68, 24, 6); fillStroke(c, s.general ? '#e8c24a' : '#b8262b', 6); if (!s.general) { line(c, [[-30, 0], [30, 0]], 4, '#e8c24a'); dot(c, -8, 0, 5, '#f0d060'); dot(c, 10, 0, 5, '#f0d060'); } else { for (let k = 0; k < 3; k++) dot(c, -16 + k * 16, 0, 6, '#b8262b'); } c.restore(); }
+  },
   tourist(c, s) {
     bodyPath(c); c.fillStyle = s.shirt || '#f2d24a'; c.fill();
     c.save(); bodyPath(c); c.clip();
@@ -266,6 +288,12 @@ function headwear(c, s, phase) {
   } else if (h === 'surgcap') {
     c.beginPath(); c.moveTo(x - r + 2, y - 36); c.quadraticCurveTo(x - r + 6, y - r - 30, x, y - r - 22); c.quadraticCurveTo(x + r - 6, y - r - 30, x + r - 2, y - 36); c.quadraticCurveTo(x, y - 62, x - r + 2, y - 36); fillStroke(c, '#3aa58f');
     for (let i = 0; i < 7; i++) dot(c, x - 80 + i * 26, y - 96 + (i % 2) * 14, 5, '#2f8c79');
+  } else if (h === 'peakcap') {
+    const big = s.general ? 1.18 : 1;
+    c.beginPath(); c.ellipse(x, y - r + 6, (r + 34) * big, 46 * big, 0, 0, Math.PI * 2); fillStroke(c, s.olive || '#66703f');
+    rrect(c, x - r + 14, y - r + 10, 2 * r - 28, 40, 10); fillStroke(c, '#b8262b');
+    c.beginPath(); c.ellipse(x, y - r + 54, r - 6, 22, 0, 0, Math.PI); fillStroke(c, '#18181c');
+    c.fillStyle = '#e8c24a'; c.beginPath(); for (let j = 0; j < 10; j++) { const a = j * Math.PI / 5 - Math.PI / 2, rr = j % 2 ? 9 : 22; c.lineTo(x + Math.cos(a) * rr, y - r + 28 + Math.sin(a) * rr); } c.closePath(); c.fill(); stroke(c, 3);
   } else if (h === 'cap') {
     c.beginPath(); c.moveTo(x - r + 4, y - 40); c.quadraticCurveTo(x - r + 6, y - r - 24, x, y - r - 16); c.quadraticCurveTo(x + r - 6, y - r - 24, x + r - 4, y - 40); c.closePath(); fillStroke(c, s.hatColor || '#2f63c0');
     c.beginPath(); c.ellipse(x - 40, y - 42, 130, 22, -0.08, 0, Math.PI * 2); fillStroke(c, s.hatColor || '#2f63c0', 8);
@@ -309,6 +337,7 @@ function face(c, s) {
   if (s.monocle) { circ(c, R[0], R[1] + 2, 30, null, 6); line(c, [[R[0] + 26, R[1] + 16], [R[0] + 70, R[1] + 120]], 3, '#c8a24a'); }
   if (s.cigar) { rrect(c, x + 10, y + 52, 70, 16, 6); fillStroke(c, '#8a5a2a', 5); circ(c, x + 82, y + 60, 7, '#ff8a3a', 3); for (let i = 0; i < 3; i++) { c.beginPath(); c.arc(x + 92 + i * 10, y + 30 - i * 26, 12 + i * 4, 0, 7); c.fillStyle = 'rgba(220,220,220,0.75)'; c.fill(); } }
   if (s.mask) { rrect(c, x - 80, y + 26, 160, 80, 24); fillStroke(c, '#9fd8d0', 6); line(c, [[x - 70, y + 50], [x + 70, y + 50]], 3, '#6aa8a0'); line(c, [[x - 70, y + 74], [x + 70, y + 74]], 3, '#6aa8a0'); }
+  if (s.headset) { c.beginPath(); c.arc(x, y - 10, HR + 12, Math.PI * 1.05, Math.PI * 1.95); stroke(c, 14); c.beginPath(); c.arc(x, y - 10, HR + 12, Math.PI * 1.05, Math.PI * 1.95); c.lineWidth = 7; c.strokeStyle = '#3a3a40'; c.stroke(); for (const sd of [-1, 1]) { rrect(c, x + sd * (HR + 2) - 22, y - 30, 44, 70, 16); fillStroke(c, '#2a2a30', 7); } line(c, [[x - HR + 4, y + 30], [x - 40, y + 70]], 7); circ(c, x - 34, y + 72, 10, '#2a2a30', 5); }
   if (s.sunglasses) { rrect(c, L[0] - 30, L[1] - 18, 60, 36, 12); fillStroke(c, '#222', 6); rrect(c, R[0] - 30, R[1] - 18, 60, 36, 12); fillStroke(c, '#222', 6); line(c, [[L[0] + 30, L[1] - 6], [R[0] - 30, R[1] - 6]], 6); }
   if (s.sweat) { c.beginPath(); c.moveTo(x + 120, y - 96); c.quadraticCurveTo(x + 142, y - 54, x + 120, y - 44); c.quadraticCurveTo(x + 98, y - 54, x + 120, y - 96); fillStroke(c, '#7fd0ff', 6); }
   if (s.wet) { for (const [dx, dy] of [[-90, -60], [70, -90], [100, 20], [-110, 30]]) { c.beginPath(); c.moveTo(x + dx, y + dy - 18); c.quadraticCurveTo(x + dx + 10, y + dy, x + dx, y + dy + 8); c.quadraticCurveTo(x + dx - 10, y + dy, x + dx, y + dy - 18); fillStroke(c, '#7fd0ff', 5); } }
@@ -357,6 +386,8 @@ function drawChar(c, s) {
     case 'baby': post = () => { arm([SL, [170, 470], [196, 470]]); arm([SR, [342, 470], [330, 470]]); baby(c, 262, 470); }; break;
     case 'note': arm([SL, [160, 470], [220, 450]]); arm([SR, [352, 470], [300, 440]]); notebook(c, 256, 440); break;
     case 'sit': arm([SL, [150, 470], [210, 530]]); arm([SR, [362, 470], [302, 530]]); break;
+    case 'phone': post = () => { arm([SR, [400, 360], [372, 250]]); handset(c, 378, 214, -0.25); hand(372, 250); }; arm([SL, [150, 500], [196, 548]]); break;
+    case 'papers': post = () => { arm([SL, [160, 470], [178, 430]]); arm([SR, [352, 470], [334, 430]]); papers(c, 256, 440); }; break;
     case 'photo': arm([SL, [190, 330], [220, 270]]); arm([SR, [322, 330], [292, 270]]); camera(c, 256, 262); break;
     case 'march1': case 'march2': case 'stand_shield':
       arm([SL, [150, 490], [170, 520]]); arm([SR, [380, 470], [404, 440]]);
