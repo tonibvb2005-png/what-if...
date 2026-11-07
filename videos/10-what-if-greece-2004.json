@@ -38,7 +38,20 @@
           120
         ]
       },
-      "audio": "../audio/what-if-greece/01.wav"
+      "audio": "../audio/what-if-greece/01.wav",
+      "wordTimes": [
+        0.0,
+        0.32,
+        0.48,
+        0.58,
+        0.88,
+        1.98,
+        2.4,
+        2.82,
+        3.54,
+        3.7,
+        3.96
+      ]
     },
     {
       "shot": "bet",
@@ -46,63 +59,255 @@
       "override": {
         "tag": "JUNE 2004"
       },
-      "audio": "../audio/what-if-greece/02.wav"
+      "audio": "../audio/what-if-greece/02.wav",
+      "wordTimes": [
+        0.56,
+        0.68,
+        2.06,
+        2.26,
+        2.46,
+        2.7,
+        2.86,
+        3.2,
+        3.42,
+        3.62,
+        4.78,
+        5.06,
+        6.16,
+        6.32,
+        7.5,
+        7.9,
+        9.12
+      ]
     },
     {
       "shot": "laugh",
       "text": "His mates can't stop laughing. Greece have never won a single game at a major tournament!",
-      "audio": "../audio/what-if-greece/03.wav"
+      "audio": "../audio/what-if-greece/03.wav",
+      "wordTimes": [
+        0.46,
+        0.6,
+        0.9,
+        1.28,
+        1.5,
+        2.48,
+        2.6,
+        2.82,
+        3.0,
+        3.18,
+        3.32,
+        3.56,
+        3.94,
+        4.1,
+        4.2,
+        4.42
+      ]
     },
     {
       "shot": "confident",
       "text": "But he just smiles. He knows something they don't.",
-      "audio": "../audio/what-if-greece/04.wav"
+      "audio": "../audio/what-if-greece/04.wav",
+      "wordTimes": [
+        0.12,
+        0.32,
+        0.52,
+        0.82,
+        2.2,
+        2.44,
+        2.68,
+        3.02,
+        3.3
+      ]
     },
     {
       "shot": "gotto",
       "text": "Their coach? A German called Otto Rehhagel. His plan? Defend. Defend. And defend again.",
-      "audio": "../audio/what-if-greece/05.wav"
+      "audio": "../audio/what-if-greece/05.wav",
+      "cues": {
+        "plan": 3.66,
+        "defend": 5.84
+      },
+      "wordTimes": [
+        0.38,
+        0.58,
+        1.44,
+        1.62,
+        1.96,
+        2.48,
+        2.96,
+        3.66,
+        4.3,
+        5.84,
+        6.54,
+        7.52,
+        7.76,
+        8.14
+      ]
     },
     {
       "shot": "gopener",
       "text": "The opening game. Against hosts Portugal. Greece win 2-1!",
-      "audio": "../audio/what-if-greece/06.wav"
+      "audio": "../audio/what-if-greece/06.wav",
+      "cues": {
+        "win": 3.62
+      },
+      "wordTimes": [
+        0.48,
+        0.48,
+        0.82,
+        1.24,
+        1.84,
+        2.3,
+        3.62,
+        3.7,
+        3.98
+      ]
     },
     {
       "shot": "gfrance",
       "text": "Quarter-final. France, the defending champions. Charisteas. Header. 1-0!",
-      "audio": "../audio/what-if-greece/07.wav"
+      "audio": "../audio/what-if-greece/07.wav",
+      "cues": {
+        "goal": 4.0
+      },
+      "wordTimes": [
+        0.4,
+        1.48,
+        1.94,
+        1.96,
+        2.26,
+        3.48,
+        4.32,
+        4.98
+      ]
     },
     {
       "shot": "gczech",
       "text": "Semi-final. Czech Republic. Extra time... Dellas! Silver goal! Greece are in the final!",
-      "audio": "../audio/what-if-greece/08.wav"
+      "audio": "../audio/what-if-greece/08.wav",
+      "cues": {
+        "goal": 3.34
+      },
+      "wordTimes": [
+        0.46,
+        1.26,
+        1.36,
+        2.16,
+        2.38,
+        3.34,
+        3.72,
+        4.08,
+        4.8,
+        4.92,
+        5.1,
+        5.18,
+        5.28
+      ]
     },
     {
       "shot": "cashout",
       "text": "Then his phone rings. The bookies want to buy back his bet. His mates beg him to take the money. He says no.",
-      "audio": "../audio/what-if-greece/09.wav"
+      "audio": "../audio/what-if-greece/09.wav",
+      "wordTimes": [
+        0.25,
+        0.45,
+        0.61,
+        0.83,
+        1.57,
+        1.77,
+        2.11,
+        2.29,
+        2.45,
+        2.63,
+        2.87,
+        3.05,
+        3.75,
+        3.85,
+        4.05,
+        4.43,
+        4.63,
+        4.77,
+        4.89,
+        5.05,
+        5.31,
+        5.73,
+        6.25
+      ]
     },
     {
       "shot": "gfinal2",
       "text": "July 4th. The final in Lisbon. Portugal again. Ronaldo. Figo. A whole country against them.",
-      "audio": "../audio/what-if-greece/10.wav"
+      "audio": "../audio/what-if-greece/10.wav",
+      "cues": {
+        "stars": 3.17
+      },
+      "wordTimes": [
+        0.53,
+        0.55,
+        1.51,
+        1.67,
+        2.01,
+        2.27,
+        3.17,
+        3.41,
+        4.19,
+        5.11,
+        5.67,
+        5.79,
+        6.03,
+        6.49,
+        6.75
+      ]
     },
     {
       "shot": "ggoal2",
       "text": "57 minutes. Corner. Charisteas... HEADER! 1-0 GREECE!",
-      "audio": "../audio/what-if-greece/11.wav"
+      "audio": "../audio/what-if-greece/11.wav",
+      "cues": {
+        "goal": 3.07
+      },
+      "wordTimes": [
+        0.39,
+        0.77,
+        1.43,
+        2.19,
+        3.07,
+        3.81,
+        4.21
+      ]
     },
     {
       "shot": "gchamp",
       "text": "GREECE ARE CHAMPIONS OF EUROPE!",
       "audio": "../audio/what-if-greece/12.wav",
-      "pad": 1.6
+      "pad": 1.6,
+      "wordTimes": [
+        0.18,
+        0.4,
+        0.62,
+        0.98,
+        1.28
+      ]
     },
     {
       "shot": "payout",
       "text": "So... how much does he win? €1,000 at 150 to 1... 150,000 euros.",
-      "audio": "../audio/what-if-greece/13.wav"
+      "audio": "../audio/what-if-greece/13.wav",
+      "wordTimes": [
+        0.21,
+        0.55,
+        1.21,
+        1.37,
+        1.57,
+        1.69,
+        2.75,
+        3.79,
+        4.41,
+        5.25,
+        5.51,
+        8.69,
+        10.13
+      ]
     },
     {
       "shot": "cta",
@@ -117,7 +322,21 @@
           90
         ]
       },
-      "audio": "../audio/what-if-greece/14.wav"
+      "audio": "../audio/what-if-greece/14.wav",
+      "wordTimes": [
+        0.14,
+        0.34,
+        0.46,
+        0.64,
+        0.8,
+        0.98,
+        2.14,
+        3.66,
+        4.2,
+        4.52,
+        4.74,
+        4.96
+      ]
     }
   ],
   "crowd": {
