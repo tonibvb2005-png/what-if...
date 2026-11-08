@@ -658,6 +658,6 @@
       if (z < 0) { l.castShadow = true; l.shadow.mapSize.set(512, 512); l.shadow.bias = -.004; }
       R.tubes.push({ m, l });
     }
-    plane('you', 1.2, 1.2); plane('youClose', .6, .6, 1536); plane('youStand', 2, 2);
+    plane('you', 1.6, 1.6); plane('youClose', .6, .6, 1536); plane('youStand', 2, 2);
   };
 })();

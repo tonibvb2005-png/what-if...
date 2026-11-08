@@ -969,11 +969,18 @@ function laundryState(t, flash = false) {
   return { on, hand, unl };
 }
 const WS_YOU = [-.25, .87, -.2];
+function seatedLegs() {   // lokale Koordinaten einer 1.6-m-Ebene mit Mitte auf 0.8 m: Sitz = .35, Boden = .8
+  return [-1, 1].map(k => `<path d="M${k * .06} .33 L${k * .085} .43" stroke="#2a2c35" stroke-width=".07" stroke-linecap="round"/>
+      <path d="M${k * .085} .43 L${k * .09} .76" stroke="#2a2c35" stroke-width=".055" stroke-linecap="round"/>
+      <path d="M${k * .085} .43 L${k * .09} .76" stroke="url(#shadeR)" stroke-width=".055" stroke-linecap="round"/>
+      <ellipse cx="${k * .1}" cy=".785" rx=".05" ry=".022" fill="#111216"/>`).join('');
+}
 async function wsChars(t, o = {}) {
-  ensurePlane('you', 1.2, 1.2); ensurePlane('youClose', .6, .6, 1536);
+  ensurePlane('you', 1.6, 1.6); ensurePlane('youClose', .6, .6, 1536);
   const st = laundryState(t, !!o.flash);
   await W3.setPlane('youClose', { visible: false });
-  if (o.you !== false) await W3.setPlane('you', { svg: svgLocal(1.2, 1.2, sitter({ shirt: SHIRT, eyes: o.eyes || 'open', t, look: o.look || 0, mouth: o.mouth || '' })), pos: WS_YOU, face: true, color: '#e2e6f0', shadow: [.5, .25], floorY: 0 });
+  // Sitzend auf der Bank, MIT Beinen: Oberschenkel nach vorn, Unterschenkel zum Boden, Schuhe auf den Fliesen
+  if (o.you !== false) await W3.setPlane('you', { svg: svgLocal(1.6, 1.6, seatedLegs() + `<g transform="translate(0 -.07)">${sitter({ shirt: SHIRT, eyes: o.eyes || 'open', t, look: o.look || 0, mouth: o.mouth || '' })}</g>`), pos: [WS_YOU[0], .8, WS_YOU[2]], face: true, color: '#e2e6f0', shadow: [.5, .25], floorY: 0 });
   else await W3.setPlane('you', { visible: false });
   return st;
 }

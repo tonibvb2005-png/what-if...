@@ -65,7 +65,7 @@ Details zum Stil stehen in `STYLE_GUIDE.md`.
 | 06 | Lichthupe | Auto, Landstraße, Verfolger, Radio, Rücksitz | Bild fertig; wartet auf Stimme |
 | 07 | **Bewegungsmelder** | dunkles Großraumbüro, Lichter folgen dir, Kopierer druckt ein Foto | Bild fertig; wartet auf Stimme |
 | 08 | Letzte Haltestelle | Nachtbus | gebaut, aber verworfen (Idee war nicht neu) |
-| 11 | **Maschine 7** | Waschsalon um 1:58, Maschine 7 läuft von allein, Hand im Bullauge, Schild „Nicht öffnen“, Kinderstimme | Bild fertig + Probevideo (Piper), neuer Aufbau; wartet auf Feedback + Stimme |
+| 11 | **Maschine 7** | Waschsalon um 1:58, Maschine 7 läuft von allein, Hand im Bullauge, Schild „Nicht öffnen“, Kinderstimme | **FINAL gerendert** mit deiner ElevenLabs-Stimme (47 s); wartende Person hat jetzt Beine |
 | 10 | **Wärmebild** | Hochsitz im Wald, Wärmebildkamera, Onkel am Funkgerät, Uhrzeit 2:47 | Bild fertig + Probevideo (Piper); **erste Folge mit neuem, optimiertem Aufbau**; wartet auf Feedback + Stimme |
 | 09 | **Spätschicht** | Kiosk nachts, Kunde mit Kapuze kauft Wasser + Schere, Zettel der Vorgängerin, Überwachungskamera | **FINAL gerendert** mit deiner ElevenLabs-Stimme (Arthur Holm), bereit zum Posten |
 
@@ -224,7 +224,8 @@ Teil 2 kommt heute Nacht – folgen, damit du ihn nicht verpasst.
 - Einstellungen `ws_porthole`, `ws_wide`, `ws_row`, `ws_display`, `ws_face`, `ws_sign` (Schild mit Zoom auf die kleine Schrift). Shot-Option `"flash": true` = Vorgriff im Cold Open (Endzustand zeigen).
 - Sounds `washer`, `thump`, Ambience `laundromat`. Kreatur nur als fahle Hand am Glas + dunkler Umriss hinter dem Schaum.
 - Gefixt: Trommel lag hinter der Gerätefront (unsichtbar), Trocknerscheiben flimmerten (Z-Fighting), Display angeschnitten, Hand zu hell.
-- Nächster Schritt: Probevideo ansehen, `stories/11_maschine7/voiceover_elevenlabs.txt` aufnehmen, final rendern. Caption `branding/CAPTION_11_maschine7.txt`, Cover `branding/cover_11_maschine7.png`.
+- Dein Feedback: Die wartende Person auf der Bank hatte keine Beine → `seatedLegs()` in sets.js (Oberschenkel, Unterschenkel, Schuhe auf dem Boden). **Regel: sitzende Figuren immer mit Beinen.**
+- Final gerendert mit `stories/11_maschine7/voice/voiceover.mp3`. Caption `branding/CAPTION_11_maschine7.txt`, Cover `branding/cover_11_maschine7.png`.
 
 ### Erledigt aus der letzten Liste
 - Punkt 1 (Auswahl): **B) Spätschicht** gewählt und gebaut (siehe oben). A) „Die Pizza“ und C) „Die Sprachnachricht“ bleiben als Reserve-Ideen.
