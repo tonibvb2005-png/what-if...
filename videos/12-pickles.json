@@ -1,0 +1,107 @@
+{
+  "title": "Pickles – the dog who found the World Cup",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "chars": {
+    "hero": {
+      "shirt": "#7a5236",
+      "trim": "#e8d8b8",
+      "number": null,
+      "hair": "slick",
+      "hairColor": "#3a2414"
+    },
+    "mike": {
+      "shirt": "#5a6a8a",
+      "trim": "#d8e0f0"
+    },
+    "jay": {
+      "shirt": "#8a5a6a",
+      "trim": "#f0d8e0"
+    }
+  },
+  "crowd": {
+    "main": [
+      "#d81e2c",
+      "#ffffff",
+      "#ffffff"
+    ],
+    "alt": [
+      "#1d2a6b",
+      "#d81e2c"
+    ],
+    "flag": [
+      "#ffffff",
+      "#d81e2c"
+    ]
+  },
+  "railing": {
+    "color": "#d81e2c",
+    "text": "ENGLAND 1966"
+  },
+  "scenes": [
+    {
+      "shot": "pcold",
+      "text": "A dog saved the World Cup.",
+      "audio": "../audio/pickles/01.wav",
+      "duration": 2.6
+    },
+    {
+      "shot": "pserious",
+      "text": "No, seriously. This really happened.",
+      "audio": "../audio/pickles/02.wav",
+      "duration": 2.8
+    },
+    {
+      "shot": "pexhibit",
+      "text": "March 1966. Four months before the World Cup in England, the trophy is on display at an exhibition in London.",
+      "audio": "../audio/pickles/03.wav"
+    },
+    {
+      "shot": "pstolen",
+      "text": "Then one Sunday... it's gone. Stolen. In broad daylight.",
+      "audio": "../audio/pickles/04.wav"
+    },
+    {
+      "shot": "pnews",
+      "text": "England is in shock. The newspapers go crazy. Then the head of the FA gets a ransom note. £15,000... or the trophy is gone forever.",
+      "audio": "../audio/pickles/05.wav"
+    },
+    {
+      "shot": "phandover",
+      "text": "Police catch a man at the handover. But the trophy? Still missing.",
+      "audio": "../audio/pickles/06.wav"
+    },
+    {
+      "shot": "pwalk",
+      "text": "One week later, a man called David Corbett takes his dog for a walk in South London. The dog's name... is Pickles.",
+      "audio": "../audio/pickles/07.wav"
+    },
+    {
+      "shot": "psniff",
+      "text": "Pickles starts sniffing at a hedge. There's a package, wrapped in newspaper.",
+      "audio": "../audio/pickles/08.wav"
+    },
+    {
+      "shot": "popen",
+      "text": "David opens it... and finds the World Cup!",
+      "audio": "../audio/pickles/09.wav"
+    },
+    {
+      "shot": "pwembley",
+      "text": "Four months later, England win the World Cup at Wembley.",
+      "audio": "../audio/pickles/10.wav",
+      "pad": 1.0
+    },
+    {
+      "shot": "pparty",
+      "text": "And Pickles? He gets a medal, a movie role... and an invitation to the team's celebration party.",
+      "audio": "../audio/pickles/11.wav"
+    },
+    {
+      "shot": "pend",
+      "text": "The greatest hero of the 1966 World Cup... might have been a dog. Follow for more football stories.",
+      "audio": "../audio/pickles/12.wav",
+      "pad": 1.0
+    }
+  ]
+}

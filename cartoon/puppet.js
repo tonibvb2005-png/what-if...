@@ -126,6 +126,8 @@ window.Puppet = (function () {
       ctx.lineWidth = 5; ctx.strokeStyle = OUT; ctx.stroke(sh);
       ctx.beginPath(); ctx.roundRect(20, -40, 80, 44, 10); ctx.fillStyle = '#ffd400'; ctx.fill(); stroke(ctx, 5, OUT);
       ctx.fillStyle = OUT; ctx.font = '900 26px Inter Display'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(kind === 'shirt10' ? '€10' : '€100', 60, -17);
+    } else if (kind === 'cup') {
+      if (window.drawJulesRimet) window.drawJulesRimet(ctx, 0, -10, 1.25, t);
     } else if (kind === 'coat') {
       ctx.rotate(.15);
       ctx.beginPath(); ctx.moveTo(-10, -6); ctx.lineTo(-58, 20); ctx.lineTo(-64, 170); ctx.lineTo(48, 170); ctx.lineTo(44, 20); ctx.lineTo(10, -6); ctx.closePath();
@@ -186,6 +188,11 @@ window.Puppet = (function () {
     } else if (ch.hair === 'buzz') {
       ctx.save(); ctx.beginPath(); ctx.arc(0, 0, R - 3, 0, Math.PI * 2); ctx.clip();
       ctx.beginPath(); ctx.ellipse(0, -R * .95, R * 1.05, R * .55, 0, 0, Math.PI * 2); ctx.fillStyle = c; ctx.globalAlpha = .55; ctx.fill(); ctx.restore();
+    } else if (ch.hair === 'helmet') {
+      ctx.beginPath(); ctx.moveTo(-R * .95, -R * .35); ctx.quadraticCurveTo(-R * .9, -R * 1.6, 0, -R * 1.75); ctx.quadraticCurveTo(R * .9, -R * 1.6, R * .95, -R * .35); ctx.closePath();
+      ctx.fillStyle = '#1b2348'; ctx.fill(); stroke(ctx, 6, OUT);
+      ctx.beginPath(); ctx.ellipse(0, -R * .38, R * 1.05, R * .14, 0, 0, Math.PI * 2); ctx.fillStyle = '#1b2348'; ctx.fill(); stroke(ctx, 5, OUT);
+      circle(ctx, 0, -R * 1.05, 14, '#e0b84a', 4);
     } else if (ch.hair === 'bald') {
       ctx.beginPath(); ctx.ellipse(-R * .35, -R * .6, 22, 12, -.5, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,.35)'; ctx.fill();
     }

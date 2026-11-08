@@ -6,6 +6,7 @@ window.World3D = (function () {
     bookies: { wall: '#3f6680', wainscot: '#2f5066', floorA: '#c48a55', floorB: '#b07a48', base: '#24394a', lights: [-3.3, 13.9] },
     stands:  { wall: '#232a4a', wainscot: '#1c2240', floorA: '#5b6277', floorB: '#535a6e', base: '#151a33', lights: [0, 0], stripes: 0 },
     pitch:   { wall: '#1a2140', wainscot: '#1a2140', floorA: '#2f9a4a', floorB: '#2a8a42', base: '#14182f', lights: [-3, 3], stripes: 1 },
+    street:  { wall: '#2c3458', wainscot: '#2c3458', floorA: '#8d93a3', floorB: '#848a9a', base: '#1d2340', lights: [-2, 6], stripes: 0 },
     studio:  { wall: '#3b2a6b', wainscot: '#2e2058', floorA: '#4a3486', floorB: '#3d2a72', base: '#22174a', lights: [0, 0] },
     room:    { wall: '#d6a273', wainscot: '#b9855a', floorA: '#8c5d3d', floorB: '#7c5135', base: '#5c3a24', lights: [0, -11.5] }
   };
@@ -149,6 +150,26 @@ window.World3D = (function () {
     [-4, 4].forEach(x => g.add(cone(x, '#f0f4ff')));
     return g;
   }
+  function buildStreet() {
+    const s = SETS.street, g = new T.Group();
+    const fl = plane(160, 60, floorMat(s), 0, 0, 0); fl.rotation.x = -Math.PI / 2; fl.position.z = 10; g.add(fl);
+    const houses = canvasTex(1024, 512, (c, w, h) => {
+      c.fillStyle = '#1b2244'; c.fillRect(0, 0, w, h);
+      const cols = ['#9b4a36', '#a85a3c', '#8a4632', '#b06a48'];
+      for (let i = 0; i < 4; i++) {
+        const x = i * 256; c.fillStyle = cols[i]; c.fillRect(x + 6, 120, 244, 392);
+        c.fillStyle = '#5a2e22'; c.beginPath(); c.moveTo(x, 124); c.lineTo(x + 128, 40); c.lineTo(x + 256, 124); c.fill();
+        c.strokeStyle = 'rgba(0,0,0,.15)'; c.lineWidth = 2; for (let y = 130; y < 512; y += 16) { c.beginPath(); c.moveTo(x + 6, y); c.lineTo(x + 250, y); c.stroke(); }
+        for (const [wx, wy] of [[40, 170], [150, 170], [40, 300], [150, 300]]) { c.fillStyle = '#ffd98a'; c.fillRect(x + wx, wy, 64, 80); c.strokeStyle = '#f2efe6'; c.lineWidth = 6; c.strokeRect(x + wx, wy, 64, 80); c.beginPath(); c.moveTo(x + wx + 32, wy); c.lineTo(x + wx + 32, wy + 80); c.stroke(); }
+        c.fillStyle = '#1e3a6e'; c.fillRect(x + 100, 410, 56, 102);
+      }
+    });
+    houses.wrapS = THREE.RepeatWrapping; houses.repeat.set(5, 1);
+    g.add(plane(160, 22, new T.MeshBasicMaterial({ map: houses, color: '#c8c8d8' }), 0, 11, -10));
+    g.add(plane(160, 30, new T.MeshBasicMaterial({ color: '#141a36' }), 0, 34, -12));
+    s.lights.forEach(x => g.add(cone(x, '#ffe2b0')));
+    return g;
+  }
   function buildStudio() {
     const s = SETS.studio, g = new T.Group();
     const fl = plane(120, 40, floorMat(s), 0, 0, 0); fl.rotation.x = -Math.PI / 2; fl.position.z = 12; g.add(fl);
@@ -162,8 +183,8 @@ window.World3D = (function () {
     renderer.setPixelRatio(1); renderer.setSize(1080, 1920, false);
     scene = new T.Scene();
     camera = new T.PerspectiveCamera(46, 1080 / 1920, .1, 400);
-    groups.bookies = buildBookies(); groups.room = buildRoom(); groups.studio = buildStudio(); groups.stands = buildStands(); groups.pitch = buildPitch();
-    scene.add(groups.bookies, groups.room, groups.studio, groups.stands, groups.pitch);
+    groups.bookies = buildBookies(); groups.room = buildRoom(); groups.studio = buildStudio(); groups.stands = buildStands(); groups.pitch = buildPitch(); groups.street = buildStreet();
+    scene.add(groups.bookies, groups.room, groups.studio, groups.stands, groups.pitch, groups.street);
     conf = new T.InstancedMesh(new T.PlaneGeometry(.22, .36), new T.MeshBasicMaterial({ side: T.DoubleSide }), 300);
     const pal = ['#1655d6', '#ffd400', '#ffffff', '#ef3b5c', '#20c56a'];
     for (let k = 0; k < 300; k++) { confData.push({ x: (R() - .5) * 16, z: -1 + R() * 6, y0: R() * 16, v: 1.6 + R() * 2, rx: R() * 6, ry: R() * 6, w: R() * 3 + 1 }); conf.setColorAt(k, C(pal[k % pal.length])); }

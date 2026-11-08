@@ -1130,6 +1130,163 @@
         extraTop: (lt, t) => { const k = eb(P(lt, .3, .7)); if (k > 0 && lt < cue('follow', .7)) { ctx.save(); ctx.translate(0, 700); ctx.scale(k, k); ctx.beginPath(); ctx.roundRect(-250, -50, 500, 100, 50); ctx.fillStyle = '#6cabdd'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke(); txt('CLUB LEGEND', 0, 4, 56, '#fff', 900, 'center', 8); ctx.restore(); } } })] }
   });
 
+
+  // ---------- Pickles 1966 story ----------
+  Object.assign(CH, {
+    thief:  { skin: '#e8c9a8', shirt: '#2b2b33', trim: '#4a4a55', pants: '#1d1d24', shoes: '#111', hair: 'slick', hairColor: '#111', mustache: true, bw: 1, blinkPh: .3 },
+    police: { skin: '#f0c19a', shirt: '#1b2348', trim: '#c9ced8', pants: '#1b2348', shoes: '#111', hair: 'helmet', hairColor: '#3a2414', bw: 1.05, blinkPh: 1.5 },
+    moore:  { skin: '#ffd9b8', shirt: '#d81e2c', trim: '#ffffff', number: '6', pants: '#ffffff', shoes: '#111', hair: 'short', hairColor: '#d8b46a', bw: 1, blinkPh: .9 }
+  });
+  window.drawJulesRimet = function (c, x, y, sc, t) {
+    c.save(); c.translate(x, y); c.scale(sc, sc); c.lineWidth = 6; c.strokeStyle = OUT; c.lineJoin = 'round';
+    c.beginPath(); c.moveTo(-46, 0); c.lineTo(46, 0); c.lineTo(38, 34); c.lineTo(-38, 34); c.closePath(); c.fillStyle = '#2346a8'; c.fill(); c.stroke();
+    const g = c.createLinearGradient(-40, -170, 40, 0); g.addColorStop(0, '#fff2a8'); g.addColorStop(.5, '#ffc928'); g.addColorStop(1, '#b07a10'); c.fillStyle = g;
+    c.beginPath(); c.moveTo(-22, 0); c.quadraticCurveTo(-14, -60, -8, -95); c.lineTo(8, -95); c.quadraticCurveTo(14, -60, 22, 0); c.closePath(); c.fill(); c.stroke();
+    c.beginPath(); c.moveTo(-8, -90); c.quadraticCurveTo(-70, -110, -64, -165); c.quadraticCurveTo(-40, -130, -6, -120); c.closePath(); c.fill(); c.stroke();
+    c.beginPath(); c.moveTo(8, -90); c.quadraticCurveTo(70, -110, 64, -165); c.quadraticCurveTo(40, -130, 6, -120); c.closePath(); c.fill(); c.stroke();
+    c.beginPath(); c.moveTo(-40, -150); c.lineTo(40, -150); c.lineTo(28, -112); c.lineTo(-28, -112); c.closePath(); c.fill(); c.stroke();
+    c.beginPath(); c.ellipse(-12, -132, 6, 14, .2, 0, Math.PI * 2); c.fillStyle = 'rgba(255,255,255,.6)'; c.fill();
+    c.restore();
+  };
+  // side-view cartoon dog (black & white collie mix)
+  function drawDog(x, y, sc, st, t) {
+    const trot = st.trot ? Math.sin(t * 13) : 0, wag = Math.sin(t * (st.wagFast ? 26 : 12)) * .5;
+    ctx.save(); ctx.translate(x, y - (st.jump ? Math.abs(Math.sin(t * 6)) * 90 : 0)); ctx.scale(sc * (st.flip ? -1 : 1), sc);
+    ctx.save(); ctx.scale(1, .22); ctx.beginPath(); ctx.arc(0, 0, 80, 0, Math.PI * 2); ctx.fillStyle = 'rgba(10,0,30,.3)'; ctx.fill(); ctx.restore();
+    ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+    const leg = (lx, ph) => { const a = (st.trot ? Math.sin(t * 13 + ph) * .5 : 0); ctx.beginPath(); ctx.moveTo(lx, -60); ctx.lineTo(lx + Math.sin(a) * 40, -4); ctx.lineWidth = 26; ctx.strokeStyle = OUT; ctx.stroke(); ctx.lineWidth = 16; ctx.strokeStyle = '#ffffff'; ctx.stroke(); };
+    leg(-46, Math.PI); leg(40, 0);
+    // tail
+    ctx.beginPath(); ctx.moveTo(-66, -82); ctx.quadraticCurveTo(-110, -110 + wag * 40, -100, -150 + wag * 50); ctx.lineWidth = 22; ctx.strokeStyle = OUT; ctx.stroke(); ctx.lineWidth = 12; ctx.strokeStyle = '#1d1d24'; ctx.stroke();
+    // body
+    ctx.beginPath(); ctx.ellipse(0, -84, 78, 40, 0, 0, Math.PI * 2); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke();
+    ctx.save(); ctx.clip(); ctx.fillStyle = '#1d1d24'; ctx.beginPath(); ctx.ellipse(-20, -110, 50, 30, .2, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    ctx.beginPath(); ctx.ellipse(0, -84, 78, 40, 0, 0, Math.PI * 2); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke();
+    leg(-24, 0); leg(60, Math.PI);
+    if (st.bow) { ctx.beginPath(); ctx.moveTo(62, -112); ctx.lineTo(44, -126); ctx.lineTo(44, -98); ctx.closePath(); ctx.moveTo(62, -112); ctx.lineTo(80, -126); ctx.lineTo(80, -98); ctx.closePath(); ctx.fillStyle = '#e8243b'; ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = OUT; ctx.stroke(); }
+    if (st.medal) { ctx.beginPath(); ctx.moveTo(48, -104); ctx.lineTo(62, -60); ctx.lineTo(76, -104); ctx.lineWidth = 6; ctx.strokeStyle = '#2346a8'; ctx.stroke(); ctx.beginPath(); ctx.arc(62, -54, 14, 0, Math.PI * 2); ctx.fillStyle = '#ffc928'; ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = OUT; ctx.stroke(); }
+    // head
+    const hy = st.sniff ? -60 + Math.sin(t * 16) * 6 : -132, hx = st.sniff ? 92 : 78;
+    ctx.save(); ctx.translate(hx, hy); ctx.rotate(st.sniff ? .5 : (st.tilt ? Math.sin(t * 2) * .25 : 0));
+    ctx.beginPath(); ctx.ellipse(30, 10, 30, 20, 0, 0, Math.PI * 2); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = OUT; ctx.stroke();
+    ctx.beginPath(); ctx.arc(0, 0, 36, 0, Math.PI * 2); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.stroke();
+    ctx.save(); ctx.beginPath(); ctx.arc(0, 0, 33, 0, Math.PI * 2); ctx.clip(); ctx.fillStyle = '#1d1d24'; ctx.beginPath(); ctx.ellipse(-12, -14, 28, 26, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    ctx.beginPath(); ctx.moveTo(-18, -26); ctx.quadraticCurveTo(-46, -10, -34, 22); ctx.quadraticCurveTo(-20, 6, -6, -24); ctx.closePath(); ctx.fillStyle = '#1d1d24'; ctx.fill(); ctx.lineWidth = 5; ctx.stroke();
+    ctx.beginPath(); ctx.arc(56, 4, 9, 0, Math.PI * 2); ctx.fillStyle = OUT; ctx.fill();
+    ctx.beginPath(); ctx.arc(10, -6, 8, 0, Math.PI * 2); ctx.fillStyle = '#ffffff'; ctx.fill(); ctx.beginPath(); ctx.arc(12, -6, 5, 0, Math.PI * 2); ctx.fillStyle = OUT; ctx.fill();
+    if (st.tongue) { ctx.beginPath(); ctx.ellipse(36, 34 + Math.sin(t * 10) * 3, 9, 15, .2, 0, Math.PI * 2); ctx.fillStyle = '#ff6b8a'; ctx.fill(); ctx.lineWidth = 4; ctx.strokeStyle = OUT; ctx.stroke(); }
+    ctx.restore();
+    ctx.restore();
+  }
+  function glassCase(x, full, t, broken) {
+    ctx.lineWidth = 7; ctx.strokeStyle = OUT;
+    ctx.beginPath(); ctx.roundRect(x - 150, 1120, 300, 280, 10); ctx.fillStyle = '#6b4a2a'; ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(x - 170, 1100, 340, 30, 8); ctx.fillStyle = '#8a6238'; ctx.fill(); ctx.stroke();
+    if (full) window.drawJulesRimet(ctx, x, 1060, 1.3, t);
+    ctx.beginPath(); ctx.roundRect(x - 150, 760, 300, 340, 8); ctx.fillStyle = 'rgba(200,230,255,.18)'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = '#d9e8ff'; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x - 110, 790); ctx.lineTo(x - 60, 790); ctx.lineTo(x - 130, 1000); ctx.closePath(); ctx.fillStyle = 'rgba(255,255,255,.25)'; ctx.fill();
+    if (!full) { ctx.save(); ctx.globalAlpha = .9; txt('?', x, 980, 120, 'rgba(255,255,255,.7)', 900); ctx.restore(); }
+  }
+  function stamp(textv, x, y, k, rot = -.15, color = '#e8243b') {
+    if (k <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot); ctx.scale(lerp(2.2, 1, k), lerp(2.2, 1, k)); ctx.globalAlpha = clamp(k * 2);
+    ctx.font = '900 84px Inter Display'; const w = ctx.measureText(textv).width;
+    ctx.beginPath(); ctx.roundRect(-w / 2 - 30, -62, w + 60, 124, 16); ctx.lineWidth = 12; ctx.strokeStyle = color; ctx.stroke();
+    txt(textv, 0, 4, 84, color, 900); ctx.restore();
+  }
+  function newspaper(x, y, k, t) {
+    if (k <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.rotate((1 - k) * Math.PI * 4 - .06); ctx.scale(k, k);
+    ctx.beginPath(); ctx.rect(-300, -380, 600, 760); ctx.fillStyle = '#f4efe2'; ctx.fill(); ctx.lineWidth = 8; ctx.strokeStyle = OUT; ctx.stroke();
+    txt('THE DAILY NEWS', 0, -320, 48, OUT, 900); ctx.fillStyle = OUT; ctx.fillRect(-270, -285, 540, 6);
+    txt('WORLD CUP', 0, -200, 92, '#c8102e', 900); txt('STOLEN!', 0, -100, 110, '#c8102e', 900);
+    ctx.fillStyle = 'rgba(27,16,53,.25)'; for (let i = 0; i < 9; i++) { ctx.fillRect(-270, -20 + i * 40, 250, 14); ctx.fillRect(20, -20 + i * 40, 250, 14); }
+    ctx.restore();
+  }
+  function ransomNote(x, y, k) {
+    if (k <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.rotate(.08); ctx.scale(k, k);
+    ctx.beginPath(); ctx.moveTo(-260, -160); ctx.lineTo(250, -170); ctx.lineTo(262, 150); ctx.lineTo(-250, 160); ctx.closePath(); ctx.fillStyle = '#fffaf0'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke();
+    const word = (w, yy, size) => { let xx = -(w.length * size * .62) / 2; for (const ch of w) { const bg = ['#ffd400', '#7fd8ff', '#ff9ab0', '#c9f27a', '#ffffff'][(ch.charCodeAt(0) + w.length) % 5]; ctx.save(); ctx.translate(xx + size * .3, yy); ctx.rotate(((ch.charCodeAt(0) % 7) - 3) * .05); ctx.fillStyle = bg; ctx.fillRect(-size * .3, -size * .48, size * .6, size * .9); txt(ch, 0, 2, size * .7, OUT, 900); ctx.restore(); xx += size * .62; } };
+    word('£15,000', -50, 96); word('OR ELSE', 80, 70);
+    ctx.restore();
+  }
+  function hedge(x0, x1) {
+    ctx.lineWidth = 7; ctx.strokeStyle = OUT;
+    for (let x = x0; x <= x1; x += 90) { ctx.beginPath(); ctx.arc(x, 1300 - ((x * 7) % 40), 90, 0, Math.PI * 2); ctx.fillStyle = (x / 90) % 2 ? '#2f8f4a' : '#287a40'; ctx.fill(); ctx.stroke(); }
+    ctx.beginPath(); ctx.rect(x0 - 90, 1300, x1 - x0 + 180, 100); ctx.fillStyle = '#287a40'; ctx.fill();
+  }
+  function lamp(x) {
+    ctx.lineWidth = 7; ctx.strokeStyle = OUT;
+    ctx.beginPath(); ctx.rect(x - 12, 700, 24, 700); ctx.fillStyle = '#2b2f3a'; ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(x - 50, 640, 100, 80, 14); ctx.fillStyle = '#ffe9a8'; ctx.fill(); ctx.stroke();
+    ctx.save(); ctx.globalAlpha = .18; ctx.beginPath(); ctx.moveTo(x - 50, 720); ctx.lineTo(x - 260, 1400); ctx.lineTo(x + 260, 1400); ctx.lineTo(x + 50, 720); ctx.fillStyle = '#ffe9a8'; ctx.fill(); ctx.restore();
+  }
+  function bundle(x, y, open, t) {
+    ctx.save(); ctx.translate(x, y);
+    ctx.beginPath(); ctx.roundRect(-70, -60, 140, 60, 10); ctx.fillStyle = '#e8e1cf'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = OUT; ctx.stroke();
+    ctx.fillStyle = 'rgba(27,16,53,.3)'; for (let i = 0; i < 3; i++) ctx.fillRect(-55, -48 + i * 16, 110, 6);
+    ctx.beginPath(); ctx.moveTo(-70, -30); ctx.lineTo(70, -30); ctx.lineWidth = 5; ctx.strokeStyle = '#8a6238'; ctx.stroke();
+    ctx.restore();
+  }
+  const ST = { x: 0, y: 985, z: 1.25 };
+  const dogAt = (lt, keys) => { let st = keys[0][1]; for (const [tt, k] of keys) if (lt >= tt) st = Object.assign({}, st, k); return st; };
+  Object.assign(SHOTS, {
+    pcold: { set: 'studio', noCaption: true, titleFast: true, bright: 1.05, cast: {}, title: ['A DOG SAVED', 'THE <span class="gold">WORLD CUP</span>'], titleSize: [110, 120],
+      cam: [[0, { x: 0, y: 1110, z: 1.55 }], [1, { x: 0, y: 1110, z: 1.7 }]],
+      draw2: (s, lt, d, t) => { window.drawJulesRimet(ctx, 165, 1400, 1.7, t); drawDog(-110, 1400, 1.75, { tongue: true, wag: true }, t); } },
+    pserious: { set: 'studio', bright: 1, cast: {},
+      cam: [[0, { x: -40, y: 1150, z: 1.9 }], [1, { x: -40, y: 1150, z: 2.15 }]],
+      draw2: (s, lt, d, t) => { window.drawJulesRimet(ctx, 150, 1400, 1.5, t); drawDog(-110, 1400, 1.5, { tongue: lt > d * .4, tilt: true }, t); ctx.save(); ctx.translate(-40, 1010); ctx.scale(.5, .5); stamp('TRUE STORY', 0, 0, eo(P(lt, d * .45, d * .45 + .3))); ctx.restore(); } },
+    pexhibit: { set: 'studio', tag: 'MARCH 1966 · LONDON', bright: 1, cast: { mike: { x: -340 }, jay: { x: 360 } },
+      cam: [[0, ST], [1, { x: 0, y: 990, z: 1.32 }]],
+      acts: { mike: [[0, { e: 'happy', m: { lookX: 1 } }]], jay: [[0, { e: 'surprised', m: { lookX: -1 } }]] },
+      draw2: (s, lt, d, t) => { glassCase(0, true, t); ctx.beginPath(); ctx.roundRect(-260, 610, 520, 90, 14); ctx.fillStyle = '#1c2238'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = '#e0b84a'; ctx.stroke(); txt('WORLD CUP EXHIBITION', 0, 657, 40, '#fff', 900); } },
+    pstolen: { set: 'studio', bright: .75, cast: {},
+      cam: [[0, ST], [1, { x: 0, y: 990, z: 1.3 }]],
+      draw2: (s, lt, d, t) => {
+        const gone = lt > d * .35;
+        glassCase(0, !gone, t);
+        if (lt < d * .55) { const tx = lerp(-60, 900, eio(P(lt, d * .3, d * .55))); silhouette(Object.assign({}, CH.thief, { x: tx, y: GROUND, scale: 1 }), Puppet.stateAt([[0, { e: 'smirk', p: 'holdCashUp', propR: 'cup', m: { walk: 1 } }]], lt, d), t, '#ff5a4f'); }
+        stamp('STOLEN!', 0, 820, eo(P(lt, d * .5, d * .5 + .3)));
+      } },
+    pnews: { set: 'studio', bright: .9, cast: {},
+      cam: [[0, STUDIO], [1, { x: 540, y: 960, z: 1.04 }]],
+      draw: (s, lt, d, t) => { const r = cue('ransom', .5); newspaper(540, 900, eb(P(lt, .1, .7)) * (1 - P(lt, r - .2, r)), t); ransomNote(540, 900, eb(P(lt, r, r + .4))); } },
+    phandover: { set: 'street', bright: .7, cast: { police: { x: -150 }, thief: { x: 150 } },
+      cam: [[0, ST], [1, { x: 0, y: 990, z: 1.3 }]],
+      acts: { police: [[0, { e: 'focused', p: 'pointR', m: { lookX: 1 } }], [.3, { e: 'confident', p: 'takeR', m: { lookX: 1 } }]], thief: [[0, { e: 'shock', p: 'cheer', m: { lookX: -1 } }], [.5, { e: 'despair', p: 'cheer' }]] },
+      draw2: (s, lt, d, t) => { lamp(-520); stamp('TROPHY STILL MISSING', 0, 760, eo(P(lt, cue('missing', .65), cue('missing', .65) + .3)), -.1); } },
+    pwalk: { set: 'street', tag: 'ONE WEEK LATER', bright: .95, cast: { hero: { x: -200 } },
+      cam: [[0, ST], [1, { x: 120, y: 990, z: 1.25 }]],
+      move: { hero: [[0, -420], [1, 180]] },
+      acts: { hero: [[0, { e: 'happy', m: { walk: 1, lookX: 1 } }]] },
+      draw2: (s, lt, d, t) => { lamp(-620); const dx = lerp(-180, 420, lt / d); drawDog(dx, 1400, 1.4, { trot: true, tongue: true }, t); const k = eb(P(lt, cue('name', .75), cue('name', .75) + .35)); if (k > 0) { ctx.save(); ctx.translate(dx + 40, 1080); ctx.scale(k, k); ctx.beginPath(); ctx.roundRect(-150, -46, 300, 92, 46); ctx.fillStyle = '#ffd400'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke(); txt('PICKLES', 0, 4, 56, OUT, 900); ctx.restore(); } } },
+    psniff: { set: 'street', bright: .9, cast: { hero: { x: -260 } },
+      cam: [[0, { x: 150, y: 1000, z: 1.3 }], [1, { x: 260, y: 1050, z: 1.6 }]],
+      acts: { hero: [[0, { e: 'surprised', m: { lookX: 1 } }]] },
+      draw2: (s, lt, d, t) => { hedge(380, 920); const pk = cue('pkg', .55); if (lt > pk) bundle(470, 1400, false, t); drawDog(250, 1400, 1.4, { sniff: true, wagFast: true }, t); const k = eb(P(lt, pk, pk + .3)); if (k > 0) txt('!', 470, 1180, 140 * k, '#ffd400', 900, 'center', 14); } },
+    popen: { set: 'street', bright: 1, cast: { hero: { x: 100 } },
+      cam: [[0, { x: 120, y: 1040, z: 1.5 }], [1, { x: 120, y: 1060, z: 1.65 }]],
+      acts: { hero: [[0, { e: 'focused', p: 'takeR', m: { lookY: .6 } }], ['find', .6, { e: 'shock', p: 'holdCashUp', propR: 'cup', m: { lookY: 0 } }], ['find', .75, { e: 'ecstatic', p: 'holdCashUp', propR: 'cup', m: { jump: .4 } }]] },
+      draw2: (s, lt, d, t) => { hedge(500, 900); const f = cue('find', .6); if (lt < f) bundle(330, 1250, false, t); drawDog(-180, 1400, 1.4, { tongue: lt > f, jump: lt > f + .3, wagFast: lt > f }, t);
+        const k = P(lt, f, f + .5); if (k > 0) { ctx.save(); ctx.globalAlpha = 1 - k; ctx.beginPath(); ctx.arc(270, 900, 120 + k * 500, 0, Math.PI * 2); ctx.fillStyle = '#fff6c0'; ctx.fill(); ctx.restore(); } } },
+    pwembley: { set: 'pitch', tag: '30 JULY 1966 · WEMBLEY', bright: 1.1,
+      cuts: [pitchCut({ at: 0, cam: [[0, { x: -60, y: 930, z: 1.2 }], [1, { x: -60, y: 930, z: 1.3 }]], conf: 1, cast: { moore: { x: -60, scale: .85 } }, score: 'ENG 4 – 2 FRG', label: 'WORLD CHAMPIONS!',
+        acts: { moore: [[0, { e: 'ecstatic', p: 'holdCashUp', propR: 'cup', m: { jump: .3 } }]] } })] },
+    pparty: { set: 'studio', bright: 1.1, conf: 1, cast: {},
+      cam: [[0, { x: 0, y: 1080, z: 1.4 }], [1, { x: 0, y: 1080, z: 1.5 }]],
+      draw2: (s, lt, d, t) => {
+        ctx.beginPath(); ctx.roundRect(-240, 1300, 480, 100, 12); ctx.fillStyle = '#e0b84a'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke();
+        drawDog(0, 1300, 1.5, { tongue: true, bow: lt > cue('party', .75), medal: lt > cue('medal', .3), wag: true }, t);
+        [['MEDAL', 'medal', .3, -260], ['MOVIE ROLE', 'movie', .5, 0], ['PARTY INVITE', 'party', .75, 260]].forEach(([l, n, df, x]) => { const k = eb(P(lt, cue(n, df), cue(n, df) + .35)); if (k > 0) { ctx.save(); ctx.translate(x, 820); ctx.scale(k, k); ctx.beginPath(); ctx.roundRect(-125, -40, 250, 80, 40); ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = OUT; ctx.stroke(); txt(l, 0, 4, 34, OUT, 900); ctx.restore(); } });
+      } },
+    pend: { set: 'street', bright: 1, cast: { hero: { x: -200 } }, title: ['FOLLOW FOR MORE', '<span class="gold">FOOTBALL STORIES</span>'], titleSize: [80, 92], titleAt: 'follow',
+      cam: [[0, ST], [1, { x: 0, y: 990, z: 1.32 }]],
+      acts: { hero: [[0, { e: 'happy', p: 'waveR', m: { wave: 1 } }]] },
+      draw2: (s, lt, d, t) => { lamp(-620); drawDog(130, 1400, 1.5, { tongue: true, wag: true }, t); window.drawJulesRimet(ctx, 330, 1400, 1.2, t); } }
+  });
+
   // ---------- timeline ----------
   let spec, scenes = [], total = 0;
   function camAt(keys, lt, d) {
@@ -1289,6 +1446,18 @@
         case 'twin': add(st + d * .22, 'thump', -12); add(st + d * .45, 'whistle', -17); add(st + d * .55, 'cheer', -12); break;
         case 'txray': add(st + .1, 'whoosh_soft', -18); add(st + C('truth', .5), 'thump', -10); break;
         case 'tlegend': add(st + .3, 'sparkle', -15); add(st + C('follow', .7) + .1, 'pop', -14); break;
+        case 'pcold': add(st, 'thump', -9); add(st + .3, 'sparkle', -14); break;
+        case 'pserious': add(st + d * .45, 'thump', -12); break;
+        case 'pexhibit': add(st + .3, 'sparkle', -17); break;
+        case 'pstolen': add(st + d * .3, 'whoosh_soft', -15); add(st + d * .5, 'thump', -10); break;
+        case 'pnews': add(st + .1, 'whoosh', -15); add(st + .7, 'thump', -12); add(st + C('ransom', .5), 'thump', -12); break;
+        case 'phandover': add(st + .2, 'whistle', -20); add(st + C('missing', .65), 'thump', -12); break;
+        case 'pwalk': add(st + C('name', .75), 'pop', -13); break;
+        case 'psniff': add(st + C('pkg', .55), 'pop', -12); for (let x = .3; x < d; x += .85) add(st + x, 'heartbeat', -16); break;
+        case 'popen': add(st + C('find', .6), 'thump', -9); add(st + C('find', .6) + .05, 'sparkle', -12); break;
+        case 'pwembley': add(st, 'thump', -10); add(st + .05, 'cheer', -11); break;
+        case 'pparty': [['medal', .3], ['movie', .5], ['party', .75]].forEach(([n, f]) => add(st + C(n, f), 'pop', -13)); break;
+        case 'pend': add(st + C('follow', .7) + .1, 'pop', -14); break;
         case 'imate': add(st + .1, 'whoosh_soft', -20); add(st + C('follow', .75) + .1, 'pop', -14); break;
       }
     });
@@ -1380,6 +1549,13 @@
       if (sh.looks && sh.looks[name]) for (const [n, df, ov] of sh.looks[name]) if (lt >= cue(n, df)) Object.assign(c, ov); Puppet.draw(ctx, c, states[name], t); };
     if (sh.draw) {
       sh.draw(s, lt, d, t);
+    } else if (sh.set === 'street') {
+      Object.keys(sh.cast || {}).forEach(drawC);
+      if (sh.draw2) sh.draw2(s, lt, d, t);
+    } else if (sh.set === 'studio' && sh.draw2) {
+      if (sh.set === 'studio' && s.shot === 'pexhibit') sh.draw2(s, lt, d, t);
+      Object.keys(sh.cast || {}).forEach(drawC);
+      if (s.shot !== 'pexhibit') sh.draw2(s, lt, d, t);
     } else if (sh.set === 'studio') {
       const after = sh.afterFence || [];
       Object.keys(sh.cast || {}).filter(n => !after.includes(n)).forEach(drawC);
