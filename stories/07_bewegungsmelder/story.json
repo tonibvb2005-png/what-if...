@@ -261,22 +261,22 @@
      "ev": [
       [
        "ghost",
-       "end",
+       "word4",
        3
       ],
       [
        "thing",
-       "end"
+       "word4"
       ]
      ],
      "sfx": [
       [
        "click",
-       "end"
+       "word4"
       ],
       [
        "boom",
-       "end"
+       "word4"
       ]
      ],
      "pause": 1.6
