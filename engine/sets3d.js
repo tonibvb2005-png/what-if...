@@ -601,3 +601,63 @@
     plane('you', 1.2, 1.2); plane('youClose', .6, .6, 1536); plane('rungHand', .5, .3, 1024);
   };
 })();
+
+// ======================================================================= Waschsalon (Maschine 7)
+(() => {
+  const { std, basic, put, rbox, canvasTex, svgTex, plane } = W3.H, R = W3.reg;
+  const dyn = (w, h) => { const c = document.createElement('canvas'); c.width = w; c.height = h; const t = new THREE.CanvasTexture(c); t.encoding = THREE.sRGBEncoding; return { c, g: c.getContext('2d'), t }; };
+  W3.BUILD.laundromat = async (A) => {
+    const sc = W3.scene;
+    sc.background = new THREE.Color('#05060b'); sc.fog = new THREE.FogExp2('#06070c', .05);
+    R.hemi = new THREE.HemisphereLight('#aab3d0', '#121318', .25); sc.add(R.hemi);
+    const tiles = canvasTex(256, 256, (g, w, h) => { for (let y = 0; y < 8; y++) for (let x = 0; x < 8; x++) { g.fillStyle = (x + y) % 2 ? '#2f3340' : '#3a3e4c'; g.fillRect(x * 32, y * 32, 32, 32); } });
+    tiles.wrapS = tiles.wrapT = THREE.RepeatWrapping; tiles.repeat.set(3, 3.6);
+    const fl = put(new THREE.Mesh(new THREE.PlaneGeometry(5, 6), new THREE.MeshStandardMaterial({ map: tiles, roughness: .5 })), 0, 0, 0, sc, false); fl.rotation.x = -Math.PI / 2;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(5, 6), std('#262830')), 0, 2.7, 0, sc, false).rotation.x = Math.PI / 2;
+    const wallM = std('#4a5060');
+    put(new THREE.Mesh(new THREE.PlaneGeometry(5, 2.7), wallM), 0, 1.35, -3, sc, false);
+    for (const sx of [-1, 1]) put(new THREE.Mesh(new THREE.PlaneGeometry(6, 2.7), std('#434856')), sx * 2.5, 1.35, 0, sc, false).rotation.y = -sx * Math.PI / 2;
+    // Front: großes dunkles Schaufenster
+    put(new THREE.Mesh(new THREE.PlaneGeometry(5, 2.7), std('#2a2e38')), 0, 1.35, 3, sc, false).rotation.y = Math.PI;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(4.2, 1.8), basic('#0a0d18')), 0, 1.3, 2.99, sc, false).rotation.y = Math.PI;
+    // Waschmaschinen (8) an der Rückwand, Trockner darüber
+    R.washers = [];
+    const white = std('#d4d7de', { r: .45 }), steel = std('#a8adb8', { m: .7, r: .3 });
+    for (let i = 0; i < 8; i++) {
+      const x = -2.1 + i * .6;
+      put(rbox(.58, .86, .6, .03, white), x, .43, -2.68);
+      put(rbox(.58, .7, .6, .03, std('#bfc3cc', { r: .5 })), x, 1.25, -2.68);   // Trockner
+      put(new THREE.Mesh(new THREE.TorusGeometry(.13, .02, 10, 28), std('#8a8f9a', { m: .6 })), x, 1.25, -2.375);
+      put(new THREE.Mesh(new THREE.CircleGeometry(.12, 28), basic('#14161c')), x, 1.25, -2.372, sc, false);
+      const ring = put(new THREE.Mesh(new THREE.TorusGeometry(.17, .03, 12, 32), steel), x, .45, -2.37);
+      const drum = dyn(256, 256);
+      const dm = put(new THREE.Mesh(new THREE.CircleGeometry(.16, 32), basic('#ffffff', { map: drum.t })), x, .45, -2.376, sc, false);
+      put(new THREE.Mesh(new THREE.CircleGeometry(.16, 32), basic('#b8c8e0', { transparent: true, opacity: .1, depthWrite: false })), x, .45, -2.355, sc, false);
+      const panel = dyn(256, 64);
+      const pm = put(new THREE.Mesh(new THREE.PlaneGeometry(.5, .125), basic('#ffffff', { map: panel.t })), x, .77, -2.378, sc, false);
+      const num = canvasTex(64, 64, (g) => { g.fillStyle = '#1b1d24'; g.beginPath(); g.arc(32, 32, 30, 0, 7); g.fill(); g.fillStyle = '#e8eaf0'; g.font = 'bold 40px sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(String(i + 1), 32, 34); });
+      put(new THREE.Mesh(new THREE.CircleGeometry(.035, 20), basic('#ffffff', { map: num })), x - .2, .77, -2.377, sc, false);
+      R.washers.push({ x, drum, dm, panel, ring, body: null });
+    }
+    // Hand in Maschine 7 (innen am Glas) – nur angedeutet
+    R.hand7 = put(new THREE.Mesh(new THREE.PlaneGeometry(.26, .26), basic('#ffffff', { map: await svgTex(A.drumHand, 512, 512), transparent: true, opacity: 0, depthWrite: false })), R.washers[6].x + .02, .44, -2.369, sc, false);
+    R.hand7.material.toneMapped = false;
+    // Bank in der Mitte, Falttisch links, Automat rechts
+    put(rbox(1.6, .06, .4, .02, std('#5a4c3c')), 0, .45, -.2); for (const sx of [-1, 1]) put(new THREE.Mesh(new THREE.BoxGeometry(.05, .45, .35), std('#2a2c33')), sx * .7, .225, -.2);
+    put(rbox(.7, .04, 1.6, .01, std('#c9ccd3')), -2.1, .85, .6); put(new THREE.Mesh(new THREE.BoxGeometry(.6, .82, 1.5), std('#30333c')), -2.1, .42, .6);
+    put(rbox(.8, 1.8, .7, .03, std('#23262e')), 2.05, .9, 1.4);
+    const vend = put(new THREE.Mesh(new THREE.PlaneGeometry(.5, 1.1), basic('#4c6a9a')), 1.69, 1.05, 1.4, sc, false); vend.rotation.y = -Math.PI / 2;
+    R.vendLight = new THREE.PointLight('#7fa2e0', .8, 2.5, 2); R.vendLight.position.set(1.4, 1.1, 1.4); sc.add(R.vendLight);
+    // Wäschekorb neben der Bank
+    put(rbox(.45, .28, .32, .03, std('#cbbf9f')), .95, .14, -.2);
+    // Neonröhren (eine flackert)
+    R.tubes = [];
+    for (const z of [-1.8, .4, 2.2]) {
+      const m = put(new THREE.Mesh(new THREE.BoxGeometry(1.6, .03, .12), basic('#e8eeff')), 0, 2.68, z, sc, false);
+      const l = new THREE.PointLight('#dfe6ff', 2.6, 6, 1.6); l.position.set(0, 2.45, z); sc.add(l);
+      if (z < 0) { l.castShadow = true; l.shadow.mapSize.set(512, 512); l.shadow.bias = -.004; }
+      R.tubes.push({ m, l });
+    }
+    plane('you', 1.2, 1.2); plane('youClose', .6, .6, 1536); plane('youStand', 2, 2);
+  };
+})();

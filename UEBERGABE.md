@@ -65,6 +65,7 @@ Details zum Stil stehen in `STYLE_GUIDE.md`.
 | 06 | Lichthupe | Auto, Landstraße, Verfolger, Radio, Rücksitz | Bild fertig; wartet auf Stimme |
 | 07 | **Bewegungsmelder** | dunkles Großraumbüro, Lichter folgen dir, Kopierer druckt ein Foto | Bild fertig; wartet auf Stimme |
 | 08 | Letzte Haltestelle | Nachtbus | gebaut, aber verworfen (Idee war nicht neu) |
+| 11 | **Maschine 7** | Waschsalon um 1:58, Maschine 7 läuft von allein, Hand im Bullauge, Schild „Nicht öffnen“, Kinderstimme | Bild fertig + Probevideo (Piper), neuer Aufbau; wartet auf Feedback + Stimme |
 | 10 | **Wärmebild** | Hochsitz im Wald, Wärmebildkamera, Onkel am Funkgerät, Uhrzeit 2:47 | Bild fertig + Probevideo (Piper); **erste Folge mit neuem, optimiertem Aufbau**; wartet auf Feedback + Stimme |
 | 09 | **Spätschicht** | Kiosk nachts, Kunde mit Kapuze kauft Wasser + Schere, Zettel der Vorgängerin, Überwachungskamera | **FINAL gerendert** mit deiner ElevenLabs-Stimme (Arthur Holm), bereit zum Posten |
 
@@ -217,6 +218,13 @@ Teil 2 kommt heute Nacht – folgen, damit du ihn nicht verpasst.
 - Neues Set `hochsitz` (sets3d.js), Einstellungen `hs_thermal` (Wärmebild-Display, Modi edge/below/gone/uncle), `hs_ext`, `hs_in`, `hs_face`, `hs_ladder` (sets.js). Neue Sounds `squelch` (Funk), `ladder`, `owl`, Ambience `woods`.
 - Kreatur nur angedeutet: im Wärmebild ein gesichtsloser, zu langer, schiefer Kopf; eine Hand umklammert den Leiterholm, ein Arm hängt zu lang herab. „Kalt“ = dunkler Umriss. An der Leiter nur zwei Hände, deren Finger sich über die Sprosse krümmen.
 - Nächster Schritt: Probevideo ansehen, dann `stories/10_waermebild/voiceover_elevenlabs.txt` aufnehmen und final rendern. Caption: `branding/CAPTION_10_waermebild.txt`.
+
+### Folge 11 „Maschine 7“
+- Neues Set `laundromat` (sets3d.js): 8 Waschmaschinen + Trockner, animierte Trommeln (Kleidung in Maschine 3, Schaum in Maschine 7), Displays mit Countdown und Türschloss, Bank, Falttisch, Automat, Neonröhren.
+- Einstellungen `ws_porthole`, `ws_wide`, `ws_row`, `ws_display`, `ws_face`, `ws_sign` (Schild mit Zoom auf die kleine Schrift). Shot-Option `"flash": true` = Vorgriff im Cold Open (Endzustand zeigen).
+- Sounds `washer`, `thump`, Ambience `laundromat`. Kreatur nur als fahle Hand am Glas + dunkler Umriss hinter dem Schaum.
+- Gefixt: Trommel lag hinter der Gerätefront (unsichtbar), Trocknerscheiben flimmerten (Z-Fighting), Display angeschnitten, Hand zu hell.
+- Nächster Schritt: Probevideo ansehen, `stories/11_maschine7/voiceover_elevenlabs.txt` aufnehmen, final rendern. Caption `branding/CAPTION_11_maschine7.txt`, Cover `branding/cover_11_maschine7.png`.
 
 ### Erledigt aus der letzten Liste
 - Punkt 1 (Auswahl): **B) Spätschicht** gewählt und gebaut (siehe oben). A) „Die Pizza“ und C) „Die Sprachnachricht“ bleiben als Reserve-Ideen.

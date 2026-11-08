@@ -897,3 +897,129 @@ async function viewHsLadder(t, sh) {
 Object.assign(VIEWS, { hs_thermal: viewHsThermal, hs_ext: viewHsExt, hs_in: viewHsIn, hs_face: viewHsFace, hs_ladder: viewHsLadder });
 Object.assign(GLSTYLE, { hs_thermal: 'none', hs_ext: '', hs_in: '', hs_face: '', hs_ladder: '' });
 Object.assign(SETBG, { hochsitz: async (t) => { await hsChars(t, { eyes: 'wide', look: .6 }); W3.setCam([.25, 3.95, .9], [0, 3.6, -.42], 48); } });
+
+
+/* ======================================================================= WASCHSALON (Maschine 7) */
+const DRUM_HAND = (() => {
+  const F = [[-.13, -.06, -.28, -.36], [-.05, -.09, -.08, -.46], [.04, -.09, .08, -.45], [.12, -.06, .22, -.36]];
+  let f = '';
+  for (const [x0, y0, x1, y1] of F) {
+    const mx = (x0 + x1) / 2, my = (y0 + y1) / 2, j1 = [x0 + (x1 - x0) * .38, y0 + (y1 - y0) * .38], j2 = [x0 + (x1 - x0) * .7, y0 + (y1 - y0) * .7];
+    const nx = -(y1 - y0), ny = x1 - x0, L = Math.hypot(nx, ny), ux = nx / L, uy = ny / L, w0 = .03, w1 = .016;
+    f += `<path d="M${x0 + ux * w0} ${y0 + uy * w0} L${x1 + ux * w1} ${y1 + uy * w1} Q${x1 + (x1 - x0) * .08} ${y1 + (y1 - y0) * .08} ${x1 - ux * w1} ${y1 - uy * w1} L${x0 - ux * w0} ${y0 - uy * w0} Z" fill="#b9bdcb"/>
+      <ellipse cx="${j1[0]}" cy="${j1[1]}" rx=".026" ry=".02" fill="#cdd0dc"/><ellipse cx="${j2[0]}" cy="${j2[1]}" rx=".02" ry=".016" fill="#cdd0dc"/>
+      <path d="M${j1[0] - .015} ${j1[1]} h.03 M${j2[0] - .012} ${j2[1]} h.024" stroke="#80849a" stroke-width=".005"/>
+      <ellipse cx="${x1}" cy="${y1}" rx=".018" ry=".02" fill="#e2e4ec"/>`;
+  }
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="-.5 -.5 1 1">
+  <path d="M-.17 .5 Q-.2 .25 -.15 .1 L.15 .08 Q.21 .25 .18 .5 Z" fill="#8a8ea0"/>
+  <path d="M-.16 .14 Q-.19 -.02 -.14 -.08 Q0 -.12 .15 -.08 Q.2 0 .17 .14 Q0 .2 -.16 .14 Z" fill="#b3b7c6"/>
+  <ellipse cx="0" cy=".02" rx=".09" ry=".07" fill="#d8dbe4" opacity=".6"/>${f}
+  <path d="M.16 .06 Q.26 .02 .31 -.1" stroke="#b3b7c6" stroke-width=".05" stroke-linecap="round" fill="none"/></svg>`;
+})();
+function drawDrum(W, t, kind, extra = {}) {
+  const { g, c, t: tex } = W.drum, S = c.width, cx = S / 2, a = t * (kind === 'off' ? 0 : 5.5);
+  const gr = g.createRadialGradient(cx, cx, 10, cx, cx, cx); gr.addColorStop(0, '#5a5f6b'); gr.addColorStop(1, '#16181d');
+  g.fillStyle = gr; g.fillRect(0, 0, S, S);
+  g.fillStyle = 'rgba(0,0,0,.45)';
+  for (let r = 30; r < cx; r += 26) for (let k = 0; k < r / 6; k++) { const ang = k / (r / 6) * Math.PI * 2 + a * .3; g.beginPath(); g.arc(cx + Math.cos(ang) * r, cx + Math.sin(ang) * r, 3, 0, 7); g.fill(); }
+  if (kind === 'clothes') {
+    for (let k = 0; k < 7; k++) { const ang = a + k * .9, r = 50 + (k % 3) * 18; g.fillStyle = ['#7c3347', '#3b5f8f', '#d8d8d0', '#5a6b3a', '#8f6a3b', '#2c2c34', '#b0485a'][k]; g.beginPath(); g.ellipse(cx + Math.cos(ang) * r, cx + 40 + Math.sin(ang) * r * .6, 34, 22, ang, 0, 7); g.fill(); }
+  }
+  if (kind === 'foam') {
+    g.fillStyle = 'rgba(28,38,50,.9)'; g.beginPath(); g.ellipse(cx, cx + 40 + 6 * Math.sin(t * 3), cx, 110, Math.sin(t * 2) * .15, 0, 7); g.fill();
+    if (extra.shape) {   // dunkler Umriss hinter dem Schaum, als würde jemand in der Trommel kauern
+      g.fillStyle = `rgba(10,12,16,${.55 * extra.shape})`; g.beginPath(); g.ellipse(cx - 10, cx - 20, 60, 72, -.2, 0, 7); g.fill();
+    }
+    for (let k = 0; k < 45; k++) {
+      const ang = a * (.6 + (k % 5) * .1) + k * 1.7, r = 40 + (k * 37 % 80);
+      const x = cx + Math.cos(ang) * r, y = cx + 30 + Math.sin(ang) * r * .7, s = 6 + (k * 13 % 14);
+      g.fillStyle = `rgba(200,208,220,${.3 + (k % 4) * .08})`; g.beginPath(); g.arc(x, y, s, 0, 7); g.fill();
+    }
+  }
+  const vg = g.createRadialGradient(cx, cx, cx * .6, cx, cx, cx); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,.7)'); g.fillStyle = vg; g.fillRect(0, 0, S, S);
+  tex.needsUpdate = true;
+}
+function drawPanel(W, txt, col, lock) {
+  const { g, c, t } = W.panel; g.fillStyle = '#1a1c22'; g.fillRect(0, 0, c.width, c.height);
+  g.fillStyle = '#07080a'; g.fillRect(70, 10, 130, 44);
+  g.font = 'bold 34px "JetBrains Mono", monospace'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillStyle = col; g.shadowColor = col; g.shadowBlur = txt === '' ? 0 : 10; g.fillText(txt, 135, 34); g.shadowBlur = 0;
+  if (lock) { g.strokeStyle = lock; g.fillStyle = lock; g.lineWidth = 4; g.strokeRect(219, 30, 22, 18); g.beginPath(); g.arc(230, 30, 8, Math.PI, 0); g.stroke(); }
+  t.needsUpdate = true;
+}
+function laundryState(t, flash = false) {
+  const W = R3.washers; if (!W) return {};
+  drawDrum(W[2], t, 'clothes');
+  // flash = Vorgriff im Cold Open: Maschine läuft schon, Hand ist schon da
+  const on = flash ? [t - 20] : lastEv('m7on', t, null), hand = flash ? [-5] : lastEv('hand', t, null), unl = flash ? null : lastEv('unlock', t, null);
+  drawDrum(W[6], t, on ? 'foam' : 'off', { shape: hand ? clamp((t - hand[0]) / 1.5) : 0 });
+  drawPanel(W[2], '0:31', '#5dff8f', null);
+  if (!on) drawPanel(W[6], '', '#333', null);
+  else {
+    const v = Math.max(0, 44 - Math.floor(t - on[0])), blink = (t * 2 % 1) < .6;
+    drawPanel(W[6], `0:${String(v).padStart(2, '0')}`, unl ? '#ff3b30' : '#ff8a2a', unl ? (blink ? '#5dff8f' : '#1a1c22') : '#ff3b30');
+  }
+  let kn = 0; for (const k of TL.knocks) { const d = t - k; if (d >= 0 && d < .2) kn = Math.max(kn, Math.sin(d / .2 * Math.PI)); }
+  const vib = on ? .0025 * Math.sin(t * 90) : 0;
+  W[6].ring.position.x = W[6].x + vib + kn * .004; W[6].dm.position.x = W[6].x + vib;
+  R3.hand7.material.opacity = hand ? clamp((t - hand[0]) / .35) * (.8 + .2 * kn) : 0; R3.hand7.material.color.set('#7d8294'); W[6].dm.material.color.set('#8a8f9c');
+  R3.hand7.position.z = -2.369 + kn * .003; R3.hand7.position.y = .44 - (hand ? .01 * Math.sin(t * 1.3) : 0);
+  let f = 1; for (const [ft] of EV('flick')) { const d = t - ft; if (d >= 0 && d < .7) f = Math.sin(d * 55) > .1 ? 1 : .08; }
+  R3.tubes[1].l.intensity = 2.6 * f; R3.tubes[1].m.material.color.set(f > .5 ? '#e8eeff' : '#2a2c33');
+  return { on, hand, unl };
+}
+const WS_YOU = [-.25, .87, -.2];
+async function wsChars(t, o = {}) {
+  ensurePlane('you', 1.2, 1.2); ensurePlane('youClose', .6, .6, 1536);
+  const st = laundryState(t, !!o.flash);
+  await W3.setPlane('youClose', { visible: false });
+  if (o.you !== false) await W3.setPlane('you', { svg: svgLocal(1.2, 1.2, sitter({ shirt: SHIRT, eyes: o.eyes || 'open', t, look: o.look || 0, mouth: o.mouth || '' })), pos: WS_YOU, face: true, color: '#e2e6f0', shadow: [.5, .25], floorY: 0 });
+  else await W3.setPlane('you', { visible: false });
+  return st;
+}
+async function viewWsPorthole(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start, x = R3.washers[6].x;
+  W3.setCam([x + .02, .47, -1.72 + .12 * ease(lt / d)], [x, .45, -2.39], 38);
+  await wsChars(t, { you: false, flash: !!sh.flash });
+  return '';
+}
+async function viewWsWide(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([-2.0 + .2 * ease(lt / d), 1.85, 2.0 - .3 * ease(lt / d)], [.25, .7, -2.0], 50);
+  await wsChars(t, { look: sh.look ?? .6, eyes: sh.eyes });
+  return '';
+}
+async function viewWsRow(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([2.25, .85, -1.55 - .1 * ease(lt / d)], [-1.6, .55, -2.45], 48);
+  await wsChars(t);
+  return '';
+}
+async function viewWsDisplay(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start, x = R3.washers[6].x;
+  W3.setCam([x + .03, .85, -1.72 + .05 * ease(lt / d)], [x + .03, .77, -2.378], 34);
+  await wsChars(t, { you: false });
+  return '';
+}
+async function viewWsFace(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([WS_YOU[0] + .03, 1.08, -.78 + .05 * ease(lt / d)], [WS_YOU[0], 1.06, -.2], 40);
+  await wsChars(t, { you: false });
+  await W3.setPlane('youClose', { svg: svgLocal(.6, .6, `<g transform="translate(0 .27)">${sitter({ shirt: SHIRT, eyes: 'wide', mouth: 'o', t, look: lt > d * .5 ? (sh.lookDir || -1) * 1.2 : 0 })}</g>`), pos: [WS_YOU[0], 1.06, -.2], face: true, color: '#e2e6f0' });
+  return '';
+}
+function signHtml(t, sh) {
+  const lt = t - sh.start, p = ease(lt / .4), z = sh.zoom ? 1 + 1.3 * ease((lt - .3) / 1.2) : 1;
+  return `<div style="position:absolute;left:50%;top:210px;width:380px;height:500px;transform:translate(-50%, ${(1 - p) * 80}px) rotate(-2deg) scale(${z});transform-origin:50% 92%;opacity:${clamp(lt / .25)};
+      background:#f3f1ea;box-shadow:0 30px 70px rgba(0,0,0,.7);border-radius:4px;overflow:hidden;text-align:center;font-family:'Montserrat'">
+    <div style="background:#d42a1f;color:#fff;font:900 30px 'Montserrat';letter-spacing:1px;padding:20px 0">AUSSER BETRIEB</div>
+    <div style="font:900 22px 'Montserrat';color:#222;margin-top:34px;letter-spacing:.5px">MASCHINE 7</div>
+    <div style="font:900 46px/1.05 'Montserrat';color:#d42a1f;margin-top:16px">NICHT<br>ÖFFNEN!</div>
+    <div style="font:700 17px/1.35 'Montserrat';color:#444;margin-top:24px;padding:0 30px">Auch wenn sie läuft.<br>Egal, was du hörst.</div>
+    <div style="position:absolute;left:0;right:0;bottom:26px;font:italic 700 12px 'Montserrat';color:${sh.zoom ? '#b0201a' : '#888'}">Er klingt wie ein Kind.</div></div>`;
+}
+async function viewWsSign(t, sh) { await SETBG.laundromat(t); return signHtml(t, sh); }
+Object.assign(VIEWS, { ws_porthole: viewWsPorthole, ws_wide: viewWsWide, ws_row: viewWsRow, ws_display: viewWsDisplay, ws_face: viewWsFace, ws_sign: viewWsSign });
+Object.assign(GLSTYLE, { ws_porthole: '', ws_wide: '', ws_row: '', ws_display: '', ws_face: '', ws_sign: 'blur(9px) brightness(.5)' });
+Object.assign(SETBG, { laundromat: async (t) => { await wsChars(t, { eyes: 'wide', look: .6 }); W3.setCam([-1.8, 1.85, 1.7], [.25, .7, -2.0], 50); } });
+Object.assign(SET_ASSETS, { drumHand: DRUM_HAND });

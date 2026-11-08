@@ -17,7 +17,7 @@ SR = 44100
 PIPER_MODEL = os.environ.get("PIPER_MODEL", os.path.join(ROOT, ".cache", "piper", "de.onnx"))
 
 # Lautstärke einzelner Effekte relativ zur Stimme (Spitze der Stimme = 0.85)
-SFX_GAIN = {"steps": .55, "steps_out": 1.4, "doorclose": .55, "bottle": .6, "clack": .5, "scrape": .7, "snip": .6, "drawer": .6, "heart": .85, "squelch": .7, "ladder": .5, "owl": 1.0}
+SFX_GAIN = {"steps": .55, "steps_out": 1.4, "doorclose": .55, "bottle": .6, "clack": .5, "scrape": .7, "snip": .6, "drawer": .6, "heart": .85, "squelch": .7, "ladder": .5, "owl": 1.0, "washer": .35, "thump": .45}
 
 GAP_LINE = 0.18   # Pause zwischen Zeilen
 GAP_SHOT = 0.30   # zusätzliche Pause bei Szenenwechsel
@@ -244,6 +244,17 @@ def sfx(name):
             tone = (np.sin(ph) + .2 * np.sin(2 * ph)) * np.sin(np.pi * t / dur) ** 1.5 * (1 + .25 * np.sin(2 * np.pi * 22 * t))
             i = int(st_ * SR); res[i:i + n] += tone[:len(res) - i] * .09
         return res
+    if name == "washer":   # Maschine springt an: Relais-Klack, Pumpe, Motor dreht hoch
+        n = int(2.5 * SR); t = np.arange(n) / SR
+        clk = np.zeros(n); m = int(.05 * SR); clk[:m] = rng.standard_normal(m) * np.exp(-np.arange(m) / SR * 150) * .5
+        f = 40 + 60 * np.minimum(1, t / 1.8); ph = 2 * np.pi * np.cumsum(f) / SR
+        mot = (np.sin(ph) * .5 + np.sin(2 * ph) * .25) * np.minimum(1, t / .6) * .25
+        water = np.convolve(rng.standard_normal(n), np.ones(60) / 60, "same") * (t > .4) * np.minimum(1, (t - .4).clip(0) / .5) * .8
+        return clk + mot + water
+    if name == "thump":    # Schlag von innen gegen die Trommeltür: dumpf, metallisch, Glas klirrt mit
+        n = int(.5 * SR); t = np.arange(n) / SR
+        return (np.sin(2 * np.pi * 85 * t) * np.exp(-18 * t) * .7 + np.sin(2 * np.pi * 410 * t) * np.exp(-25 * t) * .15
+                + np.sin(2 * np.pi * 2900 * t) * np.exp(-30 * t) * .05 + rng.standard_normal(n) * np.exp(-90 * t) * .3)
     raise ValueError(name)
 
 
@@ -271,6 +282,10 @@ def ambience(kind, dur):
         eng = np.sin(2 * np.pi * 32 * t) * .07 + np.sin(2 * np.pi * 64 * t + np.sin(t * 3)) * .035
         rattle = rng.standard_normal(n) * (np.sin(2 * np.pi * 7 * t) > .92) * .03
         return (eng + rattle + np.convolve(rng.standard_normal(n), np.ones(80) / 80, "same") * .45) * fade
+    if kind == "laundromat":   # Maschinen brummen, Trommel schwappt rhythmisch, Neonröhre summt
+        motor = np.sin(2 * np.pi * 52 * t) * .02 + np.sin(2 * np.pi * 104 * t) * .01
+        slosh = np.convolve(rng.standard_normal(n), np.ones(250) / 250, "same") * (.5 + .5 * np.sin(2 * np.pi * .45 * t) ** 2) * 1.6
+        return (motor + slosh + np.sin(2 * np.pi * 100 * t) * .004) * fade
     if kind == "woods":    # Wind in den Bäumen, an- und abschwellend, sonst Stille
         wind = np.convolve(rng.standard_normal(n), np.ones(700) / 700, "same") * 2.4
         gust = .45 + .55 * np.clip(np.sin(t * .37) * np.sin(t * .13 + 1), 0, 1)

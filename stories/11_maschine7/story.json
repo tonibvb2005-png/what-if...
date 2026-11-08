@@ -1,0 +1,288 @@
+{
+ "series": "GESCHICHTEN AUS DER NACHT",
+ "episode": "#11",
+ "title": "MASCHINE 7",
+ "part": 1,
+ "set": "laundromat",
+ "ambience": "laundromat",
+ "hook": "IN DER TROMMEL IST <em>EINE HAND</em>",
+ "titleShot": 1,
+ "question": "AUFMACHEN oder RENNEN? Schreib's in die Kommentare.",
+ "shots": [
+  {
+   "scene": "ws_porthole",
+   "lines": [
+    {
+     "text": "In der Trommel drückt sich eine Hand gegen das Glas.",
+     "hl": {
+      "Hand": "r",
+      "Glas": "y"
+     },
+     "sfx": [
+      [
+       "boom",
+       "start"
+      ],
+      [
+       "thump",
+       "word5"
+      ]
+     ],
+     "knocks": [
+      "word5"
+     ],
+     "pause": 0.3
+    }
+   ],
+   "flash": true
+  },
+  {
+   "scene": "ws_wide",
+   "clock": "1:58",
+   "place": "WASCHSALON",
+   "lines": [
+    {
+     "text": "Stell dir vor, es ist 1:58. Du bist allein im Waschsalon.",
+     "say": "Stell dir vor, es ist ein Uhr achtundfünfzig. Du bist allein im Waschsalon.",
+     "hl": {
+      "allein": "r",
+      "Waschsalon": "y"
+     }
+    }
+   ]
+  },
+  {
+   "scene": "ws_row",
+   "clock": "1:58",
+   "place": "WASCHSALON",
+   "lines": [
+    {
+     "text": "Deine Wäsche läuft in Maschine drei.",
+     "hl": {
+      "drei": "y"
+     }
+    }
+   ]
+  },
+  {
+   "scene": "ws_display",
+   "clock": "1:59",
+   "place": "MASCHINE 7",
+   "lines": [
+    {
+     "text": "Dann springt Maschine sieben an. Von allein.",
+     "hl": {
+      "sieben": "y",
+      "allein": "r"
+     },
+     "ev": [
+      [
+       "m7on",
+       "word1"
+      ]
+     ],
+     "sfx": [
+      [
+       "washer",
+       "word1"
+      ]
+     ],
+     "pause": 0.2
+    }
+   ]
+  },
+  {
+   "scene": "ws_sign",
+   "lines": [
+    {
+     "text": "Dabei klebt ein Schild darauf: Nicht öffnen. Egal, was du hörst.",
+     "hl": {
+      "Nicht": "r",
+      "öffnen": "r"
+     },
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "ws_porthole",
+   "clock": "1:59",
+   "place": "MASCHINE 7",
+   "lines": [
+    {
+     "text": "Im Bullauge dreht sich Schaum.",
+     "hl": {
+      "Schaum": "y"
+     }
+    },
+    {
+     "text": "Dann drückt sich eine Hand gegen das Glas. Von innen.",
+     "hl": {
+      "Hand": "r",
+      "innen": "r"
+     },
+     "ev": [
+      [
+       "hand",
+       "word3"
+      ],
+      [
+       "dread",
+       "word3"
+      ]
+     ],
+     "sfx": [
+      [
+       "boom",
+       "word3"
+      ],
+      [
+       "thump",
+       "word3"
+      ]
+     ],
+     "knocks": [
+      "word3"
+     ],
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "ws_face",
+   "clock": "1:59",
+   "place": "WASCHSALON",
+   "lines": [
+    {
+     "text": "Dann hörst du eine Kinderstimme.",
+     "hl": {
+      "Kinderstimme": "y"
+     },
+     "sfx": [
+      [
+       "breath",
+       "end"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "scene": "ws_porthole",
+   "clock": "1:59",
+   "place": "MASCHINE 7",
+   "lines": [
+    {
+     "text": "Hilfe! Mach auf! Ich krieg keine Luft!",
+     "hl": {
+      "Hilfe": "r",
+      "Luft": "r"
+     },
+     "quote": {
+      "who": "STIMME",
+      "place": "MASCHINE 7",
+      "text": "Hilfe! Mach auf! Ich krieg keine Luft!"
+     },
+     "sfx": [
+      [
+       "thump",
+       "start"
+      ],
+      [
+       "thump",
+       "word2"
+      ],
+      [
+       "thump",
+       "word4"
+      ]
+     ],
+     "knocks": [
+      "start",
+      "word2",
+      "word4"
+     ],
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "ws_sign",
+   "zoom": true,
+   "lines": [
+    {
+     "text": "Ganz unten auf dem Schild steht klein: Er klingt wie ein Kind.",
+     "hl": {
+      "Kind": "r"
+     },
+     "sfx": [
+      [
+       "boom",
+       "word6"
+      ]
+     ],
+     "pause": 0.4
+    }
+   ]
+  },
+  {
+   "scene": "ws_display",
+   "clock": "2:00",
+   "place": "MASCHINE 7",
+   "lines": [
+    {
+     "text": "Klick. Die Tür ist entriegelt.",
+     "hl": {
+      "Klick": "y",
+      "entriegelt": "r"
+     },
+     "ev": [
+      [
+       "unlock",
+       "start"
+      ]
+     ],
+     "sfx": [
+      [
+       "click",
+       "start"
+      ],
+      [
+       "boom",
+       "word3"
+      ]
+     ],
+     "pause": 0.5
+    }
+   ]
+  },
+  {
+   "scene": "choice",
+   "heading": "WAS MACHST DU?",
+   "part2": true,
+   "left": {
+    "label": "AUFMACHEN",
+    "text": "Vielleicht erstickt da wirklich ein Kind.",
+    "icon": "🚪",
+    "color": "#2f7cf6"
+   },
+   "right": {
+    "label": "RENNEN",
+    "text": "Dem Schild glauben. Raus hier.",
+    "icon": "🏃",
+    "color": "#ff3b30"
+   },
+   "lines": [
+    {
+     "text": "Aufmachen oder rennen? Teil 2 heute Nacht.",
+     "say": "Aufmachen oder rennen? Teil zwei heute Nacht.",
+     "hl": {
+      "Aufmachen": "b",
+      "rennen": "r"
+     },
+     "pause": 0.6
+    }
+   ]
+  }
+ ]
+}
