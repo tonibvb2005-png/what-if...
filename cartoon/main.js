@@ -1099,8 +1099,8 @@
         extraTop: (lt, t) => { const k = eb(P(lt, .3, .6)); if (k > 0) { ctx.save(); ctx.translate(0, 760); ctx.rotate(Math.sin(t * 3) * .05); ctx.scale(k, k); ctx.beginPath(); ctx.roundRect(-260, -60, 520, 120, 12); ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke(); txt('NOT IN OUR GOAL!', 0, 4, 50, '#e8243b', 900); ctx.restore(); } } })] },
     tsaves: { set: 'pitch', bright: 1,
       cuts: [pitchCut({ at: 0, cast: { trautmann: { x: -340, scale: .8 }, striker: { x: 360, scale: .8 } }, score: '', label: 'SAVE · SAVE · SAVE',
-        ball: () => { const D = CUR.duration; return saveSeq([D * .3, D * .55, D * .8]).ball; },
-        acts: () => { const D = CUR.duration, sq = saveSeq([D * .3, D * .55, D * .8]); return { trautmann: sq.acts.map(([tt, k]) => [tt / D, k]), striker: [[0, { e: 'focused', po: KICK, m: { lookX: -1 } }], [.9, { e: 'despair', p: 'handsOnHead', po: {} }]] }; } })] },
+        ball: () => { const D = CUR.duration; return saveSeq([cue('s1', .3), cue('s2', .55), cue('s3', .8)]).ball; },
+        acts: () => { const D = CUR.duration, sq = saveSeq([cue('s1', .3), cue('s2', .55), cue('s3', .8)]); return { trautmann: sq.acts.map(([tt, k]) => [tt / D, k]), striker: [[0, { e: 'focused', po: KICK, m: { lookX: -1 } }], [.9, { e: 'despair', p: 'handsOnHead', po: {} }]] }; } })] },
     tcheers: { set: 'stands', bright: 1.05,
       cuts: [standsCut({ at: 0, cast: { mike: { x: -270 }, hero: { x: 0 }, jay: { x: 270 } },
         acts: { mike: [[0, { e: 'neutral', p: 'crossed' }], [.35, { e: 'happy', p: 'cheer', propR: 'scarf' }]], hero: [[0, { e: 'surprised' }], [.3, { e: 'ecstatic', p: 'cheer', m: { jump: .5 } }]], jay: [[0, { e: 'neutral' }], [.4, { e: 'happy', p: 'cheer', propR: 'scarf' }]] } })] },
@@ -1282,7 +1282,7 @@
         case 'tcaptured': add(st + C('camp', .55), 'thump', -14); break;
         case 'tstay': add(st + d * .62, 'thump', -15); break;
         case 'tprotest': add(st + .3, 'thump', -14); break;
-        case 'tsaves': [.3, .55, .8].forEach(f => add(st + d * f, 'thump', -13)); break;
+        case 'tsaves': [['s1', .3], ['s2', .55], ['s3', .8]].forEach(([n, f]) => add(st + C(n, f), 'thump', -13)); break;
         case 'tcheers': add(st + d * .3, 'cheer', -17); break;
         case 'tfinal': add(st + C('knee', .75), 'thump', -8); break;
         case 'tplayon': for (let x = .2; x < d - .2; x += .85) add(st + x, 'heartbeat', -13); break;
