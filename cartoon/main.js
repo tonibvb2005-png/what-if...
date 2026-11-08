@@ -1027,6 +1027,109 @@
       })] }
   });
 
+
+  // ---------- Bert Trautmann story ----------
+  Object.assign(CH, {
+    trautmann: { skin: '#ffd9b8', shirt: '#3a3f52', trim: '#ffd400', pants: '#ffffff', shoes: '#111', hair: 'short', hairColor: '#d8b46a', bw: 1.05, blinkPh: .6 },
+    soldier:   { skin: '#ffd9b8', shirt: '#5b5f3a', trim: '#3f4228', pants: '#5b5f3a', shoes: '#2a2116', hair: 'cap', capColor: '#5b5f3a', hairColor: '#d8b46a', bw: 1.05, blinkPh: .6 },
+    tommy:     { skin: '#f0c19a', shirt: '#9a8a55', trim: '#6b5f38', pants: '#9a8a55', shoes: '#2a2116', hair: 'cap', capColor: '#7a6d40', hairColor: '#3a2414', bw: 1, blinkPh: 1.4 },
+    striker:   { skin: '#f0c19a', shirt: '#ffffff', trim: '#1f4fa8', pants: '#1f4fa8', shoes: '#111', hair: 'slick', hairColor: '#2a1a10', bw: 1, blinkPh: 2.2 }
+  });
+  function impact(x, y, t, k) {
+    if (k <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.scale(k, k); ctx.rotate(t * 2);
+    ctx.beginPath(); for (let i = 0; i < 16; i++) { const r = i % 2 ? 26 : 62; const a = i / 16 * Math.PI * 2; ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r); } ctx.closePath();
+    ctx.fillStyle = '#ffd400'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = '#e8243b'; ctx.stroke(); ctx.restore();
+  }
+  function fence() {
+    ctx.lineWidth = 7; ctx.strokeStyle = OUT;
+    for (let x = -900; x <= 900; x += 260) { ctx.beginPath(); ctx.roundRect(x - 14, 820, 28, 600, 6); ctx.fillStyle = '#6b4a2a'; ctx.fill(); ctx.stroke(); }
+    ctx.strokeStyle = '#9aa0ad'; ctx.lineWidth = 4;
+    for (let y = 860; y < 1300; y += 80) { ctx.beginPath(); for (let x = -900; x <= 900; x += 20) ctx.lineTo(x, y + Math.sin(x * .1) * 6); ctx.stroke(); }
+    ctx.fillStyle = '#9aa0ad'; for (let y = 860; y < 1300; y += 80) for (let x = -890; x <= 900; x += 60) { ctx.beginPath(); ctx.arc(x, y, 5, 0, Math.PI * 2); ctx.fill(); }
+  }
+  function xray(t, k) {
+    ctx.save(); ctx.translate(0, 820); ctx.scale(k, k);
+    ctx.beginPath(); ctx.roundRect(-300, -330, 600, 660, 26); ctx.fillStyle = '#0d1b33'; ctx.fill(); ctx.lineWidth = 10; ctx.strokeStyle = '#c9ced8'; ctx.stroke();
+    ctx.fillStyle = 'rgba(190,220,255,.85)';
+    ctx.beginPath(); ctx.ellipse(0, -200, 120, 105, 0, 0, Math.PI * 2); ctx.fill();          // skull
+    ctx.fillStyle = '#0d1b33'; ctx.beginPath(); ctx.ellipse(-42, -205, 26, 22, 0, 0, Math.PI * 2); ctx.ellipse(42, -205, 26, 22, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(190,220,255,.85)';
+    for (let i = 0; i < 7; i++) { ctx.beginPath(); ctx.roundRect(-34, -80 + i * 52, 68, 40, 10); ctx.fill(); }        // vertebrae
+    ctx.beginPath(); ctx.moveTo(-260, 260); ctx.quadraticCurveTo(0, 170, 260, 260); ctx.lineWidth = 30; ctx.strokeStyle = 'rgba(190,220,255,.85)'; ctx.stroke(); // shoulders
+    const pulse = .6 + .4 * Math.sin(t * 8);
+    ctx.strokeStyle = `rgba(255,40,60,${pulse})`; ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(-40, 76); ctx.lineTo(-10, 96); ctx.lineTo(-24, 110); ctx.lineTo(16, 128); ctx.lineTo(4, 140); ctx.lineTo(44, 158); ctx.stroke();
+    ctx.beginPath(); ctx.arc(0, 118, 80, 0, Math.PI * 2); ctx.lineWidth = 8; ctx.stroke();
+    ctx.restore();
+  }
+  const NECK = { lA: 40, lE: -168, rA: 40, rE: -168 };
+  const TP = { x: -60, y: 820, z: 1.0 };
+  const STUDIO2 = { x: 0, y: 985, z: 1.25 };
+  const saveSeq = (times) => {      // keeper saves at given times: alternate dives
+    const ball = [[0, 400, 1385]], acts = [[0, { e: 'focused', po: KP, m: { lookX: 1 } }]];
+    times.forEach((tt, i) => {
+      const left = i % 2 === 0; ball.push([tt - .45, 300, 1385], [tt, left ? -470 : -210, 1150, 80], [tt + .35, 380, 1385, 120]);
+      acts.push([tt - .25, { e: 'focused', po: left ? DIVE_L : DIVE_R, m: { dy: -50 } }], [tt + .25, { e: 'confident', po: KP, m: { dy: 0 } }]);
+    });
+    return { ball, acts };
+  };
+  Object.assign(SHOTS, {
+    tcold: { set: 'pitch', noCaption: true, bright: .95, titleFast: true,
+      title: ['HE WON A CUP FINAL', 'WITH A <span class="gold">BROKEN NECK</span>'], titleSize: [80, 96],
+      cuts: [pitchCut({ at: 0, cam: [[0, { x: -340, y: 980, z: 1.35 }], [1, { x: -340, y: 980, z: 1.55 }]], cast: { trautmann: { x: -340, scale: .85 } }, score: '', label: '',
+        acts: { trautmann: [[0, { e: 'tense', ex: { mouthCurve: -.4 }, p: 'idle', po: NECK, m: { tremble: .6 } }]] },
+        extra: (lt, t) => impact(-345, 1400 - 375 * .85, t, (.7 + .3 * Math.sin(lt * 10)) * .9) })] },
+    tnot: { set: 'pitch', bright: 1,
+      cuts: [pitchCut({ at: 0, cam: [[0, { x: -340, y: 1000, z: 1.55 }], [1, { x: -340, y: 950, z: 2.1 }]], cast: { trautmann: { x: -340, scale: .85 } }, score: '', label: '',
+        acts: { trautmann: [[0, { e: 'tense', po: NECK }], [.45, { e: 'wink', p: 'idle', po: {} }]] },
+        extra: (lt, t) => { const k = eb(P(lt, .5, .8)); if (k > 0) txt('?', -180, 760, 200 * k, '#ffd400', 900, 'center', 16); } })] },
+    tsoldier: { set: 'studio', bright: .85, sepia: true, tag: 'WORLD WAR II',
+      cam: [[0, STUDIO2], [1, { x: 0, y: 990, z: 1.35 }]], cast: { soldier: { x: 0 } },
+      acts: { soldier: [[0, { e: 'focused', p: 'idle', m: { lookX: 0 } }]] } },
+    tcaptured: { set: 'studio', bright: .8, sepia: true, tag: '1945',
+      cam: [[0, STUDIO2], [1, { x: 0, y: 990, z: 1.3 }]], cast: { soldier: { x: -160 }, tommy: { x: 240 } }, front: 'fence', afterFence: ['tommy'],
+      acts: { soldier: [[0, { e: 'worried', p: 'cheer', m: { lookX: 1 } }], ['camp', .55, { e: 'despair', p: 'idle', m: { lookX: 0 } }]], tommy: [[0, { e: 'focused', p: 'pointL', m: { lookX: -1 } }], ['camp', .55, { e: 'focused', p: 'crossed' }]] },
+      frontFrom: ['camp', .55], label: 'POW CAMP · ENGLAND' },
+    tstay: { set: 'pitch', bright: .95, tag: 'AFTER THE WAR',
+      cuts: [pitchCut({ at: 0, cast: { trautmann: { x: -340, scale: .8 } }, score: '', label: '',
+        ball: () => saveSeq([CUR.duration * .62]).ball, acts: () => ({ trautmann: saveSeq([CUR.duration * .62]).acts.map(([tt, k]) => [tt / CUR.duration, k]) }) })] },
+    tprotest: { set: 'stands', bright: .8, tag: '1949 · MANCHESTER CITY',
+      cuts: [standsCut({ at: 0, cast: { mike: { x: -270 }, hero: { x: 0 }, jay: { x: 270 } },
+        acts: { mike: [[0, { e: 'angry', p: 'pointR', m: { lookX: 1 } }]], hero: [[0, { e: 'angry', p: 'crossed' }]], jay: [[0, { e: 'angry', p: 'pointL', m: { lookX: -1 } }]] },
+        extraTop: (lt, t) => { const k = eb(P(lt, .3, .6)); if (k > 0) { ctx.save(); ctx.translate(0, 760); ctx.rotate(Math.sin(t * 3) * .05); ctx.scale(k, k); ctx.beginPath(); ctx.roundRect(-260, -60, 520, 120, 12); ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke(); txt('NOT IN OUR GOAL!', 0, 4, 50, '#e8243b', 900); ctx.restore(); } } })] },
+    tsaves: { set: 'pitch', bright: 1,
+      cuts: [pitchCut({ at: 0, cast: { trautmann: { x: -340, scale: .8 }, striker: { x: 360, scale: .8 } }, score: '', label: 'SAVE · SAVE · SAVE',
+        ball: () => { const D = CUR.duration; return saveSeq([D * .3, D * .55, D * .8]).ball; },
+        acts: () => { const D = CUR.duration, sq = saveSeq([D * .3, D * .55, D * .8]); return { trautmann: sq.acts.map(([tt, k]) => [tt / D, k]), striker: [[0, { e: 'focused', po: KICK, m: { lookX: -1 } }], [.9, { e: 'despair', p: 'handsOnHead', po: {} }]] }; } })] },
+    tcheers: { set: 'stands', bright: 1.05,
+      cuts: [standsCut({ at: 0, cast: { mike: { x: -270 }, hero: { x: 0 }, jay: { x: 270 } },
+        acts: { mike: [[0, { e: 'neutral', p: 'crossed' }], [.35, { e: 'happy', p: 'cheer', propR: 'scarf' }]], hero: [[0, { e: 'surprised' }], [.3, { e: 'ecstatic', p: 'cheer', m: { jump: .5 } }]], jay: [[0, { e: 'neutral' }], [.4, { e: 'happy', p: 'cheer', propR: 'scarf' }]] } })] },
+    tfinal: { set: 'pitch', tag: '5 MAY 1956 · WEMBLEY', bright: .95,
+      cuts: [pitchCut({ at: 0, cast: { striker: { x: 360, scale: .8 }, trautmann: { x: -340, scale: .8 } }, score: 'MCI 3 – 1 BIR', label: "FA CUP FINAL · 75'",
+        move: { striker: [[0, 360], ['knee', .75, -120]], trautmann: [[0, -340], ['knee', .75, -230]] },
+        ball: () => { const k = cue('knee', .75); return [[0, 300, 1385], [k - .1, -150, 1385], [k + .5, -220, 1385]]; },
+        acts: () => { const k = cue('knee', .75), D = CUR.duration; return {
+          striker: [[0, { e: 'focused', m: { walk: 1, lookX: -1 } }], [(k - .05) / D, { e: 'shock', po: KICK, m: { walk: 0 } }], [(k + .4) / D, { e: 'shock', p: 'faint', po: { lean: 70 } }]],
+          trautmann: [[0, { e: 'focused', po: KP, m: { lookX: 1 } }], [(k - .3) / D, { e: 'focused', po: DIVE_R, m: { dy: -10 } }], [(k + .15) / D, { e: 'despair', po: { lean: 85, lA: 40, lE: -168, rA: 40, rE: -168 }, m: { dy: 30 } }]] }; },
+        extra: (lt, t) => { const k = cue('knee', .75); impact(-200, 1240, t, lt > k ? eb(P(lt, k, k + .25)) * (1 - P(lt, k + 1.2, k + 1.6)) : 0); } })] },
+    tplayon: { set: 'pitch', bright: .75,
+      cuts: [
+        pitchCut({ at: 0, cast: { trautmann: { x: -300, scale: .85 } }, score: 'MCI 3 – 1 BIR', label: 'NO SUBSTITUTES IN 1956', cam: [[0, { x: -170, y: 950, z: 1.25 }], [1, { x: -170, y: 960, z: 1.38 }]],
+          acts: { trautmann: [[0, { e: 'despair', po: { lean: 85, lA: 40, lE: -168, rA: 40, rE: -168 }, m: { dy: 30 } }], ['up', .5, { e: 'tense', ex: { mouthCurve: -.5 }, p: 'idle', po: NECK, m: { dy: 0, tremble: .8 } }], ['up', .7, { e: 'focused', po: KP, m: { tremble: .5 } }]] } })] },
+    twin: { set: 'pitch', bright: 1.05,
+      cuts: [
+        pitchCut({ at: 0, cast: { trautmann: { x: -340, scale: .8 }, striker: { x: 360, scale: .8 } }, score: lt => lt < CUR.duration * .45 ? 'MCI 3 – 1 BIR' : 'FULL TIME 3 – 1', label: lt => lt < CUR.duration * .45 ? 'ANOTHER SAVE!' : 'CITY WIN THE CUP!',
+          ball: () => saveSeq([CUR.duration * .22]).ball, acts: () => { const D = CUR.duration; return { trautmann: saveSeq([D * .22]).acts.map(([tt, k]) => [tt / D, k]).concat([[.45, { e: 'ecstatic', p: 'cheer', po: {}, m: { dy: 0 } }]]), striker: [[0, { e: 'focused', po: KICK }], [.4, { e: 'despair', p: 'handsOnHead', po: {} }]] }; } }),
+        standsCut({ at: .55, cast: { mike: { x: -270 }, hero: { x: 0 }, jay: { x: 270 } }, conf: 1, flash: true, acts: { mike: [[0, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: .6 } }]], hero: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: 1 } }]], jay: [[0, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { dance: 1 } }]] } })] },
+    txray: { set: 'studio', bright: .7, tag: '3 DAYS LATER', cast: {},
+      cam: [[0, STUDIO], [1, { x: 540, y: 960, z: 1.05 }]],
+      draw: (s, lt, d, t) => { ctx.save(); ctx.translate(540, 0); xray(t, eb(P(lt, .1, .5))); ctx.restore(); const k = eb(P(lt, cue('truth', .5), cue('truth', .5) + .4)); if (k > 0) { ctx.save(); ctx.translate(540, 1300); ctx.scale(k, k); txt('BROKEN NECK', 0, 0, 120, '#ff3b4f', 900, 'center', 16); ctx.restore(); } } },
+    tlegend: { set: 'stands', bright: 1.08, title: ['FOLLOW FOR MORE', '<span class="gold">FOOTBALL STORIES</span>'], titleSize: [80, 92], titleAt: 'follow',
+      cuts: [standsCut({ at: 0, cast: { mike: { x: -270 }, trautmann: { x: 0 }, jay: { x: 270 } },
+        acts: { trautmann: [[0, { e: 'happy', p: 'waveR', m: { wave: 1 } }]], mike: [[0, { e: 'happy', p: 'cheer', propR: 'scarf' }]], jay: [[0, { e: 'happy', p: 'cheer', propR: 'scarf', m: { dance: .5 } }]] },
+        extraTop: (lt, t) => { const k = eb(P(lt, .3, .7)); if (k > 0 && lt < cue('follow', .7)) { ctx.save(); ctx.translate(0, 700); ctx.scale(k, k); ctx.beginPath(); ctx.roundRect(-250, -50, 500, 100, 50); ctx.fillStyle = '#6cabdd'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke(); txt('CLUB LEGEND', 0, 4, 56, '#fff', 900, 'center', 8); ctx.restore(); } } })] }
+  });
+
   // ---------- timeline ----------
   let spec, scenes = [], total = 0;
   function camAt(keys, lt, d) {
@@ -1174,6 +1277,18 @@
         case 'gfinal2': for (let x = .2; x < d - .2; x += .85) add(st + x, 'heartbeat', -14); break;
         case 'ggoal2': add(st + C('goal', .62), 'thump', -10); add(st + C('goal', .62) + .05, 'cheer', -14); break;
         case 'gchamp': add(st, 'thump', -9); add(st + .02, 'cheer', -11); break;
+        case 'tcold': add(st, 'thump', -9); break;
+        case 'tnot': add(st + d * .5, 'pop', -15); break;
+        case 'tcaptured': add(st + C('camp', .55), 'thump', -14); break;
+        case 'tstay': add(st + d * .62, 'thump', -15); break;
+        case 'tprotest': add(st + .3, 'thump', -14); break;
+        case 'tsaves': [.3, .55, .8].forEach(f => add(st + d * f, 'thump', -13)); break;
+        case 'tcheers': add(st + d * .3, 'cheer', -17); break;
+        case 'tfinal': add(st + C('knee', .75), 'thump', -8); break;
+        case 'tplayon': for (let x = .2; x < d - .2; x += .85) add(st + x, 'heartbeat', -13); break;
+        case 'twin': add(st + d * .22, 'thump', -12); add(st + d * .45, 'whistle', -17); add(st + d * .55, 'cheer', -12); break;
+        case 'txray': add(st + .1, 'whoosh_soft', -18); add(st + C('truth', .5), 'thump', -10); break;
+        case 'tlegend': add(st + .3, 'sparkle', -15); add(st + C('follow', .7) + .1, 'pop', -14); break;
         case 'imate': add(st + .1, 'whoosh_soft', -20); add(st + C('follow', .75) + .1, 'pop', -14); break;
       }
     });
@@ -1184,7 +1299,7 @@
     const sh = s.sh;
     if (s._tag) { const k = eb(P(lt, .05, .4)); s._tag.style.transform = `scale(${k})`; s._tag.style.opacity = clamp(k); }
     if (s._title) {
-      const t0 = sh.titleAt ? cue(sh.titleAt, .7) : 0;
+      const t0 = sh.titleAt ? cue(sh.titleAt, .7) : (sh.titleFast ? -.25 : 0);
       if (sh.titleAt && s._cap) s._cap.style.opacity = lt < t0 ? 1 : 0;
       s._tl.forEach((e, i) => { const st = t0 + .1 + i * .22, q = eo(P(lt, st, st + .22)); e.style.opacity = clamp(q * 3); e.style.transform = `scale(${lerp(2.2, 1, q)}) rotate(${(1 - q) * -6}deg)`; });
       if (s._sub) s._sub.style.opacity = P(lt, d * .55, d * .55 + .3);
@@ -1247,6 +1362,7 @@
     const br = sh.bright != null ? sh.bright : 1;
     const pbr = !sh.cuts && prev && prev.sh.set === sh.set ? (prev.sh.bright != null ? prev.sh.bright : 1) : br;
     const conf = sh.conf ? (sh.conf < 1 ? P(lt, sh.conf * d, sh.conf * d + .4) : 1) : 0;
+    { const f = sh.sepia ? 'sepia(.85) saturate(.75) contrast(1.05)' : ''; document.getElementById('gl').style.filter = f; cv.style.filter = f; }
     World3D.frame(t, { x: cam.x, y: cam.y, z: cam.z }, sh.set, { bright: lerp(pbr, br, eio(P(lt, 0, .8))), conf, crowd: conf ? 9 : 2, crowdAmp: conf ? 3 : 1 });
     // 2D
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, W, H);
@@ -1264,6 +1380,12 @@
       if (sh.looks && sh.looks[name]) for (const [n, df, ov] of sh.looks[name]) if (lt >= cue(n, df)) Object.assign(c, ov); Puppet.draw(ctx, c, states[name], t); };
     if (sh.draw) {
       sh.draw(s, lt, d, t);
+    } else if (sh.set === 'studio') {
+      const after = sh.afterFence || [];
+      Object.keys(sh.cast || {}).filter(n => !after.includes(n)).forEach(drawC);
+      if (sh.front === 'fence' && (!sh.frontFrom || lt >= cue(sh.frontFrom[0], sh.frontFrom[1]))) fence();
+      after.forEach(drawC);
+      if (sh.label && sh.frontFrom && lt >= cue(sh.frontFrom[0], sh.frontFrom[1])) { const k = eb(P(lt, cue(sh.frontFrom[0], sh.frontFrom[1]), cue(sh.frontFrom[0], sh.frontFrom[1]) + .4)); ctx.save(); ctx.translate(0, 760); ctx.scale(k, k); ctx.beginPath(); ctx.roundRect(-290, -50, 580, 100, 14); ctx.fillStyle = '#1c2238'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = '#e0b84a'; ctx.stroke(); txt(sh.label, 0, 4, 44, '#fff', 900); ctx.restore(); }
     } else if (sh.set === 'pitch') {
       // the whole goal sits behind the players so nobody walks "through" a post
       drawGoalBack();

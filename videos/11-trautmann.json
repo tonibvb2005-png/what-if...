@@ -1,0 +1,112 @@
+{
+  "title": "Bert Trautmann – the goalkeeper with a broken neck",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "chars": {
+    "hero": {
+      "shirt": "#6cabdd",
+      "number": null,
+      "trim": "#ffffff"
+    },
+    "mike": {
+      "shirt": "#6cabdd",
+      "trim": "#ffffff"
+    },
+    "jay": {
+      "shirt": "#6cabdd",
+      "trim": "#ffffff"
+    }
+  },
+  "crowd": {
+    "main": [
+      "#6cabdd",
+      "#6cabdd",
+      "#ffffff"
+    ],
+    "alt": [
+      "#1c2c5b",
+      "#ffffff"
+    ],
+    "flag": [
+      "#6cabdd",
+      "#ffffff"
+    ]
+  },
+  "railing": {
+    "color": "#6cabdd",
+    "text": "MANCHESTER CITY"
+  },
+  "scarf": [
+    "#6cabdd",
+    "#ffffff"
+  ],
+  "scenes": [
+    {
+      "shot": "tcold",
+      "text": "This goalkeeper won a cup final... with a broken neck.",
+      "audio": "../audio/trautmann/01.wav"
+    },
+    {
+      "shot": "tnot",
+      "text": "But that's not even the craziest part of his story.",
+      "audio": "../audio/trautmann/02.wav"
+    },
+    {
+      "shot": "tsoldier",
+      "text": "Bert Trautmann was a German paratrooper in the Second World War.",
+      "audio": "../audio/trautmann/03.wav"
+    },
+    {
+      "shot": "tcaptured",
+      "text": "In 1945, he was captured... and sent to a prisoner of war camp in England.",
+      "audio": "../audio/trautmann/04.wav"
+    },
+    {
+      "shot": "tstay",
+      "text": "When the war ended, he didn't go home. He stayed... and started playing in goal.",
+      "audio": "../audio/trautmann/05.wav"
+    },
+    {
+      "shot": "tprotest",
+      "text": "In 1949, Manchester City signed him. Thousands of fans protested. They wanted him gone.",
+      "audio": "../audio/trautmann/06.wav"
+    },
+    {
+      "shot": "tsaves",
+      "text": "So he did the only thing he could. He made save... after save... after save.",
+      "audio": "../audio/trautmann/07.wav"
+    },
+    {
+      "shot": "tcheers",
+      "text": "And slowly, the boos turned into cheers.",
+      "audio": "../audio/trautmann/08.wav"
+    },
+    {
+      "shot": "tfinal",
+      "text": "May 1956. The FA Cup final at Wembley. 75 minutes in, he dives at a striker's feet... and takes a knee to the neck.",
+      "audio": "../audio/trautmann/09.wav"
+    },
+    {
+      "shot": "tplayon",
+      "text": "There were no substitutes back then. So he gets up... and keeps playing.",
+      "audio": "../audio/trautmann/10.wav"
+    },
+    {
+      "shot": "twin",
+      "text": "He makes more saves. City win 3-1!",
+      "audio": "../audio/trautmann/11.wav",
+      "pad": 1.2
+    },
+    {
+      "shot": "txray",
+      "text": "Three days later, an x-ray shows the truth. His neck was broken.",
+      "audio": "../audio/trautmann/12.wav"
+    },
+    {
+      "shot": "tlegend",
+      "text": "The man they wanted gone... became a club legend. Follow for more football stories.",
+      "audio": "../audio/trautmann/13.wav",
+      "pad": 1.2
+    }
+  ]
+}
