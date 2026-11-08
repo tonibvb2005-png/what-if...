@@ -1,0 +1,22 @@
+[whispers, tense] Auf der Wärmebildkamera steht es direkt unter dir.
+[long pause]
+[calm, low voice] Stell dir vor, es ist zwei Uhr siebenundvierzig. [short pause] Du sitzt allein auf einem Hochsitz.
+[slowly] Dein Onkel sitzt dreihundert Meter weiter. [short pause] Ihr wartet auf Wildschweine.
+[long pause]
+[quietly] Dann siehst du es. [short pause] Am Waldrand.
+[tense, slowly] Warm. [short pause] Auf zwei Beinen.
+[short pause]
+[nervous] Du funkst deinen Onkel an.
+[serious, quietly] Mach kein Licht. [short pause] Dann geht es vorbei.
+[long pause]
+[whispers] Es bleibt unter dir stehen. [short pause] Und schaut hoch.
+[long pause]
+[slowly] Dann ist es weg. [short pause] Kalt. [short pause] Unsichtbar.
+[long pause]
+[whispers, frightened] Die Leiter knarrt.
+[long pause]
+[tense] Dein Onkel funkt: [quietly] Ich bin's. [short pause] Ich komm hoch.
+[short pause]
+[slowly, frightened] Aber im Wärmebild sitzt er noch auf seinem Hochsitz.
+[long pause]
+[calm, low voice] Licht an oder dunkel bleiben? [short pause] [ominous] Teil zwei heute Nacht.

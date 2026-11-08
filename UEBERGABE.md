@@ -65,6 +65,7 @@ Details zum Stil stehen in `STYLE_GUIDE.md`.
 | 06 | Lichthupe | Auto, Landstraße, Verfolger, Radio, Rücksitz | Bild fertig; wartet auf Stimme |
 | 07 | **Bewegungsmelder** | dunkles Großraumbüro, Lichter folgen dir, Kopierer druckt ein Foto | Bild fertig; wartet auf Stimme |
 | 08 | Letzte Haltestelle | Nachtbus | gebaut, aber verworfen (Idee war nicht neu) |
+| 10 | **Wärmebild** | Hochsitz im Wald, Wärmebildkamera, Onkel am Funkgerät, Uhrzeit 2:47 | Bild fertig + Probevideo (Piper); **erste Folge mit neuem, optimiertem Aufbau**; wartet auf Feedback + Stimme |
 | 09 | **Spätschicht** | Kiosk nachts, Kunde mit Kapuze kauft Wasser + Schere, Zettel der Vorgängerin, Überwachungskamera | **FINAL gerendert** mit deiner ElevenLabs-Stimme (Arthur Holm), bereit zum Posten |
 
 Die Folge „Stock 13“ (Aufzug) wurde auf deinen Wunsch gelöscht und durch „Bewegungsmelder“ ersetzt.
@@ -170,6 +171,17 @@ python3 engine/build.py stories/07_bewegungsmelder --voice-file stories/07_beweg
 
 ---
 
+## 6b. Neuer Video-Aufbau (ab Folge 10, gilt für alle neuen Folgen)
+
+Grund: „Spätschicht“ kam nicht gut an. Optimierungen für mehr Zuschauerbindung:
+1. **Cold Open:** Der erste Shot ist der stärkste Moment (Vorgriff auf das Ende), mit großem Hook-Text im Bild (`"hook"` in story.json, `<em>` = rot). Erst dann „Stell dir vor …“.
+2. **Titelkarte später und kürzer:** `"titleShot": 1` zeigt sie 2 s zu Beginn von Shot 1 statt in den ersten 3 s.
+3. **Länge 35–45 s**, ca. 100 Wörter. **Shots max. ca. 4 s**, viele Schnitte.
+4. **Kurzes Ende:** Keine eigene Endkarte mehr. Die Auswahl-Szene bekommt `"part2": true` und zeigt „TEIL 2 · HEUTE NACHT“ direkt unter den Buttons; ein Satz: „X oder Y? Teil zwei heute Nacht.“ (ca. 3–4 s).
+5. **Uhrzeit variiert**, nicht mehr immer 3:33 (Folge 10: 2:47). Deshalb Serienname vorerst neutral „GESCHICHTEN AUS DER NACHT“ (Platzhalter, bis ein echter Kanalname feststeht; Profilbilder zeigen noch 3:33).
+6. **Titelbild (Cover)** aus dem Cold Open mit Hook-Text: z. B. `branding/cover_10_waermebild.png`. Beim Posten als Cover wählen.
+7. Ton: eigener Originalton, keine TikTok-Musik darüber; Originalton nach dem Posten benennen.
+
 ## 7. Caption-Vorlage
 
 ```
@@ -200,6 +212,11 @@ Teil 2 kommt heute Nacht – folgen, damit du ihn nicht verpasst.
 0. ~~Folge 09 fertigstellen~~ → erledigt, finales Video gerendert. **Posten** (Caption siehe oben). Ursprünglicher Text: Probevideo `output/09_spaetschicht.mp4` ansehen und Feedback geben. Danach `stories/09_spaetschicht/voiceover_elevenlabs.txt` in ElevenLabs aufnehmen, als `stories/09_spaetschicht/voice/voiceover.mp3` ablegen und final rendern:
    `python3 engine/build.py stories/09_spaetschicht --voice-file stories/09_spaetschicht/voice/voiceover.mp3`
    Hinweis: Mit der Piper-Stimme dauert das Video ca. 65 s, also etwas über dem Ziel von 60 s. Falls es mit ElevenLabs auch zu lang wird, kann der Satz „Seit drei Wochen ist sie verschwunden.“ oder „Aber heute Nacht geht er nicht.“ raus.
+
+### Folge 10 „Wärmebild“
+- Neues Set `hochsitz` (sets3d.js), Einstellungen `hs_thermal` (Wärmebild-Display, Modi edge/below/gone/uncle), `hs_ext`, `hs_in`, `hs_face`, `hs_ladder` (sets.js). Neue Sounds `squelch` (Funk), `ladder`, `owl`, Ambience `woods`.
+- Kreatur nur angedeutet: im Wärmebild ein gesichtsloser, zu langer, schiefer Kopf; eine Hand umklammert den Leiterholm, ein Arm hängt zu lang herab. „Kalt“ = dunkler Umriss. An der Leiter nur zwei Hände, deren Finger sich über die Sprosse krümmen.
+- Nächster Schritt: Probevideo ansehen, dann `stories/10_waermebild/voiceover_elevenlabs.txt` aufnehmen und final rendern. Caption: `branding/CAPTION_10_waermebild.txt`.
 
 ### Erledigt aus der letzten Liste
 - Punkt 1 (Auswahl): **B) Spätschicht** gewählt und gebaut (siehe oben). A) „Die Pizza“ und C) „Die Sprachnachricht“ bleiben als Reserve-Ideen.

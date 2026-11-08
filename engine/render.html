@@ -29,6 +29,9 @@
            border-radius: 10px; padding: 10px 22px 12px; text-align: center; white-space: nowrap; }
   .title .k { color: #ff3b30; font: 800 11px 'Montserrat'; letter-spacing: .6px; }
   .title .t { color: #fff; font: 900 25px/1.1 'Montserrat'; margin-top: 4px; }
+  .hook { position: absolute; top: 178px; left: 50%; width: 470px; text-align: center; font: italic 900 44px/1.08 'Montserrat'; text-transform: uppercase; color: #fff;
+          -webkit-text-stroke: 9px #000; paint-order: stroke fill; text-shadow: 0 5px 0 rgba(0,0,0,.6); }
+  .hook em { color: #ff3b30; font-style: italic; }
   .badge { position: absolute; top: 112px; left: 30px; background: rgba(8,10,24,.78); border-radius: 8px;
            padding: 8px 14px 9px 12px; }
   .badge .tm { font: 700 27px/1 'JetBrains Mono'; color: #ffc21f; display: flex; align-items: center; gap: 6px; }
@@ -416,7 +419,9 @@ async function viewChoice(t, sh) {
   const lt = t - sh.start, card = (o, x, p) => o.contact ? miniChat(o, x, p) : miniCard(o, x, p, t);
   return `<div class="choice"><h1 style="opacity:${clamp(lt / .25)}">${sh.heading || 'WEM GLAUBST DU?'}</h1>
     ${card(sh.left, 40, outBack((lt - .15) / .35))}
-    ${card(sh.right, 300, outBack((lt - .45) / .35))}</div>`;
+    ${card(sh.right, 300, outBack((lt - .45) / .35))}
+    ${sh.part2 ? `<div style="position:absolute;left:0;right:0;top:${(sh.left.kind === 'monitor' ? 540 : 520)}px;text-align:center;opacity:${clamp((lt - .6) / .25)}">
+      <span style="display:inline-block;background:#ff3b30;color:#fff;font:900 15px 'Montserrat';letter-spacing:1.5px;padding:8px 18px;border-radius:20px">TEIL ${TL.part + 1} · HEUTE NACHT</span></div>` : ''}</div>`;
 }
 async function viewEnd(t, sh) {
   const lt = t - sh.start, a = (d) => `opacity:${clamp((lt - d) / .3)};transform:translateY(${(1 - ease((lt - d) / .3)) * 14}px)`;
@@ -621,9 +626,15 @@ window.renderFrame = async (t) => {
   sc.style.transform = shake + `scale(${z[0] + (z[1] - z[0]) * ease(lt / d)})`;
 
   let ov = '';
-  if (t < 3.0) {
-    ov += `<div class="title" style="opacity:${clamp((3.0 - t) / .25)}"><div class="k">${TL.series} · ${TL.episode}</div><div class="t">${TL.title}<br>TEIL ${TL.part}</div></div>`;
-  } else if (sh.place && !['lock', 'chat', 'choice', 'end', 'monitor', 'radio', 'ks_cctv', 'ks_note'].includes(sh.scene)) {
+  // Einstieg: optional großer Hook-Text im ersten Shot, Titelkarte erst später (titleShot) und kürzer
+  const ts = TL.titleShot != null ? TL.shots[TL.titleShot].start : 0, tLen = TL.titleShot != null ? 2.0 : 3.0;
+  const inHook = TL.hook && t < TL.shots[0].end;
+  if (inHook) {
+    const k = clamp(t / .18);
+    ov += `<div class="hook" style="opacity:${k};transform:translateX(-50%) scale(${.85 + .15 * outBack(t / .3)})">${TL.hook}</div>`;
+  } else if (t >= ts && t < ts + tLen) {
+    ov += `<div class="title" style="opacity:${clamp((ts + tLen - t) / .25) * clamp((t - ts) / .15)}"><div class="k">${TL.series} · ${TL.episode}</div><div class="t">${TL.title}<br>TEIL ${TL.part}</div></div>`;
+  } else if (sh.place && !['lock', 'chat', 'choice', 'end', 'monitor', 'radio', 'ks_cctv', 'ks_note', 'hs_thermal'].includes(sh.scene)) {
     const blink = (t % 1.2) < .7 ? 1 : .25;
     ov += `<div class="badge"><div class="tm"><i style="opacity:${blink}"></i>${sh.clock}<small>UHR</small></div><div class="pl">TEIL ${TL.part} · ${sh.place}</div></div>`;
   }

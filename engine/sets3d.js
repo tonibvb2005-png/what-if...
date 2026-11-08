@@ -549,3 +549,55 @@
     R.setTubes = (a, b) => { R.tubes[0].l.intensity = 3.2 * a; R.tubes[0].m.material.color.set(a > .5 ? '#e8eeff' : '#2a2c33'); R.tubes[1].l.intensity = 3.2 * b; R.tubes[1].m.material.color.set(b > .5 ? '#e8eeff' : '#2a2c33'); };
   };
 })();
+
+// ======================================================================= Hochsitz (Wärmebild)
+(() => {
+  const { std, basic, put, rbox, canvasTex, plane } = W3.H, R = W3.reg;
+  const rng = (seed) => () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+  const M4 = new THREE.Matrix4(), Q = new THREE.Quaternion(), V = new THREE.Vector3(), S1 = new THREE.Vector3();
+  const inst = (geo, mat, n) => { const m = new THREE.InstancedMesh(geo, mat, n); m.castShadow = true; m.receiveShadow = true; W3.scene.add(m); return m; };
+  const setI = (m, i, x, y, z, ry, s) => { Q.setFromEuler(new THREE.Euler(0, ry, 0)); M4.compose(V.set(x, y, z), Q, S1.set(s, s, s)); m.setMatrixAt(i, M4); };
+  W3.BUILD.hochsitz = async () => {
+    const sc = W3.scene;
+    sc.background = new THREE.Color('#070912'); sc.fog = new THREE.FogExp2('#080a14', .045);
+    R.hemi = new THREE.HemisphereLight('#8e9ac4', '#0b0d0c', .5); sc.add(R.hemi);
+    const moon = new THREE.DirectionalLight('#b8c4ff', .9); moon.position.set(-6, 10, 8); moon.target.position.set(0, 0, 2);
+    moon.castShadow = true; moon.shadow.mapSize.set(1024, 1024); Object.assign(moon.shadow.camera, { left: -8, right: 8, top: 8, bottom: -8, near: 1, far: 30 }); moon.shadow.bias = -.002;
+    sc.add(moon, moon.target);
+    put(new THREE.Mesh(new THREE.SphereGeometry(1.4, 20, 12), basic('#e8edff')), -18, 14, 30, sc, false);
+    const g = put(new THREE.Mesh(new THREE.PlaneGeometry(120, 120), std('#1a1f1b')), 0, 0, 10, sc, false); g.rotation.x = -Math.PI / 2;
+    // Wiese vor dem Hochsitz (heller), Wald rundherum, Waldrand vorne bei z ≈ 28
+    const field = put(new THREE.Mesh(new THREE.PlaneGeometry(26, 26), std('#252b25')), 0, .004, 15, sc, false); field.rotation.x = -Math.PI / 2;
+    const r = rng(41), N = 150;
+    const trunks = inst(new THREE.CylinderGeometry(.1, .17, 8, 7), std('#15171a'), N), crowns = inst(new THREE.ConeGeometry(1.3, 4, 9), std('#111814'), N * 2);
+    for (let i = 0; i < N; i++) {
+      let x, z; do { x = (r() - .5) * 70; z = (r() - .5) * 70 + 10; } while (Math.abs(x) < 13 && z > 2 && z < 28 || Math.hypot(x, z) < 3.5);
+      const s = .8 + r() * .6; setI(trunks, i, x, 4 * s, z, 0, s); setI(crowns, i * 2, x, 4.6 * s, z, r() * 3, s); setI(crowns, i * 2 + 1, x, 6.3 * s, z, r() * 3, s * .75);
+    }
+    trunks.instanceMatrix.needsUpdate = crowns.instanceMatrix.needsUpdate = true;
+    // Hochsitz: Pfosten, Plattform (y 3.2), Kanzel mit Brüstung, Dach; Blick nach +z über die Wiese
+    const wood = std('#4a3d30'), woodD = std('#3a3026');
+    for (const [x, z] of [[-.75, -.75], [.75, -.75], [-.75, .75], [.75, .75]]) put(new THREE.Mesh(new THREE.BoxGeometry(.12, 4.6, .12), wood), x, 2.3, z);
+    for (const [x, z, rx, rz] of [[0, -.75, 0, .5], [0, .75, 0, -.5], [-.75, 0, .5, 0], [.75, 0, -.5, 0]]) {   // Querstreben
+      const b = put(new THREE.Mesh(new THREE.BoxGeometry(rz ? 1.9 : .07, .07, rx ? 1.9 : .07), woodD), x, 1.6, z); b.rotation.z = rz ? .9 * Math.sign(rz) : 0; b.rotation.x = rx ? .9 * Math.sign(rx) : 0;
+    }
+    put(new THREE.Mesh(new THREE.BoxGeometry(1.7, .08, 1.7), wood), 0, 3.2, 0);
+    for (let y = 3.35; y < 4.0; y += .16) {
+      put(new THREE.Mesh(new THREE.BoxGeometry(1.62, .12, .04), woodD), 0, y, .8);
+      for (const sx of [-1, 1]) put(new THREE.Mesh(new THREE.BoxGeometry(.04, .12, 1.62), woodD), sx * .8, y, 0);
+    }
+    put(new THREE.Mesh(new THREE.BoxGeometry(1.62, 1.3, .05), woodD), 0, 3.9, -.8);
+    const roof = put(new THREE.Mesh(new THREE.BoxGeometry(1.95, .06, 2.0), std('#2a2622')), 0, 4.65, 0); roof.rotation.x = -.18;
+    put(new THREE.Mesh(new THREE.BoxGeometry(.5, .05, .25), wood), 0, 3.6, -.55);   // Sitzbrett
+    // Leiter: von der Plattform (z .85, y 3.2) bis zum Boden (z 2.2)
+    R.ladder = new THREE.Group(); R.ladder.position.set(0, 0, 2.2); R.ladder.rotation.x = -Math.atan2(1.35, 3.25); sc.add(R.ladder);
+    const len = Math.hypot(1.35, 3.25);
+    for (const sx of [-1, 1]) put(new THREE.Mesh(new THREE.BoxGeometry(.07, len, .07), wood), sx * .25, len / 2, 0, R.ladder);
+    R.rungs = [];
+    for (let i = 1; i * .32 < len - .1; i++) { const rg = put(new THREE.Mesh(new THREE.CylinderGeometry(.022, .022, .5, 8), wood), 0, i * .32, 0, R.ladder); rg.rotation.z = Math.PI / 2; R.rungs.push(i * .32); }
+    R.ladderLen = len;
+    // Taschenlampe/Thermalgerät-Glow in der Kanzel (sehr schwach)
+    R.scopeGlow = new THREE.PointLight('#9fb4ff', .25, 1.4, 2); R.scopeGlow.position.set(0, 3.8, .2); sc.add(R.scopeGlow);
+    plane('you', 1.2, 1.2); plane('youClose', .6, .6, 1536); plane('rungHand', .5, .3, 1024);
+  };
+})();

@@ -751,3 +751,149 @@ Object.assign(VIEWS, { ks_ext: viewKsExt, ks_wide: viewKsWide, ks_counter: viewK
 Object.assign(GLSTYLE, { ks_ext: '', ks_wide: '', ks_counter: '', ks_over: '', ks_cctv: 'grayscale(1) contrast(1.3) brightness(1.05)', ks_face: '', ks_lean: '', ks_note: 'blur(9px) brightness(.55)' });
 Object.assign(SETBG, { kiosk: async (t) => { await kioskChars(t, { eyes: 'wide', look: .8 }); W3.setCam([-1.55, 2.15, 2.6], [-.25, 1.05, -1.3], 52); } });
 Object.assign(SET_ASSETS, { lagerFig: LAGER_FIG });
+
+
+/* ======================================================================= HOCHSITZ (Wärmebild) */
+// Wärmebild „weiß = heiß“: Himmel kalt (schwarz), Bäume mittelgrau, Wesen weiß mit Glühen.
+function thermalSvg(t, sh) {
+  const mode = sh.mode, lt = t - sh.start, d = sh.end - sh.start;
+  const n = (k) => Math.sin(t * 13.1 + k * 7.7) * Math.sin(t * 5.3 + k * 2.1);
+  const jitter = `translate(${n(1) * 1.5} ${n(2) * 1.2})`;
+  let scene = '';
+  const hotFig = (x, y, s, o = {}) => {   // warme Gestalt, aufrecht, zu dünn, zu lange Arme
+    const hy = y - 1.75 * s, k = o.look || 0;
+    return `<g filter="url(#heat)" opacity="${o.op ?? 1}">
+      <ellipse cx="${x}" cy="${hy}" rx="${.13 * s}" ry="${.16 * s}" fill="#fff"/>
+      <path d="M${x - .12 * s} ${hy + .22 * s} Q${x} ${hy + .17 * s} ${x + .12 * s} ${hy + .22 * s} L${x + .09 * s} ${y - .9 * s} L${x - .09 * s} ${y - .9 * s} Z" fill="#f2f2f2"/>
+      <path d="M${x - .05 * s} ${y - .92 * s} L${x - .07 * s} ${y} M${x + .05 * s} ${y - .92 * s} L${x + .07 * s} ${y}" stroke="#d8d8d8" stroke-width="${.06 * s}" stroke-linecap="round"/>
+      <path d="M${x - .12 * s} ${hy + .25 * s} Q${x - .22 * s} ${y - 1.0 * s} ${x - .2 * s} ${y - .45 * s} M${x + .12 * s} ${hy + .25 * s} Q${x + .22 * s} ${y - 1.0 * s} ${x + .2 * s} ${y - .45 * s}" stroke="#e6e6e6" stroke-width="${.05 * s}" fill="none" stroke-linecap="round"/></g>`;
+  };
+  if (mode === 'edge' || mode === 'uncle') {
+    const zoom = mode === 'uncle' ? 1 : 1 + .06 * ease(lt / d);
+    let trees = '';
+    for (let i = 0; i < 26; i++) { const x = i * 23 - 20 + (i % 3) * 7, h = 150 + (i * 37 % 90); trees += `<path d="M${x} 470 L${x + 12} ${470 - h} L${x + 24} 470 Z" fill="#${i % 2 ? '303030' : '2a2a2a'}"/><rect x="${x + 10}" y="430" width="5" height="45" fill="#3a3a3a"/>`; }
+    scene = `<g transform="translate(270 480) scale(${zoom}) translate(-270 -480)">
+      <rect width="540" height="960" fill="url(#tsky)"/>${trees}
+      <rect y="468" width="540" height="492" fill="url(#tground)"/>`;
+    if (mode === 'edge') {
+      const fx = 300 - 40 * ease(lt / d);
+      scene += hotFig(fx, 478, 62) + `<ellipse cx="${fx}" cy="480" rx="20" ry="3" fill="#000" opacity=".35"/>`;
+    } else {   // Onkels Hochsitz am anderen Ende, 300 m: winzig, aber er sitzt drin und ist warm
+      const pan = 120 * (1 - ease(lt / Math.min(1.2, d)));
+      scene += `<g transform="translate(${pan} 0)"><g stroke="#4a4a4a" stroke-width="2.4"><path d="M262 470 L266 412 M278 470 L274 412"/><path d="M262 470 L278 440 M278 470 L262 440"/></g>
+        <rect x="258" y="398" width="24" height="16" fill="#454545"/><path d="M255 398 L285 398 L282 391 L258 391 Z" fill="#3c3c3c"/>
+        <g filter="url(#heat)"><circle cx="270" cy="401" r="3.2" fill="#fff"/><rect x="266.5" y="404" width="7" height="8" rx="2" fill="#eee"/></g></g>`;
+    }
+    scene += '</g>';
+  } else {      // Blick von oben die Leiter hinunter auf den Boden
+    let grass = ''; for (let i = 0; i < 160; i++) { const x = (i * 97) % 540, y = 380 + (i * 53) % 580; grass += `<path d="M${x} ${y} l${(i % 5) - 2} -9" stroke="#2c2c2c" stroke-width="2"/>`; }
+    const rungs = Array.from({ length: 7 }, (_, i) => { const y = 120 + i * 120, w = 70 + i * 18; return `<rect x="${270 - w}" y="${y}" width="${w * 2}" height="${8 + i}" rx="4" fill="#3e3e3e"/>`; }).join('');
+    scene = `<rect width="540" height="960" fill="#1e1e1e"/>${grass}
+      <path d="M200 0 L120 960 M340 0 L420 960" stroke="#454545" stroke-width="16"/>${rungs}`;
+    if (mode === 'below') {   // es steht unten am Fuß der Leiter: dünn, Kopf zu lang, Arme greifen schon nach den Sprossen
+      const up = sh.look ? ease((lt - .4) / .8) : 1, hy = 760 - 22 * up;
+      scene += `<g filter="url(#heat)">
+        <path d="M232 830 Q270 812 308 830 L300 905 L240 905 Z" fill="#e6e6e6"/>
+        <g transform="rotate(${-10 - 12 * up} 270 ${hy + 30})"><ellipse cx="270" cy="${hy - 6}" rx="27" ry="${48 + 10 * up}" fill="#fff"/></g>
+        <path d="M238 836 Q196 790 176 712 Q166 676 160 646" stroke="#e8e8e8" stroke-width="13" fill="none" stroke-linecap="round"/>
+        <path d="M302 838 Q332 880 336 960" stroke="#e8e8e8" stroke-width="12" fill="none" stroke-linecap="round"/>
+        <ellipse cx="160" cy="640" rx="11" ry="15" fill="#efefef"/>
+        ${[0, 1, 2, 3].map(i => `<path d="M150 ${626 + i * 8} q12 -5 22 1" stroke="#e8e8e8" stroke-width="4.5" fill="none" stroke-linecap="round"/>`).join('')}</g>`;
+    } else if (mode === 'gone') {   // weg vom Wärmebild – nur ein KALTER Umriss, dunkler als der Boden
+      scene += `<g opacity="${.55 * clamp((lt - .2) / .8)}" filter="url(#soft)"><ellipse cx="270" cy="815" rx="70" ry="58" fill="#0a0a0a"/><ellipse cx="270" cy="718" rx="54" ry="60" fill="#080808"/></g>`;
+    }
+  }
+  const temp = mode === 'edge' || mode === 'below' ? '36,8' : mode === 'uncle' ? '35,9' : '−2,1';
+  const zoomTxt = mode === 'uncle' ? '8.0x' : mode === 'edge' ? '4.0x' : '1.0x';
+  return `<svg viewBox="0 0 540 960" width="540" height="960" style="position:absolute;inset:0">
+    <defs><linearGradient id="tsky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#050505"/><stop offset="1" stop-color="#121212"/></linearGradient>
+      <linearGradient id="tground" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#262626"/><stop offset="1" stop-color="#1a1a1a"/></linearGradient>
+      <filter id="heat" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="2.2" result="b"/><feGaussianBlur in="SourceGraphic" stdDeviation="9" result="g"/><feMerge><feMergeNode in="g"/><feMergeNode in="b"/></feMerge></filter>
+      <filter id="soft"><feGaussianBlur stdDeviation="10"/></filter>
+      <radialGradient id="tvig" cx="50%" cy="50%" r="70%"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".75"/></radialGradient></defs>
+    <g transform="${jitter}">${scene}</g>
+    <rect width="540" height="960" fill="url(#tvig)"/>
+    ${Array.from({ length: 120 }, (_, i) => `<rect y="${i * 8}" width="540" height="1.2" fill="#000" opacity=".22"/>`).join('')}
+    <g stroke="#f2f2f2" stroke-width="2" opacity=".85" fill="none"><path d="M270 440 v-40 M270 520 v40 M230 480 h-40 M310 480 h40"/><circle cx="270" cy="480" r="4"/></g>
+    <g font-family="JetBrains Mono" font-weight="700" fill="#f2f2f2" font-size="15">
+      <text x="34" y="120">WÄRMEBILD</text><text x="506" y="120" text-anchor="end">${zoomTxt}</text>
+      <text x="34" y="146" font-size="12" font-weight="500" opacity=".75">WEISS-HEISS</text>
+      <text x="34" y="850">${temp} °C</text><text x="506" y="850" text-anchor="end">▮▮▯</text></g>
+  </svg>`;
+}
+async function viewHsThermal(t, sh) {
+  await SETBG.hochsitz(t);
+  return `<div style="position:absolute;inset:0;background:#000"></div>` + thermalSvg(t, sh);
+}
+const HS_YOU = [0, 3.62, -.42];
+function hsYou(st) {   // sitzend in der Kanzel, mit Funkgerät; lokale Koordinaten
+  const radio = st.radio ? `<rect x=".03" y="-.24" width=".05" height=".1" rx=".01" fill="#15161a"/><path d="M.07 -.24 l.008 -.07" stroke="#15161a" stroke-width=".01" stroke-linecap="round"/>
+    <rect x=".037" y="-.225" width=".035" height=".03" fill="${st.radioLit ? '#ffb347' : '#2a2a22'}"/>` : '';
+  const hR = st.radio ? [.06, -.14] : [.08, .3];
+  return `<path d="M-.12 -.12 Q0 -.17 .12 -.12 L.13 .42 L-.13 .42 Z" fill="${SHIRT}"/><path d="M-.12 -.12 Q0 -.17 .12 -.12 L.13 .42 L-.13 .42 Z" fill="url(#shadeR)"/>
+` +
+    arm([-.1, -.08], [-.08, .3], 1) + arm([.1, -.08], hR, -1) + radio +
+    head([0, -.27], .12, { eyes: st.eyes, t: st.t, look: st.look, mouth: st.mouth, lit: st.lit }) +
+    `<path d="M-.118 -.33 Q-.11 -.41 0 -.405 Q.11 -.41 .118 -.33 Z" fill="#3b4a2f"/><rect x="-.124" y="-.345" width=".248" height=".03" rx=".012" fill="#2f3b26"/><circle cx="0" cy="-.41" r=".018" fill="#2f3b26"/>`;
+}
+async function hsChars(t, o = {}) {
+  ensurePlane('you', 1.2, 1.2); ensurePlane('youClose', .6, .6, 1536); ensurePlane('rungHand', .5, .3, 1024);
+  await W3.setPlane('youClose', { visible: false });
+  const q = (TL.quotes || []).find(q => t >= q.start && t < q.end);
+  const talk = lastEv('talk', t, null), talking = talk && t < talk[1];
+  if (o.you !== false) await W3.setPlane('you', { svg: svgLocal(1.2, 1.2, hsYou({ eyes: o.eyes || 'open', t, look: o.look || 0, mouth: o.mouth || (talking && Math.sin(t * 14) > 0 ? 'o' : ''), radio: true, radioLit: !!q || talking })), pos: HS_YOU, rotY: 0, color: '#9aa4c8' });
+  else await W3.setPlane('you', { visible: false });
+  // Finger an der Sprosse (erst nach „grip“): greifen von unten über die Sprosse, Kuppen auf deiner Seite
+  const gp = lastEv('grip', t, null);
+  if (gp && o.hand !== false) {
+    const k = R3.rungs.length - 3, along = R3.rungs[k], a = R3.ladder.rotation.x;
+    const y = along * Math.cos(a), z = 2.2 + along * Math.sin(a);
+    // zwei Hände, je vier lange Finger, die sich über die Sprosse krümmen (Knöchel oben, Kuppe vorne unten)
+    let body = '';
+    for (const hx of [-.13, .12]) {
+      body += `<path d="M${hx - .04} .085 Q${hx} .1 ${hx + .04} .085 L${hx + .034} .03 L${hx - .034} .03 Z" fill="#8f93a4" opacity=".7"/>`;
+      [-.027, -.009, .009, .027].forEach((dx, i) => {
+        const x = hx + dx, L = i === 1 || i === 2 ? .012 : 0;
+        const d = `M${x} .035 Q${x + .002} ${-.03 - L} ${x + .001} ${-.034 - L} Q${x} ${-.02 - L} ${x - .001} ${.004}`;
+        body += `<path d="${d}" stroke="#000" stroke-opacity=".5" stroke-width=".014" stroke-linecap="round" fill="none" transform="translate(.003 .004)"/>
+          <path d="${d}" stroke="#b9bdcc" stroke-width=".012" stroke-linecap="round" fill="none"/>
+          <ellipse cx="${x + .001}" cy="${-.028 - L}" rx=".007" ry=".005" fill="#d0d3de"/>
+          <path d="M${x - .005} ${-.012 - L * .5} h.009" stroke="#6f7386" stroke-width=".0022"/>
+          <ellipse cx="${x - .001}" cy="${.002}" rx=".0045" ry=".004" fill="#3e3a30"/>`;
+      });
+    }
+    body = svgLocal(.5, .3, body, 1024);
+    await W3.setPlane('rungHand', { svg: body, pos: [0, y + .012, z + .03], color: '#c8ccd8' });
+    _planes.rungHand.mesh.rotation.set(a - .35, 0, 0);
+    _planes.rungHand.mesh.material.opacity = clamp((t - gp[0]) / .4); _planes.rungHand.mesh.material.transparent = true;
+  } else await W3.setPlane('rungHand', { visible: false });
+}
+async function viewHsExt(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start, p = ease(lt / d);
+  W3.setCam([4.2 - .8 * p, 2.0 + .3 * p, 8.5 - 1.2 * p], [0, 3.1, 0], 46);
+  await hsChars(t, { look: .4 });
+  return '';
+}
+async function viewHsIn(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([.25, 3.95, .95 - .15 * ease(lt / d)], [0, 3.6, -.42], 48);
+  await hsChars(t, { eyes: sh.eyes || 'open', look: sh.look || 0 });
+  return '';
+}
+async function viewHsFace(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([0, 3.38, .36 - .06 * ease(lt / d)], [0, 3.36, -.42], 40);
+  await hsChars(t, { you: false, hand: false });
+  const q = (TL.quotes || []).find(q => t >= q.start && t < q.end);
+  await W3.setPlane('youClose', { svg: svgLocal(.6, .6, `<g transform="translate(0 .27)">${hsYou({ eyes: 'wide', mouth: 'o', t, look: lt > d * .5 ? (sh.lookDir || 1) * 1.3 : 0, radio: true, radioLit: !!q })}</g>`), pos: [0, 3.35, -.42], rotY: 0, color: '#9aa4c8' });
+  return '';
+}
+async function viewHsLadder(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([.08, 3.95, 1.02], [0, 1.6 - .4 * ease(lt / d), 2.05], 46 - 6 * ease(lt / d));
+  await hsChars(t, { you: false });
+  return '';
+}
+Object.assign(VIEWS, { hs_thermal: viewHsThermal, hs_ext: viewHsExt, hs_in: viewHsIn, hs_face: viewHsFace, hs_ladder: viewHsLadder });
+Object.assign(GLSTYLE, { hs_thermal: 'none', hs_ext: '', hs_in: '', hs_face: '', hs_ladder: '' });
+Object.assign(SETBG, { hochsitz: async (t) => { await hsChars(t, { eyes: 'wide', look: .6 }); W3.setCam([.25, 3.95, .9], [0, 3.6, -.42], 48); } });

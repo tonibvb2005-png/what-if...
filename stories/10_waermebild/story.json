@@ -1,0 +1,285 @@
+{
+ "series": "GESCHICHTEN AUS DER NACHT",
+ "episode": "#10",
+ "title": "WÄRMEBILD",
+ "part": 1,
+ "set": "hochsitz",
+ "ambience": "woods",
+ "hook": "ES STEHT <em>DIREKT UNTER DIR</em>",
+ "titleShot": 1,
+ "question": "LICHT oder DUNKEL? Schreib's in die Kommentare.",
+ "shots": [
+  {
+   "scene": "hs_thermal",
+   "mode": "below",
+   "lines": [
+    {
+     "text": "Auf der Wärmebildkamera steht es direkt unter dir.",
+     "hl": {
+      "direkt": "r",
+      "unter": "r"
+     },
+     "sfx": [
+      [
+       "boom",
+       "start"
+      ]
+     ],
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "hs_ext",
+   "clock": "2:47",
+   "place": "HOCHSITZ",
+   "lines": [
+    {
+     "text": "Stell dir vor, es ist 2:47. Du sitzt allein auf einem Hochsitz.",
+     "say": "Stell dir vor, es ist zwei Uhr siebenundvierzig. Du sitzt allein auf einem Hochsitz.",
+     "hl": {
+      "allein": "r",
+      "Hochsitz": "y"
+     }
+    }
+   ]
+  },
+  {
+   "scene": "hs_in",
+   "clock": "2:47",
+   "place": "HOCHSITZ",
+   "lines": [
+    {
+     "text": "Dein Onkel sitzt dreihundert Meter weiter. Ihr wartet auf Wildschweine.",
+     "hl": {
+      "Onkel": "y"
+     },
+     "sfx": [
+      [
+       "owl",
+       "start+0.3"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "scene": "hs_thermal",
+   "mode": "edge",
+   "lines": [
+    {
+     "text": "Dann siehst du es. Am Waldrand.",
+     "hl": {
+      "Waldrand": "y"
+     },
+     "ev": [
+      [
+       "dread",
+       "word2"
+      ]
+     ],
+     "sfx": [
+      [
+       "boom",
+       "word2"
+      ]
+     ]
+    },
+    {
+     "text": "Warm. Auf zwei Beinen.",
+     "hl": {
+      "Warm": "y",
+      "Beinen": "r"
+     },
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "hs_in",
+   "clock": "2:48",
+   "place": "HOCHSITZ",
+   "eyes": "wide",
+   "lines": [
+    {
+     "text": "Du funkst deinen Onkel an.",
+     "ev": [
+      [
+       "talk",
+       "start",
+       "end"
+      ]
+     ],
+     "sfx": [
+      [
+       "squelch",
+       "end"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "scene": "hs_face",
+   "clock": "2:48",
+   "place": "HOCHSITZ",
+   "lines": [
+    {
+     "text": "Mach kein Licht. Dann geht es vorbei.",
+     "hl": {
+      "Licht": "r"
+     },
+     "quote": {
+      "who": "ONKEL",
+      "place": "FUNKGERÄT",
+      "text": "Mach kein Licht. Dann geht es vorbei."
+     },
+     "sfx": [
+      [
+       "squelch",
+       "start-0.25"
+      ]
+     ],
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "hs_thermal",
+   "mode": "below",
+   "look": true,
+   "lines": [
+    {
+     "text": "Es bleibt unter dir stehen. Und schaut hoch.",
+     "hl": {
+      "hoch": "r"
+     },
+     "sfx": [
+      [
+       "boom",
+       "word6"
+      ]
+     ],
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "hs_thermal",
+   "mode": "gone",
+   "lines": [
+    {
+     "text": "Dann ist es weg. Kalt. Unsichtbar.",
+     "hl": {
+      "weg": "r",
+      "Unsichtbar": "r"
+     },
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "hs_ladder",
+   "clock": "2:49",
+   "place": "HOCHSITZ",
+   "lines": [
+    {
+     "text": "Die Leiter knarrt.",
+     "hl": {
+      "knarrt": "r"
+     },
+     "ev": [
+      [
+       "grip",
+       "word2"
+      ]
+     ],
+     "sfx": [
+      [
+       "ladder",
+       "start"
+      ]
+     ],
+     "pause": 0.6
+    }
+   ]
+  },
+  {
+   "scene": "hs_face",
+   "clock": "2:49",
+   "place": "HOCHSITZ",
+   "lines": [
+    {
+     "text": "Dein Onkel funkt: Ich bin's. Ich komm hoch.",
+     "hl": {
+      "hoch": "r"
+     },
+     "quote": {
+      "who": "ONKEL",
+      "place": "FUNKGERÄT",
+      "text": "Ich bin's. Ich komm hoch."
+     },
+     "sfx": [
+      [
+       "squelch",
+       "start"
+      ],
+      [
+       "breath",
+       "end"
+      ]
+     ],
+     "pause": 0.2
+    }
+   ]
+  },
+  {
+   "scene": "hs_thermal",
+   "mode": "uncle",
+   "lines": [
+    {
+     "text": "Aber im Wärmebild sitzt er noch auf seinem Hochsitz.",
+     "hl": {
+      "sitzt": "r",
+      "noch": "r"
+     },
+     "sfx": [
+      [
+       "boom",
+       "word5"
+      ]
+     ],
+     "pause": 0.5
+    }
+   ]
+  },
+  {
+   "scene": "choice",
+   "heading": "WAS MACHST DU?",
+   "part2": true,
+   "left": {
+    "label": "LICHT",
+    "text": "Taschenlampe an. Die Leiter runterleuchten.",
+    "icon": "🔦",
+    "color": "#2f7cf6"
+   },
+   "right": {
+    "label": "DUNKEL",
+    "text": "Stillhalten. Wie dein Onkel gesagt hat.",
+    "icon": "🌑",
+    "color": "#ff3b30"
+   },
+   "lines": [
+    {
+     "text": "Licht an oder dunkel bleiben? Teil 2 heute Nacht.",
+     "say": "Licht an oder dunkel bleiben? Teil zwei heute Nacht.",
+     "hl": {
+      "Licht": "b",
+      "dunkel": "r"
+     },
+     "pause": 0.7
+    }
+   ]
+  }
+ ]
+}

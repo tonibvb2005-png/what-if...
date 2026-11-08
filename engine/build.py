@@ -17,7 +17,7 @@ SR = 44100
 PIPER_MODEL = os.environ.get("PIPER_MODEL", os.path.join(ROOT, ".cache", "piper", "de.onnx"))
 
 # Lautstärke einzelner Effekte relativ zur Stimme (Spitze der Stimme = 0.85)
-SFX_GAIN = {"steps": .55, "steps_out": 1.4, "doorclose": .55, "bottle": .6, "clack": .5, "scrape": .7, "snip": .6, "drawer": .6, "heart": .85}
+SFX_GAIN = {"steps": .55, "steps_out": 1.4, "doorclose": .55, "bottle": .6, "clack": .5, "scrape": .7, "snip": .6, "drawer": .6, "heart": .85, "squelch": .7, "ladder": .5, "owl": 1.0}
 
 GAP_LINE = 0.18   # Pause zwischen Zeilen
 GAP_SHOT = 0.30   # zusätzliche Pause bei Szenenwechsel
@@ -223,6 +223,27 @@ def sfx(name):
                 i = int((st_ + off) * SR); res[i:i + m] += np.sin(2 * np.pi * 52 * t) * np.exp(-22 * t) * a
             st_ += gap; gap *= .88
         return res * .7
+    if name == "squelch":  # Funkgerät: Taste gedrückt, kurzes Rauschen, Piep beim Loslassen
+        n = int(.45 * SR); t = np.arange(n) / SR
+        nz = rng.standard_normal(n); nz = nz - np.convolve(nz, np.ones(3) / 3, "same")
+        body = nz * np.minimum(1, t / .01) * np.exp(-6 * t) * .28
+        return body + np.sin(2 * np.pi * 1250 * t) * ((t > .33) & (t < .41)) * .09
+    if name == "ladder":   # Holzleiter knarrt unter Gewicht: tief, langsam, mit Knacken
+        n = int(1.6 * SR); t = np.arange(n) / SR
+        f = 120 + 35 * np.sin(2 * np.pi * .6 * t) + 8 * np.sin(2 * np.pi * 17 * t)
+        ph = 2 * np.pi * np.cumsum(f) / SR; saw = (ph / (2 * np.pi)) % 1.0 * 2 - 1
+        cr = np.convolve(saw, np.ones(6) / 6, "same") * np.sin(np.pi * t / 1.6) ** 1.3 * .2
+        for c in (.25, .9):
+            i = int(c * SR); m = int(.04 * SR); cr[i:i + m] += rng.standard_normal(m) * np.exp(-np.arange(m) / SR * 120) * .4
+        return cr
+    if name == "owl":      # Waldkauz, zwei Rufe, weit weg
+        res = np.zeros(int(1.6 * SR))
+        for st_, dur, f0 in ((0, .45, 410), (.75, .7, 380)):
+            n = int(dur * SR); t = np.arange(n) / SR
+            f = f0 * (1 + .04 * np.sin(np.pi * t / dur)); ph = 2 * np.pi * np.cumsum(f) / SR
+            tone = (np.sin(ph) + .2 * np.sin(2 * ph)) * np.sin(np.pi * t / dur) ** 1.5 * (1 + .25 * np.sin(2 * np.pi * 22 * t))
+            i = int(st_ * SR); res[i:i + n] += tone[:len(res) - i] * .09
+        return res
     raise ValueError(name)
 
 
@@ -250,6 +271,11 @@ def ambience(kind, dur):
         eng = np.sin(2 * np.pi * 32 * t) * .07 + np.sin(2 * np.pi * 64 * t + np.sin(t * 3)) * .035
         rattle = rng.standard_normal(n) * (np.sin(2 * np.pi * 7 * t) > .92) * .03
         return (eng + rattle + np.convolve(rng.standard_normal(n), np.ones(80) / 80, "same") * .45) * fade
+    if kind == "woods":    # Wind in den Bäumen, an- und abschwellend, sonst Stille
+        wind = np.convolve(rng.standard_normal(n), np.ones(700) / 700, "same") * 2.4
+        gust = .45 + .55 * np.clip(np.sin(t * .37) * np.sin(t * .13 + 1), 0, 1)
+        leaves = (rng.standard_normal(n) - np.convolve(rng.standard_normal(n), np.ones(4) / 4, "same")) * .006 * gust
+        return (wind * gust + leaves) * fade
     if kind == "kiosk":    # Kühlschrank-Brummen + Neonröhren-Summen
         fridge = np.sin(2 * np.pi * 47 * t) * .025 + np.sin(2 * np.pi * 94 * t) * .012
         buzz = (np.sin(2 * np.pi * 100 * t) * .006 + np.sin(2 * np.pi * 200 * t) * .004 + np.sin(2 * np.pi * 300 * t) * .002) * (.8 + .2 * np.sin(t * 1.7))
@@ -500,7 +526,7 @@ def main():
           "groups": [{"start": g["start"], "end": g["end"], "words": g["words"]} for g in groups],
           "msgs": msgs, "typing": typing, "knocks": knocks, "handle": handle, "reveal": reveal,
           "taps": taps, "hums": hums, "quotes": quotes, "eyes": eyes, "ev": {k: sorted(v) for k, v in ev.items()},
-          **{k: story[k] for k in ("item", "visitor", "endArt", "bedLegs", "openMax", "set") if k in story}}
+          **{k: story[k] for k in ("item", "visitor", "endArt", "bedLegs", "openMax", "set", "hook", "titleShot") if k in story}}
     tl_path = os.path.join(outdir, name + ".timeline.json")
     json.dump(tl, open(tl_path, "w"), ensure_ascii=False, indent=1)
 
