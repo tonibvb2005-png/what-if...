@@ -661,3 +661,66 @@
     plane('you', 1.6, 1.6); plane('youClose', .6, .6, 1536); plane('youStand', 2, 2);
   };
 })();
+
+// ======================================================================= Bad in der Ferienwohnung (Spiegeltest)
+(() => {
+  const { std, basic, put, rbox, canvasTex, plane } = W3.H, R = W3.reg;
+  // Raum: x -1.2..1.2, z 0 (Spiegelwand) .. 2.6 (Tür), Decke 2.5. Spiegel: x -.45..45, y 1.15..1.95
+  function room(P, mirrored) {
+    const tiles = canvasTex(256, 256, (g) => { g.fillStyle = '#c9ccd2'; g.fillRect(0, 0, 256, 256); g.strokeStyle = '#9ea2ab'; g.lineWidth = 3; for (let i = 0; i <= 8; i++) { g.beginPath(); g.moveTo(i * 32, 0); g.lineTo(i * 32, 256); g.moveTo(0, i * 32); g.lineTo(256, i * 32); g.stroke(); } });
+    tiles.wrapS = tiles.wrapT = THREE.RepeatWrapping; tiles.repeat.set(2.5, 2.5);
+    const tileM = new THREE.MeshStandardMaterial({ map: tiles, roughness: .35 });
+    const floorT = canvasTex(128, 128, (g) => { for (let y = 0; y < 4; y++) for (let x = 0; x < 4; x++) { g.fillStyle = (x + y) % 2 ? '#2e323c' : '#383c47'; g.fillRect(x * 32, y * 32, 32, 32); } });
+    floorT.wrapS = floorT.wrapT = THREE.RepeatWrapping; floorT.repeat.set(3, 3);
+    put(new THREE.Mesh(new THREE.PlaneGeometry(2.4, 2.6), new THREE.MeshStandardMaterial({ map: floorT, roughness: .5 })), 0, 0, 1.3, P, false).rotation.x = -Math.PI / 2;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(2.4, 2.6), std('#2a2d35')), 0, 2.5, 1.3, P, false).rotation.x = Math.PI / 2;
+    for (const sx of [-1, 1]) put(new THREE.Mesh(new THREE.PlaneGeometry(2.6, 2.5), tileM), sx * 1.2, 1.25, 1.3, P, false).rotation.y = -sx * Math.PI / 2;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(2.4, 2.5), std('#5a5f6c')), 0, 1.25, 2.6, P, false).rotation.y = Math.PI;
+    // Spiegelwand mit Loch für den Spiegel
+    put(new THREE.Mesh(new THREE.BoxGeometry(.75, 2.5, .04), tileM), -.825, 1.25, -.02, P, false);
+    put(new THREE.Mesh(new THREE.BoxGeometry(.75, 2.5, .04), tileM), .825, 1.25, -.02, P, false);
+    put(new THREE.Mesh(new THREE.BoxGeometry(.9, 1.15, .04), tileM), 0, .575, -.02, P, false);
+    put(new THREE.Mesh(new THREE.BoxGeometry(.9, .55, .04), tileM), 0, 2.225, -.02, P, false);
+    put(new THREE.Mesh(new THREE.BoxGeometry(.96, .03, .03), std('#9aa0aa', { m: .7, r: .3 })), 0, 1.95, .01, P);
+    put(new THREE.Mesh(new THREE.BoxGeometry(.96, .03, .03), std('#9aa0aa', { m: .7, r: .3 })), 0, 1.15, .01, P);
+    // Waschbecken + Unterschrank, Hahn
+    put(rbox(.8, .7, .45, .02, std('#3d3a36')), 0, .35, .24, P);
+    put(rbox(.82, .08, .48, .02, std('#e9eaee', { r: .2 })), 0, .74, .24, P);
+    put(new THREE.Mesh(new THREE.CylinderGeometry(.2, .16, .06, 24), std('#d6d8de', { r: .15 })), 0, .77, .26, P);
+    const tap = put(new THREE.Mesh(new THREE.CylinderGeometry(.015, .015, .16, 10), std('#b9bec8', { m: .8, r: .2 })), 0, .86, .06, P); 
+    const spout = put(new THREE.Mesh(new THREE.CylinderGeometry(.012, .012, .12, 10), std('#b9bec8', { m: .8, r: .2 })), 0, .93, .12, P); spout.rotation.x = Math.PI / 2;
+    // Lampe über dem Spiegel, Handtuch, Dusche rechts, Tür hinten
+    put(rbox(.7, .06, .08, .02, std('#ebeef5')), 0, 2.05, .06, P);
+    put(rbox(.35, .5, .04, .02, std('#7c3347')), -1.05, 1.1, .9, P).rotation.y = Math.PI / 2;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(1.0, 2.0), basic('#9fb0c4', { transparent: true, opacity: .18, depthWrite: false })), .7, 1.0, 1.5, P, false).rotation.y = Math.PI / 2;
+    put(rbox(.82, 2.0, .05, .01, std('#d9d6cf')), .5, 1.0, 2.57, P);
+    if (!mirrored) { R.doorHandle = put(rbox(.12, .025, .03, .01, std('#9aa0aa', { m: .7 })), .2, 1.0, 2.53, P); R.switchPlate = put(rbox(.03, .12, .09, .01, std('#e8e8e8')), 1.185, 1.1, 2.15, P); R.switchRocker = put(new THREE.Mesh(new THREE.BoxGeometry(.012, .07, .05), std('#f4f4f4')), 1.165, 1.1, 2.15, P); }
+  }
+  W3.BUILD.bathroom = async () => {
+    const sc = W3.scene;
+    sc.background = new THREE.Color('#020306'); sc.fog = new THREE.FogExp2('#020306', .06);
+    R.hemi = new THREE.HemisphereLight('#9aa3c0', '#101114', .08); sc.add(R.hemi);
+    room(sc, false);
+    // Spiegelbild: der ganze Raum noch einmal, an der Spiegelebene gespiegelt
+    R.refl = new THREE.Group(); R.refl.scale.z = -1; sc.add(R.refl); room(R.refl, true);
+    R.lamp = new THREE.PointLight('#ffe8c8', 2.6, 5, 1.6); R.lamp.position.set(0, 2.0, .35); sc.add(R.lamp);
+    R.lampR = new THREE.PointLight('#ffe8c8', 2.6, 5, 1.6); R.lampR.position.set(0, 2.0, .35); R.refl.add(R.lampR);
+    R.moon = new THREE.PointLight('#5a6c9a', .25, 4, 1.8); R.moon.position.set(-1.0, 2.2, 2.2); sc.add(R.moon);
+    // Hinter dem Glas: ein schmaler Gang (nur sichtbar, wenn dein Licht aus ist)
+    R.secret = new THREE.Group(); sc.add(R.secret);
+    const wallS = std('#3a3530');
+    put(new THREE.Mesh(new THREE.PlaneGeometry(.7, 2.4), wallS), 0, 1.2, -1.6, R.secret, false);
+    for (const sx of [-1, 1]) put(new THREE.Mesh(new THREE.PlaneGeometry(1.6, 2.4), wallS), sx * .35, 1.2, -.8, R.secret, false).rotation.y = -sx * Math.PI / 2;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(.7, 1.6), std('#24211d')), 0, .002, -.8, R.secret, false).rotation.x = -Math.PI / 2;
+    put(new THREE.Mesh(new THREE.BoxGeometry(.1, .1, .1), std('#2a2622')), .15, .05, -1.3, R.secret);
+    R.bulb = new THREE.PointLight('#c9a26a', .55, 2.2, 2); R.bulb.position.set(.25, .9, -.7); R.secret.add(R.bulb);
+    // Licht aus dem Flur fällt unter der Badtür durch (dort steht angeblich der Vermieter)
+    R.gap = put(new THREE.Mesh(new THREE.PlaneGeometry(.8, .012), basic('#ffcf8a')), .5, .006, 2.545, sc, false); R.gap.rotation.y = Math.PI;
+    const gapTex = canvasTex(128, 128, (g, w, h) => { const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, 'rgba(255,190,110,.9)'); gr.addColorStop(1, 'rgba(255,190,110,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
+    R.gapSpill = put(new THREE.Mesh(new THREE.PlaneGeometry(.9, .7), basic('#ffffff', { map: gapTex, transparent: true, opacity: .35, blending: THREE.AdditiveBlending, depthWrite: false })), .5, .004, 2.2, sc, false); R.gapSpill.rotation.x = -Math.PI / 2;
+    R.gapLight = new THREE.PointLight('#ffc27a', .5, 1.6, 2); R.gapLight.position.set(.5, .08, 2.4); sc.add(R.gapLight);
+    R.glass = put(new THREE.Mesh(new THREE.PlaneGeometry(.9, .8), basic('#a8b8cc', { transparent: true, opacity: .06, depthWrite: false })), 0, 1.55, .0, sc, false);
+    plane('back', 2, 2); plane('reflYou', 2, 2); plane('face', .5, .5, 1536); plane('finger', .5, .3, 1024); plane('fingerR', .5, .3, 1024); plane('swHand', .5, .5, 1024); plane('youClose', .6, .6, 1536);
+    R.setLight = (on) => { R.lamp.intensity = R.lampR.intensity = 2.6 * on; R.refl.visible = on > .5; R.secret.visible = on <= .5; R.hemi.intensity = .04 + .1 * on; };
+  };
+})();

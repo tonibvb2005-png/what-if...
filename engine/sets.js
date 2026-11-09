@@ -1030,3 +1030,127 @@ Object.assign(VIEWS, { ws_porthole: viewWsPorthole, ws_wide: viewWsWide, ws_row:
 Object.assign(GLSTYLE, { ws_porthole: '', ws_wide: '', ws_row: '', ws_display: '', ws_face: '', ws_sign: 'blur(9px) brightness(.5)' });
 Object.assign(SETBG, { laundromat: async (t) => { await wsChars(t, { eyes: 'wide', look: .6 }); W3.setCam([-1.8, 1.85, 1.7], [.25, .7, -2.0], 50); } });
 Object.assign(SET_ASSETS, { drumHand: DRUM_HAND });
+
+
+/* ======================================================================= BAD (Spiegeltest) */
+const BT_YOU = [.05, .58];
+function personBack(x) {   // von hinten: kein Gesicht, weinrotes Shirt, Arme zum Waschbecken
+  return `<path d="M${x - .06} -.9 L${x - .065} -.02 M${x + .06} -.9 L${x + .065} -.02" stroke="#2a2c35" stroke-width=".05" stroke-linecap="round"/>
+    <path d="M${x - .105} -1.43 Q${x} -1.47 ${x + .105} -1.43 L${x + .1} -.88 L${x - .1} -.88 Z" fill="${SHIRT}"/><path d="M${x - .105} -1.43 Q${x} -1.47 ${x + .105} -1.43 L${x + .1} -.88 L${x - .1} -.88 Z" fill="url(#shadeR)"/>
+    ${arm([x - .09, -1.39], [x - .17, -.98], 1)}${arm([x + .09, -1.39], [x + .17, -.98], -1)}
+    <circle cx="${x}" cy="-1.55" r=".13" fill="url(#headG)"/><circle cx="${x}" cy="-1.55" r=".13" fill="url(#shadeR)"/>`;
+}
+// Gesicht hinter dem Glas: ganz nah, halb im Schatten, leere schwarze Augen, Fingerkuppen platt am Glas
+function glassFace(mouth = 0) {
+  const m = clamp(mouth);
+  return svgLocal(.5, .5, `<defs>
+      <linearGradient id="gfL" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity="1"/><stop offset=".5" stop-color="#000" stop-opacity=".9"/><stop offset=".72" stop-color="#000" stop-opacity=".2"/><stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient>
+      <radialGradient id="gfS" cx="62%" cy="40%" r="65%"><stop offset="0" stop-color="#cfcdc4"/><stop offset=".7" stop-color="#9a988f"/><stop offset="1" stop-color="#5c5b56"/></radialGradient></defs>
+    <g transform="rotate(-9)">
+      <ellipse cx="0" cy="0" rx=".12" ry=".2" fill="url(#gfS)"/>
+      <ellipse cx="-.045" cy="-.02" rx=".026" ry=".05" fill="#020203"/><ellipse cx=".048" cy="-.025" rx=".026" ry=".05" fill="#020203"/>
+      <ellipse cx="0" cy=".115" rx="${.038 + .006 * m}" ry="${.003 + .024 * m}" fill="#120e0d"/>
+      <ellipse cx="0" cy="0" rx=".12" ry=".2" fill="url(#gfL)"/></g>
+    ${[0, 1, 2, 3].map(i => `<ellipse cx="${.17 + i * .012}" cy="${-.09 + i * .033}" rx=".011" ry=".015" fill="#b5b3aa" opacity=".8"/>`).join('')}`, 1536);
+}
+function bathState(t, flash = false) {
+  let L = flash ? 0 : lastEv('light', t, [0, 1])[1];
+  for (const [ft] of EV('flick')) { const d = t - ft; if (!flash && d >= 0 && d < .45) L = Math.sin(d * 60) > 0 ? 1 : 0; }
+  R3.setLight(L);
+  const sw = lastEv('light', t, [0, 1]); R3.switchRocker.rotation.z = sw[1] ? .25 : -.25;
+  const hd = EV('handle').some(h => t >= h[0] && t < h[0] + 1.2); R3.doorHandle.rotation.z = hd ? -.45 * Math.sin(clamp((t - EV('handle').find(h => t >= h[0])[0]) / 1.2) * Math.PI) : 0;
+  const tk = lastEv('talk', t, null), talking = tk && t < tk[1];
+  return { L, talking };
+}
+async function btChars(t, o = {}) {
+  for (const [n, w, h, px] of [['back', 2, 2], ['reflYou', 2, 2], ['face', .5, .5, 1536], ['finger', .5, .3, 1024], ['fingerR', .5, .3, 1024], ['swHand', .5, .5, 1024], ['youClose', .6, .6, 1536]]) ensurePlane(n, w, h, px);
+  const st = bathState(t, !!o.flash), x = BT_YOU[0];
+  await W3.setPlane('youClose', { visible: false }); await W3.setPlane('swHand', { visible: false });
+  if (!o.finger) { await W3.setPlane('finger', { visible: false }); await W3.setPlane('fingerR', { visible: false }); }
+  const col = st.L > .5 ? '#e6e8f0' : '#3a3c48';
+  if (o.back) await W3.setPlane('back', { svg: svgWrap(x, 1.0, 2.0, personBack(x)), pos: [x, 1.0, BT_YOU[1]], color: col, rotY: 0 }); else await W3.setPlane('back', { visible: false });
+  // Spiegelbild (nur bei Licht): von vorne, seitenverkehrt
+  if (st.L > .5 && o.refl !== false) await W3.setPlane('reflYou', { svg: svgWrap(x, 1.0, 2.0, `<g transform="translate(${2 * x} 0) scale(-1 1)">${person(x, { eyes: o.eyes || 'open', t, look: o.look || 0, mouth: o.mouth || '', handL: o.touch ? [2 * x - o.touch[0], -o.touch[1]] : [x - .17, -.98], handR: [x + .17, -.98] })}</g>`), pos: [x, 1.0, -BT_YOU[1]], color: '#dfe2ea', rotY: 0 });
+  else await W3.setPlane('reflYou', { visible: false });
+  // Gesicht hinter dem Glas (nur im Dunkeln sichtbar)
+  if (st.L <= .5 && o.face !== false) {
+    const mouth = st.talking ? Math.abs(Math.sin(t * 9)) * (Math.sin(t * 2.3) > -.3 ? 1 : .2) : 0;
+    await W3.setPlane('face', { svg: glassFace(mouth), pos: [x - .02, 1.56, -.07], color: o.flash ? '#8a877f' : '#75726a', rotY: 0 });
+  } else await W3.setPlane('face', { visible: false });
+  return st;
+}
+async function viewBtOver(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([.55 - .1 * ease(lt / d), 1.72, 1.75 - .2 * ease(lt / d)], [-.05, 1.42, -.4], 46);
+  await btChars(t, { back: true });
+  return '';
+}
+async function viewBtGlass(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([.04 + .004 * Math.sin(t * 1.7), 1.56, (sh.wide ? 1.15 : .95) - .15 * ease(lt / d)], [0, 1.54, -.2], sh.wide ? 50 : 40);
+  await btChars(t, { flash: !!sh.flash, eyes: 'wide' });
+  return '';
+}
+async function viewBtFinger(t, sh) {
+  // frontal: deine Hand von hinten, im Spiegel die Handinnenseite – die Fingerspitzen treffen sich ohne Lücke
+  const lt = t - sh.start, d = sh.end - sh.start, X = BT_YOU[0] + .17, Y = 1.32;
+  W3.setCam([X - .05, Y + .2, .95 - .08 * ease(lt / d)], [X - .05, Y + .08, 0], 36);
+  const tp = W3.toPlane([X, Y, -.02], -BT_YOU[1]);   // Berührungspunkt, auf die Ebene des Spiegelbilds projiziert
+  const st = await btChars(t, { finger: true, touch: tp });
+  const p = ease((lt - .15) / .8), gap = .06 * (1 - p);   // Abstand der Spitze zum Glas
+  const back = svgLocal(.5, .3, `<path d="M.07 .15 Q.1 .08 .12 .05 L.21 .09 Q.19 .14 .17 .15 Z" fill="${SHIRT}"/>
+      <path d="M.03 .03 Q.09 -.0 .14 .04 Q.15 .09 .11 .11 Q.05 .12 .02 .09 Q.0 .06 .03 .03 Z" fill="${SKIN}"/><path d="M.03 .03 Q.09 -.0 .14 .04 Q.15 .09 .11 .11 Q.05 .12 .02 .09 Q.0 .06 .03 .03 Z" fill="url(#shadeR)"/>
+      <path d="M.035 .035 L.0 .0" stroke="${SKIN}" stroke-width=".022" stroke-linecap="round"/>
+      ${[0, 1, 2].map(i => `<path d="M${.06 + i * .022} ${.05 + i * .004} q-.01 .03 .004 .045" stroke="#c9d0ef" stroke-width=".004" fill="none"/>`).join('')}`, 1024);
+  const palm = svgLocal(.5, .3, `<path d="M.03 .03 Q.09 -.0 .14 .04 Q.15 .09 .11 .11 Q.05 .12 .02 .09 Q.0 .06 .03 .03 Z" fill="#d4d9ef"/>
+      <path d="M.035 .035 L.0 .0" stroke="#d4d9ef" stroke-width=".022" stroke-linecap="round"/><ellipse cx=".004" cy=".004" rx=".009" ry=".008" fill="#e8ebf7"/>
+      ${[0, 1, 2].map(i => `<path d="M${.06 + i * .022} ${.06} q.0 .02 .01 .03" stroke="#b3bad6" stroke-width=".004" fill="none"/>`).join('')}`, 1024);
+  await W3.setPlane('finger', { svg: back, pos: [X, Y, .004 + gap + .02], rotY: 0, color: '#e6e8f0' });
+  if (st.L > .5) await W3.setPlane('fingerR', { svg: palm, pos: [X, Y, -(.004 + gap + .02)], rotY: 0, color: '#bfc3cf' });
+  else await W3.setPlane('fingerR', { visible: false });
+  return '';
+}
+async function viewBtSwitch(t, sh) {
+  const lt = t - sh.start;
+  W3.setCam([.72, 1.25, 1.78], [1.185, 1.1, 2.15], 36);
+  await btChars(t, {});
+  let p = 0; for (const e of EV('light')) { const a = t - e[0]; if (a > -.6 && a < .5) p = Math.max(p, a < 0 ? 1 + a / .6 : a < .22 ? 1 : 1 - (a - .22) / .28); }
+  if (p > 0) {
+    const tip = [.06 + .1 * ease(p), .055];
+    const body = `<path d="M-.3 -.32 Q-.1 -.1 .0 -.02" stroke="${SHIRT}" stroke-width=".06" fill="none" stroke-linecap="round"/><path d="M-.12 -.14 Q-.05 -.06 .0 -.02" stroke="${SKIN}" stroke-width=".05" fill="none" stroke-linecap="round"/>
+      <circle cx=".0" cy="-.02" r=".035" fill="${SKIN}"/><path d="M.01 -.04 L${tip[0]} ${-tip[1]}" stroke="${SKIN}" stroke-width=".02" stroke-linecap="round"/>`;
+    await W3.setPlane('swHand', { svg: svgLocal(.5, .5, body, 1024), pos: [1.14, 1.06, 1.93], rotY: -Math.PI / 2, color: '#d0d4e0' });
+  }
+  return '';
+}
+async function viewBtDoor(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start;
+  W3.setCam([.1, 1.35, .7 + .1 * ease(lt / d)], [.45, .55, 2.6], 48);
+  await btChars(t, {});
+  return '';
+}
+async function viewBtFace(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start, x = BT_YOU[0];
+  W3.setCam([x, 1.57, .12 + .04 * ease(lt / d)], [x, 1.54, .58], 40);
+  const st = await btChars(t, { face: false });
+  await W3.setPlane('youClose', { svg: svgWrap(x, 1.35, .7, person(x, { eyes: 'wide', mouth: 'o', t, look: lt > d * .5 ? (sh.lookDir || 1) * 1.3 : 0 })), pos: [x, 1.35, BT_YOU[1]], color: st.L > .5 ? '#e6e8f0' : '#4e4b48', rotY: Math.PI });
+  return '';
+}
+function guestbook(t, sh) {
+  const lt = t - sh.start, p = ease(lt / .4), z = sh.page === 2 ? 1 + .45 * ease((lt - .2) / 1.0) : 1;
+  const ln = (txt, c = '#1f2f6e', o = 1, mt = 0) => `<div style="font:italic 700 19px/34px 'Montserrat';color:${c};opacity:${o};margin-top:${mt}px">${txt}</div>`;
+  return `<div style="position:absolute;left:50%;top:200px;width:400px;height:540px;transform:translate(-50%, ${(1 - p) * 70}px) rotate(1.5deg) scale(${z});transform-origin:50% 72%;opacity:${clamp(lt / .25)};
+      background:repeating-linear-gradient(#f2ede0 0 33px, #c9d3e6 33px 34px);box-shadow:0 30px 70px rgba(0,0,0,.75);border-radius:3px;overflow:hidden;padding:0 26px 0 46px">
+    <div style="position:absolute;left:30px;top:0;bottom:0;width:2px;background:#e0a0a0"></div>
+    <div style="font:900 13px/34px 'Montserrat';letter-spacing:2px;color:#8a7a5a;margin-top:0">GÄSTEBUCH</div>
+    ${ln('Schöne Wohnung, sehr ruhig! – Familie K.', '#555', .55)}
+    ${ln('8. November:', '#1f2f6e', 1, 34)}
+    ${ln('Macht den Spiegeltest im Bad!!')}
+    ${ln('Finger ans Glas. Keine Lücke = kein Spiegel.')}
+    ${ln('Mach das Licht aus. Dann sieht er dich nicht.', '#8a1c1c', sh.page === 2 ? 1 : 0, 34)}
+    ${ln('Aber du siehst ihn.', '#8a1c1c', sh.page === 2 ? 1 : 0)}</div>`;
+}
+async function viewBtBook(t, sh) { await SETBG.bathroom(t); return guestbook(t, sh); }
+Object.assign(VIEWS, { bt_over: viewBtOver, bt_glass: viewBtGlass, bt_finger: viewBtFinger, bt_switch: viewBtSwitch, bt_door: viewBtDoor, bt_face: viewBtFace, bt_book: viewBtBook });
+Object.assign(GLSTYLE, { bt_over: '', bt_glass: '', bt_finger: '', bt_switch: '', bt_door: '', bt_face: '', bt_book: 'blur(9px) brightness(.45)' });
+Object.assign(SETBG, { bathroom: async (t) => { await btChars(t, { back: true }); W3.setCam([.5, 1.72, 1.7], [-.05, 1.42, -.4], 46); } });

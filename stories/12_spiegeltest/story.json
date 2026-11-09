@@ -1,0 +1,331 @@
+{
+ "series": "GESCHICHTEN AUS DER NACHT",
+ "episode": "#12",
+ "title": "SPIEGELTEST",
+ "part": 1,
+ "set": "bathroom",
+ "ambience": "bathroom",
+ "hook": "DER SPIEGEL IST <em>EIN FENSTER</em>",
+ "titleShot": 1,
+ "dreadBase": 0.35,
+ "question": "TÜR AUF oder STILLHALTEN? Schreib's in die Kommentare.",
+ "shots": [
+  {
+   "scene": "bt_glass",
+   "flash": true,
+   "lines": [
+    {
+     "text": "Hinter deinem Spiegel steht jemand.",
+     "hl": {
+      "Spiegel": "y",
+      "jemand": "r"
+     },
+     "sfx": [
+      [
+       "sting",
+       "start"
+      ],
+      [
+       "ring",
+       "start+0.4"
+      ]
+     ],
+     "ev": [
+      [
+       "pulse",
+       "start"
+      ]
+     ],
+     "pause": 0.4
+    }
+   ]
+  },
+  {
+   "scene": "bt_over",
+   "clock": "4:12",
+   "place": "FERIENWOHNUNG",
+   "lines": [
+    {
+     "text": "Stell dir vor, es ist 4:12. Du übernachtest allein in einer Ferienwohnung.",
+     "say": "Stell dir vor, es ist vier Uhr zwölf. Du übernachtest allein in einer Ferienwohnung.",
+     "hl": {
+      "allein": "r",
+      "Ferienwohnung": "y"
+     },
+     "sfx": [
+      [
+       "drip",
+       "end"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "scene": "bt_book",
+   "lines": [
+    {
+     "text": "Im Gästebuch steht ein Eintrag von gestern: Macht den Spiegeltest im Bad.",
+     "hl": {
+      "Spiegeltest": "y"
+     },
+     "pause": 0.2
+    }
+   ]
+  },
+  {
+   "scene": "bt_finger",
+   "clock": "4:12",
+   "place": "BAD",
+   "lines": [
+    {
+     "text": "Du legst deinen Finger an den Spiegel. Keine Lücke.",
+     "hl": {
+      "Finger": "y",
+      "Keine": "r",
+      "Lücke": "r"
+     }
+    }
+   ]
+  },
+  {
+   "scene": "bt_glass",
+   "clock": "4:12",
+   "place": "BAD",
+   "lines": [
+    {
+     "text": "Es ist kein Spiegel. Es ist ein Fenster.",
+     "hl": {
+      "Fenster": "r"
+     },
+     "ev": [
+      [
+       "dread",
+       "word6"
+      ]
+     ],
+     "sfx": [
+      [
+       "boom",
+       "word6"
+      ],
+      [
+       "whisper",
+       "end"
+      ]
+     ],
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "bt_book",
+   "page": 2,
+   "lines": [
+    {
+     "text": "Darunter steht: Mach das Licht aus. Dann sieht er dich nicht. Aber du siehst ihn.",
+     "hl": {
+      "Licht": "y",
+      "nicht": "r",
+      "ihn": "r"
+     },
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "bt_switch",
+   "clock": "4:13",
+   "place": "BAD",
+   "lines": [
+    {
+     "text": "Du machst das Licht aus.",
+     "ev": [
+      [
+       "flick",
+       "word3-0.1"
+      ],
+      [
+       "light",
+       "word3+0.35",
+       0
+      ],
+      [
+       "silence",
+       "end",
+       "end+1.3"
+      ]
+     ],
+     "sfx": [
+      [
+       "click",
+       "word3"
+      ]
+     ],
+     "pause": 1.0
+    }
+   ]
+  },
+  {
+   "scene": "bt_glass",
+   "wide": true,
+   "clock": "4:13",
+   "place": "BAD",
+   "lines": [
+    {
+     "text": "Hinter dem Glas ist ein schmaler Gang. Und ein Gesicht. Ganz nah.",
+     "hl": {
+      "Gesicht": "r",
+      "nah": "r"
+     },
+     "ev": [
+      [
+       "pulse",
+       "word6"
+      ]
+     ],
+     "sfx": [
+      [
+       "sting",
+       "word6"
+      ],
+      [
+       "ring",
+       "word6+0.3"
+      ]
+     ],
+     "pause": 0.4
+    }
+   ]
+  },
+  {
+   "scene": "bt_door",
+   "clock": "4:13",
+   "place": "BAD",
+   "lines": [
+    {
+     "text": "Dann klopft es an der Badtür.",
+     "hl": {
+      "klopft": "r"
+     },
+     "knocks": [
+      "end",
+      "end+0.35",
+      "end+0.7"
+     ],
+     "sfx": [
+      [
+       "knock",
+       "end"
+      ],
+      [
+       "knock",
+       "end+0.35"
+      ],
+      [
+       "knock",
+       "end+0.7"
+      ]
+     ],
+     "pause": 0.9
+    }
+   ]
+  },
+  {
+   "scene": "bt_face",
+   "clock": "4:13",
+   "place": "BAD",
+   "lines": [
+    {
+     "text": "Ich bin's, der Vermieter. Mach bitte das Licht an.",
+     "hl": {
+      "Licht": "y"
+     },
+     "quote": {
+      "who": "VERMIETER",
+      "place": "VOR DER BADTÜR",
+      "text": "Ich bin's, der Vermieter. Mach bitte das Licht an."
+     },
+     "ev": [
+      [
+       "talk",
+       "start",
+       "end"
+      ],
+      [
+       "handle",
+       "end"
+      ]
+     ],
+     "sfx": [
+      [
+       "breath",
+       "end"
+      ]
+     ],
+     "pause": 0.2
+    }
+   ]
+  },
+  {
+   "scene": "bt_glass",
+   "clock": "4:14",
+   "place": "BAD",
+   "lines": [
+    {
+     "text": "Hinter dem Glas bewegen sich seine Lippen. Im selben Takt.",
+     "hl": {
+      "Lippen": "r",
+      "Takt": "r"
+     },
+     "ev": [
+      [
+       "talk",
+       "start",
+       "end"
+      ]
+     ],
+     "sfx": [
+      [
+       "whisper",
+       "start"
+      ],
+      [
+       "boom",
+       "end"
+      ]
+     ],
+     "pause": 0.6
+    }
+   ]
+  },
+  {
+   "scene": "choice",
+   "heading": "WAS MACHST DU?",
+   "part2": true,
+   "left": {
+    "label": "TÜR AUF",
+    "text": "Vielleicht ist es wirklich der Vermieter.",
+    "icon": "🚪",
+    "color": "#2f7cf6"
+   },
+   "right": {
+    "label": "STILLHALTEN",
+    "text": "Im Dunkeln bleiben. Dann sieht er dich nicht.",
+    "icon": "🤫",
+    "color": "#ff3b30"
+   },
+   "lines": [
+    {
+     "text": "Tür auf oder stillhalten? Teil 2 heute Nacht.",
+     "say": "Tür auf oder stillhalten? Teil zwei heute Nacht.",
+     "hl": {
+      "Tür": "b",
+      "stillhalten": "r"
+     },
+     "pause": 0.6
+    }
+   ]
+  }
+ ]
+}

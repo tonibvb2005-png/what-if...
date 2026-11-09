@@ -610,7 +610,8 @@ window.renderFrame = async (t) => {
   const html = await VIEWS[sh.scene](t, sh);
   const gl = $('gl'), st = GLSTYLE[sh.scene];
   gl.style.display = st === 'none' ? 'none' : 'block';
-  const dr = TL.ev && TL.ev.dread ? TL.ev.dread[0][0] : null, dk = dr != null && t >= dr && sh.scene !== 'end' ? ease((t - dr) / 1.6) : 0;
+  const dr = TL.ev && TL.ev.dread ? TL.ev.dread[0][0] : null, base = TL.dreadBase || 0;
+  const dk = sh.scene === 'end' ? 0 : Math.max(base, dr != null && t >= dr ? base + (1 - base) * ease((t - dr) / 1.6) : 0);
   const dreadF = dk ? ` saturate(${1 - .5 * dk}) contrast(${1 + .2 * dk}) brightness(${1 - .22 * dk})` : '';
   gl.style.filter = st === 'none' ? '' : (st + dreadF).trim();
   $('dread').style.opacity = dk;
@@ -634,7 +635,7 @@ window.renderFrame = async (t) => {
     ov += `<div class="hook" style="opacity:${k};transform:translateX(-50%) scale(${.85 + .15 * outBack(t / .3)})">${TL.hook}</div>`;
   } else if (t >= ts && t < ts + tLen) {
     ov += `<div class="title" style="opacity:${clamp((ts + tLen - t) / .25) * clamp((t - ts) / .15)}"><div class="k">${TL.series} · ${TL.episode}</div><div class="t">${TL.title}<br>TEIL ${TL.part}</div></div>`;
-  } else if (sh.place && !['lock', 'chat', 'choice', 'end', 'monitor', 'radio', 'ks_cctv', 'ks_note', 'hs_thermal', 'ws_sign'].includes(sh.scene)) {
+  } else if (sh.place && !['lock', 'chat', 'choice', 'end', 'monitor', 'radio', 'ks_cctv', 'ks_note', 'hs_thermal', 'ws_sign', 'bt_book'].includes(sh.scene)) {
     const blink = (t % 1.2) < .7 ? 1 : .25;
     ov += `<div class="badge"><div class="tm"><i style="opacity:${blink}"></i>${sh.clock}<small>UHR</small></div><div class="pl">TEIL ${TL.part} · ${sh.place}</div></div>`;
   }
@@ -651,6 +652,7 @@ window.renderFrame = async (t) => {
       return `<span class="${w.c}" style="transform:scale(${.8 + .2 * p})">${w.w}</span>`;
     }).join('') + `</div>`;
   }
+  for (const [pt] of (TL.ev && TL.ev.pulse) || []) { const a = t - pt; if (a >= 0 && a < .9) ov = `<div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 45%, rgba(160,0,10,0) 30%, rgba(150,0,10,${.55 * Math.exp(-a * 4)}) 100%)"></div>` + ov; }
   $('overlay').innerHTML = ov;
   $('grain').style.backgroundImage = `url(${GRAIN[Math.floor(t * 24) % GRAIN.length]})`;
 };

@@ -1,0 +1,22 @@
+[whispers, frightened] Hinter deinem Spiegel steht jemand.
+[long pause]
+[calm, low voice] Stell dir vor, es ist vier Uhr zwölf. [short pause] Du übernachtest allein in einer Ferienwohnung.
+[slowly] Im Gästebuch steht ein Eintrag von gestern: [quietly] Macht den Spiegeltest im Bad.
+[long pause]
+[tense] Du legst deinen Finger an den Spiegel. [short pause] [whispers] Keine Lücke.
+[short pause]
+[slowly, ominous] Es ist kein Spiegel. [short pause] Es ist ein Fenster.
+[long pause]
+[quietly] Darunter steht: [serious, slowly] Mach das Licht aus. [short pause] Dann sieht er dich nicht. [short pause] [whispers] Aber du siehst ihn.
+[long pause]
+[nervous, quietly] Du machst das Licht aus.
+[long pause] [long pause]
+[whispers, terrified] Hinter dem Glas ist ein schmaler Gang. [short pause] Und ein Gesicht. [short pause] Ganz nah.
+[long pause]
+[tense] Dann klopft es an der Badtür.
+[long pause]
+[friendly, calm, slightly muffled] Ich bin's, der Vermieter. [short pause] Mach bitte das Licht an.
+[long pause]
+[whispers, frightened] Hinter dem Glas bewegen sich seine Lippen. [short pause] Im selben Takt.
+[long pause]
+[calm, low voice] Tür auf oder stillhalten? [short pause] [ominous] Teil zwei heute Nacht.

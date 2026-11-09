@@ -17,7 +17,7 @@ SR = 44100
 PIPER_MODEL = os.environ.get("PIPER_MODEL", os.path.join(ROOT, ".cache", "piper", "de.onnx"))
 
 # Lautstärke einzelner Effekte relativ zur Stimme (Spitze der Stimme = 0.85)
-SFX_GAIN = {"steps": .55, "steps_out": 1.4, "doorclose": .55, "bottle": .6, "clack": .5, "scrape": .7, "snip": .6, "drawer": .6, "heart": .85, "squelch": .7, "ladder": .5, "owl": 1.0, "washer": .35, "thump": .45}
+SFX_GAIN = {"steps": .55, "steps_out": 1.4, "doorclose": .55, "bottle": .6, "clack": .5, "scrape": .7, "snip": .6, "drawer": .6, "heart": .85, "squelch": .7, "ladder": .5, "owl": 1.0, "washer": .35, "thump": .45, "sting": 1.0, "whisper": 1.0, "ring": 1.0, "drip": .8}
 
 GAP_LINE = 0.18   # Pause zwischen Zeilen
 GAP_SHOT = 0.30   # zusätzliche Pause bei Szenenwechsel
@@ -255,6 +255,28 @@ def sfx(name):
         n = int(.5 * SR); t = np.arange(n) / SR
         return (np.sin(2 * np.pi * 85 * t) * np.exp(-18 * t) * .7 + np.sin(2 * np.pi * 410 * t) * np.exp(-25 * t) * .15
                 + np.sin(2 * np.pi * 2900 * t) * np.exp(-30 * t) * .05 + rng.standard_normal(n) * np.exp(-90 * t) * .3)
+    if name == "sting":    # Schock: dissonanter Streicher-Cluster, schlagartig, mit Kratzen
+        dur = 2.6; n = int(dur * SR); t = np.arange(n) / SR
+        out = np.zeros(n)
+        for f in (1244, 1318, 1396, 1864, 2489):
+            vib = 1 + .012 * np.sin(2 * np.pi * (6 + f % 5) * t)
+            ph = 2 * np.pi * np.cumsum(f * vib) / SR
+            out += ((ph / (2 * np.pi)) % 1 * 2 - 1) * .12
+        scr = rng.standard_normal(n); scr = scr - np.convolve(scr, np.ones(3) / 3, "same")
+        e = np.minimum(1, t / .015) * np.exp(-1.3 * t)
+        return (np.convolve(out, np.ones(4) / 4, "same") + scr * .25 * np.exp(-6 * t)) * e * .75
+    if name == "whisper":  # unverständliches Flüstern: zischende, rhythmische Atemsilben
+        dur = 2.4; n = int(dur * SR); t = np.arange(n) / SR
+        nz = rng.standard_normal(n); hiss = nz - np.convolve(nz, np.ones(3) / 3, "same")
+        body = np.convolve(nz, np.ones(9) / 9, "same")
+        syl = np.clip(np.sin(2 * np.pi * 3.3 * t + 2 * np.sin(2 * np.pi * .7 * t)), 0, 1) ** 2
+        return (hiss * .5 + body * .9) * syl * np.sin(np.pi * t / dur) * .22
+    if name == "ring":     # Pfeifen im Ohr nach dem Schock
+        dur = 3.0; n = int(dur * SR); t = np.arange(n) / SR
+        return np.sin(2 * np.pi * 6100 * t) * np.minimum(1, t / .3) * np.exp(-.9 * t) * .045
+    if name == "drip":     # ein Tropfen ins Waschbecken
+        n = int(.25 * SR); t = np.arange(n) / SR
+        return np.sin(2 * np.pi * (1800 - 4000 * t) * t) * np.exp(-30 * t) * .25
     raise ValueError(name)
 
 
@@ -282,6 +304,16 @@ def ambience(kind, dur):
         eng = np.sin(2 * np.pi * 32 * t) * .07 + np.sin(2 * np.pi * 64 * t + np.sin(t * 3)) * .035
         rattle = rng.standard_normal(n) * (np.sin(2 * np.pi * 7 * t) > .92) * .03
         return (eng + rattle + np.convolve(rng.standard_normal(n), np.ones(80) / 80, "same") * .45) * fade
+    if kind == "bathroom":     # Stille Wohnung: Rohre gluckern, Tropfen, ganz hinten Flüstern
+        res = np.convolve(rng.standard_normal(n), np.ones(900) / 900, "same") * .9
+        for d in np.arange(1.3, dur, 2.3):
+            i = int(d * SR); m = min(n - i, int(.2 * SR)); tt = np.arange(m) / SR
+            res[i:i + m] += np.sin(2 * np.pi * (1700 - 4000 * tt) * tt) * np.exp(-32 * tt) * .06
+        for d in np.arange(4.0, dur, 7.5):   # Flüstern, kaum hörbar
+            i = int(d * SR); m = min(n - i, int(2.0 * SR)); tt = np.arange(m) / SR
+            nz = rng.standard_normal(m); nz = nz - np.convolve(nz, np.ones(3) / 3, "same")
+            res[i:i + m] += nz * np.clip(np.sin(2 * np.pi * 3.1 * tt), 0, 1) ** 2 * np.sin(np.pi * tt / 2.0) * .02
+        return (res + np.sin(2 * np.pi * 60 * t) * .006) * fade
     if kind == "laundromat":   # Maschinen brummen, Trommel schwappt rhythmisch, Neonröhre summt
         motor = np.sin(2 * np.pi * 52 * t) * .02 + np.sin(2 * np.pi * 104 * t) * .01
         slosh = np.convolve(rng.standard_normal(n), np.ones(250) / 250, "same") * (.5 + .5 * np.sin(2 * np.pi * .45 * t) ** 2) * 1.6
@@ -541,7 +573,7 @@ def main():
           "groups": [{"start": g["start"], "end": g["end"], "words": g["words"]} for g in groups],
           "msgs": msgs, "typing": typing, "knocks": knocks, "handle": handle, "reveal": reveal,
           "taps": taps, "hums": hums, "quotes": quotes, "eyes": eyes, "ev": {k: sorted(v) for k, v in ev.items()},
-          **{k: story[k] for k in ("item", "visitor", "endArt", "bedLegs", "openMax", "set", "hook", "titleShot") if k in story}}
+          **{k: story[k] for k in ("item", "visitor", "endArt", "bedLegs", "openMax", "set", "hook", "titleShot", "dreadBase") if k in story}}
     tl_path = os.path.join(outdir, name + ".timeline.json")
     json.dump(tl, open(tl_path, "w"), ensure_ascii=False, indent=1)
 
@@ -555,7 +587,6 @@ def main():
     for st, a in voice:
         i = int(st * SR); vo[i:i + len(a)] += a[: n - i]
     vo /= (np.abs(vo).max() + 1e-9); vo *= 0.85
-    mix += vo
     for st, nm in sfx_ev:
         s = sfx(nm) * SFX_GAIN.get(nm, 1.0); i = int(st * SR); mix[i:i + len(s)] += s[: n - i]
     if ev.get("dread"):
@@ -566,6 +597,18 @@ def main():
             rum = (np.sin(2 * np.pi * 36 * tt) * .6 + np.sin(2 * np.pi * 54.5 * tt) * .25
                    + np.convolve(np.random.default_rng(9).standard_normal(m), np.ones(1500) / 1500, "same") * 6)
             mix[i0:] += rum * swell * .09
+    base = story.get("dreadBase", 0)
+    if base:   # leises Grollen schon ab dem Anfang
+        tt = np.arange(n) / SR
+        mix += (np.sin(2 * np.pi * 36 * tt) * .6 + np.sin(2 * np.pi * 54.5 * tt) * .25) * np.minimum(1, tt / 2) * .09 * base
+    # Stille vor dem Schock: Hintergrund und Effekte kurz wegziehen (Stimme bleibt)
+    for e in ev.get("silence", []):
+        a_, b_ = int(e[0] * SR), int(e[1] * SR); r_ = int(.25 * SR)
+        g = np.ones(n); g[a_:b_] = 0.04
+        g[max(0, a_ - r_):a_] = np.linspace(1, .04, a_ - max(0, a_ - r_))
+        rr = min(n, b_ + int(.03 * SR)); g[b_:rr] = np.linspace(.04, 1, rr - b_)
+        mix *= g
+    mix += vo
     mix = np.tanh(mix * 1.1) * 0.92
     wav_path = os.path.join(outdir, name + ".wav")
     with wave.open(wav_path, "wb") as w:

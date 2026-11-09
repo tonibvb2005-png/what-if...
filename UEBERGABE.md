@@ -65,6 +65,7 @@ Details zum Stil stehen in `STYLE_GUIDE.md`.
 | 06 | Lichthupe | Auto, Landstraße, Verfolger, Radio, Rücksitz | Bild fertig; wartet auf Stimme |
 | 07 | **Bewegungsmelder** | dunkles Großraumbüro, Lichter folgen dir, Kopierer druckt ein Foto | Bild fertig; wartet auf Stimme |
 | 08 | Letzte Haltestelle | Nachtbus | gebaut, aber verworfen (Idee war nicht neu) |
+| 12 | **Spiegeltest** | Bad in der Ferienwohnung um 4:12, Spiegeltest im Gästebuch, Licht aus → Gesicht hinter dem Glas, „Vermieter“ an der Tür | Bild fertig + Probevideo (Piper); **gruseliger Modus**; wartet auf Feedback + Stimme |
 | 11 | **Maschine 7** | Waschsalon um 1:58, Maschine 7 läuft von allein, Hand im Bullauge, Schild „Nicht öffnen“, Kinderstimme | **FINAL gerendert** mit deiner ElevenLabs-Stimme (47 s); wartende Person hat jetzt Beine |
 | 10 | **Wärmebild** | Hochsitz im Wald, Wärmebildkamera, Onkel am Funkgerät, Uhrzeit 2:47 | Bild fertig + Probevideo (Piper); **erste Folge mit neuem, optimiertem Aufbau**; wartet auf Feedback + Stimme |
 | 09 | **Spätschicht** | Kiosk nachts, Kunde mit Kapuze kauft Wasser + Schere, Zettel der Vorgängerin, Überwachungskamera | **FINAL gerendert** mit deiner ElevenLabs-Stimme (Arthur Holm), bereit zum Posten |
@@ -183,6 +184,13 @@ Grund: „Spätschicht“ kam nicht gut an. Optimierungen für mehr Zuschauerbin
 6. **Titelbild (Cover)** aus dem Cold Open mit Hook-Text: z. B. `branding/cover_10_waermebild.png`. Beim Posten als Cover wählen.
 7. Ton: eigener Originalton, keine TikTok-Musik darüber; Originalton nach dem Posten benennen.
 
+## 6c. Gruseliger Modus (ab Folge 12, weil 10/11 nicht gut liefen)
+- `"dreadBase": 0.35` in story.json: dunkel/entsättigt + leises Grollen schon ab Sekunde 1, voll ab dem `dread`-Ereignis.
+- Ereignis `silence` [start, ende]: Atmo + Effekte werden kurz fast stumm (Stimme bleibt) → danach Schock.
+- Neue Sounds: `sting` (Schock-Streicher), `whisper` (Flüstern), `ring` (Pfeifen im Ohr), `drip`; Ambience `bathroom` mit kaum hörbarem Flüstern.
+- Ereignis `pulse`: roter Blitz am Bildrand beim Schock.
+- Kreatur: halbes Gesicht im Schatten, leere schwarze Augen, keine niedlichen Details (keine Nase/kein Lächeln).
+
 ## 7. Caption-Vorlage
 
 ```
@@ -226,6 +234,11 @@ Teil 2 kommt heute Nacht – folgen, damit du ihn nicht verpasst.
 - Gefixt: Trommel lag hinter der Gerätefront (unsichtbar), Trocknerscheiben flimmerten (Z-Fighting), Display angeschnitten, Hand zu hell.
 - Dein Feedback: Die wartende Person auf der Bank hatte keine Beine → `seatedLegs()` in sets.js (Oberschenkel, Unterschenkel, Schuhe auf dem Boden). **Regel: sitzende Figuren immer mit Beinen.**
 - Final gerendert mit `stories/11_maschine7/voice/voiceover.mp3`. Caption `branding/CAPTION_11_maschine7.txt`, Cover `branding/cover_11_maschine7.png`.
+
+### Folge 12 „Spiegeltest“
+- Neues Set `bathroom`: Bad + komplett gespiegelte Kopie des Raums hinter dem Spiegel (echtes Spiegelbild), versteckter Gang, der bei Licht aus sichtbar wird; Lichtspalt unter der Badtür.
+- Einstellungen `bt_glass` (Spiegel, `flash` = Vorgriff, `wide`), `bt_over`, `bt_finger` (Finger trifft Spiegelbild ohne Lücke, Spiegelbild hebt den Arm mit), `bt_switch`, `bt_door`, `bt_face`, `bt_book` (Gästebuch, `page: 2` zoomt auf die Regel).
+- Nächster Schritt: Probevideo ansehen, `stories/12_spiegeltest/voiceover_elevenlabs.txt` aufnehmen, final rendern. Caption `branding/CAPTION_12_spiegeltest.txt`, Cover `branding/cover_12_spiegeltest.png`.
 
 ### Erledigt aus der letzten Liste
 - Punkt 1 (Auswahl): **B) Spätschicht** gewählt und gebaut (siehe oben). A) „Die Pizza“ und C) „Die Sprachnachricht“ bleiben als Reserve-Ideen.
