@@ -209,22 +209,22 @@
       "klopft": "r"
      },
      "knocks": [
-      "end",
-      "end+0.35",
-      "end+0.7"
+      "word5+0.45",
+      "word5+0.75",
+      "word5+1.05"
      ],
      "sfx": [
       [
        "knock",
-       "end"
+       "word5+0.45"
       ],
       [
        "knock",
-       "end+0.35"
+       "word5+0.75"
       ],
       [
        "knock",
-       "end+0.7"
+       "word5+1.05"
       ]
      ],
      "pause": 0.9
