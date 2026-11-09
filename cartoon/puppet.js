@@ -128,6 +128,8 @@ window.Puppet = (function () {
       ctx.fillStyle = OUT; ctx.font = '900 26px Inter Display'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(kind === 'shirt10' ? '€10' : '€100', 60, -17);
     } else if (kind === 'cup') {
       if (window.drawJulesRimet) window.drawJulesRimet(ctx, 0, -10, 1.25, t);
+    } else if (kind === 'yellow') {
+      ctx.rotate(-.15); ctx.beginPath(); ctx.roundRect(-24, -96, 48, 70, 6); ctx.fillStyle = '#ffd400'; ctx.fill(); stroke(ctx, 5, OUT);
     } else if (kind === 'coat') {
       ctx.rotate(.15);
       ctx.beginPath(); ctx.moveTo(-10, -6); ctx.lineTo(-58, 20); ctx.lineTo(-64, 170); ctx.lineTo(48, 170); ctx.lineTo(44, 20); ctx.lineTo(10, -6); ctx.closePath();
