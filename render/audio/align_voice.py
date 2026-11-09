@@ -5,7 +5,7 @@ import json, re, sys, difflib
 from faster_whisper import WhisperModel
 
 NUM = {'1900': ['nineteen', 'hundred'], '58-ton': ['fifty', 'eight', 'ton'], '172': ['hundred', 'seventy', 'two'],
-       '2014,': ['twenty', 'fourteen'], 'bc.': ['bc'], '1847.': ['eighteen', 'forty', 'seven'], '312': ['three', 'hundred', 'twelve'], '1983.': ['nineteen', 'eighty', 'three'], '1962.': ['nineteen', 'sixty', 'two'], '1779.': ['seventeen', 'seventy', 'nine']}
+       '2014,': ['twenty', 'fourteen'], 'bc.': ['bc'], '1847.': ['eighteen', 'forty', 'seven'], '312': ['three', 'hundred', 'twelve'], '1983.': ['nineteen', 'eighty', 'three'], '1962.': ['nineteen', 'sixty', 'two'], '1779.': ['seventeen', 'seventy', 'nine'], '1871.': ['eighteen', 'seventy', 'one']}
 
 def norm(w):
     return re.sub(r"[^a-z0-9']", '', w.lower().replace('-', ' ').split()[0] if w.strip() else '')
