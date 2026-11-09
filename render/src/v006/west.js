@@ -143,5 +143,5 @@ export function buildWest() {
   for (const [x, y] of [[-2.55, 2.05], [2.6, 1.55]]) { const r = new THREE.Group(); const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.18, 0.08, 24), new THREE.MeshStandardMaterial({ color: 0xd8903a, metalness: 0.95, roughness: 0.2 })); cap.rotation.x = Math.PI / 2; r.add(cap); const dome = new THREE.Mesh(new THREE.SphereGeometry(0.12, 16, 8, 0, Math.PI * 2, 0, Math.PI / 2), cap.material); dome.rotation.x = Math.PI / 2; dome.position.z = 0.04; r.add(dome); r.position.set(x, y, 0.22); jeans.add(r); bigRivets.push(r); }
   const jLight = new THREE.PointLight(0xfff2d8, 30, 12, 1.2); jLight.position.set(-2, 3, 3); jeans.add(jLight);
 
-  return { scene, sky, hemi, sun, clouds, town, wm, tumbles, dust, horses, horseT, pants, pantsT, ropes, rivetGlow, hats, mine, nuggets, cart, shop, benchPants, rivetsOnPants, sparks, jeans, bigRivets };
+  return { scene, ground, sky, hemi, sun, clouds, town, wm, tumbles, dust, horses, horseT, pants, pantsT, ropes, rivetGlow, hats, mine, nuggets, cart, shop, benchPants, rivetsOnPants, sparks, jeans, bigRivets };
 }

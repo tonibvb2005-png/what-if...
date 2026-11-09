@@ -71,7 +71,7 @@ const allTown = [davis, ...cowboys, rival, levi, ...crowd, ...queue, longjohn];
 function setPlace(p, t) {
   place = p;
   R.town.visible = p === 'town'; R.mine.visible = p === 'mine'; R.shop.visible = p === 'shop'; R.jeans.visible = p === 'jeans';
-  R.sky.visible = p !== 'shop' && p !== 'jeans'; R.clouds.forEach((c) => (c.visible = R.sky.visible));
+  R.sky.visible = p !== 'shop' && p !== 'jeans'; R.ground.visible = p !== 'jeans'; R.clouds.forEach((c) => (c.visible = R.sky.visible));
   R.scene.background = p === 'jeans' ? new THREE.Color(0x1a2a4a) : null;
   R.scene.fog = p === 'town' || p === 'mine' ? new THREE.Fog(0xf6e2b8, 80, 420) : null;
   R.scene.environment = p === 'shop' ? ENV.shop : p === 'jeans' ? ENV.jeans : ENV.day; R.scene.environmentIntensity = 0.8;
