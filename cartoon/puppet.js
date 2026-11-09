@@ -327,10 +327,17 @@ window.Puppet = (function () {
     if (m.dance > 0) { p.lA += m.dance * (Math.sin(t * 6.5) * 25); p.rA += m.dance * (-Math.sin(t * 6.5) * 25); }
     const lookX = m.lookX + m.no * Math.sin(t * 11) * .9;
     p.rE += m.wave * Math.sin(t * 12) * 28;
-    if (m.walk > 0) { const w = Math.sin(t * 9); p.lL += w * 24 * m.walk; p.rL -= w * 24 * m.walk; p.lK -= Math.max(0, -w) * 30 * m.walk; p.rK -= Math.max(0, w) * 30 * m.walk; p.lA += -w * 14 * m.walk; m = Object.assign({}, m, { dy: m.dy - Math.abs(w) * 10 * m.walk }); }
+    if (m.walk > 0) {
+      // natural front-view walk: legs stay under the hips, one knee lifts at a time, arms swing opposite
+      const w = Math.sin(t * 8), up = Math.max(0, w), dn = Math.max(0, -w);
+      p.lL += (4 - up * 6) * m.walk; p.rL += (4 - dn * 6) * m.walk;
+      p.lK -= up * 38 * m.walk; p.rK -= dn * 38 * m.walk;
+      p.lA += -w * 10 * m.walk; p.rA += w * 10 * m.walk;
+      m = Object.assign({}, m, { dy: m.dy - Math.abs(w) * 7 * m.walk });
+    }
     if (m.sing > 0) { e = Object.assign({}, e, { mouthOpen: e.mouthOpen + (.35 + .3 * Math.sin(t * 7)) * m.sing, squint: Math.max(e.squint, .8 * m.sing) }); p.headTilt += Math.sin(t * 3) * 8 * m.sing; p.lean += Math.sin(t * 3) * 4 * m.sing; }
     const tuck = m.jump * jumpPh;
-    p.lL += tuck * 18; p.rL += tuck * 18; p.lK -= tuck * 40; p.rK -= tuck * 40;
+    p.lL += tuck * 5; p.rL += tuck * 5; p.lK -= tuck * 28; p.rK -= tuck * 28;
 
     const hipY = -185, sY = -375, headY = sY - 84 + laughB * .6, R = 88;
     const tw = 64 * bw, bwid = 56 * bw;
