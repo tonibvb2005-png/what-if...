@@ -1287,6 +1287,182 @@
       draw2: (s, lt, d, t) => { lamp(-620); drawDog(130, 1400, 1.5, { tongue: true, wag: true }, t); window.drawJulesRimet(ctx, 330, 1400, 1.2, t); } }
   });
 
+
+  // ---------- flat daylight style ("Why it sucks being a ...") ----------
+  Object.assign(CH, {
+    max:     { skin: '#f0c19a', shirt: '#2fbf71', trim: '#111', number: '1', pants: '#1f2236', shoes: '#111', hair: 'spiky', hairColor: '#4a2a14', gloves: '#ff8c1a', bw: 1, blinkPh: .4 },
+    kidR:    { skin: '#ffd9b8', shirt: '#e8364f', trim: '#fff', number: '9', pants: '#fff', shoes: '#111', hair: 'short', hairColor: '#c9a46a', bw: .95, blinkPh: 1.1 },
+    kidY:    { skin: '#8a5a3c', shirt: '#ffd400', trim: '#111', number: '10', pants: '#111', shoes: '#111', hair: 'buzz', hairColor: '#120a05', bw: .95, blinkPh: 2.0 },
+    kidB:    { skin: '#e8b08a', shirt: '#1f6fe0', trim: '#fff', number: '7', pants: '#fff', shoes: '#111', hair: 'slick', hairColor: '#2a1a10', bw: .95, blinkPh: .7 },
+    coach:   { skin: '#e8b08a', shirt: '#1c2c5b', trim: '#ffd400', pants: '#1c2c5b', shoes: '#111', hair: 'cap', capColor: '#1c2c5b', hairColor: '#3a2414', stubble: true, bw: 1.2, blinkPh: 1.6 },
+    dad:     { skin: '#f0c19a', shirt: '#5a6a8a', trim: '#fff', pants: '#2b2f4a', shoes: '#111', hair: 'short', hairColor: '#4a2a14', beard: false, stubble: true, bw: 1.1, blinkPh: 2.4 },
+    striker: Object.assign({}, CH.striker || {}, { skin: '#ffd9b8', shirt: '#1f6fe0', trim: '#fff', number: '9', pants: '#fff', shoes: '#111', hair: 'slick', hairColor: '#e0c060', bw: 1, blinkPh: 2.2 }),
+    opp:     { skin: '#c98d63', shirt: '#e8364f', trim: '#fff', number: '11', pants: '#e8364f', shoes: '#111', hair: 'buzz', hairColor: '#120a05', bw: 1, blinkPh: 1.3 }
+  });
+  const R7 = (seed) => { let x = seed; return () => (x = (x * 16807) % 2147483647) / 2147483647; };
+  function skyDay(t) {
+    const g = ctx.createLinearGradient(0, 0, 0, 1100); g.addColorStop(0, '#4fbaf5'); g.addColorStop(1, '#bfe8ff'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.beginPath(); ctx.arc(900, 330, 70, 0, Math.PI * 2); ctx.fillStyle = '#ffe14d'; ctx.fill();
+    ctx.fillStyle = '#fff';
+    [[120, 250, 1], [520, 180, 1.2], [760, 420, .9], [300, 520, .8]].forEach(([x, y, k], i) => { const xx = ((x + t * 12 * (1 + i * .3)) % 1300) - 100; ctx.save(); ctx.translate(xx, y); ctx.scale(k, k); for (const [cx, cy, r] of [[0, 0, 40], [45, -18, 50], [95, 0, 40], [48, 14, 42]]) { ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill(); } ctx.restore(); });
+  }
+  function stripes(top, c1, c2) {
+    ctx.fillStyle = c1; ctx.fillRect(0, top, W, H - top);
+    ctx.fillStyle = c2; for (let i = 0; i < 12; i++) { ctx.beginPath(); const x0 = i * 180 - 540, x1 = x0 + 90; ctx.moveTo(540 + (x0 - 540) * .35, top); ctx.lineTo(540 + (x1 - 540) * .35, top); ctx.lineTo(540 + (x1 - 540) * 2.2, H); ctx.lineTo(540 + (x0 - 540) * 2.2, H); ctx.closePath(); ctx.fill(); }
+  }
+  function bgPark(t) {
+    skyDay(t);
+    ctx.fillStyle = '#7fd36a'; ctx.fillRect(0, 900, W, 140);
+    const r = R7(5); for (let x = -40; x < W + 60; x += 70) { const h = 70 + r() * 50; ctx.fillStyle = '#5b3a24'; ctx.fillRect(x - 6, 920 - 10, 12, 40); ctx.beginPath(); ctx.arc(x, 900 - h * .3, h * .55, 0, Math.PI * 2); ctx.fillStyle = r() < .5 ? '#3f9a46' : '#358a3d'; ctx.fill(); }
+    ctx.fillStyle = '#e8f5e0'; ctx.fillRect(0, 1036, W, 6);
+    stripes(1040, '#4caf50', '#43a047');
+  }
+  function crowdBand(top, bot, night) {
+    ctx.fillStyle = night ? '#141a36' : '#2b3a6b'; ctx.fillRect(0, top, W, bot - top);
+    const r = R7(11), pal = night ? ['#3a4a8a', '#6a7ab0', '#8a3040', '#c9c9d9'] : ['#e8364f', '#1f6fe0', '#ffd400', '#ffffff', '#ff8c1a', '#2fbf71'];
+    for (let y = top + 18; y < bot - 10; y += 26) for (let x = (y / 26 % 2) * 11; x < W; x += 22) { ctx.fillStyle = pal[Math.floor(r() * pal.length)]; ctx.fillRect(x, y, 14, 16); ctx.fillStyle = night ? '#8a7a6a' : '#f0c19a'; ctx.beginPath(); ctx.arc(x + 7, y - 4, 6, 0, Math.PI * 2); ctx.fill(); }
+  }
+  function adStrip(y) {
+    ctx.fillStyle = '#1c2238'; ctx.fillRect(0, y, W, 56);
+    for (let x = 0; x < W; x += 360) { ctx.fillStyle = '#ffd400'; ctx.fillRect(x + 10, y + 8, 160, 40); txt('FOOTBALLPAGE', x + 90, y + 29, 22, '#1c2238', 900); txt('FOOTBALLPAGE', x + 270, y + 29, 22, '#ffffff', 900); }
+  }
+  function bgStadium(t, night) {
+    if (night) { const g = ctx.createLinearGradient(0, 0, 0, 600); g.addColorStop(0, '#060a1e'); g.addColorStop(1, '#16204a'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+      for (const x of [140, 940]) { ctx.fillStyle = '#2b2f3a'; ctx.fillRect(x - 6, 260, 12, 300); ctx.fillStyle = '#fff8d0'; ctx.fillRect(x - 70, 220, 140, 50); ctx.save(); ctx.globalAlpha = .12; ctx.beginPath(); ctx.moveTo(x - 70, 270); ctx.lineTo(x - 300, 1500); ctx.lineTo(x + 300, 1500); ctx.lineTo(x + 70, 270); ctx.fillStyle = '#fff8d0'; ctx.fill(); ctx.restore(); }
+    } else skyDay(t);
+    crowdBand(720, 1100, night); adStrip(1100);
+    stripes(1156, night ? '#2e8f45' : '#4caf50', night ? '#29803e' : '#43a047');
+    ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.fillRect(0, 1180, W, 5);
+  }
+  function bgCar(t) {
+    const g = ctx.createLinearGradient(0, 0, 0, 1300); g.addColorStop(0, '#ff9a5a'); g.addColorStop(1, '#ffd08a'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#c96a5a'; [[60, 760, 140], [220, 700, 120], [360, 800, 160], [560, 720, 130], [720, 780, 150], [900, 690, 140]].forEach(([x, y, w]) => ctx.fillRect(x, y, w, 1300 - y));
+    ctx.fillStyle = '#4a4f62'; ctx.fillRect(0, 1300, W, H - 1300);
+    ctx.fillStyle = '#ffffff'; for (let x = -((t * 400) % 200); x < W; x += 200) ctx.fillRect(x, 1560, 100, 14);
+  }
+  function car(x, y) {
+    ctx.save(); ctx.translate(x, y); ctx.lineWidth = 8; ctx.strokeStyle = OUT; ctx.lineJoin = 'round';
+    ctx.beginPath(); ctx.moveTo(-400, 120); ctx.lineTo(-400, -20); ctx.quadraticCurveTo(-380, -60, -300, -70); ctx.lineTo(-230, -230); ctx.quadraticCurveTo(-215, -260, -170, -260); ctx.lineTo(230, -260); ctx.quadraticCurveTo(270, -260, 290, -220); ctx.lineTo(340, -70); ctx.quadraticCurveTo(400, -60, 400, 0); ctx.lineTo(400, 120); ctx.closePath();
+    const bodyPath = new Path2D(); bodyPath.moveTo(-400, 120); bodyPath.lineTo(-400, -60); bodyPath.lineTo(400, -60); bodyPath.lineTo(400, 120); bodyPath.closePath();
+    ctx.fillStyle = '#2f6fd6'; ctx.fill(bodyPath);
+    ctx.beginPath(); ctx.moveTo(-300, -70); ctx.lineTo(-230, -230); ctx.quadraticCurveTo(-215, -260, -170, -260); ctx.lineTo(230, -260); ctx.quadraticCurveTo(270, -260, 290, -220); ctx.lineTo(340, -70); ctx.closePath(); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(10, -255); ctx.lineTo(10, -65); ctx.lineWidth = 14; ctx.stroke(); ctx.lineWidth = 8;
+    ctx.beginPath(); ctx.roundRect(-400, -70, 800, 190, 40); ctx.fillStyle = '#2f6fd6'; ctx.fill(); ctx.stroke();
+    for (const wx of [-240, 240]) { ctx.beginPath(); ctx.arc(wx, 120, 70, 0, Math.PI * 2); ctx.fillStyle = '#2b2f3a'; ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.arc(wx, 120, 28, 0, Math.PI * 2); ctx.fillStyle = '#c9ced8'; ctx.fill(); ctx.stroke(); }
+    ctx.restore();
+  }
+  function bgDark(t) {
+    ctx.fillStyle = '#05060f'; ctx.fillRect(0, 0, W, H);
+    ctx.save(); ctx.globalAlpha = .28; ctx.beginPath(); ctx.moveTo(470, 0); ctx.lineTo(610, 0); ctx.lineTo(860, 1550); ctx.lineTo(220, 1550); ctx.closePath(); ctx.fillStyle = '#ffe9a8'; ctx.fill(); ctx.restore();
+    ctx.beginPath(); ctx.ellipse(540, 1490, 330, 60, 0, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,233,168,.25)'; ctx.fill();
+    [[110, 700], [230, 980], [130, 1250], [930, 760], [850, 1040], [960, 1300], [300, 520], [780, 500]].forEach(([x, y], i) => { const bl = ((t + i * .7) % 3.1) < .15 ? .1 : 1; for (const dx of [-16, 16]) { ctx.beginPath(); ctx.ellipse(x + dx, y, 12, 16 * bl, 0, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.fill(); ctx.beginPath(); ctx.arc(x + dx + 3, y + 2, 5 * bl, 0, Math.PI * 2); ctx.fillStyle = '#05060f'; ctx.fill(); } });
+  }
+  function bgPurple(t) {
+    ctx.fillStyle = '#3b2a8a'; ctx.fillRect(0, 0, W, H);
+    const r = R7(3); for (let i = 0; i < 40; i++) { ctx.beginPath(); ctx.arc(r() * W, r() * H, 6 + r() * 8, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,90,110,.6)'; ctx.fill(); }
+  }
+  function bubble(x, y, textv, k = 1, tailDx = -30) {
+    if (k <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.scale(k, k);
+    ctx.font = '900 40px Inter Display'; const w = ctx.measureText(textv).width + 50;
+    ctx.beginPath(); ctx.roundRect(-w / 2, -50, w, 84, 24); ctx.moveTo(tailDx - 16, 32); ctx.lineTo(tailDx, 70); ctx.lineTo(tailDx + 18, 32);
+    ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = OUT; ctx.stroke();
+    txt(textv, 0, -6, 40, OUT, 900); ctx.restore();
+  }
+  function statCard(x, y, title, rows, k) {
+    if (k <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.scale(k, k);
+    const h = 90 + rows.length * 62;
+    ctx.beginPath(); ctx.roundRect(-210, 0, 420, h, 22); ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke();
+    txt(title, 0, 48, 36, OUT, 900);
+    rows.forEach(([l, v, ok], i) => { const yy = 110 + i * 62; ctx.beginPath(); ctx.arc(-160, yy, 20, 0, Math.PI * 2); ctx.fillStyle = ok ? '#2fbf71' : '#e8364f'; ctx.fill(); ctx.lineWidth = 4; ctx.stroke(); txt(ok ? '✓' : '✗', -160, yy + 2, 26, '#fff', 900); txt(l, -120, yy, 34, OUT, 800, 'left'); txt(String(v), 180, yy, 38, OUT, 900, 'right'); });
+    ctx.restore();
+  }
+  function pill(x, y, textv, k, bg = '#ffd400', fg = OUT, size = 44) {
+    if (k <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.scale(k, k); ctx.font = `900 ${size}px Inter Display`; const w = ctx.measureText(textv).width + 60;
+    ctx.beginPath(); ctx.roundRect(-w / 2, -size * .9, w, size * 1.8, size * .9); ctx.fillStyle = bg; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke(); txt(textv, 0, 3, size, fg, 900); ctx.restore();
+  }
+  function phone(x, y, k, comments, t) {
+    if (k <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.scale(k, k);
+    ctx.beginPath(); ctx.roundRect(-190, -330, 380, 660, 46); ctx.fillStyle = '#1b1035'; ctx.fill(); ctx.beginPath(); ctx.roundRect(-170, -300, 340, 600, 30); ctx.fillStyle = '#fff'; ctx.fill();
+    txt('COMMENTS', 0, -260, 30, OUT, 900);
+    comments.forEach(([u, c, at], i) => { if (t < at) return; const yy = -190 + i * 110; ctx.beginPath(); ctx.arc(-130, yy, 22, 0, Math.PI * 2); ctx.fillStyle = ['#e8364f', '#1f6fe0', '#ffd400', '#2fbf71'][i % 4]; ctx.fill(); txt(u, -96, yy - 16, 22, '#6b6b80', 700, 'left'); txt(c, -96, yy + 14, 28, OUT, 900, 'left'); });
+    ctx.restore();
+  }
+  function headline(x, y, k, title, line) {
+    if (k <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.rotate(.06); ctx.scale(k, k);
+    ctx.beginPath(); ctx.rect(-230, -300, 460, 600); ctx.fillStyle = '#f4efe2'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke();
+    txt('THE DAILY GOAL', 0, -250, 34, OUT, 900); ctx.fillStyle = OUT; ctx.fillRect(-200, -222, 400, 5);
+    txt(title, 0, -160, title.length > 11 ? 50 : 62, '#c8102e', 900); txt(line, 0, -90, 30, OUT, 800);
+    ctx.beginPath(); ctx.rect(-180, -40, 360, 260); ctx.fillStyle = '#cfd6e0'; ctx.fill(); ctx.lineWidth = 5; ctx.stroke();
+    ctx.restore();
+  }
+  function rain(t) { ctx.strokeStyle = 'rgba(200,220,255,.55)'; ctx.lineWidth = 3; const r = R7(9); for (let i = 0; i < 120; i++) { const x = r() * W, y = ((r() * H + t * 1400) % H); ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x - 10, y + 36); ctx.stroke(); } }
+  const FC = { x: 0, y: 900, z: 1 };
+  const kidPark = (age) => ({ 6: .62, 8: .7, 11: .8, 13: .86, 15: .94, 17: 1 })[age];
+  const keeperGoal = (xL, xR, top) => { ctx.lineWidth = 16; ctx.lineCap = 'round'; ctx.strokeStyle = '#fff'; ctx.beginPath(); ctx.moveTo(xL, GROUND); ctx.lineTo(xL, top); ctx.lineTo(xR, top); ctx.lineTo(xR, GROUND); ctx.stroke(); ctx.lineWidth = 2; ctx.strokeStyle = 'rgba(255,255,255,.6)'; for (let x = xL + 25; x < xR; x += 30) { ctx.beginPath(); ctx.moveTo(x, top); ctx.lineTo(x, GROUND); ctx.stroke(); } for (let y = top + 25; y < GROUND; y += 30) { ctx.beginPath(); ctx.moveTo(xL, y); ctx.lineTo(xR, y); ctx.stroke(); } };
+  Object.assign(SHOTS, {
+    whook: { set: 'flat', flat: (t) => bgStadium(t, false), noCaption: false, titleFast: true, captionTop: 1235,
+      title: ['WHY IT SUCKS BEING A', '<span class="box">GOALKEEPER</span>'], titleSize: [70, 104],
+      cam: [[0, FC], [1, { x: 0, y: 900, z: 1.04 }]], cast: { striker: { x: 260, scale: .55, y: 1180 }, max: { x: -40, scale: 1 } },
+      acts: { max: [[0, { e: 'despair', p: 'idle' }]], striker: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: .5 } }]] } },
+    wsix: { set: 'flat', flat: bgPark, age: 'AGE 6', captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { kidR: { x: -320, scale: .62 }, kidY: { x: -60, scale: .62 }, kidB: { x: 200, scale: .62 }, max: { x: 400, scale: .62 }, coach: { x: 420, scale: 1 } },
+      move: { max: [[0, 420], ['coach', .62, 420], [1, -360]] },
+      acts: { kidR: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: .6 } }]], kidY: [[0, { e: 'happy', p: 'fistPumpR', handR: 'fist', m: { jump: .4 } }]], kidB: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: .5 } }]],
+              max: [[0, { e: 'neutral', p: 'idle', m: { walk: .5 } }], ['coach', .62, { e: 'surprised', m: { walk: 1, lookX: -1 } }]], coach: [[0, { e: 'neutral', p: 'crossed', m: { lookX: -1 } }], ['coach', .62, { e: 'focused', p: 'pointL', m: { lookX: -1 } }]] },
+      extra: (lt, t) => { const k = eb(P(lt, .3, .6)); bubble(-320, 820, 'I SCORE!', k); bubble(-40, 760, 'ME! ME!', eb(P(lt, .5, .8))); bubble(220, 830, 'STRIKER!', eb(P(lt, .7, 1))); const c = cue('coach', .62); pill(210, 690, '⬅ GOALKEEPER', eb(P(lt, c + .3, c + .6)), '#fff'); }, castOrder: ['coach', 'kidR', 'kidY', 'kidB', 'max'], hideCast: { coach: [0, .55] } },
+    weight: { set: 'flat', flat: bgPark, age: 'AGE 8', captionTop: 1235, bright: .9,
+      cam: [[0, FC], [1, { x: 0, y: 920, z: 1.1 }]], cast: { max: { x: 0, scale: .7 } },
+      acts: { max: [[0, { e: 'neutral', p: 'crossed', m: { tremble: .4 } }], [.5, { e: 'worried', p: 'crossed', m: { tremble: 1 } }]] },
+      back: () => keeperGoal(-260, 260, 1090),
+      extra: (lt, t) => { pill(330, 720, '40:00', eb(P(lt, .2, .5)), '#fff'); const k = P(lt, .4, .7); if (k > 0) { ctx.save(); ctx.globalAlpha = .7 * (0.5 + .5 * Math.sin(t * 3)); ctx.beginPath(); ctx.arc(70, 990 - (t * 20 % 30), 22, 0, Math.PI * 2); ctx.arc(95, 975 - (t * 20 % 30), 16, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.fill(); ctx.restore(); } } },
+    wcar: { set: 'flat', flat: bgCar, age: 'AFTER THE GAME', captionTop: 1650,
+      cam: [[0, FC], [1, FC]], cast: { dad: { x: -170, scale: .9, y: 1500 }, max: { x: 210, scale: .7, y: 1430 } },
+      acts: { dad: [[0, { e: 'happy', m: { lookX: 1 } }]], max: [[0, { e: 'neutral', m: { lookX: -1 } }], ['twice', .7, { e: 'despair', m: { lookX: 0 } }]] },
+      front: (lt, t) => { car(20, 1330); bubble(-160, 800, 'DID YOU SAVE ANYTHING?', eb(P(lt, .2, .5)), 40); statCard(300, 400, 'YOUR GAME', [['TOUCHES', 2, false]], eb(P(lt, cue('twice', .7), cue('twice', .7) + .4))); } },
+    weleven: { set: 'flat', flat: (t) => bgStadium(t, false), age: 'AGE 11', captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { max: { x: -300, scale: .8 }, opp: { x: 360, scale: .8 } },
+      back: () => keeperGoal(-560, -40, 1050),
+      ball: () => { const D = CUR.duration; return saveSeq([D * .15, D * .3, D * .45]).ball.concat([[D * .58, 300, 1385], [D * .66, -360, 1150, 60], [D * .9, -400, 1385, 20]]); },
+      acts: () => { const D = CUR.duration, sq = saveSeq([D * .15, D * .3, D * .45]); return { max: sq.acts.map(([tt, k]) => [tt / D, k]).concat([[.6, { e: 'shock', po: DIVE_R, m: { dy: -40 } }], [.75, { e: 'despair', p: 'handsOnHead', po: {}, m: { dy: 0 } }]]), opp: [[0, { e: 'focused', po: KICK, m: { lookX: -1 } }], [.7, { e: 'ecstatic', p: 'cheer', po: {}, m: { jump: .6 } }]] }; },
+      extra: (lt, t) => { const D = CUR.duration, n = Math.min(10, Math.floor(P(lt, 0, D * .5) * 10.99)); statCard(260, 330, 'YOUR GAME', [['SAVES', n, true], ['RESULT', lt > D * .66 ? '0-1' : '0-0', lt <= D * .66]], 1); } },
+    weyes: { set: 'flat', flat: bgDark, captionTop: 1650, cam: [[0, FC], [1, { x: 0, y: 930, z: 1.08 }]], cast: { max: { x: 0, scale: .8 } },
+      acts: { max: [[0, { e: 'worried', p: 'nervous', m: { tremble: .4 } }]] }, extra: (lt) => pill(0, 640, 'EVERYONE LOOKS AT YOU', eb(P(lt, .2, .5)), '#e8364f', '#fff', 40) },
+    wface: { set: 'flat', flat: (t) => bgStadium(t, false), age: 'AGE 13', captionTop: 1235,
+      cam: [[0, FC], [1, { x: -120, y: 930, z: 1.15 }]], cast: { max: { x: -200, scale: .86 }, kidR: { x: 300, scale: .8 }, kidB: { x: 480, scale: .8 } },
+      back: () => keeperGoal(-480, 80, 1030),
+      ball: () => { const f = cue('face', .45); return [[0, 330, 1385], [f - .35, 330, 1385], [f, -200, 1400 - 470 * .86, 30], [f + .5, 200, 1385, 140]]; },
+      acts: () => { const f = cue('face', .45), D = CUR.duration; return { max: [[0, { e: 'focused', po: KP }], [f / D, { e: 'shock', squint: 1, po: { lean: -12 }, ex: { squint: 1 } }], [(f + .5) / D, { e: 'despair', p: 'idle', po: {}, m: { tremble: .4 } }]], kidR: [[0, { e: 'focused', po: KICK, m: { lookX: -1 } }], [(f + .4) / D, { e: 'laugh', p: 'bellyLaugh', po: {}, m: { laugh: 1 } }]], kidB: [[0, { e: 'neutral', m: { lookX: -1 } }], [(f + .45) / D, { e: 'laugh', p: 'pointL', m: { laugh: 1, lookX: -1 } }]] }; },
+      extra: (lt, t) => { const f = cue('face', .45); impact(-200, 1400 - 465 * .86, t, lt > f ? eb(P(lt, f, f + .2)) * (1 - P(lt, f + .8, f + 1.1)) : 0); pill(-200, 720, 'IT COUNTS AS A SAVE ✓', eb(P(lt, f + .6, f + .9)), '#2fbf71', '#fff', 36); } },
+    wrain: { set: 'flat', flat: (t) => { bgStadium(t, true); }, age: 'AGE 15', captionTop: 1235, bright: .8,
+      cam: [[0, FC], [1, { x: 0, y: 900, z: 1.05 }]], cast: { kidR: { x: 300, scale: .5, y: 1200 }, kidY: { x: 430, scale: .5, y: 1200 }, kidB: { x: 360, scale: .5, y: 1190 }, max: { x: -180, scale: .94 } },
+      acts: { kidR: [[0, { e: 'happy', m: { walk: 1 } }]], kidY: [[0, { e: 'happy', m: { walk: 1 } }]], kidB: [[0, { e: 'ecstatic', p: 'cheer' }]], max: [[0, { e: 'focused', po: { lA: 160, lE: 10, rA: 160, rE: 10 } }], [.5, { e: 'focused', po: DIVE_L, m: { dy: -40 } }], [.7, { e: 'focused', po: { lA: 160, lE: 10, rA: 160, rE: 10 }, m: { dy: 0 } }]] },
+      back: () => keeperGoal(-560, -20, 1060),
+      extra: (lt, t) => { rain(t); pill(-260, 700, 'ALONE', eb(P(lt, cue('alone', .8), cue('alone', .8) + .3)), '#fff'); statCard(300, 330, 'CROSSES', [['CAUGHT', Math.floor(P(lt, 0, CUR.duration) * 30), true]], 1); } },
+    wslip: { set: 'flat', flat: (t) => bgStadium(t, true), age: 'AGE 17', captionTop: 1235,
+      cam: [[0, FC], [1, { x: -200, y: 930, z: 1.15 }]], cast: { max: { x: -300, scale: 1 }, opp: { x: 360, scale: .85 } },
+      back: () => keeperGoal(-580, -20, 1000),
+      ball: () => { const s1 = cue('slip', .65); return [[0, 400, 1385], [s1 - .9, 300, 1385], [s1, -300, 1385, 30], [s1 + .6, -460, 1385, 0]]; },
+      acts: () => { const s1 = cue('slip', .65), D = CUR.duration; return { max: [[0, { e: 'confident', po: KP }], [(s1 - .3) / D, { e: 'focused', po: { lA: 60, lE: -40, rA: 60, rE: -40, lL: 20, rL: 20, lK: -30, rK: -30 } }], [s1 / D, { e: 'shock', po: { lA: 80, lE: 0, rA: 80, rE: 0 } }], [(s1 + .5) / D, { e: 'despair', p: 'handsOnHead', po: {} }]], opp: [[0, { e: 'neutral', m: { lookX: -1 } }], [(s1 + .5) / D, { e: 'ecstatic', p: 'cheer', m: { jump: .8 } }]] }; },
+      extra: (lt, t) => { const s1 = cue('slip', .65); scoreboard(lt < s1 + .5 ? 'HOME 1 – 0 AWAY' : 'HOME 1 – 1 AWAY', "90:00"); if (lt > s1 + .5) pill(300, 900, 'GOAL!', eb(P(lt, s1 + .5, s1 + .8)), '#e8364f', '#fff', 56); } },
+    wname: { set: 'flat', flat: bgPurple, captionTop: 1650, cam: [[0, STUDIO], [1, STUDIO]], cast: {},
+      draw: (s, lt, d, t) => { pill(540, 300, 'NOW EVERYONE KNOWS YOUR NAME', eb(P(lt, .1, .4)), '#ffd400', OUT, 36); phone(330, 1000, eb(P(lt, .2, .5)), [['@fan_99', 'who is #1??', .5], ['@coach_k', 'bench him', 1.1], ['@ultra77', 'BUTTERFINGERS 😂', 1.7]], lt); headline(780, 1050, eb(P(lt, 1.2, 1.6)), 'BUTTERFINGERS!', 'Keeper drops it in 90th min'); } },
+    whero: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { striker: { x: 0, scale: 1 } },
+      acts: { striker: [[0, { e: 'confident', p: 'hips' }], ['one', .55, { e: 'ecstatic', p: 'cheer', m: { jump: .7 } }]] },
+      extra: (lt, t) => { statCard(0, 330, 'STRIKER', [['MISSES', Math.min(10, Math.floor(P(lt, .1, cue('one', .55)) * 10.99)), false], ['GOALS', lt > cue('one', .55) ? 1 : 0, true]], 1); pill(0, 810, 'HERO 🏆', eb(P(lt, cue('hero', .8), cue('hero', .8) + .35)), '#2fbf71', '#fff', 56); } },
+    wvillain: { set: 'flat', flat: bgDark, captionTop: 1650, cam: [[0, FC], [1, { x: 0, y: 930, z: 1.08 }]], cast: { max: { x: 0, scale: 1 } },
+      acts: { max: [[0, { e: 'neutral', p: 'idle' }], ['drop', .5, { e: 'despair', p: 'handsOnHead', m: { tremble: .3 } }]] },
+      extra: (lt, t) => { statCard(0, 330, 'GOALKEEPER', [['SAVES', Math.min(10, Math.floor(P(lt, .1, cue('drop', .5)) * 10.99)), true], ['MISTAKES', lt > cue('drop', .5) ? 1 : 0, false]], 1); pill(0, 810, 'VILLAIN', eb(P(lt, cue('villain', .8), cue('villain', .8) + .35)), '#e8364f', '#fff', 56); } },
+    wtag: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235, conf: 0,
+      cam: [[0, FC], [1, FC]], cast: { max: { x: -170, scale: 1 }, kidB: { x: 200, scale: 1 } },
+      acts: { max: [[0, { e: 'surprised', m: { lookX: 1 } }], [.4, { e: 'happy', p: 'thumbsUpR', handR: 'thumb', m: { lookX: 1 } }]], kidB: [[0, { e: 'happy', p: 'takeR', m: { lookX: -1 } }]] },
+      extra: (lt, t) => { pill(0, 520, '@ TAG YOUR GOALKEEPER', eb(P(lt, .1, .45)), '#ffd400', OUT, 50); bubble(240, 790, 'THANK YOU.', eb(P(lt, cue('thanks', .6), cue('thanks', .6) + .35)), -40); } }
+  });
+
   // ---------- timeline ----------
   let spec, scenes = [], total = 0;
   function camAt(keys, lt, d) {
@@ -1319,6 +1495,7 @@
       // overlay elements
       const root = el('div', null, null); root.style.display = 'none'; s._ov = root;
       if (sh.tag) s._tag = el('div', 'tag', `<span>${esc(sh.tag)}</span>`, root);
+      if (sh.age) s._tag = el('div', 'agetag', `<span>${esc(sh.age)}</span>`, root);
       if (sh.title) {
         s._title = el('div', 'title', null, root);
         s._tl = sh.title.map((h, i) => { const d = el('div', null, h, s._title); d.style.fontSize = (sh.titleSize[i] || 100) + 'px'; return d; });
@@ -1458,6 +1635,17 @@
         case 'pwembley': add(st, 'thump', -10); add(st + .05, 'cheer', -11); break;
         case 'pparty': [['medal', .3], ['movie', .5], ['party', .75]].forEach(([n, f]) => add(st + C(n, f), 'pop', -13)); break;
         case 'pend': add(st + C('follow', .7) + .1, 'pop', -14); break;
+        case 'whook': add(st, 'thump', -10); break;
+        case 'wsix': add(st + C('coach', .62), 'whistle', -18); break;
+        case 'wcar': add(st + .2 * d, 'pop', -15); add(st + C('twice', .7), 'pop', -14); break;
+        case 'weleven': [.15, .3, .45].forEach(f => add(st + d * f, 'thump', -15)); add(st + d * .66, 'thump', -11); break;
+        case 'weyes': add(st + .2, 'heartbeat', -14); add(st + 1.05, 'heartbeat', -14); break;
+        case 'wface': add(st + C('face', .45), 'thump', -8); break;
+        case 'wslip': add(st + C('slip', .65), 'thump', -10); add(st + C('slip', .65) + .55, 'cheer', -16); break;
+        case 'wname': add(st + .5, 'pop', -16); add(st + 1.1, 'pop', -16); add(st + 1.7, 'pop', -16); add(st + 1.3, 'whoosh', -15); break;
+        case 'whero': add(st + C('one', .55), 'cheer', -17); add(st + C('hero', .8), 'ding', -15); break;
+        case 'wvillain': add(st + C('drop', .5), 'thump', -12); add(st + C('villain', .8), 'thump', -10); break;
+        case 'wtag': add(st + .1, 'pop', -14); add(st + C('thanks', .6), 'sparkle', -16); break;
         case 'imate': add(st + .1, 'whoosh_soft', -20); add(st + C('follow', .75) + .1, 'pop', -14); break;
       }
     });
@@ -1535,9 +1723,12 @@
     World3D.frame(t, { x: cam.x, y: cam.y, z: cam.z }, sh.set, { bright: lerp(pbr, br, eio(P(lt, 0, .8))), conf, crowd: conf ? 9 : 2, crowdAmp: conf ? 3 : 1 });
     // 2D
     ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, W, H);
+    if (sh.flat) sh.flat(t, lt, d);
     ctx.setTransform(cam.z, 0, 0, cam.z, W / 2 - cam.x * cam.z + Math.sin(t * 50) * shake, H / 2 - cam.y * cam.z + Math.cos(t * 43) * shake);
     const toF = k => typeof k[0] === 'string' ? [cue(k[0], k[1]) / d, k[2]] : k;
     const states = {}, castX = {};
+    if (typeof sh.acts === 'function') sh = Object.assign({}, sh, { acts: sh.acts() });
+    if (typeof sh.ball === 'function') sh = Object.assign({}, sh, { ball: sh.ball() });
     for (const name in sh.cast) states[name] = Puppet.stateAt(((sh.acts || {})[name] || [[0, {}]]).map(toF), lt, d);
     if (sh.move) for (const n in sh.move) {
       const ks = sh.move[n].map(k => typeof k[0] === 'string' ? [cue(k[0], k[1]) / d, k[2]] : k);
@@ -1545,10 +1736,17 @@
       castX[n] = x;
     }
     if (sh.propFix) for (const n in sh.propFix) for (const [f, pr] of sh.propFix[n]) if (lt >= f * d) states[n].propL = pr;
-    const drawC = name => { if (!sh.cast[name]) return; const c = Object.assign({}, CH[name], sh.cast[name], { y: GROUND }, castX[name] != null ? { x: castX[name] } : {});
+    const drawC = name => { if (!sh.cast[name]) return; const c = Object.assign({}, CH[name], sh.cast[name], { y: sh.cast[name].y || GROUND }, castX[name] != null ? { x: castX[name] } : {});
       if (sh.looks && sh.looks[name]) for (const [n, df, ov] of sh.looks[name]) if (lt >= cue(n, df)) Object.assign(c, ov); Puppet.draw(ctx, c, states[name], t); };
     if (sh.draw) {
       sh.draw(s, lt, d, t);
+    } else if (sh.set === 'flat') {
+      if (sh.back) sh.back(lt, t);
+      const order = sh.castOrder || Object.keys(sh.cast || {});
+      order.forEach(n => { if (sh.hideCast && sh.hideCast[n] && lt / d >= sh.hideCast[n][0] && lt / d < sh.hideCast[n][1]) return; const c = sh.cast[n]; if (c && c.y) { const keep = GROUND; } drawC(n); });
+      if (sh.ball) { const b = ballPos(sh.ball, lt); drawBall(b.x, b.y, b.moving ? t : 0); }
+      if (sh.front) sh.front(lt, t);
+      if (sh.extra) sh.extra(lt, t);
     } else if (sh.set === 'street') {
       Object.keys(sh.cast || {}).forEach(drawC);
       if (sh.draw2) sh.draw2(s, lt, d, t);

@@ -393,7 +393,7 @@ window.Puppet = (function () {
     for (const side of [-1, 1]) {
       const L = side < 0 ? 'l' : 'r';
       const a = limb(ctx, side * (tw - 8), sY + 24, p[L + 'A'], 92, p[L + 'A'] + p[L + 'E'], 88, side, 34, 24, ch.shirt, ch.skin);
-      hand(ctx, a.x2, a.y2, ch.skin, side < 0 ? st.handL : st.handR, side, a.ang);
+      hand(ctx, a.x2, a.y2, ch.gloves || ch.skin, side < 0 ? st.handL : st.handR, side, a.ang);
       drawProp(ctx, side < 0 ? st.propL : st.propR, a.x2, a.y2, t, a.ang);
     }
     ctx.restore();

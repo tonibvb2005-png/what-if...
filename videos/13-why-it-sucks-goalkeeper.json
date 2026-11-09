@@ -1,0 +1,75 @@
+{
+  "title": "Why it sucks being a goalkeeper",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "scenes": [
+    {
+      "shot": "whook",
+      "text": "Why it sucks being a goalkeeper.",
+      "audio": "../audio/goalkeeper/01.wav",
+      "duration": 2.8
+    },
+    {
+      "shot": "wsix",
+      "text": "It starts when you're six. Everyone wants to score. You're the slowest kid on the team. So the coach puts you in goal.",
+      "audio": "../audio/goalkeeper/02.wav"
+    },
+    {
+      "shot": "weight",
+      "text": "Age eight. Forty minutes. Nothing happens. You're freezing. Nobody passes to you.",
+      "audio": "../audio/goalkeeper/03.wav"
+    },
+    {
+      "shot": "wcar",
+      "text": "After the game, your dad asks: \"Did you save anything?\" You touched the ball twice.",
+      "audio": "../audio/goalkeeper/04.wav"
+    },
+    {
+      "shot": "weleven",
+      "text": "Age eleven. You make ten saves. You still lose 1-0.",
+      "audio": "../audio/goalkeeper/05.wav"
+    },
+    {
+      "shot": "weyes",
+      "text": "And everyone looks at you.",
+      "audio": "../audio/goalkeeper/06.wav"
+    },
+    {
+      "shot": "wface",
+      "text": "Age thirteen. A shot from five yards. You save it... with your face. Everyone laughs.",
+      "audio": "../audio/goalkeeper/07.wav"
+    },
+    {
+      "shot": "wrain",
+      "text": "Age fifteen. Training ends. The others play five-a-side. You? Thirty crosses. In the rain. Alone.",
+      "audio": "../audio/goalkeeper/08.wav"
+    },
+    {
+      "shot": "wslip",
+      "text": "Age seventeen. Ninetieth minute. 1-0 up. Easy catch... and it slips through your gloves.",
+      "audio": "../audio/goalkeeper/09.wav"
+    },
+    {
+      "shot": "wname",
+      "text": "Suddenly, everybody knows your name.",
+      "audio": "../audio/goalkeeper/10.wav",
+      "duration": 3.2
+    },
+    {
+      "shot": "whero",
+      "text": "That's the thing about being a goalkeeper. A striker misses ten chances, scores one... and he's a hero.",
+      "audio": "../audio/goalkeeper/11.wav"
+    },
+    {
+      "shot": "wvillain",
+      "text": "You make ten saves, drop one... and you're the villain.",
+      "audio": "../audio/goalkeeper/12.wav"
+    },
+    {
+      "shot": "wtag",
+      "text": "Tag your goalkeeper. Tell them thank you.",
+      "audio": "../audio/goalkeeper/13.wav",
+      "pad": 1.2
+    }
+  ]
+}
