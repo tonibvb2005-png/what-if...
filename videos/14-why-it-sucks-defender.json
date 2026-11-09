@@ -7,60 +7,250 @@
       "shot": "dhook",
       "text": "Why it sucks being a defender.",
       "audio": "../audio/defender/01.wav",
-      "duration": 2.6
+      "wordTimes": [
+        0.0,
+        0.3,
+        0.5,
+        0.82,
+        1.24,
+        1.44
+      ]
     },
     {
       "shot": "dsix",
       "text": "It starts when you're six. You're the tallest kid on the team. So the coach says: \"Just stand at the back.\"",
-      "audio": "../audio/defender/02.wav"
+      "audio": "../audio/defender/02.wav",
+      "cues": {
+        "tall": 2.02,
+        "coach": 4.2
+      },
+      "wordTimes": [
+        0.28,
+        0.4,
+        0.64,
+        0.86,
+        1.04,
+        2.02,
+        2.16,
+        2.28,
+        2.64,
+        2.94,
+        3.08,
+        3.2,
+        4.2,
+        4.46,
+        4.6,
+        4.76,
+        5.5,
+        5.7,
+        5.96,
+        6.08,
+        6.2
+      ]
     },
     {
       "shot": "dcorner",
       "text": "Age nine. Corner kick. You finally get to go up. The ball never comes. You jog all the way back.",
-      "audio": "../audio/defender/03.wav"
+      "audio": "../audio/defender/03.wav",
+      "cues": {
+        "up": 2.27,
+        "never": 4.59
+      },
+      "wordTimes": [
+        0.61,
+        0.61,
+        1.59,
+        1.67,
+        2.27,
+        2.37,
+        2.75,
+        3.07,
+        3.23,
+        3.37,
+        4.59,
+        4.83,
+        5.17,
+        5.85,
+        7.27,
+        7.55,
+        7.91,
+        8.53,
+        8.67,
+        8.81
+      ]
     },
     {
       "shot": "dtackle",
       "text": "Age twelve. Perfect sliding tackle. Clean ball. Nobody claps.",
-      "audio": "../audio/defender/04.wav"
+      "audio": "../audio/defender/04.wav",
+      "cues": {
+        "slide": 1.61,
+        "claps": 4.69
+      },
+      "wordTimes": [
+        0.45,
+        1.03,
+        1.61,
+        1.85,
+        2.29,
+        3.11,
+        3.27,
+        4.75,
+        5.05
+      ]
     },
     {
       "shot": "dshadow",
       "text": "Age fourteen. The striker falls over your shadow. Penalty. Yellow card... for you.",
-      "audio": "../audio/defender/05.wav"
+      "audio": "../audio/defender/05.wav",
+      "cues": {
+        "fall": 2.01,
+        "pen": 4.23,
+        "yellow": 5.11
+      },
+      "wordTimes": [
+        0.15,
+        0.88,
+        1.61,
+        1.69,
+        2.01,
+        2.45,
+        2.73,
+        2.91,
+        4.23,
+        5.11,
+        5.41,
+        5.89,
+        6.53
+      ]
     },
     {
       "shot": "dclean",
       "text": "Age sixteen. Ninety minutes. Not one shot on target. Clean sheet. Man of the match? The goalkeeper.",
-      "audio": "../audio/defender/06.wav"
+      "audio": "../audio/defender/06.wav",
+      "cues": {
+        "motm": 6.21,
+        "keeper": 7.81
+      },
+      "wordTimes": [
+        0.51,
+        1.02,
+        1.52,
+        2.03,
+        2.87,
+        2.97,
+        3.37,
+        3.63,
+        3.85,
+        4.75,
+        4.85,
+        6.21,
+        6.49,
+        6.61,
+        6.71,
+        7.81,
+        8.05
+      ]
     },
     {
       "shot": "dwinger",
       "text": "Age seventeen. The new winger is faster than a scooter. You blink... and the ball goes through your legs.",
-      "audio": "../audio/defender/07.wav"
+      "audio": "../audio/defender/07.wav",
+      "cues": {
+        "blink": 4.08,
+        "legs": 5.38
+      },
+      "wordTimes": [
+        0.32,
+        1.01,
+        1.7,
+        1.88,
+        2.08,
+        2.36,
+        2.6,
+        3.0,
+        3.28,
+        3.38,
+        4.08,
+        4.2,
+        4.5,
+        5.38,
+        5.52,
+        5.8,
+        6.08,
+        6.4,
+        6.6
+      ]
     },
     {
       "shot": "dviews",
       "text": "One nutmeg. Ten million views.",
       "audio": "../audio/defender/08.wav",
-      "duration": 3.4
+      "cues": {
+        "views": 2.0
+      },
+      "wordTimes": [
+        0.31,
+        0.57,
+        1.4,
+        2.23,
+        2.65
+      ]
     },
     {
       "shot": "dnothing",
       "text": "That's the thing about being a defender. When you do your job... nothing happens.",
-      "audio": "../audio/defender/09.wav"
+      "audio": "../audio/defender/09.wav",
+      "cues": {
+        "nothing": 4.13
+      },
+      "wordTimes": [
+        0.18,
+        0.43,
+        0.57,
+        0.77,
+        1.03,
+        1.25,
+        1.43,
+        2.39,
+        2.47,
+        2.63,
+        2.77,
+        2.99,
+        4.13,
+        4.29
+      ]
     },
     {
       "shot": "dclap",
       "text": "And nobody claps for nothing.",
       "audio": "../audio/defender/10.wav",
-      "duration": 2.8
+      "wordTimes": [
+        0.18,
+        0.68,
+        0.96,
+        1.46,
+        1.7
+      ]
     },
     {
       "shot": "dtag",
       "text": "Tag your defender. Tell them you see them.",
       "audio": "../audio/defender/11.wav",
-      "pad": 1.2
+      "pad": 1.2,
+      "cues": {
+        "see": 1.9
+      },
+      "wordTimes": [
+        0.54,
+        0.62,
+        0.82,
+        1.9,
+        2.04,
+        2.18,
+        2.32,
+        2.58
+      ]
     }
   ]
 }
