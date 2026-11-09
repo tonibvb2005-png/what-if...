@@ -134,8 +134,8 @@ export function buildShips() {
   const harborN = normalTex(256, [[5, 1], [11, 0.5]], [1, 1], 3); harborN.repeat.set(30, 30);
   const harbor = new THREE.Mesh(new THREE.PlaneGeometry(400, 300), new THREE.MeshStandardMaterial({ color: 0x2a7a9a, roughness: 0.15, normalMap: harborN, envMapIntensity: 1.2 })); harbor.rotation.x = -Math.PI / 2; harbor.position.set(0, -0.6, -170); yard.add(harbor);
   const yShip = tallShip({ variant: 'wood' }); yShip.position.set(0, 2.2, 0); yShip.rotation.x = -0.04; yard.add(yShip);
-  for (let z = -9; z <= 9; z += 3) for (const s of [-1, 1]) { const p = box(0.3, 3.4, 0.3, 0x8a6a3a, [s * 3.6, 1.7, z], 0.03); yard.add(p); const brace = box(0.2, 0.2, 2.2, 0x8a6a3a, [s * 3.6, 2.6, z + 1.1], 0.02); yard.add(brace); }
-  for (const s of [-1, 1]) yard.add(box(0.8, 0.12, 20, 0xa07a48, [s * 3.9, 1.5, 0], 0.03));
+  for (let z = -9; z <= 9; z += 3) for (const s of [-1, 1]) { const p = box(0.3, 3.4, 0.3, 0x8a6a3a, [s * 3.25, 1.7, z], 0.03); yard.add(p); const brace = box(0.2, 0.2, 2.2, 0x8a6a3a, [s * 3.25, 2.6, z + 1.1], 0.02); yard.add(brace); }
+  for (const s of [-1, 1]) yard.add(box(1.1, 0.12, 20, 0xa07a48, [s * 3.85, 1.5, 0], 0.03));
   const plates = []; for (let i = 0; i < 9; i++) { const st = new THREE.Group(); for (let k = 0; k < 8; k++) { const p = box(1.0, 0.05, 0.7, 0xc8742a, [(hash(i, k) - 0.5) * 0.05, k * 0.055, 0], 0.01); p.material.metalness = 0.7; p.material.roughness = 0.3; st.add(p); } st.position.set(6.5 + (i % 3) * 1.3, 0, -6 + Math.floor(i / 3) * 1.6); yard.add(st); plates.push(st); }
   for (let i = 0; i < 8; i++) { const b = new THREE.Mesh(new THREE.CylinderGeometry(0.5, 0.45, 1.1, 14), toon(0x8a5a2a)); b.position.set(-7 - (i % 3) * 1.1, 0.55, 4 + Math.floor(i / 3) * 1.1); outline(b, 0.03); b.castShadow = true; yard.add(b); }
   for (const [x, z, w] of [[-16, 12, 10], [16, 14, 12]]) { const shed = box(w, 5, 7, 0x9a4a32, [x, 2.5, z], 0.08); yard.add(shed); const roof = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 5.6, 2.5, 4, 1), toon(0x5a3a2a)); roof.rotation.y = Math.PI / 4; roof.scale.set(w / 7.6, 1, 1); roof.position.set(x, 6.2, z); outline(roof, 0.06); yard.add(roof); }

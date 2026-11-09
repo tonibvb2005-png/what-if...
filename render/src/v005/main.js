@@ -89,7 +89,7 @@ function seaState(t, opt = {}) {
     for (let i = 0; i < 12; i++) {
       const per = 1.6, ph = (t * 1.0 + i * 0.37) % per / per, src = R.enemies[i % 3];
       const from = src.position.clone().add(v3(i % 2 ? 2.8 : -2.8, 2.0, -6 + (i % 5) * 2.5));
-      const tgt = v3((hsh(i, 3) - 0.5) * 16 + (i % 2 ? 4 : -4), 0, -8 + hsh(i, 4) * 26);
+      const tgt = opt.near ? v3(9 + hsh(i, 3) * 7, 0, -24 + hsh(i, 4) * 16) : v3((hsh(i, 3) - 0.5) * 16 + (i % 2 ? 4 : -4), 0, -8 + hsh(i, 4) * 26);
       const ball = R.balls[i]; ball.visible = ph < 0.7; const q = ph / 0.7; ball.position.copy(from).lerp(tgt, q); ball.position.y = lerp(from.y, 0, q) + Math.sin(q * Math.PI) * 6;
       const sm = R.smoke[i]; sm.visible = ph < 0.5; sm.position.copy(from).add(v3(0, ph * 2, 0)); sm.scale.setScalar(2 + ph * 8); sm.material.opacity = 0.9 * (1 - ph * 2);
       const sp = R.splashes[i]; sp.visible = ph >= 0.7; const k = (ph - 0.7) / 0.3; sp.position.copy(tgt); sp.scale.set(1 + k, Math.sin(k * Math.PI) * 6 + 0.01, 1 + k); sp.material.opacity = 0.9 * (1 - k * 0.6);
@@ -111,7 +111,7 @@ function underState(t, opt = {}) {
 // ---------- shots ----------
 const shots = [
   { id: 'hook', start: 0, run(t, u) {
-      setPlace('sea', t); seaState(t, { enemies: true, fire: true, close: 0.5, lag: 0.6 });
+      setPlace('sea', t); seaState(t, { enemies: true, fire: true, close: 0.5, lag: 0.6, near: true });
       const e = ease.sine(u);
       look(v3(SEA_X + lerp(6.5, 5.5, e), lerp(1.2, 1.8, e), lerp(9, -4, e)), v3(SEA_X + 0.5, 2.2, lerp(-6, -16, e)), 52, 0.05);
       return {};
@@ -129,7 +129,7 @@ const shots = [
       R.yShip.userData.side.map = hullSideTex('wood', Math.round(cov * 10) / 10, 0); R.yShip.userData.side.needsUpdate = true;
       R.yShip.userData.bottom.color.set(cov > 0.95 ? 0xc8742a : 0x4a3a22);
       const swing = Math.floor(t * (cov < 1 ? 7 : 3)) % 2 === 0;
-      wright.mesh.visible = true; wright.set({ ...SW, pose: 'hammer', swing, expr: 'bored' }); wright.mesh.position.set(3.85, 1.56, lerp(5, -4, cov)); wright.face(camera, true);
+      wright.mesh.visible = true; wright.set({ ...SW, pose: 'hammer', swing, expr: 'bored' }); wright.mesh.position.set(4.2, 1.56, lerp(5, -4, cov)); wright.face(camera, true);
       R.sparks.forEach((s, i) => { s.visible = swing && i < 6; s.position.copy(wright.mesh.position).add(v3(-0.85, 1.15 + hsh(i, 1) * 0.3, (hsh(i, 2) - 0.5) * 0.5)); s.scale.setScalar(0.3 + hsh(i, 3) * 0.3); });
       capt.mesh.visible = false; tars.forEach((c) => (c.mesh.visible = false));
       if (t < WT('plates', 10)) look(v3(7.2, 2.6, wright.mesh.position.z + 3.5), v3(3.0, 2.2, wright.mesh.position.z - 0.5), 46, 0.03);
@@ -159,8 +159,8 @@ const shots = [
       setPlace('yard', t); capt.mesh.visible = false; tars.forEach((c) => (c.mesh.visible = false));
       const hamT = WT('shrug', 2);
       const swing = t >= hamT && Math.floor(t * 7) % 2 === 0;
-      wright.mesh.visible = true; wright.set({ ...SW, pose: t < hamT ? 'shrug' : 'hammer', swing, expr: t < hamT ? 'bored' : 'smirk' }); wright.mesh.position.set(3.85, 1.56, -4.2);
-      look(v3(6.2, 3.0, -2.0), v3(3.85, 2.9, -4.2), 40);
+      wright.mesh.visible = true; wright.set({ ...SW, pose: t < hamT ? 'shrug' : 'hammer', swing, expr: t < hamT ? 'bored' : 'smirk' }); wright.mesh.position.set(4.2, 1.56, -4.2);
+      look(v3(6.6, 3.0, -2.0), v3(4.2, 2.9, -4.2), 40);
       wright.face(camera, true);
       R.sparks.forEach((s, i) => { s.visible = swing && i < 8; s.position.copy(wright.mesh.position).add(v3(-0.85, 1.15 + hsh(i + Math.floor(t * 7), 1) * 0.4, (hsh(i, 2) - 0.5) * 0.6)); s.scale.setScalar(0.3 + hsh(i, 3) * 0.4); });
       return {};
@@ -250,7 +250,7 @@ function bigText(txt, k, y = 0.64, size = 150, col = '#ffd23f', rot = -0.05) {
 }
 function stamp(k) {
   if (k <= 0) return; const s = 2.2 - 1.2 * ease.o(k);
-  cx.save(); cx.translate(W / 2, H * 0.84); cx.rotate(-0.12); cx.scale(s * 0.85, s * 0.85); cx.globalAlpha = Math.min(1, k * 1.5);
+  cx.save(); cx.translate(W / 2, H * 0.76); cx.rotate(-0.12); cx.scale(s * 0.95, s * 0.95); cx.globalAlpha = Math.min(1, k * 1.5);
   cx.font = '900 96px Montserrat'; cx.textAlign = 'center'; cx.textBaseline = 'middle'; const w = cx.measureText('COPPER-BOTTOMED').width + 70;
   cx.lineWidth = 14; cx.strokeStyle = '#c8742a'; cx.strokeRect(-w / 2, -80, w, 160); cx.lineWidth = 5; cx.strokeRect(-w / 2 + 14, -66, w - 28, 132);
   cx.fillStyle = '#e8892e'; cx.shadowColor = 'rgba(0,0,0,0.5)'; cx.shadowBlur = 10; cx.fillText('COPPER-BOTTOMED', 0, 6); cx.restore();
