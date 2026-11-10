@@ -599,3 +599,4 @@ export function sheet(specs, cols = 8) {
   specs.forEach((s, i) => x.drawImage(charTex(s).canvas, (i % cols) * 256, Math.floor(i / cols) * 384, 256, 384));
   return cv;
 }
+export { drawChar };

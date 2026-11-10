@@ -1,0 +1,127 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<script type="importmap">{"imports":{"three":"/node_modules/three/build/three.module.js"}}</script>
+<style>body{margin:0;background:#111}</style>
+</head><body>
+<script type="module">
+// Channel branding: profile picture (800x800) and YouTube banner (2560x1440).
+// Render: node brand.cjs  ->  out/brand/profile.png, banner.png
+const base = '/node_modules/@fontsource/montserrat/files/montserrat-latin-';
+await Promise.all(['700', '800', '900'].map((w) => new FontFace('Montserrat', `url(${base}${w}-normal.woff2)`, { weight: w }).load().then((x) => document.fonts.add(x))));
+const { drawChar } = await import('./src/chars.js');
+
+const INK = '#1b1b24';
+function rand(seed) { let s = seed; return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+
+function sunburst(x, cx, cy, r, n, a, b, rot = 0) {
+  for (let i = 0; i < n; i++) {
+    const a0 = rot + (i / n) * Math.PI * 2, a1 = rot + ((i + 0.5) / n) * Math.PI * 2;
+    x.fillStyle = i % 2 ? a : b; x.beginPath(); x.moveTo(cx, cy);
+    x.arc(cx, cy, r, a0, a1); x.closePath(); x.fill();
+  }
+}
+function cloud(x, cx, cy, s, alpha = 1) {
+  x.save(); x.globalAlpha = alpha; x.fillStyle = '#ffffff'; x.strokeStyle = INK; x.lineWidth = 5 * s;
+  const blobs = [[-70, 10, 48], [-20, -18, 62], [42, -4, 52], [88, 16, 38], [10, 22, 50]];
+  x.beginPath(); for (const [dx, dy, r] of blobs) { x.moveTo(cx + (dx + r) * s, cy + dy * s); x.arc(cx + dx * s, cy + dy * s, r * s, 0, Math.PI * 2); }
+  x.stroke(); x.fill(); x.restore();
+}
+function char(x, spec, cx, feetY, scale, flip = false) {
+  x.save(); x.translate(cx, feetY); x.scale(flip ? -scale : scale, scale); x.translate(-256, -742);
+  drawChar(x, spec); x.restore();
+}
+function shadow(x, cx, y, w) {
+  x.save(); x.fillStyle = 'rgba(20,30,60,0.22)'; x.beginPath(); x.ellipse(cx, y, w, w * 0.16, 0, 0, Math.PI * 2); x.fill(); x.restore();
+}
+function title(x, text, cx, cy, size, qColor = '#ffd23a') {
+  x.save(); x.font = `900 ${size}px Montserrat`; x.textAlign = 'left'; x.textBaseline = 'middle';
+  const w = x.measureText(text).width; let px = cx - w / 2;
+  x.lineJoin = 'round';
+  for (const ch of text) {
+    const cw = x.measureText(ch).width;
+    x.fillStyle = 'rgba(15,20,50,0.35)'; x.fillText(ch, px + size * 0.05, cy + size * 0.07);
+    x.lineWidth = size * 0.16; x.strokeStyle = INK; x.strokeText(ch, px, cy);
+    x.fillStyle = ch === '?' ? qColor : '#ffffff'; x.fillText(ch, px, cy);
+    px += cw;
+  }
+  x.restore(); return w;
+}
+function save(cv, name) { window.OUT = window.OUT || {}; window.OUT[name] = cv.toDataURL('image/png'); }
+
+// ---------- profile picture ----------
+{
+  const S = 800, cv = document.createElement('canvas'); cv.width = cv.height = S; const x = cv.getContext('2d');
+  const g = x.createRadialGradient(400, 380, 40, 400, 400, 560); g.addColorStop(0, '#7fd4ff'); g.addColorStop(1, '#1f6fd0');
+  x.fillStyle = g; x.fillRect(0, 0, S, S);
+  sunburst(x, 400, 420, 800, 24, 'rgba(255,255,255,0.10)', 'rgba(255,255,255,0)', 0.1);
+  // big question mark behind the head
+  x.save(); x.font = '900 380px Montserrat'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.lineJoin = 'round';
+  x.translate(615, 250); x.rotate(0.18);
+  x.lineWidth = 34; x.strokeStyle = INK; x.strokeText('?', 0, 0); x.fillStyle = '#ffd23a'; x.fillText('?', 0, 0); x.restore();
+  // mascot: roman legionary, winking — head centred, shoulders cropped by the circle
+  const spec = { outfit: 'legionary', hat: 'galea', hair: 'curly', stubble: true, expr: 'wink', pose: 'stand' };
+  const sc = 1.3; x.save(); x.translate(370 - 256 * sc, 480 - 196 * sc); x.scale(sc, sc); drawChar(x, spec); x.restore();
+  save(cv, 'profile');
+  // circular preview (how YouTube/TikTok crop it)
+  const pv = document.createElement('canvas'); pv.width = pv.height = S; const p = pv.getContext('2d');
+  p.fillStyle = '#ffffff'; p.fillRect(0, 0, S, S); p.save(); p.beginPath(); p.arc(400, 400, 400, 0, Math.PI * 2); p.clip(); p.drawImage(cv, 0, 0); p.restore();
+  save(pv, 'profile_circle_preview');
+}
+
+// ---------- banner ----------
+{
+  const W = 2560, H = 1440, cv = document.createElement('canvas'); cv.width = W; cv.height = H; const x = cv.getContext('2d');
+  const sky = x.createLinearGradient(0, 0, 0, H); sky.addColorStop(0, '#2a7fe0'); sky.addColorStop(0.5, '#8fd2ff'); sky.addColorStop(0.68, '#ffe3b0'); sky.addColorStop(1, '#f2b46a');
+  x.fillStyle = sky; x.fillRect(0, 0, W, H);
+  sunburst(x, 1280, 760, 1800, 36, 'rgba(255,255,255,0.13)', 'rgba(255,255,255,0)', 0.05);
+  const r = rand(7);
+  for (let i = 0; i < 9; i++) cloud(x, 120 + i * 300 + r() * 80, 250 + r() * 140, 0.9 + r() * 0.5, 0.95);
+  // distant era silhouettes along the horizon: roman arch, ship masts, water tower, mesa
+  x.fillStyle = 'rgba(70,90,140,0.28)';
+  const hz = 935;
+  x.fillRect(150, hz - 260, 360, 260); x.clearRect; // block of roman arch
+  x.save(); x.globalCompositeOperation = 'destination-out'; x.beginPath(); x.arc(330, hz - 40, 90, Math.PI, 0); x.rect(240, hz - 40, 180, 40); x.fill(); x.restore();
+  x.fillStyle = 'rgba(70,90,140,0.28)';
+  for (const mx of [2150, 2290]) { x.fillRect(mx, hz - 420, 14, 420); for (let k = 0; k < 3; k++) x.fillRect(mx - 70 + k * 10, hz - 400 + k * 120, 154 - k * 20, 80); }
+  x.beginPath(); x.moveTo(2060, hz - 60); x.lineTo(2420, hz - 60); x.lineTo(2380, hz); x.lineTo(2100, hz); x.fill();
+  x.fillRect(560, hz - 230, 120, 90); x.fillRect(575, hz - 140, 12, 140); x.fillRect(653, hz - 140, 12, 140);
+  x.beginPath(); x.moveTo(1850, hz); x.lineTo(1890, hz - 150); x.lineTo(2010, hz - 150); x.lineTo(2050, hz); x.fill();
+  // ground
+  const gr = x.createLinearGradient(0, hz, 0, H); gr.addColorStop(0, '#e9c27a'); gr.addColorStop(1, '#c98f4a');
+  x.fillStyle = gr; x.fillRect(0, hz, W, H - hz); x.fillStyle = INK; x.fillRect(0, hz - 3, W, 6);
+
+  // cast: one per era/job — inner pair stay inside the mobile safe area (507..2053 x 508..931)
+  const feet = 925, sc = 0.52;
+  const L = [
+    [{ outfit: 'centurion', hat: 'crest', item: 'vitis', greaves: true, mustache: true, expr: 'angry', pose: 'fist', faceColor: '#ef6b5b', steam: true }, 110, true],
+    [{ outfit: 'nurse', hat: 'nursecap', blush: true, expr: 'happy', pose: 'stand', dress: '#5a7a4a' }, 290, false],
+    [{ outfit: 'soviet', hat: 'peakcap', general: true, mustache: true, expr: 'angry', pose: 'papers' }, 450, false],
+    [{ outfit: 'shipwright', hair: 'curly', hairColor: '#8a4a1a', stubble: true, expr: 'smirk', pose: 'hammer', swing: true }, 645, false],
+  ];
+  const R = [
+    [{ outfit: 'tailor', hair: 'receding', hairColor: '#3a2a1a', mustache: true, glasses: true, expr: 'wink', pose: 'stand' }, 1915, false],
+    [{ outfit: 'cowboy', hat: 'cowboyhat', expr: 'laugh', pose: 'laughbelly' }, 2095, true],
+    [{ outfit: 'navyofficer', hat: 'peakcap', navy: true, mustache: true, expr: 'shock', pose: 'point' }, 2275, true],
+    [{ outfit: 'miner', hat: 'slouch', hair: 'beard', hairColor: '#8a5a2a', expr: 'happy', pose: 'stand', rivets: true }, 2450, true],
+  ];
+  for (const [s, cx, fl] of [...L, ...R]) { shadow(x, cx, feet + 4, 90); char(x, s, cx, feet, sc, fl); }
+
+  title(x, 'WHAT IF...?', 1280, 640, 150);
+  x.save(); x.font = '800 46px Montserrat'; x.textAlign = 'center'; x.textBaseline = 'middle';
+  const sub = 'History • Weird Jobs • One Crazy Idea';
+  const sw = x.measureText(sub).width + 70;
+  x.fillStyle = INK; x.beginPath(); x.roundRect(1280 - sw / 2, 755, sw, 76, 38); x.fill();
+  x.fillStyle = '#ffd23a'; x.fillText(sub, 1280, 795); x.restore();
+  x.save(); x.font = '800 40px Montserrat'; x.textAlign = 'center'; x.fillStyle = INK; x.fillText('NEW SHORTS EVERY WEEK', 1280, 885); x.restore();
+  save(cv, 'banner');
+
+  // guide overlay: YouTube safe areas
+  const gv = document.createElement('canvas'); gv.width = W; gv.height = H; const q = gv.getContext('2d');
+  q.drawImage(cv, 0, 0); q.fillStyle = 'rgba(0,0,0,0.55)';
+  q.fillRect(0, 0, W, 508); q.fillRect(0, 931, W, H - 931);
+  q.lineWidth = 6; q.strokeStyle = '#ff3355'; q.strokeRect(507, 508, 1546, 423);
+  q.strokeStyle = '#33ff88'; q.strokeRect(3, 508, W - 6, 423);
+  save(gv, 'banner_safe_area_preview');
+}
+document.title = 'done';
+</script></body></html>
