@@ -1,0 +1,320 @@
+{
+ "series": "GESCHICHTEN AUS DER NACHT",
+ "episode": "#14",
+ "title": "HINTERKAIFECK",
+ "part": null,
+ "kicker": "WAHRE GESCHICHTE · 1922",
+ "set": "farm",
+ "ambience": "winter",
+ "film": true,
+ "hook": "SPUREN ZUM HAUS.<br><em>KEINE ZURÜCK.</em>",
+ "titleShot": 1,
+ "question": "Wer war auf dem Dachboden?",
+ "shots": [
+  {
+   "scene": "fm_tracks",
+   "flash": true,
+   "lines": [
+    {
+     "text": "Die Spuren im Schnee führten zum Haus. Aber keine führte wieder hinaus.",
+     "hl": {
+      "Spuren": "y",
+      "keine": "r"
+     },
+     "sfx": [
+      [
+       "boom",
+       "word8"
+      ]
+     ],
+     "pause": 0.4
+    }
+   ]
+  },
+  {
+   "scene": "fm_wide",
+   "clock": "1922",
+   "place": "OBERBAYERN",
+   "lines": [
+    {
+     "text": "Hinterkaifeck. Ein einsamer Hof in Oberbayern, im Jahr 1922.",
+     "say": "Hinterkaifeck. Ein einsamer Hof in Oberbayern, im Jahr neunzehnhundertzweiundzwanzig.",
+     "hl": {
+      "Hinterkaifeck": "y"
+     }
+    }
+   ]
+  },
+  {
+   "scene": "fm_windows",
+   "clock": "1922",
+   "place": "HINTERKAIFECK",
+   "lines": [
+    {
+     "text": "Hier leben der Bauer Andreas Gruber, seine Frau, ihre Tochter und deren zwei kleine Kinder.",
+     "hl": {
+      "Gruber": "y"
+     }
+    }
+   ]
+  },
+  {
+   "scene": "fm_attic",
+   "clock": "1921",
+   "place": "DACHBODEN",
+   "lines": [
+    {
+     "text": "Schon ein halbes Jahr vorher kündigt die Magd. Sie sagt, auf dem Dachboden gehen Schritte.",
+     "hl": {
+      "Schritte": "r"
+     },
+     "ev": [
+      [
+       "step",
+       "end+0.2"
+      ]
+     ],
+     "sfx": [
+      [
+       "woodstep",
+       "end+0.2"
+      ]
+     ],
+     "pause": 0.4
+    }
+   ]
+  },
+  {
+   "scene": "fm_tracks",
+   "clock": "MÄRZ 1922",
+   "place": "HINTERKAIFECK",
+   "lines": [
+    {
+     "text": "Ende März findet der Bauer Spuren im Schnee. Vom Waldrand bis zum Hof.",
+     "hl": {
+      "Spuren": "y"
+     }
+    },
+    {
+     "text": "Zurück führt keine.",
+     "hl": {
+      "keine": "r"
+     },
+     "sfx": [
+      [
+       "boom",
+       "word2"
+      ]
+     ],
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "fm_kitchen",
+   "focus": "paper",
+   "clock": "MÄRZ 1922",
+   "place": "KÜCHE",
+   "lines": [
+    {
+     "text": "Im Haus liegt eine fremde Zeitung. Niemand auf dem Hof hat sie gekauft.",
+     "hl": {
+      "fremde": "r"
+     }
+    }
+   ]
+  },
+  {
+   "scene": "fm_kitchen",
+   "focus": "keys",
+   "clock": "MÄRZ 1922",
+   "place": "KÜCHE",
+   "lines": [
+    {
+     "text": "Und ein Hausschlüssel ist verschwunden.",
+     "hl": {
+      "verschwunden": "r"
+     },
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "fm_attic",
+   "clock": "MÄRZ 1922",
+   "place": "DACHBODEN",
+   "lines": [
+    {
+     "text": "Nachts hört er Schritte. Über sich. Auf dem Dachboden.",
+     "hl": {
+      "Schritte": "r",
+      "Dachboden": "r"
+     },
+     "ev": [
+      [
+       "dread",
+       "word2"
+      ],
+      [
+       "step",
+       "word2"
+      ],
+      [
+       "step",
+       "word4"
+      ],
+      [
+       "step",
+       "end+0.3"
+      ]
+     ],
+     "sfx": [
+      [
+       "woodstep",
+       "word2"
+      ],
+      [
+       "woodstep",
+       "word4"
+      ],
+      [
+       "woodstep",
+       "end+0.3"
+      ]
+     ],
+     "pause": 0.6
+    }
+   ]
+  },
+  {
+   "scene": "doc_card",
+   "kick": "FREITAG",
+   "card": "31. MÄRZ 1922",
+   "lines": [
+    {
+     "text": "Am 31. März tritt eine neue Magd ihre Stelle an. Es ist ihr erster Tag.",
+     "say": "Am einunddreißigsten März tritt eine neue Magd ihre Stelle an. Es ist ihr erster Tag.",
+     "hl": {
+      "erster": "y"
+     },
+     "sfx": [
+      [
+       "typewriter",
+       "shot+0.15"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "scene": "fm_windows",
+   "clock": "31.03.1922",
+   "place": "HINTERKAIFECK",
+   "lines": [
+    {
+     "text": "In derselben Nacht sterben alle sechs Menschen auf dem Hof.",
+     "hl": {
+      "sechs": "r"
+     },
+     "ev": [
+      [
+       "winOff",
+       "start+0.2",
+       5
+      ],
+      [
+       "winOff",
+       "start+0.8",
+       2
+      ],
+      [
+       "winOff",
+       "word3",
+       4
+      ],
+      [
+       "winOff",
+       "word5",
+       0
+      ],
+      [
+       "winOff",
+       "word7",
+       3
+      ],
+      [
+       "winOff",
+       "end",
+       1
+      ],
+      [
+       "silence",
+       "end+0.1",
+       "end+1.2"
+      ]
+     ],
+     "pause": 1.2
+    }
+   ]
+  },
+  {
+   "scene": "fm_smoke",
+   "tod": "smoke",
+   "clock": "APRIL 1922",
+   "place": "HINTERKAIFECK",
+   "lines": [
+    {
+     "text": "Doch in den Tagen danach steigt Rauch aus dem Kamin. Jemand füttert das Vieh.",
+     "hl": {
+      "Rauch": "y",
+      "Jemand": "r"
+     },
+     "sfx": [
+      [
+       "boom",
+       "word12"
+      ]
+     ],
+     "pause": 0.4
+    }
+   ]
+  },
+  {
+   "scene": "doc_card",
+   "kick": "HINTERKAIFECK · 1922",
+   "card": "UNGELÖST",
+   "red": true,
+   "size": 60,
+   "lines": [
+    {
+     "text": "Der Täter wurde nie gefunden. Der Fall ist bis heute ungelöst.",
+     "hl": {
+      "nie": "r",
+      "ungelöst": "r"
+     },
+     "sfx": [
+      [
+       "typewriter",
+       "shot+0.15"
+      ]
+     ],
+     "pause": 0.4
+    }
+   ]
+  },
+  {
+   "scene": "doc_card",
+   "card": "Wer war auf dem Dachboden?",
+   "size": 34,
+   "speed": 30,
+   "sub": "Schreib's in die Kommentare 👇",
+   "lines": [
+    {
+     "text": "Wer war auf dem Dachboden?",
+     "nocap": true,
+     "pause": 0.8
+    }
+   ]
+  }
+ ]
+}

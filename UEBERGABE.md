@@ -65,7 +65,8 @@ Details zum Stil stehen in `STYLE_GUIDE.md`.
 | 06 | Lichthupe | Auto, Landstraße, Verfolger, Radio, Rücksitz | Bild fertig; wartet auf Stimme |
 | 07 | **Bewegungsmelder** | dunkles Großraumbüro, Lichter folgen dir, Kopierer druckt ein Foto | Bild fertig; wartet auf Stimme |
 | 08 | Letzte Haltestelle | Nachtbus | gebaut, aber verworfen (Idee war nicht neu) |
-| 13 | **Der Sechste** | „Wahre Geschichte“: Klassenfahrt 2014, Jugendherberge im Harz, Durchzählen im Dunkeln, Foto mit sechs Jungs | Bild fertig + Probevideo (Piper); **neuer Scherenschnitt-Stil, abgeschlossen (kein Teil 2)**; wartet auf Feedback + Stimme |
+| 14 | **Hinterkaifeck** | ECHTER Fall 1922 (Oberbayern): Spuren im Schnee, fremde Zeitung, fehlender Schlüssel, Schritte auf dem Dachboden, 6 Tote, ungelöst | Bild fertig + Probevideo (Piper); **Doku-Look**; wartet auf Feedback + Stimme |
+| 13 | **Der Sechste** | „Wahre Geschichte“: Klassenfahrt 2014, Jugendherberge im Harz, Durchzählen im Dunkeln, Foto mit sechs Jungs | Probevideo; **Stil gefiel dir nicht („sieht billig aus“)** → verworfen |
 | 12 | **Spiegeltest** | Bad in der Ferienwohnung um 4:12, Spiegeltest im Gästebuch, Licht aus → Gesicht hinter dem Glas, „Vermieter“ an der Tür | **FINAL gerendert** mit deiner ElevenLabs-Stimme (ca. 56 s); gruseliger Modus |
 | 11 | **Maschine 7** | Waschsalon um 1:58, Maschine 7 läuft von allein, Hand im Bullauge, Schild „Nicht öffnen“, Kinderstimme | **FINAL gerendert** mit deiner ElevenLabs-Stimme (47 s); wartende Person hat jetzt Beine |
 | 10 | **Wärmebild** | Hochsitz im Wald, Wärmebildkamera, Onkel am Funkgerät, Uhrzeit 2:47 | Bild fertig + Probevideo (Piper); **erste Folge mit neuem, optimiertem Aufbau**; wartet auf Feedback + Stimme |
@@ -200,6 +201,12 @@ Analyse: (1) Es gab nie einen Teil 2 → wer aufs Profil klickt, findet nur Anf�
 - Uhrzeiten nach Story (19:40, 21:15, 2:07).
 - Engine-Fix: Vor dem ersten Shot (erste 0,35 s bei Piper-Proben) wurde der letzte Shot gezeigt → behoben.
 
+## 6e. Doku-Look für echte Fälle (ab Folge 14; Scherenschnitt war dir zu billig)
+- Echte (oder in Teilen echte) Geschichten, sachlich nach dem bekannten Stand des Falls, **keine Gewalt zeigen** (z. B. Fenster gehen nacheinander aus), respektvoll mit den Opfern.
+- 3D-Szenen statt Figuren: Set `farm` (Hof im Schnee mit Nachthimmel + Mond, Nebel, fallendem Schnee, Fußspuren nur in eine Richtung, leuchtende Fenster mit Lichtschein, Kaminrauch bei Tag), Innenräume Dachboden (Lichtschlitze, Staub fällt bei `step`) und Küche (Petroleumlampe, fremde Zeitung, Schlüsselbrett mit leerem Haken).
+- `"film": true` = Archivfilm-Overlay (Kratzer, Staub, Flackern, Vignette), Sepia-Filter in GLSTYLE. Karten `doc_card` mit Schreibmaschinen-Text (`card`, `kick`, `red`, `sub`). Badge zeigt Jahreszahlen ohne „UHR“.
+- Ende: Diskussionsfrage (Theorie in die Kommentare), kein Teil 2.
+
 ## 7. Caption-Vorlage
 
 ```
@@ -253,6 +260,10 @@ Teil 2 kommt heute Nacht – folgen, damit du ihn nicht verpasst.
 - Szenen (`sil`, shot): `ext` (Jugendherberge, Abendrot, Bus), `warm` (Zimmer, Licht an, Lehrerin mit Fotoblitz), `moon` (Strom aus), `count` (Zahlen 1–5 weiß, 6 rot; Zoom auf den Sechsten am Fenster), `back` (Licht wieder an, Ecke leer), `photo` (Foto mit sechs Jungs, Zoom, rote Augen), `end` (Frage).
 - Ereignisse: `flash`, `off`, `num` [zeit, zahl], `photoEyes`. Sounds `shutter`, `powerdown`, Ambience `hostel`.
 - Nächster Schritt: Probevideo ansehen, `stories/13_der_sechste/voiceover_elevenlabs.txt` aufnehmen, final rendern. Caption `branding/CAPTION_13_der_sechste.txt`, Cover `branding/cover_13_der_sechste.png`.
+
+### Folge 14 „Hinterkaifeck“
+- Fakten-Basis (wie über den Fall überliefert): Einödhof bei Gröbern, Oberbayern; Andreas Gruber, Frau Cäzilia, Tochter Viktoria Gabriel mit zwei Kindern; frühere Magd kündigte ca. ein halbes Jahr vorher (Spuk/Schritte); Spuren vom Wald zum Hof, keine zurück; fremde Zeitung; fehlender Schlüssel; Schritte auf dem Dachboden; neue Magd Maria Baumgartner trat am 31.03.1922 an; in der Nacht starben alle sechs; danach Rauch aus dem Kamin, Vieh versorgt; Leichen am 04.04.1922 gefunden; bis heute ungelöst.
+- Nächster Schritt: Probevideo ansehen, `stories/14_hinterkaifeck/voiceover_elevenlabs.txt` aufnehmen, final rendern. Caption `branding/CAPTION_14_hinterkaifeck.txt`, Cover `branding/cover_14_hinterkaifeck.png`.
 
 ### Erledigt aus der letzten Liste
 - Punkt 1 (Auswahl): **B) Spätschicht** gewählt und gebaut (siehe oben). A) „Die Pizza“ und C) „Die Sprachnachricht“ bleiben als Reserve-Ideen.

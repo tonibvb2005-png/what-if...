@@ -635,9 +635,9 @@ window.renderFrame = async (t) => {
     ov += `<div class="hook" style="opacity:${k};transform:translateX(-50%) scale(${.85 + .15 * outBack(t / .3)})">${TL.hook}</div>`;
   } else if (t >= ts && t < ts + tLen) {
     ov += `<div class="title" style="opacity:${clamp((ts + tLen - t) / .25) * clamp((t - ts) / .15)}"><div class="k">${TL.series} · ${TL.episode}</div><div class="t">${TL.title}${TL.part != null ? `<br>TEIL ${TL.part}` : ''}</div>${TL.kicker ? `<div class="k" style="color:#ffc21f;margin-top:6px">${TL.kicker}</div>` : ''}</div>`;
-  } else if (sh.place && !['lock', 'chat', 'choice', 'end', 'monitor', 'radio', 'ks_cctv', 'ks_note', 'hs_thermal', 'ws_sign', 'bt_book'].includes(sh.scene)) {
+  } else if (sh.place && !['lock', 'chat', 'choice', 'end', 'monitor', 'radio', 'ks_cctv', 'ks_note', 'hs_thermal', 'ws_sign', 'bt_book', 'doc_card'].includes(sh.scene)) {
     const blink = (t % 1.2) < .7 ? 1 : .25;
-    ov += `<div class="badge"><div class="tm"><i style="opacity:${blink}"></i>${sh.clock}<small>UHR</small></div><div class="pl">${TL.part != null ? `TEIL ${TL.part} · ` : ''}${sh.place}</div></div>`;
+    ov += `<div class="badge"><div class="tm"><i style="opacity:${blink}"></i>${sh.clock}${String(sh.clock).includes(':') ? '<small>UHR</small>' : ''}</div><div class="pl">${TL.part != null ? `TEIL ${TL.part} · ` : ''}${sh.place}</div></div>`;
   }
   if (TL.set === 'cellar' && typeof timerOverlay !== 'undefined') ov += timerOverlay(t, sh);
   const q = (TL.quotes || []).find(q => t >= q.start && t < q.end);
@@ -653,6 +653,7 @@ window.renderFrame = async (t) => {
     }).join('') + `</div>`;
   }
   for (const [pt] of (TL.ev && TL.ev.pulse) || []) { const a = t - pt; if (a >= 0 && a < .9) ov = `<div style="position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 45%, rgba(160,0,10,0) 30%, rgba(150,0,10,${.55 * Math.exp(-a * 4)}) 100%)"></div>` + ov; }
+  if (TL.film && typeof filmOverlay !== 'undefined' && sh.scene !== 'end') ov = filmOverlay(t) + ov;
   $('overlay').innerHTML = ov;
   $('grain').style.backgroundImage = `url(${GRAIN[Math.floor(t * 24) % GRAIN.length]})`;
 };

@@ -727,3 +727,175 @@
 
 // ======================================================================= 2D-Scherenschnitt (kein 3D nötig)
 W3.BUILD.flat = async () => { W3.scene.background = new THREE.Color('#000'); };
+
+// ======================================================================= Hinterkaifeck (Hof im Schnee, Doku-Look)
+(() => {
+  const { std, basic, put, rbox, canvasTex, plane } = W3.H, R = W3.reg;
+  const rng = (seed) => () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+  const M4 = new THREE.Matrix4(), Q = new THREE.Quaternion(), V = new THREE.Vector3(), S1 = new THREE.Vector3();
+  const inst = (geo, mat, n, cast = true) => { const m = new THREE.InstancedMesh(geo, mat, n); m.castShadow = cast; m.receiveShadow = true; W3.scene.add(m); return m; };
+  const planks = (base, dark, w = 256, h = 256, vertical = true) => canvasTex(w, h, (g) => {
+    g.fillStyle = base; g.fillRect(0, 0, w, h); const r = rng(5);
+    for (let i = 0; i < 16; i++) { g.fillStyle = `rgba(0,0,0,${.08 + r() * .14})`; vertical ? g.fillRect(i * w / 16, 0, w / 16 - 2, h) : g.fillRect(0, i * h / 16, w, h / 16 - 2); }
+    g.strokeStyle = dark; g.lineWidth = 2; for (let i = 0; i <= 16; i++) { g.beginPath(); vertical ? (g.moveTo(i * w / 16, 0), g.lineTo(i * w / 16, h)) : (g.moveTo(0, i * h / 16), g.lineTo(w, i * h / 16)); g.stroke(); }
+    for (let i = 0; i < 40; i++) { g.fillStyle = 'rgba(0,0,0,.25)'; g.beginPath(); g.ellipse(r() * w, r() * h, 2 + r() * 3, 1 + r() * 2, 0, 0, 7); g.fill(); }
+  });
+  W3.BUILD.farm = async () => {
+    const sc = W3.scene;
+    R.fogDay = new THREE.FogExp2('#8d98aa', .022); R.fogNight = new THREE.FogExp2('#27304a', .026);
+    sc.fog = R.fogNight; sc.background = new THREE.Color('#1a2130');
+    R.hemi = new THREE.HemisphereLight('#a9b7d6', '#2a2a30', .55); sc.add(R.hemi);
+    R.sun = new THREE.DirectionalLight('#c6d2f0', .8); R.sun.position.set(-20, 30, 25); R.sun.target.position.set(0, 0, 0);
+    R.sun.castShadow = true; R.sun.shadow.mapSize.set(2048, 2048); Object.assign(R.sun.shadow.camera, { left: -25, right: 25, top: 25, bottom: -25, near: 1, far: 90 }); R.sun.shadow.bias = -.0015;
+    sc.add(R.sun, R.sun.target);
+    const skyT = canvasTex(64, 512, (g, w, h) => { const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, '#0b1020'); gr.addColorStop(.55, '#2a3550'); gr.addColorStop(1, '#5d6a86'); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
+    R.sky = new THREE.Mesh(new THREE.SphereGeometry(180, 32, 16), new THREE.MeshBasicMaterial({ map: skyT, side: THREE.BackSide, fog: false })); sc.add(R.sky);
+    const glowT = canvasTex(128, 128, (g, w, h) => { const gr = g.createRadialGradient(w / 2, h / 2, 1, w / 2, h / 2, w / 2); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(.25, 'rgba(255,255,255,.35)'); gr.addColorStop(1, 'rgba(255,255,255,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
+    R.glowT = glowT;
+    R.moon = new THREE.Sprite(new THREE.SpriteMaterial({ map: glowT, color: '#dfe6ff', fog: false, depthWrite: false, blending: THREE.AdditiveBlending })); R.moon.position.set(-60, 70, -120); R.moon.scale.setScalar(55); sc.add(R.moon);
+    const moonDisc = new THREE.Mesh(new THREE.CircleGeometry(5, 32), new THREE.MeshBasicMaterial({ color: '#eef2ff', fog: false })); moonDisc.position.copy(R.moon.position); moonDisc.lookAt(0, 0, 0); sc.add(moonDisc);
+    // Schnee: weich, leicht unruhig, bläuliche Mulden
+    const snowT = canvasTex(512, 512, (g, w, h) => { g.fillStyle = '#e9eef6'; g.fillRect(0, 0, w, h); const r = rng(9);
+      for (let i = 0; i < 2600; i++) { const v = 200 + r() * 55; g.fillStyle = `rgba(${v - 20},${v - 10},${v + 5},${.25})`; g.beginPath(); g.arc(r() * w, r() * h, 1 + r() * 6, 0, 7); g.fill(); } });
+    snowT.wrapS = snowT.wrapT = THREE.RepeatWrapping; snowT.repeat.set(30, 30);
+    const snowM = new THREE.MeshStandardMaterial({ map: snowT, roughness: .95, color: '#dfe6f2' });
+    const ground = put(new THREE.Mesh(new THREE.PlaneGeometry(260, 260, 60, 60), snowM), 0, 0, 0, sc, false); ground.rotation.x = -Math.PI / 2;
+    { const p = ground.geometry.attributes.position; for (let i = 0; i < p.count; i++) { const x = p.getX(i), y = p.getY(i), d = Math.hypot(x, y); if (d > 30) p.setZ(i, Math.sin(x * .05) * Math.cos(y * .04) * 3 * Math.min(1, (d - 30) / 40)); } ground.geometry.computeVertexNormals(); }
+    // Wald: Fichten mit Schnee auf den Ästen
+    const r = rng(77), N = 260;
+    const trunks = inst(new THREE.CylinderGeometry(.18, .3, 10, 7), std('#2a2522'), N);
+    const crownD = inst(new THREE.ConeGeometry(2.0, 6.5, 9), std('#1d2a26'), N * 2), crownS = inst(new THREE.ConeGeometry(1.4, 2.2, 9), std('#dfe6f0'), N * 2);
+    for (let i = 0; i < N; i++) {
+      let x, z; do { x = (r() - .5) * 160; z = -26 - r() * 70; } while (false);
+      if (i % 3 === 0) { x = (r() > .5 ? 1 : -1) * (28 + r() * 40); z = (r() - .5) * 90; }
+      const s = .8 + r() * .8, rot = r() * 6;
+      const set = (m, k, y, ss) => { Q.setFromEuler(new THREE.Euler(0, rot, 0)); M4.compose(V.set(x, y, z), Q, S1.set(ss, ss, ss)); m.setMatrixAt(k, M4); };
+      set(trunks, i, 5 * s, s); set(crownD, i * 2, 5.5 * s, s); set(crownD, i * 2 + 1, 8.2 * s, s * .72); set(crownS, i * 2, 7.6 * s, s); set(crownS, i * 2 + 1, 9.9 * s, s * .7);
+    }
+    trunks.instanceMatrix.needsUpdate = crownD.instanceMatrix.needsUpdate = crownS.instanceMatrix.needsUpdate = true;
+    // Der Hof: Wohnhaus + angebauter Stadel unter einem First (Einödhof), Holz/Putz, Schnee auf dem Dach
+    const plaster = new THREE.MeshStandardMaterial({ map: canvasTex(256, 256, (g, w, h) => { g.fillStyle = '#b8b2a6'; g.fillRect(0, 0, w, h); const q = rng(3); for (let i = 0; i < 900; i++) { g.fillStyle = `rgba(60,50,40,${q() * .12})`; g.fillRect(q() * w, q() * h, 2 + q() * 6, 2 + q() * 6); } g.fillStyle = 'rgba(40,35,30,.35)'; g.fillRect(0, h - 30, w, 30); }), roughness: .95 });
+    const woodM = new THREE.MeshStandardMaterial({ map: planks('#5a4634', '#2a2018'), roughness: .9 });
+    const roofSnow = std('#e6ebf3', { r: .95 });
+    const house = new THREE.Group(); house.position.set(0, 0, 0); sc.add(house); R.house = house;
+    const gable = (w, d, h, x, z, y) => {     // Satteldach (dunkle Unterseite) + Schneedecke obendrauf
+      const shape = (o) => { const s = new THREE.Shape(); s.moveTo(-w / 2 - .5 - o, 0); s.lineTo(0, h + o); s.lineTo(w / 2 + .5 + o, 0); s.lineTo(-w / 2 - .5 - o, 0); return s; };
+      const g1 = new THREE.ExtrudeGeometry(shape(0), { depth: d + .8, bevelEnabled: false }); g1.translate(0, 0, -(d + .8) / 2);
+      put(new THREE.Mesh(g1, std('#3a2f28')), x, y, z, house);
+      const g2 = new THREE.ExtrudeGeometry(shape(.06), { depth: d + .9, bevelEnabled: false }); g2.translate(0, 0, -(d + .9) / 2);
+      put(new THREE.Mesh(g2, roofSnow), x, y + .1, z, house);
+    };
+    put(new THREE.Mesh(new THREE.BoxGeometry(9, 5.2, 8), plaster), -6, 2.6, 0, house);                    // Wohnhaus
+    put(new THREE.Mesh(new THREE.BoxGeometry(12, 6, 8.4), woodM), 4.5, 3.0, 0, house);                    // Stadel
+    gable(9, 8, 3.6, -6, 0, 5.2); gable(12, 8.4, 4.2, 4.5, 0, 6.0);
+    put(new THREE.Mesh(new THREE.BoxGeometry(.7, 2.2, .7), plaster), -4.2, 8.2, -1.2, house);            // Kamin
+    put(new THREE.Mesh(new THREE.BoxGeometry(.8, .15, .8), roofSnow), -4.2, 9.35, -1.2, house);
+    // Fenster (Wohnhaus vorne) – warm, mit Kreuz; werden später einzeln dunkel
+    R.windows = [];
+    for (const [x, y] of [[-8.6, 1.7], [-6.9, 1.7], [-3.6, 1.7], [-8.6, 3.9], [-6.0, 3.9], [-3.6, 3.9]]) {
+      const m = put(new THREE.Mesh(new THREE.PlaneGeometry(.9, 1.1), basic('#ffb969')), x, y, 4.01, house, false);
+      put(new THREE.Mesh(new THREE.BoxGeometry(.06, 1.1, .05), std('#2a221b')), x, y, 4.03, house); put(new THREE.Mesh(new THREE.BoxGeometry(.9, .06, .05), std('#2a221b')), x, y, 4.03, house);
+      put(new THREE.Mesh(new THREE.BoxGeometry(1.1, .1, .25), roofSnow), x, y - .6, 4.1, house);
+      const l = new THREE.PointLight('#ffb366', 1.6, 7, 1.8); l.position.set(x, y, 4.8); house.add(l);
+      const gl = new THREE.Sprite(new THREE.SpriteMaterial({ map: R.glowT, color: '#ffb35c', transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: .55 })); gl.position.set(x, y, 4.2); gl.scale.set(2.6, 2.6, 1); house.add(gl);
+      R.windows.push({ m, l, gl });
+    }
+    put(rbox(1.2, 2.2, .1, .02, woodM), -1.9, 1.1, 4.02, house);                                           // Haustür
+    put(new THREE.Mesh(new THREE.BoxGeometry(4.5, 4.2, .12), std('#3c2f24')), 4.0, 2.1, 4.25, house);     // Stadeltor
+    // Zaun, Holzstoß, Brunnen
+    for (let i = 0; i < 24; i++) put(new THREE.Mesh(new THREE.BoxGeometry(.12, 1.1, .12), std('#3a2f26')), -14 + i * 1.3, .55, 9.5);
+    put(new THREE.Mesh(new THREE.BoxGeometry(31, .08, .06), std('#3a2f26')), 1, .9, 9.5);
+    put(new THREE.Mesh(new THREE.BoxGeometry(3, 1.3, 1), woodM), -12.5, .65, 2);
+    put(new THREE.Mesh(new THREE.BoxGeometry(3.1, .15, 1.1), roofSnow), -12.5, 1.36, 2);
+    // Fußspuren: vom Waldrand (z -26) in einem Bogen bis zur Hausecke – nur in eine Richtung
+    const fpT = canvasTex(128, 128, (g, w, h) => { const gr = g.createRadialGradient(w / 2, h / 2, 4, w / 2, h / 2, w / 2); gr.addColorStop(0, 'rgba(40,55,90,.95)'); gr.addColorStop(.6, 'rgba(80,100,140,.55)'); gr.addColorStop(1, 'rgba(160,175,205,0)'); g.fillStyle = gr; g.beginPath(); g.ellipse(w / 2, h / 2, w * .3, h * .48, 0, 0, 7); g.fill(); });
+    const NF = 90; R.prints = inst(new THREE.PlaneGeometry(.36, .58), new THREE.MeshBasicMaterial({ map: fpT, transparent: true, depthWrite: false, fog: true }), NF, false);
+    R.trail = [];
+    for (let i = 0; i < NF; i++) {
+      const u = i / (NF - 1), x = -29 + 27 * u + Math.sin(u * 4) * 1.5, z = 20 - 15 * u + Math.sin(u * 6) * 1.2, ang = Math.atan2(27, -15) + Math.PI;
+      const side = i % 2 ? .22 : -.22, px = x + Math.cos(ang) * side, pz = z - Math.sin(ang) * side;
+      Q.setFromEuler(new THREE.Euler(-Math.PI / 2, 0, -ang)); M4.compose(V.set(px, .02, pz), Q, S1.set(1, 1, 1)); R.prints.setMatrixAt(i, M4); R.trail.push([px, pz]);
+    }
+    R.prints.instanceMatrix.needsUpdate = true;
+    // Rauch aus dem Kamin (Sprites)
+    const smT = canvasTex(128, 128, (g, w, h) => { const gr = g.createRadialGradient(w / 2, h / 2, 2, w / 2, h / 2, w / 2); gr.addColorStop(0, 'rgba(225,228,235,.8)'); gr.addColorStop(1, 'rgba(225,228,235,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
+    R.smoke = Array.from({ length: 18 }, () => { const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: smT, transparent: true, depthWrite: false, opacity: 0 })); sc.add(s); return s; });
+    // fallender Schnee (Punkte, deterministisch animiert)
+    const NS = 2500, sp = new Float32Array(NS * 3), sr = rng(31);
+    R.snowBase = Array.from({ length: NS }, () => [sr() * 60 - 30, sr() * 20, sr() * 60 - 30, sr()]);
+    const sg = new THREE.BufferGeometry(); sg.setAttribute('position', new THREE.BufferAttribute(sp, 3));
+    R.snow = new THREE.Points(sg, new THREE.PointsMaterial({ color: '#ffffff', size: .07, transparent: true, opacity: .85, depthWrite: false })); sc.add(R.snow);
+    R.tick = (t, tod) => {
+      const P = R.snow.geometry.attributes.position;
+      for (let i = 0; i < NS; i++) { const b = R.snowBase[i]; P.setXYZ(i, b[0] + Math.sin(t * .7 + b[3] * 9) * .4, ((b[1] - t * (.9 + b[3] * .6)) % 20 + 20) % 20, b[2]); }
+      P.needsUpdate = true;
+      const smoke = tod === 'day' || tod === 'smoke';
+      R.smoke.forEach((s, i) => { const a = ((t * .35 + i / 18) % 1); s.position.set(-4.2 + a * 3 + Math.sin(a * 6 + i) * .4, 9.5 + a * 7, -1.2 - a * 1.5); s.scale.setScalar(1.5 + a * 6); s.material.opacity = smoke ? (1 - a) * .95 : 0; });
+    };
+    R.setTod = (tod) => {
+      const day = tod === 'day' || tod === 'smoke';
+      sc.fog = day ? R.fogDay : R.fogNight; sc.background.set(day ? '#8d98aa' : '#1a2130'); R.sky.visible = R.moon.visible = !day; R.moon.parent.children.forEach(c => { if (c.geometry && c.geometry.type === 'CircleGeometry' && c.position.y > 50) c.visible = !day; });
+      R.hemi.intensity = day ? 1.0 : .5; R.hemi.color.set(day ? '#cfd6e4' : '#9fb0d6'); R.sun.intensity = day ? .9 : .55; R.sun.color.set(day ? '#e6e8f0' : '#b7c6ee');
+    };
+    R.setWindows = (lit) => R.windows.forEach((w, i) => { const v = lit[i] ?? 0; w.m.material.color.set(v > .5 ? '#ffd08a' : '#14161c'); w.m.material.toneMapped = false; w.l.intensity = 1.6 * v; w.gl.material.opacity = .55 * v; });
+    // ----- Dachboden (eigener Raum, weit weg aufgebaut)
+    const A = new THREE.Group(); A.position.set(200, 0, 0); sc.add(A); R.attic = A;
+    const atticWood = new THREE.MeshStandardMaterial({ map: planks('#4a3a2c', '#1f1811', 256, 256, false), roughness: .9 });
+    const fl = put(new THREE.Mesh(new THREE.PlaneGeometry(4, 10), atticWood), 0, 0, 0, A, false); fl.rotation.x = -Math.PI / 2;
+    for (const sx of [-1, 1]) { const rf = put(new THREE.Mesh(new THREE.PlaneGeometry(10, 3.2), atticWood), sx * 1.0, 1.3, 0, A, false); rf.rotation.set(0, sx * Math.PI / 2, 0); rf.rotation.order = 'YXZ'; rf.rotation.x = sx * -.62; }
+    put(new THREE.Mesh(new THREE.PlaneGeometry(4, 2.8), atticWood), 0, 1.4, -5, A, false);
+    for (let z = -4.5; z <= 4.5; z += 1.1) for (const sx of [-1, 1]) { const b = put(new THREE.Mesh(new THREE.BoxGeometry(.12, 3.0, .14), std('#2e241b')), sx * .85, 1.25, z, A); b.rotation.z = sx * .62; }
+    put(new THREE.Mesh(new THREE.BoxGeometry(.16, .16, 10), std('#2e241b')), 0, 2.55, 0, A);
+    for (let z = -4; z <= 4; z += 2.2) put(new THREE.Mesh(new THREE.BoxGeometry(3.6, .14, .14), std('#2e241b')), 0, 1.75, z, A);
+    for (const [x, z, s] of [[-.9, -2.8, 1], [-.7, -1.6, .8], [.9, -3.5, .9]]) put(rbox(1.0 * s, .6 * s, .7 * s, .08, std('#8a7650')), x, .3 * s, z, A);
+    // Lichtschlitze durch die Bretter (Mondlicht)
+    const beamT = canvasTex(64, 256, (g, w, h) => { const gr = g.createLinearGradient(0, 0, 0, h); gr.addColorStop(0, 'rgba(190,205,235,.55)'); gr.addColorStop(1, 'rgba(190,205,235,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
+    for (const z of [-3.2, -1.1, 1.0, 3.1]) { const b = put(new THREE.Mesh(new THREE.PlaneGeometry(.06, 3.2), basic('#ffffff', { map: beamT, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false, opacity: .8 })), -.3, 1.4, z, A, false); b.rotation.set(0, Math.PI / 2, .55); }
+    R.atticMoon = new THREE.PointLight('#9fb2e0', .9, 6, 1.6); R.atticMoon.position.set(-.6, 2.0, 0); A.add(R.atticMoon);
+    R.hatch = new THREE.PointLight('#ffb366', .9, 3, 2); R.hatch.position.set(.6, -.3, 3.6); A.add(R.hatch);
+    put(new THREE.Mesh(new THREE.PlaneGeometry(.8, .8), basic('#5a3a1c')), .6, .003, 3.6, A, false).rotation.x = -Math.PI / 2;
+    // Staub (fällt bei Schritten von den Balken)
+    const ND = 700, dp = new Float32Array(ND * 3), dr = rng(55);
+    R.dustBase = Array.from({ length: ND }, () => [dr() * 3 - 1.5, dr() * 2.4, dr() * 9 - 4.5, dr()]);
+    const dg = new THREE.BufferGeometry(); dg.setAttribute('position', new THREE.BufferAttribute(dp, 3));
+    R.dust = new THREE.Points(dg, new THREE.PointsMaterial({ color: '#d9cfb8', size: .018, transparent: true, opacity: .7, depthWrite: false })); A.add(R.dust);
+    R.tickDust = (t, fall) => {
+      const P = R.dust.geometry.attributes.position;
+      for (let i = 0; i < ND; i++) { const b = R.dustBase[i]; const f = fall * (b[3] > .6 ? 1 : 0);
+        P.setXYZ(i, b[0] + Math.sin(t * .3 + b[3] * 20) * .1, ((b[1] + Math.sin(t * .2 + i) * .05 - f * ((t * 1.5 + b[3]) % 1) * 2.4) % 2.5 + 2.5) % 2.5, b[2]); }
+      P.needsUpdate = true;
+    };
+    // ----- Küche (eigener Raum)
+    const K = new THREE.Group(); K.position.set(-200, 0, 0); sc.add(K); R.kitchen = K;
+    const kWood = new THREE.MeshStandardMaterial({ map: planks('#5d4a37', '#2a2018', 256, 256, false), roughness: .85 });
+    put(new THREE.Mesh(new THREE.PlaneGeometry(6, 6), kWood), 0, 0, 0, K, false).rotation.x = -Math.PI / 2;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(6, 3), plaster), 0, 1.5, -2.5, K, false);
+    put(new THREE.Mesh(new THREE.PlaneGeometry(6, 3), plaster), -2.2, 1.5, 0, K, false).rotation.y = Math.PI / 2;
+    put(rbox(1.6, .08, 1.0, .02, std('#6a5440')), 0, .8, -.6, K);
+    for (const [x, z] of [[-.7, -1.0], [.7, -1.0], [-.7, -.2], [.7, -.2]]) put(new THREE.Mesh(new THREE.BoxGeometry(.07, .78, .07), std('#4a3a2c')), x, .39, z, K);
+    // Zeitung (fremd) auf dem Tisch
+    const paper = canvasTex(512, 680, (g, w, h) => {
+      g.fillStyle = '#e4dcc8'; g.fillRect(0, 0, w, h); g.fillStyle = '#1f1a14';
+      g.font = 'bold 54px "DejaVu Serif", Georgia, serif'; g.textAlign = 'center'; g.fillText('Neueste Nachrichten', w / 2, 70);
+      g.font = '18px "DejaVu Serif", serif'; g.fillText('München · März 1922 · Preis 1 Mark', w / 2, 102);
+      g.fillRect(30, 115, w - 60, 3);
+      const q = rng(13); for (let c = 0; c < 3; c++) for (let y = 140; y < h - 30; y += 14) { if (q() < .08) { y += 14; continue; } g.globalAlpha = .55 + q() * .3; g.fillRect(36 + c * 152, y, 128 - q() * 30 * (q() < .2), 6); }
+      g.globalAlpha = 1; g.font = 'bold 26px "DejaVu Serif", serif'; g.fillText('Unruhen im Land', 112, 160);
+      const vg = g.createRadialGradient(w / 2, h / 2, w * .2, w / 2, h / 2, w * .8); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(80,60,30,.35)'); g.fillStyle = vg; g.fillRect(0, 0, w, h);
+    });
+    const pp = put(new THREE.Mesh(new THREE.PlaneGeometry(.48, .64), new THREE.MeshStandardMaterial({ map: paper, roughness: .9 })), .15, .845, -.55, K, false); pp.rotation.set(-Math.PI / 2, 0, .28);
+    // Petroleumlampe
+    put(new THREE.Mesh(new THREE.CylinderGeometry(.08, .1, .12, 16), std('#7a5a2a', { m: .6, r: .4 })), -.45, .9, -.75, K);
+    put(new THREE.Mesh(new THREE.SphereGeometry(.07, 16, 10), basic('#ffd39a', { transparent: true, opacity: .85 })), -.45, 1.02, -.75, K, false);
+    R.lamp = new THREE.PointLight('#ffb35c', 2.2, 5, 1.8); R.lamp.position.set(-.45, 1.08, -.7); K.add(R.lamp);
+    // Schlüsselbrett: drei Haken, ein Schlüssel fehlt
+    put(rbox(.6, .14, .04, .01, std('#4a3a2c')), .9, 1.55, -2.47, K);
+    for (const [i, has] of [[0, true], [1, false], [2, true]]) {
+      const x = .81 + i * .09; put(new THREE.Mesh(new THREE.CylinderGeometry(.008, .008, .05, 6), std('#8a8a8a', { m: .8 })), x, 1.52, -2.43, K).rotation.x = Math.PI / 2;
+      if (has) { put(new THREE.Mesh(new THREE.TorusGeometry(.035, .009, 8, 18), std('#b09a60', { m: .8, r: .3 })), x, 1.48, -2.43, K); put(new THREE.Mesh(new THREE.BoxGeometry(.016, .14, .008), std('#b09a60', { m: .8, r: .3 })), x, 1.38, -2.43, K); put(new THREE.Mesh(new THREE.BoxGeometry(.04, .02, .008), std('#b09a60', { m: .8, r: .3 })), x + .02, 1.32, -2.43, K); }
+    }
+    // Fenster mit Nacht draußen
+    put(new THREE.Mesh(new THREE.PlaneGeometry(.8, 1.0), basic('#1e2a40')), -.9, 1.6, -2.49, K, false);
+    put(new THREE.Mesh(new THREE.BoxGeometry(.05, 1.0, .04), std('#2a221b')), -.9, 1.6, -2.47, K); put(new THREE.Mesh(new THREE.BoxGeometry(.8, .05, .04), std('#2a221b')), -.9, 1.6, -2.47, K);
+  };
+})();

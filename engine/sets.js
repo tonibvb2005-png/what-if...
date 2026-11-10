@@ -1284,3 +1284,75 @@ async function viewSil(t, sh) {
 Object.assign(VIEWS, { sil: viewSil });
 Object.assign(GLSTYLE, { sil: 'none' });
 Object.assign(SETBG, { flat: async () => {} });
+
+
+/* ======================================================================= HINTERKAIFECK (Doku-Look) */
+function farmState(t, sh) {
+  const tod = sh.tod || 'night';
+  R3.setTod(tod); R3.tick(t, tod);
+  const lit = [1, 1, 1, 1, 1, 1];
+  if (tod !== 'night') lit.fill(0);
+  else for (const [et, idx] of EV('winOff')) if (t >= et) { const k = t - et; lit[idx] = k < .35 ? (Math.sin(k * 50) > 0 ? 1 : 0) : 0; }
+  if (sh.flash) lit.fill(1);
+  R3.setWindows(lit);
+  let fall = 0; for (const [st] of EV('step')) { const k = t - st; if (k >= 0 && k < 1.6) fall = Math.max(fall, 1 - k / 1.6); }
+  R3.tickDust(t, fall);
+  R3.lamp.intensity = 2.2 * (.9 + .1 * Math.sin(t * 13) * Math.sin(t * 5.1));
+  R3.hatch.intensity = .9 * (.85 + .15 * Math.sin(t * 9));
+}
+async function viewFmTracks(t, sh) {
+  farmState(t, sh); const lt = t - sh.start, d = sh.end - sh.start, u = .12 + .25 * ease(lt / d);
+  const tr = R3.trail, i = Math.floor(u * (tr.length - 1)), p = tr[i];
+  W3.setCam([p[0] - 2.2, 1.25, p[1] + 1.6], [-3, 1.6, 4], 44);
+  return '';
+}
+async function viewFmWide(t, sh) {
+  farmState(t, sh); const lt = t - sh.start, d = sh.end - sh.start, p = ease(lt / d);
+  W3.setCam([-26 + 5 * p, 6 - 1 * p, 34 - 5 * p], [0, 4, 0], 40);
+  return '';
+}
+async function viewFmWindows(t, sh) {
+  farmState(t, sh); const lt = t - sh.start, d = sh.end - sh.start, p = ease(lt / d);
+  W3.setCam([-6 + 1.2 * p, 2.9, 17 - 3 * p], [-6, 2.8, 4], 40);
+  return '';
+}
+async function viewFmAttic(t, sh) {
+  farmState(t, sh); const lt = t - sh.start, d = sh.end - sh.start, p = ease(lt / d);
+  W3.setCam([200.35 - .2 * p, 1.35 + .05 * Math.sin(t * .7), 4.0 - 1.2 * p], [200, 1.25, -3.5], 56);
+  return '';
+}
+async function viewFmKitchen(t, sh) {
+  farmState(t, sh); const lt = t - sh.start, d = sh.end - sh.start, p = ease(lt / d);
+  if (sh.focus === 'keys') W3.setCam([-199.1, 1.5, -1.3 - .15 * p], [-199.1, 1.46, -2.45], 34);
+  else W3.setCam([-199.4, 1.4 - .1 * p, .2 - .2 * p], [-199.85, .84, -.6], 42);
+  return '';
+}
+async function viewFmSmoke(t, sh) {
+  farmState(t, { ...sh, tod: 'smoke' }); const lt = t - sh.start, d = sh.end - sh.start, p = ease(lt / d);
+  W3.setCam([-14 + 2 * p, 3.5, 24 - 3 * p], [-3, 7.5, 0], 42);
+  return '';
+}
+function typed(txt, lt, speed = 18) { const n = Math.floor(Math.max(0, lt) * speed); return txt.slice(0, n) + (n < txt.length && (lt * 3 % 1) < .6 ? '▌' : ''); }
+async function viewDocCard(t, sh) {
+  await SETBG.farm(t, sh);
+  const lt = t - sh.start;
+  return `<div style="position:absolute;inset:0;background:rgba(5,6,10,.55)"></div>
+    <div style="position:absolute;left:40px;right:40px;top:${sh.top || 380}px;text-align:center">
+      <div style="font:700 15px 'JetBrains Mono';letter-spacing:4px;color:#c9b38a;opacity:${clamp(lt / .3)}">${sh.kick || ''}</div>
+      <div style="margin-top:14px;font:700 ${sh.size || 44}px/1.15 'JetBrains Mono';color:${sh.red ? '#ff3b30' : '#f0e8d8'};text-shadow:0 0 14px rgba(0,0,0,.8)">${typed(sh.card, lt - .15, sh.speed || 16)}</div>
+      ${sh.sub ? `<div style="margin-top:18px;font:italic 700 18px 'Montserrat';color:#ffc21f;opacity:${clamp((lt - 1.1) / .3)}">${sh.sub}</div>` : ''}</div>`;
+}
+Object.assign(VIEWS, { fm_tracks: viewFmTracks, fm_wide: viewFmWide, fm_windows: viewFmWindows, fm_attic: viewFmAttic, fm_kitchen: viewFmKitchen, fm_smoke: viewFmSmoke, doc_card: viewDocCard });
+const FILM = 'sepia(.3) saturate(.78) contrast(1.08)';
+Object.assign(GLSTYLE, { fm_tracks: FILM, fm_wide: FILM, fm_windows: FILM, fm_attic: FILM, fm_kitchen: FILM, fm_smoke: FILM, doc_card: 'blur(8px) brightness(.5) ' + FILM });
+Object.assign(SETBG, { farm: async (t, sh = {}) => { farmState(t, { tod: sh.tod || 'night' }); W3.setCam([-24, 5.5, 32], [0, 4, 0], 40); } });
+// Archivfilm-Überlagerung: Kratzer, Staub, leichtes Flackern (für Doku-Folgen mit "film": true)
+function filmOverlay(t) {
+  const f = Math.floor(t * 24), r = (k) => { const x = Math.sin(f * 12.9898 + k * 78.233) * 43758.5453; return x - Math.floor(x); };
+  let s = '';
+  for (let k = 0; k < 2; k++) if (r(k) < .35) s += `<div style="position:absolute;top:0;bottom:0;left:${r(k + 10) * 540}px;width:1px;background:rgba(235,225,200,${.15 + r(k + 20) * .2})"></div>`;
+  for (let k = 0; k < 5; k++) if (r(k + 30) < .5) s += `<div style="position:absolute;left:${r(k + 40) * 540}px;top:${r(k + 50) * 960}px;width:${1 + r(k + 60) * 3}px;height:${1 + r(k + 70) * 3}px;border-radius:50%;background:rgba(20,15,10,.6)"></div>`;
+  s += `<div style="position:absolute;inset:0;background:rgba(40,30,15,${.03 + .03 * r(90)})"></div>`;
+  s += `<div style="position:absolute;inset:0;box-shadow:inset 0 0 140px rgba(0,0,0,.55)"></div>`;
+  return `<div style="position:absolute;inset:0;pointer-events:none">${s}</div>`;
+}

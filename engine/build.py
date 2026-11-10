@@ -17,7 +17,7 @@ SR = 44100
 PIPER_MODEL = os.environ.get("PIPER_MODEL", os.path.join(ROOT, ".cache", "piper", "de.onnx"))
 
 # Lautstärke einzelner Effekte relativ zur Stimme (Spitze der Stimme = 0.85)
-SFX_GAIN = {"steps": .55, "steps_out": 1.4, "doorclose": .55, "bottle": .6, "clack": .5, "scrape": .7, "snip": .6, "drawer": .6, "heart": .85, "squelch": .7, "ladder": .5, "owl": 1.0, "washer": .35, "thump": .45, "sting": 1.0, "whisper": 1.0, "ring": 1.0, "drip": .8, "shutter": .8, "powerdown": .8}
+SFX_GAIN = {"steps": .55, "steps_out": 1.4, "doorclose": .55, "bottle": .6, "clack": .5, "scrape": .7, "snip": .6, "drawer": .6, "heart": .85, "squelch": .7, "ladder": .5, "owl": 1.0, "washer": .35, "thump": .45, "sting": 1.0, "whisper": 1.0, "ring": 1.0, "drip": .8, "shutter": .8, "powerdown": .8, "woodstep": .45, "typewriter": .3}
 
 GAP_LINE = 0.18   # Pause zwischen Zeilen
 GAP_SHOT = 0.30   # zusätzliche Pause bei Szenenwechsel
@@ -285,6 +285,18 @@ def sfx(name):
         n = int(1.2 * SR); t = np.arange(n) / SR
         f = 100 * np.exp(-2.5 * t) + 20; ph = 2 * np.pi * np.cumsum(f) / SR
         return (np.sin(ph) * .3 + np.sin(2 * ph) * .1) * np.exp(-2 * t) + rng.standard_normal(n) * np.exp(-120 * t) * .4
+    if name == "woodstep":  # schwerer Schritt auf altem Holz, Dielen knarzen
+        n = int(.7 * SR); t = np.arange(n) / SR
+        thud = np.sin(2 * np.pi * 70 * t) * np.exp(-22 * t) * .7 + np.convolve(rng.standard_normal(n), np.ones(30) / 30, "same") * np.exp(-30 * t) * 2
+        f = 300 + 80 * np.sin(2 * np.pi * 3 * t); ph = 2 * np.pi * np.cumsum(f) / SR
+        creak = ((ph / (2 * np.pi)) % 1 * 2 - 1) * np.exp(-((t - .18) / .12) ** 2) * .08
+        return thud + creak
+    if name == "typewriter":  # Schreibmaschine: Anschläge
+        res = np.zeros(int(1.2 * SR))
+        for k, st_ in enumerate(np.arange(0, 1.1, .07)):
+            m = int(.03 * SR); i = int(st_ * SR); tt = np.arange(m) / SR
+            res[i:i + m] += rng.standard_normal(m) * np.exp(-tt * 260) * (.35 + .15 * (k % 3 == 0))
+        return res
     raise ValueError(name)
 
 
@@ -312,6 +324,12 @@ def ambience(kind, dur):
         eng = np.sin(2 * np.pi * 32 * t) * .07 + np.sin(2 * np.pi * 64 * t + np.sin(t * 3)) * .035
         rattle = rng.standard_normal(n) * (np.sin(2 * np.pi * 7 * t) > .92) * .03
         return (eng + rattle + np.convolve(rng.standard_normal(n), np.ones(80) / 80, "same") * .45) * fade
+    if kind == "winter":   # Winterwind ums Haus: tiefes Heulen, Böen, Schneerieseln
+        wind = np.convolve(rng.standard_normal(n), np.ones(1200) / 1200, "same") * 2.6
+        gust = .5 + .5 * np.clip(np.sin(t * .29) * np.sin(t * .11 + 2), 0, 1)
+        howl = np.sin(2 * np.pi * (190 + 40 * np.sin(t * .23)) * t) * .006 * gust
+        hiss = (rng.standard_normal(n) - np.convolve(rng.standard_normal(n), np.ones(3) / 3, "same")) * .004
+        return (wind * gust + howl + hiss) * fade
     if kind == "hostel":   # altes Haus nachts: Wind ums Haus, Holz knackt, Uhr tickt leise
         wind = np.convolve(rng.standard_normal(n), np.ones(900) / 900, "same") * 1.8 * (.6 + .4 * np.sin(t * .3) ** 2)
         tick = np.zeros(n)
@@ -587,7 +605,7 @@ def main():
           "groups": [{"start": g["start"], "end": g["end"], "words": g["words"]} for g in groups],
           "msgs": msgs, "typing": typing, "knocks": knocks, "handle": handle, "reveal": reveal,
           "taps": taps, "hums": hums, "quotes": quotes, "eyes": eyes, "ev": {k: sorted(v) for k, v in ev.items()},
-          **{k: story[k] for k in ("item", "visitor", "endArt", "bedLegs", "openMax", "set", "hook", "titleShot", "dreadBase", "kicker") if k in story}}
+          **{k: story[k] for k in ("item", "visitor", "endArt", "bedLegs", "openMax", "set", "hook", "titleShot", "dreadBase", "kicker", "film") if k in story}}
     tl_path = os.path.join(outdir, name + ".timeline.json")
     json.dump(tl, open(tl_path, "w"), ensure_ascii=False, indent=1)
 
