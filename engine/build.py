@@ -17,7 +17,7 @@ SR = 44100
 PIPER_MODEL = os.environ.get("PIPER_MODEL", os.path.join(ROOT, ".cache", "piper", "de.onnx"))
 
 # Lautstärke einzelner Effekte relativ zur Stimme (Spitze der Stimme = 0.85)
-SFX_GAIN = {"steps": .55, "steps_out": 1.4, "doorclose": .55, "bottle": .6, "clack": .5, "scrape": .7, "snip": .6, "drawer": .6, "heart": .85, "squelch": .7, "ladder": .5, "owl": 1.0, "washer": .35, "thump": .45, "sting": 1.0, "whisper": 1.0, "ring": 1.0, "drip": .8}
+SFX_GAIN = {"steps": .55, "steps_out": 1.4, "doorclose": .55, "bottle": .6, "clack": .5, "scrape": .7, "snip": .6, "drawer": .6, "heart": .85, "squelch": .7, "ladder": .5, "owl": 1.0, "washer": .35, "thump": .45, "sting": 1.0, "whisper": 1.0, "ring": 1.0, "drip": .8, "shutter": .8, "powerdown": .8}
 
 GAP_LINE = 0.18   # Pause zwischen Zeilen
 GAP_SHOT = 0.30   # zusätzliche Pause bei Szenenwechsel
@@ -277,6 +277,14 @@ def sfx(name):
     if name == "drip":     # ein Tropfen ins Waschbecken
         n = int(.25 * SR); t = np.arange(n) / SR
         return np.sin(2 * np.pi * (1800 - 4000 * t) * t) * np.exp(-30 * t) * .25
+    if name == "shutter":  # Kamera: Auslöser + Blitz-Fiepen
+        n = int(.5 * SR); t = np.arange(n) / SR
+        clk = rng.standard_normal(n) * (np.exp(-200 * t) + np.exp(-200 * np.clip(t - .09, 0, None)) * (t > .09)) * .4
+        return clk + np.sin(2 * np.pi * (3000 + 3000 * t) * t) * np.exp(-6 * t) * .02
+    if name == "powerdown":  # Strom fällt aus: Brummen kippt nach unten weg
+        n = int(1.2 * SR); t = np.arange(n) / SR
+        f = 100 * np.exp(-2.5 * t) + 20; ph = 2 * np.pi * np.cumsum(f) / SR
+        return (np.sin(ph) * .3 + np.sin(2 * ph) * .1) * np.exp(-2 * t) + rng.standard_normal(n) * np.exp(-120 * t) * .4
     raise ValueError(name)
 
 
@@ -304,6 +312,12 @@ def ambience(kind, dur):
         eng = np.sin(2 * np.pi * 32 * t) * .07 + np.sin(2 * np.pi * 64 * t + np.sin(t * 3)) * .035
         rattle = rng.standard_normal(n) * (np.sin(2 * np.pi * 7 * t) > .92) * .03
         return (eng + rattle + np.convolve(rng.standard_normal(n), np.ones(80) / 80, "same") * .45) * fade
+    if kind == "hostel":   # altes Haus nachts: Wind ums Haus, Holz knackt, Uhr tickt leise
+        wind = np.convolve(rng.standard_normal(n), np.ones(900) / 900, "same") * 1.8 * (.6 + .4 * np.sin(t * .3) ** 2)
+        tick = np.zeros(n)
+        for d in np.arange(.5, dur, 1.0):
+            i = int(d * SR); m = min(n - i, int(.02 * SR)); tick[i:i + m] += np.sin(2 * np.pi * 3200 * np.arange(m) / SR) * np.exp(-np.arange(m) / SR * 300) * .03
+        return (wind + tick) * fade
     if kind == "bathroom":     # Stille Wohnung: Rohre gluckern, Tropfen, ganz hinten Flüstern
         res = np.convolve(rng.standard_normal(n), np.ones(900) / 900, "same") * .9
         for d in np.arange(1.3, dur, 2.3):
@@ -569,11 +583,11 @@ def main():
         a_["end"] = b_["start"]
 
     tl = {"fps": args.fps, "duration": duration, "series": story["series"], "episode": story["episode"],
-          "title": story["title"], "part": story["part"], "question": story.get("question", ""), "shots": shots, "words": words,
+          "title": story["title"], "part": story.get("part"), "question": story.get("question", ""), "shots": shots, "words": words,
           "groups": [{"start": g["start"], "end": g["end"], "words": g["words"]} for g in groups],
           "msgs": msgs, "typing": typing, "knocks": knocks, "handle": handle, "reveal": reveal,
           "taps": taps, "hums": hums, "quotes": quotes, "eyes": eyes, "ev": {k: sorted(v) for k, v in ev.items()},
-          **{k: story[k] for k in ("item", "visitor", "endArt", "bedLegs", "openMax", "set", "hook", "titleShot", "dreadBase") if k in story}}
+          **{k: story[k] for k in ("item", "visitor", "endArt", "bedLegs", "openMax", "set", "hook", "titleShot", "dreadBase", "kicker") if k in story}}
     tl_path = os.path.join(outdir, name + ".timeline.json")
     json.dump(tl, open(tl_path, "w"), ensure_ascii=False, indent=1)
 

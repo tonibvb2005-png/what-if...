@@ -1,0 +1,279 @@
+{
+ "series": "GESCHICHTEN AUS DER NACHT",
+ "episode": "#13",
+ "title": "DER SECHSTE",
+ "part": null,
+ "kicker": "WAHRE GESCHICHTE",
+ "set": "flat",
+ "ambience": "hostel",
+ "hook": "WIR WAREN FÜNF.<br><em>ES ANTWORTETEN SECHS.</em>",
+ "titleShot": 1,
+ "question": "Wer war der Sechste?",
+ "shots": [
+  {
+   "scene": "sil",
+   "shot": "count",
+   "flash": true,
+   "lines": [
+    {
+     "text": "Wir waren fünf im Zimmer. Beim Durchzählen haben sechs geantwortet.",
+     "hl": {
+      "fünf": "y",
+      "sechs": "r"
+     },
+     "ev": [
+      [
+       "pulse",
+       "word8"
+      ]
+     ],
+     "sfx": [
+      [
+       "sting",
+       "word8"
+      ],
+      [
+       "ring",
+       "word8+0.4"
+      ]
+     ],
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "sil",
+   "shot": "ext",
+   "clock": "19:40",
+   "place": "HARZ · 2014",
+   "lines": [
+    {
+     "text": "Das hat mir mein Bruder erzählt. Klassenfahrt 2014, eine Jugendherberge im Harz.",
+     "say": "Das hat mir mein Bruder erzählt. Klassenfahrt zweitausendvierzehn, eine Jugendherberge im Harz.",
+     "hl": {
+      "Bruder": "y",
+      "Harz": "y"
+     }
+    }
+   ]
+  },
+  {
+   "scene": "sil",
+   "shot": "warm",
+   "clock": "21:15",
+   "place": "ZIMMER 14",
+   "lines": [
+    {
+     "text": "Fünf Jungs in einem Zimmer. Abends macht die Lehrerin noch ein Foto von ihnen.",
+     "hl": {
+      "Fünf": "y",
+      "Foto": "y"
+     },
+     "ev": [
+      [
+       "flash",
+       "word11"
+      ]
+     ],
+     "sfx": [
+      [
+       "shutter",
+       "word11"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "scene": "sil",
+   "shot": "moon",
+   "clock": "2:07",
+   "place": "ZIMMER 14",
+   "lines": [
+    {
+     "text": "Um sieben nach zwei fällt der Strom aus.",
+     "hl": {
+      "Strom": "r"
+     },
+     "ev": [
+      [
+       "off",
+       "word6"
+      ]
+     ],
+     "sfx": [
+      [
+       "powerdown",
+       "word6"
+      ]
+     ]
+    },
+    {
+     "text": "Mein Bruder flüstert: Wir zählen durch.",
+     "hl": {
+      "zählen": "y"
+     },
+     "pause": 0.2
+    }
+   ]
+  },
+  {
+   "scene": "sil",
+   "shot": "count",
+   "clock": "2:07",
+   "place": "ZIMMER 14",
+   "lines": [
+    {
+     "text": "Eins. Zwei. Drei. Vier. Fünf.",
+     "nocap": true,
+     "ev": [
+      [
+       "num",
+       "word0",
+       1
+      ],
+      [
+       "num",
+       "word1",
+       2
+      ],
+      [
+       "num",
+       "word2",
+       3
+      ],
+      [
+       "num",
+       "word3",
+       4
+      ],
+      [
+       "num",
+       "word4",
+       5
+      ]
+     ],
+     "pause": 0.4
+    },
+    {
+     "text": "Dann, ganz leise, aus der Ecke am Fenster: Sechs.",
+     "hl": {
+      "Sechs": "r"
+     },
+     "ev": [
+      [
+       "num",
+       "word8",
+       6
+      ],
+      [
+       "dread",
+       "word8"
+      ],
+      [
+       "pulse",
+       "word8"
+      ],
+      [
+       "silence",
+       "word7",
+       "word8"
+      ]
+     ],
+     "sfx": [
+      [
+       "sting",
+       "word8"
+      ],
+      [
+       "ring",
+       "word8+0.4"
+      ]
+     ],
+     "pause": 0.8
+    }
+   ]
+  },
+  {
+   "scene": "sil",
+   "shot": "back",
+   "clock": "2:09",
+   "place": "ZIMMER 14",
+   "lines": [
+    {
+     "text": "Als der Strom zurückkommt, liegen alle fünf in ihren Betten.",
+     "hl": {
+      "fünf": "y"
+     },
+     "sfx": [
+      [
+       "click",
+       "start"
+      ]
+     ]
+    },
+    {
+     "text": "In der Ecke ist niemand.",
+     "hl": {
+      "niemand": "r"
+     },
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "sil",
+   "shot": "photo",
+   "lines": [
+    {
+     "text": "Mein Bruder hat das Foto von dem Abend noch.",
+     "hl": {
+      "Foto": "y"
+     }
+    },
+    {
+     "text": "Es sind sechs Jungs darauf.",
+     "hl": {
+      "sechs": "r"
+     },
+     "sfx": [
+      [
+       "boom",
+       "word2"
+      ]
+     ]
+    },
+    {
+     "text": "Und keiner weiß, wer der Sechste ist.",
+     "hl": {
+      "Sechste": "r"
+     },
+     "ev": [
+      [
+       "photoEyes",
+       "word5"
+      ]
+     ],
+     "sfx": [
+      [
+       "sting",
+       "word5"
+      ]
+     ],
+     "pause": 0.6
+    }
+   ]
+  },
+  {
+   "scene": "sil",
+   "shot": "end",
+   "lines": [
+    {
+     "text": "Wer war der Sechste? Schreib's in die Kommentare.",
+     "nocap": true,
+     "pause": 0.6
+    }
+   ]
+  }
+ ]
+}

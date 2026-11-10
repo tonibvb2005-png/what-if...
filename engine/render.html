@@ -605,7 +605,7 @@ window.setup = async (tl, dpr) => {
 
 /* ------------------------------------------------ Frame */
 window.renderFrame = async (t) => {
-  const sh = TL.shots.find(s => t >= s.start && t < s.end) || TL.shots[TL.shots.length - 1];
+  const sh = TL.shots.find(s => t >= s.start && t < s.end) || (t < TL.shots[0].start ? TL.shots[0] : TL.shots[TL.shots.length - 1]);
   const lt = t - sh.start, d = sh.end - sh.start;
   const html = await VIEWS[sh.scene](t, sh);
   const gl = $('gl'), st = GLSTYLE[sh.scene];
@@ -634,10 +634,10 @@ window.renderFrame = async (t) => {
     const k = clamp(t / .18);
     ov += `<div class="hook" style="opacity:${k};transform:translateX(-50%) scale(${.85 + .15 * outBack(t / .3)})">${TL.hook}</div>`;
   } else if (t >= ts && t < ts + tLen) {
-    ov += `<div class="title" style="opacity:${clamp((ts + tLen - t) / .25) * clamp((t - ts) / .15)}"><div class="k">${TL.series} · ${TL.episode}</div><div class="t">${TL.title}<br>TEIL ${TL.part}</div></div>`;
+    ov += `<div class="title" style="opacity:${clamp((ts + tLen - t) / .25) * clamp((t - ts) / .15)}"><div class="k">${TL.series} · ${TL.episode}</div><div class="t">${TL.title}${TL.part != null ? `<br>TEIL ${TL.part}` : ''}</div>${TL.kicker ? `<div class="k" style="color:#ffc21f;margin-top:6px">${TL.kicker}</div>` : ''}</div>`;
   } else if (sh.place && !['lock', 'chat', 'choice', 'end', 'monitor', 'radio', 'ks_cctv', 'ks_note', 'hs_thermal', 'ws_sign', 'bt_book'].includes(sh.scene)) {
     const blink = (t % 1.2) < .7 ? 1 : .25;
-    ov += `<div class="badge"><div class="tm"><i style="opacity:${blink}"></i>${sh.clock}<small>UHR</small></div><div class="pl">TEIL ${TL.part} · ${sh.place}</div></div>`;
+    ov += `<div class="badge"><div class="tm"><i style="opacity:${blink}"></i>${sh.clock}<small>UHR</small></div><div class="pl">${TL.part != null ? `TEIL ${TL.part} · ` : ''}${sh.place}</div></div>`;
   }
   if (TL.set === 'cellar' && typeof timerOverlay !== 'undefined') ov += timerOverlay(t, sh);
   const q = (TL.quotes || []).find(q => t >= q.start && t < q.end);

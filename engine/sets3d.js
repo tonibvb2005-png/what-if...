@@ -724,3 +724,6 @@
     R.setLight = (on) => { R.lamp.intensity = R.lampR.intensity = 2.6 * on; R.refl.visible = on > .5; R.secret.visible = on <= .5; R.hemi.intensity = .04 + .1 * on; };
   };
 })();
+
+// ======================================================================= 2D-Scherenschnitt (kein 3D nötig)
+W3.BUILD.flat = async () => { W3.scene.background = new THREE.Color('#000'); };

@@ -65,6 +65,7 @@ Details zum Stil stehen in `STYLE_GUIDE.md`.
 | 06 | Lichthupe | Auto, Landstraße, Verfolger, Radio, Rücksitz | Bild fertig; wartet auf Stimme |
 | 07 | **Bewegungsmelder** | dunkles Großraumbüro, Lichter folgen dir, Kopierer druckt ein Foto | Bild fertig; wartet auf Stimme |
 | 08 | Letzte Haltestelle | Nachtbus | gebaut, aber verworfen (Idee war nicht neu) |
+| 13 | **Der Sechste** | „Wahre Geschichte“: Klassenfahrt 2014, Jugendherberge im Harz, Durchzählen im Dunkeln, Foto mit sechs Jungs | Bild fertig + Probevideo (Piper); **neuer Scherenschnitt-Stil, abgeschlossen (kein Teil 2)**; wartet auf Feedback + Stimme |
 | 12 | **Spiegeltest** | Bad in der Ferienwohnung um 4:12, Spiegeltest im Gästebuch, Licht aus → Gesicht hinter dem Glas, „Vermieter“ an der Tür | **FINAL gerendert** mit deiner ElevenLabs-Stimme (ca. 56 s); gruseliger Modus |
 | 11 | **Maschine 7** | Waschsalon um 1:58, Maschine 7 läuft von allein, Hand im Bullauge, Schild „Nicht öffnen“, Kinderstimme | **FINAL gerendert** mit deiner ElevenLabs-Stimme (47 s); wartende Person hat jetzt Beine |
 | 10 | **Wärmebild** | Hochsitz im Wald, Wärmebildkamera, Onkel am Funkgerät, Uhrzeit 2:47 | Bild fertig + Probevideo (Piper); **erste Folge mit neuem, optimiertem Aufbau**; wartet auf Feedback + Stimme |
@@ -191,6 +192,14 @@ Grund: „Spätschicht“ kam nicht gut an. Optimierungen für mehr Zuschauerbin
 - Ereignis `pulse`: roter Blitz am Bildrand beim Schock.
 - Kreatur: halbes Gesicht im Schatten, leere schwarze Augen, keine niedlichen Details (keine Nase/kein Lächeln).
 
+## 6d. Neuer Stil + Format (ab Folge 13, weil 10–12 nicht gut liefen)
+Analyse: (1) Es gab nie einen Teil 2 → wer aufs Profil klickt, findet nur Anfänge. (2) Bilder auf dem Handy zu dunkel. (3) Stil wirkte wie eine Kopie von „3:17 AM Stories“. (4) Geschichten immer gleich gebaut.
+- **Scherenschnitt-Stil** (`"set": "flat"`, Szene `sil` mit `"shot"`): schwarze Silhouetten (runde Köpfe = unsere Figur) vor **hellen Farbverläufen** (Abendrot, warmes Zimmer, Mondlicht-Blau), **ein roter Akzent** (Augen, Zahl), viel Bewegung (Bus fährt, Bäume, Zoom, aufpoppende Zahlen). Komplett 2D-SVG, kein Three.js.
+- **„Wahre Geschichte“-Rahmen** („Das hat mir mein Bruder erzählt …“), **deutscher Ort + Jahr**.
+- **Abgeschlossen mit Twist**, kein „Teil 2“. `"part": null` + `"kicker"` (z. B. „WAHRE GESCHICHTE“) für Titelkarte/Badge. Ende = Diskussionsfrage (Szene `sil` / `shot: end`, ca. 3 s).
+- Uhrzeiten nach Story (19:40, 21:15, 2:07).
+- Engine-Fix: Vor dem ersten Shot (erste 0,35 s bei Piper-Proben) wurde der letzte Shot gezeigt → behoben.
+
 ## 7. Caption-Vorlage
 
 ```
@@ -239,6 +248,11 @@ Teil 2 kommt heute Nacht – folgen, damit du ihn nicht verpasst.
 - Neues Set `bathroom`: Bad + komplett gespiegelte Kopie des Raums hinter dem Spiegel (echtes Spiegelbild), versteckter Gang, der bei Licht aus sichtbar wird; Lichtspalt unter der Badtür.
 - Einstellungen `bt_glass` (Spiegel, `flash` = Vorgriff, `wide`), `bt_over`, `bt_finger` (Finger trifft Spiegelbild ohne Lücke, Spiegelbild hebt den Arm mit), `bt_switch`, `bt_door`, `bt_face`, `bt_book` (Gästebuch, `page: 2` zoomt auf die Regel).
 - Final gerendert mit `stories/12_spiegeltest/voice/voiceover.mp3`; Klopfer in die Pause nach „Badtür“ gelegt (vorher in der Stimme). Caption `branding/CAPTION_12_spiegeltest.txt`, Cover `branding/cover_12_spiegeltest.png`.
+
+### Folge 13 „Der Sechste“
+- Szenen (`sil`, shot): `ext` (Jugendherberge, Abendrot, Bus), `warm` (Zimmer, Licht an, Lehrerin mit Fotoblitz), `moon` (Strom aus), `count` (Zahlen 1–5 weiß, 6 rot; Zoom auf den Sechsten am Fenster), `back` (Licht wieder an, Ecke leer), `photo` (Foto mit sechs Jungs, Zoom, rote Augen), `end` (Frage).
+- Ereignisse: `flash`, `off`, `num` [zeit, zahl], `photoEyes`. Sounds `shutter`, `powerdown`, Ambience `hostel`.
+- Nächster Schritt: Probevideo ansehen, `stories/13_der_sechste/voiceover_elevenlabs.txt` aufnehmen, final rendern. Caption `branding/CAPTION_13_der_sechste.txt`, Cover `branding/cover_13_der_sechste.png`.
 
 ### Erledigt aus der letzten Liste
 - Punkt 1 (Auswahl): **B) Spätschicht** gewählt und gebaut (siehe oben). A) „Die Pizza“ und C) „Die Sprachnachricht“ bleiben als Reserve-Ideen.

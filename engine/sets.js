@@ -1154,3 +1154,133 @@ async function viewBtBook(t, sh) { await SETBG.bathroom(t); return guestbook(t, 
 Object.assign(VIEWS, { bt_over: viewBtOver, bt_glass: viewBtGlass, bt_finger: viewBtFinger, bt_switch: viewBtSwitch, bt_door: viewBtDoor, bt_face: viewBtFace, bt_book: viewBtBook });
 Object.assign(GLSTYLE, { bt_over: '', bt_glass: '', bt_finger: '', bt_switch: '', bt_door: '', bt_face: '', bt_book: 'blur(9px) brightness(.45)' });
 Object.assign(SETBG, { bathroom: async (t) => { await btChars(t, { back: true }); W3.setCam([.5, 1.72, 1.7], [-.05, 1.42, -.4], 46); } });
+
+
+/* ======================================================================= SCHERENSCHNITT-STIL (Der Sechste) */
+// Schwarze Silhouetten vor hellen Farbverläufen, ein roter Akzent. Alles 2D (SVG, 540×960), viel Bewegung.
+const SIL = '#07080c', RED = '#ff3b30';
+function silKid(x, y, s, o = {}) {        // stehend/sitzend: runder Kopf, Rumpf, Strich-Arme (unsere Figur als Silhouette)
+  const bob = o.bob || 0, hy = y - 95 * s + bob;
+  let g = `<circle cx="${x}" cy="${hy}" r="${24 * s}" fill="${SIL}"/>
+    <path d="M${x - 22 * s} ${hy + 30 * s} Q${x} ${hy + 22 * s} ${x + 22 * s} ${hy + 30 * s} L${x + 20 * s} ${y - 20 * s} L${x - 20 * s} ${y - 20 * s} Z" fill="${SIL}"/>`;
+  const aL = o.armL || [x - 34 * s, y - 25 * s], aR = o.armR || [x + 34 * s, y - 25 * s];
+  g += `<path d="M${x - 18 * s} ${hy + 34 * s} Q${x - 34 * s} ${hy + 55 * s} ${aL[0]} ${aL[1]} M${x + 18 * s} ${hy + 34 * s} Q${x + 34 * s} ${hy + 55 * s} ${aR[0]} ${aR[1]}" stroke="${SIL}" stroke-width="${6 * s}" fill="none" stroke-linecap="round"/>`;
+  if (!o.sit) g += `<path d="M${x - 9 * s} ${y - 22 * s} L${x - 11 * s} ${y} M${x + 9 * s} ${y - 22 * s} L${x + 11 * s} ${y}" stroke="${SIL}" stroke-width="${8 * s}" stroke-linecap="round"/>`;
+  return g;
+}
+function silLying(x, y, s, o = {}) {      // im Bett: Kopf auf dem Kissen, Decke als Hügel
+  return `<circle cx="${x}" cy="${y - 14 * s + (o.bob || 0)}" r="${17 * s}" fill="${SIL}"/>
+    <path d="M${x + 14 * s} ${y + 2} Q${x + 60 * s} ${y - 22 * s} ${x + 120 * s} ${y - 6 * s} L${x + 130 * s} ${y + 4} Z" fill="${SIL}"/>`;
+}
+// Der Sechste: zu groß, Kopf schief, Arme hängen bis zu den Knien, steht in der Ecke am Schrank
+function silSixth(x, y, s, o = {}) {
+  const hy = y - 150 * s;
+  return `<g transform="rotate(${o.tilt ?? -14} ${x} ${hy})"><ellipse cx="${x}" cy="${hy}" rx="${22 * s}" ry="${28 * s}" fill="${SIL}"/></g>
+    <path d="M${x - 18 * s} ${hy + 34 * s} Q${x} ${hy + 26 * s} ${x + 18 * s} ${hy + 34 * s} L${x + 15 * s} ${y - 40 * s} L${x - 15 * s} ${y - 40 * s} Z" fill="${SIL}"/>
+    <path d="M${x - 15 * s} ${hy + 38 * s} Q${x - 30 * s} ${y - 70 * s} ${x - 26 * s} ${y - 14 * s} M${x + 15 * s} ${hy + 38 * s} Q${x + 30 * s} ${y - 70 * s} ${x + 27 * s} ${y - 12 * s}" stroke="${SIL}" stroke-width="${5 * s}" fill="none" stroke-linecap="round"/>
+    <path d="M${x - 7 * s} ${y - 42 * s} L${x - 8 * s} ${y} M${x + 7 * s} ${y - 42 * s} L${x + 8 * s} ${y}" stroke="${SIL}" stroke-width="${7 * s}" stroke-linecap="round"/>
+    ${o.eyes ? `<circle cx="${x - 7 * s}" cy="${hy - 2 * s}" r="${2.6 * s}" fill="${RED}" opacity="${o.eyes}"/><circle cx="${x + 8 * s}" cy="${hy - 4 * s}" r="${2.6 * s}" fill="${RED}" opacity="${o.eyes}"/>` : ''}`;
+}
+// Zimmer als Querschnitt. mode: 'warm' (Licht an) oder 'moon' (Strom weg)
+function silRoom(t, mode, o = {}) {
+  const warm = mode === 'warm';
+  const wall = warm ? ['#f1d3a6', '#c99766'] : ['#6f8fb8', '#33496b'];
+  const sway = Math.sin(t * .8) * 6;
+  let g = `<defs><linearGradient id="wl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${wall[0]}"/><stop offset="1" stop-color="${wall[1]}"/></linearGradient>
+      <radialGradient id="win" cx="50%" cy="40%" r="70%"><stop offset="0" stop-color="${warm ? '#ffcf9a' : '#f3f7ff'}"/><stop offset="1" stop-color="${warm ? '#b86b5a' : '#8fb0dc'}"/></radialGradient>
+      <radialGradient id="beam" cx="50%" cy="0%" r="100%"><stop offset="0" stop-color="#fff" stop-opacity="${warm ? 0 : .35}"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient></defs>
+    <rect width="540" height="960" fill="url(#wl)"/>
+    <rect x="190" y="250" width="160" height="200" fill="url(#win)"/>
+    ${warm ? '' : `<circle cx="300" cy="300" r="34" fill="#fff"/>`}
+    <g transform="translate(${sway} 0)">${[200, 235, 275, 320, 345].map((x, i) => `<path d="M${x} 450 L${x + 14} ${360 - i * 12} L${x + 28} 450 Z" fill="${warm ? '#6b3a3a' : '#3b5478'}"/>`).join('')}</g>
+    <path d="M190 350 H350 M270 250 V450" stroke="${SIL}" stroke-width="8"/><rect x="186" y="246" width="168" height="208" fill="none" stroke="${SIL}" stroke-width="10"/>
+    ${warm ? '' : `<polygon points="190,450 350,450 430,820 90,820" fill="url(#beam)"/>`}
+    <rect y="820" width="540" height="140" fill="${SIL}"/>`;
+  // Stockbett links, Stockbett rechts, Klappbett vorne, Schrank rechts in der Ecke
+  const bunk = (x) => `<rect x="${x}" y="480" width="10" height="340" fill="${SIL}"/><rect x="${x + 150}" y="480" width="10" height="340" fill="${SIL}"/>
+    <rect x="${x}" y="590" width="160" height="16" fill="${SIL}"/><rect x="${x}" y="760" width="160" height="16" fill="${SIL}"/>`;
+  g += bunk(-20) + bunk(400 - 30);
+  g += `<rect x="150" y="770" width="190" height="12" fill="${SIL}"/><path d="M160 782 L150 820 M330 782 L340 820" stroke="${SIL}" stroke-width="7"/>`;
+  g += `<rect x="470" y="360" width="80" height="460" fill="${SIL}"/>`;
+  if (o.ajar) g += `<rect x="466" y="372" width="6" height="440" fill="${warm ? '#c99766' : '#5d7aa3'}" opacity=".9"/>`;
+  return g;
+}
+const SLOTS = [[0, 580], [0, 750], [390, 580], [390, 750], [170, 760]];   // fünf Betten
+function silKids(t, lying) {
+  return SLOTS.map(([x, y], i) => lying ? silLying(x + 28, y, 1, { bob: Math.sin(t * 1.3 + i) * 1.2 }) : '').join('');
+}
+function numbersSvg(t) {
+  let g = '';
+  for (const [nt, n] of EV('num')) {
+    const a = t - nt; if (a < 0) continue;
+    const p = outBack(a / .25), [x, y] = n <= 5 ? SLOTS[n - 1] : [215, 575];
+    const red = n === 6;
+    g += `<text x="${x + (n <= 5 ? 45 : 0)}" y="${y - 50}" text-anchor="middle" font-family="Montserrat" font-weight="900" font-style="italic" font-size="${(red ? 92 : 62) * p}"
+      fill="${red ? RED : '#fff'}" stroke="#000" stroke-width="7" paint-order="stroke" opacity="${red ? 1 : clamp(1.6 - a / 2.5)}">${n}</text>`;
+  }
+  return g;
+}
+function silScene(t, sh) {
+  const lt = t - sh.start, d = sh.end - sh.start, k = sh.shot;
+  let body = '', zoom = 1, cx = 270, cy = 480;
+  if (k === 'ext') {          // Jugendherberge im Harz, Abenddämmerung, Bus kommt an
+    const bx = lerp(-260, 70, ease(lt / Math.max(1, d * .8)));
+    body = `<defs><linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2a2350"/><stop offset=".55" stop-color="#9a4f7a"/><stop offset="1" stop-color="#f6a86a"/></linearGradient></defs>
+      <rect width="540" height="960" fill="url(#sky)"/><circle cx="380" cy="560" r="70" fill="#ffd9a0"/>
+      <path d="M0 600 Q120 520 260 570 T540 540 V960 H0 Z" fill="#5a3f6e"/>
+      <g transform="translate(${-lt * 6} 0)">${Array.from({ length: 22 }, (_, i) => `<path d="M${i * 30 - 20} 680 L${i * 30} ${600 - (i * 37 % 50)} L${i * 30 + 20} 680 Z" fill="#2b2140"/>`).join('')}</g>
+      <path d="M0 700 Q270 660 540 700 V960 H0 Z" fill="${SIL}"/>
+      <path d="M150 700 V560 L260 480 L370 560 V700 Z" fill="${SIL}"/><rect x="300" y="500" width="20" height="50" fill="${SIL}"/>
+      ${[[180, 590], [225, 590], [295, 590], [340, 590], [180, 640], [340, 640], [250, 540]].map(([x, y], i) => `<rect x="${x}" y="${y}" width="22" height="26" fill="#ffc864" opacity="${.75 + .25 * Math.sin(t * 2 + i)}"/>`).join('')}
+      <g transform="translate(${bx} 0)"><rect x="0" y="760" width="230" height="70" rx="10" fill="${SIL}"/>${[0, 1, 2, 3, 4].map(i => `<rect x="${14 + i * 42}" y="772" width="30" height="22" fill="#ffd9a0" opacity=".8"/>`).join('')}
+        <circle cx="45" cy="832" r="16" fill="${SIL}"/><circle cx="185" cy="832" r="16" fill="${SIL}"/></g>`;
+    zoom = 1 + .05 * ease(lt / d);
+  } else if (k === 'warm') {  // Abend, Licht an: fünf Jungs, die Lehrerin macht ein Foto
+    const fl = lastEv('flash', t, null), f = fl ? Math.exp(-(t - fl[0]) * 5) * (t >= fl[0] ? 1 : 0) : 0;
+    body = silRoom(t, 'warm') +
+      silKid(40, 588, .8, { sit: true, bob: Math.sin(t * 3) * 3 }) + silKid(110, 758, .8, { sit: true }) +
+      silKid(430, 588, .8, { sit: true, armR: [470, 520] }) + silKid(480, 758, .8, { sit: true }) +
+      silKid(250, 768, .9, { sit: true, bob: Math.sin(t * 2.4) * 4, armL: [205, 700], armR: [300, 690] }) +
+      silKid(-10 + 0, 820, 1.15, { armR: [70, 640] }) + `<rect x="62" y="625" width="24" height="18" rx="3" fill="${SIL}"/>` +
+      (f > .01 ? `<rect width="540" height="960" fill="#fff" opacity="${.85 * f}"/>` : '');
+    zoom = 1.02 + .04 * ease(lt / d);
+  } else if (k === 'moon' || k === 'count' || k === 'back') {
+    const off = lastEv('off', t, null), fk = off && t - off[0] < .5 ? (Math.sin((t - off[0]) * 60) > 0) : false;
+    const mode = (k === 'back') ? 'warm' : (off && t >= off[0] && !fk) || sh.flash ? 'moon' : 'warm';
+    const six = sh.flash ? 1 : (EV('num').some(e => e[1] === 6 && t >= e[0]) ? 1 : 0);
+    body = silRoom(t, mode, { ajar: k === 'back' }) + silKids(t, true);
+    if (k !== 'back') {
+      const eyes = six ? clamp((t - (sh.flash ? sh.start : EV('num').find(e => e[1] === 6)[0])) / .6) * (.6 + .4 * Math.sin(t * 9) ** 2) : 0;
+      if (six) body += silSixth(352, 820, 2.35, { eyes: eyes * .95, tilt: -16 });
+      body += sh.flash ? [1, 2, 3, 4, 5].map((n, i) => `<text x="${SLOTS[i][0] + 45}" y="${SLOTS[i][1] - 50}" text-anchor="middle" font-family="Montserrat" font-weight="900" font-style="italic" font-size="62" fill="#fff" stroke="#000" stroke-width="7" paint-order="stroke" opacity=".85">${n}</text>`).join('') +
+        `<text x="215" y="525" text-anchor="middle" font-family="Montserrat" font-weight="900" font-style="italic" font-size="92" fill="${RED}" stroke="#000" stroke-width="7" paint-order="stroke">6</text>` : numbersSvg(t);
+    }
+    if (k === 'count' && six) { zoom = 1 + .3 * ease((t - EV('num').find(e => e[1] === 6)[0]) / 1.4); cx = 360; cy = 520; }
+    else zoom = 1.02 + .04 * ease(lt / d);
+    if (sh.flash) { zoom = 1.2; cx = 360; cy = 560; }
+  } else if (k === 'photo') { // das Foto vom Abend: sechs Jungs
+    const zp = ease((lt - .8) / Math.max(1, d - 1));
+    const inner = silRoom(t * 0, 'warm') + silKid(40, 588, .8, { sit: true }) + silKid(110, 758, .8, { sit: true }) + silKid(430, 588, .8, { sit: true }) +
+      silKid(480, 758, .8, { sit: true }) + silKid(250, 768, .9, { sit: true }) + silSixth(352, 820, 2.35, { tilt: -16, eyes: lastEv('photoEyes', t, null) ? .95 : 0 });
+    body = `<rect width="540" height="960" fill="#1b1d28"/>
+      <g transform="translate(270 470) rotate(${-3 + 1.5 * ease(lt / .6)}) scale(${(.62 + .02 * ease(lt / .6)) * (1 + 1.1 * zp)}) translate(${-270 - 80 * zp} ${-480 - 110 * zp})">
+        <rect x="-30" y="140" width="600" height="760" fill="#f3efe6"/><svg x="0" y="170" width="540" height="650" viewBox="0 200 540 650" preserveAspectRatio="xMidYMid slice"><g filter="url(#sepia)">${inner}</g></svg>
+        <text x="270" y="870" text-anchor="middle" font-family="Montserrat" font-style="italic" font-weight="700" font-size="26" fill="#3a3a5a">Zimmer 14 – Harz 2014</text></g>`;
+  } else if (k === 'end') {
+    body = `<rect width="540" height="960" fill="#11131c"/>` + `<g opacity=".25">${silRoom(t, 'moon')}</g>`;
+  }
+  const sc = sh.shot === 'photo' ? 1 : zoom;
+  return `<svg viewBox="0 0 540 960" width="540" height="960" style="position:absolute;inset:0">
+    <defs><filter id="sepia"><feColorMatrix type="matrix" values=".9 .25 .1 0 0  .3 .8 .15 0 0  .25 .2 .6 0 0  0 0 0 1 0"/></filter></defs>
+    <g transform="translate(${cx} ${cy}) scale(${sc}) translate(${-cx} ${-cy})">${body}</g></svg>`;
+}
+async function viewSil(t, sh) {
+  let html = `<div style="position:absolute;inset:0;background:#000"></div>` + silScene(t, sh);
+  if (sh.shot === 'end') html += `<div style="position:absolute;left:0;right:0;top:330px;text-align:center;color:#fff">
+      <div style="font:italic 900 62px/1.05 'Montserrat';-webkit-text-stroke:8px #000;paint-order:stroke fill;opacity:${clamp((t - sh.start) / .2)}">WER WAR DER<br><span style="color:${RED}">SECHSTE?</span></div>
+      <div style="margin-top:26px;font:800 18px 'Montserrat';color:#ffc21f;opacity:${clamp((t - sh.start - .3) / .3)}">Schreib's in die Kommentare 👇</div></div>`;
+  return html;
+}
+Object.assign(VIEWS, { sil: viewSil });
+Object.assign(GLSTYLE, { sil: 'none' });
+Object.assign(SETBG, { flat: async () => {} });
