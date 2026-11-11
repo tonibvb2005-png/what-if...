@@ -7,54 +7,245 @@
       "shot": "mhook",
       "text": "Why it sucks being a midfielder.",
       "audio": "../audio/midfielder/01.wav",
-      "duration": 2.6
+      "wordTimes": [
+        0.0,
+        0.32,
+        0.52,
+        0.86,
+        1.26,
+        1.46
+      ]
     },
     {
       "shot": "mseven",
       "text": "It starts when you're seven. The coach says: \"You're box to box.\" You don't know what that means. So you just run. Everywhere.",
-      "audio": "../audio/midfielder/02.wav"
+      "audio": "../audio/midfielder/02.wav",
+      "cues": {
+        "box": 2.74,
+        "know": 4.2,
+        "run": 5.92
+      },
+      "wordTimes": [
+        0.36,
+        0.44,
+        0.64,
+        0.84,
+        1.02,
+        1.72,
+        1.84,
+        1.98,
+        2.74,
+        2.86,
+        3.02,
+        3.22,
+        4.2,
+        4.44,
+        4.52,
+        4.64,
+        4.74,
+        4.88,
+        5.6,
+        5.68,
+        5.78,
+        5.92,
+        6.22
+      ]
     },
     {
       "shot": "mten",
       "text": "Age ten. You run twelve kilometres. The striker runs two. He still gets the first drink at half-time.",
-      "audio": "../audio/midfielder/03.wav"
+      "audio": "../audio/midfielder/03.wav",
+      "cues": {
+        "two": 3.66,
+        "drink": 6.48
+      },
+      "wordTimes": [
+        0.66,
+        1.11,
+        1.56,
+        1.6,
+        1.91,
+        2.22,
+        3.3,
+        3.38,
+        3.66,
+        4.22,
+        5.66,
+        5.82,
+        5.98,
+        6.14,
+        6.3,
+        6.48,
+        6.74,
+        6.88
+      ]
     },
     {
       "shot": "mtwelve",
       "text": "Age twelve. You win the ball. You look up. Nobody is moving. So you pass it sideways. Coach: \"Be more creative!\"",
-      "audio": "../audio/midfielder/04.wav"
+      "audio": "../audio/midfielder/04.wav",
+      "cues": {
+        "look": 2.7,
+        "side": 5.48,
+        "coach": 7.16
+      },
+      "wordTimes": [
+        0.74,
+        1.14,
+        1.54,
+        1.76,
+        1.92,
+        2.08,
+        2.62,
+        2.7,
+        2.86,
+        3.7,
+        3.88,
+        4.16,
+        5.16,
+        5.36,
+        5.48,
+        5.66,
+        5.82,
+        7.16,
+        7.8,
+        8.08,
+        8.3
+      ]
     },
     {
       "shot": "mkicked",
       "text": "Age fourteen. Every game, you get kicked. Again. And again. The referee: \"Play on.\"",
-      "audio": "../audio/midfielder/05.wav"
+      "audio": "../audio/midfielder/05.wav",
+      "cues": {
+        "k1": 3.59,
+        "k2": 3.95,
+        "k3": 5.39,
+        "ref": 6.57
+      },
+      "wordTimes": [
+        0.21,
+        1.29,
+        2.37,
+        2.63,
+        2.97,
+        3.35,
+        3.59,
+        3.91,
+        4.69,
+        5.39,
+        6.49,
+        6.57,
+        7.41,
+        7.65
+      ]
     },
     {
       "shot": "mgoal",
       "text": "Age sixteen. Thirty yards out. You shoot... top corner! Now every time you touch the ball, the whole team screams: \"PASS IT!\"",
-      "audio": "../audio/midfielder/06.wav"
+      "audio": "../audio/midfielder/06.wav",
+      "cues": {
+        "shoot": 2.86,
+        "pass": 7.9
+      },
+      "wordTimes": [
+        0.44,
+        0.89,
+        1.35,
+        1.8,
+        2.06,
+        2.7,
+        2.86,
+        3.2,
+        4.02,
+        5.08,
+        5.28,
+        5.64,
+        5.84,
+        6.04,
+        6.2,
+        6.44,
+        6.74,
+        6.8,
+        7.04,
+        7.28,
+        8.22,
+        8.44
+      ]
     },
     {
       "shot": "massists",
       "text": "Age seventeen. Fifteen assists this season. The highlight video? Fifteen goals... by the striker.",
-      "audio": "../audio/midfielder/07.wav"
+      "audio": "../audio/midfielder/07.wav",
+      "cues": {
+        "hl": 3.86
+      },
+      "wordTimes": [
+        0.3,
+        0.93,
+        1.57,
+        2.2,
+        2.56,
+        2.9,
+        3.86,
+        4.04,
+        4.24,
+        4.98,
+        5.72,
+        6.22,
+        6.86,
+        7.02
+      ]
     },
     {
       "shot": "mthing",
       "text": "That's the thing about being a midfielder. Everyone wants the ball.",
-      "audio": "../audio/midfielder/08.wav"
+      "audio": "../audio/midfielder/08.wav",
+      "cues": {
+        "ball": 2.79
+      },
+      "wordTimes": [
+        0.55,
+        0.85,
+        0.97,
+        1.15,
+        1.35,
+        1.61,
+        1.75,
+        2.79,
+        3.11,
+        3.47,
+        3.69
+      ]
     },
     {
       "shot": "mjob",
       "text": "Nobody wants your job.",
       "audio": "../audio/midfielder/09.wav",
-      "duration": 2.8
+      "wordTimes": [
+        0.22,
+        0.51,
+        0.85,
+        1.09
+      ]
     },
     {
       "shot": "mtag",
       "text": "Tag the midfielder who ran for you.",
       "audio": "../audio/midfielder/10.wav",
-      "pad": 1.2
+      "pad": 1.2,
+      "cues": {
+        "ran": 1.64
+      },
+      "wordTimes": [
+        0.56,
+        0.56,
+        0.76,
+        1.12,
+        1.64,
+        1.86,
+        2.06
+      ]
     }
   ]
 }
