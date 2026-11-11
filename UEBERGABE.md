@@ -64,7 +64,7 @@ Details zum Stil stehen in `STYLE_GUIDE.md`.
 | 05 | Komm raus | Zelt im Wald, Jonas, Schatten an der Zeltwand, Reißverschluss | **FINAL mit ElevenLabs-Stimme** (stories/05_komm_raus/voice/voiceover.mp3) |
 | 06 | Lichthupe | Auto, Landstraße, Verfolger, Radio, Rücksitz | Bild fertig; wartet auf Stimme |
 | 07 | **Bewegungsmelder** | dunkles Großraumbüro, Lichter folgen dir, Kopierer druckt ein Foto | **FINAL mit ElevenLabs-Stimme** (stories/07_bewegungsmelder/voice/voiceover.mp3) |
-| 09 | **Blackout** | NEUES FORMAT: Fiktion + echte Überlebensfakten (Stromausfall Frankfurt, 9. Stock, CO-Generator) | Probevideo; wartet auf Stimme |
+| 09 | **Blackout** | NEUES FORMAT: Fiktion + echte Überlebensfakten (Stromausfall Frankfurt, 9. Stock, CO-Generator) | **FINAL mit ElevenLabs-Stimme** (stories/09_blackout/voice/voiceover.mp3) |
 | 08 | Letzte Haltestelle | Nachtbus | gebaut, aber verworfen (Idee war nicht neu) |
 
 Die Folge „Stock 13“ (Aufzug) wurde auf deinen Wunsch gelöscht und durch „Bewegungsmelder“ ersetzt.
