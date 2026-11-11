@@ -14,3 +14,6 @@ Alle Aufnahmen sind **CC0** oder **Public Domain**. Sie dürfen ohne Namensnennu
 | zipper.ogg | Reißverschluss (verlangsamt) | opengameart.org: „Zipper“ | CC0 |
 | amb_forest.ogg (neu) | Ruhige Nacht im Wald, Kildoon Woods, Irland (ersetzt die alte Aufnahme mit Insekten-Zirpen) | archive.org: aporee_73025_85251 | Public Domain Mark |
 | owl.ogg | Eulenruf bei Nacht, Chantaduc, Auvergne | archive.org: aporee_68669_79628 | Public Domain Mark |
+| knockrec.ogg | Klopfen an einer Tür | archive.org: Red_Library_Doors, „R09-18 Knocking on Door“ | CC0 |
+| generator.ogg | Generator, gedämpft (wie hinter einer Tür) | archive.org: SSE_Library_MACHINES, „Generator building“ | CC0 |
+| siren.ogg | Entfernte Sirene | archive.org: SSE_Library_ALARMS, „Distant siren“ | CC0 |

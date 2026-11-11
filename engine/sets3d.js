@@ -437,6 +437,7 @@
     const neck = new THREE.Mesh(new THREE.CylinderGeometry(.03, .034, .08, 10), skin); neck.position.y = .54; hips.add(neck);
     const head = new THREE.Group(); head.position.y = .65; hips.add(head);
     const hs = new THREE.Mesh(new THREE.SphereGeometry(.13, 32, 24), skin); hs.castShadow = true; head.add(hs);
+    if (o.hair) { const hr = new THREE.Mesh(new THREE.SphereGeometry(.137, 28, 16, 0, Math.PI * 2, 0, Math.PI * .45), std(o.hair, { r: .9 })); hr.rotation.x = -.25; hr.position.z = -.01; head.add(hr); }
     const eyes = [-1, 1].map(s => { const e = new THREE.Mesh(new THREE.SphereGeometry(.0105, 12, 8), ink); e.position.set(s * .04, .005, .124); head.add(e);
       const hl = new THREE.Mesh(new THREE.SphereGeometry(.0035, 8, 6), basic('#9fd8ff')); hl.position.set(s * .04 + .004, .009, .133); hl.visible = false; head.add(hl); return { e, hl }; });
     const mouth = new THREE.Mesh(new THREE.SphereGeometry(.009, 10, 8), ink); mouth.scale.set(1, .75, .5); mouth.position.set(0, -.045, .124); head.add(mouth);

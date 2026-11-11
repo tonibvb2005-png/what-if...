@@ -58,7 +58,7 @@ def env(n, attack=0.005, decay=10.0):
 
 SFX_DIR = os.path.join(ENGINE, "sfx")
 # Spitzenpegel der echten Aufnahmen (0..1); Atmosphären: Ziel-Lautstärke (RMS)
-REC_PEAK = {"owl": .16, "steps": .32, "twig": .38, "zipper": .42, "heartbeat": .5, "rev": .34, "static": .2, "carby": .3}
+REC_PEAK = {"knockrec": .5, "generator": .2, "siren": .12, "owl": .16, "steps": .32, "twig": .38, "zipper": .42, "heartbeat": .5, "rev": .34, "static": .2, "carby": .3}
 AMB_RMS = {"car": .028, "forest": .011}
 _rec_cache = {}
 
@@ -152,6 +152,11 @@ def sfx(name):
     if name == "whoosh":   # vorbeirauschend
         n = int(1.2 * SR); t = np.arange(n) / SR
         return np.convolve(rng.standard_normal(n), np.ones(25) / 25, "same") * np.sin(np.pi * t / 1.2) ** 2 * 1.6
+    if name == "alert":    # Warnton (elektronisch, an- und abschwellend)
+        n = int(3.2 * SR); t = np.arange(n) / SR
+        f = np.where((t * 2.2) % 1 < .5, 960, 1250)
+        ph = 2 * np.pi * np.cumsum(f) / SR
+        return np.sign(np.sin(ph)) * .055 * np.minimum(1, t / .05) * np.minimum(1, (3.2 - t) / .3)
     if name == "copier":   # Kopierer: rhythmisches Rattern
         n = int(4.0 * SR); t = np.arange(n) / SR
         mech = np.sin(2 * np.pi * 7 * t) > .6
@@ -477,7 +482,7 @@ def main():
           "groups": [{"start": g["start"], "end": g["end"], "words": g["words"]} for g in groups],
           "msgs": msgs, "typing": typing, "knocks": knocks, "handle": handle, "reveal": reveal,
           "taps": taps, "hums": hums, "quotes": quotes, "eyes": eyes, "ev": {k: sorted(v) for k, v in ev.items()},
-          **{k: story[k] for k in ("item", "visitor", "endArt", "bedLegs", "openMax", "set") if k in story}}
+          **{k: story[k] for k in ("item", "visitor", "endArt", "bedLegs", "openMax", "set", "pill", "noTitle", "endStyle", "nextQ") if k in story}}
     tl_path = os.path.join(outdir, name + ".timeline.json")
     json.dump(tl, open(tl_path, "w"), ensure_ascii=False, indent=1)
 

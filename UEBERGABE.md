@@ -64,6 +64,7 @@ Details zum Stil stehen in `STYLE_GUIDE.md`.
 | 05 | Komm raus | Zelt im Wald, Jonas, Schatten an der Zeltwand, Reißverschluss | **FINAL mit ElevenLabs-Stimme** (stories/05_komm_raus/voice/voiceover.mp3) |
 | 06 | Lichthupe | Auto, Landstraße, Verfolger, Radio, Rücksitz | Bild fertig; wartet auf Stimme |
 | 07 | **Bewegungsmelder** | dunkles Großraumbüro, Lichter folgen dir, Kopierer druckt ein Foto | **FINAL mit ElevenLabs-Stimme** (stories/07_bewegungsmelder/voice/voiceover.mp3) |
+| 09 | **Blackout** | NEUES FORMAT: Fiktion + echte Überlebensfakten (Stromausfall Frankfurt, 9. Stock, CO-Generator) | Probevideo; wartet auf Stimme |
 | 08 | Letzte Haltestelle | Nachtbus | gebaut, aber verworfen (Idee war nicht neu) |
 
 Die Folge „Stock 13“ (Aufzug) wurde auf deinen Wunsch gelöscht und durch „Bewegungsmelder“ ersetzt.
@@ -190,3 +191,9 @@ Teil 2 kommt heute Nacht – folgen, damit du ihn nicht verpasst.
     - Die Aufnahmen kommen aus dem Internet Archive (SSE-Bibliothek, aporee) und von OpenGameArt, alle CC0 oder Public Domain. Sie liegen in `engine/sfx/`, Herkunft und Lizenz stehen in `engine/sfx/LIZENZEN.md`.
     - `build.py` nimmt automatisch die echte Aufnahme, wenn es zu einem Geräuschnamen eine Datei gibt. Atmosphären (`amb_car`, `amb_forest`) werden geloopt und liegen etwa 13 dB unter der Stimme.
     - Regel: **Neue Geräusche immer als echte Aufnahme** (CC0/Public Domain) holen. Gute Quelle ist archive.org mit `SSE_Library_*`, `Red_Library_*` und `aporee_*`. Wikimedia Commons sperrt Downloads oft (Fehler 429).
+17. **Neues Format nach zwei neuen Referenzen** (Kanal mit „Fiction + Survival Facts“):
+    - **Thema:** realistische Katastrophen-Fiktion mit **echten Überlebensfakten**.
+    - **Optik:** 3D-Umgebungen mit Kinolicht. Detaillierte 2D-Brustbilder mit Hautton, Haaren, Augenbrauen, Nase, Ohren, Kleidung, Brille und Schattierung, groß vor unscharfem Hintergrund.
+    - **Einblendungen:** Kapsel oben („● FIKTION · 3:33 · ORT“), grüne „ECHT“-Etiketten, Regel-Karten, Info-Grafiken, Namensschilder, Endkarte „NÄCHSTER TEIL“.
+    - **Umsetzung:** Folge **09 „Blackout“**, Code in `engine/blackout3d.js` (Skyline, Wohnung, Treppenhaus) und `engine/blackout.js` (Porträts, Overlays, Kameras).
+    - **Regel:** Fakten nur aus seriösen Quellen (BBK u. ä.) und vorsichtig formuliert.

@@ -119,6 +119,34 @@
   .cam i { position: absolute; left: 26px; top: 102px; width: 11px; height: 11px; border-radius: 50%; background: #ff3b30; }
   .cam b { position: absolute; left: 44px; top: 98px; } .cam span { position: absolute; right: 26px; top: 98px; }
   .cam em { position: absolute; left: 26px; bottom: 96px; font-style: normal; font-weight: 500; font-size: 13px; }
+  .pill2 { position: absolute; top: 46px; left: 50%; transform: translateX(-50%); background: rgba(10,10,14,.82); border: 2px solid #ff3b30; border-radius: 20px;
+           padding: 5px 16px 5px 12px; font: 800 12px 'Montserrat'; color: #f2f2f2; letter-spacing: 1px; white-space: nowrap; display: flex; align-items: center; gap: 8px; }
+  .pill2 i { width: 8px; height: 8px; border-radius: 50%; background: #ff3b30; display: block; }
+  .fact { position: absolute; top: 86px; left: 50%; transform: translateX(-50%); display: flex; align-items: center; gap: 8px; background: rgba(10,14,12,.85);
+          border-radius: 14px; padding: 6px 14px 6px 6px; max-width: 470px; }
+  .fact b { background: #1fbf62; color: #04120a; font: 900 11px 'Montserrat'; padding: 3px 9px; border-radius: 10px; letter-spacing: 1px; flex: none; }
+  .fact span { font: 700 12.5px/1.25 'Montserrat'; color: #e8f6ee; }
+  .rule { position: absolute; left: 50%; top: 250px; width: 400px; background: #f2eee4; border-radius: 6px; padding: 22px 26px 24px; text-align: center;
+          box-shadow: 0 20px 60px rgba(0,0,0,.6); }
+  .rule .rn { display: inline-block; background: #ffc21f; color: #1a1408; font: 900 12px 'Montserrat'; padding: 3px 10px; border-radius: 4px; letter-spacing: 1.5px; }
+  .rule .rt { font: 900 30px/1.1 'Montserrat'; color: #15151a; margin-top: 12px; } .rule .rs { font: 900 24px/1.15 'Montserrat'; color: #e0302a; margin-top: 6px; }
+  .graph { position: absolute; left: 50%; top: 220px; transform: translateX(-50%); width: 400px; height: 400px; display: flex; gap: 70px; justify-content: center; }
+  .graph .gcol { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .graph .gbar { width: 92px; height: 280px; border: 3px solid #e6e6e6; border-radius: 8px; position: relative; overflow: hidden; background: rgba(0,0,0,.35); }
+  .graph .gbar i { position: absolute; bottom: 0; left: 0; right: 0; display: block; }
+  .graph b { font: 900 13px 'Montserrat'; color: #fff; letter-spacing: 1px; } .graph span { font: 800 15px 'JetBrains Mono'; color: #ffc21f; }
+  .graph .gnote { position: absolute; bottom: -24px; font: italic 700 14px 'Montserrat'; color: #c9ced9; }
+  .co { position: absolute; left: 50%; top: 230px; width: 380px; text-align: center; }
+  .co .coi { width: 150px; height: 150px; margin: 0 auto; border-radius: 50%; border: 5px solid #ff3b30; font: 900 64px/140px 'Montserrat'; color: #fff; background: rgba(40,0,0,.5);
+             box-shadow: 0 0 40px rgba(255,59,48,.4); }
+  .co .cot { font: 900 24px 'Montserrat'; color: #fff; margin-top: 16px; letter-spacing: 1px; }
+  .co .cor { font: 800 18px/1.7 'Montserrat'; color: #ffb0aa; margin-top: 8px; }
+  .ntag { position: absolute; top: 120px; left: 26px; background: rgba(12,12,16,.86); border-left: 4px solid #ffc21f; padding: 7px 14px; border-radius: 4px; }
+  .ntag b { display: block; font: 900 15px 'Montserrat'; color: #fff; letter-spacing: 1px; } .ntag span { font: 600 11px 'JetBrains Mono'; color: #b9bfcc; letter-spacing: 1px; }
+  .portrait { position: absolute; left: 50%; top: 300px; width: 470px; height: 658px; }
+  .cb { position: absolute; left: 12px; right: 12px; top: 186px; border-radius: 18px; background: rgba(255,255,255,.95); color: #111; padding: 12px 14px; text-align: left;
+        box-shadow: 0 0 0 3px #e0302a; }
+  .cb .cbh { font: 900 12px 'Montserrat'; color: #e0302a; letter-spacing: 1px; } .cb .cbt { font: 900 15px 'Montserrat'; margin-top: 4px; } .cb .cbm { font: 600 12px/1.35 'Montserrat'; margin-top: 4px; color: #333; }
   .end { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 30%, #1a1e3d, #0b0d1c 70%); text-align: center; color: #fff; }
   .end .s { font: 500 11px 'JetBrains Mono'; letter-spacing: 4px; color: #9aa0b8; margin-top: 18px; }
   .end .p { font: 900 112px/1 'Montserrat'; color: #ff3b30; margin-top: 8px; letter-spacing: -1px; }
@@ -130,6 +158,7 @@
 <script src="node_modules/three/build/three.min.js"></script>
 <script src="world3d.js"></script>
 <script src="sets3d.js"></script>
+<script src="blackout3d.js"></script>
 <script>
 let TL, GRAIN = [];
 const SET_ASSETS = {};
@@ -420,6 +449,10 @@ async function viewChoice(t, sh) {
 }
 async function viewEnd(t, sh) {
   const lt = t - sh.start, a = (d) => `opacity:${clamp((lt - d) / .3)};transform:translateY(${(1 - ease((lt - d) / .3)) * 14}px)`;
+  if (TL.endStyle === 'next') return `<div class="end"><div class="s" style="margin-top:330px;${a(0)}">${TL.series} · TEIL ${TL.part}</div>
+    <div class="p" style="font-size:70px;color:#fff;${a(.15)}">NÄCHSTER TEIL</div><div style="font:900 24px 'Montserrat';color:#ff3b30;margin-top:8px;${a(.3)}">${TL.nextQ || ''}</div>
+    <div style="${a(.45)}"><span class="f">FOLGE FÜR TEIL ${TL.part + 1}</span></div>
+    <div class="s" style="margin-top:26px;${a(.6)}">GESCHICHTE · FIKTION · ECHTE ÜBERLEBENSFAKTEN</div></div>`;
   const door = `<svg viewBox="0 0 200 150" width="200" height="150" style="display:block;margin:0 auto">
     <rect x="50" y="10" width="100" height="128" fill="#05060f"/>
     <rect x="58" y="22" width="22" height="116" fill="#3a2412"/>
@@ -613,7 +646,8 @@ window.renderFrame = async (t) => {
   sc.style.transform = shake + `scale(${z[0] + (z[1] - z[0]) * ease(lt / d)})`;
 
   let ov = '';
-  if (t < 3.0) {
+  if (TL.set === 'blackout' && typeof boOverlays !== 'undefined') ov += boOverlays(t, sh);
+  if (t < 3.0 && !TL.noTitle) {
     ov += `<div class="title" style="opacity:${clamp((3.0 - t) / .25)}"><div class="k">${TL.series} · ${TL.episode}</div><div class="t">${TL.title}<br>TEIL ${TL.part}</div></div>`;
   } else if (sh.place && !['lock', 'chat', 'choice', 'end', 'monitor', 'radio'].includes(sh.scene)) {
     const blink = (t % 1.2) < .7 ? 1 : .25;
@@ -636,4 +670,5 @@ window.renderFrame = async (t) => {
   $('grain').style.backgroundImage = `url(${GRAIN[Math.floor(t * 24) % GRAIN.length]})`;
 };
 </script>
-<script src="sets.js"></script></body></html>
+<script src="sets.js"></script>
+<script src="blackout.js"></script></body></html>
