@@ -130,6 +130,9 @@ window.Puppet = (function () {
       if (window.drawJulesRimet) window.drawJulesRimet(ctx, 0, -10, 1.25, t);
     } else if (kind === 'yellow') {
       ctx.rotate(-.15); ctx.beginPath(); ctx.roundRect(-24, -96, 48, 70, 6); ctx.fillStyle = '#ffd400'; ctx.fill(); stroke(ctx, 5, OUT);
+    } else if (kind === 'bottle') {
+      ctx.rotate(-.2); ctx.beginPath(); ctx.roundRect(-16, -110, 32, 90, 10); ctx.fillStyle = '#4fbaf5'; ctx.fill(); stroke(ctx, 5, OUT);
+      ctx.beginPath(); ctx.roundRect(-9, -128, 18, 20, 4); ctx.fillStyle = '#fff'; ctx.fill(); stroke(ctx, 4, OUT);
     } else if (kind === 'coat') {
       ctx.rotate(.15);
       ctx.beginPath(); ctx.moveTo(-10, -6); ctx.lineTo(-58, 20); ctx.lineTo(-64, 170); ctx.lineTo(48, 170); ctx.lineTo(44, 20); ctx.lineTo(10, -6); ctx.closePath();

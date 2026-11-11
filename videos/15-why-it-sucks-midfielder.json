@@ -1,0 +1,60 @@
+{
+  "title": "Why it sucks being a midfielder",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "scenes": [
+    {
+      "shot": "mhook",
+      "text": "Why it sucks being a midfielder.",
+      "audio": "../audio/midfielder/01.wav",
+      "duration": 2.6
+    },
+    {
+      "shot": "mseven",
+      "text": "It starts when you're seven. The coach says: \"You're box to box.\" You don't know what that means. So you just run. Everywhere.",
+      "audio": "../audio/midfielder/02.wav"
+    },
+    {
+      "shot": "mten",
+      "text": "Age ten. You run twelve kilometres. The striker runs two. He still gets the first drink at half-time.",
+      "audio": "../audio/midfielder/03.wav"
+    },
+    {
+      "shot": "mtwelve",
+      "text": "Age twelve. You win the ball. You look up. Nobody is moving. So you pass it sideways. Coach: \"Be more creative!\"",
+      "audio": "../audio/midfielder/04.wav"
+    },
+    {
+      "shot": "mkicked",
+      "text": "Age fourteen. Every game, you get kicked. Again. And again. The referee: \"Play on.\"",
+      "audio": "../audio/midfielder/05.wav"
+    },
+    {
+      "shot": "mgoal",
+      "text": "Age sixteen. Thirty yards out. You shoot... top corner! Now every time you touch the ball, the whole team screams: \"PASS IT!\"",
+      "audio": "../audio/midfielder/06.wav"
+    },
+    {
+      "shot": "massists",
+      "text": "Age seventeen. Fifteen assists this season. The highlight video? Fifteen goals... by the striker.",
+      "audio": "../audio/midfielder/07.wav"
+    },
+    {
+      "shot": "mthing",
+      "text": "That's the thing about being a midfielder. Everyone wants the ball.",
+      "audio": "../audio/midfielder/08.wav"
+    },
+    {
+      "shot": "mjob",
+      "text": "Nobody wants your job.",
+      "audio": "../audio/midfielder/09.wav",
+      "duration": 2.8
+    },
+    {
+      "shot": "mtag",
+      "text": "Tag the midfielder who ran for you.",
+      "audio": "../audio/midfielder/10.wav",
+      "pad": 1.2
+    }
+  ]
+}

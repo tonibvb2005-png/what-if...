@@ -1541,6 +1541,70 @@
       extra: (lt) => { pill(0, 520, '@ TAG YOUR DEFENDER', eb(P(lt, .1, .45)), '#ffd400', OUT, 50); bubble(240, 790, 'WE SEE YOU.', eb(P(lt, cue('see', .6), cue('see', .6) + .35)), -40); } }
   });
 
+
+  // ---------- "Why it sucks being a midfielder" ----------
+  Object.assign(CH, {
+    nico: { skin: '#e8b08a', shirt: '#7b3ff2', trim: '#ffffff', number: '8', pants: '#ffffff', shoes: '#111', hair: 'short', hairColor: '#2a1a10', bw: .95, blinkPh: .8 },
+    nine: { skin: '#ffd9b8', shirt: '#7b3ff2', trim: '#ffffff', number: '9', pants: '#ffffff', shoes: '#111', hair: 'slick', hairColor: '#e0c060', bw: 1, blinkPh: 1.7 },
+    mate: { skin: '#8a5a3c', shirt: '#7b3ff2', trim: '#ffffff', number: '5', pants: '#ffffff', shoes: '#111', hair: 'buzz', hairColor: '#120a05', bw: 1.05, blinkPh: 2.3 }
+  });
+  function highlightPhone(x, y, k, lt) {
+    if (k <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.scale(k, k);
+    ctx.beginPath(); ctx.roundRect(-210, -380, 420, 760, 50); ctx.fillStyle = '#1b1035'; ctx.fill(); ctx.beginPath(); ctx.roundRect(-188, -350, 376, 700, 34); ctx.fillStyle = '#0f0f14'; ctx.fill();
+    txt('SEASON HIGHLIGHTS', 0, -300, 30, '#fff', 900);
+    for (let i = 0; i < 5; i++) { const yy = -230 + i * 110; ctx.beginPath(); ctx.roundRect(-165, yy, 330, 92, 14); ctx.fillStyle = '#2b2f4a'; ctx.fill();
+      ctx.beginPath(); ctx.roundRect(-155, yy + 10, 110, 72, 8); ctx.fillStyle = '#43a047'; ctx.fill(); txt('▶', -100, yy + 46, 30, '#fff', 900);
+      txt('GOAL #9', 40, yy + 30, 28, '#fff', 900); txt('feat. 0 assists', 40, yy + 62, 20, 'rgba(255,255,255,.55)', 700); }
+    ctx.restore();
+  }
+  Object.assign(SHOTS, {
+    mhook: { set: 'flat', flat: (t) => bgStadium(t, false), titleFast: true, captionTop: 1235,
+      title: ['WHY IT SUCKS BEING A', '<span class="box">MIDFIELDER</span>'], titleSize: [70, 104],
+      cam: [[0, FC], [1, { x: 0, y: 900, z: 1.04 }]], cast: { nine: { x: 270, scale: .55, y: 1180 }, nico: { x: -40, scale: 1 } },
+      acts: { nico: [[0, { e: 'despair', p: 'hips', m: { tremble: .2 } }]], nine: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: .5 } }]] } },
+    mseven: { set: 'flat', flat: bgPark, age: 'AGE 7', captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { nico: { x: -180, scale: .66 }, coach: { x: 330, scale: 1 } },
+      move: { nico: [['run', .7, -180], [.8, 420], [.9, -420], [1, 300]] },
+      acts: { nico: [[0, { e: 'neutral', m: { lookX: 1 } }], ['know', .45, { e: 'surprised', p: 'shrug', m: { lookX: 1 } }], ['run', .7, { e: 'focused', m: { walk: 1.2 } }]], coach: [[0, { e: 'confident', p: 'pointL', m: { lookX: -1 } }]] },
+      extra: (lt) => { bubble(240, 760, '"BOX TO BOX!"', eb(P(lt, cue('box', .2), cue('box', .2) + .35)), 80); const k = eb(P(lt, cue('know', .45), cue('know', .45) + .3)); if (k > 0 && lt < cue('run', .7)) txt('?', -180, 860, 140 * k, '#ffd400', 900, 'center', 14); } },
+    mten: { set: 'flat', flat: bgPark, age: 'AGE 10', captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { nico: { x: -220, scale: .74 }, nine: { x: 220, scale: .74 } },
+      acts: { nico: [[0, { e: 'tense', ex: { sweat: 1, mouthOpen: .5 }, p: 'hips', m: { tremble: .3 } }]], nine: [[0, { e: 'confident', p: 'idle' }], ['drink', .65, { e: 'happy', p: 'holdCashUp', propR: 'bottle' }]] },
+      extra: (lt) => { statCard(-220, 300, 'DISTANCE', [['YOU', Math.round(lerp(0, 12, P(lt, .2, cue('two', .4)))) + ' KM', true]], eb(P(lt, .1, .4))); statCard(220, 300, 'DISTANCE', [['STRIKER', lt > cue('two', .4) ? '2 KM' : '…', false]], eb(P(lt, cue('two', .4) - .2, cue('two', .4) + .2))); pill(220, 780, 'FIRST DRINK 💧', eb(P(lt, cue('drink', .65), cue('drink', .65) + .3)), '#fff', OUT, 36); } },
+    mtwelve: { set: 'flat', flat: (t) => bgStadium(t, false), age: 'AGE 12', captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { mate: { x: -400, scale: .8 }, nico: { x: -100, scale: .86 }, nine: { x: 180, scale: .8 }, coach: { x: 420, scale: .92 } },
+      ball: () => { const sw = cue('side', .6); return [[0, 60, 1385], [sw, 60, 1385], [sw + .6, -330, 1385]]; },
+      acts: { mate: [[0, { e: 'neutral', p: 'idle' }]], nine: [[0, { e: 'neutral', p: 'crossed' }]], nico: [[0, { e: 'focused', m: { lookX: 0 } }], ['look', .3, { e: 'worried', m: { lookX: 1 } }], ['side', .6, { e: 'neutral', po: KICK, m: { lookX: -1 } }], ['side', .7, { e: 'despair', po: {} }]], coach: [[0, { e: 'neutral', m: { lookX: -1 } }], ['coach', .82, { e: 'angry', p: 'pointL', m: { lookX: -1 } }]] },
+      extra: (lt) => { pill(0, 650, 'NOBODY MOVING', eb(P(lt, cue('look', .35), cue('look', .35) + .3)) * (1 - P(lt, cue('side', .6), cue('side', .6) + .2)), '#fff', OUT, 38); bubble(250, 760, 'BE MORE CREATIVE!', eb(P(lt, cue('coach', .82), cue('coach', .82) + .3)), 170); } },
+    mkicked: { set: 'flat', flat: (t) => bgStadium(t, false), age: 'AGE 14', captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { nico: { x: -120, scale: .9 }, opp: { x: 180, scale: .9 }, ref: { x: 430, scale: .95 } },
+      acts: () => { const D = CUR.duration, ks = [cue('k1', .25), cue('k2', .4), cue('k3', .52)]; const a = [[0, { e: 'focused', p: 'idle' }]]; ks.forEach(k => { a.push([k / D, { e: 'shock', p: 'faint', po: { lean: -70 } }], [(k + .45) / D, { e: 'angry', p: 'idle', po: {} }]); }); a.push([cue('ref', .8) / D, { e: 'pleading', p: 'pleading' }]);
+        const o = [[0, { e: 'smirk', m: { lookX: -1 } }]]; ks.forEach(k => o.push([(k - .2) / D, { e: 'smirk', po: KICK }], [(k + .3) / D, { e: 'smirk', po: {} }]));
+        return { nico: a, opp: o, ref: [[0, { e: 'neutral', p: 'crossed', m: { lookX: -1 } }], [cue('ref', .8) / D, { e: 'confident', p: 'waveR', m: { wave: 1, lookX: -1 } }]] }; },
+      extra: (lt, t) => { [cue('k1', .25), cue('k2', .4), cue('k3', .52)].forEach(k => impact(-60, 1250, t, lt > k ? eb(P(lt, k, k + .15)) * (1 - P(lt, k + .35, k + .5)) * .7 : 0)); bubble(430, 760, 'PLAY ON!', eb(P(lt, cue('ref', .8), cue('ref', .8) + .3)), 0); } },
+    mgoal: { set: 'flat', flat: (t) => bgStadium(t, false), age: 'AGE 16', captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { nico: { x: 300, scale: .86 }, max: { x: -760, scale: .8 }, mate: { x: -100, scale: .8 }, nine: { x: 120, scale: .8 } },
+      back: () => keeperGoal(-1080, -380, int3()),
+      ball: () => { const s1 = cue('shoot', .2); return [[0, 220, 1385], [s1, 220, 1385], [s1 + .7, -460, 830, 360], [s1 + 1.2, -500, 1385, 30]]; },
+      acts: () => { const s1 = cue('shoot', .2), D = CUR.duration, pi = cue('pass', .62); return {
+        nico: [[0, { e: 'focused', m: { lookX: -1 } }], [(s1 - .1) / D, { po: KICK }], [(s1 + .8) / D, { e: 'ecstatic', p: 'cheer', po: {}, m: { jump: .7 } }], [pi / D, { e: 'surprised', p: 'shrug', m: { jump: 0 } }]],
+        mate: [[0, { e: 'neutral', m: { lookX: 1 } }], [(s1 + .8) / D, { e: 'ecstatic', p: 'cheer' }], [pi / D, { e: 'angry', p: 'pointR', m: { lookX: 1 } }]],
+        nine: [[0, { e: 'neutral', m: { lookX: 1 } }], [(s1 + .8) / D, { e: 'surprised', p: 'cheer' }], [pi / D, { e: 'angry', p: 'pleading', m: { lookX: 1 } }]] }; },
+      extra: (lt) => { const s1 = cue('shoot', .2); pill(-500, 650, 'TOP CORNER!', eb(P(lt, s1 + .7, s1 + 1)) * (1 - P(lt, cue('pass', .62) - .3, cue('pass', .62))), '#2fbf71', '#fff', 44); const pi = cue('pass', .62); bubble(-100, 800, 'PASS IT!', eb(P(lt, pi + .1, pi + .35)), 0); bubble(160, 730, 'PASS IT!!', eb(P(lt, pi + .25, pi + .5)), -40); } },
+    massists: { set: 'flat', flat: bgPurple, age: 'AGE 17', captionTop: 1700, cam: [[0, STUDIO], [1, STUDIO]], cast: {},
+      draw: (s, lt, d, t) => { statCard(540, 300, 'YOUR SEASON', [['ASSISTS', Math.round(lerp(0, 15, P(lt, .2, cue('hl', .45)))), true]], eb(P(lt, 0, .3))); highlightPhone(540, 1060, 1.3 * eb(P(lt, cue('hl', .45), cue('hl', .45) + .4)), lt); } },
+    mthing: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { mate: { x: -330, scale: .86 }, nico: { x: 0, scale: .9 }, nine: { x: 330, scale: .86 } },
+      acts: { mate: [[0, { e: 'happy', p: 'pointR', m: { lookX: 1 } }], ['ball', .7, { e: 'focused', p: 'cheer', m: { jump: .4 } }]], nine: [[0, { e: 'happy', p: 'pointL', m: { lookX: -1 } }], ['ball', .7, { e: 'focused', p: 'cheer', m: { jump: .4 } }]], nico: [[0, { e: 'neutral', p: 'hips' }]] },
+      extra: (lt) => { bubble(-330, 760, 'ME!', eb(P(lt, cue('ball', .7), cue('ball', .7) + .3)), 0); bubble(330, 760, 'TO ME!', eb(P(lt, cue('ball', .7) + .15, cue('ball', .7) + .45)), 0); } },
+    mjob: { set: 'flat', flat: bgDark, captionTop: 1700, cam: [[0, FC], [1, { x: 0, y: 930, z: 1.08 }]], cast: { nico: { x: 0, scale: 1 } },
+      acts: { nico: [[0, { e: 'tense', ex: { sweat: 1 }, p: 'hips', m: { tremble: .3 } }]] }, extra: (lt) => pill(0, 640, 'NOBODY WANTS YOUR JOB', eb(P(lt, .3, .6)), '#ffd400', OUT, 40) },
+    mtag: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { nico: { x: -170, scale: 1 }, leo: { x: 220, scale: .96 } },
+      acts: { nico: [[0, { e: 'tense', ex: { sweat: .8 }, m: { lookX: 1 } }], [.45, { e: 'happy', p: 'thumbsUpR', handR: 'thumb', m: { lookX: 1 } }]], leo: [[0, { e: 'happy', p: 'takeR', propR: 'bottle', m: { lookX: -1 } }]] },
+      extra: (lt) => { pill(0, 520, '@ TAG YOUR MIDFIELDER', eb(P(lt, .1, .45)), '#ffd400', OUT, 50); bubble(240, 790, 'YOU EARNED THIS.', eb(P(lt, cue('ran', .6), cue('ran', .6) + .35)), -40); } }
+  });
+
   // ---------- timeline ----------
   let spec, scenes = [], total = 0;
   function camAt(keys, lt, d) {
@@ -1735,6 +1799,16 @@
         case 'dnothing': add(st + C('nothing', .7), 'pop', -15); break;
         case 'dclap': add(st + .3, 'tick', -16); break;
         case 'dtag': add(st + .1, 'pop', -14); add(st + C('see', .6), 'sparkle', -16); break;
+        case 'mhook': add(st, 'thump', -10); break;
+        case 'mseven': add(st + C('box', .2), 'whistle', -20); add(st + C('run', .7), 'whoosh_soft', -16); break;
+        case 'mten': for (let k = 0; k < 10; k++) add(st + .3 + k * .12, 'tick', -20); add(st + C('drink', .65), 'pop', -15); break;
+        case 'mtwelve': add(st + C('side', .6), 'thump', -16); add(st + C('coach', .82), 'pop', -14); break;
+        case 'mkicked': [['k1', .25], ['k2', .4], ['k3', .52]].forEach(([n, f]) => add(st + C(n, f), 'thump', -11)); add(st + C('ref', .8), 'whistle', -18); break;
+        case 'mgoal': add(st + C('shoot', .2), 'thump', -13); add(st + C('shoot', .2) + .7, 'cheer', -15); add(st + C('pass', .62) + .1, 'pop', -14); add(st + C('pass', .62) + .25, 'pop', -14); break;
+        case 'massists': for (let k = 0; k < 15; k++) add(st + .2 + k * .1, 'tick', -20); add(st + C('hl', .45), 'whoosh_soft', -16); break;
+        case 'mthing': add(st + C('ball', .7), 'pop', -15); break;
+        case 'mjob': add(st + .3, 'heartbeat', -14); break;
+        case 'mtag': add(st + .1, 'pop', -14); add(st + C('ran', .6), 'sparkle', -16); break;
         case 'imate': add(st + .1, 'whoosh_soft', -20); add(st + C('follow', .75) + .1, 'pop', -14); break;
       }
     });
