@@ -1605,6 +1605,71 @@
       extra: (lt) => { pill(0, 520, '@ TAG YOUR MIDFIELDER', eb(P(lt, .1, .45)), '#ffd400', OUT, 50); bubble(240, 790, 'YOU EARNED THIS.', eb(P(lt, cue('ran', .6), cue('ran', .6) + .35)), -40); } }
   });
 
+
+  // ---------- "Why it sucks being a striker" ----------
+  Object.assign(CH, {
+    rico: { skin: '#f0c19a', shirt: '#e8364f', trim: '#ffffff', number: '9', pants: '#ffffff', shoes: '#111', hair: 'spiky', hairColor: '#2a1a10', bw: .95, blinkPh: .2 },
+    defA: { skin: '#c98d63', shirt: '#1f6fe0', trim: '#fff', number: '4', pants: '#fff', shoes: '#111', hair: 'buzz', hairColor: '#120a05', bw: 1.2, blinkPh: 1.0 },
+    defB: { skin: '#ffd9b8', shirt: '#1f6fe0', trim: '#fff', number: '5', pants: '#fff', shoes: '#111', hair: 'short', hairColor: '#c9a46a', bw: 1.2, blinkPh: 1.6 },
+    defC: { skin: '#e8b08a', shirt: '#1f6fe0', trim: '#fff', number: '6', pants: '#fff', shoes: '#111', hair: 'slick', hairColor: '#2a1a10', bw: 1.2, blinkPh: 2.4 },
+    lino: { skin: '#f0c19a', shirt: '#ffd400', trim: '#111', pants: '#111', shoes: '#111', hair: 'bald', hairColor: '#3a2414', bw: 1.05, blinkPh: .9 }
+  });
+  function offsideFlag(x, y, k, t) {
+    if (k <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.scale(k, k); ctx.rotate(-.15 + Math.sin(t * 10) * .08);
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -260); ctx.lineWidth = 12; ctx.strokeStyle = OUT; ctx.stroke(); ctx.lineWidth = 6; ctx.strokeStyle = '#c9ced8'; ctx.stroke();
+    ctx.beginPath(); ctx.rect(0, -260, 120, 90); ctx.fillStyle = '#ffd400'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = OUT; ctx.stroke();
+    ctx.fillStyle = '#e8364f'; for (let i = 0; i < 4; i++) for (let j = 0; j < 3; j++) if ((i + j) % 2) ctx.fillRect(i * 30, -260 + j * 30, 30, 30);
+    ctx.restore();
+  }
+  Object.assign(SHOTS, {
+    shook: { set: 'flat', flat: (t) => bgStadium(t, false), titleFast: true, captionTop: 1235,
+      title: ['WHY IT SUCKS BEING A', '<span class="box">STRIKER</span>'], titleSize: [70, 104],
+      cam: [[0, FC], [1, { x: 0, y: 900, z: 1.04 }]], cast: { leo: { x: 280, scale: .58, y: 1180 }, rico: { x: -40, scale: 1 } },
+      acts: { rico: [[0, { e: 'despair', p: 'handsOnHead' }]], leo: [[0, { e: 'smirk', p: 'crossed' }]] } },
+    ssix: { set: 'flat', flat: bgPark, age: 'AGE 6', captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { kidR: { x: -330, scale: .6 }, rico: { x: 0, scale: .62 }, kidY: { x: 320, scale: .6 } },
+      acts: { rico: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: .6 } }]], kidR: [[0, { e: 'happy', p: 'cheer' }], ['love', .7, { e: 'ecstatic', p: 'cheer', m: { jump: .5 } }]], kidY: [[0, { e: 'happy', p: 'cheer' }], ['love', .7, { e: 'ecstatic', p: 'cheer', m: { jump: .5 } }]] },
+      extra: (lt) => { statCard(0, 300, 'TODAY', [['GOALS', Math.round(lerp(0, 10, P(lt, .2, cue('ten', .5)))), true]], eb(P(lt, .1, .4))); if (lt > cue('love', .7)) ['❤️', '❤️', '❤️'].forEach((h, i) => txt(h, -200 + i * 200, 760 - ((lt * 120 + i * 40) % 140), 70, '#e8364f', 900)); } },
+    snine: { set: 'flat', flat: (t) => bgStadium(t, false), age: 'AGE 9', captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { defA: { x: -330, scale: .8 }, rico: { x: 0, scale: .72 }, defB: { x: 300, scale: .8 }, defC: { x: 120, scale: .82 } },
+      move: { rico: [['three', .4, 0], [1, -160]], defA: [['three', .4, -330], [1, -400]], defB: [['three', .4, 300], [1, 140]], defC: [['three', .4, 520], [1, 0]] },
+      acts: { rico: [[0, { e: 'happy' }], ['three', .45, { e: 'worried', p: 'nervous', m: { walk: .6 } }]], defA: [[0, { e: 'focused', po: KP, m: { lookX: 1 } }], ['three', .4, { e: 'focused', po: KP, m: { walk: .6, lookX: 1 } }]], defB: [[0, { e: 'focused', po: KP, m: { lookX: -1 } }], ['three', .4, { e: 'focused', po: KP, m: { walk: .6, lookX: -1 } }]], defC: [[0, { e: 'smirk', po: KP, m: { lookX: -1 } }], ['three', .4, { e: 'smirk', po: KP, m: { walk: .6, lookX: -1 } }]] },
+      extra: (lt) => pill(0, 650, '3 DEFENDERS ON YOU', eb(P(lt, cue('three', .4) + .3, cue('three', .4) + .6)), '#e8364f', '#fff', 40) },
+    scar: { set: 'flat', flat: bgCar, age: 'AGE 11', captionTop: 1650,
+      cam: [[0, FC], [1, FC]], cast: { dad: { x: -150, scale: .5, y: 1380 }, rico: { x: 190, scale: .42, y: 1360 } },
+      acts: { dad: [[0, { e: 'happy', m: { lookX: 1 } }], ['dad', .6, { e: 'focused', p: 'pointR', ex: { mouthOpen: .4 }, m: { lookX: 1 } }]], rico: [[0, { e: 'happy', m: { lookX: -1 } }], ['dad', .65, { e: 'despair', m: { lookX: 0 } }]] },
+      front: (lt) => { car(20, 1330); statCard(260, 300, 'YOUR GAME', [['GOALS', 2, true], ['EASY MISSES', lt > cue('miss', .3) ? 1 : 0, false]], eb(P(lt, .1, .4))); bubble(-160, 800, 'WHY DID YOU MISS THAT ONE?', eb(P(lt, cue('dad', .6), cue('dad', .6) + .35)), 40); } },
+    snopass: { set: 'flat', flat: (t) => bgStadium(t, false), age: 'AGE 13', captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { rico: { x: 300, scale: .86 }, nico: { x: -150, scale: .82 }, coach: { x: -400, scale: .9 } },
+      ball: () => [[0, -200, 1385], [CUR.duration * .3, -320, 1385], [CUR.duration * .55, -120, 1385]],
+      acts: { rico: [[0, { e: 'happy', p: 'waveR', m: { wave: 1, lookX: -1 } }], ['once', .45, { e: 'despair', p: 'pleading', m: { lookX: -1 } }], ['coach', .75, { e: 'shock', p: 'idle' }]], nico: [[0, { e: 'focused', m: { lookX: -1 } }]], coach: [[0, { e: 'neutral', m: { lookX: 1 } }], ['coach', .75, { e: 'angry', p: 'pointR', m: { lookX: 1 } }]] },
+      extra: (lt) => { pill(300, 650, 'TOUCHES: 0', eb(P(lt, cue('once', .45), cue('once', .45) + .3)), '#fff', OUT, 40); bubble(-180, 760, "WHY AREN'T YOU INVOLVED?", eb(P(lt, cue('coach', .75), cue('coach', .75) + .3)), -220); pill(380, 420, '80:00', eb(P(lt, .2, .5)), '#fff', OUT, 40); } },
+    spen: { set: 'flat', flat: (t) => bgStadium(t, true), age: 'AGE 15', captionTop: 1235,
+      cam: [[0, FC], [.7, { x: -150, y: 920, z: 1.1 }], [1, { x: -150, y: 920, z: 1.12 }]], cast: { max: { x: -330, scale: .82 }, rico: { x: 250, scale: .9 } },
+      back: () => keeperGoal(-900, 240, int3()),
+      ball: () => { const k = cue('bar', .7); return [[0, 60, 1385], [k - .6, 60, 1385], [k, -330, int3() + 8, 200], [k + .6, 200, 1385, 300]]; },
+      acts: () => { const k = cue('bar', .7), D = CUR.duration; return { rico: [[0, { e: 'tense', ex: { sweat: .8 }, m: { lookX: -1 } }], [(k - .7) / D, { e: 'focused', po: KICK }], [(k + .2) / D, { e: 'shock', p: 'handsOnHead', po: {} }]], max: [[0, { e: 'focused', po: KP, m: { lookX: 1 } }], [(k - .3) / D, { e: 'focused', po: DIVE_L, m: { dy: -40 } }], [(k + .5) / D, { e: 'ecstatic', p: 'cheer', po: {}, m: { dy: 0 } }]] }; },
+      extra: (lt, t) => { const k = cue('bar', .7); scoreboard('HOME 0 – 0 AWAY', "90+3'"); impact(-330, int3(), t, lt > k ? eb(P(lt, k, k + .15)) * (1 - P(lt, k + .5, k + .7)) : 0); pill(-330, 760, 'CROSSBAR!', eb(P(lt, k + .1, k + .4)), '#e8364f', '#fff', 46); } },
+    shat: { set: 'flat', flat: bgPurple, age: 'AGE 16', captionTop: 1700, cam: [[0, STUDIO], [1, STUDIO]], cast: {},
+      draw: (s, lt, d, t) => { const n = cue('next', .4); pill(540, 300, lt < n ? 'HAT-TRICK! ⚽⚽⚽' : 'NEXT WEEK: 0 GOALS', 1, lt < n ? '#2fbf71' : '#e8364f', '#fff', 46); if (lt < n) { for (let i = 0; i < 3; i++) { const k = eb(P(lt, .2 + i * .25, .5 + i * .25)); if (k > 0) drawBall(330 + i * 210, 980, 0, 1, k * 2.4); } ctx.save(); ctx.translate(540, 1250); const kk = eb(P(lt, .9, 1.2)); ctx.scale(kk, kk); txt('3 GOALS', 0, 0, 110, '#ffd400', 900, 'center', 14); ctx.restore(); }
+        phone(540, 1000, eb(P(lt, n, n + .4)), [['@fan_99', 'flop 😴', cue('flop', .6)], ['@coach_k', 'bench him', cue('flop', .6) + .6], ['@ultra77', 'SELL HIM', cue('flop', .6) + 1.2]], lt); } },
+    soffside: { set: 'flat', flat: (t) => bgStadium(t, true), age: 'AGE 17', captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { rico: { x: -100, scale: .96 }, lino: { x: 420, scale: .9 } },
+      move: { rico: [['run', .35, -100], ['off', .8, 160]] },
+      acts: { rico: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: .6 } }], ['run', .35, { e: 'ecstatic', p: 'cheer', m: { walk: 1 } }], ['off', .8, { e: 'despair', p: 'handsOnHead', m: { walk: 0 } }]], lino: [[0, { e: 'neutral', m: { lookX: -1 } }], ['off', .78, { e: 'focused', p: 'holdCashUp', m: { lookX: -1 } }]] },
+      extra: (lt, t) => { const o = cue('off', .8); scoreboard(lt < o ? 'HOME 1 – 0 AWAY' : 'HOME 0 – 0 AWAY', "90+5'"); pill(0, 850, 'WINNER!', eb(P(lt, .1, .4)) * (1 - P(lt, o - .2, o)), '#2fbf71', '#fff', 50); offsideFlag(455, 1400 - 420 * .9, lt > o ? eb(P(lt, o, o + .3)) : 0, t); pill(160, 650, 'OFFSIDE', eb(P(lt, o + .1, o + .4)), '#e8364f', '#fff', 56); } },
+    sthing: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { leo: { x: -330, scale: .9 }, rico: { x: 0, scale: .92 }, nico: { x: 330, scale: .9 } },
+      acts: { leo: [[0, { e: 'happy', p: 'hips' }]], nico: [[0, { e: 'happy', p: 'hips' }]], rico: [[0, { e: 'neutral', p: 'idle' }]] },
+      extra: (lt) => { pill(-330, 700, '90 MIN', eb(P(lt, cue('ninety', .7), cue('ninety', .7) + .3)), '#fff', OUT, 40); pill(330, 700, '90 MIN', eb(P(lt, cue('ninety', .7) + .1, cue('ninety', .7) + .4)), '#fff', OUT, 40); } },
+    ssecond: { set: 'flat', flat: bgDark, captionTop: 1700, cam: [[0, FC], [1, { x: 0, y: 930, z: 1.08 }]], cast: { rico: { x: 0, scale: 1 } },
+      acts: { rico: [[0, { e: 'worried', p: 'nervous', m: { tremble: .3 } }]] }, extra: (lt) => pill(0, 640, '1 SECOND', eb(P(lt, .3, .6)), '#e8364f', '#fff', 60) },
+    stag: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { rico: { x: -170, scale: 1 }, nico: { x: 220, scale: .96 } },
+      acts: { rico: [[0, { e: 'worried', m: { lookX: 1 } }], [.45, { e: 'happy', p: 'thumbsUpR', handR: 'thumb', m: { lookX: 1 } }]], nico: [[0, { e: 'happy', p: 'takeR', m: { lookX: -1 } }]] },
+      extra: (lt) => { pill(0, 520, '@ TAG YOUR STRIKER', eb(P(lt, .1, .45)), '#ffd400', OUT, 50); bubble(240, 790, 'NEXT ONE GOES IN.', eb(P(lt, cue('next', .6), cue('next', .6) + .35)), -40); } }
+  });
+
   // ---------- timeline ----------
   let spec, scenes = [], total = 0;
   function camAt(keys, lt, d) {
@@ -1809,6 +1874,17 @@
         case 'mthing': add(st + C('ball', .7), 'pop', -15); break;
         case 'mjob': add(st + .3, 'heartbeat', -14); break;
         case 'mtag': add(st + .1, 'pop', -14); add(st + C('ran', .6), 'sparkle', -16); break;
+        case 'shook': add(st, 'thump', -10); break;
+        case 'ssix': for (let k = 0; k < 10; k++) add(st + .2 + k * .12, 'tick', -19); add(st + C('love', .7), 'cheer', -18); break;
+        case 'snine': add(st + C('three', .4), 'whoosh_soft', -16); add(st + C('three', .4) + .3, 'pop', -14); break;
+        case 'scar': add(st + C('miss', .3), 'pop', -15); add(st + C('dad', .6), 'pop', -14); break;
+        case 'snopass': add(st + C('once', .45), 'pop', -15); add(st + C('coach', .75), 'pop', -14); break;
+        case 'spen': add(st + .2, 'heartbeat', -14); add(st + 1.05, 'heartbeat', -14); add(st + C('bar', .7), 'thump', -8); add(st + C('bar', .7) + .02, 'ding', -12); break;
+        case 'shat': add(st + .1, 'cheer', -17); add(st + C('next', .4), 'whoosh', -15); [0, .6, 1.2].forEach(o => add(st + C('flop', .6) + o, 'pop', -15)); break;
+        case 'soffside': add(st + .1, 'cheer', -15); add(st + C('off', .8), 'whistle', -14); break;
+        case 'sthing': add(st + C('ninety', .7), 'pop', -16); break;
+        case 'ssecond': add(st + .3, 'heartbeat', -13); break;
+        case 'stag': add(st + .1, 'pop', -14); add(st + C('next', .6), 'sparkle', -16); break;
         case 'imate': add(st + .1, 'whoosh_soft', -20); add(st + C('follow', .75) + .1, 'pop', -14); break;
       }
     });

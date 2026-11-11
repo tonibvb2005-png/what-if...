@@ -1,0 +1,65 @@
+{
+  "title": "Why it sucks being a striker",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "scenes": [
+    {
+      "shot": "shook",
+      "text": "Why it sucks being a striker.",
+      "audio": "../audio/striker/01.wav",
+      "duration": 2.6
+    },
+    {
+      "shot": "ssix",
+      "text": "It starts when you're six. You score ten goals a game. Everyone loves you.",
+      "audio": "../audio/striker/02.wav"
+    },
+    {
+      "shot": "snine",
+      "text": "Age nine. The other team finds out. Now three defenders follow you everywhere.",
+      "audio": "../audio/striker/03.wav"
+    },
+    {
+      "shot": "scar",
+      "text": "Age eleven. You score twice. You miss one easy chance. In the car, your dad only talks about the miss.",
+      "audio": "../audio/striker/04.wav"
+    },
+    {
+      "shot": "snopass",
+      "text": "Age thirteen. Eighty minutes. Nobody passes to you. Not once. Coach: \"Why aren't you involved?\"",
+      "audio": "../audio/striker/05.wav"
+    },
+    {
+      "shot": "spen",
+      "text": "Age fifteen. Last minute. Penalty. Everyone is watching. You hit the bar.",
+      "audio": "../audio/striker/06.wav"
+    },
+    {
+      "shot": "shat",
+      "text": "Age sixteen. Hat-trick! Next week, you don't score. \"Flop.\" \"Bench him.\" \"Sell him.\"",
+      "audio": "../audio/striker/07.wav"
+    },
+    {
+      "shot": "soffside",
+      "text": "Age seventeen. You finally score the winner. You run to the fans... Offside.",
+      "audio": "../audio/striker/08.wav"
+    },
+    {
+      "shot": "sthing",
+      "text": "That's the thing about being a striker. Everyone else is judged on ninety minutes.",
+      "audio": "../audio/striker/09.wav"
+    },
+    {
+      "shot": "ssecond",
+      "text": "You're judged on one second.",
+      "audio": "../audio/striker/10.wav",
+      "duration": 2.8
+    },
+    {
+      "shot": "stag",
+      "text": "Tag your striker. Tell them: the next one goes in.",
+      "audio": "../audio/striker/11.wav",
+      "pad": 1.2
+    }
+  ]
+}
