@@ -144,7 +144,8 @@ def rumble(sec): n = int(sec * SR); t_ = np.arange(n) / SR; x = lp(noise(sec), 1
 def doorslide(sec=0.5): n = int(sec * SR); return bp(noise(sec), 600, 3000) * np.sin(np.pi * np.arange(n) / n) + np.sin(2 * np.pi * 90 * np.arange(n) / SR) * 0.2 * np.sin(np.pi * np.arange(n) / n)
 def squish(): n = int(0.3 * SR); t_ = np.arange(n) / SR; f = 300 - 200 * t_ / 0.3; return lp(signal.square(2 * np.pi * np.cumsum(f) / SR), 1200) * np.exp(-t_ * 6) * 0.6
 def grunt(): n = int(0.18 * SR); t_ = np.arange(n) / SR; return bp(signal.sawtooth(2 * np.pi * np.cumsum(140 - 40 * t_ / 0.18) / SR), 200, 1400) * np.sin(np.pi * t_ / 0.18)
-def bump(): return thud() * 0.7 + squish() * 0.5
+def bump():
+    a, b = thud() * 0.7, squish() * 0.5; n = max(len(a), len(b)); return np.pad(a, (0, n - len(a))) + np.pad(b, (0, n - len(b)))
 def scream(sec=0.8): n = int(sec * SR); t_ = np.arange(n) / SR; f = 900 + 300 * np.sin(2 * np.pi * 7 * t_); return bp(signal.sawtooth(2 * np.pi * np.cumsum(f) / SR), 700, 3500) * env(n, 0.03) * np.clip((n - np.arange(n)) / (0.1 * SR), 0, 1) * 0.5
 
 at(fx, 0, crowd_amb(DUR), 0.05)
