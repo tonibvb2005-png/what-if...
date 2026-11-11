@@ -1,451 +1,58 @@
 {
- "series": "BLACKOUT",
- "episode": "#09",
- "title": "BLACKOUT",
- "part": 1,
- "set": "blackout",
- "ambience": "office",
- "noTitle": true,
- "endStyle": "next",
- "nextQ": "WAS IST HINTER DER TÜR?",
- "pill": "FIKTION · 3:33 · FRANKFURT",
- "question": "",
- "shots": [
-  {
-   "scene": "bo_city",
-   "pill": "FIKTION · 3:33 · FRANKFURT",
-   "lines": [
-    {
-     "text": "Es ist 3:33, als in ganz Deutschland das Licht ausgeht.",
-     "say": "Es ist drei Uhr dreiunddreißig, als in ganz Deutschland das Licht ausgeht.",
-     "hl": {
-      "Licht": "y",
-      "Deutschland": "r"
-     },
-     "ev": [
-      [
-       "off",
-       "end-0.4",
-       0
-      ]
-     ],
-     "sfx": [
-      [
-       "boom",
-       "end-0.4"
-      ]
-     ]
-    },
-    {
-     "text": "Erst ein Stadtteil. Dann der nächste.",
-     "ev": [
-      [
-       "off",
-       "word2",
-       1
-      ],
-      [
-       "off",
-       "word4+0.2",
-       2
-      ]
-     ],
-     "sfx": [
-      [
-       "siren",
-       "start"
-      ]
-     ]
-    },
-    {
-     "text": "Und dann dein Haus.",
-     "hl": {
-      "Haus": "r"
-     },
-     "ev": [
-      [
-       "off",
-       "word3",
-       3
-      ]
-     ],
-     "pause": 0.6
-    }
-   ]
-  },
-  {
-   "scene": "bo_portrait",
-   "who": "you",
-   "bg": "apt",
-   "mood": "worried",
-   "tag": [
-    "DU",
-    "9. STOCK · WOHNUNG 9B"
-   ],
-   "pill": "FIKTION · 3:33 · KEIN STROM",
-   "lines": [
-    {
-     "text": "Du wohnst im neunten Stock.",
-     "hl": {
-      "neunten": "y"
-     }
-    },
-    {
-     "text": "Kein Strom. Kein Aufzug. Nur dein Handy leuchtet noch.",
-     "hl": {
-      "Strom": "r",
-      "Aufzug": "r",
-      "Handy": "y"
-     },
-     "pause": 0.3
-    }
-   ]
-  },
-  {
-   "scene": "bo_alert",
-   "pill": "FIKTION · 3:34 · KEIN STROM",
-   "lines": [
-    {
-     "text": "Dann schrillt es. Eine Warnung, direkt aufs Handy.",
-     "hl": {
-      "Warnung": "r"
-     },
-     "sfx": [
-      [
-       "alert",
-       "word1"
-      ]
-     ]
-    },
-    {
-     "text": "Großflächiger Stromausfall. Bleiben Sie zu Hause.",
-     "hl": {
-      "Stromausfall": "r"
-     },
-     "ev": [
-      [
-       "fact",
-       "start",
-       "Seit 2023 kommen Warnungen in Deutschland per Cell Broadcast direkt aufs Handy.",
-       "end+1.2"
-      ]
-     ],
-     "pause": 0.5
-    }
-   ]
-  },
-  {
-   "scene": "bo_apt",
-   "pill": "FIKTION · 3:36 · KEIN STROM",
-   "lines": [
-    {
-     "text": "Und hier ist, was die meisten nicht wissen.",
-     "hl": {
-      "meisten": "y"
-     },
-     "pause": 0.2
-    }
-   ]
-  },
-  {
-   "scene": "bo_rule",
-   "rule": {
-    "n": 1,
-    "text": "LASS DEN KÜHLSCHRANK",
-    "sub": "ZU."
-   },
-   "bg": "kitchen",
-   "pill": "FIKTION · 3:36 · KEIN STROM",
-   "lines": [
-    {
-     "text": "Regel eins: Lass den Kühlschrank zu.",
-     "hl": {
-      "Kühlschrank": "y"
-     },
-     "pause": 0.3
-    }
-   ]
-  },
-  {
-   "scene": "bo_fridge",
-   "pill": "FIKTION · 3:36 · KEIN STROM",
-   "lines": [
-    {
-     "text": "Geschlossen bleibt er etwa vier Stunden kalt.",
-     "hl": {
-      "vier": "y"
-     },
-     "ev": [
-      [
-       "fact",
-       "start",
-       "Ein voller Gefrierschrank hält bei geschlossener Tür etwa 48 Stunden.",
-       "end+3.4"
-      ]
-     ]
-    },
-    {
-     "text": "Ein voller Gefrierschrank sogar etwa zwei Tage.",
-     "hl": {
-      "zwei": "y",
-      "Tage": "y"
-     },
-     "pause": 0.4
-    }
-   ]
-  },
-  {
-   "scene": "bo_rule",
-   "rule": {
-    "n": 2,
-    "text": "FÜLL SOFORT",
-    "sub": "WASSER AB."
-   },
-   "bg": "kitchen",
-   "pill": "FIKTION · 3:38 · KEIN STROM",
-   "lines": [
-    {
-     "text": "Regel zwei: Füll sofort Wasser ab.",
-     "hl": {
-      "Wasser": "y"
-     },
-     "ev": [
-      [
-       "waterOn",
-       "end"
-      ]
-     ],
-     "pause": 0.2
-    }
-   ]
-  },
-  {
-   "scene": "bo_kitchen",
-   "pill": "FIKTION · 3:38 · KEIN STROM",
-   "lines": [
-    {
-     "text": "In Hochhäusern pumpen Pumpen das Wasser nach oben.",
-     "hl": {
-      "Pumpen": "y"
-     }
-    },
-    {
-     "text": "Ohne Strom bleibt der Hahn irgendwann trocken.",
-     "hl": {
-      "trocken": "r"
-     },
-     "ev": [
-      [
-       "waterOff",
-       "word4"
-      ]
-     ]
-    },
-    {
-     "text": "Zwei Liter pro Person und Tag. So viel brauchst du.",
-     "hl": {
-      "Zwei": "y",
-      "Liter": "y"
-     },
-     "ev": [
-      [
-       "fact",
-       "start",
-       "Das Bundesamt für Bevölkerungsschutz empfiehlt 2 Liter pro Person und Tag als Vorrat.",
-       "end+0.6"
-      ]
-     ],
-     "pause": 0.5
-    }
-   ]
-  },
-  {
-   "scene": "bo_hall",
-   "pill": "FIKTION · 5:10 · TREPPENHAUS",
-   "lines": [
-    {
-     "text": "Gegen fünf Uhr klopft es an deiner Tür.",
-     "hl": {
-      "klopft": "r"
-     },
-     "sfx": [
-      [
-       "knockrec",
-       "end+0.1"
-      ]
-     ],
-     "ev": [
-      [
-       "brandt",
-       "start"
-      ],
-      [
-       "candle",
-       "start"
-      ]
-     ],
-     "pause": 0.9
-    }
-   ]
-  },
-  {
-   "scene": "bo_portrait",
-   "who": "brandt",
-   "bg": "hall",
-   "mood": "pain",
-   "sweat": true,
-   "tag": [
-    "HERR BRANDT",
-    "8. STOCK · RENTNER"
-   ],
-   "pill": "FIKTION · 5:10 · TREPPENHAUS",
-   "lines": [
-    {
-     "text": "Herr Brandt von unten. Mit einer Kerze in der Hand.",
-     "hl": {
-      "Brandt": "y"
-     }
-    },
-    {
-     "text": "Mein Kopf tut so weh, sagt er. Und mir ist schwindelig.",
-     "hl": {
-      "schwindelig": "r"
-     },
-     "quote": {
-      "who": "HERR BRANDT",
-      "place": "8. STOCK",
-      "text": "Mein Kopf tut so weh. Und mir ist schwindelig."
-     },
-     "pause": 0.4
-    }
-   ]
-  },
-  {
-   "scene": "bo_hall",
-   "pov": true,
-   "pill": "FIKTION · 5:11 · TREPPENHAUS",
-   "lines": [
-    {
-     "text": "Dann hörst du es. Ein Brummen. Aus seiner Wohnung.",
-     "hl": {
-      "Brummen": "y"
-     },
-     "sfx": [
-      [
-       "generator",
-       "start"
-      ]
-     ]
-    },
-    {
-     "text": "Ein Stromgenerator. Mitten im Wohnzimmer.",
-     "hl": {
-      "Stromgenerator": "r"
-     },
-     "pause": 0.4
-    }
-   ]
-  },
-  {
-   "scene": "bo_rule",
-   "rule": {
-    "n": 3,
-    "text": "GENERATOREN NIEMALS",
-    "sub": "IN INNENRÄUME."
-   },
-   "bg": "hall",
-   "pill": "FIKTION · 5:11 · TREPPENHAUS",
-   "lines": [
-    {
-     "text": "Regel drei: Generatoren gehören niemals nach drinnen.",
-     "hl": {
-      "niemals": "r"
-     },
-     "ev": [
-      [
-       "dread",
-       "start"
-      ]
-     ],
-     "pause": 0.3
-    }
-   ]
-  },
-  {
-   "scene": "bo_co",
-   "pill": "FIKTION · 5:11 · TREPPENHAUS",
-   "lines": [
-    {
-     "text": "Ihre Abgase enthalten Kohlenmonoxid. Unsichtbar. Und es riecht nach nichts.",
-     "hl": {
-      "Kohlenmonoxid": "r",
-      "Unsichtbar": "y"
-     },
-     "ev": [
-      [
-       "fact",
-       "start",
-       "Erste Anzeichen einer CO-Vergiftung: Kopfschmerzen, Schwindel, Übelkeit.",
-       "end+0.8"
-      ]
-     ],
-     "pause": 0.5
-    }
-   ]
-  },
-  {
-   "scene": "bo_portrait",
-   "who": "brandt",
-   "bg": "hall",
-   "mood": "scared",
-   "eyes": "wide",
-   "tag": [
-    "HERR BRANDT",
-    "8. STOCK · RENTNER"
-   ],
-   "pill": "FIKTION · 5:12 · TREPPENHAUS",
-   "lines": [
-    {
-     "text": "Meine Frau schläft noch da drin, sagt er.",
-     "hl": {
-      "Frau": "y"
-     },
-     "quote": {
-      "who": "HERR BRANDT",
-      "place": "8. STOCK",
-      "text": "Meine Frau schläft noch da drin."
-     }
-    },
-    {
-     "text": "Seit Stunden.",
-     "hl": {
-      "Stunden": "r"
-     },
-     "sfx": [
-      [
-       "boom",
-       "start"
-      ]
-     ],
-     "pause": 1.2
-    }
-   ]
-  },
-  {
-   "scene": "end",
-   "sfx": [
-    [
-     "boom",
-     0.0
-    ]
-   ],
-   "lines": [
-    {
-     "text": "Teil zwei. Heute Nacht.",
-     "nocap": true,
-     "pause": 1.4
-    }
-   ]
-  }
- ]
+  "series": "BLACKOUT", "episode": "#09", "title": "BLACKOUT", "part": 1,
+  "set": "blackout", "ambience": "office", "noTitle": true, "endStyle": "next", "nextQ": "WER HAT GEKLOPFT?",
+  "pill": "FIKTION · 3:33 · FRANKFURT", "question": "",
+  "shots": [
+    {"scene": "bo_city", "pill": "FIKTION · 3:33 · FRANKFURT", "lines": [
+      {"text": "Es ist 3:33, als in ganz Deutschland das Licht ausgeht.", "say": "Es ist drei Uhr dreiunddreißig, als in ganz Deutschland das Licht ausgeht.", "hl": {"Licht": "y", "Deutschland": "r"},
+       "ev": [["off", "end-0.4", 0]], "sfx": [["boom", "end-0.4"], ["siren", "end"]]},
+      {"text": "Erst ein Stadtteil. Dann dein Haus.", "hl": {"Haus": "r"}, "ev": [["off", "word2", 1], ["off", "word2+0.35", 2], ["off", "word4", 3]], "pause": 0.4}
+    ]},
+    {"scene": "bo_portrait", "who": "you", "bg": "apt", "mood": "worried", "tag": ["DU", "9. STOCK · WOHNUNG 9B"], "pill": "FIKTION · 3:33 · KEIN STROM", "lines": [
+      {"text": "Neunter Stock. Kein Strom. Kein Aufzug.", "hl": {"Strom": "r", "Aufzug": "r"}, "pause": 0.2}
+    ]},
+    {"scene": "bo_alert", "pill": "FIKTION · 3:34 · KEIN STROM", "lines": [
+      {"text": "Dann kommt die Warnung aufs Handy.", "hl": {"Warnung": "r"}, "sfx": [["alert", "start"]],
+       "ev": [["fact", "start", "Seit 2023 kommen Warnungen in Deutschland per Cell Broadcast direkt aufs Handy.", "end+1.4"]], "pause": 0.8}
+    ]},
+    {"scene": "bo_fill", "pill": "FIKTION · 3:35 · KÜCHE", "lines": [
+      {"text": "Du füllst sofort alle Flaschen mit Wasser.", "hl": {"Wasser": "y"}, "ev": [["waterOn", "word1"],
+        ["fact", "start", "In Hochhäusern pumpen elektrische Pumpen das Wasser nach oben. Ohne Strom versiegt es.", "end+2.6"]]},
+      {"text": "Keine Minute zu früh. Der Hahn versiegt.", "hl": {"versiegt": "r"}, "ev": [["waterOff", "word3"]], "pause": 0.3}
+    ]},
+    {"scene": "bo_fridge3d", "pill": "FIKTION · 3:36 · KÜCHE", "lines": [
+      {"text": "Den Kühlschrank lässt du zu.", "hl": {"Kühlschrank": "y"},
+       "ev": [["fact", "start", "Geschlossen bleibt ein Kühlschrank etwa 4 Stunden kalt, ein voller Gefrierschrank etwa 48.", "end+1.2"]], "pause": 0.8}
+    ]},
+    {"scene": "bo_hall", "pill": "FIKTION · 5:10 · TREPPENHAUS", "lines": [
+      {"text": "Um fünf Uhr klopft es.", "hl": {"klopft": "r"}, "sfx": [["knockrec", "end+0.1"]], "ev": [["brandt", "start"], ["candle", "start"]], "pause": 0.9}
+    ]},
+    {"scene": "bo_portrait", "who": "brandt", "bg": "hall", "mood": "pain", "sweat": true, "tag": ["HERR BRANDT", "8. STOCK"], "pill": "FIKTION · 5:10 · TREPPENHAUS", "lines": [
+      {"text": "Herr Brandt von unten. Mit einer Kerze.", "hl": {"Brandt": "y"}},
+      {"text": "Mein Kopf tut so weh, sagt er.", "hl": {"Kopf": "r"}, "quote": {"who": "HERR BRANDT", "place": "8. STOCK", "text": "Mein Kopf tut so weh."}, "pause": 0.3}
+    ]},
+    {"scene": "bo_hall", "pov": true, "pill": "FIKTION · 5:11 · TREPPENHAUS", "lines": [
+      {"text": "Aus seiner Wohnung brummt ein Generator.", "hl": {"Generator": "r"}, "sfx": [["generator", "start"]], "ev": [["dread", "word3"],
+        ["fact", "start", "Generator-Abgase enthalten Kohlenmonoxid: unsichtbar, geruchlos. Erste Anzeichen: Kopfschmerzen, Schwindel.", "end+3.6"]]},
+      {"text": "Du gehst runter. Seine Tür steht offen.", "hl": {"offen": "r"}, "sfx": [["creak", "word4"]], "ev": [["gone", "start"]], "pause": 0.3}
+    ]},
+    {"scene": "bo_bapt", "pill": "FIKTION · 5:12 · 8. STOCK", "lines": [
+      {"text": "Im Licht des Generators sitzt Frau Brandt am Tisch.", "hl": {"Frau": "y"}, "sfx": [["generator", "start"]]},
+      {"text": "Ihre Augen sind offen. Aber sie blinzelt nicht.", "hl": {"blinzelt": "r"}, "pause": 0.5}
+    ]},
+    {"scene": "bo_portrait", "who": "you", "bg": "hall", "mood": "scared", "eyes": "wide", "pill": "FIKTION · 5:12 · 8. STOCK", "lines": [
+      {"text": "Hinter dir flüstert Herr Brandt: Sie schläft doch nur.", "hl": {"schläft": "y"},
+       "quote": {"who": "HERR BRANDT", "place": "HINTER DIR", "text": "Sie schläft doch nur."}, "pause": 0.4}
+    ]},
+    {"scene": "bo_hall", "pill": "FIKTION · 5:12 · TREPPENHAUS", "lines": [
+      {"text": "Du drehst dich um. Das Treppenhaus ist leer.", "hl": {"leer": "r"}, "pause": 0.5}
+    ]},
+    {"scene": "bo_bapt", "pill": "FIKTION · 5:13 · 8. STOCK", "lines": [
+      {"text": "Herr Brandt sitzt neben ihr am Tisch.", "hl": {"neben": "r"}, "ev": [["mrSeat", "start"]], "sfx": [["boom", "start"]]},
+      {"text": "Seit Stunden.", "hl": {"Stunden": "r"}, "ev": [["mrTurn", "start"]], "pause": 1.6}
+    ]},
+    {"scene": "end", "sfx": [["boom", 0.0]], "lines": [
+      {"text": "Wer hat dann an deine Tür geklopft?", "nocap": true, "pause": 1.4}
+    ]}
+  ]
 }

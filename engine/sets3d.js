@@ -460,8 +460,8 @@
       J.hipL.rotation.x = p.sit ? -1.5 : sw * .45; J.hipR.rotation.x = p.sit ? -1.5 : -sw * .45;
       J.kneeL.rotation.x = p.sit ? 1.5 : Math.max(0, -sw) * .7; J.kneeR.rotation.x = p.sit ? 1.5 : Math.max(0, sw) * .7;
       const armF = p.sit ? -1.0 : 0;
-      J.shoL.rotation.set(armF - sw * .38, 0, -.1); J.shoR.rotation.set(armF + sw * .38, 0, .1);
-      J.elL.rotation.x = p.sit ? -.7 : -.18 - Math.max(0, sw) * .3; J.elR.rotation.x = p.sit ? -.7 : -.18 - Math.max(0, -sw) * .3;
+      J.shoL.rotation.set(armF - sw * .38 - (p.reachL || 0) * 1.35, 0, -.1); J.shoR.rotation.set(armF + sw * .38 - (p.reach || 0) * 1.35, 0, .1);
+      J.elL.rotation.x = p.sit ? -.7 : -.18 - Math.max(0, sw) * .3 - (p.reachL || 0) * .3; J.elR.rotation.x = p.sit ? -.7 : -.18 - Math.max(0, -sw) * .3 - (p.reach || 0) * .3;
       head.rotation.set(p.nod || 0, p.look || 0, 0);
       const es = p.eyes === 'wide' ? 1.3 : 1;
       eyes.forEach(({ e, hl }) => { e.scale.set(es, p.eyes === 'closed' ? .18 : es, es); hl.visible = p.eyes === 'wide'; });

@@ -71,10 +71,10 @@ function boState(t) {
   R3.water.scale.set(1 - .7 * wp, 1 - wp * .9, 1 - .7 * wp); R3.water.visible = wp < .98 && !!lastEv('waterOn', t, null);
   const fillK = lastEv('waterOn', t, null) ? clamp((t - lastEv('waterOn', t, null)[0]) / 3) * (1 - wp * .3) : 0;
   R3.bottles.forEach((b, i) => b.material.opacity = .15 + .45 * clamp(fillK * 3 - i));
-  const c = lastEv('candle', t, null); R3.candle.intensity = c ? 2.2 * (1 + .12 * Math.sin(t * 17)) : 0; R3.candleM.visible = !!c;
+  const c = lastEv('candle', t, null) && !lastEv('gone', t, null); R3.candle.intensity = c ? 2.2 * (1 + .12 * Math.sin(t * 17)) : 0; R3.candleM.visible = !!c;
   R3.gapL.intensity = 2 * (.85 + .15 * Math.sin(t * 40));
 }
-function hideChars() { R3.hero.setPose({ visible: false }); R3.neighbor.setPose({ visible: false }); }
+function hideChars() { R3.hero.setPose({ visible: false }); R3.neighbor.setPose({ visible: false }); R3.mrsB.setPose({ visible: false }); R3.mrB.setPose({ visible: false }); }
 const BO_BG = {
   apt: () => W3.setCam([2.5, 1.6, 2.0], [-.4, 1.2, -2.6], 52),
   kitchen: () => W3.setCam([1.15, 1.7, .75], [2.15, .95, 2.65], 52),
@@ -100,10 +100,34 @@ async function viewBoKitchen(t, sh) {
   R3.phoneL.position.set(1.9, 1.3, 1.8); R3.phoneL.intensity = 1.2;
   return '';
 }
+async function viewBoFill(t, sh) {          // du füllst Flaschen an der Spüle
+  const lt = t - sh.start, d = sh.end - sh.start; boState(t); hideChars();
+  R3.hero.setPose({ visible: true, pos: [2.25, 0, 2.05], yaw: 0, reach: .55 + .05 * Math.sin(t * 2), reachL: .45, look: -.15 });
+  W3.setCam([.35 + .15 * ease(lt / d), 1.85, .15], [2.2, 1.0, 2.45], 50);
+  R3.phoneL.position.set(1.9, 1.5, 1.6); R3.phoneL.intensity = 2.2;
+  return '';
+}
+async function viewBoFridge3d(t, sh) {      // Hand zum Kühlschrank ... und zurück
+  const lt = t - sh.start, d = sh.end - sh.start; boState(t); hideChars();
+  const r = ease(lt / .9) - ease((lt - 1.4) / .8);
+  R3.hero.setPose({ visible: true, pos: [.45, 0, 1.95], yaw: 0, reach: .75 * r, look: .2 });
+  W3.setCam([-1.45, 1.65, .55], [.45, 1.05, 2.3], 50);
+  R3.phoneL.position.set(.0, 1.4, 1.6); R3.phoneL.intensity = 2.0;
+  return '';
+}
+async function viewBoBapt(t, sh) {          // Wohnung der Brandts im Licht der Arbeitslampe
+  const lt = t - sh.start, d = sh.end - sh.start; boState(t); hideChars();
+  R3.workL.intensity = 4 * (.86 + .14 * Math.sin(t * 31) * Math.sin(t * 7));
+  R3.mrsB.setPose({ visible: true, pos: [-.35, 0, 198.55], yaw: 0, sit: true, eyes: 'open', look: 0, nod: .08 });
+  const mr = lastEv('mrSeat', t, null), turn = lastEv('mrTurn', t, null);
+  R3.mrB.setPose({ visible: !!mr, pos: [.35, 0, 198.55], yaw: 0, sit: true, eyes: 'open', look: turn ? -.5 * ease((t - turn[0]) / 2.5) : .35, nod: .1 });
+  W3.setCam([.05 + .1 * Math.sin(lt * .3), 1.55 - .1 * ease(lt / d), 202.6 - 1.2 * ease(lt / d)], [0, .95, 198.6], 46);
+  return '';
+}
 async function viewBoHall(t, sh) {
   const lt = t - sh.start, d = sh.end - sh.start; boState(t);
   R3.hero.setPose({ visible: false });
-  const nb = lastEv('brandt', t, null);
+  const nb = lastEv('brandt', t, null) && !lastEv('gone', t, null);
   R3.neighbor.setPose({ visible: !!nb, pos: [-.3, 0, 99.2], yaw: 0, nod: .1 });
   if (sh.pov) W3.setCam([.1, .95, 98.6 - .3 * ease(lt / d)], [1.17, .45, 97.2], 46);
   else W3.setCam([-.55, 1.62, 102.6 - .4 * ease(lt / d)], [.1, 1.25, 96.5], 54);
@@ -156,8 +180,8 @@ function boOverlays(t, sh) {
   if (f) ov += `<div class="fact" style="opacity:${clamp((t - f[0]) / .25) * clamp((f[2] - t) / .25)}"><b>ECHT</b><span>${f[1]}</span></div>`;
   return ov;
 }
-Object.assign(VIEWS, { bo_city: viewBoCity, bo_apt: viewBoAptWide, bo_kitchen: viewBoKitchen, bo_hall: viewBoHall, bo_portrait: viewBoPortrait,
+Object.assign(VIEWS, { bo_fill: viewBoFill, bo_fridge3d: viewBoFridge3d, bo_bapt: viewBoBapt, bo_city: viewBoCity, bo_apt: viewBoAptWide, bo_kitchen: viewBoKitchen, bo_hall: viewBoHall, bo_portrait: viewBoPortrait,
   bo_alert: viewBoAlert, bo_rule: viewBoRule, bo_fridge: viewBoFridge, bo_co: viewBoCO });
-Object.assign(GLSTYLE, { bo_city: '', bo_apt: '', bo_kitchen: '', bo_hall: '', bo_portrait: 'blur(7px) brightness(.75)', bo_alert: 'blur(9px) brightness(.6)',
+Object.assign(GLSTYLE, { bo_fill: '', bo_fridge3d: '', bo_bapt: '', bo_city: '', bo_apt: '', bo_kitchen: '', bo_hall: '', bo_portrait: 'blur(7px) brightness(.75)', bo_alert: 'blur(9px) brightness(.6)',
   bo_rule: 'blur(8px) brightness(.6)', bo_fridge: 'blur(8px) brightness(.5)', bo_co: 'blur(8px) brightness(.55)' });
 Object.assign(SETBG, { blackout: async (t) => overlayBg(t, 'hall') });

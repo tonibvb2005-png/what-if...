@@ -197,3 +197,8 @@ Teil 2 kommt heute Nacht – folgen, damit du ihn nicht verpasst.
     - **Einblendungen:** Kapsel oben („● FIKTION · 3:33 · ORT“), grüne „ECHT“-Etiketten, Regel-Karten, Info-Grafiken, Namensschilder, Endkarte „NÄCHSTER TEIL“.
     - **Umsetzung:** Folge **09 „Blackout“**, Code in `engine/blackout3d.js` (Skyline, Wohnung, Treppenhaus) und `engine/blackout.js` (Porträts, Overlays, Kameras).
     - **Regel:** Fakten nur aus seriösen Quellen (BBK u. ä.) und vorsichtig formuliert.
+18. **Blackout überarbeitet** (dein Feedback):
+    - Statt Regel-Karten **handelt die Figur selbst** (Flaschen füllen, Kühlschrank zulassen), die Erklärung kommt währenddessen als Stimme und ECHT-Etikett.
+    - Das Video ist auf etwa 58 Sekunden gekürzt.
+    - Neues, gruseligeres Ende: Die Brandts sitzen tot am Tisch (Kohlenmonoxid). Herr Brandt, der geklopft hat, war gar nicht mehr am Leben. Endfrage: „Wer hat dann an deine Tür geklopft?“
+    - **Regel für dieses Format:** Fakten nicht als Regel einblenden, sondern in Handlung zeigen und nebenbei erklären.

@@ -99,6 +99,25 @@
     R.exitL = new THREE.PointLight('#3dff8f', 1.2, 4, 2); R.exitL.position.set(0, 2.0, -4.6); R.hall.add(R.exitL);
     R.candle = new THREE.PointLight('#ffb050', 0, 3.5, 1.8); R.candle.position.set(-.3, 1.2, -.6); R.hall.add(R.candle);
     R.candleM = put(new THREE.Mesh(new THREE.SphereGeometry(.025, 10, 8), basic('#ffd27a')), -.3, 1.2, -.6, R.hall, false);
+    /* ---------- Wohnung der Brandts (z = 200): Tisch, Stühle, Generator mit Arbeitslampe */
+    R.bapt = new THREE.Group(); R.bapt.position.set(0, 0, 200); sc.add(R.bapt);
+    const bf = put(new THREE.Mesh(new THREE.PlaneGeometry(6, 6), std('#2e2620')), 0, 0, 0, R.bapt, false); bf.rotation.x = -Math.PI / 2;
+    const bc = put(new THREE.Mesh(new THREE.PlaneGeometry(6, 6), std('#201e1d')), 0, 2.5, 0, R.bapt, false); bc.rotation.x = Math.PI / 2;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(6, 2.5), std('#4b4238')), 0, 1.25, -2.6, R.bapt, false);
+    for (const sx of [-1, 1]) put(new THREE.Mesh(new THREE.PlaneGeometry(6, 2.5), std('#45403a')), sx * 2.6, 1.25, 0, R.bapt, false).rotation.y = -sx * Math.PI / 2;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(1.2, 1.0), basic('#06070c')), -1.4, 1.5, -2.58, R.bapt, false);
+    put(rbox(1.4, .05, .8, .02, std('#6b4a32')), 0, .74, -1.0, R.bapt);
+    for (const x of [-.6, .6]) put(new THREE.Mesh(new THREE.BoxGeometry(.05, .72, .05), std('#4a3322')), x, .36, -1.0, R.bapt);
+    for (const x of [-.35, .35]) { put(rbox(.42, .05, .42, .02, std('#5a3d29')), x, .5, -1.5, R.bapt); put(rbox(.42, .5, .05, .02, std('#5a3d29')), x, .8, -1.72, R.bapt); }
+    put(new THREE.Mesh(new THREE.CylinderGeometry(.04, .05, .1, 12), std('#e8e4da')), -.25, .82, -.85, R.bapt);
+    put(new THREE.Mesh(new THREE.CylinderGeometry(.06, .06, .02, 16), std('#d8d2c4')), .2, .78, -.85, R.bapt);
+    R.gen = put(rbox(.55, .42, .38, .04, std('#b8352a', { r: .6 })), 1.5, .22, -.4, R.bapt);
+    put(new THREE.Mesh(new THREE.BoxGeometry(.6, .05, .05), std('#222')), 1.5, .45, -.4, R.bapt);
+    put(new THREE.Mesh(new THREE.CylinderGeometry(.012, .012, 1.3, 6), std('#222')), 1.1, .7, -.5, R.bapt).rotation.z = .9;
+    R.workLamp = put(new THREE.Mesh(new THREE.SphereGeometry(.06, 12, 8), basic('#ffd9a0')), .95, 1.25, -.6, R.bapt, false);
+    R.workL = new THREE.PointLight('#ffc27a', 4, 5, 1.8); R.workL.position.set(.9, 1.2, -.55); R.workL.castShadow = true; R.workL.shadow.mapSize.set(512, 512); R.bapt.add(R.workL);
+    R.mrsB = W3.H.makeChar({ shirt: '#5e4656', tie: '#5e4656', pants: '#3a3036', skin: '#b9b2ab', hair: '#d6d6d6' });
+    R.mrB = W3.H.makeChar({ shirt: '#6b5a48', tie: '#6b5a48', pants: '#3a3630', skin: '#b9b2ab', hair: '#bdbdbd' });
     R.neighbor = W3.H.makeChar({ shirt: '#6b5a48', tie: '#6b5a48', pants: '#3a3630', skin: '#d8b49a', hair: '#bdbdbd' });
   };
 })();

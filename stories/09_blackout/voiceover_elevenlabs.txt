@@ -1,36 +1,31 @@
 [calm, serious] Es ist drei Uhr dreiunddreißig, als in ganz Deutschland das Licht ausgeht.
-[slowly] Erst ein Stadtteil. [short pause] Dann der nächste.
-[quietly] Und dann dein Haus.
+[slowly] Erst ein Stadtteil. [short pause] Dann dein Haus.
 [long pause]
-Du wohnst im neunten Stock.
-[tense] Kein Strom. [short pause] Kein Aufzug. [short pause] Nur dein Handy leuchtet noch.
-[long pause]
-[urgent] Dann schrillt es. Eine Warnung, direkt aufs Handy.
-[flat, official] Großflächiger Stromausfall. Bleiben Sie zu Hause.
-[long pause]
-[calm, low voice] Und hier ist, was die meisten nicht wissen.
+[tense] Neunter Stock. [short pause] Kein Strom. [short pause] Kein Aufzug.
 [short pause]
-[firm] Regel eins: Lass den Kühlschrank zu.
-[calm] Geschlossen bleibt er etwa vier Stunden kalt.
-Ein voller Gefrierschrank sogar etwa zwei Tage.
+[urgent] Dann kommt die Warnung aufs Handy.
 [long pause]
-[firm] Regel zwei: Füll sofort Wasser ab.
-[calm] In Hochhäusern pumpen Pumpen das Wasser nach oben.
-[tense] Ohne Strom bleibt der Hahn irgendwann trocken.
-Zwei Liter pro Person und Tag. So viel brauchst du.
+[focused] Du füllst sofort alle Flaschen mit Wasser.
+[tense] Keine Minute zu früh. [short pause] Der Hahn versiegt.
 [long pause]
-[quietly] Gegen fünf Uhr klopft es an deiner Tür.
+[calm] Den Kühlschrank lässt du zu.
 [long pause]
-[slowly] Herr Brandt von unten. Mit einer Kerze in der Hand.
-[weak, in pain] Mein Kopf tut so weh, sagt er. Und mir ist schwindelig.
+[quietly] Um fünf Uhr klopft es.
 [long pause]
-[tense, quietly] Dann hörst du es. Ein Brummen. Aus seiner Wohnung.
-[slowly] Ein Stromgenerator. Mitten im Wohnzimmer.
+[slowly] Herr Brandt von unten. [short pause] Mit einer Kerze.
+[weak, in pain] Mein Kopf tut so weh, sagt er.
 [long pause]
-[firm, serious] Regel drei: Generatoren gehören niemals nach drinnen.
-[slowly] Ihre Abgase enthalten Kohlenmonoxid. Unsichtbar. Und es riecht nach nichts.
+[tense, quietly] Aus seiner Wohnung brummt ein Generator.
+[slowly] Du gehst runter. [short pause] Seine Tür steht offen.
 [long pause]
-[frightened, quietly] Meine Frau schläft noch da drin, sagt er.
+[whispers] Im Licht des Generators sitzt Frau Brandt am Tisch.
+[slowly, frightened] Ihre Augen sind offen. [short pause] Aber sie blinzelt nicht.
+[long pause]
+[whispers, eerie] Hinter dir flüstert Herr Brandt: [whispers, gentle] Sie schläft doch nur.
+[long pause]
+[nervous] Du drehst dich um. [short pause] Das Treppenhaus ist leer.
+[long pause]
+[slowly, frightened] Herr Brandt sitzt neben ihr am Tisch.
 [whispers] Seit Stunden.
 [long pause]
-[ominous] Teil zwei. [short pause] Heute Nacht.
+[ominous, slowly] Wer hat dann an deine Tür geklopft?
