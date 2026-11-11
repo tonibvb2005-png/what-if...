@@ -899,3 +899,106 @@ W3.BUILD.flat = async () => { W3.scene.background = new THREE.Color('#000'); };
     put(new THREE.Mesh(new THREE.BoxGeometry(.05, 1.0, .04), std('#2a221b')), -.9, 1.6, -2.47, K); put(new THREE.Mesh(new THREE.BoxGeometry(.8, .05, .04), std('#2a221b')), -.9, 1.6, -2.47, K);
   };
 })();
+
+// ======================================================================= Bahntunnel (Survival-Doku-Stil)
+(() => {
+  const { std, basic, put, rbox, canvasTex, plane } = W3.H, R = W3.reg;
+  const rng = (seed) => () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
+  // einfache 3D-Figur (Low-Poly): Körper, Kopf, Beine, Arme
+  function lowPerson(col, skin = '#e0b48c', h = 1.0) {
+    const g = new THREE.Group();
+    const body = put(rbox(.42 * h, .62 * h, .26 * h, .1, std(col, { r: .8 })), 0, 1.12 * h, 0, g);
+    const head = put(new THREE.Mesh(new THREE.SphereGeometry(.12 * h, 14, 10), std(skin, { r: .7 })), 0, 1.6 * h, 0, g);
+    const legs = [-.1, .1].map(x => put(rbox(.15 * h, .78 * h, .17 * h, .05, std('#2a2c33')), x * h, .4 * h, 0, g));
+    const arms = [-.27, .27].map(x => put(rbox(.11 * h, .56 * h, .13 * h, .05, std(col, { r: .8 })), x * h, 1.12 * h, 0, g));
+    g.userData = { legs, arms, body, head, h };
+    return g;
+  }
+  function walkPose(g, ph, amp = 1) { const { legs, arms } = g.userData; legs[0].rotation.x = Math.sin(ph) * .5 * amp; legs[1].rotation.x = -Math.sin(ph) * .5 * amp; arms[0].rotation.x = -Math.sin(ph) * .4 * amp; arms[1].rotation.x = Math.sin(ph) * .4 * amp; g.position.y = Math.abs(Math.sin(ph)) * .03 * amp; }
+  R.lowPerson = lowPerson; R.walkPose = walkPose;
+  W3.BUILD.tunnel = async () => {
+    const sc = W3.scene;
+    sc.background = new THREE.Color('#050608'); sc.fog = new THREE.FogExp2('#0b0c10', .022);
+    R.hemi = new THREE.HemisphereLight('#8a96b0', '#151515', .12); sc.add(R.hemi);
+    // Röhre: Hufeisen aus Beton (z +40 .. -260)
+    const conc = canvasTex(256, 256, (g, w, h) => { g.fillStyle = '#5b5d61'; g.fillRect(0, 0, w, h); const r = rng(4); for (let i = 0; i < 1600; i++) { g.fillStyle = `rgba(${r() < .5 ? 0 : 255},${r() < .5 ? 0 : 255},${r() < .5 ? 0 : 255},.04)`; g.fillRect(r() * w, r() * h, 3, 3); } g.fillStyle = 'rgba(0,0,0,.25)'; for (let y = 0; y < h; y += 64) g.fillRect(0, y, w, 3); });
+    conc.wrapS = conc.wrapT = THREE.RepeatWrapping; conc.repeat.set(8, 60);
+    const tube = new THREE.Mesh(new THREE.CylinderGeometry(4.6, 4.6, 300, 40, 1, true, -Math.PI / 2, Math.PI), new THREE.MeshStandardMaterial({ map: conc, side: THREE.BackSide, roughness: .95, color: '#9a9ca2' }));
+    tube.rotation.x = -Math.PI / 2; tube.position.set(0, 1.2, -110); tube.receiveShadow = true; sc.add(tube);
+    for (const sx of [-1, 1]) put(new THREE.Mesh(new THREE.PlaneGeometry(300, 1.4), new THREE.MeshStandardMaterial({ map: conc, roughness: .95, color: '#8a8c92' })), sx * 4.6, .5, -110, sc, false).rotation.y = -sx * Math.PI / 2;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(9.2, 300), std('#2c2b2a')), 0, 0, -110, sc, false).rotation.x = -Math.PI / 2;
+    // Gleis: Schotter, Schwellen (instanced), Schienen
+    put(new THREE.Mesh(new THREE.BoxGeometry(3.4, .25, 300), std('#3a3836')), -1.4, .12, -110, sc, false);
+    const sl = new THREE.InstancedMesh(new THREE.BoxGeometry(2.6, .14, .26), std('#4a4642'), 470); const M = new THREE.Matrix4();
+    for (let i = 0; i < 470; i++) { M.makeTranslation(-1.4, .3, 40 - i * .64); sl.setMatrixAt(i, M); } sc.add(sl);
+    for (const x of [-2.12, -.68]) put(new THREE.Mesh(new THREE.BoxGeometry(.08, .14, 300), std('#9ea2a8', { m: .8, r: .3 })), x, .42, -110, sc, false);
+    // Fluchtweg rechts: erhöht, Handlauf an der Wand, gelbe Kante
+    put(new THREE.Mesh(new THREE.BoxGeometry(1.9, .7, 300), std('#6a6a6c')), 3.4, .35, -110, sc, false);
+    put(new THREE.Mesh(new THREE.BoxGeometry(.08, .02, 300), basic('#c9a227')), 2.48, .71, -110, sc, false);
+    put(new THREE.Mesh(new THREE.CylinderGeometry(.03, .03, 300, 8), std('#b9bec6', { m: .7, r: .3 })), 4.2, 1.7, -110, sc, false).rotation.x = Math.PI / 2;
+    // Wandlampen (Notlicht) alle 12 m, grüne Notausgangsschilder alle 60 m
+    R.lamps = [];
+    for (let z = 36; z > -250; z -= 12) {
+      const m = put(new THREE.Mesh(new THREE.BoxGeometry(.08, .12, .4), basic('#ffd9a0')), 4.45, 2.6, z, sc, false);
+      R.lamps.push({ m, z });
+    }
+    R.lampLights = Array.from({ length: 6 }, () => { const l = new THREE.PointLight('#ffcf8a', 1.2, 14, 1.6); sc.add(l); return l; });
+    R.signs = [];
+    const signTex = (dist, dir) => canvasTex(512, 160, (g, w, h) => {
+      g.fillStyle = '#0f8a47'; g.fillRect(0, 0, w, h); g.strokeStyle = '#fff'; g.lineWidth = 8; g.strokeRect(8, 8, w - 16, h - 16);
+      g.fillStyle = '#fff'; g.beginPath(); g.arc(70, 50, 14, 0, 7); g.fill(); g.fillRect(62, 68, 16, 44); g.fillRect(48, 70, 44, 10);
+      g.font = 'bold 54px Montserrat, sans-serif'; g.textBaseline = 'middle'; g.fillText((dir < 0 ? '← ' : '') + dist + ' m' + (dir > 0 ? ' →' : ''), 120, 60);
+      g.font = 'bold 30px Montserrat, sans-serif'; g.fillText('NOTAUSGANG', 120, 118);
+    });
+    for (const [z, d] of [[20, 380], [-40, 440], [-100, 500]]) { const sg = put(new THREE.Mesh(new THREE.PlaneGeometry(1.2, .38), basic('#ffffff', { map: signTex(d, 1) })), 4.44, 1.15, z, sc, false); sg.rotation.y = -Math.PI / 2; sg.material.toneMapped = false; R.signs.push(sg); }
+    R.signGlow = new THREE.PointLight('#2bd17a', .6, 3, 2); R.signGlow.position.set(4.0, 1.2, 20); sc.add(R.signGlow);
+    // Zug: 3 Wagen (z 0 .. -78), weiß mit dunkelblauem Streifen, Fensterband
+    R.train = new THREE.Group(); R.train.position.set(-1.4, 0, 0); sc.add(R.train); R.winBands = [];
+    for (let c = 0; c < 3; c++) {
+      const z0 = -c * 26.2 - 13;
+      put(rbox(2.9, 3.3, 25.8, .35, std('#e3e6ec', { r: .45 })), 0, 2.15, z0, R.train);
+      for (const sx of [-1, 1]) {
+        const wb = put(new THREE.Mesh(new THREE.PlaneGeometry(24, .75), basic('#ffe2b0')), sx * 1.46, 2.55, z0, R.train, false); wb.rotation.y = sx * Math.PI / 2; R.winBands.push(wb);
+        for (let k = -11; k <= 11; k += 2.2) put(new THREE.Mesh(new THREE.BoxGeometry(.02, .78, .14), std('#e3e6ec')), sx * 1.47, 2.55, z0 + k, R.train);
+        put(new THREE.Mesh(new THREE.PlaneGeometry(25.6, .16), basic('#2b3f78')), sx * 1.462, 1.92, z0, R.train, false).rotation.y = sx * Math.PI / 2;
+      }
+      for (const dz of [-11.5, 11.5]) put(new THREE.Mesh(new THREE.PlaneGeometry(.9, 2.0), std('#c9cdd5')), 1.463, 1.55, z0 + dz, R.train, false).rotation.y = Math.PI / 2;
+    }
+    R.tail = [-.9, .9].map(x => put(new THREE.Mesh(new THREE.CircleGeometry(.12, 16), basic('#ff2a2a')), x, 1.2, .9, R.train, false));
+    // Rauch (Sprites) vorne am Zug
+    const smT = canvasTex(128, 128, (g, w, h) => { const gr = g.createRadialGradient(w / 2, h / 2, 2, w / 2, h / 2, w / 2); gr.addColorStop(0, 'rgba(120,118,115,.85)'); gr.addColorStop(1, 'rgba(120,118,115,0)'); g.fillStyle = gr; g.fillRect(0, 0, w, h); });
+    R.smoke = Array.from({ length: 40 }, () => { const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: smT, transparent: true, depthWrite: false, opacity: 0, color: '#5f5c58', fog: false })); sc.add(s); return s; });
+    R.fireGlow = new THREE.PointLight('#ff7a2a', 0, 22, 1.4); R.fireGlow.position.set(.2, 2.6, -42); sc.add(R.fireGlow);
+    // Gruppe auf dem Fluchtweg + der, der entgegenkommt
+    R.you = lowPerson('#5d6b3e'); R.merve = lowPerson('#23345e', '#c58d63'); R.gue = lowPerson('#7a5b3c', '#eab9a0', .96);
+    R.stranger = lowPerson('#141416', '#3a3a3c', 1.08); R.stranger.userData.head.material.color.set('#1c1c1e');
+    [R.you, R.merve, R.gue, R.stranger].forEach(g => { sc.add(g); g.visible = false; });
+    R.torch = new THREE.SpotLight('#fff3d6', 0, 40, .35, .5, 1.4); sc.add(R.torch, R.torch.target);
+    // Wageninneres (eigener Raum bei x = 300)
+    const I = new THREE.Group(); I.position.set(300, 0, 0); sc.add(I); R.inside = I;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(2.8, 22), std('#3b3f48')), 0, 0, -10, I, false).rotation.x = -Math.PI / 2;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(.7, 22), std('#5a3a3a')), 0, .005, -10, I, false).rotation.x = -Math.PI / 2;
+    put(new THREE.Mesh(new THREE.PlaneGeometry(2.8, 22), std('#a9acb5')), 0, 2.35, -10, I, false).rotation.x = Math.PI / 2;
+    for (const sx of [-1, 1]) {
+      put(new THREE.Mesh(new THREE.PlaneGeometry(22, .9), std('#c9ccd4')), sx * 1.4, .45, -10, I, false).rotation.y = -sx * Math.PI / 2;
+      put(new THREE.Mesh(new THREE.PlaneGeometry(22, .6), std('#c9ccd4')), sx * 1.4, 2.05, -10, I, false).rotation.y = -sx * Math.PI / 2;
+      const win = put(new THREE.Mesh(new THREE.PlaneGeometry(22, .85), basic('#0b0d12')), sx * 1.4, 1.33, -10, I, false); win.rotation.y = -sx * Math.PI / 2;
+      for (let z = 0; z > -20; z -= 1.1) {
+        put(rbox(.95, .45, .5, .08, std('#3d5a8a')), sx * .88, .45, z, I); put(rbox(.95, .75, .12, .06, std('#3d5a8a')), sx * .88, .95, z + .22, I);
+        put(rbox(.3, .14, .1, .04, std('#e6e8ee')), sx * .88, 1.32, z + .24, I);
+      }
+      put(new THREE.Mesh(new THREE.BoxGeometry(.5, .04, 22), std('#9aa0aa', { m: .5 })), sx * 1.1, 1.95, -10, I);
+    }
+    put(new THREE.Mesh(new THREE.PlaneGeometry(2.8, 2.35), std('#b9bcc4')), 0, 1.17, -20.5, I, false);
+    R.disp = put(new THREE.Mesh(new THREE.PlaneGeometry(.8, .16), basic('#ff9a2a')), 0, 2.05, -20.45, I, false);
+    R.ceil = []; for (let z = -1; z > -20; z -= 2.5) R.ceil.push(put(new THREE.Mesh(new THREE.BoxGeometry(.5, .03, 2.0), basic('#f4f6ff')), 0, 2.33, z, I, false));
+    R.inLights = [-3, -10, -17].map(z => { const l = new THREE.PointLight('#f2f4ff', 1.4, 9, 1.6); l.position.set(0, 2.1, z); I.add(l); return l; });
+    R.emerg = [-2, -9, -16].map(z => { const l = new THREE.PointLight('#ff9a50', 0, 6, 1.8); l.position.set(0, .3, z); I.add(l); return l; });
+    R.inSmoke = Array.from({ length: 22 }, () => { const s = new THREE.Sprite(new THREE.SpriteMaterial({ map: smT, transparent: true, depthWrite: false, opacity: 0, color: '#9a9590' })); I.add(s); return s; });
+    // Passagiere im Wagen (Günther sitzt, Merve steht im Gang)
+    R.gueIn = lowPerson('#7a5b3c', '#eab9a0', .96); R.gueIn.position.set(-.88, -.35, -6.5); R.gueIn.rotation.y = 0; I.add(R.gueIn);
+    R.merveIn = lowPerson('#23345e', '#c58d63'); R.merveIn.position.set(.05, 0, -12); R.merveIn.rotation.y = 0; I.add(R.merveIn);
+    // Tunnellichter, die am Fenster vorbeiziehen (solange der Zug fährt)
+    R.passing = []; for (let i = 0; i < 6; i++) { const m = put(new THREE.Mesh(new THREE.PlaneGeometry(.5, .1), basic('#ffd9a0')), 0, 1.5, 0, I, false); R.passing.push(m); }
+  };
+})();

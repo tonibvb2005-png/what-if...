@@ -65,7 +65,8 @@ Details zum Stil stehen in `STYLE_GUIDE.md`.
 | 06 | Lichthupe | Auto, Landstraße, Verfolger, Radio, Rücksitz | Bild fertig; wartet auf Stimme |
 | 07 | **Bewegungsmelder** | dunkles Großraumbüro, Lichter folgen dir, Kopierer druckt ein Foto | Bild fertig; wartet auf Stimme |
 | 08 | Letzte Haltestelle | Nachtbus | gebaut, aber verworfen (Idee war nicht neu) |
-| 14 | **Hinterkaifeck** | ECHTER Fall 1922 (Oberbayern): Spuren im Schnee, fremde Zeitung, fehlender Schlüssel, Schritte auf dem Dachboden, 6 Tote, ungelöst | Bild fertig + Probevideo (Piper); **Doku-Look**; wartet auf Feedback + Stimme |
+| 15 | **Im Tunnel** (Teil 1) | Survival-Fiktion mit echten Regeln: brennender Zug im Landrückentunnel, Merve (Zugbegleiterin), Günther (Pendler), Fluchtweg, jemand rennt aus dem Dunkel entgegen | Probevideo (Piper); **Stil nach deinen 2 Referenzvideos**; wartet auf Feedback + Stimme |
+| 14 | **Hinterkaifeck** | ECHTER Fall 1922 (Oberbayern): Spuren im Schnee, fremde Zeitung, fehlender Schlüssel, Schritte auf dem Dachboden, 6 Tote, ungelöst | Probevideo; **gefiel dir nicht** → verworfen |
 | 13 | **Der Sechste** | „Wahre Geschichte“: Klassenfahrt 2014, Jugendherberge im Harz, Durchzählen im Dunkeln, Foto mit sechs Jungs | Probevideo; **Stil gefiel dir nicht („sieht billig aus“)** → verworfen |
 | 12 | **Spiegeltest** | Bad in der Ferienwohnung um 4:12, Spiegeltest im Gästebuch, Licht aus → Gesicht hinter dem Glas, „Vermieter“ an der Tür | **FINAL gerendert** mit deiner ElevenLabs-Stimme (ca. 56 s); gruseliger Modus |
 | 11 | **Maschine 7** | Waschsalon um 1:58, Maschine 7 läuft von allein, Hand im Bullauge, Schild „Nicht öffnen“, Kinderstimme | **FINAL gerendert** mit deiner ElevenLabs-Stimme (47 s); wartende Person hat jetzt Beine |
@@ -207,6 +208,18 @@ Analyse: (1) Es gab nie einen Teil 2 → wer aufs Profil klickt, findet nur Anf�
 - `"film": true` = Archivfilm-Overlay (Kratzer, Staub, Flackern, Vignette), Sepia-Filter in GLSTYLE. Karten `doc_card` mit Schreibmaschinen-Text (`card`, `kick`, `red`, `sub`). Badge zeigt Jahreszahlen ohne „UHR“.
 - Ende: Diskussionsfrage (Theorie in die Kommentare), kein Teil 2.
 
+## 6f. Referenz-Stil (ab Folge 15) – nach deinen zwei Referenzvideos (Survival-„Was wäre wenn“, safezonestudios-Art, nicht kopiert)
+Analyse der Referenzen:
+- **Thema:** realistische Katastrophen-Szenarien in Du-Form (Krieg, Stromausfall, U-Bahn-Tunnel), Story = Fiktion, aber **echte Überlebensregeln/Fakten** (grünes „REAL“), Regelkarten („RULE 1“), Infografiken, benannte Nebenfiguren mit Rolle, Funk/Durchsagen, Cliffhanger + „NEXT PART · WHO'S COMING UP?“. Lang (1,5–10 min), in Teilen.
+- **Figuren:** flache 2D-Vektor-Brustbilder groß im Bild, dicke dunkle Kontur, Cel-Shading (eine Seite dunkler), große Köpfe mit Ohren, Punktaugen mit Glanzpunkt, kräftige Brauen für Mimik, Schweißtropfen; Kleidung mit Details (Ausweis, Krawatte, Warnweste). Hintergrund = unscharfe 3D-Szene.
+- **Umgebung:** schlichte 3D-Low-Poly-Welten mit starkem Licht (Stadtlichter, rotes Notlicht, Tunnellampen), in der Welt einfache 3D-Figuren.
+- **Overlays:** rote Pille oben „● FICTION · Uhrzeit · Ort“, Namensschild oben links (grau, farbiger Balken), Untertitel gerade (nicht kursiv), weiß, gelb/rot hervorgehoben.
+Umsetzung:
+- `engine/toon.js`: Vektor-Figuren (`TOON.bust`), Ausdrücke neutral/worried/scared/determined/angry, Sprechmund, Blinzeln, Schweiß, Ruß; Frisuren messy/bun/balding, Kleidung parka/uniform/cardigan, Brille, Bart, Mütze. Besetzung in `CAST` (sets.js).
+- Set `tunnel` (Röhre, Gleis, Fluchtweg, Notlicht, grüne Notausgangsschilder, Zug außen, Wageninneres, Rauch innen/außen, Low-Poly-Figuren, Taschenlampe, Fremder).
+- Szenen: `tn_ext`, `tn_in`, `tn_walk`, `tn_ahead`, `toon` (Brustbild, `who`, `expr`, `talk`, `bg`), `tn_card` (nur Overlay über unscharfem Hintergrund), `tn_end`. Shot-Felder: `tag {name, sub, color}`, `real`, `rule {n, a, b}`, `diag`, `speaker`.
+- Story-Optionen: `"capStyle": "doc"`, `"noTitle": true`, `"pill": true`, `"rumble": true` (Zug rattert bis `stop`).
+
 ## 7. Caption-Vorlage
 
 ```
@@ -264,6 +277,11 @@ Teil 2 kommt heute Nacht – folgen, damit du ihn nicht verpasst.
 ### Folge 14 „Hinterkaifeck“
 - Fakten-Basis (wie über den Fall überliefert): Einödhof bei Gröbern, Oberbayern; Andreas Gruber, Frau Cäzilia, Tochter Viktoria Gabriel mit zwei Kindern; frühere Magd kündigte ca. ein halbes Jahr vorher (Spuk/Schritte); Spuren vom Wald zum Hof, keine zurück; fremde Zeitung; fehlender Schlüssel; Schritte auf dem Dachboden; neue Magd Maria Baumgartner trat am 31.03.1922 an; in der Nacht starben alle sechs; danach Rauch aus dem Kamin, Vieh versorgt; Leichen am 04.04.1922 gefunden; bis heute ungelöst.
 - Nächster Schritt: Probevideo ansehen, `stories/14_hinterkaifeck/voiceover_elevenlabs.txt` aufnehmen, final rendern. Caption `branding/CAPTION_14_hinterkaifeck.txt`, Cover `branding/cover_14_hinterkaifeck.png`.
+
+### Folge 15 „Im Tunnel“ (Teil 1)
+- Echte Fakten im Video: Landrückentunnel ca. 10,8 km; ein brennender Zug soll möglichst bis ins Freie fahren; Rauch steigt nach oben (gebückt gehen); nie in den Rauch laufen. Alles andere ist Fiktion (380 m, Personen).
+- **Teil 2 MUSS kommen** (sonst wieder Profil ohne Fortsetzung): Wer rennt da aus dem Dunkel?
+- Nächster Schritt: Probevideo ansehen, `stories/15_im_tunnel/voiceover_elevenlabs.txt` aufnehmen, final rendern. Caption `branding/CAPTION_15_im_tunnel.txt`, Cover `branding/cover_15_im_tunnel.png`.
 
 ### Erledigt aus der letzten Liste
 - Punkt 1 (Auswahl): **B) Spätschicht** gewählt und gebaut (siehe oben). A) „Die Pizza“ und C) „Die Sprachnachricht“ bleiben als Reserve-Ideen.

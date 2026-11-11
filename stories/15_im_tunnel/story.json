@@ -1,0 +1,407 @@
+{
+ "series": "",
+ "episode": "",
+ "title": "IM TUNNEL",
+ "part": 1,
+ "set": "tunnel",
+ "ambience": "tunnel",
+ "rumble": true,
+ "capStyle": "doc",
+ "noTitle": true,
+ "pill": true,
+ "question": "WER KOMMT DA AUS DEM DUNKEL?",
+ "shots": [
+  {
+   "scene": "tn_ext",
+   "flash": true,
+   "clock": "23:47",
+   "place": "LANDRÜCKENTUNNEL",
+   "lines": [
+    {
+     "text": "Du sitzt im letzten Zug durch einen der längsten Tunnel Deutschlands, als es anfängt zu brennen.",
+     "hl": {
+      "längsten": "y",
+      "brennen": "r"
+     }
+    }
+   ]
+  },
+  {
+   "scene": "tn_in",
+   "clock": "23:47",
+   "place": "LANDRÜCKENTUNNEL",
+   "real": "LANDRÜCKENTUNNEL · 10,8 KM LANG",
+   "lines": [
+    {
+     "text": "Der Landrückentunnel. Fast elf Kilometer Fels.",
+     "hl": {
+      "elf": "y"
+     }
+    }
+   ]
+  },
+  {
+   "scene": "toon",
+   "who": "you",
+   "expr": "neutral",
+   "bg": "in",
+   "clock": "23:48",
+   "place": "LANDRÜCKENTUNNEL",
+   "tag": {
+    "name": "DU · WAGEN 3",
+    "sub": "AUF DEM HEIMWEG"
+   },
+   "lines": [
+    {
+     "text": "Der Wagen ist fast leer. Nur du, ein alter Mann und die Zugbegleiterin."
+    }
+   ]
+  },
+  {
+   "scene": "tn_in",
+   "clock": "23:51",
+   "place": "LANDRÜCKENTUNNEL",
+   "lines": [
+    {
+     "text": "Du machst gerade die Augen zu, da riechst du es.",
+     "hl": {
+      "riechst": "y"
+     },
+     "ev": [
+      [
+       "smoke",
+       "word7"
+      ]
+     ]
+    },
+    {
+     "text": "Rauch. Ganz oben unter der Decke.",
+     "hl": {
+      "Rauch": "r"
+     },
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "tn_card",
+   "bg": "in",
+   "speaker": true,
+   "clock": "23:51",
+   "place": "LANDRÜCKENTUNNEL",
+   "tag": {
+    "name": "LOKFÜHRER",
+    "sub": "DURCHSAGE",
+    "color": "#c8282d"
+   },
+   "lines": [
+    {
+     "text": "„Bitte bleiben Sie ruhig. Wir fahren aus dem Tunnel heraus.“",
+     "say": "Bitte bleiben Sie ruhig. Wir fahren aus dem Tunnel heraus.",
+     "hl": {
+      "ruhig": "y"
+     },
+     "sfx": [
+      [
+       "ding",
+       "start-0.9"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "scene": "tn_card",
+   "bg": "ext",
+   "clock": "23:52",
+   "place": "LANDRÜCKENTUNNEL",
+   "real": "TUNNELREGEL · WEITERFAHREN BIS INS FREIE",
+   "lines": [
+    {
+     "text": "Und das ist richtig: Ein brennender Zug soll möglichst bis ins Freie fahren.",
+     "hl": {
+      "richtig": "y",
+      "Freie": "y"
+     }
+    }
+   ]
+  },
+  {
+   "scene": "tn_ext",
+   "clock": "23:52",
+   "place": "LANDRÜCKENTUNNEL",
+   "lines": [
+    {
+     "text": "Doch dann ein Ruck. Die Bremsen kreischen.",
+     "hl": {
+      "Ruck": "r"
+     },
+     "ev": [
+      [
+       "stop",
+       "word3"
+      ]
+     ],
+     "sfx": [
+      [
+       "brakes",
+       "word3"
+      ]
+     ],
+     "pause": 0.4
+    }
+   ]
+  },
+  {
+   "scene": "tn_in",
+   "clock": "23:53",
+   "place": "LANDRÜCKENTUNNEL",
+   "lines": [
+    {
+     "text": "Der Zug steht. Das Licht geht aus.",
+     "hl": {
+      "aus": "r"
+     },
+     "ev": [
+      [
+       "dark",
+       "word6"
+      ]
+     ],
+     "sfx": [
+      [
+       "powerdown",
+       "word6"
+      ]
+     ]
+    },
+    {
+     "text": "Nur noch Notlicht.",
+     "hl": {
+      "Notlicht": "y"
+     },
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "toon",
+   "who": "merve",
+   "expr": "determined",
+   "talk": true,
+   "bg": "in",
+   "clock": "23:53",
+   "place": "LANDRÜCKENTUNNEL",
+   "tag": {
+    "name": "MERVE · ZUGBEGLEITERIN",
+    "sub": "FÄHRT DIE STRECKE SEIT 6 JAHREN",
+    "color": "#b3263a"
+   },
+   "lines": [
+    {
+     "text": "„Alle nach hinten! Weg vom Rauch!“",
+     "say": "Alle nach hinten! Weg vom Rauch!",
+     "hl": {
+      "hinten": "y",
+      "Rauch": "r"
+     },
+     "quote": {
+      "who": "MERVE",
+      "place": "",
+      "text": ""
+     }
+    }
+   ]
+  },
+  {
+   "scene": "tn_card",
+   "bg": "in",
+   "clock": "23:53",
+   "place": "LANDRÜCKENTUNNEL",
+   "rule": {
+    "n": 1,
+    "a": "BLEIB",
+    "b": "UNTEN"
+   },
+   "real": "RAUCH STEIGT NACH OBEN",
+   "lines": [
+    {
+     "text": "Regel eins: Rauch steigt nach oben. Geh gebückt und atme durch den Ärmel.",
+     "hl": {
+      "eins": "y",
+      "gebückt": "y"
+     }
+    }
+   ]
+  },
+  {
+   "scene": "toon",
+   "who": "gue",
+   "expr": "determined",
+   "talk": true,
+   "bg": "in",
+   "clock": "23:54",
+   "place": "LANDRÜCKENTUNNEL",
+   "tag": {
+    "name": "GÜNTHER · PENDLER",
+    "sub": "FÄHRT HIER SEIT 30 JAHREN",
+    "color": "#a07a3c"
+   },
+   "lines": [
+    {
+     "text": "„Es gibt Notausgänge“, sagt der alte Mann. „Folgt den grünen Schildern.“",
+     "say": "Es gibt Notausgänge, sagt der alte Mann. Folgt den grünen Schildern.",
+     "hl": {
+      "Notausgänge": "y",
+      "grünen": "y"
+     },
+     "quote": {
+      "who": "GÜNTHER",
+      "place": "",
+      "text": ""
+     }
+    }
+   ]
+  },
+  {
+   "scene": "tn_card",
+   "bg": "in",
+   "diag": true,
+   "clock": "23:54",
+   "place": "LANDRÜCKENTUNNEL",
+   "lines": [
+    {
+     "text": "Regel zwei: Lauf nie in den Rauch. Nimm den Ausgang hinter dir.",
+     "hl": {
+      "zwei": "y",
+      "nie": "r",
+      "hinter": "y"
+     }
+    }
+   ]
+  },
+  {
+   "scene": "tn_walk",
+   "clock": "23:56",
+   "place": "FLUCHTWEG",
+   "lines": [
+    {
+     "text": "Ihr steigt aus. Auf den schmalen Fluchtweg neben dem Gleis.",
+     "hl": {
+      "Fluchtweg": "y"
+     },
+     "ev": [
+      [
+       "exit",
+       "start-0.6"
+      ]
+     ]
+    },
+    {
+     "text": "Dreihundertachtzig Meter bis zum Notausgang. Im Dunkeln.",
+     "hl": {
+      "Dunkeln": "r"
+     },
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "toon",
+   "who": "you",
+   "expr": "scared",
+   "sweat": true,
+   "soot": true,
+   "bg": "walk",
+   "clock": "23:58",
+   "place": "FLUCHTWEG",
+   "lines": [
+    {
+     "text": "Dann bleibt Merve stehen. Sie leuchtet nach vorne.",
+     "hl": {
+      "stehen": "r"
+     },
+     "ev": [
+      [
+       "freeze",
+       "start"
+      ],
+      [
+       "torch",
+       "word6"
+      ]
+     ],
+     "sfx": [
+      [
+       "click",
+       "word6"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "scene": "tn_ahead",
+   "clock": "23:58",
+   "place": "FLUCHTWEG",
+   "lines": [
+    {
+     "text": "Da kommt jemand. Von dort, wo der Ausgang ist. Ohne Lampe.",
+     "hl": {
+      "jemand": "r",
+      "Lampe": "r"
+     },
+     "ev": [
+      [
+       "figure",
+       "start"
+      ],
+      [
+       "dread",
+       "start"
+      ]
+     ],
+     "sfx": [
+      [
+       "boom",
+       "start"
+      ]
+     ]
+    },
+    {
+     "text": "Und er geht nicht. Er rennt.",
+     "hl": {
+      "rennt": "r"
+     },
+     "ev": [
+      [
+       "run",
+       "word4"
+      ]
+     ],
+     "sfx": [
+      [
+       "run",
+       "word4"
+      ],
+      [
+       "sting",
+       "end+0.2"
+      ]
+     ],
+     "pause": 1.0
+    }
+   ]
+  },
+  {
+   "scene": "tn_end",
+   "lines": [
+    {
+     "text": "Teil zwei kommt. Folge, damit du ihn nicht verpasst.",
+     "nocap": true,
+     "pause": 0.6
+    }
+   ]
+  }
+ ]
+}

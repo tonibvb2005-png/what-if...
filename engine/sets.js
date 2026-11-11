@@ -1356,3 +1356,117 @@ function filmOverlay(t) {
   s += `<div style="position:absolute;inset:0;box-shadow:inset 0 0 140px rgba(0,0,0,.55)"></div>`;
   return `<div style="position:absolute;inset:0;pointer-events:none">${s}</div>`;
 }
+
+
+/* ======================================================================= TUNNEL (Survival-Doku-Stil wie Referenz) */
+const CAST = {
+  you: { id: 'you', skin: '#f2c9a0', hair: 'messy', hairC: '#6b4423', cloth: '#5d6b3e', cloth2: '#4a5632', kind: 'parka' },
+  merve: { id: 'mv', skin: '#d9a27a', hair: 'bun', hairC: '#2a1a12', cloth: '#23345e', kind: 'uniform', accent: '#b3263a' },
+  gue: { id: 'gu', skin: '#f0c4a8', hair: 'balding', hairC: '#c9c9cf', cloth: '#7a5b3c', kind: 'cardigan', glasses: true, beard: '#d2d2d8' },
+};
+function tunnelState(t, flash = false) {
+  const st = lastEv('stop', t, null), dk = lastEv('dark', t, null), sm = lastEv('smoke', t, null);
+  const moving = !st, smoke = flash ? .8 : sm ? clamp((t - sm[0]) / 4) : 0;
+  let L = dk ? 0 : 1; if (dk && t - dk[0] < .6) L = Math.sin((t - dk[0]) * 50) > 0 ? 1 : 0;
+  R3.inLights.forEach(l => l.intensity = 1.4 * L); R3.ceil.forEach(m => m.material.color.set(L ? '#f4f6ff' : '#2a2c33'));
+  R3.emerg.forEach(l => l.intensity = dk ? 1.3 : 0);
+  R3.hemi.intensity = .12; R3.disp.material.color.set(L ? '#ff9a2a' : '#5a2a10');
+  R3.winBands.forEach(w => w.material.color.set(L ? '#ffe2b0' : '#5a3a20'));
+  // vorbeiziehende Tunnellichter am Fenster (nur während der Fahrt)
+  R3.passing.forEach((m, i) => { m.visible = moving; const z = -((t * 22 + i * 4) % 24); m.position.set(i % 2 ? 1.39 : -1.39, 1.55, z + 2); m.rotation.y = i % 2 ? -Math.PI / 2 : Math.PI / 2; });
+  // Rauch draußen (vorne am Zug) und drinnen (unter der Decke, kommt von vorne)
+  R3.smoke.forEach((s, i) => { const a = ((t * .12 + i / 40) % 1); s.position.set(-1.4 + Math.sin(i * 1.7 + t * .3) * 2.4, 3.3 + a * 1.6, -46 + a * 30 * smoke + Math.cos(i) * 2); s.scale.setScalar(3 + a * 5); s.material.opacity = Math.min(1, smoke * 1.2) * (.95 - a * .45); });
+  R3.inSmoke.forEach((s, i) => { const a = ((t * .1 + i / 22) % 1); s.position.set(Math.sin(i * 2.3) * .9, 2.1 - a * .2, -20 + a * 18 * smoke + (i % 3) * .5); s.scale.setScalar(1.8 + a * 2.2); s.material.opacity = Math.min(1, smoke * 1.3) * (.9 - a * .4); });
+  R3.fireGlow.intensity = smoke * (6 + Math.sin(t * 13) * 1.5 + Math.sin(t * 7.3) * 1);
+  // Gruppe auf dem Fluchtweg
+  const ex = lastEv('exit', t, null), fr = lastEv('freeze', t, null);
+  const tw = ex ? (fr ? fr[0] : t) - ex[0] : 0, gz = -4 + Math.max(0, tw) * .95;
+  [R3.you, R3.merve, R3.gue].forEach((g, i) => { g.visible = !!ex; g.position.set(3.25 + (i === 2 ? .15 : 0), .7, gz + [0, 1.3, -1.3][i]); g.rotation.y = 0; R3.walkPose(g, ex && !fr ? (t * 5.5 + i * 1.3) : 0, 1); g.position.y += .7; });
+  const tc = lastEv('torch', t, null);
+  R3.torch.intensity = tc ? 60 : 0; R3.torch.position.set(3.4, 1.9, gz + 1.6); R3.torch.target.position.set(3.4, 1.2, gz + 30);
+  const fg = lastEv('figure', t, null), rn = lastEv('run', t, null);
+  R3.stranger.visible = !!fg;
+  if (fg) { let z = gz + 34 - (t - fg[0]) * .6; if (rn) z -= Math.max(0, t - rn[0]) ** 1.25 * 3.2; z = Math.max(z, gz + 6); R3.stranger.position.set(3.3, 1.4, z); R3.stranger.rotation.y = Math.PI; R3.walkPose(R3.stranger, rn ? t * 11 : t * 4, rn ? 1.4 : .7); R3.stranger.position.y += .7; }
+  return { gz, moving, smoke, L };
+}
+function placeLamps(camZ) {   // die 6 nächsten Wandlampen bekommen echtes Licht
+  const near = R3.lamps.slice().sort((a, b) => Math.abs(a.z - camZ) - Math.abs(b.z - camZ)).slice(0, 6);
+  R3.lampLights.forEach((l, i) => { l.position.set(4.1, 2.5, near[i].z); });
+}
+async function viewTnExt(t, sh) {
+  const st = tunnelState(t, !!sh.flash), lt = t - sh.start, d = sh.end - sh.start, p = ease(lt / d);
+  W3.setCam([3.4, 1.9 + .2 * p, 14 - 3 * p], [-1.2, 2.2, -50], 38); placeLamps(5);
+  return '';
+}
+async function viewTnIn(t, sh) {
+  tunnelState(t); const lt = t - sh.start, d = sh.end - sh.start, p = ease(lt / d);
+  W3.setCam([300.05, 1.62, 1.2 - 2 * p], [300, 1.45, -20], 54);
+  return '';
+}
+async function viewTnWalk(t, sh) {
+  const { gz } = tunnelState(t);
+  W3.setCam([2.3, 2.6, gz - 6.5], [3.3, 1.3, gz + 8], 46); placeLamps(gz);
+  return '';
+}
+async function viewTnAhead(t, sh) {
+  const { gz } = tunnelState(t);
+  W3.setCam([3.15, 1.7, gz + 2.0], [3.35, 1.45, gz + 30], 44); placeLamps(gz + 10);
+  return '';
+}
+async function tnBg(t, sh) {
+  const b = sh.bg || 'in';
+  if (b === 'ext') return viewTnExt(t, sh);
+  if (b === 'walk') return viewTnWalk(t, sh);
+  if (b === 'ahead') return viewTnAhead(t, sh);
+  return viewTnIn(t, sh);
+}
+// ---------- Overlays im Stil der Referenz
+function docPill(sh) { return sh.clock ? `<div style="position:absolute;top:70px;left:50%;transform:translateX(-50%);white-space:nowrap;background:rgba(12,12,16,.88);border:2px solid #c8282d;border-radius:20px;padding:6px 16px 6px 14px;font:800 12px 'Montserrat';letter-spacing:1.2px;color:#f2f2f4"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#e8342f;margin-right:8px;vertical-align:1px"></span>FIKTION · ${sh.clock} · ${sh.place || ''}</div>` : ''; }
+function docTag(sh, lt) { const g = sh.tag; if (!g) return ''; const p = ease(lt / .35);
+  return `<div style="position:absolute;left:28px;top:150px;transform:translateX(${(1 - p) * -40}px);opacity:${p};background:#ececef;border-left:6px solid ${g.color || '#2f7a4a'};border-radius:3px;padding:7px 14px 7px 12px;box-shadow:0 6px 18px rgba(0,0,0,.35)">
+    <div style="font:900 18px 'Montserrat';color:#17171d">${g.name}</div><div style="font:800 10px 'Montserrat';letter-spacing:1px;color:#6a6a74;margin-top:2px">${g.sub || ''}</div></div>`; }
+function docReal(sh, lt) { if (!sh.real) return ''; const p = ease((lt - .2) / .3);
+  return `<div style="position:absolute;top:118px;left:50%;transform:translateX(-50%);white-space:nowrap;opacity:${p};background:#f2f2f4;border-radius:16px;padding:4px 12px 4px 4px;font:800 11.5px 'Montserrat';color:#17171d;box-shadow:0 4px 12px rgba(0,0,0,.4)">
+    <span style="background:#1f9d55;color:#fff;border-radius:12px;padding:3px 9px;margin-right:8px;letter-spacing:.8px">ECHT</span>${sh.real}</div>`; }
+function docRule(sh, lt) { const r = sh.rule; if (!r) return ''; const p = outBack((lt - .1) / .35);
+  return `<div style="position:absolute;left:50%;top:205px;width:340px;transform:translateX(-50%) rotate(-3deg) scale(${.7 + .3 * p});opacity:${clamp(p)};background:#f4f2ec;border-radius:4px;padding:16px 18px 18px;text-align:center;box-shadow:0 18px 40px rgba(0,0,0,.55)">
+    <div style="display:inline-block;background:#ffc21f;color:#17171d;font:900 11px 'Montserrat';letter-spacing:1.5px;padding:3px 10px;border-radius:3px">REGEL ${r.n}</div>
+    <div style="font:900 30px/1.05 'Montserrat';color:#17171d;margin-top:8px">${r.a}</div><div style="font:900 30px/1.05 'Montserrat';color:#d42a2a">${r.b}</div></div>`; }
+function docSpeaker(sh, t) { if (!sh.speaker) return ''; const lt = t - sh.start;
+  const rings = [0, 1, 2].map(i => { const a = ((t * .9 + i / 3) % 1); return `<circle cx="270" cy="400" r="${110 + a * 120}" fill="none" stroke="#e9e2d0" stroke-width="3" opacity="${(1 - a) * .5}"/>`; }).join('');
+  return `<svg viewBox="0 0 540 960" width="540" height="960" style="position:absolute;inset:0">${rings}
+    <circle cx="270" cy="400" r="105" fill="#17171d" stroke="#e9e2d0" stroke-width="6"/>
+    <path d="M222 375 h30 l40 -34 v118 l-40 -34 h-30 Z" fill="#e9e2d0"/>${[0, 1, 2].map(i => `<path d="M${310 + i * 16} ${370 - i * 8} q${18 + i * 6} ${30 + i * 8} 0 ${60 + i * 16}" stroke="#e9e2d0" stroke-width="6" fill="none" stroke-linecap="round" opacity="${.4 + .6 * (Math.sin(t * 8 - i) > 0)}"/>`).join('')}</svg>`; }
+function docDiagram(sh, t) { if (!sh.diag) return ''; const lt = t - sh.start, p = ease(lt / .6), you = 420, smokeTop = 190;
+  return `<svg viewBox="0 0 540 960" width="540" height="960" style="position:absolute;inset:0;opacity:${clamp(lt / .3)}">
+    <text x="270" y="150" text-anchor="middle" font-family="Montserrat" font-weight="900" font-size="15" letter-spacing="3" fill="#9aa0b4">TUNNEL · 10,8 KM</text>
+    <rect x="240" y="170" width="60" height="370" rx="8" fill="#1d2230" stroke="#3a4258" stroke-width="3"/>
+    <rect x="244" y="${smokeTop}" width="52" height="${(you - 40 - smokeTop) * p}" fill="#7a7570" opacity=".75"/>
+    <text x="226" y="${smokeTop + 120}" text-anchor="end" font-family="Montserrat" font-weight="900" font-size="15" fill="#e8342f">RAUCH</text>
+    ${[230, 505].map((y, i) => `<rect x="300" y="${y}" width="46" height="22" rx="4" fill="#0f8a47"/><text x="354" y="${y + 16}" font-family="Montserrat" font-weight="800" font-size="13" fill="#4fe08d">${i ? 'NOTAUSGANG · 380 M' : 'NOTAUSGANG'}</text>`).join('')}
+    <circle cx="270" cy="${you}" r="13" fill="#4d9bff" stroke="#fff" stroke-width="3"/><text x="210" y="${you + 5}" text-anchor="end" font-family="Montserrat" font-weight="900" font-size="15" fill="#4d9bff">DU</text>
+    <path d="M270 ${you + 22} L270 ${you + 22 + 70 * p}" stroke="#4fe08d" stroke-width="7" stroke-linecap="round"/><path d="M256 ${you + 80 * p} l14 14 l14 -14" stroke="#4fe08d" stroke-width="7" fill="none" stroke-linecap="round" opacity="${p}"/>
+    ${p > .4 ? `<path d="M226 ${smokeTop + 70} l88 88 M314 ${smokeTop + 70} l-88 88" stroke="#e8342f" stroke-width="9" stroke-linecap="round" opacity="${clamp((p - .4) / .4)}"/>` : ''}</svg>`; }
+function docOverlays(t, sh) { const lt = t - sh.start; return docPill(sh) + docReal(sh, lt) + docTag(sh, lt) + docRule(sh, lt) + docSpeaker(sh, t) + docDiagram(sh, t); }
+async function viewToon(t, sh) {
+  await tnBg(t, sh);
+  const q = (TL.quotes || []).find(q => t >= q.start && t < q.end);
+  const lt = t - sh.start, zoom = 1 + .03 * ease(lt / (sh.end - sh.start));
+  const st = { expr: sh.expr, t, sweat: sh.sweat, soot: sh.soot, mouth: sh.talk ? (EV('talk').some(e => t >= e[0] && t < e[1]) || q ? 'talk' : '') : (sh.mouth || ''), look: sh.look || 0 };
+  return `<div style="position:absolute;inset:0;transform:scale(${zoom});transform-origin:50% 60%">${TOON.bust(CAST[sh.who], st)}</div>` + docOverlays(t, sh);
+}
+async function viewTnCard(t, sh) { await tnBg(t, sh); return docOverlays(t, sh); }
+async function viewTnEnd(t, sh) {
+  const lt = t - sh.start, a = (d) => `opacity:${clamp((lt - d) / .3)};transform:translateY(${(1 - ease((lt - d) / .3)) * 12}px)`;
+  return `<div style="position:absolute;inset:0;background:#101219"></div><div style="position:absolute;left:0;right:0;top:330px;text-align:center">
+    <div style="font:800 12px 'Montserrat';letter-spacing:3px;color:#7a7f92;${a(0)}">${TL.title} · TEIL 1</div>
+    <div style="font:900 62px/1 'Montserrat';color:#fff;margin-top:14px;${a(.1)}">NÄCHSTER TEIL</div>
+    <div style="width:70px;height:4px;background:#ffc21f;margin:16px auto;${a(.2)}"></div>
+    <div style="font:900 24px 'Montserrat';color:#e8342f;${a(.3)}">${TL.question}</div>
+    <div style="font:900 14px 'Montserrat';letter-spacing:1.5px;color:#ffc21f;margin-top:26px;${a(.5)}">FOLGE FÜR TEIL 2</div>
+    <div style="font:700 10px 'Montserrat';letter-spacing:1.5px;color:#5d6276;margin-top:16px;${a(.6)}">STORY = FIKTION · ÜBERLEBENS-FAKTEN = ECHT</div></div>`;
+}
+const wrapDoc = (fn) => async (t, sh) => (await fn(t, sh)) + docOverlays(t, sh);
+Object.assign(VIEWS, { tn_ext: wrapDoc(viewTnExt), tn_in: wrapDoc(viewTnIn), tn_walk: wrapDoc(viewTnWalk), tn_ahead: wrapDoc(viewTnAhead), toon: viewToon, tn_card: viewTnCard, tn_end: viewTnEnd });
+Object.assign(GLSTYLE, { tn_ext: '', tn_in: '', tn_walk: '', tn_ahead: '', toon: 'blur(5px) brightness(.8)', tn_card: 'blur(7px) brightness(.55)', tn_end: 'none' });
+Object.assign(SETBG, { tunnel: async (t) => { tunnelState(t); W3.setCam([300.05, 1.62, 1.0], [300, 1.45, -20], 54); } });

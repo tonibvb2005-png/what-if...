@@ -17,7 +17,7 @@ SR = 44100
 PIPER_MODEL = os.environ.get("PIPER_MODEL", os.path.join(ROOT, ".cache", "piper", "de.onnx"))
 
 # Lautstärke einzelner Effekte relativ zur Stimme (Spitze der Stimme = 0.85)
-SFX_GAIN = {"steps": .55, "steps_out": 1.4, "doorclose": .55, "bottle": .6, "clack": .5, "scrape": .7, "snip": .6, "drawer": .6, "heart": .85, "squelch": .7, "ladder": .5, "owl": 1.0, "washer": .35, "thump": .45, "sting": 1.0, "whisper": 1.0, "ring": 1.0, "drip": .8, "shutter": .8, "powerdown": .8, "woodstep": .45, "typewriter": .3}
+SFX_GAIN = {"steps": .55, "steps_out": 1.4, "doorclose": .55, "bottle": .6, "clack": .5, "scrape": .7, "snip": .6, "drawer": .6, "heart": .85, "squelch": .7, "ladder": .5, "owl": 1.0, "washer": .35, "thump": .45, "sting": 1.0, "whisper": 1.0, "ring": 1.0, "drip": .8, "shutter": .8, "powerdown": .8, "woodstep": .45, "typewriter": .3, "brakes": .6, "run": .35}
 
 GAP_LINE = 0.18   # Pause zwischen Zeilen
 GAP_SHOT = 0.30   # zusätzliche Pause bei Szenenwechsel
@@ -297,6 +297,20 @@ def sfx(name):
             m = int(.03 * SR); i = int(st_ * SR); tt = np.arange(m) / SR
             res[i:i + m] += rng.standard_normal(m) * np.exp(-tt * 260) * (.35 + .15 * (k % 3 == 0))
         return res
+    if name == "brakes":   # Notbremsung: Kreischen + Rumpeln, das abklingt
+        dur = 3.2; n = int(dur * SR); t = np.arange(n) / SR
+        sq = sum(np.sin(2 * np.pi * (f + 60 * np.sin(t * 2.3 + f)) * t) for f in (2900, 3400, 4100)) * .05
+        rum = np.convolve(rng.standard_normal(n), np.ones(80) / 80, "same") * 2.0
+        e = np.minimum(1, t / .08) * np.clip(1 - t / dur, 0, 1) ** .7
+        return (sq + rum) * e
+    if name == "run":      # schnelle Schritte auf Schotter, hallend, kommen näher
+        dur = 3.0; n = int(dur * SR); res = np.zeros(n)
+        for k, st_ in enumerate(np.arange(0, dur - .2, .27)):
+            m = int(.14 * SR); i = int(st_ * SR); tt = np.arange(m) / SR
+            crunch = np.convolve(rng.standard_normal(m), np.ones(6) / 6, "same") * np.exp(-tt * 40) * 1.6
+            res[i:i + m] += crunch * (.3 + .7 * st_ / dur)
+        echo = np.zeros(n); d = int(.11 * SR); echo[d:] = res[:-d] * .45
+        return res + echo
     raise ValueError(name)
 
 
@@ -324,6 +338,13 @@ def ambience(kind, dur):
         eng = np.sin(2 * np.pi * 32 * t) * .07 + np.sin(2 * np.pi * 64 * t + np.sin(t * 3)) * .035
         rattle = rng.standard_normal(n) * (np.sin(2 * np.pi * 7 * t) > .92) * .03
         return (eng + rattle + np.convolve(rng.standard_normal(n), np.ones(80) / 80, "same") * .45) * fade
+    if kind == "tunnel":   # Tunnel: tiefes Brummen, Lüftung, ferne Tropfen
+        hum = np.sin(2 * np.pi * 48 * t) * .015 + np.convolve(rng.standard_normal(n), np.ones(700) / 700, "same") * 1.2
+        res = np.zeros(n)
+        for d in np.arange(2.1, dur, 3.7):
+            i = int(d * SR); m = min(n - i, int(.15 * SR)); tt = np.arange(m) / SR
+            res[i:i + m] += np.sin(2 * np.pi * (1500 - 5000 * tt) * tt) * np.exp(-35 * tt) * .03
+        return (hum + res) * fade
     if kind == "winter":   # Winterwind ums Haus: tiefes Heulen, Böen, Schneerieseln
         wind = np.convolve(rng.standard_normal(n), np.ones(1200) / 1200, "same") * 2.6
         gust = .5 + .5 * np.clip(np.sin(t * .29) * np.sin(t * .11 + 2), 0, 1)
@@ -605,7 +626,7 @@ def main():
           "groups": [{"start": g["start"], "end": g["end"], "words": g["words"]} for g in groups],
           "msgs": msgs, "typing": typing, "knocks": knocks, "handle": handle, "reveal": reveal,
           "taps": taps, "hums": hums, "quotes": quotes, "eyes": eyes, "ev": {k: sorted(v) for k, v in ev.items()},
-          **{k: story[k] for k in ("item", "visitor", "endArt", "bedLegs", "openMax", "set", "hook", "titleShot", "dreadBase", "kicker", "film") if k in story}}
+          **{k: story[k] for k in ("item", "visitor", "endArt", "bedLegs", "openMax", "set", "hook", "titleShot", "dreadBase", "kicker", "film", "capStyle", "noTitle", "pill", "rumble") if k in story}}
     tl_path = os.path.join(outdir, name + ".timeline.json")
     json.dump(tl, open(tl_path, "w"), ensure_ascii=False, indent=1)
 
@@ -615,6 +636,15 @@ def main():
     mix = drone(n / SR)
     mix = mix[:n] if len(mix) >= n else np.pad(mix, (0, n - len(mix)))
     mix += np.pad(amb, (0, max(0, n - len(amb))))[:n]
+    if story.get("rumble") and ev.get("stop"):   # fahrender Zug: Rattern der Räder bis zum Halt
+        t1 = ev["stop"][0][0]; m = int(min(n, (t1 + 2.5) * SR)); tt = np.arange(m) / SR
+        r = np.random.default_rng(12)
+        clack = np.zeros(m)
+        for d in np.arange(.2, t1, .43):
+            i = int(d * SR); k = min(m - i, int(.06 * SR)); clack[i:i + k] += r.standard_normal(k) * np.exp(-np.arange(k) / SR * 90) * .25
+        body = np.convolve(r.standard_normal(m), np.ones(120) / 120, "same") * 2.2 + np.sin(2 * np.pi * 42 * tt) * .03
+        env_ = np.clip(1 - (tt - t1) / 2.5, 0, 1) * np.minimum(1, tt / 1.0)
+        mix[:m] += (body + clack) * env_ * .9
     vo = np.zeros(n)
     for st, a in voice:
         i = int(st * SR); vo[i:i + len(a)] += a[: n - i]

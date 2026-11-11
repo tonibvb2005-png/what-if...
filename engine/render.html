@@ -32,6 +32,7 @@
   .hook { position: absolute; top: 178px; left: 50%; width: 470px; text-align: center; font: italic 900 44px/1.08 'Montserrat'; text-transform: uppercase; color: #fff;
           -webkit-text-stroke: 9px #000; paint-order: stroke fill; text-shadow: 0 5px 0 rgba(0,0,0,.6); }
   .hook em { color: #ff3b30; font-style: italic; }
+  .cap.doc { font: 800 37px/1.08 'Montserrat'; font-style: normal; -webkit-text-stroke: 7px #000; letter-spacing: -.4px; text-shadow: 0 3px 0 rgba(0,0,0,.5); }
   .badge { position: absolute; top: 112px; left: 30px; background: rgba(8,10,24,.78); border-radius: 8px;
            padding: 8px 14px 9px 12px; }
   .badge .tm { font: 700 27px/1 'JetBrains Mono'; color: #ffc21f; display: flex; align-items: center; gap: 6px; }
@@ -133,6 +134,7 @@
 <script src="node_modules/three/build/three.min.js"></script>
 <script src="world3d.js"></script>
 <script src="sets3d.js"></script>
+<script src="toon.js"></script>
 <script>
 let TL, GRAIN = [];
 const SET_ASSETS = {};
@@ -633,21 +635,21 @@ window.renderFrame = async (t) => {
   if (inHook) {
     const k = clamp(t / .18);
     ov += `<div class="hook" style="opacity:${k};transform:translateX(-50%) scale(${.85 + .15 * outBack(t / .3)})">${TL.hook}</div>`;
-  } else if (t >= ts && t < ts + tLen) {
+  } else if (!TL.noTitle && t >= ts && t < ts + tLen) {
     ov += `<div class="title" style="opacity:${clamp((ts + tLen - t) / .25) * clamp((t - ts) / .15)}"><div class="k">${TL.series} · ${TL.episode}</div><div class="t">${TL.title}${TL.part != null ? `<br>TEIL ${TL.part}` : ''}</div>${TL.kicker ? `<div class="k" style="color:#ffc21f;margin-top:6px">${TL.kicker}</div>` : ''}</div>`;
-  } else if (sh.place && !['lock', 'chat', 'choice', 'end', 'monitor', 'radio', 'ks_cctv', 'ks_note', 'hs_thermal', 'ws_sign', 'bt_book', 'doc_card'].includes(sh.scene)) {
+  } else if (!TL.pill && sh.place && !['lock', 'chat', 'choice', 'end', 'monitor', 'radio', 'ks_cctv', 'ks_note', 'hs_thermal', 'ws_sign', 'bt_book', 'doc_card'].includes(sh.scene)) {
     const blink = (t % 1.2) < .7 ? 1 : .25;
     ov += `<div class="badge"><div class="tm"><i style="opacity:${blink}"></i>${sh.clock}${String(sh.clock).includes(':') ? '<small>UHR</small>' : ''}</div><div class="pl">${TL.part != null ? `TEIL ${TL.part} · ` : ''}${sh.place}</div></div>`;
   }
   if (TL.set === 'cellar' && typeof timerOverlay !== 'undefined') ov += timerOverlay(t, sh);
   const q = (TL.quotes || []).find(q => t >= q.start && t < q.end);
-  if (q && sh.scene !== 'radio') ov += `<div class="quote" style="opacity:${clamp((t - q.start) / .2)}"><div class="w">— ${q.who} · ${q.place} —</div><div class="tx">„${q.text}“</div></div>`;
+  if (q && q.text && sh.scene !== 'radio') ov += `<div class="quote" style="opacity:${clamp((t - q.start) / .2)}"><div class="w">— ${q.who} · ${q.place} —</div><div class="tx">„${q.text}“</div></div>`;
   const g = TL.groups.find(g => t >= g.start && t < g.end);
   if (g) {
     const top = sh.scene === 'choice' ? 720 : 568;
     const ws = g.words.map(i => TL.words[i]).filter(w => w.t <= t + 0.02);
     const last = ws.length - 1;
-    ov += `<div class="cap" style="top:${top}px">` + ws.map((w, i) => {
+    ov += `<div class="cap${TL.capStyle === 'doc' ? ' doc' : ''}" style="top:${top}px">` + ws.map((w, i) => {
       const p = i === last ? outBack((t - w.t) / .12) : 1;
       return `<span class="${w.c}" style="transform:scale(${.8 + .2 * p})">${w.w}</span>`;
     }).join('') + `</div>`;
