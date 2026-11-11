@@ -194,7 +194,7 @@ Teil 2 kommt heute Nacht – folgen, damit du ihn nicht verpasst.
 17. **Neues Format nach zwei neuen Referenzen** (Kanal mit „Fiction + Survival Facts“):
     - **Thema:** realistische Katastrophen-Fiktion mit **echten Überlebensfakten**.
     - **Optik:** 3D-Umgebungen mit Kinolicht. Detaillierte 2D-Brustbilder mit Hautton, Haaren, Augenbrauen, Nase, Ohren, Kleidung, Brille und Schattierung, groß vor unscharfem Hintergrund.
-    - **Einblendungen:** Kapsel oben („● FIKTION · 3:33 · ORT“), grüne „ECHT“-Etiketten, Regel-Karten, Info-Grafiken, Namensschilder, Endkarte „NÄCHSTER TEIL“.
+    - **Einblendungen:** Kapsel oben („● 3:33 · ORT“, ohne das Wort „Fiktion“), grüne „ECHT“-Etiketten, Regel-Karten, Info-Grafiken, Namensschilder, Endkarte „NÄCHSTER TEIL“.
     - **Umsetzung:** Folge **09 „Blackout“**, Code in `engine/blackout3d.js` (Skyline, Wohnung, Treppenhaus) und `engine/blackout.js` (Porträts, Overlays, Kameras).
     - **Regel:** Fakten nur aus seriösen Quellen (BBK u. ä.) und vorsichtig formuliert.
 18. **Blackout überarbeitet** (dein Feedback):

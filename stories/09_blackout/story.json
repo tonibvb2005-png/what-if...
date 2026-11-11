@@ -8,12 +8,12 @@
  "noTitle": true,
  "endStyle": "next",
  "nextQ": "WER HAT GEKLOPFT?",
- "pill": "FIKTION · 3:33 · FRANKFURT",
+ "pill": "3:33 · FRANKFURT",
  "question": "",
  "shots": [
   {
    "scene": "bo_city",
-   "pill": "FIKTION · 3:33 · FRANKFURT",
+   "pill": "3:33 · FRANKFURT",
    "lines": [
     {
      "text": "Es ist 3:33, als in ganz Deutschland das Licht ausgeht.",
@@ -75,7 +75,7 @@
     "DU",
     "9. STOCK · WOHNUNG 9B"
    ],
-   "pill": "FIKTION · 3:33 · KEIN STROM",
+   "pill": "3:33 · KEIN STROM",
    "lines": [
     {
      "text": "Neunter Stock. Kein Strom. Kein Aufzug.",
@@ -89,7 +89,7 @@
   },
   {
    "scene": "bo_alert",
-   "pill": "FIKTION · 3:34 · KEIN STROM",
+   "pill": "3:34 · KEIN STROM",
    "lines": [
     {
      "text": "Dann kommt die Warnung aufs Handy.",
@@ -116,7 +116,7 @@
   },
   {
    "scene": "bo_fill",
-   "pill": "FIKTION · 3:35 · KÜCHE",
+   "pill": "3:35 · KÜCHE",
    "lines": [
     {
      "text": "Du füllst sofort alle Flaschen mit Wasser.",
@@ -153,7 +153,7 @@
   },
   {
    "scene": "bo_fridge3d",
-   "pill": "FIKTION · 3:36 · KÜCHE",
+   "pill": "3:36 · KÜCHE",
    "lines": [
     {
      "text": "Den Kühlschrank lässt du zu.",
@@ -174,7 +174,7 @@
   },
   {
    "scene": "bo_hall",
-   "pill": "FIKTION · 5:10 · TREPPENHAUS",
+   "pill": "5:10 · TREPPENHAUS",
    "lines": [
     {
      "text": "Um fünf Uhr klopft es.",
@@ -211,7 +211,7 @@
     "HERR BRANDT",
     "8. STOCK"
    ],
-   "pill": "FIKTION · 5:10 · TREPPENHAUS",
+   "pill": "5:10 · TREPPENHAUS",
    "lines": [
     {
      "text": "Herr Brandt von unten. Mit einer Kerze.",
@@ -236,7 +236,7 @@
   {
    "scene": "bo_hall",
    "pov": true,
-   "pill": "FIKTION · 5:11 · TREPPENHAUS",
+   "pill": "5:11 · TREPPENHAUS",
    "lines": [
     {
      "text": "Aus seiner Wohnung brummt ein Generator.",
@@ -285,7 +285,7 @@
   },
   {
    "scene": "bo_bapt",
-   "pill": "FIKTION · 5:12 · 8. STOCK",
+   "pill": "5:12 · 8. STOCK",
    "lines": [
     {
      "text": "Im Licht des Generators sitzt Frau Brandt am Tisch.",
@@ -314,7 +314,7 @@
    "bg": "hall",
    "mood": "scared",
    "eyes": "wide",
-   "pill": "FIKTION · 5:12 · 8. STOCK",
+   "pill": "5:12 · 8. STOCK",
    "lines": [
     {
      "text": "Hinter dir flüstert Herr Brandt: Sie schläft doch nur.",
@@ -332,7 +332,7 @@
   },
   {
    "scene": "bo_hall",
-   "pill": "FIKTION · 5:12 · TREPPENHAUS",
+   "pill": "5:12 · TREPPENHAUS",
    "lines": [
     {
      "text": "Du drehst dich um. Das Treppenhaus ist leer.",
@@ -345,7 +345,7 @@
   },
   {
    "scene": "bo_bapt",
-   "pill": "FIKTION · 5:13 · 8. STOCK",
+   "pill": "5:13 · 8. STOCK",
    "lines": [
     {
      "text": "Herr Brandt sitzt neben ihr am Tisch.",
