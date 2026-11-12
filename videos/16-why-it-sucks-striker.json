@@ -7,59 +7,246 @@
       "shot": "shook",
       "text": "Why it sucks being a striker.",
       "audio": "../audio/striker/01.wav",
-      "duration": 2.6
+      "wordTimes": [
+        0.0,
+        0.3,
+        0.44,
+        0.74,
+        1.06,
+        1.32
+      ]
     },
     {
       "shot": "ssix",
       "text": "It starts when you're six. You score ten goals a game. Everyone loves you.",
-      "audio": "../audio/striker/02.wav"
+      "audio": "../audio/striker/02.wav",
+      "cues": {
+        "ten": 2.1,
+        "love": 3.76
+      },
+      "wordTimes": [
+        0.34,
+        0.34,
+        0.56,
+        0.78,
+        1.0,
+        1.84,
+        1.88,
+        2.13,
+        2.38,
+        2.66,
+        2.82,
+        3.76,
+        4.02,
+        4.32
+      ]
     },
     {
       "shot": "snine",
       "text": "Age nine. The other team finds out. Now three defenders follow you everywhere.",
-      "audio": "../audio/striker/03.wav"
+      "audio": "../audio/striker/03.wav",
+      "cues": {
+        "three": 3.16
+      },
+      "wordTimes": [
+        0.52,
+        0.95,
+        1.38,
+        1.48,
+        1.62,
+        1.88,
+        2.2,
+        3.16,
+        3.26,
+        3.58,
+        3.98,
+        4.36,
+        4.6
+      ]
     },
     {
       "shot": "scar",
       "text": "Age eleven. You score twice. You miss one easy chance. In the car, your dad only talks about the miss.",
-      "audio": "../audio/striker/04.wav"
+      "audio": "../audio/striker/04.wav",
+      "cues": {
+        "miss": 2.52,
+        "dad": 5.32
+      },
+      "wordTimes": [
+        0.36,
+        0.8,
+        1.24,
+        1.4,
+        1.62,
+        2.44,
+        2.52,
+        2.68,
+        3.12,
+        3.58,
+        4.54,
+        4.66,
+        4.8,
+        5.32,
+        5.44,
+        5.66,
+        6.0,
+        6.42,
+        6.74,
+        6.92
+      ]
     },
     {
       "shot": "snopass",
       "text": "Age thirteen. Eighty minutes. Nobody passes to you. Not once. Coach: \"Why aren't you involved?\"",
-      "audio": "../audio/striker/05.wav"
+      "audio": "../audio/striker/05.wav",
+      "cues": {
+        "once": 3.96,
+        "coach": 5.1
+      },
+      "wordTimes": [
+        0.28,
+        0.73,
+        1.17,
+        1.62,
+        2.56,
+        2.78,
+        3.14,
+        3.42,
+        3.96,
+        4.1,
+        5.1,
+        5.94,
+        6.1,
+        6.2,
+        6.32
+      ]
     },
     {
       "shot": "spen",
       "text": "Age fifteen. Last minute. Penalty. Everyone is watching. You hit the bar.",
-      "audio": "../audio/striker/06.wav"
+      "audio": "../audio/striker/06.wav",
+      "cues": {
+        "bar": 4.59
+      },
+      "wordTimes": [
+        0.23,
+        0.89,
+        1.55,
+        1.73,
+        2.37,
+        2.99,
+        3.19,
+        3.43,
+        4.45,
+        4.59,
+        4.77,
+        4.93
+      ]
     },
     {
       "shot": "shat",
       "text": "Age sixteen. Hat-trick! Next week, you don't score. \"Flop.\" \"Bench him.\" \"Sell him.\"",
-      "audio": "../audio/striker/07.wav"
+      "audio": "../audio/striker/07.wav",
+      "cues": {
+        "next": 2.48,
+        "flop": 4.8
+      },
+      "wordTimes": [
+        0.3,
+        0.9,
+        1.5,
+        2.48,
+        2.7,
+        3.38,
+        3.46,
+        3.68,
+        4.8,
+        5.52,
+        5.6,
+        6.3,
+        6.42
+      ]
     },
     {
       "shot": "soffside",
       "text": "Age seventeen. You finally score the winner. You run to the fans... Offside.",
-      "audio": "../audio/striker/08.wav"
+      "audio": "../audio/striker/08.wav",
+      "cues": {
+        "run": 2.94,
+        "off": 4.78
+      },
+      "wordTimes": [
+        0.24,
+        0.75,
+        1.26,
+        1.38,
+        1.84,
+        2.22,
+        2.4,
+        2.94,
+        3.04,
+        3.3,
+        3.46,
+        3.56,
+        4.78
+      ]
     },
     {
       "shot": "sthing",
       "text": "That's the thing about being a striker. Everyone else is judged on ninety minutes.",
-      "audio": "../audio/striker/09.wav"
+      "audio": "../audio/striker/09.wav",
+      "cues": {
+        "ninety": 3.54
+      },
+      "wordTimes": [
+        0.42,
+        0.64,
+        0.74,
+        0.88,
+        1.12,
+        1.3,
+        1.74,
+        2.24,
+        2.56,
+        2.76,
+        3.02,
+        3.24,
+        3.58,
+        3.92
+      ]
     },
     {
       "shot": "ssecond",
       "text": "You're judged on one second.",
       "audio": "../audio/striker/10.wav",
-      "duration": 2.8
+      "wordTimes": [
+        0.24,
+        0.52,
+        0.74,
+        1.02,
+        1.3
+      ]
     },
     {
       "shot": "stag",
       "text": "Tag your striker. Tell them: the next one goes in.",
       "audio": "../audio/striker/11.wav",
-      "pad": 1.2
+      "pad": 1.2,
+      "cues": {
+        "next": 2.1
+      },
+      "wordTimes": [
+        0.38,
+        0.42,
+        0.6,
+        1.36,
+        1.46,
+        1.66,
+        2.1,
+        2.32,
+        2.54,
+        2.76
+      ]
     }
   ]
 }
