@@ -407,6 +407,27 @@ const OUT = {
     shade(c); c.restore(); bodyPath(c); stroke(c);
     for (let i = 0; i < 3; i++) dot(c, BX, BT + 40 + i * 40, 5, '#ffffff');
   },
+  longcoat(c, s) {
+    const col = s.coat || '#2a2a3a';
+    c.beginPath(); c.moveTo(BX - 84, BT + 120); c.lineTo(BX - 112, FEET - 30); c.lineTo(BX + 112, FEET - 30); c.lineTo(BX + 84, BT + 120); c.closePath(); fillStroke(c, col, 9);
+    line(c, [[BX, BT + 200], [BX, FEET - 34]], 5, 'rgba(0,0,0,0.35)');
+    bodyPath(c); c.fillStyle = col; c.fill(); c.save(); bodyPath(c); c.clip();
+    for (let i = 0; i < 5; i++) dot(c, BX + 16, BT + 70 + i * 44, 7, '#8a7a5a');
+    c.fillStyle = 'rgba(255,255,255,0.08)'; c.fillRect(BX - 100, BT, 40, 300);
+    shade(c); c.restore(); bodyPath(c); stroke(c);
+    // knitted scarf
+    c.beginPath(); c.ellipse(BX, BT + 14, 78, 30, 0, 0, Math.PI * 2); fillStroke(c, s.scarf || '#c8302a', 8);
+    rrect(c, BX + 20, BT + 20, 34, 120, 10); fillStroke(c, s.scarf || '#c8302a', 7); for (let k = 0; k < 4; k++) line(c, [[BX + 24, BT + 40 + k * 26], [BX + 50, BT + 40 + k * 26]], 3, 'rgba(255,255,255,0.5)');
+    rrect(c, BX - 70, BB - 70, 44, 50, 6); fillStroke(c, 'rgba(0,0,0,0.25)', 4);
+  },
+  nightgown(c, s) {
+    const col = s.gown || '#f4ecdc';
+    c.beginPath(); c.moveTo(BX - 84, BT + 160); c.lineTo(BX - 104, FEET - 20); c.lineTo(BX + 104, FEET - 20); c.lineTo(BX + 84, BT + 160); c.closePath(); fillStroke(c, col, 9);
+    bodyPath(c); c.fillStyle = col; c.fill(); c.save(); bodyPath(c); c.clip();
+    for (let x = BX - 100; x < BX + 100; x += 24) line(c, [[x, BT], [x, BB]], 6, s.stripe || 'rgba(90,120,200,0.35)');
+    shade(c); c.restore(); bodyPath(c); stroke(c);
+    for (let i = 0; i < 3; i++) dot(c, BX, BT + 40 + i * 30, 6, '#ffffff');
+  },
   tourist(c, s) {
     bodyPath(c); c.fillStyle = s.shirt || '#f2d24a'; c.fill();
     c.save(); bodyPath(c); c.clip();
@@ -496,6 +517,16 @@ function headwear(c, s, phase) {
     c.beginPath(); c.moveTo(x - r + 6, y - 40); c.quadraticCurveTo(x - r + 10, y - r - 30, x + 10, y - r - 22); c.quadraticCurveTo(x + r, y - r - 10, x + r - 6, y - 40); c.closePath(); fillStroke(c, s.hatColor || '#c8302a');
     line(c, [[x - r + 8, y - 44], [x + r - 8, y - 44]], 12, '#f2c23a');
     c.beginPath(); c.moveTo(x + 40, y - r - 10); c.quadraticCurveTo(x + 160, y - r - 120, x + 200, y - r - 40); c.quadraticCurveTo(x + 120, y - r - 50, x + 40, y - r - 10); fillStroke(c, '#f8f4ec', 6);
+  } else if (h === 'nightcap') {
+    const col = s.hatColor || '#4a7ad8';
+    c.beginPath(); c.moveTo(x - r + 4, y - 40); c.quadraticCurveTo(x - r + 10, y - r - 40, x + 20, y - r - 30); c.quadraticCurveTo(x + r + 60, y - r - 10, x + r + 90, y + 30); c.quadraticCurveTo(x + r + 20, y - r + 10, x + r - 4, y - 40); c.closePath(); fillStroke(c, col);
+    for (let k = 0; k < 4; k++) line(c, [[x - r + 30 + k * 50, y - 50 - k * 8], [x - r + 40 + k * 50, y - r - 20 + k * 6]], 8, 'rgba(255,255,255,0.45)');
+    circ(c, x + r + 92, y + 34, 22, '#ffffff', 7);
+    rrect(c, x - r + 2, y - 56, 2 * r - 4, 26, 12); fillStroke(c, '#ffffff', 7);
+  } else if (h === 'cloche' || h === 'flatcap') {
+    const col = s.hatColor || (h === 'cloche' ? '#2a2420' : '#5a5048');
+    if (h === 'cloche') { c.beginPath(); c.ellipse(x, y - r + 46, r + 26, 24, 0, 0, Math.PI * 2); fillStroke(c, col); c.beginPath(); c.moveTo(x - r + 6, y - r + 46); c.quadraticCurveTo(x - r + 4, y - r - 36, x, y - r - 34); c.quadraticCurveTo(x + r - 4, y - r - 36, x + r - 6, y - r + 46); c.closePath(); fillStroke(c, col); line(c, [[x - r + 10, y - r + 26], [x + r - 10, y - r + 26]], 12, s.hatBand || '#8a3a5a'); circ(c, x + r - 30, y - r + 22, 16, '#e8c24a', 6); }
+    else { c.beginPath(); c.moveTo(x - r + 2, y - 30); c.quadraticCurveTo(x - r + 6, y - r - 26, x + 10, y - r - 20); c.quadraticCurveTo(x + r + 4, y - r - 10, x + r + 10, y - 40); c.lineTo(x + r + 70, y - 36); c.quadraticCurveTo(x + r + 40, y - 20, x + r - 10, y - 24); c.closePath(); fillStroke(c, col); for (let k = 0; k < 5; k++) line(c, [[x - r + 20 + k * 40, y - r - 4], [x - r + 30 + k * 40, y - 36]], 3, 'rgba(255,255,255,0.18)'); }
   } else if (h === 'stationcap' || h === 'gakucap') {
     const col = h === 'stationcap' ? '#1e2a5a' : '#16161c';
     c.beginPath(); c.moveTo(x - r + 8, y - r + 46); c.lineTo(x - r - 2, y - r - 14); c.quadraticCurveTo(x, y - r - 40, x + r + 2, y - r - 14); c.lineTo(x + r - 8, y - r + 46); c.closePath(); fillStroke(c, col);
@@ -608,6 +639,14 @@ function face(c, s) {
     case 'aha': for (const p of [L, R]) { circ(c, p[0], p[1] - 2, 23, '#fff', 7); dot(c, p[0] + 4, p[1], 8); } brows(22); c.beginPath(); c.arc(x, y + 44, 28, 0.1 * Math.PI, 0.9 * Math.PI); c.closePath(); fillStroke(c, '#7a1f1f', 7); break;
     case 'determined': line(c, [[L[0] - 26, L[1] - 40], [L[0] + 22, L[1] - 30]], 10); line(c, [[R[0] - 22, R[1] - 30], [R[0] + 26, R[1] - 40]], 10); dot(c, L[0], L[1] + 4, 11); dot(c, R[0], R[1] + 4, 11); curve(x - 22, y + 62, x, y + 56, x + 22, y + 62); break;
     case 'sad': dot(c, L[0], L[1] + 4, 11); dot(c, R[0], R[1] + 4, 11); line(c, [[L[0] - 22, L[1] - 26], [L[0] + 20, L[1] - 40]], 9); line(c, [[R[0] - 20, R[1] - 40], [R[0] + 22, R[1] - 26]], 9); curve(x - 26, y + 70, x, y + 50, x + 26, y + 70); break;
+    case 'sleep': for (const p of [L, R]) { c.beginPath(); c.arc(p[0], p[1] + 2, 17, Math.PI * 0.1, Math.PI * 0.9); stroke(c, 8); } c.beginPath(); c.ellipse(x + 8, y + 64, 16, 12, 0, 0, 7); fillStroke(c, '#7a1f1f', 6);
+      c.beginPath(); c.moveTo(x + 20, y + 72); c.quadraticCurveTo(x + 30, y + 100, x + 22, y + 116); stroke(c, 0); c.fillStyle = '#9ad8ff'; c.beginPath(); c.ellipse(x + 26, y + 96, 7, 14, 0, 0, 7); c.fill(); break;
+    case 'yawn': for (const p of [L, R]) line(c, [[p[0] - 18, p[1] + 2], [p[0] + 18, p[1] + 2]], 8); brows(14);
+      c.beginPath(); c.ellipse(x, y + 70, 30, 44, 0, 0, 7); fillStroke(c, '#7a1f1f', 8); c.beginPath(); c.ellipse(x, y + 96, 18, 12, 0, 0, 7); c.fillStyle = '#e0605a'; c.fill(); break;
+    case 'jolt': for (const p of [L, R]) { circ(c, p[0], p[1] - 6, 32, '#fff', 7); dot(c, p[0], p[1] - 6, 6); } brows(40, -4);
+      c.beginPath(); c.moveTo(x - 40, y + 56); for (let k = 1; k <= 8; k++) c.lineTo(x - 40 + k * 10, y + 56 + (k % 2 ? -10 : 10)); stroke(c, 7); break;
+    case 'blow': for (const p of [L, R]) { c.beginPath(); c.arc(p[0], p[1] + 6, 15, Math.PI * 1.15, Math.PI * 1.85); stroke(c, 8); } brows(4, 6);
+      c.fillStyle = 'rgba(250,110,120,0.55)'; for (const p of [L, R]) { c.beginPath(); c.arc(p[0] + (p === L ? -14 : 14), y + 46, 30, 0, 7); c.fill(); } circ(c, x + 26, y + 56, 13, '#7a1f1f', 7); break;
     case 'panic': for (const p of [L, R]) { circ(c, p[0] + (s.lookX || 0) * 4, p[1] - 4, 30, '#fff', 7); circ(c, p[0] + (s.lookX || 0) * 8, p[1] - 2, 14, null, 5); dot(c, p[0] + (s.lookX || 0) * 8, p[1] - 2, 6); } brows(30, -6);
       c.beginPath(); c.ellipse(x, y + 74, 30, 38, 0, 0, 7); fillStroke(c, '#7a1f1f', 8); c.beginPath(); c.ellipse(x, y + 96, 16, 9, 0, 0, 7); c.fillStyle = '#e0605a'; c.fill(); c.fillStyle = '#fff'; c.fillRect(x - 18, y + 42, 36, 8); break;
     case 'ring': for (const p of [L, R]) { circ(c, p[0], p[1] - 2, 24, '#fff', 7); circ(c, p[0] + (s.lookX || 0) * 7, p[1] - 1, 11, null, 5); dot(c, p[0] + (s.lookX || 0) * 7, p[1] - 1, 5); } line(c, [[x - 14, y + 62], [x + 14, y + 62]], 7); break;
@@ -689,6 +728,8 @@ function drawChar(c, s) {
     case 'toss': post = () => { arm([SR, [420, 330], [450, 230]]); hand(450, 230); }; arm([SL, [150, 500], [196, 548]]); break;
     case 'tails': post = () => { arm([SR, [420, 340], [430, 250]]); for (let k = 0; k < 5; k++) ratTail(c, 430, 250, -0.5 + k * 0.25, 110); hand(430, 248); }; arm([SL, [150, 500], [196, 548]]); break;
     case 'throne': arm([SL, [140, 470], [130, 540]]); arm([SR, [372, 470], [382, 540]]); hand(130, 540); hand(382, 540); break;
+    case 'blow': post = () => { c.save(); c.translate(HX + 30, HY + 70); c.rotate(-0.3 + (s.aim || 0)); rrect(c, 0, -13, 190, 26, 12); fillStroke(c, '#c8a46a', 7); line(c, [[20, -4], [180, -4]], 4, 'rgba(255,255,255,0.5)'); c.restore(); arm([SL, [250, 400], [330, 250]]); arm([SR, [420, 380], [420, 250]]); hand(330, 252); hand(420, 240); }; break;
+    case 'reload': post = () => { arm([SR, [400, 400], [330, 300]]); hand(330, 300); for (let k = 0; k < 4; k++) circ(c, 316 + k * 10, 290 - (k % 2) * 10, 9, '#8ac84a', 4); }; arm([SL, [150, 500], [196, 548]]); break;
     case 'push': post = () => { arm([SL, [300, 410], [470, 400]]); arm([SR, [420, 380], [488, 350]]); hand(474, 400); hand(490, 350); }; break;
     case 'pinned': arm([SL, [150, 300], [196, 210]]); arm([SR, [362, 300], [316, 210]]); hand(196, 210); hand(316, 210); break;
     case 'briefcase': post = () => { arm([SR, [380, 470], [396, 560]]); rrect(c, 340, 560, 120, 86, 10); fillStroke(c, s.caseCol || '#5a3418', 8); rrect(c, 378, 544, 44, 20, 6); stroke(c, 6); hand(396, 560); }; arm([SL, [150, 500], [196, 548]]); break;
@@ -711,6 +752,7 @@ function drawChar(c, s) {
   face(c, s);
   headwear(c, s, 'front');
   if (post) post();
+  if (s.zzz) { const x = HX, y = HY; c.save(); c.fillStyle = '#ffffff'; c.strokeStyle = INK; c.lineWidth = 8; c.font = '900 64px Montserrat, sans-serif'; c.lineJoin = 'round'; [[x + 150, y - 40, 1], [x + 196, y - 100, 0.75], [x + 226, y - 150, 0.55]].forEach(([zx, zy, k]) => { c.save(); c.translate(zx, zy); c.scale(k, k); c.strokeText('Z', 0, 0); c.fillText('Z', 0, 0); c.restore(); }); c.restore(); }
   c.restore();
   if (s.mud) {
     c.save(); c.globalCompositeOperation = 'source-atop';
