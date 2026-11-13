@@ -24,6 +24,43 @@
   .cap span { display: inline-block; margin: 0 5px; }
   .y { color: #ffc21f; } .r { color: #ff3b30; } .b { color: #4d9bff; }
 
+
+  /* Flacher Regel-Stil */
+  .fhd { position:absolute; top:40px; left:26px; color:#cfd6ea; font:800 13px 'Montserrat'; letter-spacing:.5px; opacity:.85 }
+  .fhd i { display:inline-block; width:8px; height:8px; border-radius:50%; background:#ff3b30; margin-right:6px }
+  .ftb { position:absolute; top:76px; left:50%; transform:translateX(-50%); border:3px solid; border-radius:10px; background:rgba(5,7,14,.85); padding:6px 18px 8px; text-align:center; min-width:150px }
+  .ftb span { display:block; color:#aab4d4; font:800 11px 'Montserrat'; letter-spacing:1px }
+  .ftb b { display:block; color:#fff; font:900 38px/1 'Montserrat' }
+  .frl { position:absolute; top:160px; right:18px; display:flex; flex-direction:column; gap:6px; align-items:flex-end }
+  .frl div { background:rgba(5,7,14,.85); border:1.5px solid #3a4670; border-radius:14px; padding:4px 10px 4px 4px; color:#e9eefc; font:800 11px 'Montserrat'; text-transform:uppercase; display:flex; align-items:center; gap:6px; max-width:230px }
+  .frl i { width:20px; height:20px; border-radius:50%; color:#111; font:900 12px/20px 'Montserrat'; text-align:center; font-style:normal; flex:none }
+  .ftitle { position:absolute; top:170px; left:0; right:0; text-align:center }
+  .ftitle b { display:block; color:#fff; font:900 52px/1 'Montserrat'; letter-spacing:-.5px; text-shadow:0 4px 0 #000 }
+  .ftitle span { display:inline-block; margin-top:10px; background:#ff3b30; color:#fff; font:900 14px 'Montserrat'; padding:5px 12px; border-radius:4px; letter-spacing:.8px }
+  .fpill { position:absolute; left:50%; transform:translateX(-50%); background:#fff; color:#0b0f1d; font:900 24px 'Montserrat'; padding:10px 24px; border-radius:30px; white-space:nowrap }
+  .fnt { position:absolute; top:430px; left:50%; transform:translateX(-50%); text-align:center; background:rgba(5,7,14,.88); border:2px solid #ffc21f; border-radius:8px; padding:5px 16px }
+  .fnt b { display:block; color:#ffc21f; font:900 18px 'Montserrat' } .fnt span { color:#cfd6ea; font:800 11px 'Montserrat'; letter-spacing:1px }
+  .frule { position:absolute; top:430px; left:50%; display:flex; align-items:center; gap:16px; width:470px }
+  .frule i { width:104px; height:104px; flex:none; border-radius:50%; color:#111; font:900 64px/104px 'Montserrat'; text-align:center; font-style:normal }
+  .frule div { border-left:5px solid; padding:4px 0 4px 16px }
+  .frule span { display:block; font:900 16px 'Montserrat'; letter-spacing:2px }
+  .frule b { display:block; color:#fff; font:900 32px/1.1 'Montserrat'; text-transform:uppercase }
+  .fword { position:absolute; left:0; right:0; text-align:center; color:#8a96c0; font:italic 900 30px 'Montserrat'; letter-spacing:4px }
+  .fwave { position:absolute; top:400px; left:50%; transform:translateX(-50%); width:440px; background:rgba(5,7,14,.88); border:2px solid #ff3b30; border-radius:14px; padding:14px 18px }
+  .fwave span { color:#ff3b30; font:900 13px 'Montserrat'; letter-spacing:1px }
+  .fwave div { display:flex; align-items:center; justify-content:space-between; height:100px }
+  .fwave i { width:5px; background:#ff8a7a; border-radius:3px }
+  .fch { position:absolute; top:250px; left:0; right:0; text-align:center }
+  .fch h1 { font:900 50px/1.05 'Montserrat'; margin:0 0 40px }
+  .fbt { display:flex; justify-content:center; gap:22px }
+  .fbt div { width:196px; border:4px solid; border-radius:16px; padding:18px 0 14px; font:900 25px 'Montserrat'; background:rgba(5,7,14,.7) }
+  .fbt small { display:block; margin-top:6px; color:#aab4d4; font:800 11px 'Montserrat'; letter-spacing:1px }
+  .fmaj { display:inline-block; margin-top:36px; background:#ffc21f; color:#15130c; font:900 16px 'Montserrat'; padding:9px 18px; border-radius:24px }
+  .fend { position:absolute; top:300px; left:0; right:0; text-align:center; color:#fff }
+  .fend span { display:block; color:#aab4d4; font:900 18px 'Montserrat'; letter-spacing:3px }
+  .fend b { display:block; font:900 92px/1 'Montserrat'; margin:14px 0 } .fend em { display:block; font:900 34px 'Montserrat'; color:#ff3b30; font-style:normal }
+  .fend i { display:inline-block; margin-top:40px; border:2px solid #fff; border-radius:24px; padding:8px 18px; font:900 15px 'Montserrat'; font-style:normal }
+
   /* Titelkarte + Uhr-Badge */
   .title { position: absolute; top: 118px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,.84);
            border-radius: 10px; padding: 10px 22px 12px; text-align: center; white-space: nowrap; }
@@ -647,7 +684,9 @@ window.renderFrame = async (t) => {
 
   let ov = '';
   if (TL.set === 'blackout' && typeof boOverlays !== 'undefined') ov += boOverlays(t, sh);
-  if (t < 3.0 && !TL.noTitle) {
+  const FLAT = TL.set === 'flat';
+  if (FLAT && typeof flOverlays !== 'undefined') ov += flOverlays(t, sh);
+  if (FLAT) {} else if (t < 3.0 && !TL.noTitle) {
     ov += `<div class="title" style="opacity:${clamp((3.0 - t) / .25)}"><div class="k">${TL.series} · ${TL.episode}</div><div class="t">${TL.title}<br>TEIL ${TL.part}</div></div>`;
   } else if (sh.place && !['lock', 'chat', 'choice', 'end', 'monitor', 'radio'].includes(sh.scene)) {
     const blink = (t % 1.2) < .7 ? 1 : .25;
@@ -655,10 +694,10 @@ window.renderFrame = async (t) => {
   }
   if (TL.set === 'cellar' && typeof timerOverlay !== 'undefined') ov += timerOverlay(t, sh);
   const q = (TL.quotes || []).find(q => t >= q.start && t < q.end);
-  if (q && sh.scene !== 'radio') ov += `<div class="quote" style="opacity:${clamp((t - q.start) / .2)}"><div class="w">— ${q.who} · ${q.place} —</div><div class="tx">„${q.text}“</div></div>`;
+  if (q && sh.scene !== 'radio' && !FLAT) ov += `<div class="quote" style="opacity:${clamp((t - q.start) / .2)}"><div class="w">— ${q.who} · ${q.place} —</div><div class="tx">„${q.text}“</div></div>`;
   const g = TL.groups.find(g => t >= g.start && t < g.end);
   if (g) {
-    const top = sh.scene === 'choice' ? 720 : 568;
+    const top = FLAT ? (sh.scene === 'fl_choice' || sh.scene === 'fl_end' ? 790 : 770) : sh.scene === 'choice' ? 720 : 568;
     const ws = g.words.map(i => TL.words[i]).filter(w => w.t <= t + 0.02);
     const last = ws.length - 1;
     ov += `<div class="cap" style="top:${top}px">` + ws.map((w, i) => {
@@ -671,4 +710,5 @@ window.renderFrame = async (t) => {
 };
 </script>
 <script src="sets.js"></script>
-<script src="blackout.js"></script></body></html>
+<script src="blackout.js"></script>
+<script src="flat.js"></script></body></html>

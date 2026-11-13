@@ -1,0 +1,79 @@
+{
+ "series": "NACHTGESCHICHTEN", "episode": "#11", "title": "DER SCHUTZRAUM", "part": 1,
+ "set": "flat", "noTitle": true, "handleTag": "NACHTGESCHICHTEN", "nextTitle": "DIE TÜR",
+ "question": "Aufmachen oder zu lassen? Schreib's in die Kommentare.",
+ "shots": [
+  {"scene": "fl_door", "tbox": ["SCHUTZRAUM · KELLER", "1:52", "red"], "title": ["DER SCHUTZRAUM", "TEIL 1 · DIE TÜR"], "gap": "#ffb35a",
+   "sfx": [["airraid_muff:1.6", 0]],
+   "lines": [
+    {"text": "1 Uhr 52.", "say": "Ein Uhr zweiundfünfzig.", "hl": {"52": "y"}},
+    {"text": "Die Sirenen verstummen.", "hl": {"Sirenen": "r"}, "pause": 0.3},
+    {"text": "Und jemand klopft an die Stahltür.", "hl": {"klopft": "r"}, "knocks": ["word3", "word3+.32", "word3+.64"], "sfx": [["knockmetal", "word3"]]},
+    {"text": "Von draußen.", "hl": {"draußen": "r"}, "pause": 0.5}
+   ]},
+  {"scene": "fl_rewind", "label": "◀◀ 20 MINUTEN VORHER", "sfx": [["whoosh", 0]],
+   "lines": [{"text": "20 Minuten vorher.", "say": "Zwanzig Minuten vorher.", "hl": {"20": "y", "Minuten": "y"}}]},
+  {"scene": "fl_city", "tbox": ["STADT", "1:32", "red"], "sfx": [["airraid:9", 0]],
+   "lines": [
+    {"text": "Sirenen. In der ganzen Stadt.", "hl": {"Sirenen": "r"}},
+    {"text": "Du rennst runter in den Schutzraum im Keller.", "hl": {"Schutzraum": "y"}}
+   ]},
+  {"scene": "fl_janitor", "tbox": ["SCHUTZRAUM", "1:34", "yellow"], "tag": ["HERR KORN", "HAUSMEISTER"],
+   "lines": [
+    {"text": "Nur der Hausmeister ist schon da.", "hl": {"Hausmeister": "y"}},
+    {"text": "Er verriegelt die Tür.", "sfx": [["knockmetal", "end-.1"]]},
+    {"text": "Und flüstert dir drei Regeln zu.", "hl": {"drei": "y", "Regeln": "y"}, "pause": 0.3}
+   ]},
+  {"scene": "fl_rule", "rule": 1, "text": "Die Tür bleibt zu. Egal, wer klopft.", "tbox": ["SCHUTZRAUM", "1:35", "yellow"],
+   "lines": [{"text": "Regel 1.", "say": "Regel eins.", "hl": {"1": "y"}, "ev": [["rule", "start", 1, "Tür bleibt zu"]], "sfx": [["click", "start"]]},
+             {"text": "Die Tür bleibt zu. Egal, wer klopft.", "hl": {"klopft": "y"}, "pause": 0.3}]},
+  {"scene": "fl_rule", "rule": 2, "text": "Kein Licht. Auch kein Handy.", "tbox": ["SCHUTZRAUM", "1:35", "yellow"],
+   "lines": [{"text": "Regel 2.", "say": "Regel zwei.", "hl": {"2": "b"}, "ev": [["rule", "start", 2, "Kein Licht"]], "sfx": [["click", "start"]]},
+             {"text": "Kein Licht. Auch kein Handy.", "hl": {"Licht": "b", "Handy": "b"}, "pause": 0.3}]},
+  {"scene": "fl_rule", "rule": 3, "text": "Hören die Sirenen auf, ist es nicht vorbei.", "tbox": ["SCHUTZRAUM", "1:36", "yellow"],
+   "lines": [{"text": "Regel 3.", "say": "Regel drei.", "hl": {"3": "r"}, "ev": [["rule", "start", 3, "Sirenen aus ≠ vorbei"]], "sfx": [["click", "start"]]},
+             {"text": "Hören die Sirenen auf, ist es nicht vorbei.", "hl": {"nicht": "r", "vorbei": "r"}, "pause": 0.4}]},
+  {"scene": "fl_plan", "tbox": ["SCHUTZRAUM", "1:40", "yellow"],
+   "lines": [
+    {"text": "Dann macht er die Lampe aus.", "ev": [["jan", "shot+0"], ["lampOff", "end-.1"]], "sfx": [["click", "end-.1"]]},
+    {"text": "Stockdunkel.", "hl": {"Stockdunkel": "b"}},
+    {"text": "Du hörst ihn neben dir atmen.", "hl": {"atmen": "y"}, "sfx": [["breath", "start"]], "pause": 0.4}
+   ]},
+  {"scene": "fl_door", "tbox": ["SCHUTZRAUM", "1:52", "red"], "gap": "#ffb35a", "sfx": [["airraid_muff:1.4", 0]],
+   "lines": [
+    {"text": "1 Uhr 52. Die Sirenen verstummen.", "say": "Ein Uhr zweiundfünfzig. Die Sirenen verstummen.", "hl": {"Sirenen": "r"}, "ev": [["dread", "end"]]},
+    {"text": "Es klopft.", "hl": {"klopft": "r"}, "knocks": ["end", "end+.32", "end+.64"], "sfx": [["knockmetal", "end"]], "pause": 0.9}
+   ]},
+  {"scene": "fl_voice", "tbox": ["SCHUTZRAUM", "1:53", "red"],
+   "lines": [
+    {"text": "Dann eine Stimme. Deine Mutter.", "hl": {"Mutter": "y"}},
+    {"text": "„Mach auf, Schatz. Es ist vorbei.“", "hl": {"vorbei": "r"}, "quote": {"who": "Mama", "place": "draußen", "text": "Mach auf, Schatz."}, "pause": 0.3},
+    {"text": "Aber Mama wohnt 300 Kilometer weg.", "say": "Aber Mama wohnt dreihundert Kilometer weg.", "hl": {"300": "r", "Kilometer": "r"}, "pause": 0.5}
+   ]},
+  {"scene": "fl_dark", "tbox": ["SCHUTZRAUM", "1:53", "red"], "words": ["…", "HERR KORN?"],
+   "lines": [
+    {"text": "Du flüsterst: Herr Korn?", "hl": {"Korn": "y"}},
+    {"text": "Keine Antwort.", "pause": 0.4},
+    {"text": "Du tastest neben dich. Der Platz ist leer.", "hl": {"leer": "r"}, "ev": [["janGone", "start"]], "pause": 0.4}
+   ]},
+  {"scene": "fl_plan", "tbox": ["SCHUTZRAUM", "1:54", "red"],
+   "lines": [
+    {"text": "Du machst das Handy an.", "ev": [["phone", "end-.2"]], "sfx": [["click", "end-.2"]]},
+    {"text": "Auf der Bank liegt sein Schlüssel.", "hl": {"Schlüssel": "y"}},
+    {"text": "Die Tür ist noch verriegelt. Von innen.", "hl": {"innen": "r"}, "pause": 0.5}
+   ]},
+  {"scene": "fl_voice", "tbox": ["SCHUTZRAUM", "1:54", "red"], "vlabel": "STIMME · VOR DER TÜR",
+   "lines": [
+    {"text": "Und draußen ruft jetzt er.", "hl": {"er": "r"}},
+    {"text": "„Mach auf! Ich bin's! Lass mich rein!“", "hl": {"rein": "r"}, "quote": {"who": "Herr Korn", "place": "draußen", "text": "Lass mich rein!"},
+     "knocks": ["end+.1", "end+.4", "end+.7"], "sfx": [["knockmetal", "end+.1"]], "pause": 1.0}
+   ]},
+  {"scene": "fl_choice", "q": ["AUFMACHEN", "ODER ZU LASSEN?"], "a": ["AUFMACHEN", "ER WAR BEI DIR"], "b": ["ZU LASSEN", "REGEL 1"],
+   "lines": [
+    {"text": "Machst du ihm auf?", "hl": {"auf": "y"}},
+    {"text": "Oder hältst du dich an Regel 1?", "say": "Oder hältst du dich an Regel eins?", "hl": {"Regel": "b", "1": "b"}, "pause": 0.3}
+   ]},
+  {"scene": "fl_end",
+   "lines": [{"text": "Schreib es in die Kommentare. Die Mehrheit entscheidet Teil 2.", "say": "Schreib es in die Kommentare. Die Mehrheit entscheidet Teil zwei.", "hl": {"Mehrheit": "y"}, "pause": 0.8}]}
+ ]
+}

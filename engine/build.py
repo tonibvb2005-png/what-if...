@@ -482,7 +482,7 @@ def main():
           "groups": [{"start": g["start"], "end": g["end"], "words": g["words"]} for g in groups],
           "msgs": msgs, "typing": typing, "knocks": knocks, "handle": handle, "reveal": reveal,
           "taps": taps, "hums": hums, "quotes": quotes, "eyes": eyes, "ev": {k: sorted(v) for k, v in ev.items()},
-          **{k: story[k] for k in ("item", "visitor", "endArt", "bedLegs", "openMax", "set", "pill", "noTitle", "endStyle", "nextQ", "noBasket", "steelDoor") if k in story}}
+          **{k: story[k] for k in ("item", "visitor", "endArt", "bedLegs", "openMax", "set", "pill", "noTitle", "endStyle", "nextQ", "noBasket", "steelDoor", "nextTitle", "handleTag") if k in story}}
     tl_path = os.path.join(outdir, name + ".timeline.json")
     json.dump(tl, open(tl_path, "w"), ensure_ascii=False, indent=1)
 
@@ -498,7 +498,13 @@ def main():
     vo /= (np.abs(vo).max() + 1e-9); vo *= 0.85
     mix += vo
     for st, nm in sfx_ev:
-        s = sfx(nm); i = int(st * SR); mix[i:i + len(s)] += s[: n - i]
+        cut = None
+        if ":" in nm: nm, cut = nm.split(":"); cut = float(cut)
+        s = sfx(nm)
+        if cut:   # nach `cut` Sekunden kurz ausblenden (z. B. Sirene verstummt)
+            k = int(cut * SR); f = int(.35 * SR); s = s[:k + f].copy()
+            if len(s) > k: s[k:] *= np.linspace(1, 0, len(s) - k)
+        i = int(st * SR); mix[i:i + len(s)] += s[: n - i]
     if ev.get("dread"):
         d0 = ev["dread"][0][0]; i0 = int(d0 * SR); m = n - i0
         if m > 0:
