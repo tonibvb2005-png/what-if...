@@ -1,0 +1,52 @@
+[whispering, tense] Ein Uhr zweiundfünfzig.
+[short pause]
+[quietly] Die Sirenen verstummen.
+[long pause]
+[tense, slowly] Und jemand klopft an die Stahltür.
+[short pause]
+[whispering] Von draußen.
+[long pause]
+[calm] Zwanzig Minuten vorher.
+[short pause]
+[urgent] Sirenen. In der ganzen Stadt.
+[urgent, breathless] Du rennst runter in den Schutzraum im Keller.
+[short pause]
+[calm, serious] Nur der Hausmeister ist schon da.
+[short pause] Er verriegelt die Tür.
+[quietly] Und flüstert dir drei Regeln zu.
+[short pause]
+[serious] Regel eins. [short pause] Die Tür bleibt zu. Egal, wer klopft.
+[short pause]
+[serious] Regel zwei. [short pause] Kein Licht. Auch kein Handy.
+[short pause]
+[serious, slowly] Regel drei. [short pause] Hören die Sirenen auf, ist es nicht vorbei.
+[long pause]
+[quietly] Dann macht er die Lampe aus.
+[whispering] Stockdunkel.
+[whispering] Du hörst ihn neben dir atmen.
+[long pause]
+[tense] Ein Uhr zweiundfünfzig. Die Sirenen verstummen.
+[short pause]
+[whispering] Es klopft.
+[long pause]
+[quietly] Dann eine Stimme. [short pause] Deine Mutter.
+[softly, warm] Mach auf, Schatz. Es ist vorbei.
+[short pause]
+[slowly, uneasy] Aber Mama wohnt dreihundert Kilometer weg.
+[long pause]
+[whispering] Du flüsterst: Herr Korn?
+[short pause]
+[whispering] Keine Antwort.
+[tense, slowly] Du tastest neben dich. [short pause] Der Platz ist leer.
+[long pause]
+[quietly] Du machst das Handy an.
+[tense] Auf der Bank liegt sein Schlüssel.
+[slowly, scared] Die Tür ist noch verriegelt. [short pause] Von innen.
+[long pause]
+[whispering] Und draußen ruft jetzt er.
+[shouting, desperate] Mach auf! Ich bin's! Lass mich rein!
+[long pause]
+[serious] Machst du ihm auf?
+[short pause] Oder hältst du dich an Regel eins?
+[short pause]
+[calm] Schreib es in die Kommentare. Die Mehrheit entscheidet Teil zwei.

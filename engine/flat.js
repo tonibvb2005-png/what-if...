@@ -10,7 +10,7 @@ const RULE_C = { 1: '#ffc21f', 2: '#38b6ff', 3: '#ff3b30' };
 /* ---------------- Zeichnungen */
 function flDoor(t, knock, gapCol) {
   const dx = knock ? Math.sin(t * 90) * 4 * knock : 0;
-  return `<g transform="translate(${dx} 0)">
+  return `<g transform="translate(0 40)"><g transform="translate(${dx} 0)">
     <rect x="128" y="236" width="284" height="540" rx="6" fill="#2a2f3d"/>
     <rect x="148" y="256" width="244" height="516" rx="4" fill="#5d6574"/>
     <rect x="148" y="256" width="244" height="516" rx="4" fill="url(#dsh)"/>
@@ -20,7 +20,7 @@ function flDoor(t, knock, gapCol) {
     ${[0, 1, 2].map(i => `<line x1="350" y1="520" x2="${350 + Math.cos(i * 2.094 + .4) * 34}" y2="${520 + Math.sin(i * 2.094 + .4) * 34}" stroke="#2c313c" stroke-width="6"/>`).join('')}
   </g>
   <rect x="148" y="772" width="244" height="5" fill="${gapCol}" opacity=".9"/><ellipse cx="270" cy="790" rx="160" ry="24" fill="${gapCol}" opacity=".18"/>
-  <rect x="0" y="776" width="540" height="184" fill="#0a0d18"/>`;
+  <rect x="0" y="776" width="540" height="184" fill="#0a0d18"/></g>`;
 }
 function flCity(t) {
   const pulse = .5 + .5 * Math.sin(t * 2.2);
@@ -75,7 +75,7 @@ function flTimebox(sh) {
 }
 function flRules(t, sh) {
   const rs = EV('rule').filter(e => e[0] <= t);
-  if (!rs.length || sh.scene === 'fl_choice' || sh.scene === 'end') return '';
+  if (!rs.length || sh.scene === 'fl_choice' || sh.scene === 'fl_end') return '';
   const big = sh.scene === 'fl_rule' ? sh.rule : null;
   return `<div class="frl">${rs.filter(e => e[1] !== big).map(e => `<div><i style="background:${RULE_C[e[1]]}">${e[1]}</i>${e[2]}</div>`).join('')}</div>`;
 }
