@@ -1,0 +1,298 @@
+{
+ "series": "GESCHICHTEN UM 3:33",
+ "episode": "#05",
+ "title": "KOMM RAUS",
+ "part": 1,
+ "set": "tent",
+ "ambience": "forest",
+ "endArt": "tent",
+ "question": "FESTHALTEN oder FLIEHEN? Schreib's in die Kommentare.",
+ "shots": [
+  {
+   "scene": "tent_ext",
+   "clock": "3:33",
+   "place": "IM WALD",
+   "lines": [
+    {
+     "text": "Stell dir vor, du zeltest mit deinem besten Freund Jonas im Wald.",
+     "hl": {
+      "Jonas": "y",
+      "Wald": "y"
+     }
+    },
+    {
+     "text": "Kilometerweit ist niemand außer euch.",
+     "hl": {
+      "niemand": "r"
+     },
+     "sfx": [
+      [
+       "owl",
+       "end+0.2"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "scene": "tent_in",
+   "clock": "3:33",
+   "place": "IM ZELT",
+   "lines": [
+    {
+     "text": "Um 3:33 wachst du auf.",
+     "say": "Um drei Uhr dreiunddreißig wachst du auf.",
+     "ev": [
+      [
+       "wake",
+       "word2"
+      ]
+     ]
+    },
+    {
+     "text": "Jemand ruft deinen Namen.",
+     "hl": {
+      "Namen": "y"
+     },
+     "sfx": [
+      [
+       "twig",
+       "end+0.15"
+      ]
+     ]
+    },
+    {
+     "text": "Von draußen.",
+     "hl": {
+      "draußen": "r"
+     },
+     "pause": 0.5
+    }
+   ]
+  },
+  {
+   "scene": "tent_ext",
+   "clock": "3:33",
+   "place": "VOR DEM ZELT",
+   "lines": [
+    {
+     "text": "Es ist Jonas' Stimme.",
+     "hl": {
+      "Jonas'": "y"
+     },
+     "sfx": [
+      [
+       "steps",
+       "start"
+      ],
+      [
+       "owl",
+       "start-1.2"
+      ]
+     ]
+    },
+    {
+     "text": "Komm schnell raus! Das musst du sehen!",
+     "hl": {
+      "raus": "r"
+     },
+     "quote": {
+      "who": "JONAS",
+      "place": "VOR DEM ZELT",
+      "text": "Komm schnell raus! Das musst du sehen!"
+     },
+     "pause": 0.6
+    }
+   ]
+  },
+  {
+   "scene": "tent_in",
+   "clock": "3:33",
+   "place": "IM ZELT",
+   "lines": [
+    {
+     "text": "Aber Jonas liegt neben dir.",
+     "hl": {
+      "neben": "r"
+     },
+     "ev": [
+      [
+       "jonasEyes",
+       "start"
+      ]
+     ],
+     "sfx": [
+      [
+       "boom",
+       "word3"
+      ]
+     ],
+     "pause": 1.0
+    }
+   ]
+  },
+  {
+   "scene": "jonas",
+   "clock": "3:34",
+   "place": "IM ZELT",
+   "lines": [
+    {
+     "text": "Seine Augen sind weit offen. Er bewegt sich nicht.",
+     "hl": {
+      "offen": "r"
+     },
+     "sfx": [
+      [
+       "twig",
+       "end"
+      ]
+     ]
+    },
+    {
+     "text": "Ganz leise flüstert er: Ich höre ihn auch.",
+     "hl": {
+      "auch": "r"
+     },
+     "quote": {
+      "who": "JONAS",
+      "place": "NEBEN DIR",
+      "text": "Ich höre ihn auch."
+     },
+     "pause": 0.7
+    }
+   ]
+  },
+  {
+   "scene": "tent_in",
+   "look": "wall",
+   "clock": "3:34",
+   "place": "IM ZELT",
+   "lines": [
+    {
+     "text": "Dann fällt ein Schatten auf die Zeltwand.",
+     "hl": {
+      "Schatten": "r"
+     },
+     "ev": [
+      [
+       "shadow",
+       "word2"
+      ],
+      [
+       "dread",
+       "word2"
+      ]
+     ],
+     "sfx": [
+      [
+       "steps",
+       "start"
+      ]
+     ]
+    },
+    {
+     "text": "Groß. Dünn. Mit viel zu langen Armen.",
+     "hl": {
+      "langen": "r",
+      "Armen": "r"
+     },
+     "pause": 0.6,
+     "sfx": [
+      [
+       "twig",
+       "word1"
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "scene": "tent_door",
+   "clock": "3:34",
+   "place": "IM ZELT",
+   "lines": [
+    {
+     "text": "Und dann bewegt sich der Reißverschluss.",
+     "hl": {
+      "Reißverschluss": "r"
+     },
+     "ev": [
+      [
+       "zip",
+       "word3",
+       "end+2.6"
+      ]
+     ],
+     "sfx": [
+      [
+       "zipper",
+       "word3"
+      ]
+     ]
+    },
+    {
+     "text": "Langsam. Von außen.",
+     "hl": {
+      "außen": "r"
+     },
+     "sfx": [
+      [
+       "boom",
+       "end+0.4"
+      ]
+     ],
+     "pause": 1.5
+    }
+   ]
+  },
+  {
+   "scene": "choice",
+   "heading": "WAS MACHST DU?",
+   "left": {
+    "label": "FESTHALTEN",
+    "text": "Den Reißverschluss festhalten.",
+    "icon": "✊",
+    "color": "#2f7cf6"
+   },
+   "right": {
+    "label": "FLIEHEN",
+    "text": "Hinten das Zelt aufreißen und rennen.",
+    "icon": "🏃",
+    "color": "#ff3b30"
+   },
+   "lines": [
+    {
+     "text": "Was machst du?",
+     "hl": {
+      "machst": "y"
+     }
+    },
+    {
+     "text": "Festhalten oder fliehen?",
+     "hl": {
+      "Festhalten": "b",
+      "fliehen": "r"
+     },
+     "pause": 0.5
+    }
+   ]
+  },
+  {
+   "scene": "end",
+   "sfx": [
+    [
+     "boom",
+     0.0
+    ]
+   ],
+   "lines": [
+    {
+     "text": "Teil 2. Heute Nacht.",
+     "say": "Teil zwei. Heute Nacht.",
+     "nocap": true,
+     "pause": 1.2
+    }
+   ]
+  }
+ ]
+}

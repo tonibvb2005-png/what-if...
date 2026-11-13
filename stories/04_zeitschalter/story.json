@@ -1,0 +1,344 @@
+{
+ "series": "GESCHICHTEN UM 3:33",
+ "episode": "#04",
+ "title": "ZEITSCHALTER",
+ "part": 1,
+ "set": "cellar",
+ "ambience": "cellar",
+ "endArt": "switch",
+ "question": "RENNEN oder DRÜCKEN? Schreib's in die Kommentare.",
+ "shots": [
+  {
+   "scene": "cellar_wide",
+   "clock": "3:33",
+   "place": "KELLER",
+   "lines": [
+    {
+     "text": "Stell dir vor, du kannst nachts nicht schlafen."
+    },
+    {
+     "text": "Um 3:33 gehst du in den Keller, um deine Wäsche zu holen.",
+     "say": "Um drei Uhr dreiunddreißig gehst du in den Keller, um deine Wäsche zu holen.",
+     "hl": {
+      "Keller": "y"
+     }
+    }
+   ]
+  },
+  {
+   "scene": "switch",
+   "clock": "3:33",
+   "place": "KELLER",
+   "lines": [
+    {
+     "text": "Das Licht hat einen Zeitschalter.",
+     "hl": {
+      "Zeitschalter": "y"
+     }
+    },
+    {
+     "text": "Dreißig Sekunden. Dann ist es dunkel.",
+     "hl": {
+      "dunkel": "r"
+     },
+     "pause": 1.0,
+     "ev": [
+      [
+       "timer",
+       "start",
+       30,
+       "end+0.3"
+      ],
+      [
+       "light",
+       "end+0.3",
+       0
+      ]
+     ]
+    },
+    {
+     "text": "Du drückst den Schalter.",
+     "ev": [
+      [
+       "press",
+       "word1"
+      ],
+      [
+       "light",
+       "word1+0.15",
+       1
+      ],
+      [
+       "fig",
+       "word1",
+       13.2
+      ]
+     ],
+     "pause": 0.2
+    }
+   ]
+  },
+  {
+   "scene": "cellar_pov",
+   "clock": "3:33",
+   "place": "KELLER",
+   "lines": [
+    {
+     "text": "Am Ende des Gangs steht jemand.",
+     "hl": {
+      "jemand": "r"
+     },
+     "sfx": [
+      [
+       "boom",
+       0.0
+      ]
+     ],
+     "ev": [
+      [
+       "dread",
+       "start"
+      ]
+     ]
+    },
+    {
+     "text": "Du rufst: Hallo?",
+     "hl": {
+      "Hallo": "y"
+     }
+    },
+    {
+     "text": "Keine Antwort.",
+     "pause": 1.0,
+     "ev": [
+      [
+       "timer",
+       "start-4.5",
+       30,
+       "end+0.3"
+      ],
+      [
+       "light",
+       "end+0.3",
+       0
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "scene": "cellar_pov",
+   "clock": "3:34",
+   "place": "KELLER",
+   "lines": [
+    {
+     "text": "Dunkel.",
+     "pause": 0.5
+    },
+    {
+     "text": "Du drückst wieder. Licht.",
+     "ev": [
+      [
+       "press",
+       "word1"
+      ],
+      [
+       "fig",
+       "word1",
+       8.0
+      ],
+      [
+       "light",
+       "word1+0.15",
+       1
+      ]
+     ]
+    },
+    {
+     "text": "Er steht näher.",
+     "hl": {
+      "näher": "r"
+     },
+     "sfx": [
+      [
+       "boom",
+       0.0
+      ]
+     ],
+     "pause": 0.5
+    }
+   ]
+  },
+  {
+   "scene": "cellar_face",
+   "clock": "3:34",
+   "place": "KELLER",
+   "lines": [
+    {
+     "text": "Er bewegt sich nur, wenn es dunkel ist.",
+     "hl": {
+      "dunkel": "r"
+     }
+    },
+    {
+     "text": "Also drückst du immer wieder, bevor das Licht ausgeht.",
+     "hl": {
+      "immer": "y",
+      "wieder": "y"
+     },
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "scene": "switch",
+   "clock": "3:34",
+   "place": "KELLER",
+   "lines": [
+    {
+     "text": "Fünf Sekunden.",
+     "hl": {
+      "Fünf": "y"
+     }
+    },
+    {
+     "text": "Du drückst.",
+     "ev": [
+      [
+       "press",
+       "word1"
+      ]
+     ]
+    },
+    {
+     "text": "Nichts passiert. Der Schalter klemmt.",
+     "hl": {
+      "klemmt": "r"
+     },
+     "ev": [
+      [
+       "press",
+       "word1"
+      ],
+      [
+       "press",
+       "end-0.2"
+      ]
+     ]
+    },
+    {
+     "text": "Dann geht das Licht aus.",
+     "ev": [
+      [
+       "timer",
+       "shot+0",
+       5,
+       "word3"
+      ],
+      [
+       "light",
+       "word3",
+       0
+      ]
+     ],
+     "pause": 0.8
+    }
+   ]
+  },
+  {
+   "scene": "cellar_pov",
+   "clock": "3:34",
+   "place": "KELLER",
+   "lines": [
+    {
+     "text": "Dunkelheit.",
+     "sfx": [
+      [
+       "breath",
+       0.0
+      ]
+     ],
+     "pause": 0.4
+    },
+    {
+     "text": "Dann flackert das Licht ein letztes Mal auf.",
+     "hl": {
+      "flackert": "y"
+     },
+     "ev": [
+      [
+       "fig",
+       "word1-0.1",
+       1.35
+      ],
+      [
+       "light",
+       "end-0.25",
+       1
+      ],
+      [
+       "light",
+       "end+0.3",
+       0
+      ]
+     ],
+     "sfx": [
+      [
+       "boom",
+       "end-0.25"
+      ]
+     ],
+     "pause": 1.4
+    }
+   ]
+  },
+  {
+   "scene": "choice",
+   "heading": "WAS MACHST DU?",
+   "left": {
+    "label": "RENNEN",
+    "text": "Im Dunkeln an ihm vorbei zur Treppe.",
+    "icon": "🏃",
+    "color": "#2f7cf6"
+   },
+   "right": {
+    "label": "DRÜCKEN",
+    "text": "Weiter auf den Schalter drücken.",
+    "icon": "💡",
+    "color": "#ff3b30"
+   },
+   "lines": [
+    {
+     "text": "Rennst du im Dunkeln an ihm vorbei?",
+     "hl": {
+      "Dunkeln": "b"
+     }
+    },
+    {
+     "text": "Oder drückst du weiter?",
+     "hl": {
+      "drückst": "r"
+     },
+     "pause": 0.5
+    }
+   ]
+  },
+  {
+   "scene": "end",
+   "sfx": [
+    [
+     "boom",
+     0.0
+    ]
+   ],
+   "lines": [
+    {
+     "text": "Teil 2. Heute Nacht.",
+     "say": "Teil zwei. Heute Nacht.",
+     "nocap": true,
+     "pause": 1.2
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,31 @@
+[calm, serious] Es ist drei Uhr dreiunddreißig, als in ganz Deutschland das Licht ausgeht.
+[slowly] Erst ein Stadtteil. [short pause] Dann dein Haus.
+[long pause]
+[tense] Neunter Stock. [short pause] Kein Strom. [short pause] Kein Aufzug.
+[short pause]
+[urgent] Dann kommt die Warnung aufs Handy.
+[long pause]
+[focused] Du füllst sofort alle Flaschen mit Wasser.
+[tense] Keine Minute zu früh. [short pause] Der Hahn versiegt.
+[long pause]
+[calm] Den Kühlschrank lässt du zu.
+[long pause]
+[quietly] Um fünf Uhr klopft es.
+[long pause]
+[slowly] Herr Brandt von unten. [short pause] Mit einer Kerze.
+[weak, in pain] Mein Kopf tut so weh, sagt er.
+[long pause]
+[tense, quietly] Aus seiner Wohnung brummt ein Generator.
+[slowly] Du gehst runter. [short pause] Seine Tür steht offen.
+[long pause]
+[whispers] Im Licht des Generators sitzt Frau Brandt am Tisch.
+[slowly, frightened] Ihre Augen sind offen. [short pause] Aber sie blinzelt nicht.
+[long pause]
+[whispers, eerie] Hinter dir flüstert Herr Brandt: [whispers, gentle] Sie schläft doch nur.
+[long pause]
+[nervous] Du drehst dich um. [short pause] Das Treppenhaus ist leer.
+[long pause]
+[slowly, frightened] Herr Brandt sitzt neben ihr am Tisch.
+[whispers] Seit Stunden.
+[long pause]
+[ominous, slowly] Wer hat dann an deine Tür geklopft?
