@@ -79,11 +79,21 @@ function handsSvg() {
 }
 
 /* ------------------------------------------------ KELLER */
+async function viewCellarDoor(t, sh) {      // Blick auf die Stahltür des Schutzraums
+  const lt = t - sh.start, d = sh.end - sh.start; cellarState(t);
+  let k = 0; for (const kt of TL.knocks || []) { const a = t - kt; if (a >= 0 && a < .18) k = Math.sin(a * 90) * (1 - a / .18); }
+  R3.steelDoor.position.z = 12.62 + k * .006;
+  R3.steelGap.material.color.setScalar(.35 + .25 * Math.abs(Math.sin(t * 2.3)));
+  W3.setCam([.15, 1.55, 9.6 + 1.2 * ease(lt / d)], [0, 1.15, 12.8], 46);
+  ensurePlane('you', 2, 2); await W3.setPlane('you', { visible: false });
+  return '';
+}
 function cellarState(t) {
   const e = lastEv('light', t, [0, 1]); let L = e[1];
   if (L > 0 && e[0] > .5 && t - e[0] < .3) L = Math.sin((t - e[0]) * 70) > -.2 ? 1 : .1;
   const fz = lastEv('fig', t, [0, 99])[1];
   R3.setLight(L, fz);
+  if (R3.steel) R3.steel.visible = !!TL.steelDoor;
   const pr = EV('press').some(p => t >= p[0] && t < p[0] + .22);
   R3.switchBtn.position.x = -.868 + (pr ? .006 : 0);
   return { L };
@@ -93,7 +103,7 @@ async function viewCellarWide(t, sh) {
   W3.setCam([.35, 1.72, 4.3 - .35 * ease(lt / d)], [0, 1.05, -.6], 50);
   ensurePlane('you', 2, 2); ensurePlane('hand', .5, .5, 1024);
   await W3.setPlane('hand', { visible: false });
-  await W3.setPlane('you', { svg: svgWrap(0, 1.0, 2.0, standing(0, { eyes: 'open', t, look: sh.look || 0 }), 1536), pos: [0, 1.0, .35], color: L > .05 ? '#ece8df' : '#101012', face: true, shadow: [.55, .3] });
+  await W3.setPlane('you', { svg: svgWrap(0, 1.0, 2.0, standing(0, { eyes: sh.eyes || 'open', t, look: sh.look || 0, basket: !TL.noBasket, mouth: sh.mouth || '' }), 1536), pos: [0, 1.0, .35], color: L > .05 ? '#ece8df' : '#101012', face: true, shadow: [.55, .3] });
   return '';
 }
 async function viewCellarPov(t, sh) {
@@ -122,7 +132,7 @@ async function viewCellarFace(t, sh) {
   ensurePlane('you', 2, 2); ensurePlane('youClose', .7, .7, 1536);
   await W3.setPlane('you', { visible: false });
   const look = lt > d * .5 ? 1.3 * (sh.lookDir || 1) : 0;
-  await W3.setPlane('youClose', { svg: svgWrap(0, 1.35, .7, standing(0, { eyes: 'wide', mouth: 'o', t, look, basket: true }), 1536), pos: [0, 1.35, .36], color: L > .05 ? '#ece8df' : '#101012' });
+  await W3.setPlane('youClose', { svg: svgWrap(0, 1.35, .7, standing(0, { eyes: 'wide', mouth: 'o', t, look, basket: !TL.noBasket }), 1536), pos: [0, 1.35, .36], color: L > .05 ? '#ece8df' : '#101012' });
   return '';
 }
 function timerOverlay(t, sh) {
@@ -280,10 +290,10 @@ const SETBG = {
   car: async (t) => { carState(t, true); await driverPlane(t, true, 'wide'); W3.setCam([-.36, 1.3, -.6], [-.22, 1.0, 1.5], 60); },
 };
 
-Object.assign(VIEWS, { cellar_wide: viewCellarWide, cellar_pov: viewCellarPov, switch: viewSwitch, cellar_face: viewCellarFace,
+Object.assign(VIEWS, { cellar_door: viewCellarDoor, cellar_wide: viewCellarWide, cellar_pov: viewCellarPov, switch: viewSwitch, cellar_face: viewCellarFace,
   tent_ext: viewTentExt, tent_in: viewTentIn, jonas: viewJonas, tent_door: viewTentDoor,
   car_ext: viewCarExt, car_in: viewCarIn, mirror: viewMirror, car_face: viewCarFace, radio: viewRadio });
-Object.assign(GLSTYLE, { cellar_wide: '', cellar_pov: '', switch: '', cellar_face: '', tent_ext: '', tent_in: '', jonas: '', tent_door: '',
+Object.assign(GLSTYLE, { cellar_door: '', cellar_wide: '', cellar_pov: '', switch: '', cellar_face: '', tent_ext: '', tent_in: '', jonas: '', tent_door: '',
   car_ext: '', car_in: '', mirror: '', car_face: '', radio: 'blur(7px) brightness(.55)' });
 Object.assign(SET_ASSETS, { creatureCellar: CREATURE.replace(/<rect x="0" y="290"[^>]*\/>/, ''), backseat: BACKSEAT, tentShadow: TENT_SHADOW, handShadow: HAND_SHADOW });
 

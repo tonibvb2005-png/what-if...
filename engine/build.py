@@ -58,7 +58,7 @@ def env(n, attack=0.005, decay=10.0):
 
 SFX_DIR = os.path.join(ENGINE, "sfx")
 # Spitzenpegel der echten Aufnahmen (0..1); Atmosphären: Ziel-Lautstärke (RMS)
-REC_PEAK = {"knockrec": .5, "generator": .2, "siren": .12, "owl": .16, "steps": .32, "twig": .38, "zipper": .42, "heartbeat": .5, "rev": .34, "static": .2, "carby": .3}
+REC_PEAK = {"airraid": .3, "airraid_muff": .22, "knockmetal": .55, "knockrec": .5, "generator": .2, "siren": .12, "owl": .16, "steps": .32, "twig": .38, "zipper": .42, "heartbeat": .5, "rev": .34, "static": .2, "carby": .3}
 AMB_RMS = {"car": .028, "forest": .011}
 _rec_cache = {}
 
@@ -482,7 +482,7 @@ def main():
           "groups": [{"start": g["start"], "end": g["end"], "words": g["words"]} for g in groups],
           "msgs": msgs, "typing": typing, "knocks": knocks, "handle": handle, "reveal": reveal,
           "taps": taps, "hums": hums, "quotes": quotes, "eyes": eyes, "ev": {k: sorted(v) for k, v in ev.items()},
-          **{k: story[k] for k in ("item", "visitor", "endArt", "bedLegs", "openMax", "set", "pill", "noTitle", "endStyle", "nextQ") if k in story}}
+          **{k: story[k] for k in ("item", "visitor", "endArt", "bedLegs", "openMax", "set", "pill", "noTitle", "endStyle", "nextQ", "noBasket", "steelDoor") if k in story}}
     tl_path = os.path.join(outdir, name + ".timeline.json")
     json.dump(tl, open(tl_path, "w"), ensure_ascii=False, indent=1)
 

@@ -55,6 +55,17 @@
     });
     const ex = put(new THREE.Mesh(new THREE.PlaneGeometry(.42, .16), basic('#ffffff', { map: exitTex })), 0, 2.1, 12.95, sc, false); ex.rotation.y = Math.PI;
     R.exitLight = new THREE.PointLight('#38ff8a', .5, 4, 1.6); R.exitLight.position.set(0, 1.9, 12.6); sc.add(R.exitLight);
+    // Schutzraum-Stahltür (optional, versperrt den Gang vor der Treppe)
+    R.steel = new THREE.Group(); R.steel.visible = false; sc.add(R.steel);
+    const stM = std('#6a6f78', { m: .55, r: .45 }), wM = std('#5b5d63');
+    put(new THREE.Mesh(new THREE.BoxGeometry(.4, 2.3, .2), wM), -.65, 1.15, 12.7, R.steel); put(new THREE.Mesh(new THREE.BoxGeometry(.4, 2.3, .2), wM), .65, 1.15, 12.7, R.steel);
+    put(new THREE.Mesh(new THREE.BoxGeometry(1.8, .3, .2), wM), 0, 2.15, 12.7, R.steel);
+    R.steelDoor = put(rbox(.9, 2.0, .09, .01, stM), 0, 1.0, 12.62, R.steel);
+    put(new THREE.Mesh(new THREE.BoxGeometry(.5, .05, .05), std('#9aa0a8', { m: .7, r: .3 })), .1, 1.05, 12.55, R.steel);
+    for (const y of [.35, 1.65]) put(new THREE.Mesh(new THREE.BoxGeometry(.06, .16, .05), std('#4a4d55', { m: .6 })), -.42, y, 12.56, R.steel);
+    const sign = canvasTex(256, 64, (g, w, h) => { g.fillStyle = '#e8e2c8'; g.fillRect(0, 0, w, h); g.fillStyle = '#1a1a1a'; g.font = 'bold 30px sans-serif'; g.fillText('SCHUTZRAUM', 22, 44); });
+    put(new THREE.Mesh(new THREE.PlaneGeometry(.5, .125), basic('#ffffff', { map: sign })), 0, 1.7, 12.565, R.steel, false).rotation.y = Math.PI;
+    R.steelGap = put(new THREE.Mesh(new THREE.BoxGeometry(.85, .012, .02), basic('#9fb4ff')), 0, .006, 12.57, R.steel, false);
     // Zeitschalter an der linken Wand (Knopf glüht orange im Dunkeln)
     put(rbox(.03, .13, .09, .006, std('#d8d6cf')), -.885, 1.15, .45);
     R.switchBtn = put(new THREE.Mesh(new THREE.BoxGeometry(.02, .05, .05), basic('#ff8a2a')), -.868, 1.15, .45, W3.scene, false);
