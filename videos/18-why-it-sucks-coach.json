@@ -7,59 +7,251 @@
       "shot": "kohook",
       "text": "Why it sucks being the coach.",
       "audio": "../audio/18-why-it-sucks-coach/01.wav",
-      "duration": 2.6
+      "wordTimes": [
+        0.0,
+        0.32,
+        0.46,
+        0.76,
+        1.1,
+        1.28
+      ]
     },
     {
       "shot": "kovol",
       "text": "It starts when nobody else volunteers. Now you own twenty bibs, thirty cones... and a group chat with forty parents.",
-      "audio": "../audio/18-why-it-sucks-coach/02.wav"
+      "audio": "../audio/18-why-it-sucks-coach/02.wav",
+      "cues": {
+        "own": 3.49,
+        "chat": 6.71
+      },
+      "wordTimes": [
+        0.31,
+        0.31,
+        0.67,
+        0.95,
+        1.27,
+        1.55,
+        3.49,
+        3.55,
+        3.73,
+        4.04,
+        4.35,
+        4.79,
+        5.23,
+        6.37,
+        6.61,
+        6.71,
+        6.87,
+        7.15,
+        7.43,
+        7.71
+      ]
     },
     {
       "shot": "kosat",
       "text": "Saturday, seven a.m. You're the first one there. You put up the nets. In the rain.",
-      "audio": "../audio/18-why-it-sucks-coach/03.wav"
+      "audio": "../audio/18-why-it-sucks-coach/03.wav",
+      "cues": {
+        "nets": 3.4,
+        "rain": 4.78
+      },
+      "wordTimes": [
+        0.72,
+        1.0,
+        1.28,
+        1.92,
+        2.14,
+        2.24,
+        2.44,
+        2.64,
+        3.4,
+        3.5,
+        3.64,
+        3.78,
+        3.9,
+        4.78,
+        4.9,
+        5.04
+      ]
     },
     {
       "shot": "koparents",
       "text": "Match day. Fifteen players. Eleven positions. Fifteen parents who think their kid should start.",
-      "audio": "../audio/18-why-it-sucks-coach/04.wav"
+      "audio": "../audio/18-why-it-sucks-coach/04.wav",
+      "cues": {
+        "parents": 4.04
+      },
+      "wordTimes": [
+        0.6,
+        0.6,
+        1.09,
+        1.58,
+        2.13,
+        2.68,
+        3.49,
+        4.3,
+        4.82,
+        5.0,
+        5.22,
+        5.54,
+        5.78,
+        6.0
+      ]
     },
     {
       "shot": "koflip",
       "text": "You lose 3-0? \"Bad tactics.\" You win 3-0? \"Great players.\"",
-      "audio": "../audio/18-why-it-sucks-coach/05.wav"
+      "audio": "../audio/18-why-it-sucks-coach/05.wav",
+      "cues": {
+        "bad": 1.74,
+        "win": 3.2,
+        "great": 4.98
+      },
+      "wordTimes": [
+        0.14,
+        0.34,
+        0.54,
+        1.74,
+        2.02,
+        3.2,
+        3.44,
+        3.7,
+        4.98,
+        5.14
+      ]
     },
     {
       "shot": "kodad",
       "text": "Second half. A dad on the sideline shouts different instructions. Louder than you.",
-      "audio": "../audio/18-why-it-sucks-coach/06.wav"
+      "audio": "../audio/18-why-it-sucks-coach/06.wav",
+      "cues": {
+        "dad": 2.36,
+        "louder": 4.5
+      },
+      "wordTimes": [
+        0.22,
+        0.56,
+        1.34,
+        1.44,
+        1.66,
+        1.8,
+        1.94,
+        2.36,
+        2.64,
+        3.1,
+        4.5,
+        4.66,
+        4.82
+      ]
     },
     {
       "shot": "kospeech",
       "text": "Half-time. You prepared the perfect speech. First question: \"Can we have orange slices?\"",
-      "audio": "../audio/18-why-it-sucks-coach/07.wav"
+      "audio": "../audio/18-why-it-sucks-coach/07.wav",
+      "cues": {
+        "orange": 4.86
+      },
+      "wordTimes": [
+        0.24,
+        1.24,
+        1.38,
+        1.78,
+        2.08,
+        2.48,
+        3.68,
+        3.84,
+        4.86,
+        4.92,
+        5.06,
+        5.18,
+        5.46
+      ]
     },
     {
       "shot": "kophoto",
       "text": "End of the season. They win the league! Everyone gets in the team photo. You're the one holding the camera.",
-      "audio": "../audio/18-why-it-sucks-coach/08.wav"
+      "audio": "../audio/18-why-it-sucks-coach/08.wav",
+      "cues": {
+        "photo": 2.92,
+        "cam": 5.58
+      },
+      "wordTimes": [
+        0.2,
+        0.52,
+        0.64,
+        0.76,
+        1.48,
+        1.64,
+        1.84,
+        2.04,
+        2.92,
+        3.32,
+        3.58,
+        3.74,
+        3.86,
+        4.08,
+        4.98,
+        5.26,
+        5.36,
+        5.58,
+        5.88,
+        6.08
+      ]
     },
     {
       "shot": "kothing",
       "text": "That's the thing about being the coach. No money. No thanks.",
-      "audio": "../audio/18-why-it-sucks-coach/09.wav"
+      "audio": "../audio/18-why-it-sucks-coach/09.wav",
+      "cues": {
+        "money": 2.36,
+        "thanks": 3.42
+      },
+      "wordTimes": [
+        0.24,
+        0.54,
+        0.7,
+        0.88,
+        1.1,
+        1.34,
+        1.54,
+        2.36,
+        2.6,
+        3.42,
+        3.58
+      ]
     },
     {
       "shot": "koagain",
       "text": "And next Saturday... you're there at seven again.",
       "audio": "../audio/18-why-it-sucks-coach/10.wav",
-      "duration": 3.4
+      "wordTimes": [
+        0.23,
+        0.37,
+        0.59,
+        1.57,
+        1.79,
+        1.93,
+        2.12,
+        2.31
+      ]
     },
     {
       "shot": "kotag",
       "text": "Tag your coach. Tell them thank you.",
       "audio": "../audio/18-why-it-sucks-coach/11.wav",
-      "pad": 1.2
+      "pad": 1.2,
+      "cues": {
+        "thanks": 1.62
+      },
+      "wordTimes": [
+        0.46,
+        0.56,
+        0.74,
+        1.62,
+        1.74,
+        1.9,
+        2.16
+      ]
     }
   ]
 }

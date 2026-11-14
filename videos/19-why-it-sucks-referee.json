@@ -7,59 +7,242 @@
       "shot": "rfhook",
       "text": "Why it sucks being the referee.",
       "audio": "../audio/19-why-it-sucks-referee/01.wav",
-      "duration": 2.6
+      "wordTimes": [
+        0.0,
+        0.28,
+        0.48,
+        0.74,
+        1.08,
+        1.26
+      ]
     },
     {
       "shot": "rffirst",
       "text": "Your very first game. Under nines. A grandma calls you blind.",
-      "audio": "../audio/19-why-it-sucks-referee/02.wav"
+      "audio": "../audio/19-why-it-sucks-referee/02.wav",
+      "cues": {
+        "blind": 3.74
+      },
+      "wordTimes": [
+        0.42,
+        0.42,
+        0.78,
+        1.18,
+        2.22,
+        2.38,
+        3.74,
+        3.84,
+        4.18,
+        4.66,
+        4.88
+      ]
     },
     {
       "shot": "rffree",
       "text": "You give a free kick. Half the crowd hates you. You don't give it... the other half hates you.",
-      "audio": "../audio/19-why-it-sucks-referee/03.wav"
+      "audio": "../audio/19-why-it-sucks-referee/03.wav",
+      "cues": {
+        "hate1": 2.14,
+        "dont": 3.34,
+        "hate2": 5.24
+      },
+      "wordTimes": [
+        0.24,
+        0.36,
+        0.48,
+        0.58,
+        0.76,
+        1.48,
+        1.62,
+        1.82,
+        2.14,
+        2.54,
+        3.34,
+        3.58,
+        3.84,
+        3.98,
+        4.6,
+        4.7,
+        4.96,
+        5.24,
+        5.44
+      ]
     },
     {
       "shot": "rfrun",
       "text": "Ninety minutes. You run ten kilometres. Nobody even passes to you.",
-      "audio": "../audio/19-why-it-sucks-referee/04.wav"
+      "audio": "../audio/19-why-it-sucks-referee/04.wav",
+      "cues": {
+        "pass": 3.84
+      },
+      "wordTimes": [
+        0.39,
+        0.78,
+        1.72,
+        1.76,
+        2.09,
+        2.42,
+        3.84,
+        4.06,
+        4.38,
+        4.8,
+        5.1
+      ]
     },
     {
       "shot": "rfdecisions",
       "text": "You make a hundred decisions. Ninety-nine are right. Everyone talks about the other one.",
-      "audio": "../audio/19-why-it-sucks-referee/05.wav"
+      "audio": "../audio/19-why-it-sucks-referee/05.wav",
+      "cues": {
+        "right": 2.16,
+        "one": 3.94
+      },
+      "wordTimes": [
+        0.32,
+        0.44,
+        0.58,
+        0.72,
+        1.02,
+        1.69,
+        2.36,
+        2.98,
+        3.94,
+        4.2,
+        4.5,
+        4.76,
+        4.92,
+        5.1
+      ]
     },
     {
       "shot": "rfpen",
       "text": "Last minute. Penalty! Suddenly, eleven players are screaming in your face.",
-      "audio": "../audio/19-why-it-sucks-referee/06.wav"
+      "audio": "../audio/19-why-it-sucks-referee/06.wav",
+      "cues": {
+        "pen": 1.1,
+        "mob": 2.78
+      },
+      "wordTimes": [
+        0.54,
+        0.78,
+        1.1,
+        2.78,
+        3.24,
+        3.7,
+        4.2,
+        4.42,
+        4.82,
+        5.1,
+        5.26
+      ]
     },
     {
       "shot": "rfvar",
       "text": "No VAR. No replay. Just you... and two hundred phones filming.",
-      "audio": "../audio/19-why-it-sucks-referee/07.wav"
+      "audio": "../audio/19-why-it-sucks-referee/07.wav",
+      "cues": {
+        "phones": 4.77
+      },
+      "wordTimes": [
+        0.43,
+        0.55,
+        2.19,
+        2.47,
+        3.39,
+        3.53,
+        4.45,
+        4.72,
+        4.98,
+        5.25,
+        5.89
+      ]
     },
     {
       "shot": "rfcar",
       "text": "After the game, you walk to your car. Alone. Someone shouts: \"Get home safe, ref!\" You're not sure if it's nice.",
-      "audio": "../audio/19-why-it-sucks-referee/08.wav"
+      "audio": "../audio/19-why-it-sucks-referee/08.wav",
+      "cues": {
+        "alone": 3.28,
+        "shout": 4.04,
+        "sure": 6.52
+      },
+      "wordTimes": [
+        0.46,
+        0.66,
+        0.84,
+        1.44,
+        1.66,
+        1.84,
+        2.04,
+        2.18,
+        3.28,
+        4.04,
+        4.28,
+        5.14,
+        5.22,
+        5.4,
+        5.88,
+        6.52,
+        6.92,
+        7.06,
+        7.3,
+        7.44,
+        7.62
+      ]
     },
     {
       "shot": "rfthing",
       "text": "That's the thing about being the referee. Without you... there is no game.",
-      "audio": "../audio/19-why-it-sucks-referee/09.wav"
+      "audio": "../audio/19-why-it-sucks-referee/09.wav",
+      "cues": {
+        "nogame": 3.76
+      },
+      "wordTimes": [
+        0.44,
+        0.68,
+        0.86,
+        1.06,
+        1.3,
+        1.56,
+        1.76,
+        2.62,
+        2.84,
+        3.76,
+        3.96,
+        4.2,
+        4.42
+      ]
     },
     {
       "shot": "rfforget",
       "text": "And everyone forgets that.",
       "audio": "../audio/19-why-it-sucks-referee/10.wav",
-      "duration": 2.6
+      "wordTimes": [
+        0.48,
+        0.6,
+        0.94,
+        1.44
+      ]
     },
     {
       "shot": "rftag",
       "text": "Tag a referee. Tell them: thanks for the game.",
       "audio": "../audio/19-why-it-sucks-referee/11.wav",
-      "pad": 1.2
+      "pad": 1.2,
+      "cues": {
+        "thanks": 1.87
+      },
+      "wordTimes": [
+        0.21,
+        0.65,
+        0.81,
+        1.87,
+        1.91,
+        2.43,
+        2.83,
+        3.03,
+        3.15
+      ]
     }
   ]
 }

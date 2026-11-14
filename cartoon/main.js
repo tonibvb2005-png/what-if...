@@ -1769,7 +1769,7 @@
     koflip: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235,
       cam: [[0, FC], [1, FC]], cast: { coach: { x: 0, scale: 1 } },
       acts: { coach: [[0, { e: 'despair', p: 'handsOnHead' }], ['win', .5, { e: 'happy', p: 'cheer' }], ['great', .8, { e: 'neutral', p: 'crossed' }]] },
-      extra: (lt) => { const w = cue('win', .5); scoreboard(lt < w ? 'HOME 0 – 3 AWAY' : 'HOME 3 – 0 AWAY', lt < w ? 'LOST' : 'WON'); pill(0, 650, lt < w ? '"BAD TACTICS."' : '"GREAT PLAYERS."', eb(P(lt, lt < w ? cue('bad', .3) : cue('great', .8), (lt < w ? cue('bad', .3) : cue('great', .8)) + .3)), lt < w ? '#e8364f' : '#2fbf71', '#fff', 46); } },
+      extra: (lt) => { const w = cue('win', .5); scoreboard(lt < w ? 'HOME 0 – 3 AWAY' : 'HOME 3 – 0 AWAY', lt < w ? 'LOST' : 'WON'); pill(0, 860, lt < w ? '"BAD TACTICS."' : '"GREAT PLAYERS."', eb(P(lt, lt < w ? cue('bad', .3) : cue('great', .8), (lt < w ? cue('bad', .3) : cue('great', .8)) + .3)), lt < w ? '#e8364f' : '#2fbf71', '#fff', 46); } },
     kodad: { set: 'flat', flat: (t) => bgStadium(t, false), age: 'SECOND HALF', captionTop: 1235,
       cam: [[0, FC], [1, FC]], cast: { coach: { x: -230, scale: 1 }, dad: { x: 260, scale: 1 } },
       acts: { coach: [[0, { e: 'focused', p: 'pointR', ex: { mouthOpen: .5 } }], ['louder', .7, { e: 'angry', p: 'crossed' }]], dad: [[0, { e: 'neutral', m: { lookX: -1 } }], ['dad', .35, { e: 'angry', p: 'pointL', ex: { mouthOpen: 1, mouthW: 1.3 }, m: { lookX: -1, tremble: .5 } }]] },
