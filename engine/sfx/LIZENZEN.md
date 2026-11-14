@@ -17,3 +17,6 @@ Alle Aufnahmen sind **CC0** oder **Public Domain**. Sie dürfen ohne Namensnennu
 | knockrec.ogg | Klopfen an einer Tür | archive.org: Red_Library_Doors, „R09-18 Knocking on Door“ | CC0 |
 | generator.ogg | Generator, gedämpft (wie hinter einer Tür) | archive.org: SSE_Library_MACHINES, „Generator building“ | CC0 |
 | siren.ogg | Entfernte Sirene | archive.org: SSE_Library_ALARMS, „Distant siren“ | CC0 |
+| switch.ogg | Lichtschalter wird ausgeschaltet | archive.org: SSE_Library_MECHANICAL, „Footsteps; turning off several light switches“ | CC0 |
+| bolt.ogg | Große Metalltür, Riegel | archive.org: SSE_Library_DOORS, „Elevator doors or large metal cabinet; latches“ | CC0 |
+| clickrec.ogg | Kurzer Metall-Klick | archive.org: SSE_Library_MECHANICAL, „Metal clicks; several takes“ | CC0 |

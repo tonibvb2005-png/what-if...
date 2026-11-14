@@ -58,7 +58,7 @@ def env(n, attack=0.005, decay=10.0):
 
 SFX_DIR = os.path.join(ENGINE, "sfx")
 # Spitzenpegel der echten Aufnahmen (0..1); Atmosphären: Ziel-Lautstärke (RMS)
-REC_PEAK = {"airraid": .3, "airraid_muff": .22, "knockmetal": .55, "knockrec": .5, "generator": .2, "siren": .12, "owl": .16, "steps": .32, "twig": .38, "zipper": .42, "heartbeat": .5, "rev": .34, "static": .2, "carby": .3}
+REC_PEAK = {"airraid": .3, "airraid_muff": .22, "knockmetal": .55, "knockrec": .5, "generator": .2, "siren": .12, "owl": .16, "steps": .32, "twig": .38, "zipper": .42, "heartbeat": .5, "rev": .34, "static": .2, "carby": .3, "switch": .4, "bolt": .45, "clickrec": .3}
 AMB_RMS = {"car": .028, "forest": .011}
 _rec_cache = {}
 

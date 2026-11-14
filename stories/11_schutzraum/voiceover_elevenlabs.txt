@@ -1,13 +1,3 @@
-[whispering, tense] Ein Uhr zweiundfünfzig.
-[short pause]
-[quietly] Die Sirenen verstummen.
-[long pause]
-[tense, slowly] Und jemand klopft an die Stahltür.
-[short pause]
-[whispering] Von draußen.
-[long pause]
-[calm] Zwanzig Minuten vorher.
-[short pause]
 [urgent] Sirenen. In der ganzen Stadt.
 [urgent, breathless] Du rennst runter in den Schutzraum im Keller.
 [short pause]
