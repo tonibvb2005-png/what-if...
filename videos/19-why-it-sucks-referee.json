@@ -1,0 +1,65 @@
+{
+  "title": "Why it sucks being the referee",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "scenes": [
+    {
+      "shot": "rfhook",
+      "text": "Why it sucks being the referee.",
+      "audio": "../audio/19-why-it-sucks-referee/01.wav",
+      "duration": 2.6
+    },
+    {
+      "shot": "rffirst",
+      "text": "Your very first game. Under nines. A grandma calls you blind.",
+      "audio": "../audio/19-why-it-sucks-referee/02.wav"
+    },
+    {
+      "shot": "rffree",
+      "text": "You give a free kick. Half the crowd hates you. You don't give it... the other half hates you.",
+      "audio": "../audio/19-why-it-sucks-referee/03.wav"
+    },
+    {
+      "shot": "rfrun",
+      "text": "Ninety minutes. You run ten kilometres. Nobody even passes to you.",
+      "audio": "../audio/19-why-it-sucks-referee/04.wav"
+    },
+    {
+      "shot": "rfdecisions",
+      "text": "You make a hundred decisions. Ninety-nine are right. Everyone talks about the other one.",
+      "audio": "../audio/19-why-it-sucks-referee/05.wav"
+    },
+    {
+      "shot": "rfpen",
+      "text": "Last minute. Penalty! Suddenly, eleven players are screaming in your face.",
+      "audio": "../audio/19-why-it-sucks-referee/06.wav"
+    },
+    {
+      "shot": "rfvar",
+      "text": "No VAR. No replay. Just you... and two hundred phones filming.",
+      "audio": "../audio/19-why-it-sucks-referee/07.wav"
+    },
+    {
+      "shot": "rfcar",
+      "text": "After the game, you walk to your car. Alone. Someone shouts: \"Get home safe, ref!\" You're not sure if it's nice.",
+      "audio": "../audio/19-why-it-sucks-referee/08.wav"
+    },
+    {
+      "shot": "rfthing",
+      "text": "That's the thing about being the referee. Without you... there is no game.",
+      "audio": "../audio/19-why-it-sucks-referee/09.wav"
+    },
+    {
+      "shot": "rfforget",
+      "text": "And everyone forgets that.",
+      "audio": "../audio/19-why-it-sucks-referee/10.wav",
+      "duration": 2.6
+    },
+    {
+      "shot": "rftag",
+      "text": "Tag a referee. Tell them: thanks for the game.",
+      "audio": "../audio/19-why-it-sucks-referee/11.wav",
+      "pad": 1.2
+    }
+  ]
+}

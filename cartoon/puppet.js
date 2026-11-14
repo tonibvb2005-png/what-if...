@@ -139,6 +139,13 @@ window.Puppet = (function () {
       ctx.beginPath(); ctx.roundRect(-34, -40, 68, 34, 8); ctx.fillStyle = '#ffd400'; ctx.fill(); stroke(ctx, 5, OUT); ctx.fillStyle = OUT; ctx.font = '900 26px Inter Display'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('C', 0, -22);
     } else if (kind === 'bibs') {
       for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.roundRect(-40 + i * 4, -40 - i * 16, 80, 22, 8); ctx.fillStyle = ['#ff8c1a', '#ffd400', '#2fbf71', '#ff8c1a'][i]; ctx.fill(); stroke(ctx, 4, OUT); }
+    } else if (kind === 'red') {
+      ctx.rotate(-.15); ctx.beginPath(); ctx.roundRect(-24, -96, 48, 70, 6); ctx.fillStyle = '#e8243b'; ctx.fill(); stroke(ctx, 5, OUT);
+    } else if (kind === 'camera') {
+      ctx.beginPath(); ctx.roundRect(-46, -70, 92, 60, 10); ctx.fillStyle = '#2b2f3a'; ctx.fill(); stroke(ctx, 5, OUT);
+      ctx.beginPath(); ctx.arc(0, -40, 18, 0, Math.PI * 2); ctx.fillStyle = '#7fd8ff'; ctx.fill(); stroke(ctx, 4, OUT);
+    } else if (kind === 'whistle') {
+      ctx.beginPath(); ctx.roundRect(-14, -40, 34, 22, 8); ctx.fillStyle = '#c9ced8'; ctx.fill(); stroke(ctx, 4, OUT);
     } else if (kind === 'coat') {
       ctx.rotate(.15);
       ctx.beginPath(); ctx.moveTo(-10, -6); ctx.lineTo(-58, 20); ctx.lineTo(-64, 170); ctx.lineTo(48, 170); ctx.lineTo(44, 20); ctx.lineTo(10, -6); ctx.closePath();

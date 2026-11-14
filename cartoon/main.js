@@ -1729,6 +1729,115 @@
       extra: (lt) => { pill(0, 520, '@ TAG YOUR CAPTAIN', eb(P(lt, .1, .45)), '#ffd400', OUT, 50); bubble(240, 790, "WE'VE GOT YOU.", eb(P(lt, cue('got', .6), cue('got', .6) + .35)), -60); } }
   });
 
+
+  // ---------- "Why it sucks being the coach" / "... the referee" ----------
+  Object.assign(CH, {
+    gran: { skin: '#f0c19a', shirt: '#c96a9a', trim: '#fff', pants: '#5a4a6a', shoes: '#111', hair: 'short', hairColor: '#d9d9e0', glasses: true, bw: 1.15, blinkPh: .5 },
+    mum:  { skin: '#e8b08a', shirt: '#2fae9a', trim: '#fff', pants: '#2b2f4a', shoes: '#111', hair: 'short', hairColor: '#4a2a14', bw: 1.05, blinkPh: 1.4 },
+    kidG: { skin: '#ffd9b8', shirt: '#0f8a5c', trim: '#fff', number: '3', pants: '#fff', shoes: '#111', hair: 'spiky', hairColor: '#c9a46a', bw: .95, blinkPh: 2.2 }
+  });
+  function groupChat(x, y, k, lt, msgs) {
+    if (k <= 0) return;
+    ctx.save(); ctx.translate(x, y); ctx.scale(k, k);
+    ctx.beginPath(); ctx.roundRect(-210, -380, 420, 760, 50); ctx.fillStyle = '#1b1035'; ctx.fill(); ctx.beginPath(); ctx.roundRect(-188, -350, 376, 700, 34); ctx.fillStyle = '#e9f5e9'; ctx.fill();
+    ctx.fillStyle = '#2fbf71'; ctx.beginPath(); ctx.roundRect(-188, -350, 376, 80, [34, 34, 0, 0]); ctx.fill(); txt('U9 PARENTS (40)', 0, -310, 28, '#fff', 900);
+    msgs.forEach(([who, m, at], i) => { if (lt < at) return; const yy = -230 + i * 105; ctx.beginPath(); ctx.roundRect(-170, yy - 34, 300, 84, 16); ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(0,0,0,.1)'; ctx.stroke(); txt(who, -152, yy - 12, 20, '#2fbf71', 800, 'left'); txt(m, -152, yy + 20, 24, OUT, 800, 'left'); });
+    ctx.restore();
+  }
+  function phonesUp(t, k) { if (k <= 0) return; for (let i = 0; i < 9; i++) { const x = -480 + i * 120, y = 1120 + (i % 2) * 40 + Math.sin(t * 2 + i) * 6; ctx.save(); ctx.translate(x, y); ctx.scale(k, k); ctx.beginPath(); ctx.roundRect(-26, -46, 52, 92, 8); ctx.fillStyle = '#1b1035'; ctx.fill(); ctx.beginPath(); ctx.roundRect(-20, -38, 40, 70, 4); ctx.fillStyle = (Math.floor(t * 2 + i) % 2) ? '#fff' : '#ff3b4f'; ctx.fill(); ctx.restore(); } }
+  function splitCrowd(lt, cl, cr) { pill(-280, 520, cl, 1, '#e8364f', '#fff', 34); pill(280, 520, cr, 1, '#1f6fe0', '#fff', 34); }
+  const COACH = { x: 0, scale: 1 };
+  Object.assign(SHOTS, {
+    // ===== COACH =====
+    kohook: { set: 'flat', flat: (t) => bgStadium(t, false), titleFast: true, captionTop: 1235,
+      title: ['WHY IT SUCKS BEING THE', '<span class="box">COACH</span>'], titleSize: [66, 110],
+      cam: [[0, FC], [1, { x: 0, y: 900, z: 1.04 }]], cast: { theo: { x: 290, scale: .58, y: 1180 }, coach: { x: -40, scale: 1 } },
+      acts: { coach: [[0, { e: 'despair', p: 'handsOnHead' }]], theo: [[0, { e: 'happy', p: 'cheer' }]] } },
+    kovol: { set: 'flat', flat: bgPark, age: 'YEAR 1', captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { coach: { x: -230, scale: 1 } },
+      acts: { coach: [[0, { e: 'surprised', p: 'cheer' }], ['own', .4, { e: 'neutral', p: 'holdBag', propR: 'bibs' }], ['chat', .72, { e: 'despair', p: 'phone', propR: 'phoneRing' }]] },
+      extra: (lt, t) => { pill(-230, 650, 'NOBODY ELSE? 🙋', eb(P(lt, .2, .5)) * (1 - P(lt, cue('own', .4) - .2, cue('own', .4))), '#fff', OUT, 40); if (lt > cue('own', .4)) cones(-80, 1400); statCard(270, 330, 'YOU OWN', [['BIBS', 20, true], ['CONES', 30, true], ['PARENTS', lt > cue('chat', .72) ? 40 : 0, false]], eb(P(lt, cue('own', .4), cue('own', .4) + .3))); } },
+    kosat: { set: 'flat', flat: (t) => bgStadium(t, true), age: 'SATURDAY 7:00', captionTop: 1235, bright: .7,
+      cam: [[0, FC], [1, { x: -60, y: 920, z: 1.08 }]], cast: { coach: { x: 160, scale: 1 } },
+      back: () => keeperGoal(-780, 100, int3()),
+      acts: { coach: [[0, { e: 'focused', p: 'holdBag', m: { walk: .6 } }], ['nets', .5, { e: 'tense', ex: { sweat: .6 }, p: 'cheer', m: { walk: 0 } }], ['rain', .85, { e: 'despair', p: 'cheer', m: { tremble: .5 } }]] },
+      extra: (lt, t) => { pill(160, 650, 'FIRST ONE THERE', eb(P(lt, .3, .6)), '#fff', OUT, 38); if (lt > cue('rain', .82)) rain(t); } },
+    koparents: { set: 'flat', flat: (t) => bgStadium(t, false), age: 'MATCH DAY', captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { mum: { x: -380, scale: .95 }, dad: { x: -130, scale: .95 }, coach: { x: 130, scale: 1 }, gran: { x: 380, scale: .92 } },
+      acts: { coach: [[0, { e: 'focused', p: 'crossed' }], ['parents', .6, { e: 'nervous', ex: { sweat: 1 }, p: 'nervous' }]], mum: [[0, { e: 'neutral' }], ['parents', .6, { e: 'angry', p: 'pointR', m: { lookX: 1 } }]], dad: [[0, { e: 'neutral' }], ['parents', .6, { e: 'angry', p: 'pointR', m: { lookX: 1 } }]], gran: [[0, { e: 'neutral' }], ['parents', .6, { e: 'angry', p: 'pointL', m: { lookX: -1 } }]] },
+      extra: (lt) => { statCard(0, 300, 'THE MATHS', [['PLAYERS', 15, true], ['POSITIONS', 11, false]], eb(P(lt, .1, .4))); const k = cue('parents', .6); bubble(-330, 860, 'MY KID STARTS!', eb(P(lt, k, k + .3)), -40); bubble(-120, 720, 'WHY IS HE ON THE BENCH?', eb(P(lt, k + .2, k + .5)), 0); bubble(320, 800, 'MY GRANDSON!', eb(P(lt, k + .4, k + .7)), 50); } },
+    koflip: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { coach: { x: 0, scale: 1 } },
+      acts: { coach: [[0, { e: 'despair', p: 'handsOnHead' }], ['win', .5, { e: 'happy', p: 'cheer' }], ['great', .8, { e: 'neutral', p: 'crossed' }]] },
+      extra: (lt) => { const w = cue('win', .5); scoreboard(lt < w ? 'HOME 0 – 3 AWAY' : 'HOME 3 – 0 AWAY', lt < w ? 'LOST' : 'WON'); pill(0, 650, lt < w ? '"BAD TACTICS."' : '"GREAT PLAYERS."', eb(P(lt, lt < w ? cue('bad', .3) : cue('great', .8), (lt < w ? cue('bad', .3) : cue('great', .8)) + .3)), lt < w ? '#e8364f' : '#2fbf71', '#fff', 46); } },
+    kodad: { set: 'flat', flat: (t) => bgStadium(t, false), age: 'SECOND HALF', captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { coach: { x: -230, scale: 1 }, dad: { x: 260, scale: 1 } },
+      acts: { coach: [[0, { e: 'focused', p: 'pointR', ex: { mouthOpen: .5 } }], ['louder', .7, { e: 'angry', p: 'crossed' }]], dad: [[0, { e: 'neutral', m: { lookX: -1 } }], ['dad', .35, { e: 'angry', p: 'pointL', ex: { mouthOpen: 1, mouthW: 1.3 }, m: { lookX: -1, tremble: .5 } }]] },
+      extra: (lt) => { bubble(-230, 760, 'HOLD YOUR POSITION!', eb(P(lt, .1, .4)), 0); const k = cue('dad', .35); ctx.save(); const s2 = lt > cue('louder', .7) ? 1.35 : 1; ctx.translate(260, 700); ctx.scale(s2, s2); bubble(0, 0, 'ATTAAACK!!!', eb(P(lt, k, k + .3)), 0); ctx.restore(); } },
+    kospeech: { set: 'flat', flat: (t) => bgStadium(t, false), age: 'HALF-TIME', captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { kidR: { x: -360, scale: .66 }, kidG: { x: -150, scale: .66 }, coach: { x: 120, scale: 1 }, kidY: { x: 390, scale: .66 } },
+      acts: { coach: [[0, { e: 'confident', p: 'pointR', ex: { mouthOpen: .4 } }], ['orange', .7, { e: 'despair', p: 'idle' }]], kidR: [[0, { e: 'neutral' }]], kidY: [[0, { e: 'neutral', m: { lookX: -1 } }]], kidG: [[0, { e: 'neutral', m: { lookX: 1 } }], ['orange', .7, { e: 'happy', p: 'waveR', m: { wave: 1 } }]] },
+      extra: (lt) => { pill(120, 560, '📋 TACTICS · PRESSING · SHAPE', eb(P(lt, .2, .5)) * (1 - P(lt, cue('orange', .7) - .2, cue('orange', .7))), '#fff', OUT, 30); bubble(-150, 860, 'CAN WE HAVE ORANGE SLICES?', eb(P(lt, cue('orange', .7), cue('orange', .7) + .3)), 0); } },
+    kophoto: { set: 'flat', flat: (t) => bgStadium(t, false), age: 'END OF SEASON', captionTop: 1235, conf: 1,
+      cam: [[0, FC], [1, FC]], cast: { kidR: { x: -380, scale: .7 }, kidG: { x: -170, scale: .7 }, kidY: { x: 40, scale: .7 }, kidB: { x: 250, scale: .7 }, coach: { x: 450, scale: 1 } },
+      move: { coach: [[0, 0], ['photo', .45, 0], ['cam', .78, 470]] },
+      acts: { kidR: [[0, { e: 'ecstatic', p: 'cheer' }]], kidG: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: .4 } }]], kidY: [[0, { e: 'ecstatic', p: 'holdBag', propR: 'cup' }]], kidB: [[0, { e: 'ecstatic', p: 'cheer' }]], coach: [[0, { e: 'ecstatic', p: 'cheer' }], ['cam', .78, { e: 'neutral', p: 'holdCashUp', propR: 'camera', m: { lookX: -1 } }]] },
+      extra: (lt) => { pill(0, 520, 'LEAGUE CHAMPIONS 🏆', eb(P(lt, .1, .4)), '#2fbf71', '#fff', 44); const c = cue('cam', .78); if (lt > c + .2) { const a = 1 - P(lt, c + .2, c + .5); if (a > 0) { ctx.fillStyle = `rgba(255,255,255,${a})`; ctx.fillRect(-2000, -2000, 5000, 5000); } } } },
+    kothing: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { coach: { x: 0, scale: 1 } },
+      acts: { coach: [[0, { e: 'neutral', p: 'hips' }]] },
+      extra: (lt) => statCard(0, 330, 'YOUR SALARY', [['MONEY', '€0', false], ['THANK YOUS', lt > cue('thanks', .75) ? 0 : '…', false]], eb(P(lt, cue('money', .55), cue('money', .55) + .3))) },
+    koagain: { set: 'flat', flat: (t) => bgStadium(t, true), age: 'NEXT SATURDAY 7:00', captionTop: 1700, bright: .75, cam: [[0, FC], [1, { x: 0, y: 930, z: 1.08 }]], cast: { coach: { x: 0, scale: 1 } },
+      acts: { coach: [[0, { e: 'happy', p: 'holdBag', propR: 'bibs', m: { walk: .5 } }]] }, extra: (lt) => pill(0, 640, '❤️', eb(P(lt, .6, .9)), '#fff', OUT, 60) },
+    kotag: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { kidR: { x: -380, scale: .7 }, coach: { x: -120, scale: 1 }, kidG: { x: 150, scale: .7 }, kidY: { x: 380, scale: .7 } },
+      acts: { coach: [[0, { e: 'surprised' }], [.45, { e: 'happy', p: 'thumbsUpR', handR: 'thumb' }]], kidR: [[0, { e: 'happy', p: 'cheer' }]], kidG: [[0, { e: 'happy', p: 'cheer', m: { jump: .3 } }]], kidY: [[0, { e: 'happy', p: 'waveR', m: { wave: 1 } }]] },
+      extra: (lt) => { pill(0, 520, '@ TAG YOUR COACH', eb(P(lt, .1, .45)), '#ffd400', OUT, 50); bubble(220, 790, 'THANK YOU, COACH!', eb(P(lt, cue('thanks', .6), cue('thanks', .6) + .35)), -60); } },
+    // ===== REFEREE =====
+    rfhook: { set: 'flat', flat: (t) => bgStadium(t, false), titleFast: true, captionTop: 1235,
+      title: ['WHY IT SUCKS BEING THE', '<span class="box">REFEREE</span>'], titleSize: [66, 110],
+      cam: [[0, FC], [1, { x: 0, y: 900, z: 1.04 }]], cast: { tC: { x: 290, scale: .58, y: 1180 }, ref: { x: -40, scale: 1 } },
+      acts: { ref: [[0, { e: 'despair', p: 'crossed' }]], tC: [[0, { e: 'angry', p: 'pointL', m: { lookX: -1 } }]] } },
+    rffirst: { set: 'flat', flat: bgPark, age: 'FIRST GAME · U9', captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { ref: { x: -200, scale: 1 }, gran: { x: 280, scale: .95 } },
+      acts: { ref: [[0, { e: 'happy', p: 'holdCashUp', propR: 'whistle' }], ['blind', .65, { e: 'shock', p: 'idle' }]], gran: [[0, { e: 'neutral', m: { lookX: -1 } }], ['blind', .6, { e: 'angry', p: 'pointL', ex: { mouthOpen: 1 }, m: { lookX: -1, tremble: .4 } }]] },
+      extra: (lt) => bubble(280, 760, 'ARE YOU BLIND, REF?!', eb(P(lt, cue('blind', .6), cue('blind', .6) + .3)), 0) },
+    rffree: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { ref: { x: 0, scale: 1 } },
+      acts: { ref: [[0, { e: 'focused', p: 'pointR' }], ['dont', .55, { e: 'neutral', p: 'waveR', m: { wave: 1 } }]] },
+      extra: (lt) => { const d2 = cue('dont', .55); if (lt < d2) { pill(0, 650, 'FREE KICK ✓', 1, '#fff', OUT, 40); bubble(-300, 820, 'BOOO!', eb(P(lt, cue('hate1', .3), cue('hate1', .3) + .3)), 0); splitCrowd(lt, '😡 HOME', '😊 AWAY'); } else { pill(0, 650, 'PLAY ON ✗', 1, '#fff', OUT, 40); bubble(300, 820, 'BOOO!', eb(P(lt, cue('hate2', .85), cue('hate2', .85) + .3)), 0); splitCrowd(lt, '😊 HOME', '😡 AWAY'); } } },
+    rfrun: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { ref: { x: -150, scale: 1 } },
+      move: { ref: [[0, -350], [1, 250]] },
+      acts: { ref: [[0, { e: 'tense', ex: { sweat: 1 }, m: { walk: 1.2 } }]] },
+      extra: (lt) => { statCard(220, 320, 'DISTANCE', [['RUN', Math.round(lerp(0, 10, P(lt, .2, cue('pass', .6)))) + ' KM', true], ['PASSES TO YOU', 0, false]], eb(P(lt, .1, .4))); } },
+    rfdecisions: { set: 'flat', flat: bgPurple, captionTop: 1700, cam: [[0, STUDIO], [1, STUDIO]], cast: {},
+      draw: (s, lt, d, t) => { statCard(540, 380, 'YOUR GAME', [['DECISIONS', Math.round(lerp(0, 100, P(lt, .2, cue('right', .45)))), true], ['CORRECT', lt > cue('right', .45) ? 99 : '…', true], ['WRONG', lt > cue('one', .8) ? 1 : '…', false]], 1.3 * eb(P(lt, 0, .3))); if (lt > cue('one', .8)) { phone(540, 1240, .95 * eb(P(lt, cue('one', .8), cue('one', .8) + .3)), [['@fan_99', 'THAT ONE CALL 😡', cue('one', .8)], ['@ultra77', 'worst ref ever', cue('one', .8) + .4]], lt); } } },
+    rfpen: { set: 'flat', flat: (t) => bgStadium(t, true), age: "90+4'", captionTop: 1235,
+      cam: [[0, FC], [.5, FC], [1, { x: 0, y: 960, z: 1.2 }]], cast: { tA: { x: -380, scale: .86 }, tB: { x: -170, scale: .86 }, ref: { x: 30, scale: 1 }, tC: { x: 250, scale: .86 }, oppCap: { x: 440, scale: .86 } },
+      move: { tA: [[0, -560], ['mob', .55, -330]], tB: [[0, -420], ['mob', .55, -160]], tC: [[0, 420], ['mob', .55, 220]], oppCap: [[0, 600], ['mob', .55, 390]] },
+      acts: () => { const m = cue('mob', .55), D = CUR.duration, mob = { e: 'angry', p: 'pointR', ex: { mouthOpen: 1 }, m: { tremble: .6 } }, mobL = Object.assign({}, mob, { p: 'pointL' });
+        return { ref: [[0, { e: 'focused', p: 'pointR' }], [m / D, { e: 'shock', p: 'idle', m: { tremble: .3 } }]], tA: [[0, { e: 'neutral', m: { walk: 1 } }], [m / D, mob]], tB: [[0, { e: 'neutral', m: { walk: 1 } }], [m / D, mob]], tC: [[0, { e: 'neutral', m: { walk: 1 } }], [m / D, mobL]], oppCap: [[0, { e: 'neutral', m: { walk: 1 } }], [m / D, mobL]] }; },
+      extra: (lt) => { pill(30, 620, 'PENALTY!', eb(P(lt, cue('pen', .2), cue('pen', .2) + .3)), '#e8364f', '#fff', 50); const m = cue('mob', .55); ['NEVER!', 'DIVE!', 'REF!!', 'NO WAY!'].forEach((b, i) => bubble([-320, -150, 170, 340][i], 760 + (i % 2) * 70, b, eb(P(lt, m + i * .12, m + i * .12 + .25)), 0)); } },
+    rfvar: { set: 'flat', flat: (t) => bgStadium(t, true), captionTop: 1235, bright: .8,
+      cam: [[0, FC], [1, FC]], cast: { ref: { x: 0, scale: 1 } },
+      acts: { ref: [[0, { e: 'worried', p: 'shrug' }], ['phones', .6, { e: 'nervous', ex: { sweat: 1 }, p: 'nervous' }]] },
+      extra: (lt, t) => { pill(0, 620, 'VAR ✗  REPLAY ✗', eb(P(lt, .1, .4)), '#fff', OUT, 40); phonesUp(t, eb(P(lt, cue('phones', .6), cue('phones', .6) + .4))); } },
+    rfcar: { set: 'flat', flat: (t) => bgStadium(t, true), age: 'AFTER THE GAME', captionTop: 1235, bright: .6,
+      cam: [[0, FC], [1, { x: 100, y: 920, z: 1.06 }]], cast: { ref: { x: -300, scale: .95 }, dad: { x: 520, scale: .6, y: 1200 } },
+      move: { ref: [[0, -400], [1, 200]] },
+      acts: { ref: [[0, { e: 'neutral', p: 'idle', m: { walk: 1 } }], ['shout', .55, { e: 'surprised', p: 'idle', m: { walk: 0, lookX: 1 } }], ['sure', .8, { e: 'worried', p: 'shrug', m: { lookX: 1 } }]], dad: [[0, { e: 'neutral' }], ['shout', .55, { e: 'smirk', p: 'waveR', m: { wave: 1 } }]] },
+      extra: (lt) => { pill(-300, 640, 'ALONE', eb(P(lt, cue('alone', .3), cue('alone', .3) + .3)) * (1 - P(lt, cue('shout', .55) - .2, cue('shout', .55))), '#fff', OUT, 44); bubble(230, 900, '"GET HOME SAFE, REF!"', eb(P(lt, cue('shout', .55), cue('shout', .55) + .3)), 230); if (lt > cue('sure', .8)) txt('?', 120, 820, 120 * eb(P(lt, cue('sure', .8), cue('sure', .8) + .3)), '#ffd400', 900, 'center', 14); } },
+    rfthing: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { tA: { x: -360, scale: .86 }, ref: { x: 0, scale: 1 }, oppCap: { x: 360, scale: .86 } },
+      acts: { ref: [[0, { e: 'confident', p: 'holdCashUp', propR: 'whistle' }]], tA: [[0, { e: 'happy', p: 'idle', m: { lookX: 1 } }]], oppCap: [[0, { e: 'happy', p: 'idle', m: { lookX: -1 } }]] },
+      extra: (lt) => pill(0, 640, 'NO REF = NO GAME', eb(P(lt, cue('nogame', .65), cue('nogame', .65) + .3)), '#ffd400', OUT, 46) },
+    rfforget: { set: 'flat', flat: bgDark, captionTop: 1700, cam: [[0, FC], [1, { x: 0, y: 930, z: 1.08 }]], cast: { ref: { x: 0, scale: 1 } },
+      acts: { ref: [[0, { e: 'despair', p: 'idle' }]] }, extra: (lt) => pill(0, 640, 'FORGOTTEN', eb(P(lt, .3, .6)), '#fff', OUT, 56) },
+    rftag: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { theo: { x: -380, scale: .9 }, ref: { x: -100, scale: 1 }, oppCap: { x: 180, scale: .9 }, rico: { x: 420, scale: .9 } },
+      acts: { ref: [[0, { e: 'surprised' }], [.45, { e: 'happy', p: 'thumbsUpR', handR: 'thumb' }]], theo: [[0, { e: 'happy', p: 'waveR', m: { wave: 1 } }]], oppCap: [[0, { e: 'happy', p: 'thumbsUpR', handR: 'thumb', m: { lookX: -1 } }]], rico: [[0, { e: 'happy', p: 'cheer' }]] },
+      extra: (lt) => { pill(0, 520, '@ TAG A REFEREE', eb(P(lt, .1, .45)), '#ffd400', OUT, 50); bubble(250, 790, 'THANKS FOR THE GAME!', eb(P(lt, cue('thanks', .6), cue('thanks', .6) + .35)), -100); } }
+  });
+
   // ---------- timeline ----------
   let spec, scenes = [], total = 0;
   function camAt(keys, lt, d) {
@@ -1954,6 +2063,26 @@
         case 'cthing': add(st + C('team', .7), 'cheer', -18); break;
         case 'cyou': add(st + C('you', .55), 'thump', -12); break;
         case 'ctag': add(st + .1, 'pop', -14); add(st + C('got', .6), 'sparkle', -16); break;
+        case 'kohook': case 'rfhook': add(st, 'thump', -10); break;
+        case 'kovol': add(st + C('own', .4), 'pop', -15); add(st + C('chat', .72), 'ring', -18); break;
+        case 'kosat': add(st + C('nets', .5), 'thump', -16); break;
+        case 'koparents': [0, .2, .4].forEach(o => add(st + C('parents', .6) + o, 'pop', -15)); break;
+        case 'koflip': add(st + C('bad', .3), 'thump', -14); add(st + C('win', .5), 'whoosh_soft', -16); add(st + C('great', .8), 'ding', -15); break;
+        case 'kodad': add(st + C('dad', .35), 'pop', -14); add(st + C('louder', .7), 'thump', -13); break;
+        case 'kospeech': add(st + C('orange', .7), 'pop', -14); break;
+        case 'kophoto': add(st, 'cheer', -15); add(st + C('cam', .78) + .2, 'sparkle', -14); break;
+        case 'kothing': add(st + C('money', .55), 'pop', -15); break;
+        case 'koagain': add(st + .1, 'whistle', -22); break;
+        case 'kotag': case 'rftag': add(st + .1, 'pop', -14); add(st + C('thanks', .6), 'sparkle', -16); break;
+        case 'rffirst': add(st + .2, 'whistle', -18); add(st + C('blind', .6), 'pop', -14); break;
+        case 'rffree': add(st + .1, 'whistle', -18); add(st + C('hate1', .3), 'pop', -15); add(st + C('hate2', .85), 'pop', -15); break;
+        case 'rfrun': for (let k = 0; k < 10; k++) add(st + .2 + k * .14, 'tick', -20); break;
+        case 'rfdecisions': for (let k = 0; k < 12; k++) add(st + .2 + k * .12, 'tick', -20); add(st + C('one', .8), 'thump', -13); break;
+        case 'rfpen': add(st + C('pen', .2), 'whistle', -14); add(st + C('mob', .55), 'whoosh', -14); break;
+        case 'rfvar': add(st + C('phones', .6), 'sparkle', -17); break;
+        case 'rfcar': add(st + C('shout', .55), 'pop', -15); break;
+        case 'rfthing': add(st + C('nogame', .65), 'ding', -15); break;
+        case 'rfforget': add(st + .3, 'heartbeat', -14); break;
         case 'imate': add(st + .1, 'whoosh_soft', -20); add(st + C('follow', .75) + .1, 'pop', -14); break;
       }
     });

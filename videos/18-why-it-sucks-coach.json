@@ -1,0 +1,65 @@
+{
+  "title": "Why it sucks being the coach",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "scenes": [
+    {
+      "shot": "kohook",
+      "text": "Why it sucks being the coach.",
+      "audio": "../audio/18-why-it-sucks-coach/01.wav",
+      "duration": 2.6
+    },
+    {
+      "shot": "kovol",
+      "text": "It starts when nobody else volunteers. Now you own twenty bibs, thirty cones... and a group chat with forty parents.",
+      "audio": "../audio/18-why-it-sucks-coach/02.wav"
+    },
+    {
+      "shot": "kosat",
+      "text": "Saturday, seven a.m. You're the first one there. You put up the nets. In the rain.",
+      "audio": "../audio/18-why-it-sucks-coach/03.wav"
+    },
+    {
+      "shot": "koparents",
+      "text": "Match day. Fifteen players. Eleven positions. Fifteen parents who think their kid should start.",
+      "audio": "../audio/18-why-it-sucks-coach/04.wav"
+    },
+    {
+      "shot": "koflip",
+      "text": "You lose 3-0? \"Bad tactics.\" You win 3-0? \"Great players.\"",
+      "audio": "../audio/18-why-it-sucks-coach/05.wav"
+    },
+    {
+      "shot": "kodad",
+      "text": "Second half. A dad on the sideline shouts different instructions. Louder than you.",
+      "audio": "../audio/18-why-it-sucks-coach/06.wav"
+    },
+    {
+      "shot": "kospeech",
+      "text": "Half-time. You prepared the perfect speech. First question: \"Can we have orange slices?\"",
+      "audio": "../audio/18-why-it-sucks-coach/07.wav"
+    },
+    {
+      "shot": "kophoto",
+      "text": "End of the season. They win the league! Everyone gets in the team photo. You're the one holding the camera.",
+      "audio": "../audio/18-why-it-sucks-coach/08.wav"
+    },
+    {
+      "shot": "kothing",
+      "text": "That's the thing about being the coach. No money. No thanks.",
+      "audio": "../audio/18-why-it-sucks-coach/09.wav"
+    },
+    {
+      "shot": "koagain",
+      "text": "And next Saturday... you're there at seven again.",
+      "audio": "../audio/18-why-it-sucks-coach/10.wav",
+      "duration": 3.4
+    },
+    {
+      "shot": "kotag",
+      "text": "Tag your coach. Tell them thank you.",
+      "audio": "../audio/18-why-it-sucks-coach/11.wav",
+      "pad": 1.2
+    }
+  ]
+}
