@@ -133,6 +133,12 @@ window.Puppet = (function () {
     } else if (kind === 'bottle') {
       ctx.rotate(-.2); ctx.beginPath(); ctx.roundRect(-16, -110, 32, 90, 10); ctx.fillStyle = '#4fbaf5'; ctx.fill(); stroke(ctx, 5, OUT);
       ctx.beginPath(); ctx.roundRect(-9, -128, 18, 20, 4); ctx.fillStyle = '#fff'; ctx.fill(); stroke(ctx, 4, OUT);
+    } else if (kind === 'coin') {
+      const sq = Math.abs(Math.cos(t * 18)); ctx.beginPath(); ctx.ellipse(0, -150 - Math.abs(Math.sin(t * 4)) * 60, 22, 22 * Math.max(.15, sq), 0, 0, Math.PI * 2); ctx.fillStyle = '#ffc928'; ctx.fill(); stroke(ctx, 4, OUT);
+    } else if (kind === 'armband') {
+      ctx.beginPath(); ctx.roundRect(-34, -40, 68, 34, 8); ctx.fillStyle = '#ffd400'; ctx.fill(); stroke(ctx, 5, OUT); ctx.fillStyle = OUT; ctx.font = '900 26px Inter Display'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('C', 0, -22);
+    } else if (kind === 'bibs') {
+      for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.roundRect(-40 + i * 4, -40 - i * 16, 80, 22, 8); ctx.fillStyle = ['#ff8c1a', '#ffd400', '#2fbf71', '#ff8c1a'][i]; ctx.fill(); stroke(ctx, 4, OUT); }
     } else if (kind === 'coat') {
       ctx.rotate(.15);
       ctx.beginPath(); ctx.moveTo(-10, -6); ctx.lineTo(-58, 20); ctx.lineTo(-64, 170); ctx.lineTo(48, 170); ctx.lineTo(44, 20); ctx.lineTo(10, -6); ctx.closePath();
@@ -405,6 +411,7 @@ window.Puppet = (function () {
     for (const side of [-1, 1]) {
       const L = side < 0 ? 'l' : 'r';
       const a = limb(ctx, side * (tw - 8), sY + 24, p[L + 'A'], 92, p[L + 'A'] + p[L + 'E'], 88, side, 34, 24, ch.shirt, ch.skin);
+      if (ch.armband && side < 0) { const ax = lerp(side * (tw - 8), a.x1, .55), ay = lerp(sY + 24, a.y1, .55); ctx.save(); ctx.translate(ax, ay); ctx.rotate(-p.lA * D2R * side); ctx.beginPath(); ctx.roundRect(-22, -11, 44, 22, 4); ctx.fillStyle = '#ffd400'; ctx.fill(); stroke(ctx, 4, OUT); ctx.fillStyle = OUT; ctx.font = '900 16px Inter Display'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('C', 0, 1); ctx.restore(); }
       hand(ctx, a.x2, a.y2, ch.gloves || ch.skin, side < 0 ? st.handL : st.handR, side, a.ang);
       drawProp(ctx, side < 0 ? st.propL : st.propR, a.x2, a.y2, t, a.ang);
     }

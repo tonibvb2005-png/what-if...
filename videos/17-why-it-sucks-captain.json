@@ -1,0 +1,59 @@
+{
+  "title": "Why it sucks being the captain",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "scenes": [
+    {
+      "shot": "chook",
+      "text": "Why it sucks being the captain.",
+      "audio": "../audio/captain/01.wav",
+      "duration": 2.6
+    },
+    {
+      "shot": "ceight",
+      "text": "It starts when you're eight. The coach gives you the armband. You think it's an honour. It means you do the coin toss... and lose it.",
+      "audio": "../audio/captain/02.wav"
+    },
+    {
+      "shot": "celeven",
+      "text": "Age eleven. You're losing 5-0. The coach says: \"Captain, say something.\" Everyone stares at you.",
+      "audio": "../audio/captain/03.wav"
+    },
+    {
+      "shot": "cthirteen",
+      "text": "Age thirteen. Your teammate screams at the referee. The referee: \"Captain! Come here.\" You get the yellow card.",
+      "audio": "../audio/captain/04.wav"
+    },
+    {
+      "shot": "cfifteen",
+      "text": "Age fifteen. Final whistle. Everyone goes home. You collect the bibs. The cones. The balls. Alone.",
+      "audio": "../audio/captain/05.wav"
+    },
+    {
+      "shot": "csixteen",
+      "text": "Age sixteen. Penalty shootout. Nobody wants the fifth one. Everyone looks at the armband.",
+      "audio": "../audio/captain/06.wav"
+    },
+    {
+      "shot": "cseventeen",
+      "text": "Age seventeen. You win the cup! You lift the trophy for one second... then the striker takes it for the photo.",
+      "audio": "../audio/captain/07.wav"
+    },
+    {
+      "shot": "cthing",
+      "text": "That's the thing about being the captain. When you win, it's the team.",
+      "audio": "../audio/captain/08.wav"
+    },
+    {
+      "shot": "cyou",
+      "text": "When you lose... it's you.",
+      "audio": "../audio/captain/09.wav"
+    },
+    {
+      "shot": "ctag",
+      "text": "Tag your captain. Tell them: we've got you.",
+      "audio": "../audio/captain/10.wav",
+      "pad": 1.2
+    }
+  ]
+}

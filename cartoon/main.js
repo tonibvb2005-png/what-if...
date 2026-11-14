@@ -1670,6 +1670,65 @@
       extra: (lt) => { pill(0, 520, '@ TAG YOUR STRIKER', eb(P(lt, .1, .45)), '#ffd400', OUT, 50); bubble(240, 790, 'NEXT ONE GOES IN.', eb(P(lt, cue('next', .6), cue('next', .6) + .35)), -40); } }
   });
 
+
+  // ---------- "Why it sucks being the captain" ----------
+  Object.assign(CH, {
+    theo: { skin: '#ffd2b0', shirt: '#0f8a5c', trim: '#ffffff', number: '6', pants: '#ffffff', shoes: '#111', hair: 'slick', hairColor: '#6a4a2a', bw: 1.05, blinkPh: .6, armband: true },
+    tA: { skin: '#c98d63', shirt: '#0f8a5c', trim: '#fff', number: '11', pants: '#fff', shoes: '#111', hair: 'buzz', hairColor: '#120a05', bw: .95, blinkPh: 1.2 },
+    tB: { skin: '#ffd9b8', shirt: '#0f8a5c', trim: '#fff', number: '7', pants: '#fff', shoes: '#111', hair: 'spiky', hairColor: '#c9a46a', bw: .95, blinkPh: 2.0 },
+    tC: { skin: '#e8b08a', shirt: '#0f8a5c', trim: '#fff', number: '9', pants: '#fff', shoes: '#111', hair: 'short', hairColor: '#2a1a10', bw: 1, blinkPh: 2.6 },
+    oppCap: { skin: '#e8b08a', shirt: '#e8364f', trim: '#fff', number: '4', pants: '#e8364f', shoes: '#111', hair: 'short', hairColor: '#2a1a10', bw: 1.05, blinkPh: 1.8, armband: true }
+  });
+  function cones(x, y) { for (let i = 0; i < 5; i++) { const cx = x + i * 70 - (i % 2) * 20, cy = y - i * 6; ctx.beginPath(); ctx.moveTo(cx - 26, cy); ctx.lineTo(cx, cy - 46); ctx.lineTo(cx + 26, cy); ctx.closePath(); ctx.fillStyle = '#ff8c1a'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = OUT; ctx.stroke(); } }
+  function ballBag(x, y) { ctx.beginPath(); ctx.ellipse(x, y - 70, 80, 90, 0, 0, Math.PI * 2); ctx.fillStyle = 'rgba(30,40,70,.85)'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = OUT; ctx.stroke(); for (const [dx, dy] of [[-30, -70], [25, -95], [10, -40]]) drawBall(x + dx, y + dy, 0, 1, .9); }
+  const TEAM = { tA: { x: -360, scale: .86 }, tB: { x: 360, scale: .86 } };
+  Object.assign(SHOTS, {
+    chook: { set: 'flat', flat: (t) => bgStadium(t, false), titleFast: true, captionTop: 1235,
+      title: ['WHY IT SUCKS BEING THE', '<span class="box">CAPTAIN</span>'], titleSize: [66, 104],
+      cam: [[0, FC], [1, { x: 0, y: 900, z: 1.04 }]], cast: { rico: { x: 280, scale: .58, y: 1180 }, theo: { x: -40, scale: 1 } },
+      acts: { theo: [[0, { e: 'despair', p: 'crossed' }]], rico: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: .5 } }]] } },
+    ceight: { set: 'flat', flat: bgPark, age: 'AGE 8', captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { coach: { x: -360, scale: 1 }, theo: { x: -60, scale: .66 }, ref: { x: 200, scale: .95 }, oppCap: { x: 420, scale: .66 } },
+      acts: { coach: [[0, { e: 'happy', p: 'giveL', propL: 'armband', m: { lookX: 1 } }], ['honour', .3, { e: 'happy', p: 'thumbsUpR', handR: 'thumb' }]],
+              theo: [[0, { e: 'surprised', m: { lookX: -1 } }], ['honour', .3, { e: 'ecstatic', p: 'cheer', m: { jump: .4 } }], ['toss', .6, { e: 'focused', p: 'idle', m: { lookX: 1 } }], ['lose', .85, { e: 'despair', p: 'idle', m: { lookX: 1 } }]],
+              ref: [[0, { e: 'neutral', p: 'crossed', m: { lookX: -1 } }], ['toss', .6, { e: 'neutral', p: 'idle', propR: 'coin' }], ['lose', .85, { e: 'neutral', p: 'pointR', propR: null, m: { lookX: 1 } }]],
+              oppCap: [[0, { e: 'neutral', m: { lookX: -1 } }], ['lose', .85, { e: 'ecstatic', p: 'fistPumpR', handR: 'fist' }]] },
+      extra: (lt) => { pill(-60, 680, 'AN HONOUR? ✨', eb(P(lt, cue('honour', .3), cue('honour', .3) + .3)) * (1 - P(lt, cue('toss', .6) - .2, cue('toss', .6))), '#fff', OUT, 40); pill(200, 650, 'COIN TOSS: LOST', eb(P(lt, cue('lose', .85), cue('lose', .85) + .3)), '#e8364f', '#fff', 40); } },
+    celeven: { set: 'flat', flat: (t) => bgStadium(t, false), age: 'AGE 11', captionTop: 1235, bright: .85,
+      cam: [[0, FC], [.6, FC], [1, { x: 0, y: 960, z: 1.25 }]], cast: { tA: { x: -360, scale: .82 }, coach: { x: -120, scale: .95 }, theo: { x: 140, scale: .84 }, tB: { x: 380, scale: .82 } },
+      acts: { coach: [[0, { e: 'despair', p: 'handsOnHead' }], ['say', .4, { e: 'focused', p: 'pointR', m: { lookX: 1 } }]], theo: [[0, { e: 'despair' }], ['stare', .78, { e: 'nervous', p: 'nervous', m: { tremble: .5 } }]], tA: [[0, { e: 'despair', p: 'crossed' }], ['stare', .78, { e: 'neutral', m: { lookX: 1 } }]], tB: [[0, { e: 'despair', p: 'crossed' }], ['stare', .78, { e: 'neutral', m: { lookX: -1 } }]] },
+      extra: (lt) => { scoreboard('HOME 0 – 5 AWAY', 'HALF-TIME'); bubble(-60, 760, 'CAPTAIN, SAY SOMETHING.', eb(P(lt, cue('say', .4), cue('say', .4) + .3)), -60); } },
+    cthirteen: { set: 'flat', flat: (t) => bgStadium(t, false), age: 'AGE 13', captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { tC: { x: -320, scale: .86 }, ref: { x: 60, scale: .95 }, theo: { x: 360, scale: .88 } },
+      move: { theo: [['come', .5, 360], ['card', .8, 230]] },
+      acts: { tC: [[0, { e: 'angry', p: 'pointR', ex: { mouthOpen: .7 }, m: { lookX: 1, tremble: .5 } }], ['card', .8, { e: 'smirk', p: 'crossed' }]],
+              ref: [[0, { e: 'neutral', m: { lookX: -1 } }], ['come', .5, { e: 'angry', p: 'pointR', m: { lookX: 1 } }], ['card', .8, { e: 'focused', p: 'holdCashUp', propR: 'yellow', m: { lookX: 1 } }]],
+              theo: [[0, { e: 'worried', m: { lookX: -1 } }], ['come', .5, { e: 'surprised', m: { walk: .7, lookX: -1 } }], ['card', .8, { e: 'despair', p: 'idle', m: { walk: 0 } }]] },
+      extra: (lt) => { bubble(-180, 760, 'REF!! NEVER A FOUL!', eb(P(lt, .2, .5)) * (1 - P(lt, cue('come', .5) - .1, cue('come', .5))), 0); bubble(60, 760, 'CAPTAIN! COME HERE.', eb(P(lt, cue('come', .5), cue('come', .5) + .3)), -40); } },
+    cfifteen: { set: 'flat', flat: (t) => bgStadium(t, true), age: 'AGE 15', captionTop: 1235, bright: .8,
+      cam: [[0, FC], [1, { x: 0, y: 920, z: 1.1 }]], cast: { theo: { x: 0, scale: .92 }, tA: { x: 380, scale: .55, y: 1200 }, tB: { x: 470, scale: .55, y: 1200 } },
+      move: { tA: [[0, 380], ['home', .35, 900]], tB: [[0, 470], ['home', .35, 1000]] },
+      acts: { tA: [[0, { e: 'happy', m: { walk: 1 } }]], tB: [[0, { e: 'happy', m: { walk: 1 } }]], theo: [[0, { e: 'neutral', m: { lookX: 1 } }], ['bibs', .5, { e: 'despair', p: 'holdBag', propR: 'bibs' }]] },
+      extra: (lt) => { const b = cue('bibs', .5); if (lt < cue('cones', .7)) cones(-480, 1400); if (lt < cue('balls', .82)) ballBag(330, 1400); pill(0, 650, 'ALONE', eb(P(lt, cue('alone', .92), cue('alone', .92) + .3)), '#fff', OUT, 50); } },
+    csixteen: { set: 'flat', flat: (t) => bgStadium(t, true), age: 'AGE 16', captionTop: 1235, bright: .75,
+      cam: [[0, FC], [.6, FC], [1, { x: 0, y: 940, z: 1.22 }]], cast: { tA: { x: -380, scale: .84 }, tC: { x: -150, scale: .84 }, theo: { x: 90, scale: .88 }, tB: { x: 360, scale: .84 } },
+      acts: { tA: [[0, { e: 'worried', p: 'crossed', m: { no: .8 } }], ['look', .65, { e: 'neutral', m: { lookX: 1 } }]], tC: [[0, { e: 'worried', p: 'nervous', m: { no: .8 } }], ['look', .65, { e: 'neutral', m: { lookX: 1 } }]], tB: [[0, { e: 'worried', p: 'crossed', m: { no: .8 } }], ['look', .65, { e: 'neutral', m: { lookX: -1 } }]], theo: [[0, { e: 'tense' }], ['look', .65, { e: 'nervous', ex: { sweat: 1 }, p: 'nervous', m: { tremble: .5 } }]] },
+      extra: (lt) => { scoreboard('PENALTIES 4 – 4', 'KICK 5 OF 5'); bubble(-260, 880, 'NOT ME.', eb(P(lt, .3, .6)) * (1 - P(lt, cue('look', .65) - .2, cue('look', .65))), 0); bubble(360, 880, 'NOPE.', eb(P(lt, .6, .9)) * (1 - P(lt, cue('look', .65) - .2, cue('look', .65))), 0); const k = eb(P(lt, cue('look', .65), cue('look', .65) + .3)); if (k > 0) { ctx.save(); ctx.translate(40, 820); ctx.scale(k, k); ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-20, -40); ctx.lineTo(20, -40); ctx.closePath(); ctx.fillStyle = '#ffd400'; ctx.fill(); ctx.restore(); pill(90, 700, 'THE ARMBAND 👀', k, '#ffd400', OUT, 40); } } },
+    cseventeen: { set: 'flat', flat: (t) => bgStadium(t, false), age: 'AGE 17', captionTop: 1235, conf: 1,
+      cam: [[0, FC], [1, FC]], cast: { theo: { x: -150, scale: .92 }, rico: { x: 200, scale: .9 } },
+      acts: { theo: [[0, { e: 'ecstatic', p: 'holdBag', propR: null, m: { jump: .3 } }], ['take', .72, { e: 'shock', p: 'idle', m: { jump: 0 } }], ['take', .85, { e: 'despair', p: 'crossed' }]], rico: [[0, { e: 'happy', p: 'cheer' }], ['take', .72, { e: 'ecstatic', p: 'holdBag', m: { lookX: 0 } }]] },
+      extra: (lt, t) => { const tk = cue('take', .72), x = lt < tk ? -150 : lerp(-150, 200, eio(P(lt, tk, tk + .35))); trophy(x, 1400 - 553 * .92 - 230, 1.1, t, 'CUP'); pill(-150, 520, '1 SECOND', eb(P(lt, cue('one', .55), cue('one', .55) + .3)) * (1 - P(lt, tk, tk + .2)), '#fff', OUT, 40); if (lt > tk + .4) { ctx.save(); ctx.translate(430, 640); const k = eb(P(lt, tk + .4, tk + .7)); ctx.scale(k, k); ctx.beginPath(); ctx.roundRect(-110, -60, 220, 120, 16); ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = OUT; ctx.stroke(); txt('📸', 0, 4, 64, OUT, 900); ctx.restore(); } } },
+    cthing: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { tA: { x: -350, scale: .86 }, theo: { x: 0, scale: .92 }, tB: { x: 350, scale: .86 } },
+      acts: { tA: [[0, { e: 'neutral' }], ['team', .7, { e: 'ecstatic', p: 'cheer', m: { jump: .5 } }]], tB: [[0, { e: 'neutral' }], ['team', .7, { e: 'ecstatic', p: 'cheer', m: { jump: .5 } }]], theo: [[0, { e: 'neutral', p: 'hips' }], ['team', .7, { e: 'happy', p: 'cheer' }]] },
+      extra: (lt) => pill(0, 640, 'WIN = THE TEAM 🏆', eb(P(lt, cue('team', .7), cue('team', .7) + .3)), '#2fbf71', '#fff', 46) },
+    cyou: { set: 'flat', flat: bgDark, captionTop: 1700, cam: [[0, FC], [1, { x: 0, y: 930, z: 1.08 }]], cast: { theo: { x: 0, scale: 1 } },
+      acts: { theo: [[0, { e: 'despair', p: 'idle' }]] }, extra: (lt) => pill(0, 640, 'LOSS = YOU', eb(P(lt, cue('you', .55), cue('you', .55) + .3)), '#e8364f', '#fff', 56) },
+    ctag: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235,
+      cam: [[0, FC], [1, FC]], cast: { tA: { x: -380, scale: .88 }, theo: { x: -100, scale: 1 }, nico: { x: 170, scale: .92 }, leo: { x: 420, scale: .92 } },
+      acts: { theo: [[0, { e: 'worried', m: { lookX: 1 } }], [.45, { e: 'happy', p: 'cheer' }]], tA: [[0, { e: 'happy', p: 'pointR' }]], nico: [[0, { e: 'happy', p: 'pointL', m: { lookX: -1 } }]], leo: [[0, { e: 'happy', p: 'thumbsUpR', handR: 'thumb', m: { lookX: -1 } }]] },
+      extra: (lt) => { pill(0, 520, '@ TAG YOUR CAPTAIN', eb(P(lt, .1, .45)), '#ffd400', OUT, 50); bubble(240, 790, "WE'VE GOT YOU.", eb(P(lt, cue('got', .6), cue('got', .6) + .35)), -60); } }
+  });
+
   // ---------- timeline ----------
   let spec, scenes = [], total = 0;
   function camAt(keys, lt, d) {
@@ -1885,6 +1944,16 @@
         case 'sthing': add(st + C('ninety', .7), 'pop', -16); break;
         case 'ssecond': add(st + .3, 'heartbeat', -13); break;
         case 'stag': add(st + .1, 'pop', -14); add(st + C('next', .6), 'sparkle', -16); break;
+        case 'chook': add(st, 'thump', -10); break;
+        case 'ceight': add(st + C('honour', .3), 'sparkle', -16); add(st + C('toss', .6), 'whoosh_soft', -18); add(st + C('lose', .85), 'pop', -14); break;
+        case 'celeven': add(st + C('say', .4), 'pop', -15); add(st + C('stare', .78), 'heartbeat', -14); break;
+        case 'cthirteen': add(st + .2, 'pop', -16); add(st + C('come', .5), 'whistle', -16); add(st + C('card', .8), 'pop', -13); break;
+        case 'cfifteen': add(st + .1, 'whistle', -20); [['bibs', .5], ['cones', .7], ['balls', .82]].forEach(([n, f]) => add(st + C(n, f), 'pop', -16)); break;
+        case 'csixteen': for (let x = .2; x < d - .2; x += .85) add(st + x, 'heartbeat', -14); add(st + C('look', .65), 'thump', -13); break;
+        case 'cseventeen': add(st, 'cheer', -14); add(st + C('take', .72), 'whoosh_soft', -14); add(st + C('take', .72) + .4, 'pop', -14); break;
+        case 'cthing': add(st + C('team', .7), 'cheer', -18); break;
+        case 'cyou': add(st + C('you', .55), 'thump', -12); break;
+        case 'ctag': add(st + .1, 'pop', -14); add(st + C('got', .6), 'sparkle', -16); break;
         case 'imate': add(st + .1, 'whoosh_soft', -20); add(st + C('follow', .75) + .1, 'pop', -14); break;
       }
     });
