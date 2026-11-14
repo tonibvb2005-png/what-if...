@@ -58,7 +58,7 @@ def env(n, attack=0.005, decay=10.0):
 
 SFX_DIR = os.path.join(ENGINE, "sfx")
 # Spitzenpegel der echten Aufnahmen (0..1); Atmosphären: Ziel-Lautstärke (RMS)
-REC_PEAK = {"airraid": .3, "airraid_muff": .22, "knockmetal": .55, "knockrec": .5, "generator": .2, "siren": .12, "owl": .16, "steps": .32, "twig": .38, "zipper": .42, "heartbeat": .5, "rev": .34, "static": .2, "carby": .3, "switch": .4, "bolt": .45, "clickrec": .3}
+REC_PEAK = {"airraid": .16, "airraid_muff": .12, "knockmetal": .55, "knockrec": .5, "generator": .2, "siren": .12, "owl": .16, "steps": .32, "twig": .38, "zipper": .42, "heartbeat": .5, "rev": .34, "static": .2, "carby": .3, "switch": .4, "bolt": .45, "clickrec": .3}
 AMB_RMS = {"car": .028, "forest": .011}
 _rec_cache = {}
 
@@ -497,6 +497,7 @@ def main():
         i = int(st * SR); vo[i:i + len(a)] += a[: n - i]
     vo /= (np.abs(vo).max() + 1e-9); vo *= 0.85
     mix += vo
+    sir = np.zeros(n)
     for st, nm in sfx_ev:
         cut = None
         if ":" in nm: nm, cut = nm.split(":"); cut = float(cut)
@@ -504,7 +505,12 @@ def main():
         if cut:   # nach `cut` Sekunden kurz ausblenden (z. B. Sirene verstummt)
             k = int(cut * SR); f = int(.35 * SR); s = s[:k + f].copy()
             if len(s) > k: s[k:] *= np.linspace(1, 0, len(s) - k)
-        i = int(st * SR); mix[i:i + len(s)] += s[: n - i]
+        i = int(st * SR)
+        if nm.startswith("airraid"): sir[i:i + len(s)] += s[: n - i]   # Sirenen: unter der Stimme abgesenkt
+        else: mix[i:i + len(s)] += s[: n - i]
+    env = np.convolve(np.abs(vo), np.ones(int(.25 * SR)) / int(.25 * SR), "same")
+    env = np.clip(env / (env.max() + 1e-9) * 6, 0, 1)
+    mix += sir * (1 - .75 * env)
     if ev.get("dread"):
         d0 = ev["dread"][0][0]; i0 = int(d0 * SR); m = n - i0
         if m > 0:

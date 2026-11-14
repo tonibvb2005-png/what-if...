@@ -18,7 +18,7 @@
    ],
    "sfx": [
     [
-     "airraid:9",
+     "airraid:5.2",
      0
     ]
    ],
@@ -234,7 +234,7 @@
    "gap": "#ffb35a",
    "sfx": [
     [
-     "airraid_muff:1.4",
+     "airraid_muff:1.2",
      0
     ]
    ],
