@@ -7,53 +7,249 @@
       "shot": "chook",
       "text": "Why it sucks being the captain.",
       "audio": "../audio/captain/01.wav",
-      "duration": 2.6
+      "wordTimes": [
+        0.0,
+        0.28,
+        0.5,
+        0.8,
+        1.14,
+        1.38
+      ]
     },
     {
       "shot": "ceight",
       "text": "It starts when you're eight. The coach gives you the armband. You think it's an honour. It means you do the coin toss... and lose it.",
-      "audio": "../audio/captain/02.wav"
+      "audio": "../audio/captain/02.wav",
+      "cues": {
+        "honour": 3.56,
+        "toss": 5.7,
+        "lose": 7.06
+      },
+      "wordTimes": [
+        0.34,
+        0.34,
+        0.6,
+        0.82,
+        1.02,
+        1.76,
+        1.8,
+        1.94,
+        2.22,
+        2.4,
+        2.52,
+        3.56,
+        3.7,
+        3.84,
+        4.04,
+        4.16,
+        4.84,
+        4.96,
+        5.16,
+        5.42,
+        5.54,
+        5.7,
+        5.92,
+        6.22,
+        7.06,
+        7.28
+      ]
     },
     {
       "shot": "celeven",
       "text": "Age eleven. You're losing 5-0. The coach says: \"Captain, say something.\" Everyone stares at you.",
-      "audio": "../audio/captain/03.wav"
+      "audio": "../audio/captain/03.wav",
+      "cues": {
+        "say": 3.89,
+        "stare": 5.89
+      },
+      "wordTimes": [
+        0.55,
+        0.99,
+        1.43,
+        1.63,
+        2.21,
+        2.79,
+        2.87,
+        3.05,
+        3.89,
+        4.61,
+        4.69,
+        5.89,
+        6.27,
+        6.63,
+        6.85
+      ]
     },
     {
       "shot": "cthirteen",
       "text": "Age thirteen. Your teammate screams at the referee. The referee: \"Captain! Come here.\" You get the yellow card.",
-      "audio": "../audio/captain/04.wav"
+      "audio": "../audio/captain/04.wav",
+      "cues": {
+        "come": 3.88,
+        "card": 6.7
+      },
+      "wordTimes": [
+        0.52,
+        1.05,
+        1.58,
+        1.72,
+        2.02,
+        2.58,
+        2.84,
+        2.96,
+        3.88,
+        4.0,
+        4.94,
+        5.68,
+        5.78,
+        6.7,
+        6.88,
+        7.08,
+        7.26,
+        7.48
+      ]
     },
     {
       "shot": "cfifteen",
       "text": "Age fifteen. Final whistle. Everyone goes home. You collect the bibs. The cones. The balls. Alone.",
-      "audio": "../audio/captain/05.wav"
+      "audio": "../audio/captain/05.wav",
+      "cues": {
+        "bibs": 4.78,
+        "cones": 5.58,
+        "balls": 6.52,
+        "alone": 7.38
+      },
+      "wordTimes": [
+        0.34,
+        0.92,
+        1.5,
+        1.78,
+        2.8,
+        3.0,
+        3.32,
+        3.64,
+        4.3,
+        4.58,
+        4.78,
+        5.54,
+        5.58,
+        6.44,
+        6.52,
+        7.38
+      ]
     },
     {
       "shot": "csixteen",
       "text": "Age sixteen. Penalty shootout. Nobody wants the fifth one. Everyone looks at the armband.",
-      "audio": "../audio/captain/06.wav"
+      "audio": "../audio/captain/06.wav",
+      "cues": {
+        "look": 5.08
+      },
+      "wordTimes": [
+        0.66,
+        1.24,
+        1.82,
+        1.96,
+        3.18,
+        3.34,
+        3.82,
+        4.04,
+        4.22,
+        5.08,
+        5.48,
+        5.8,
+        5.98,
+        6.12
+      ]
     },
     {
       "shot": "cseventeen",
       "text": "Age seventeen. You win the cup! You lift the trophy for one second... then the striker takes it for the photo.",
-      "audio": "../audio/captain/07.wav"
+      "audio": "../audio/captain/07.wav",
+      "cues": {
+        "one": 3.96,
+        "take": 5.74
+      },
+      "wordTimes": [
+        0.36,
+        0.97,
+        1.58,
+        1.78,
+        1.98,
+        2.16,
+        2.9,
+        3.1,
+        3.28,
+        3.46,
+        3.72,
+        3.96,
+        4.28,
+        5.32,
+        5.58,
+        5.74,
+        5.98,
+        6.3,
+        6.48,
+        6.62,
+        6.74
+      ]
     },
     {
       "shot": "cthing",
       "text": "That's the thing about being the captain. When you win, it's the team.",
-      "audio": "../audio/captain/08.wav"
+      "audio": "../audio/captain/08.wav",
+      "cues": {
+        "team": 3.2
+      },
+      "wordTimes": [
+        0.26,
+        0.52,
+        0.66,
+        0.8,
+        1.0,
+        1.22,
+        1.44,
+        2.22,
+        2.38,
+        2.54,
+        3.2,
+        3.42,
+        3.56
+      ]
     },
     {
       "shot": "cyou",
       "text": "When you lose... it's you.",
-      "audio": "../audio/captain/09.wav"
+      "audio": "../audio/captain/09.wav",
+      "cues": {
+        "you": 1.6
+      },
+      "wordTimes": [
+        0.26,
+        0.48,
+        0.6,
+        1.6,
+        1.98
+      ]
     },
     {
       "shot": "ctag",
       "text": "Tag your captain. Tell them: we've got you.",
       "audio": "../audio/captain/10.wav",
-      "pad": 1.2
+      "pad": 1.2,
+      "cues": {
+        "got": 2.04
+      },
+      "wordTimes": [
+        0.4,
+        0.58,
+        0.76,
+        1.62,
+        1.76,
+        2.04,
+        2.82,
+        3.0
+      ]
     }
   ]
 }
