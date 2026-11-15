@@ -356,7 +356,12 @@ export function mia(view = 'front', expr = 'neutral', cam = false) {
   g.drawImage(base, 0, 0, 512, 1024);
   if (view === 'back') { P(g, g => { g.moveTo(80, 300); g.bezierCurveTo(70, 80, 442, 80, 432, 300); g.bezierCurveTo(440, 470, 420, 590, 400, 610); g.lineTo(112, 610); g.bezierCurveTo(92, 590, 72, 470, 80, 300); g.closePath(); }, HAIR, 11, 0.1);
     g.strokeStyle = 'rgba(0,0,0,.18)'; g.lineWidth = 6; for (const x of [180, 256, 330]) { g.beginPath(); g.moveTo(x, 200); g.quadraticCurveTo(x + 10, 420, x - 6, 600); g.stroke(); } }
-  else { for (const s of [-1, 1]) P(g, g => { g.moveTo(256 + s * 170, 280); g.bezierCurveTo(256 + s * 200, 420, 256 + s * 170, 560, 256 + s * 150, 620); g.lineTo(256 + s * 118, 600); g.bezierCurveTo(256 + s * 140, 500, 256 + s * 150, 400, 256 + s * 140, 300); g.closePath(); }, HAIR, 9, 0.1);
+  else {
+    // voller Haaransatz oben (kein Hautstreifen mehr ueber dem Pony)
+    P(g, g => { g.moveTo(76, 300); g.bezierCurveTo(46, 40, 466, 40, 436, 300); g.lineTo(424, 236); g.lineTo(392, 258); g.lineTo(360, 214); g.lineTo(322, 246); g.lineTo(290, 208); g.lineTo(250, 240); g.lineTo(214, 206); g.lineTo(180, 244); g.lineTo(146, 214); g.lineTo(114, 252); g.lineTo(90, 236); g.closePath(); }, HAIR, 11, 0.1);
+    g.strokeStyle = 'rgba(255,255,255,.18)'; g.lineWidth = 8; g.beginPath(); g.arc(256, 260, 150, -2.5, -1.9); g.stroke();
+    g.strokeStyle = 'rgba(0,0,0,.2)'; g.lineWidth = 5; for (const x of [200, 256, 312]) { g.beginPath(); g.moveTo(x, 110); g.quadraticCurveTo(x + (x - 256) * 0.3, 160, x + (x - 256) * 0.2, 210); g.stroke(); }
+    for (const s of [-1, 1]) P(g, g => { g.moveTo(256 + s * 170, 280); g.bezierCurveTo(256 + s * 200, 420, 256 + s * 170, 560, 256 + s * 150, 620); g.lineTo(256 + s * 118, 600); g.bezierCurveTo(256 + s * 140, 500, 256 + s * 150, 400, 256 + s * 140, 300); g.closePath(); }, HAIR, 9, 0.1);
     P(g, circ(372, 228, 14), '#f2c84b', 5, 0); }
   if (cam && view === 'front') {
     P(g, rr(170, 640, 150, 90, 14), '#222428', 8, 0); P(g, circ(200, 685, 30), '#0e0f12', 6, 0); P(g, circ(200, 685, 14), '#3a5a8a', 0, 0);
