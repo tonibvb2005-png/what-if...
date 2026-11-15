@@ -268,7 +268,34 @@ def S_sparkle():
     return reverb(out, 1.2, 0.4)
 
 
+
+# ---------------------------------------------------------------- echte Aufnahmen (BigSoundBank, CC0)
+_REC = {}
+def rec(fid, start, dur, peak=0.8, fin=0.01, fout=0.15, rms=None):
+    key = (fid, start, dur)
+    if key not in _REC:
+        r = subprocess.run(["ffmpeg", "-v", "error", "-ss", str(start), "-t", str(dur), "-i", os.path.join(HERE, "sfx", fid + ".mp3"),
+                            "-ac", "1", "-ar", str(SR), "-f", "f32le", "-"], capture_output=True, check=True)
+        _REC[key] = np.frombuffer(r.stdout, np.float32).copy()
+    x = _REC[key].copy(); n = len(x)
+    if n == 0: return x
+    x *= env(n, fin, fout)
+    if rms: return (x * (rms / (np.sqrt((x ** 2).mean()) + 1e-9))).astype(np.float32)
+    return norm(x, peak)
+
+def R_ticks():   return rec("0140", 50.0, 8.4, 0.75, 0.3, 0.3)          # Freilauf, bremst ab (letzter Klick bei 7.96 s)
+def R_knock3():  return reverb(rec("0374", 5.42, 1.5, 0.85, 0.002, 0.3), 0.9, 0.22)   # 3x Klopfen, Holz/Papier
+def R_knock2():  return reverb(rec("0095", 0.05, 1.3, 0.85, 0.002, 0.3), 0.8, 0.2)    # 2x Klopfen an Holztuer
+def R_steps():   return rec("0085", 0.05, 2.4, 0.45, 0.01, 0.3)          # Schritte auf Kies
+def R_shatter(): return reverb(rec("1643", 0.0, 1.77, 0.75, 0.001, 0.2), 0.7, 0.18)  # zerbrechendes Porzellan
+def R_slide():   return reverb(rec("1268", 2.0, 1.4, 0.6, 0.02, 0.25), 0.7, 0.2)     # Holz gleitet (Schiebetuer)
+def R_snore():   return reverb(rec("0653", 0.2, 6.6, 0.45, 0.1, 0.6), 0.9, 0.3)      # Schnarchen nebenan (gedaempft)
+def R_clock():   return rec("2655", 0.2, 3.0, 0.4, 0.05, 0.3)            # mechanische Uhr
+def R_paper():   return rec("0297", 0.45, 1.2, 0.4, 0.01, 0.2)           # Klebeband / Papier
+def R_crackle(): return reverb(rec("2205", 0.0, 1.97, 0.35, 0.01, 0.4), 1.2, 0.35)   # knisterndes Salz
+def R_birds():   return rec("0222", 20.0, 3.0, 0.25, 0.5, 0.8)
 SFX = {k[2:]: v for k, v in globals().items() if k.startswith("S_")}
+SFX.update({k[2:]: v for k, v in globals().items() if k.startswith("R_")})
 
 
 # ---------------------------------------------------------------- ambience beds
@@ -300,6 +327,24 @@ def A_dawn(d):
     return (lp(noise(d), 400) * 0.1 * (0.6 + 0.4 * np.sin(2 * np.pi * 0.1 * tt))).astype(np.float32)
 
 
+def A_day(d):
+    c = rec("3002", 2.0, d, rms=0.035, fin=0.3, fout=0.3)
+    w = rec("0097", 10.0, d, rms=0.015, fin=0.3, fout=0.3)
+    m = min(len(c), len(w)); return (c[:m] + w[:m]).astype(np.float32)
+
+
+def A_night(d):
+    n = rec("0110", 5.0, d, rms=0.03, fin=0.3, fout=0.3)
+    tt = t_(len(n) / SR)
+    w = lp(noise(len(n) / SR), 400) * (0.5 + 0.5 * np.sin(2 * np.pi * 0.17 * tt + 1) ** 2) * 0.12
+    m = min(len(n), len(w)); return (n[:m] + w[:m]).astype(np.float32)
+
+
+def A_dawn(d):
+    b = rec("0222", 40.0, d, rms=0.02, fin=0.6, fout=0.4)
+    w = lp(noise(len(b) / SR), 400) * 0.06; m = min(len(b), len(w)); return (b[:m] + w[:m]).astype(np.float32)
+
+
 AMB = {"day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn}
 
 
@@ -321,16 +366,17 @@ def voice(shot, k, seg):
             if os.path.exists(p): break
         if os.path.exists(p):
             x = trim(load(p), 0.02)
+            SIL = "silenceremove=stop_periods=-1:stop_duration={d}:stop_threshold=-38dB:stop_silence={d}"
             if seg["v"] == "po":   # tiefer, hohler Klang mit langem Hall
-                x = ffx(x, "asetrate=44100*0.8,aresample=44100,atempo=1.1,lowpass=f=1800")
+                x = ffx(x, SIL.format(d=0.32) + ",asetrate=44100*0.8,aresample=44100,atempo=1.15,lowpass=f=1800")
                 return norm(reverb(x, 2.6, 0.55, 0.05), 0.8), len(x) / SR
             if seg["v"] == "oma":  # gefilterte, leicht zitternde Stimme hinter der Tuer
-                x = ffx(x, "highpass=f=200,lowpass=f=4500,tremolo=f=5:d=0.12")
+                x = ffx(x, SIL.format(d=0.25) + ",atempo=1.05,highpass=f=200,lowpass=f=4500,tremolo=f=5:d=0.12")
                 return norm(reverb(x, 1.6, 0.45), 0.7), len(x) / SR
             if seg["v"] == "opa":
-                x = ffx(x, "asetrate=44100*0.96,aresample=44100,atempo=1.04,highpass=f=120,lowpass=f=5000")
+                x = ffx(x, SIL.format(d=0.25) + ",asetrate=44100*0.96,aresample=44100,atempo=1.1,highpass=f=120,lowpass=f=5000")
                 return norm(reverb(x, 1.2, 0.35), 0.72), len(x) / SR
-            x = ffx(x, "highpass=f=70,acompressor=threshold=0.1:ratio=2.5:attack=5:release=80")
+            x = ffx(x, SIL.format(d=0.2) + ",atempo=1.15,highpass=f=70,acompressor=threshold=0.1:ratio=2.5:attack=5:release=80")
             return norm(x, 0.85), len(x) / SR
     base = os.path.join(B, "tts", f"{shot['id']}_{k}")
     v, txt = seg["v"], seg["t"]
@@ -399,6 +445,7 @@ def main():
             if "atSeg" in spec:
                 i, o = spec["atSeg"]; g = segs[i]
                 return (g["e"] + o) if o < 0 else (g["s"] + o)
+            if "atEnd" in spec: return cur + spec["atEnd"]
             return s0 + spec.get("at", 0)
         for key in ("card", "rule"):
             if key in sh:
@@ -416,7 +463,9 @@ def main():
     for sh in tl:
         for f in sh["sfx"]:
             if f["n"] not in cache: cache[f["n"]] = SFX[f["n"]]()
-            x = cache[f["n"]]; i = max(0, int(f["t"] * SR)); fx[i:i + len(x)] += x[: N - i]
+            x = cache[f["n"]]; i = int(f["t"] * SR)
+            if i < 0: x = x[-i:]; i = 0
+            fx[i:i + len(x)] += x[: N - i]
 
     # ambience beds, crossfaded per run of equal "amb"
     amb = np.zeros(N, np.float32)

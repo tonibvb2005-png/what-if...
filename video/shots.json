@@ -1,7 +1,7 @@
 {
   "monster": "HACHISHAKUSAMA",
   "shots": [
-    {"id":"hook","scene":"roulette","segs":[{"v":"narr","t":"Eines dieser Monster ist ausgebrochen. Mal sehen, wer es ist.","sub":"EINES DIESER MONSTER IST *AUSGEBROCHEN.* MAL SEHEN, WER ES IST."}],"hold":1.55,"sfx":[{"n":"alarm","at":0},{"n":"ticks","at":0.2}],"noHeader":true},
+    {"id":"hook","scene":"roulette","segs":[{"v":"narr","t":"Eines dieser Monster ist ausgebrochen. Mal sehen, wer es ist.","sub":"EINES DIESER MONSTER IST *AUSGEBROCHEN.* MAL SEHEN, WER ES IST."}],"hold":1.55,"sfx":[{"n":"alarm","at":0},{"n":"ticks","atEnd":-8.31}],"noHeader":true},
     {"id":"name","scene":"ext_wide","clock":"15:00","segs":[{"v":"narr","t":"Hachischakusama. Fünfzehn Uhr.","sub":"*HACHISHAKUSAMA.* 15 UHR."}],"sfx":[{"n":"boom","at":-0.05}],"amb":"day"},
     {"id":"arrive","scene":"ext_arrive","clock":"15:02","segs":[{"v":"narr","t":"Sommerferien bei Oma und Opa, auf dem Land.","sub":"SOMMERFERIEN BEI OMA UND OPA, AUF DEM *LAND.*"}],"card":{"k":"NÄCHSTE STADT","v":"30 KM"},"sfx":[{"n":"steps","at":0.1}],"amb":"day"},
     {"id":"hat","scene":"garden_hat","clock":"15:04","segs":[{"v":"narr","t":"Über der Hecke siehst du einen weißen Sonnenhut.","sub":"ÜBER DER HECKE SIEHST DU EINEN *WEISSEN SONNENHUT.*"}],"amb":"day"},

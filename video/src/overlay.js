@@ -105,7 +105,7 @@ const RING = ['#a35cff', '#3fe08a', '#43d4ff', '#ff5ca8', '#3fe08a', '#a35cff', 
 let MON = null;
 export function roulette(g, t, tEnd) {
   if (!MON) MON = ROSTER.map(n => C.MONSTERS[n]());
-  const SP = 480, TARGET = 6 + 16, tLand = Math.min(4.45, tEnd - 0.3);
+  const SP = 480, TARGET = 6 + 16, tLand = tEnd - 0.35;
   const off = SP * TARGET * easeOut(clamp(t / tLand)) ** 1.0;
   const locked = t >= tLand, lk = clamp((t - tLand) / 0.4);
   g.fillStyle = '#101116'; g.fillRect(0, 0, W, H);
