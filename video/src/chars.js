@@ -1,6 +1,7 @@
 // Flache 2D-Cartoonfiguren (Canvas), die in die 3D-Welt als Sprites gesetzt werden.
 export const OL = '#1c1512';
-export function cv(w, h) { const c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+export function cv(w, h, res = 1) { const c = document.createElement('canvas'); c.width = w * res; c.height = h * res; if (res !== 1) c.getContext('2d').scale(res, res); return c; }
+const cv2 = (w, h) => cv(w, h, 2); // Figuren in doppelter Aufloesung
 
 function P(g, fn, fill, lw = 10, shadeAmt = 0.13) {
   g.beginPath(); fn(g); g.fillStyle = fill; g.fill();
@@ -45,7 +46,7 @@ function face(g, cx, cy, kind) {
 
 // ------------------------------------------------------------- Junge
 export function boy(view = 'front', expr = 'neutral') {
-  const c = cv(512, 1024), g = c.getContext('2d');
+  const c = cv2(512, 1024), g = c.getContext('2d');
   P(g, ell(218, 985, 42, 22), '#3a2a22', 8, 0); P(g, ell(294, 985, 42, 22), '#3a2a22', 8, 0);
   P(g, rr(188, 715, 58, 262, 18), JEANS); P(g, rr(266, 715, 58, 262, 18), JEANS);
   P(g, rr(140, 468, 232, 292, 64), HOOD);
@@ -69,7 +70,7 @@ export function boy(view = 'front', expr = 'neutral') {
 }
 
 export function boySit(expr = 'scared_sweat') {
-  const c = cv(512, 1024), g = c.getContext('2d');
+  const c = cv2(512, 1024), g = c.getContext('2d');
   P(g, ell(196, 990, 44, 22), '#3a2a22', 8, 0); P(g, ell(316, 990, 44, 22), '#3a2a22', 8, 0);
   P(g, rr(160, 560, 192, 300, 60), HOOD);
   P(g, rr(168, 790, 70, 190, 26), JEANS); P(g, rr(274, 790, 70, 190, 26), JEANS);
@@ -84,7 +85,7 @@ export function boySit(expr = 'scared_sweat') {
 
 // ------------------------------------------------------------- Oma
 export function oma(expr = 'neutral') {
-  const c = cv(512, 1024), g = c.getContext('2d'), SK = '#f1cba4';
+  const c = cv2(512, 1024), g = c.getContext('2d'), SK = '#f1cba4';
   P(g, ell(224, 992, 36, 18), '#2d2522', 8, 0); P(g, ell(290, 992, 36, 18), '#2d2522', 8, 0);
   P(g, rr(204, 860, 36, 126, 14), '#d9b79a'); P(g, rr(272, 860, 36, 126, 14), '#d9b79a');
   P(g, g => { g.moveTo(150, 700); g.lineTo(362, 700); g.lineTo(386, 886); g.lineTo(126, 886); g.closePath(); }, '#55476a');
@@ -108,7 +109,7 @@ export function oma(expr = 'neutral') {
 }
 
 export function omaSleep() {
-  const c = cv(1024, 512), g = c.getContext('2d');
+  const c = cv2(1024, 512), g = c.getContext('2d');
   P(g, rr(40, 250, 940, 200, 40), '#e9e4d8', 10, 0.06);
   P(g, rr(330, 210, 640, 230, 60), '#3f5f8f', 10, 0.1);
   g.strokeStyle = 'rgba(255,255,255,.25)'; g.lineWidth = 6; for (let x = 380; x < 950; x += 70) { g.beginPath(); g.moveTo(x, 230); g.lineTo(x + 30, 420); g.stroke(); }
@@ -149,7 +150,7 @@ function opaHead(g, cx, cy, expr) {
 }
 
 export function opa(expr = 'neutral') {
-  const c = cv(512, 1024), g = c.getContext('2d');
+  const c = cv2(512, 1024), g = c.getContext('2d');
   P(g, ell(218, 988, 42, 20), '#2a211d', 8, 0); P(g, ell(294, 988, 42, 20), '#2a211d', 8, 0);
   P(g, rr(188, 718, 58, 262, 18), '#46423f'); P(g, rr(266, 718, 58, 262, 18), '#46423f');
   P(g, rr(140, 470, 232, 290, 60), '#e6d7b8');
@@ -162,7 +163,7 @@ export function opa(expr = 'neutral') {
 }
 
 export function opaTall(expr = 'glow') {
-  const c = cv(512, 2048), g = c.getContext('2d');
+  const c = cv2(512, 2048), g = c.getContext('2d');
   P(g, ell(226, 2025, 34, 16), '#2a211d', 7, 0); P(g, ell(290, 2025, 34, 16), '#2a211d', 7, 0);
   P(g, rr(212, 1280, 34, 745, 16), '#46423f'); P(g, rr(266, 1280, 34, 745, 16), '#46423f');
   P(g, rr(236, 430, 40, 160, 14), '#efc59c');
@@ -177,7 +178,7 @@ export function opaTall(expr = 'glow') {
 
 // ------------------------------------------------------------- Hachishakusama
 export function hachi(expr = 'smile', withHat = true) {
-  const c = cv(512, 1536), g = c.getContext('2d'), PALE = '#efe7dc';
+  const c = cv2(512, 1536), g = c.getContext('2d'), PALE = '#efe7dc';
   P(g, g => { g.moveTo(130, 330); g.bezierCurveTo(70, 600, 80, 820, 120, 960); g.lineTo(392, 960); g.bezierCurveTo(432, 820, 442, 600, 382, 330); g.closePath(); }, '#0f0d10', 8, 0);
   P(g, ell(222, 1508, 26, 12), PALE, 6, 0); P(g, ell(290, 1508, 26, 12), PALE, 6, 0);
   P(g, rr(210, 1420, 22, 90, 10), PALE, 6, 0); P(g, rr(280, 1420, 22, 90, 10), PALE, 6, 0);
@@ -207,7 +208,7 @@ export function hachi(expr = 'smile', withHat = true) {
 
 // ------------------------------------------------------------- Ofuda (Papier-Talisman)
 export function ofuda(seed = 1) {
-  const c = cv(160, 440), g = c.getContext('2d');
+  const c = cv2(160, 440), g = c.getContext('2d');
   let s = seed * 9301; const r = () => (s = (s * 9301 + 49297) % 233280) / 233280;
   g.fillStyle = '#f1e7cc'; g.fillRect(0, 0, 160, 440);
   g.strokeStyle = '#b8231e'; g.lineWidth = 6; g.strokeRect(12, 12, 136, 416);
@@ -218,7 +219,7 @@ export function ofuda(seed = 1) {
 }
 
 // ------------------------------------------------------------- Roulette-Monster
-function sil(fn) { const c = cv(512, 1024), g = c.getContext('2d'); fn(g); return c; }
+function sil(fn) { const c = cv2(512, 1024), g = c.getContext('2d'); fn(g); return c; }
 function glowEyes(g, pts, r = 16, col = '255,40,30') {
   for (const [x, y] of pts) { const gr = g.createRadialGradient(x, y, 1, x, y, r * 2.6); gr.addColorStop(0, '#fff'); gr.addColorStop(0.3, `rgba(${col},1)`); gr.addColorStop(1, `rgba(${col},0)`); g.fillStyle = gr; g.beginPath(); g.arc(x, y, r * 2.6, 0, 7); g.fill(); }
 }
@@ -286,5 +287,5 @@ export const MONSTERS = {
     for (const s of [-1, 1]) { P(g, circ(256 + s * 52, 380, 44), '#fff', 7, 0); g.strokeStyle = '#d33'; g.lineWidth = 3; for (let a = 0; a < 6; a++) { g.beginPath(); g.moveTo(256 + s * 52 + Math.cos(a) * 44, 380 + Math.sin(a) * 44); g.lineTo(256 + s * 52 + Math.cos(a) * 26, 380 + Math.sin(a) * 26); g.stroke(); } P(g, circ(256 + s * 50, 384, 10), OL, 0, 0); }
     P(g, g => { g.moveTo(170, 500); g.quadraticCurveTo(256, 560, 342, 500); g.quadraticCurveTo(256, 520, 170, 500); }, '#3a0d10', 6, 0);
   }),
-  'HACHISHAKUSAMA': () => { const c = cv(512, 1024), g = c.getContext('2d'); g.drawImage(hachi('glow'), 0, 0, 512, 1536, 85, 0, 341, 1024); return c; },
+  'HACHISHAKUSAMA': () => { const c = cv2(512, 1024), g = c.getContext('2d'); g.drawImage(hachi('glow'), 85, 0, 341, 1024); return c; },
 };

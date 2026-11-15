@@ -1,6 +1,7 @@
 // 3D-Welten (Low-Poly) + Szenen-Setups pro Shot
 import * as THREE from 'three';
 import * as C from './chars.js';
+import { mergeGeometries, mergeVertices } from 'three/addons/utils/BufferGeometryUtils.js';
 
 const L = (a, b, t) => a + (b - a) * t;
 const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
@@ -10,7 +11,7 @@ const V = (x, y, z) => new THREE.Vector3(x, y, z);
 const lerpV = (a, b, t) => a.clone().lerp(b, t);
 let seed = 11; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
 
-function tex(canvas) { const t = new THREE.CanvasTexture(canvas); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4; return t; }
+function tex(canvas) { const t = new THREE.CanvasTexture(canvas); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 16; return t; }
 function lam(color, o = {}) { return new THREE.MeshLambertMaterial({ color, flatShading: true, ...o }); }
 function box(w, h, d, mat, x = 0, y = 0, z = 0) { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.position.set(x, y, z); return m; }
 function jitter(geo, a) { const p = geo.attributes.position; for (let i = 0; i < p.count; i++) p.setXYZ(i, p.getX(i) + (rnd() - .5) * a, p.getY(i) + (rnd() - .5) * a, p.getZ(i) + (rnd() - .5) * a); geo.computeVertexNormals(); return geo; }
@@ -70,10 +71,29 @@ function buildExt() {
   const rg = new THREE.ExtrudeGeometry(rs, { depth: 12.4, bevelEnabled: false }); rg.translate(0, 0, -6.2); rg.rotateY(Math.PI / 2);
   const roof = new THREE.Mesh(rg, dark); roof.position.y = 3.1; roof.castShadow = true; H.add(roof);
   // Hecke
+  // Kern + viele Blattbueschel mit Farbverlauf (unten schattig, oben sonnig)
   const hedge = new THREE.Group(); S.add(hedge);
-  const hm = lam(0x4f8240), hm2 = lam(0x457536);
-  for (let x = -9; x <= 9; x += 0.9) { const b = new THREE.Mesh(jitter(new THREE.BoxGeometry(1.1, 2.1, 0.9, 2, 3, 2), 0.18), rnd() > .5 ? hm : hm2); b.position.set(x, 1.05, 6.9); b.castShadow = b.receiveShadow = true; hedge.add(b);
-    const t = new THREE.Mesh(jitter(new THREE.IcosahedronGeometry(0.5, 0), 0.15), hm); t.position.set(x + rnd() * 0.3, 2.05, 6.9); t.scale.set(1.1, 0.5, 1); t.castShadow = true; hedge.add(t); }
+  const core = box(18.4, 1.9, 0.75, lam(0x2a4a24), 0, 0.95, 6.9); core.receiveShadow = true; hedge.add(core);
+  const greens = [[0.25, 0.42, 0.18], [0.30, 0.50, 0.20], [0.36, 0.56, 0.22], [0.22, 0.38, 0.17], [0.42, 0.60, 0.24]];
+  const parts = [];
+  const clump = (x, y, z, r) => {
+    const ico = new THREE.IcosahedronGeometry(r, 2); ico.deleteAttribute('normal'); ico.deleteAttribute('uv');
+    const g = jitter(mergeVertices(ico), r * 0.07).toNonIndexed();
+    g.scale(1, 0.85, 0.9); g.translate(x, y, z);
+    const base = greens[Math.floor(rnd() * greens.length)], v = 0.92 + rnd() * 0.16;
+    const n = g.attributes.position.count, col = new Float32Array(n * 3), P = g.attributes.position;
+    for (let i = 0; i < n; i++) { const h = Math.min(1, Math.max(0, P.getY(i) / 2.2)), k = (0.55 + 0.55 * h) * v, warm = h * h * 0.07;
+      col[i * 3] = (base[0] + warm) * k; col[i * 3 + 1] = (base[1] + warm * 0.5) * k; col[i * 3 + 2] = base[2] * k; }
+    g.setAttribute('color', new THREE.BufferAttribute(col, 3)); parts.push(g);
+  };
+  for (let x = -9.2; x <= 9.2; x += 0.5) {
+    for (let y = 0.3; y <= 1.7; y += 0.46) { clump(x + (rnd() - .5) * 0.2, y + (rnd() - .5) * 0.1, 6.55 + (rnd() - .5) * 0.08, 0.34 + rnd() * 0.08); clump(x + (rnd() - .5) * 0.2, y, 7.25, 0.34 + rnd() * 0.08); }
+    for (const z of [6.62, 7.18]) clump(x + (rnd() - .5) * 0.2, 1.82 + (rnd() - .5) * 0.08, z, 0.36 + rnd() * 0.06);
+  }
+  const hedgeMesh = new THREE.Mesh(mergeGeometries(parts), new THREE.MeshLambertMaterial({ vertexColors: true, flatShading: false }));
+  hedgeMesh.castShadow = hedgeMesh.receiveShadow = true; hedge.add(hedgeMesh);
+  // Graskante vor der Hecke
+  const strip = new THREE.Mesh(new THREE.PlaneGeometry(18.4, 0.5), lam(0x2c4a22)); strip.rotation.x = -Math.PI / 2; strip.position.set(0, 0.015, 6.35); hedge.add(strip);
   // Bäume & Berge
   const tm = [lam(0x2f5a2c), lam(0x3a6b30), lam(0x4b7a36), lam(0x9a6a2e)];
   const tree = (x, z, s) => { const g = new THREE.Group(); g.add(box(0.3 * s, 1.2 * s, 0.3 * s, lam(0x5a3b25), 0, 0.6 * s, 0)); for (let k = 0; k < 3; k++) { const c = new THREE.Mesh(new THREE.ConeGeometry((1.5 - k * .35) * s, 1.6 * s, 6), tm[Math.floor(rnd() * 4)]); c.position.y = (1.4 + k * 0.9) * s; c.castShadow = true; g.add(c); } g.position.set(x, 0, z); S.add(g); };
@@ -87,6 +107,7 @@ function buildExt() {
   const brim = new THREE.Mesh(new THREE.CylinderGeometry(0.46, 0.48, 0.03, 28), hw); hat.add(brim);
   const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.2, 0.2, 20), hw); crown.position.y = 0.11; hat.add(crown);
   const band = new THREE.Mesh(new THREE.CylinderGeometry(0.205, 0.205, 0.05, 20), lam(0x1a1718)); band.position.y = 0.04; hat.add(band);
+  const hair = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.24, 0.62, 14, 1, true), new THREE.MeshLambertMaterial({ color: 0x0d0b0d, side: THREE.DoubleSide })); hair.position.y = -0.3; hat.add(hair);
   hat.traverse(o => o.castShadow = true); S.add(hat);
   // Figuren
   const boyB = sprite(C.boy('back'), 1.35), boyF = sprite(C.boy('front', 'scared_sweat'), 1.35);
@@ -200,7 +221,7 @@ function buildInt() {
   const hf = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 12), new THREE.MeshLambertMaterial({ map: pl })); hf.rotation.x = -Math.PI / 2; hf.position.set(3.8, 0.001, 0); hall.add(hf);
   hall.add(box(0.1, 2.4, 12, plaster, 4.65, 1.2, 0), box(1.7, 0.08, 12, lam(0x6e4e33), 3.8, 2.44, 0));
   for (const z of [-3, -1.5, 1.5, 3]) hall.add(box(0.12, 2.4, 0.12, wood, 4.58, 1.2, z));
-  for (const z of [-4, 0, 4]) hall.add(box(1.6, 0.12, 0.12, woodD, 3.8, 2.36, z));
+  for (const z of [-4, -1.3, 1.3, 4]) hall.add(box(1.6, 0.12, 0.12, woodD, 3.8, 2.36, z));
   const hallWin = box(1.4, 2.0, 0.05, new THREE.MeshBasicMaterial({ color: 0xfff2dc }), 3.8, 1.2, -5.9); hall.add(hallWin);
   const hallL = new THREE.PointLight(0xfff0dc, 3, 10, 1.2); hallL.position.set(3.8, 2.1, -1.5); S.add(hallL);
   // Figuren
@@ -254,7 +275,7 @@ export const SHOTS = {
     look(E.cam, lerpV(V(-3.4, 1.25, 1.9), V(-3.0, 1.25, 2.4), ease(p)), V(-0.3, 1.25, 6.4));
     return { world: E, vig: 0.6, measure: [V(0.1, 0, 6.42), V(0.1, 2.12, 6.42)], measureLabel: '2,10 M', measureP: sm(0.05, 0.5, p) }; },
   tilt_hat(W, p, t) { const E = W.ext; extBase(E, 0.85, true); onlyShow([E.boyB, E.boyF, E.om, E.op, E.hat], [E.hat]);
-    E.hat.position.set(0.7, L(2.52, 2.8, ease(p)), 7.6); E.hat.rotation.set(0.05 + Math.sin(t * 3) * 0.03, 1 + p * 0.3, 0);
+    E.hat.position.set(0.7, L(2.55, 2.95, ease(p)), 7.6); E.hat.rotation.set(0.05 + Math.sin(t * 3) * 0.03, 1 + p * 0.3, 0);
     look(E.cam, V(0.1, 1.0, 4.0), lerpV(V(0.4, 1.6, 7.3), V(0.65, 2.75, 7.6), ease(p))); return { world: E, vig: 0.7 }; },
 
   // ---------------------------------------------------- innen
@@ -306,16 +327,16 @@ export const SHOTS = {
     I.door.position.z = L(0, 1.0, ease(sm(0.25, 0.75, p))); I.doorSil.material.opacity = 0; I.hallL.intensity = 5; I.hallL.color.set(0xfff0dc);
     look(I.cam, lerpV(V(1.3, 1.2, 0.1), V(1.9, 1.2, 0.05), ease(p)), V(3.2, 1.15, 0)); return { world: I, vig: 0.5 }; },
   opa_smile(W, p) { const I = W.int; intBase(I, 'dawn', 1); onlyShow(intActors(I), [I.opT]);
-    I.door.position.z = 1.0; I.hallL.intensity = 5; I.hallL.color.set(0xfff0dc); setTex(I.opT, I.T.opaCreepy); I.opT.position.set(3.95, 0, 0);
-    look(I.cam, V(L(3.15, 3.3, ease(p)), 2.1, 0.02), V(3.95, 2.1, 0)); return { world: I, vig: 0.55 }; },
+    I.door.position.z = 1.0; I.hallL.intensity = 5; I.hallL.color.set(0xfff0dc); setTex(I.opT, I.T.opaCreepy); I.opT.position.set(4.35, 0, 0);
+    look(I.cam, V(L(3.25, 3.42, ease(p)), 2.1, 0.02), V(4.35, 2.1, 0)); return { world: I, vig: 0.55 }; },
   look_up(W, p, t) { const I = W.int; intBase(I, 'dawn', 1); onlyShow(intActors(I), [I.opT]);
-    I.door.position.z = 1.0; I.hallL.intensity = 5; I.hallL.color.setRGB(1, L(0.94, 0.35, p), L(0.86, 0.3, p)); setTex(I.opT, I.T.opaCreepy); I.opT.position.set(3.95, 0, 0);
-    look(I.cam, V(3.15, 1.0, 0.05), lerpV(V(3.95, 1.0, 0), V(3.95, 2.25, 0), ease(p))); return { world: I, vig: 0.6, tint: p * 0.5 }; },
+    I.door.position.z = 1.0; I.hallL.intensity = 5; I.hallL.color.setRGB(1, L(0.94, 0.35, p), L(0.86, 0.3, p)); setTex(I.opT, I.T.opaCreepy); I.opT.position.set(4.35, 0, 0);
+    look(I.cam, V(3.0, 1.0, 0.03), lerpV(V(4.35, 1.0, 0), V(4.35, 2.2, 0), ease(p))); return { world: I, vig: 0.6, tint: p * 0.5 }; },
   ceiling(W, p, t, sh) { const I = W.int; intBase(I, 'red'); onlyShow(intActors(I), [I.opT]);
-    I.door.position.z = 1.0; I.hallL.intensity = 6; I.hallL.color.setRGB(1, 0.25, 0.2); setTex(I.opT, I.T.opaGlow); I.opT.position.set(3.95, 0, 0);
+    I.door.position.z = 1.0; I.hallL.intensity = 6; I.hallL.color.setRGB(1, 0.25, 0.2); setTex(I.opT, I.T.opaGlow); I.opT.position.set(4.35, 0, 0);
     const st = sh.sfx.find(f => f.n === 'stinger'); const after = st ? t - st.t : -1;
-    look(I.cam, lerpV(V(3.25, 1.35, 0.05), V(3.45, 1.55, 0.04), ease(p)), V(3.95, 2.2, 0));
-    return { world: I, vig: 0.8, tint: 0.65, shake: after > 0 && after < 0.6 ? 0.02 * (1 - after / 0.6) : 0, flash: after > 0 && after < 0.12 ? 1 - after / 0.12 : 0 }; },
+    look(I.cam, lerpV(V(3.3, 1.35, 0.03), V(3.5, 1.5, 0.03), ease(p)), V(4.35, 2.2, 0));
+    return { world: I, vig: 0.8, tint: 0.65, shake: after > 0 && after < 0.5 ? 0.008 * (1 - after / 0.5) : 0, flash: after > 0 && after < 0.12 ? 1 - after / 0.12 : 0 }; },
 };
 SHOTS._billboard = billboard; SHOTS._shake = shake;
 
