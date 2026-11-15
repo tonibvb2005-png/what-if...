@@ -209,6 +209,6 @@ export function endcard(g, p) {
   for (const [dx, col] of [[-5, '#25f4ee'], [5, '#fe2c55'], [0, '#fff']]) { g.beginPath(); g.roundRect(W / 2 - 300 + dx, 960, 600, 92, 14); g.lineWidth = 6; g.strokeStyle = col; g.stroke(); }
   g.fillStyle = '#fff'; g.beginPath(); g.roundRect(W / 2 - 297, 963, 594, 86, 12); g.fill();
   g.strokeStyle = '#161722'; g.lineWidth = 6; g.beginPath(); g.arc(W / 2 - 240, 1000, 18, 0, 7); g.stroke(); g.beginPath(); g.moveTo(W / 2 - 227, 1013); g.lineTo(W / 2 - 212, 1028); g.stroke();
-  g.fillStyle = '#161722'; g.font = '700 40px Montserrat'; g.textAlign = 'center'; g.fillText('@deinkanal', W / 2 + 10, 1008);
+  g.fillStyle = '#161722'; g.font = '700 40px Montserrat'; g.textAlign = 'center'; g.fillText('@interestingstuff', W / 2 + 10, 1008);
   g.restore();
 }
