@@ -1,0 +1,33 @@
+{
+  "monster": "HACHISHAKUSAMA",
+  "shots": [
+    {"id":"hook","scene":"roulette","segs":[{"v":"narr","t":"Eines dieser Monster ist ausgebrochen. Mal sehen, wer es ist.","sub":"EINES DIESER MONSTER IST *AUSGEBROCHEN.* MAL SEHEN, WER ES IST."}],"hold":1.55,"sfx":[{"n":"alarm","at":0},{"n":"ticks","at":0.2}],"noHeader":true},
+    {"id":"name","scene":"ext_wide","clock":"15:00","segs":[{"v":"narr","t":"Hachischakusama. Fünfzehn Uhr.","sub":"*HACHISHAKUSAMA.* 15 UHR."}],"sfx":[{"n":"boom","at":-0.05}],"amb":"day"},
+    {"id":"arrive","scene":"ext_arrive","clock":"15:02","segs":[{"v":"narr","t":"Sommerferien bei Oma und Opa, auf dem Land.","sub":"SOMMERFERIEN BEI OMA UND OPA, AUF DEM *LAND.*"}],"card":{"k":"NÄCHSTE STADT","v":"30 KM"},"sfx":[{"n":"steps","at":0.1}],"amb":"day"},
+    {"id":"hat","scene":"garden_hat","clock":"15:04","segs":[{"v":"narr","t":"Über der Hecke siehst du einen weißen Sonnenhut.","sub":"ÜBER DER HECKE SIEHST DU EINEN *WEISSEN SONNENHUT.*"}],"amb":"day"},
+    {"id":"hear","scene":"face_garden","clock":"15:04","segs":[{"v":"narr","t":"Dann hörst du es.","sub":"DANN HÖRST DU ES."}],"amb":"day_fade"},
+    {"id":"po1","scene":"hedge_po","clock":"15:05","segs":[{"v":"po","t":"Po. Po. Po. Po.","sub":"„*PO… PO… PO… PO.*“"}],"hold":0.3,"sfx":[{"n":"hit_soft","at":0}]},
+    {"id":"measure","scene":"side_measure","clock":"15:05","segs":[{"v":"narr","t":"Die Hecke ist über zwei Meter hoch.","sub":"DIE HECKE IST ÜBER *ZWEI METER* HOCH."}]},
+    {"id":"float","scene":"tilt_hat","clock":"15:05","segs":[{"v":"narr","t":"Und der Hut schwebt darüber.","sub":"UND DER HUT *SCHWEBT* DARÜBER."}],"sfx":[{"n":"riser","at":0}]},
+    {"id":"cup","scene":"kitchen","clock":"15:10","segs":[{"v":"narr","t":"Du erzählst es Oma. Ihre Teetasse fällt zu Boden.","sub":"DU ERZÄHLST ES OMA. IHRE *TEETASSE* FÄLLT ZU BODEN."}],"sfx":[{"n":"shatter","atSeg":[0,-0.35]}],"amb":"room"},
+    {"id":"tall","scene":"red_tall","clock":"15:11","tint":"red","segs":[{"v":"narr","t":"Hachischakusama. Eine Frau, zweieinhalb Meter groß.","sub":"*HACHISHAKUSAMA.* EINE FRAU, *2,5 METER* GROSS."}],"card":{"k":"GRÖSSE","v":"2,50 M"},"sfx":[{"n":"boom","at":0}]},
+    {"id":"takes","scene":"red_face","clock":"15:11","tint":"red","segs":[{"v":"narr","t":"Wen sie einmal gesehen hat, den holt sie.","sub":"WEN SIE EINMAL GESEHEN HAT, DEN *HOLT* SIE."}],"sfx":[{"n":"whisper","at":0.2}]},
+    {"id":"rule","scene":"room_rule","clock":"18:30","segs":[{"v":"narr","t":"Sie macht jede Stimme nach. Aber rein kommt sie nur, wenn du ihr öffnest.","sub":"SIE MACHT JEDE *STIMME* NACH. ABER REIN KOMMT SIE NUR, WENN DU IHR *ÖFFNEST.*"}],"rule":{"title":"REGEL #1","text":"ÖFFNE NIEMALS DIE TÜR","atSeg":[0,0.55]},"sfx":[{"n":"pop","atSeg":[0,0.55]}],"amb":"room"},
+    {"id":"talisman","scene":"talisman","clock":"18:40","segs":[{"v":"narr","t":"Opa klebt Papierzettel an jedes Fenster. Salz in jede Ecke.","sub":"OPA KLEBT PAPIERZETTEL AN JEDES FENSTER. *SALZ* IN JEDE ECKE."}],"sfx":[{"n":"paper","at":0.3},{"n":"paper","at":1.1},{"n":"salt","atSeg":[0,-1.4]}],"amb":"room"},
+    {"id":"alone","scene":"room_alone","clock":"19:00","segs":[{"v":"narr","t":"Die Regel: Bis sieben Uhr morgens öffnest du die Tür nicht. Für niemanden.","sub":"DIE REGEL: BIS *7 UHR* MORGENS ÖFFNEST DU DIE TÜR NICHT. FÜR *NIEMANDEN.*"}],"sfx":[{"n":"slide","at":0.1}],"amb":"room"},
+    {"id":"knock","scene":"window_night","clock":"00:00","segs":[{"v":"narr","t":"Mitternacht. Es klopft am Fenster.","sub":"*MITTERNACHT.* ES KLOPFT AM FENSTER."}],"hold":0.5,"sfx":[{"n":"knock3","atSeg":[0,0.05]}],"amb":"night"},
+    {"id":"po2","scene":"window_po","clock":"00:01","segs":[{"v":"po","t":"Po. Po. Po.","sub":"„*PO… PO… PO.*“"}],"hold":0.3,"amb":"night"},
+    {"id":"oma","scene":"door_oma","clock":"00:03","segs":[{"v":"narr","t":"Dann Omas Stimme.","sub":"DANN *OMAS* STIMME."},{"v":"oma","t":"Schatz, mach auf. Ich hab dir Tee gebracht.","sub":"„SCHATZ, MACH AUF. ICH HAB DIR *TEE* GEBRACHT.“"}],"card":{"k":"STIMMEN-MATCH","v":"OMA 100 %","atSeg":[1,0.2]},"amb":"night"},
+    {"id":"sleep","scene":"oma_sleep","clock":"00:03","segs":[{"v":"narr","t":"Aber Oma schläft nebenan. Du hörst sie schnarchen.","sub":"ABER OMA *SCHLÄFT* NEBENAN. DU HÖRST SIE SCHNARCHEN."}],"sfx":[{"n":"snore","atSeg":[0,-0.2]}],"hold":0.4,"amb":"night"},
+    {"id":"salt","scene":"salt_black","clock":"04:47","segs":[{"v":"narr","t":"Das Salz in der Ecke wird schwarz.","sub":"DAS SALZ IN DER ECKE WIRD *SCHWARZ.*"}],"sfx":[{"n":"crackle","at":0}],"hold":0.3,"amb":"night"},
+    {"id":"dawn","scene":"dawn","clock":"06:55","segs":[{"v":"narr","t":"Sechs Uhr fünfundfünfzig. Noch fünf Minuten.","sub":"6:55 UHR. NOCH *FÜNF MINUTEN.*"}],"card":{"k":"SONNENAUFGANG IN","v":"countdown"},"sfx":[{"n":"birds","at":0.2}],"amb":"dawn"},
+    {"id":"opa","scene":"door_opa","clock":"06:56","segs":[{"v":"narr","t":"Dann Opas Stimme.","sub":"DANN *OPAS* STIMME."},{"v":"opa","t":"Es ist vorbei. Du kannst rauskommen.","sub":"„ES IST *VORBEI.* DU KANNST RAUSKOMMEN.“"}],"sfx":[{"n":"knock2","at":0}],"amb":"dawn"},
+    {"id":"wait","scene":"face_wait","clock":"06:59","segs":[{"v":"narr","t":"Du sagst nichts. Du wartest.","sub":"DU SAGST NICHTS. DU *WARTEST.*"}],"hold":0.4,"sfx":[{"n":"clock","at":0}],"amb":"dawn"},
+    {"id":"open","scene":"door_open","clock":"07:00","segs":[{"v":"narr","t":"Punkt sieben. Du öffnest die Tür.","sub":"*PUNKT SIEBEN.* DU ÖFFNEST DIE TÜR."}],"sfx":[{"n":"slide","atSeg":[0,-0.6]}],"amb":"dawn"},
+    {"id":"smile","scene":"opa_smile","clock":"07:00","segs":[{"v":"narr","t":"Opa steht im Flur und lächelt.","sub":"OPA STEHT IM FLUR UND *LÄCHELT.*"},{"v":"opa","t":"Gut gemacht.","sub":"„GUT GEMACHT.“"}],"hold":0.35,"amb":"dawn"},
+    {"id":"lookup","scene":"look_up","clock":"07:00","tint":"red","segs":[{"v":"narr","t":"Dann siehst du nach oben.","sub":"DANN SIEHST DU NACH *OBEN.*"}],"sfx":[{"n":"riser","at":0}]},
+    {"id":"ceiling","scene":"ceiling","clock":"07:00","tint":"red","segs":[{"v":"narr","t":"Sein Kopf berührt die Decke.","sub":"SEIN KOPF BERÜHRT DIE *DECKE.*"}],"hold":0.9,"sfx":[{"n":"stinger","atSeg":[0,-0.25]}]},
+    {"id":"cta","scene":"cta","segs":[{"v":"narr","t":"Folge mir, um zu sehen, wen du als Nächstes bekommst.","sub":"FOLGE MIR, UM ZU SEHEN, WEN DU ALS *NÄCHSTES* BEKOMMST."}],"hold":0.4,"noHeader":true,"sfx":[{"n":"sparkle","at":0}]},
+    {"id":"end","scene":"endcard","segs":[],"hold":2.6,"noHeader":true}
+  ]
+}

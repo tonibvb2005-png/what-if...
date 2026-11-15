@@ -1,0 +1,11 @@
+<!doctype html><html><body style="margin:0;background:#888"><canvas id=c width=2400 height=1100></canvas>
+<script type=module>
+import * as C from '../src/chars.js';
+const g=document.getElementById('c').getContext('2d');
+const list=[C.boy('front','neutral'),C.boy('front','scared_sweat'),C.boy('back'),C.boySit(),C.oma(),C.oma('shocked'),C.opa(),C.opa('creepy'),C.opaTall('glow'),C.hachi('smile'),C.ofuda(3)];
+let x=0;for(const c of list){const h=c.height>1024?1000:500;const w=c.width*h/c.height; g.drawImage(c,x,0,w,h);x+=w+10;}
+g.drawImage(C.omaSleep(),0,560,600,300);x=620;for(const f of Object.values(C.MONSTERS)){g.drawImage(f(),x,560,250,500);x+=230;}
+let y=0;x=0;const ms=Object.values(C.MONSTERS);
+const s2=document.createElement('canvas');
+window.done=true;
+</script></body></html>
