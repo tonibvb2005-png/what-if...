@@ -1,0 +1,7 @@
+<!doctype html><html><body style="margin:0;background:#556"><canvas id=c width=1600 height=900></canvas>
+<script type=module>
+import * as C from '../src/chars.js';
+const g=document.getElementById('c').getContext('2d');
+[C.mia('front','neutral',true),C.mia('front','scared_sweat'),C.mia('back'),C.MONSTERS['SLENDER MAN']()].forEach((c,i)=>g.drawImage(c,i*400,0,400,800));
+window.done=true;
+</script></body></html>

@@ -364,6 +364,43 @@ def A_bedroom(d):
     a = lp(rec("0426", 0.0, min(d, 22.0), rms=0.008, fin=0.5, fout=0.5), 3000); n = int(d * SR); x = np.zeros(n, np.float32)
     x[:min(n, len(a))] += a[:n]; return x + lp(noise(d), 150)[:n] * 0.03
 
+
+# ---------------------------------------------------------------- Folge 3: Slender Man
+def _static(d, lvl, rise=False):
+    n = rec("1037", 20.0, d, rms=0.12, fin=0.05, fout=0.25)
+    n = bp(n, 400, 9000); tt = t_(len(n) / SR)
+    crack = np.zeros(len(n), np.float32)
+    for _ in range(int(d * 25)):
+        i = rng.integers(0, len(n) - 600); crack[i:i + 500] += hp(noise(500 / SR), 1500) * rng.uniform(0.2, 1.0) * np.linspace(1, 0, 500)
+    flutter = 0.75 + 0.25 * np.sign(np.sin(2 * np.pi * rng.uniform(5, 9) * tt))
+    x = (n * flutter + crack * 0.25)
+    if rise: x *= np.linspace(0.08, 1.0, len(x)) ** 1.5
+    return (x * lvl / (np.abs(x).max() + 1e-9)).astype(np.float32)
+def R_static_low():  return _static(3.0, 0.15)
+def R_static_mid():  return _static(3.0, 0.3)
+def R_static_high(): return _static(2.5, 0.5)
+def R_static_rise(): return _static(4.0, 0.6, True)
+def R_recbeep():
+    x = np.zeros(int(0.5 * SR), np.float32)
+    for k in range(2): d = 0.07; b = np.sin(2 * np.pi * 2350 * t_(d)) * env(int(d * SR), 0.003, 0.02) * 0.25; i = int(k * 0.14 * SR); x[i:i + len(b)] += b
+    return x
+def R_leafsteps(): return rec("2889", 6.0, 3.2, 0.5, 0.2, 0.6)
+def R_twig():      return reverb(rec("1300", 0.0, 1.27, 0.85, 0.002, 0.3), 1.6, 0.35)
+def R_run():
+    x = rec("1843", 2.0, 3.5, 0.7, 0.01, 0.2); tt = np.linspace(0, 1, len(x))
+    return reverb((lp(x, 2500) * (1 - tt) ** 1.6).astype(np.float32), 1.8, 0.4)
+def R_dog():       return reverb(lp(rec("2954", 2.0, 3.0, 0.3, 0.05, 0.6), 1500), 2.5, 0.55)
+def R_radio():     return lp(rec("0312", 0.0, 4.4, 0.35, 0.05, 0.5), 3500)
+def R_cassette():
+    a = rec("1783", 0.0, 0.17, 0.5, 0.001, 0.05); b = rec("2154", 0.0, 1.15, 0.6, 0.002, 0.2)
+    x = np.zeros(len(a) + len(b) + 2000, np.float32); x[:len(b)] += b; x[len(b) + 2000 - len(a) - 1000:][:len(a)] += a; return x
+def A_woods(d):
+    i = rec("1470", 30.0, d, rms=0.014, fin=0.4, fout=0.4); tt = t_(len(i) / SR)
+    w = lp(noise(len(i) / SR), 450) * 0.14 * (0.5 + 0.5 * np.sin(2 * np.pi * 0.11 * tt) ** 2); m = min(len(i), len(w))
+    return (i[:m] + w[:m]).astype(np.float32)
+def A_village(d): return rec("0110", 20.0, d, rms=0.02, fin=0.4, fout=0.4)
+def A_tvroom(d):  tt = t_(d); return (np.sin(2 * np.pi * 50 * tt) * 0.006 + lp(noise(d), 200) * 0.03 + hp(noise(d), 6000) * 0.006).astype(np.float32)
+
 SFX = {k[2:]: v for k, v in globals().items() if k.startswith("S_")}
 SFX.update({k[2:]: v for k, v in globals().items() if k.startswith("R_")})
 
@@ -415,7 +452,7 @@ def A_dawn(d):
     w = lp(noise(len(b) / SR), 400) * 0.06; m = min(len(b), len(w)); return (b[:m] + w[:m]).astype(np.float32)
 
 
-AMB = {"day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn, "forest": A_forest, "car": A_car, "dusk": A_dusk, "bedroom": A_bedroom}
+AMB = {"day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn, "forest": A_forest, "car": A_car, "dusk": A_dusk, "bedroom": A_bedroom, "woods": A_woods, "village": A_village, "tvroom": A_tvroom}
 
 
 def drone(d):

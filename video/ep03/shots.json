@@ -1,0 +1,29 @@
+{
+  "monster": "SLENDER MAN",
+  "shots": [
+    {"id":"hook","scene":"roulette","segs":[{"v":"narr","t":"Eines dieser Monster ist ausgebrochen. Mal sehen, wer es ist.","sub":"EINES DIESER MONSTER IST *AUSGEBROCHEN.* MAL SEHEN, WER ES IST."}],"hold":1.55,"sfx":[{"n":"alarm","at":0},{"n":"ticks","atEnd":-8.31}],"noHeader":true},
+    {"id":"name","scene":"forest_wide","clock":"22:00","segs":[{"v":"narr","t":"Slender Man. Zweiundzwanzig Uhr.","sub":"*SLENDER MAN.* 22 UHR."}],"sfx":[{"n":"boom","at":-0.05}],"amb":"woods"},
+    {"id":"year","scene":"camcorder","clock":"22:00","segs":[{"v":"narr","t":"Herbst, zweitausendelf.","sub":"HERBST, *2011.*"}],"sfx":[{"n":"recbeep","at":0.2}],"amb":"woods"},
+    {"id":"walk","scene":"walk","clock":"22:03","segs":[{"v":"narr","t":"Du und deine Schwester Mia dreht ein Video im Wald hinter eurem Dorf.","sub":"DU UND DEINE SCHWESTER *MIA* DREHT EIN VIDEO IM WALD HINTER EUREM DORF."}],"sfx":[{"n":"leafsteps","at":0}],"amb":"woods"},
+    {"id":"static","scene":"vf_static","clock":"22:06","segs":[{"v":"narr","t":"Mia filmt. Plötzlich: Rauschen auf dem Display.","sub":"MIA FILMT. PLÖTZLICH: *RAUSCHEN* AUF DEM DISPLAY."}],"sfx":[{"n":"static_mid","atSeg":[0,-1.6]}],"amb":"woods"},
+    {"id":"mia","scene":"mia_face","clock":"22:06","segs":[{"v":"mia","t":"Siehst du das?","sub":"„SIEHST DU *DAS?*“"}],"hold":0.25,"amb":"woods"},
+    {"id":"man","scene":"vf_man","clock":"22:06","segs":[{"v":"narr","t":"Zwischen den Bäumen steht ein Mann. Kein Gesicht. Viel zu groß.","sub":"ZWISCHEN DEN BÄUMEN STEHT EIN MANN. *KEIN GESICHT.* VIEL ZU GROSS."}],"sfx":[{"n":"static_mid","at":0},{"n":"hit_soft","atSeg":[0,1.4]}],"amb":"woods"},
+    {"id":"look","scene":"real_empty","clock":"22:07","segs":[{"v":"narr","t":"Du schaust hoch. Da ist nichts. Nur Bäume.","sub":"DU SCHAUST HOCH. DA IST *NICHTS.* NUR BÄUME."}],"amb":"woods"},
+    {"id":"closer","scene":"vf_closer","clock":"22:07","segs":[{"v":"narr","t":"Du schaust auf das Display. Er ist näher.","sub":"DU SCHAUST AUF DAS DISPLAY. ER IST *NÄHER.*"}],"hold":0.3,"sfx":[{"n":"static_high","atSeg":[0,-1.2]},{"n":"boom","atSeg":[0,-0.9]}],"amb":"woods"},
+    {"id":"lore","scene":"red_slender","clock":"22:08","tint":"red","segs":[{"v":"narr","t":"Slender Man. Man sieht ihn nur durch eine Kamera. Und er holt jeden, der vor ihm wegrennt.","sub":"*SLENDER MAN.* MAN SIEHT IHN NUR DURCH EINE *KAMERA.* UND ER HOLT JEDEN, DER VOR IHM *WEGRENNT.*"}],"sfx":[{"n":"whisper","at":0.4}]},
+    {"id":"rule","scene":"kids_front","clock":"22:08","segs":[{"v":"narr","t":"Die Regel: Wenn die Kamera rauscht, renn nicht. Geh langsam. Dreh dich nicht um.","sub":"DIE REGEL: WENN DIE KAMERA RAUSCHT, *RENN NICHT.* GEH LANGSAM. DREH DICH NICHT UM."}],"rule":{"title":"REGEL #1","text":"RENN NICHT","atSeg":[0,0.6]},"sfx":[{"n":"pop","atSeg":[0,0.6]}],"amb":"woods"},
+    {"id":"steps","scene":"walk_slow","clock":"22:09","segs":[{"v":"narr","t":"Ihr geht. Schritt für Schritt.","sub":"IHR GEHT. *SCHRITT FÜR SCHRITT.*"}],"sfx":[{"n":"leafsteps","at":0}],"amb":"woods"},
+    {"id":"behind","scene":"vf_behind","clock":"22:10","segs":[{"v":"narr","t":"Das Rauschen wird lauter. Er ist direkt hinter euch.","sub":"DAS RAUSCHEN WIRD LAUTER. ER IST *DIREKT HINTER EUCH.*"}],"sfx":[{"n":"static_rise","at":0},{"n":"heart","at":0.5}],"amb":"woods"},
+    {"id":"crack","scene":"mia_runs","clock":"22:10","segs":[{"v":"narr","t":"Dann knackt ein Ast. Mia rennt.","sub":"DANN KNACKT EIN *AST.* MIA *RENNT.*"}],"sfx":[{"n":"twig","atSeg":[0,0.55]},{"n":"run","atSeg":[0,-0.8]}],"amb":"woods"},
+    {"id":"alone","scene":"alone","clock":"22:11","segs":[{"v":"narr","t":"Du rufst ihren Namen. Sie ist weg.","sub":"DU RUFST IHREN NAMEN. SIE IST *WEG.*"}],"hold":0.4,"amb":"woods"},
+    {"id":"home","scene":"village","clock":"22:40","segs":[{"v":"narr","t":"Du gehst weiter. Langsam. Bis nach Hause.","sub":"DU GEHST WEITER. LANGSAM. BIS NACH *HAUSE.*"}],"sfx":[{"n":"dog","at":0.8}],"amb":"village"},
+    {"id":"police","scene":"police","clock":"TAG 3","segs":[{"v":"narr","t":"Drei Tage sucht die Polizei. Nichts.","sub":"*DREI TAGE* SUCHT DIE POLIZEI. *NICHTS.*"}],"sfx":[{"n":"radio","at":0.1}],"amb":"woods"},
+    {"id":"door","scene":"doormat","clock":"TAG 7","segs":[{"v":"narr","t":"Eine Woche später liegt Mias Kamera vor eurer Haustür.","sub":"EINE WOCHE SPÄTER LIEGT *MIAS KAMERA* VOR EURER HAUSTÜR."}],"card":{"k":"","v":"1 WOCHE SPÄTER","at":0.1},"sfx":[{"n":"birds","at":0.2}],"amb":"dawn"},
+    {"id":"tape1","scene":"tv_run","clock":"TAG 7","segs":[{"v":"narr","t":"Auf der Kassette: Mia rennt. Die Kamera fällt.","sub":"AUF DER KASSETTE: MIA RENNT. DIE KAMERA *FÄLLT.*"}],"sfx":[{"n":"cassette","at":0},{"n":"static_mid","atSeg":[0,-1.0]}],"amb":"tvroom"},
+    {"id":"tape2","scene":"tv_pickup","clock":"TAG 7","segs":[{"v":"narr","t":"Dann hebt jemand sie auf.","sub":"DANN HEBT *JEMAND* SIE AUF."}],"hold":0.3,"sfx":[{"n":"static_high","at":0}],"amb":"tvroom"},
+    {"id":"tape3","scene":"tv_follow","clock":"TAG 7","segs":[{"v":"narr","t":"Und filmt dich. Den ganzen Weg nach Hause.","sub":"UND FILMT *DICH.* DEN GANZEN WEG NACH HAUSE."}],"sfx":[{"n":"static_low","at":0}],"amb":"tvroom"},
+    {"id":"end","scene":"tv_room","clock":"TAG 7","segs":[{"v":"narr","t":"Die letzte Aufnahme ist von heute Nacht. Aus deinem Zimmer.","sub":"DIE LETZTE AUFNAHME IST VON *HEUTE NACHT.* AUS DEINEM *ZIMMER.*"}],"hold":0.9,"sfx":[{"n":"static_mid","at":0},{"n":"stinger","atSeg":[0,-0.25]}],"amb":"tvroom"},
+    {"id":"cta","scene":"cta","segs":[{"v":"narr","t":"Folge mir, um zu sehen, wen du als Nächstes bekommst.","sub":"FOLGE MIR, UM ZU SEHEN, WEN DU ALS *NÄCHSTES* BEKOMMST."}],"hold":0.4,"noHeader":true,"sfx":[{"n":"sparkle","at":0}]},
+    {"id":"endcard","scene":"endcard","segs":[],"hold":2.6,"noHeader":true}
+  ]
+}

@@ -346,3 +346,22 @@ export function mothman(pose = 'open') {
   mothEyes(g, [[474, 330], [550, 330]], 22);
   return c;
 }
+
+// ------------------------------------------------------------- Folge 3: Mia (Schwester, lange Haare, Camcorder)
+export function mia(view = 'front', expr = 'neutral', cam = false) {
+  const o = [HOOD, HOOD2, HAIR]; HOOD = '#8a4fb0'; HOOD2 = '#6c3a8c'; HAIR = '#7a3b22';
+  const base = boy(view, expr); const c = cv2(512, 1024), g = c.getContext('2d');
+  const longHair = g => { g.moveTo(84, 250); g.bezierCurveTo(40, 420, 70, 560, 110, 600); g.lineTo(402, 600); g.bezierCurveTo(442, 560, 472, 420, 428, 250); g.closePath(); };
+  P(g, longHair, HAIR, 11, 0.1);
+  g.drawImage(base, 0, 0, 512, 1024);
+  if (view === 'back') { P(g, g => { g.moveTo(80, 300); g.bezierCurveTo(70, 80, 442, 80, 432, 300); g.bezierCurveTo(440, 470, 420, 590, 400, 610); g.lineTo(112, 610); g.bezierCurveTo(92, 590, 72, 470, 80, 300); g.closePath(); }, HAIR, 11, 0.1);
+    g.strokeStyle = 'rgba(0,0,0,.18)'; g.lineWidth = 6; for (const x of [180, 256, 330]) { g.beginPath(); g.moveTo(x, 200); g.quadraticCurveTo(x + 10, 420, x - 6, 600); g.stroke(); } }
+  else { for (const s of [-1, 1]) P(g, g => { g.moveTo(256 + s * 170, 280); g.bezierCurveTo(256 + s * 200, 420, 256 + s * 170, 560, 256 + s * 150, 620); g.lineTo(256 + s * 118, 600); g.bezierCurveTo(256 + s * 140, 500, 256 + s * 150, 400, 256 + s * 140, 300); g.closePath(); }, HAIR, 9, 0.1);
+    P(g, circ(372, 228, 14), '#f2c84b', 5, 0); }
+  if (cam && view === 'front') {
+    P(g, rr(170, 640, 150, 90, 14), '#222428', 8, 0); P(g, circ(200, 685, 30), '#0e0f12', 6, 0); P(g, circ(200, 685, 14), '#3a5a8a', 0, 0);
+    P(g, rr(300, 630, 90, 70, 8), '#1a1c20', 6, 0); g.fillStyle = '#9fd4ff'; g.fillRect(310, 640, 70, 50); P(g, circ(305, 650, 6), '#ff2a20', 0, 0);
+    P(g, circ(160, 700, 30), SKIN, 8, 0); P(g, circ(350, 710, 30), SKIN, 8, 0);
+  }
+  [HOOD, HOOD2, HAIR] = o; return c;
+}
