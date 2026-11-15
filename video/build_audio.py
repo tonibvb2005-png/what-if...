@@ -320,7 +320,18 @@ def voice(shot, k, seg):
             p = os.path.join(VOICE_DIR, f"{shot['id']}_{k}.{ext}")
             if os.path.exists(p): break
         if os.path.exists(p):
-            x = norm(trim(load(p)), 0.85); return x, len(x) / SR
+            x = trim(load(p), 0.02)
+            if seg["v"] == "po":   # tiefer, hohler Klang mit langem Hall
+                x = ffx(x, "asetrate=44100*0.8,aresample=44100,atempo=1.1,lowpass=f=1800")
+                return norm(reverb(x, 2.6, 0.55, 0.05), 0.8), len(x) / SR
+            if seg["v"] == "oma":  # gefilterte, leicht zitternde Stimme hinter der Tuer
+                x = ffx(x, "highpass=f=200,lowpass=f=4500,tremolo=f=5:d=0.12")
+                return norm(reverb(x, 1.6, 0.45), 0.7), len(x) / SR
+            if seg["v"] == "opa":
+                x = ffx(x, "asetrate=44100*0.96,aresample=44100,atempo=1.04,highpass=f=120,lowpass=f=5000")
+                return norm(reverb(x, 1.2, 0.35), 0.72), len(x) / SR
+            x = ffx(x, "highpass=f=70,acompressor=threshold=0.1:ratio=2.5:attack=5:release=80")
+            return norm(x, 0.85), len(x) / SR
     base = os.path.join(B, "tts", f"{shot['id']}_{k}")
     v, txt = seg["v"], seg["t"]
     if v == "narr":
