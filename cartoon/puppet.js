@@ -146,6 +146,9 @@ window.Puppet = (function () {
       ctx.beginPath(); ctx.arc(0, -40, 18, 0, Math.PI * 2); ctx.fillStyle = '#7fd8ff'; ctx.fill(); stroke(ctx, 4, OUT);
     } else if (kind === 'whistle') {
       ctx.beginPath(); ctx.roundRect(-14, -40, 34, 22, 8); ctx.fillStyle = '#c9ced8'; ctx.fill(); stroke(ctx, 4, OUT);
+    } else if (kind === 'oranges') {
+      ctx.beginPath(); ctx.ellipse(0, -30, 70, 22, 0, 0, Math.PI * 2); ctx.fillStyle = '#e8e8f0'; ctx.fill(); stroke(ctx, 5, OUT);
+      for (let i = -2; i <= 2; i++) { ctx.beginPath(); ctx.arc(i * 24, -44, 20, Math.PI, 0); ctx.closePath(); ctx.fillStyle = '#ff9a1a'; ctx.fill(); stroke(ctx, 4, OUT); ctx.beginPath(); ctx.arc(i * 24, -44, 12, Math.PI, 0); ctx.strokeStyle = '#ffd08a'; ctx.lineWidth = 3; ctx.stroke(); }
     } else if (kind === 'coat') {
       ctx.rotate(.15);
       ctx.beginPath(); ctx.moveTo(-10, -6); ctx.lineTo(-58, 20); ctx.lineTo(-64, 170); ctx.lineTo(48, 170); ctx.lineTo(44, 20); ctx.lineTo(10, -6); ctx.closePath();

@@ -1838,6 +1838,7 @@
       extra: (lt) => { pill(0, 520, '@ TAG A REFEREE', eb(P(lt, .1, .45)), '#ffd400', OUT, 50); bubble(250, 790, 'THANKS FOR THE GAME!', eb(P(lt, cue('thanks', .6), cue('thanks', .6) + .35)), -100); } }
   });
 
+  CH.aaron = { skin: '#f0c19a', shirt: '#034694', trim: '#ffffff', pants: '#034694', shoes: '#111', hair: 'short', hairColor: '#3a2414', bw: 1.05, blinkPh: 1.1 };
   // ---------- timeline ----------
   let spec, scenes = [], total = 0;
   function camAt(keys, lt, d) {
@@ -2184,6 +2185,14 @@
       order.forEach(n => { if (sh.hideCast && sh.hideCast[n] && lt / d >= sh.hideCast[n][0] && lt / d < sh.hideCast[n][1]) return; const c = sh.cast[n]; if (c && c.y) { const keep = GROUND; } drawC(n); });
       if (sh.ball) { const b = ballPos(sh.ball, lt); drawBall(b.x, b.y, b.moving ? t : 0); }
       if (sh.front) sh.front(lt, t);
+      if (s.guest) {
+        // guest cameo requested by a viewer: own character + name tag
+        const g = s.guest, gx = g.move ? lerp(g.move[0], g.move[1], eio(P(lt / d, g.move[2] || 0, g.move[3] || 1))) : g.x;
+        const gc = Object.assign({}, CH[g.char || 'aaron'], { x: gx, y: g.y || GROUND, scale: g.scale || .95 });
+        Puppet.draw(ctx, gc, Puppet.stateAt((g.acts || [[0, {}]]).map(toF), lt, d), t);
+        const k = eb(P(lt, g.tagAt || .1, (g.tagAt || .1) + .35));
+        pill(gx, (g.y || GROUND) - 553 * (g.scale || .95) - 70, g.tag || 'AARON · HELPER COACH', k, '#034694', '#fff', 30);
+      }
       if (sh.extra) sh.extra(lt, t);
     } else if (sh.set === 'street') {
       Object.keys(sh.cast || {}).forEach(drawC);
