@@ -10,7 +10,9 @@ from scipy.io import wavfile
 
 SR = 44100
 HERE = os.path.dirname(os.path.abspath(__file__))
-B = os.path.join(HERE, "build")
+EP = sys.argv[sys.argv.index("--ep") + 1] if "--ep" in sys.argv else ""
+EPDIR = os.path.join(HERE, EP) if EP else HERE
+B = os.path.join(EPDIR, "build")
 os.makedirs(os.path.join(B, "tts"), exist_ok=True)
 rng = np.random.default_rng(7)
 VOICE_DIR = None
@@ -294,6 +296,74 @@ def R_clock():   return rec("2655", 0.2, 3.0, 0.4, 0.05, 0.3)            # mecha
 def R_paper():   return rec("0297", 0.45, 1.2, 0.4, 0.01, 0.2)           # Klebeband / Papier
 def R_crackle(): return reverb(rec("2205", 0.0, 1.97, 0.35, 0.01, 0.4), 1.2, 0.35)   # knisterndes Salz
 def R_birds():   return rec("0222", 20.0, 3.0, 0.25, 0.5, 0.8)
+
+# ---------------------------------------------------------------- Folge 2: Mothman
+def peakrec(fid, dur, **kw):
+    full = rec(fid, 0, 999, peak=1.0, fin=0.001, fout=0.001)
+    h = 2205; e = np.convolve(full ** 2, np.ones(h) / h, 'same'); c = int(np.argmax(e)) / SR
+    return rec(fid, max(0, c - dur * 0.55), dur, **kw)
+
+def _pitch(x, r, extra=""):
+    return ffx(x, f"asetrate=44100*{r},aresample=44100" + ("," + extra if extra else ""))
+
+def _scream():
+    a = _pitch(rec("1403", 0.3, 1.9, 0.9, 0.005, 0.35), 0.8)          # Schleiereule, tiefer
+    b = _pitch(rec("1400", 5.0, 1.7, 0.9, 0.005, 0.35), 0.66)         # zweite Eule, noch tiefer
+    c = _pitch(rec("1403", 0.3, 1.9, 0.9, 0.005, 0.35), 1.12)         # Obertoene -> "unmenschlich"
+    n = max(len(a), len(b) + 3000, len(c)); x = np.zeros(n, np.float32)
+    x[:len(a)] += a * 0.75; x[3000:3000 + len(b)] += b * 0.55; x[:len(c)] += c * 0.18
+    x = np.tanh(x * 1.6) / np.tanh(1.6)
+    return hp(x, 250)
+
+def R_scream_close(): return norm(reverb(_scream(), 1.9, 0.32), 0.85)
+def R_scream_far():   return norm(reverb(lp(_scream(), 2600), 3.4, 0.62, 0.08), 0.45)
+def R_flap():
+    a = _pitch(rec("2891", 0.0, 2.7, 0.9, 0.005, 0.3), 0.5, "lowpass=f=2200")
+    b = _pitch(rec("2892", 0.0, 2.2, 0.9, 0.005, 0.3), 0.42, "lowpass=f=1800")
+    n = max(len(a), len(b)); x = np.zeros(n, np.float32); x[:len(a)] += a; x[:len(b)] += b * 0.7
+    return norm(reverb(x, 1.2, 0.25), 0.8)
+def R_brakes():   return reverb(rec("2368", 0.0, 2.2, 0.55, 0.01, 0.3), 0.8, 0.2)
+def R_squeal():   return reverb(rec("0500", 3.6, 1.1, 0.5, 0.01, 0.3), 0.8, 0.2)
+def R_accel():    return ffx(rec("0600", 0.0, 6.5, 0.7, 0.05, 1.0), "lowpass=f=3200")
+def R_carpass():  return peakrec("2987", 5.0, peak=0.45, fin=0.8, fout=1.2)
+def R_whoosh():   return rec("0572", 1.0, 1.1, 0.4, 0.01, 0.3)
+def R_windrush():
+    w = hp(rec("3098", 30.0, 5.0, rms=0.08, fin=0.4, fout=0.8), 500); tt = t_(len(w) / SR)
+    s = lp(noise(len(w) / SR), 1200) * 0.12 * (0.6 + 0.4 * np.sin(2 * np.pi * 0.4 * tt))
+    m = min(len(w), len(s)); return (w[:m] + s[:m]).astype(np.float32)
+def R_horn():
+    h = lp(rec("0260", 0.0, 0.55, 0.5, 0.005, 0.05), 2500); x = np.zeros(int(1.6 * SR), np.float32)
+    x[:len(h)] += h; i = int(0.7 * SR); x[i:i + len(h)] += h * 0.7; return reverb(x, 1.8, 0.45)
+def R_collapse():
+    groan = _pitch(rec("0616", 0.1, 1.7, 0.9, 0.01, 0.4), 0.55)
+    steel = _pitch(rec("1776", 0.0, 3.4, 0.9, 0.002, 1.0), 0.75)
+    thun  = rec("3113", 1.0, 4.0, 0.9, 0.005, 1.5)
+    splash = _pitch(rec("1519", 0.2, 3.1, 0.9, 0.002, 1.0), 0.8)
+    x = np.zeros(int(6.5 * SR), np.float32)
+    def put(y, t, g): i = int(t * SR); x[i:i + len(y)] += y[: len(x) - i] * g
+    put(groan, 0.0, 0.6); put(steel, 0.9, 0.7); put(thun, 1.0, 0.8); put(splash, 2.0, 0.6)
+    return norm(reverb(lp(x, 2800), 2.6, 0.45), 0.8)
+def R_scratch():
+    a = _pitch(rec("0541", 9.05, 1.0, 0.9, 0.005, 0.1), 0.82, "highpass=f=900")
+    x = np.zeros(int(1.0 * SR) + 2 * len(a), np.float32); x[:len(a)] += a; i = int(1.0 * SR); x[i:i + len(a)] += a * 0.8
+    return norm(reverb(x, 0.9, 0.25), 0.5)
+def R_heart():
+    h = lp(rec("0243", 0.0, 0.8, 0.9, 0.002, 0.1), 300); x = np.zeros(int(3.6 * SR), np.float32)
+    for k in range(4): i = int(k * 0.85 * SR); x[i:i + len(h)] += h * (0.7 + 0.1 * k)
+    return norm(x, 0.7)
+
+def A_forest(d):
+    i = rec("1470", 10.0, d, rms=0.03, fin=0.4, fout=0.4); tt = t_(len(i) / SR)
+    w = lp(noise(len(i) / SR), 350) * 0.1 * (0.6 + 0.4 * np.sin(2 * np.pi * 0.13 * tt)); m = min(len(i), len(w))
+    return (i[:m] + w[:m]).astype(np.float32)
+def A_car(d):     return lp(rec("3098", 5.0, d, rms=0.06, fin=0.3, fout=0.3), 1600)
+def A_dusk(d):
+    a = lp(rec("1080", 5.0, d, rms=0.03, fin=0.4, fout=0.4), 3000); w = lp(noise(len(a) / SR), 300) * 0.06
+    m = min(len(a), len(w)); return (a[:m] + w[:m]).astype(np.float32)
+def A_bedroom(d):
+    a = lp(rec("0426", 0.0, min(d, 22.0), rms=0.008, fin=0.5, fout=0.5), 3000); n = int(d * SR); x = np.zeros(n, np.float32)
+    x[:min(n, len(a))] += a[:n]; return x + lp(noise(d), 150)[:n] * 0.03
+
 SFX = {k[2:]: v for k, v in globals().items() if k.startswith("S_")}
 SFX.update({k[2:]: v for k, v in globals().items() if k.startswith("R_")})
 
@@ -345,7 +415,7 @@ def A_dawn(d):
     w = lp(noise(len(b) / SR), 400) * 0.06; m = min(len(b), len(w)); return (b[:m] + w[:m]).astype(np.float32)
 
 
-AMB = {"day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn}
+AMB = {"day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn, "forest": A_forest, "car": A_car, "dusk": A_dusk, "bedroom": A_bedroom}
 
 
 def drone(d):
@@ -425,7 +495,7 @@ def chunks(sub, start, dur):
 
 
 def main():
-    data = json.load(open(os.path.join(HERE, "shots.json")))
+    data = json.load(open(os.path.join(EPDIR, "shots.json")))
     shots = data["shots"]
     cur = 0.0
     vox_parts, tl = [], []

@@ -243,7 +243,8 @@ export function build() {
 // ================================================================= SHOT-SETUPS
 function look(cam, pos, target) { cam.position.copy(pos); cam.lookAt(target); }
 function onlyShow(list, show) { for (const o of list) o.visible = show.includes(o); }
-function billboard(cam) { for (const s of sprites) { if (!s.visible) continue; const dx = cam.position.x - s.position.x, dz = cam.position.z - s.position.z; s.rotation.y = Math.atan2(dx, dz); } }
+const _wp = new THREE.Vector3();
+function billboard(cam) { for (const s of sprites) { if (!s.visible || s.userData.noBB) continue; s.getWorldPosition(_wp); const dx = cam.position.x - _wp.x, dz = cam.position.z - _wp.z; s.rotation.y = Math.atan2(dx, dz); } }
 function shake(cam, amt, t) { cam.rotation.z += Math.sin(t * 61) * amt; cam.rotation.x += Math.sin(t * 47 + 1) * amt; }
 
 function extBase(W, tone = 0, garden = false) { // tone 0 = warmer Nachmittag, 1 = kuehl/unheimlich
@@ -359,3 +360,5 @@ function intBase(I, mode, k = 1) {
   I.lamp.intensity = M.lamp * (mode === 'night' ? k : 1); I.andon.visible = M.lamp > 0;
   I.doorPaper.color.setRGB(0.3, 0.35, 0.45);
 }
+
+export { tex, lam, box, jitter, sprite, setTex, glow, glowTex, gradTex, V, L, clamp, sm, lerpV, look, onlyShow, billboard, shake, rnd };

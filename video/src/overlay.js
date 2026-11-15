@@ -103,9 +103,9 @@ export function measure(g, a, b, label, k) {
 const ROSTER = ['SKINWALKER', 'MOTHMAN', 'SLENDER MAN', 'SIREN HEAD', 'WENDIGO', 'THE SMILER', 'HACHISHAKUSAMA', 'MOMO'];
 const RING = ['#a35cff', '#3fe08a', '#43d4ff', '#ff5ca8', '#3fe08a', '#a35cff', '#ff5ca8', '#43d4ff'];
 let MON = null;
-export function roulette(g, t, tEnd) {
+export function roulette(g, t, tEnd, monster = 'HACHISHAKUSAMA') {
   if (!MON) MON = ROSTER.map(n => C.MONSTERS[n]());
-  const SP = 480, TARGET = 6 + 16, tLand = tEnd - 0.35;
+  const SP = 480, TARGET = Math.max(0, ROSTER.indexOf(monster)) + 16, tLand = tEnd - 0.35;
   const off = SP * TARGET * easeOut(clamp(t / tLand)) ** 1.0;
   const locked = t >= tLand, lk = clamp((t - tLand) / 0.4);
   g.fillStyle = '#101116'; g.fillRect(0, 0, W, H);

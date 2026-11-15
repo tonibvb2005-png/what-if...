@@ -1,0 +1,32 @@
+{
+  "monster": "MOTHMAN",
+  "shots": [
+    {"id":"hook","scene":"roulette","segs":[{"v":"narr","t":"Eines dieser Monster ist ausgebrochen. Mal sehen, wer es ist.","sub":"EINES DIESER MONSTER IST *AUSGEBROCHEN.* MAL SEHEN, WER ES IST."}],"hold":1.55,"sfx":[{"n":"alarm","at":0},{"n":"ticks","atEnd":-8.31}],"noHeader":true},
+    {"id":"name","scene":"road_wide","clock":"23:00","segs":[{"v":"narr","t":"Mothman. Dreiundzwanzig Uhr.","sub":"*MOTHMAN.* 23 UHR."}],"sfx":[{"n":"boom","at":-0.05},{"n":"carpass","at":0.1}],"amb":"forest"},
+    {"id":"wv","scene":"map","clock":"23:01","segs":[{"v":"narr","t":"West Virginia, neunzehnhundertsiebenundsechzig.","sub":"WEST VIRGINIA, *1967.*"}],"sfx":[{"n":"whoosh","at":0}],"amb":"forest"},
+    {"id":"drive","scene":"car_back","clock":"23:03","segs":[{"v":"narr","t":"Du und dein Freund Ben fahrt durch das alte Munitionsgelände.","sub":"DU UND DEIN FREUND *BEN* FAHRT DURCH DAS ALTE *MUNITIONSGELÄNDE.*"}],"amb":"car"},
+    {"id":"bunkers","scene":"bunkers","clock":"23:05","segs":[{"v":"narr","t":"Verlassene Bunker. Kein Licht. Niemand.","sub":"VERLASSENE BUNKER. KEIN LICHT. *NIEMAND.*"}],"card":{"k":"ORT","v":"TNT-GELÄNDE","at":0.2},"sfx":[{"n":"carpass","at":0}],"amb":"forest"},
+    {"id":"eyes","scene":"eyes_road","clock":"23:07","segs":[{"v":"narr","t":"Dann, im Scheinwerferlicht: zwei rote Augen.","sub":"DANN, IM SCHEINWERFERLICHT: *ZWEI ROTE AUGEN.*"}],"sfx":[{"n":"brakes","atSeg":[0,-1.9]},{"n":"boom","atSeg":[0,-1.0]}],"amb":"car"},
+    {"id":"height","scene":"eyes_side","clock":"23:07","segs":[{"v":"narr","t":"Zwei Meter über dem Boden.","sub":"*ZWEI METER* ÜBER DEM BODEN."}],"hold":0.2,"sfx":[{"n":"heart","at":0}],"amb":"forest"},
+    {"id":"rise","scene":"moth_rise","clock":"23:07","segs":[{"v":"narr","t":"Es steht auf. Und breitet die Flügel aus.","sub":"ES STEHT AUF. UND BREITET DIE *FLÜGEL* AUS."}],"hold":1.2,"card":{"k":"SPANNWEITE","v":"3 M","atSeg":[0,-0.6]},"sfx":[{"n":"flap","atSeg":[0,-1.3]},{"n":"scream_close","atSeg":[0,-0.2]},{"n":"hit_soft","atSeg":[0,-0.2]}],"amb":"forest"},
+    {"id":"gas","scene":"tacho","clock":"23:08","segs":[{"v":"narr","t":"Ben gibt Gas. Hundert. Hundertzwanzig. Hundertsechzig.","sub":"BEN GIBT GAS. 100. 120. *160.*"}],"sfx":[{"n":"accel","at":0.1}],"amb":"car"},
+    {"id":"fly","scene":"side_window","clock":"23:08","segs":[{"v":"narr","t":"Es fliegt direkt neben dir. Ohne einen einzigen Flügelschlag.","sub":"ES FLIEGT *DIREKT NEBEN DIR.* OHNE EINEN EINZIGEN FLÜGELSCHLAG."}],"sfx":[{"n":"scream_far","at":0.5},{"n":"windrush","at":0}],"amb":"car"},
+    {"id":"warn","scene":"red_moth","clock":"23:09","tint":"red","segs":[{"v":"narr","t":"Mothman. Er jagt dich nicht. Er warnt dich.","sub":"*MOTHMAN.* ER JAGT DICH NICHT. ER *WARNT* DICH."}],"sfx":[{"n":"boom","at":0}]},
+    {"id":"disaster","scene":"red_town","clock":"23:09","tint":"red","segs":[{"v":"narr","t":"Wo er auftaucht, passiert innerhalb eines Tages ein Unglück.","sub":"WO ER AUFTAUCHT, PASSIERT INNERHALB EINES TAGES EIN *UNGLÜCK.*"}],"sfx":[{"n":"whisper","at":0.3},{"n":"riser","atSeg":[0,-2.0]}]},
+    {"id":"rule","scene":"car_front","clock":"23:15","segs":[{"v":"narr","t":"Die Regel: Wenn du ihn siehst, ändere deinen Weg.","sub":"DIE REGEL: WENN DU IHN SIEHST, *ÄNDERE DEINEN WEG.*"}],"rule":{"title":"REGEL #1","text":"ÄNDERE DEINEN WEG","atSeg":[0,0.6]},"sfx":[{"n":"pop","atSeg":[0,0.6]}],"amb":"car"},
+    {"id":"evening","scene":"river_road","clock":"17:00","segs":[{"v":"narr","t":"Am nächsten Abend. Siebzehn Uhr. Ihr fahrt nach Hause.","sub":"AM NÄCHSTEN ABEND. *17 UHR.* IHR FAHRT NACH HAUSE."}],"sfx":[{"n":"carpass","at":0.3}],"amb":"dusk"},
+    {"id":"bridge","scene":"bridge_wide","clock":"17:01","segs":[{"v":"narr","t":"Vor euch: die Silver Bridge. Stau. Hunderte Autos.","sub":"VOR EUCH: DIE *SILVER BRIDGE.* STAU. *HUNDERTE AUTOS.*"}],"card":{"k":"SILVER BRIDGE","v":"15.12.1967","at":0.3},"sfx":[{"n":"horn","atSeg":[0,-1.4]}],"amb":"dusk"},
+    {"id":"pillar","scene":"pillar_tilt","clock":"17:02","segs":[{"v":"narr","t":"Und oben auf dem Pfeiler sitzt etwas.","sub":"UND OBEN AUF DEM PFEILER SITZT *ETWAS.*"}],"sfx":[{"n":"riser","at":0}],"amb":"dusk"},
+    {"id":"eyes2","scene":"pillar_moth","clock":"17:02","segs":[{"v":"narr","t":"Zwei rote Augen. Sie schauen genau dich an.","sub":"ZWEI ROTE AUGEN. SIE SCHAUEN GENAU *DICH* AN."}],"sfx":[{"n":"hit_soft","at":0},{"n":"scream_far","atSeg":[0,-0.9]}],"amb":"dusk"},
+    {"id":"ben","scene":"ben_face","clock":"17:03","segs":[{"v":"ben","t":"Wir nehmen den Umweg.","sub":"„WIR NEHMEN DEN *UMWEG.*“"}],"hold":0.2,"amb":"car"},
+    {"id":"turn","scene":"uturn","clock":"17:03","segs":[{"v":"narr","t":"Er wendet.","sub":"ER *WENDET.*"}],"hold":0.6,"sfx":[{"n":"squeal","at":0}],"amb":"dusk"},
+    {"id":"mirror","scene":"mirror","clock":"17:04","segs":[{"v":"narr","t":"Siebzehn Uhr vier. Im Rückspiegel bricht die Brücke zusammen.","sub":"*17:04 UHR.* IM RÜCKSPIEGEL BRICHT DIE BRÜCKE *ZUSAMMEN.*"}],"hold":0.6,"sfx":[{"n":"collapse","atSeg":[0,1.2]}],"amb":"car"},
+    {"id":"made","scene":"road_relief","clock":"17:10","segs":[{"v":"narr","t":"Ihr habt es geschafft.","sub":"IHR HABT ES *GESCHAFFT.*"}],"hold":0.6,"amb":"dusk"},
+    {"id":"bed","scene":"bedroom","clock":"00:00","segs":[{"v":"narr","t":"Mitternacht. Du liegst im Bett.","sub":"*MITTERNACHT.* DU LIEGST IM BETT."}],"sfx":[{"n":"clock","at":0}],"amb":"bedroom"},
+    {"id":"scratch","scene":"window_scratch","clock":"00:01","segs":[{"v":"narr","t":"Es kratzt am Fenster.","sub":"ES *KRATZT* AM FENSTER."}],"hold":0.4,"sfx":[{"n":"scratch","at":0.1}],"amb":"bedroom"},
+    {"id":"eyes3","scene":"window_eyes","clock":"00:01","segs":[{"v":"narr","t":"Zwei rote Augen.","sub":"*ZWEI ROTE AUGEN.*"}],"hold":0.4,"sfx":[{"n":"heart","at":0}],"amb":"bedroom"},
+    {"id":"end","scene":"window_face","clock":"00:01","tint":"red","segs":[{"v":"narr","t":"Er ist nicht wegen der Brücke gekommen.","sub":"ER IST NICHT WEGEN DER *BRÜCKE* GEKOMMEN."}],"hold":0.9,"sfx":[{"n":"stinger","atSeg":[0,-0.25]},{"n":"scream_close","atSeg":[0,-0.25]}]},
+    {"id":"cta","scene":"cta","segs":[{"v":"narr","t":"Folge mir, um zu sehen, wen du als Nächstes bekommst.","sub":"FOLGE MIR, UM ZU SEHEN, WEN DU ALS *NÄCHSTES* BEKOMMST."}],"hold":0.4,"noHeader":true,"sfx":[{"n":"sparkle","at":0}]},
+    {"id":"endcard","scene":"endcard","segs":[],"hold":2.6,"noHeader":true}
+  ]
+}

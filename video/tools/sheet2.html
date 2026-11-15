@@ -1,0 +1,8 @@
+<!doctype html><html><body style="margin:0;background:#556"><canvas id=c width=2400 height=1100></canvas>
+<script type=module>
+import * as C from '../src/chars.js';
+const g=document.getElementById('c').getContext('2d');
+const L=[[C.mothman('open'),0,0,1000,1000],[C.mothman('folded'),1000,0,500,500],[C.ben('back'),1500,0,250,500],[C.ben('front','scared_sweat'),1750,0,250,500],[C.boyBed(),1000,520,1000,500]];
+for(const [c,x,y,w,h] of L){ if(c.width===c.height && w===500) g.drawImage(c,x,y,500,500); else g.drawImage(c,x,y,w,h);}
+window.done=true;
+</script></body></html>

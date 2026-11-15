@@ -18,7 +18,8 @@ const ell = (x, y, rx, ry, rot = 0) => g => g.ellipse(x, y, rx, ry, rot, 0, Math
 function line(g, pts, lw = 8, col = OL) { g.beginPath(); g.moveTo(...pts[0]); for (const p of pts.slice(1)) g.lineTo(...p); g.lineWidth = lw; g.strokeStyle = col; g.lineCap = 'round'; g.lineJoin = 'round'; g.stroke(); }
 function curve(g, a, c, b, lw = 8, col = OL) { g.beginPath(); g.moveTo(...a); g.quadraticCurveTo(...c, ...b); g.lineWidth = lw; g.strokeStyle = col; g.lineCap = 'round'; g.stroke(); }
 
-const SKIN = '#f4cfa5', HOOD = '#e47b2f', HOOD2 = '#c9641f', JEANS = '#34405e', HAIR = '#6a4327';
+const SKIN = '#f4cfa5', JEANS = '#34405e';
+let HOOD = '#e47b2f', HOOD2 = '#c9641f', HAIR = '#6a4327';
 
 function sweat(g, x, y, s = 1) {
   P(g, g => { g.moveTo(x, y - 34 * s); g.quadraticCurveTo(x + 22 * s, y + 4 * s, x, y + 14 * s); g.quadraticCurveTo(x - 22 * s, y + 4 * s, x, y - 34 * s); }, '#86cdf2', 6, 0);
@@ -289,3 +290,59 @@ export const MONSTERS = {
   }),
   'HACHISHAKUSAMA': () => { const c = cv2(512, 1024), g = c.getContext('2d'); g.drawImage(hachi('glow'), 85, 0, 341, 1024); return c; },
 };
+
+// ------------------------------------------------------------- Folge 2: Ben, Junge im Bett, Mothman
+export function ben(view = 'front', expr = 'neutral') {
+  const o = [HOOD, HOOD2, HAIR]; HOOD = '#3f7d4e'; HOOD2 = '#2f6340'; HAIR = '#d9ad52';
+  const c = boy(view, expr); [HOOD, HOOD2, HAIR] = o; return c;
+}
+export function boyBed() {
+  const c = cv2(1024, 512), g = c.getContext('2d');
+  P(g, rr(30, 300, 964, 190, 30), '#6b4a30', 10, 0.1);
+  P(g, rr(40, 250, 940, 120, 30), '#ecebe6', 10, 0.05);
+  P(g, rr(60, 200, 250, 110, 50), '#f6f4ef', 10, 0.05);
+  P(g, circ(205, 205, 112), SKIN, 10);
+  P(g, g => { g.moveTo(96, 210); g.bezierCurveTo(90, 60, 330, 60, 316, 200); g.lineTo(300, 160); g.lineTo(270, 175); g.lineTo(240, 140); g.lineTo(205, 168); g.lineTo(170, 138); g.lineTo(140, 170); g.lineTo(110, 150); g.closePath(); }, HAIR, 9, 0.1);
+  for (const s of [-1, 1]) { P(g, circ(205 + s * 36, 218, 20), '#fff', 5, 0); P(g, circ(205 + s * 34, 222, 7), OL, 0, 0); }
+  line(g, [[150, 180], [186, 170]], 6); line(g, [[224, 170], [260, 180]], 6);
+  P(g, ell(205, 280, 10, 13), '#5a2a1e', 4, 0);
+  P(g, rr(250, 240, 740, 170, 40), '#3b4f86', 10, 0.12);
+  g.strokeStyle = 'rgba(255,255,255,.18)'; g.lineWidth = 8; for (let x = 300; x < 980; x += 80) { g.beginPath(); g.moveTo(x, 250); g.lineTo(x, 400); g.stroke(); }
+  P(g, ell(255, 300, 46, 34), SKIN, 8, 0);
+  return c;
+}
+function mothEyes(g, pts, r) {
+  for (const [x, y] of pts) {
+    const gr = g.createRadialGradient(x, y, 1, x, y, r * 3.2); gr.addColorStop(0, 'rgba(255,240,230,1)'); gr.addColorStop(0.18, 'rgba(255,60,40,1)'); gr.addColorStop(0.5, 'rgba(220,0,0,.45)'); gr.addColorStop(1, 'rgba(200,0,0,0)');
+    g.fillStyle = gr; g.beginPath(); g.arc(x, y, r * 3.2, 0, 7); g.fill();
+    g.fillStyle = '#ff2a1a'; g.beginPath(); g.ellipse(x, y, r, r * 0.8, 0, 0, 7); g.fill();
+    g.fillStyle = '#fff3ea'; g.beginPath(); g.ellipse(x - r * 0.25, y - r * 0.2, r * 0.35, r * 0.28, 0, 0, 7); g.fill();
+  }
+}
+function mothWing(g, s) { // s = -1 links, 1 rechts; Ursprung Schulter (512, 360)
+  const X = x => 512 + s * x;
+  P(g, g => { g.moveTo(X(40), 340); g.bezierCurveTo(X(200), 120, X(420), 60, X(470), 150); g.bezierCurveTo(X(500), 260, X(430), 430, X(250), 500); g.quadraticCurveTo(X(120), 520, X(40), 470); g.closePath(); }, '#43352f', 10, 0.1);
+  P(g, g => { g.moveTo(X(40), 460); g.bezierCurveTo(X(160), 470, X(330), 520, X(330), 640); g.bezierCurveTo(X(320), 760, X(170), 760, X(60), 620); g.closePath(); }, '#3a2d29', 10, 0.1);
+  g.save(); g.beginPath(); g.moveTo(X(40), 340); g.bezierCurveTo(X(200), 120, X(420), 60, X(470), 150); g.bezierCurveTo(X(500), 260, X(430), 430, X(250), 500); g.quadraticCurveTo(X(120), 520, X(40), 470); g.closePath(); g.clip();
+  g.strokeStyle = '#6a574c'; g.lineWidth = 34; g.beginPath(); g.moveTo(X(200), 130); g.bezierCurveTo(X(420), 70, X(500), 250, X(250), 500); g.stroke();
+  g.strokeStyle = 'rgba(20,12,10,.55)'; g.lineWidth = 6; for (const [a, b] of [[160, 170], [280, 120], [380, 140], [440, 260], [380, 380]]) { g.beginPath(); g.moveTo(X(60), 380); g.quadraticCurveTo(X(a * 0.6), (b + 380) / 2 - 20, X(a), b); g.stroke(); }
+  g.restore();
+  P(g, circ(X(300), 280, 52), '#b8842e', 8, 0); P(g, circ(X(300), 280, 30), '#2a1c18', 0, 0); P(g, circ(X(290), 270, 9), '#e9d3a0', 0, 0);
+  P(g, circ(X(200), 620, 30), '#8a6332', 6, 0); P(g, circ(X(200), 620, 14), '#1d1412', 0, 0);
+}
+export function mothman(pose = 'open') {
+  const c = cv2(1024, 1024), g = c.getContext('2d'), B = '#1d1718';
+  if (pose === 'open') { mothWing(g, -1); mothWing(g, 1); }
+  P(g, rr(468, 690, 30, 320, 12), B, 8, 0); P(g, rr(526, 690, 30, 320, 12), B, 8, 0);
+  P(g, ell(458, 1010, 40, 12), B, 6, 0); P(g, ell(566, 1010, 40, 12), B, 6, 0);
+  if (pose === 'folded') {
+    P(g, g => { g.moveTo(512, 210); g.bezierCurveTo(330, 230, 300, 520, 360, 860); g.lineTo(664, 860); g.bezierCurveTo(724, 520, 694, 230, 512, 210); g.closePath(); }, '#3a2d29', 10, 0.12);
+    g.strokeStyle = 'rgba(15,8,8,.5)'; g.lineWidth = 7; for (const x of [420, 470, 554, 604]) { g.beginPath(); g.moveTo(512, 300); g.quadraticCurveTo(x, 560, x + (x - 512) * 0.3, 850); g.stroke(); }
+  }
+  P(g, g => { g.moveTo(512, 250); g.bezierCurveTo(420, 260, 410, 420, 430, 560); g.quadraticCurveTo(440, 720, 512, 730); g.quadraticCurveTo(584, 720, 594, 560); g.bezierCurveTo(614, 420, 604, 260, 512, 250); g.closePath(); }, B, 10, 0.08);
+  g.strokeStyle = 'rgba(90,70,60,.5)'; g.lineWidth = 5; for (let y = 470; y < 700; y += 34) { g.beginPath(); g.moveTo(450, y); g.quadraticCurveTo(512, y + 14, 574, y); g.stroke(); }
+  for (const s of [-1, 1]) { line(g, [[512 + s * 70, 320], [512 + s * 110, 520], [512 + s * 96, 700]], 18, B); for (let k = -1; k <= 1; k++) line(g, [[512 + s * 96, 700], [512 + s * (96 + k * 14), 760]], 7, '#2a2020'); }
+  g.fillStyle = 'rgba(70,55,50,.9)'; for (let i = 0; i < 26; i++) { const a = Math.PI * (0.15 + 0.7 * i / 25); g.beginPath(); g.moveTo(512 + Math.cos(a) * 92, 300 - Math.sin(a) * 40); g.lineTo(512 + Math.cos(a) * 112, 290 - Math.sin(a) * 58); g.lineTo(512 + Math.cos(a + 0.05) * 92, 300 - Math.sin(a + 0.05) * 40); g.fill(); }
+  mothEyes(g, [[474, 330], [550, 330]], 22);
+  return c;
+}
