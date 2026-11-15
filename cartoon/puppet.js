@@ -149,6 +149,15 @@ window.Puppet = (function () {
     } else if (kind === 'oranges') {
       ctx.beginPath(); ctx.ellipse(0, -30, 70, 22, 0, 0, Math.PI * 2); ctx.fillStyle = '#e8e8f0'; ctx.fill(); stroke(ctx, 5, OUT);
       for (let i = -2; i <= 2; i++) { ctx.beginPath(); ctx.arc(i * 24, -44, 20, Math.PI, 0); ctx.closePath(); ctx.fillStyle = '#ff9a1a'; ctx.fill(); stroke(ctx, 4, OUT); ctx.beginPath(); ctx.arc(i * 24, -44, 12, Math.PI, 0); ctx.strokeStyle = '#ffd08a'; ctx.lineWidth = 3; ctx.stroke(); }
+    } else if (kind === 'bottles') {
+      for (let i = -1; i <= 1; i++) { ctx.beginPath(); ctx.roundRect(i * 30 - 13, -120 + Math.abs(i) * 8, 26, 80, 8); ctx.fillStyle = ['#4fbaf5', '#2fbf71', '#ff8c1a'][i + 1]; ctx.fill(); stroke(ctx, 4, OUT); }
+    } else if (kind === 'board') {
+      ctx.beginPath(); ctx.roundRect(-80, -150, 160, 120, 10); ctx.fillStyle = '#2f8f4a'; ctx.fill(); stroke(ctx, 5, OUT);
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, -150); ctx.lineTo(0, -30); ctx.stroke(); ctx.beginPath(); ctx.arc(0, -90, 20, 0, Math.PI * 2); ctx.stroke();
+      for (const [x, y, c] of [[-50, -120, '#e8364f'], [-30, -60, '#e8364f'], [40, -110, '#1f6fe0'], [55, -55, '#1f6fe0']]) { ctx.beginPath(); ctx.arc(x, y, 8, 0, Math.PI * 2); ctx.fillStyle = c; ctx.fill(); }
+      ctx.strokeStyle = '#ffd400'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(-30, -60); ctx.quadraticCurveTo(0, -40, 30, -80); ctx.stroke();
+    } else if (kind === 'mic') {
+      ctx.beginPath(); ctx.moveTo(0, -20); ctx.lineTo(0, -70); ctx.lineWidth = 10; ctx.strokeStyle = OUT; ctx.stroke(); ctx.beginPath(); ctx.arc(0, -84, 18, 0, Math.PI * 2); ctx.fillStyle = '#2b2f3a'; ctx.fill(); stroke(ctx, 5, OUT);
     } else if (kind === 'coat') {
       ctx.rotate(.15);
       ctx.beginPath(); ctx.moveTo(-10, -6); ctx.lineTo(-58, 20); ctx.lineTo(-64, 170); ctx.lineTo(48, 170); ctx.lineTo(44, 20); ctx.lineTo(10, -6); ctx.closePath();

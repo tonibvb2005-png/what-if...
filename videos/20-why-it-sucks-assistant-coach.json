@@ -1,0 +1,54 @@
+{
+  "title": "Why it sucks being the assistant coach (feat. Aaron)",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "scenes": [
+    {
+      "shot": "ahook",
+      "text": "Why it sucks being the assistant coach.",
+      "audio": "../audio/20-why-it-sucks-assistant-coach/01.wav",
+      "duration": 2.8
+    },
+    {
+      "shot": "aday",
+      "text": "Day one. The head coach says: \"You'll help with tactics.\" You carry the water bottles.",
+      "audio": "../audio/20-why-it-sucks-assistant-coach/02.wav"
+    },
+    {
+      "shot": "acones",
+      "text": "Training. You set up forty cones for the perfect drill. The coach says: \"Actually... let's just play a match.\"",
+      "audio": "../audio/20-why-it-sucks-assistant-coach/03.wav"
+    },
+    {
+      "shot": "aidea",
+      "text": "Match day. You have a great idea. You tell the coach. He says no. Ten minutes later, he shouts the same idea. Everyone claps for him.",
+      "audio": "../audio/20-why-it-sucks-assistant-coach/04.wav"
+    },
+    {
+      "shot": "aboard",
+      "text": "Half-time. The head coach gives the big speech. You hold the tactics board.",
+      "audio": "../audio/20-why-it-sucks-assistant-coach/05.wav"
+    },
+    {
+      "shot": "asick",
+      "text": "The coach is sick. You're in charge for one game! You lose 1-0. Group chat: \"Bring the real coach back.\"",
+      "audio": "../audio/20-why-it-sucks-assistant-coach/06.wav"
+    },
+    {
+      "shot": "acup",
+      "text": "Cup final. You win! The coach gives the interview. You pick up the bibs.",
+      "audio": "../audio/20-why-it-sucks-assistant-coach/07.wav"
+    },
+    {
+      "shot": "athing",
+      "text": "That's the thing about being the assistant coach. Good idea? His. Bad result? Yours.",
+      "audio": "../audio/20-why-it-sucks-assistant-coach/08.wav"
+    },
+    {
+      "shot": "atag",
+      "text": "Shout-out to Aaron, the best helper coach. Tag yours below.",
+      "audio": "../audio/20-why-it-sucks-assistant-coach/09.wav",
+      "pad": 1.4
+    }
+  ]
+}
