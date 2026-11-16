@@ -61,7 +61,9 @@ export function boy(view = 'front', expr = 'neutral') {
   P(g, circ(80, 300, 32), SKIN, 9, 0); P(g, circ(432, 300, 32), SKIN, 9, 0);
   if (view === 'front') {
     P(g, circ(256, 290, 178), SKIN, 11);
-    P(g, g => { g.moveTo(72, 300); g.bezierCurveTo(52, 70, 460, 70, 440, 300); g.lineTo(424, 236); g.lineTo(392, 258); g.lineTo(360, 214); g.lineTo(322, 246); g.lineTo(290, 208); g.lineTo(250, 240); g.lineTo(214, 206); g.lineTo(180, 244); g.lineTo(146, 214); g.lineTo(114, 252); g.lineTo(90, 236); g.closePath(); }, HAIR, 11, 0.1);
+    P(g, g => { g.moveTo(72, 300); g.bezierCurveTo(46, 36, 466, 36, 440, 300); g.lineTo(424, 236); g.lineTo(392, 258); g.lineTo(360, 214); g.lineTo(322, 246); g.lineTo(290, 208); g.lineTo(250, 240); g.lineTo(214, 206); g.lineTo(180, 244); g.lineTo(146, 214); g.lineTo(114, 252); g.lineTo(90, 236); g.closePath(); }, HAIR, 11, 0.1);
+    g.strokeStyle = 'rgba(255,255,255,.18)'; g.lineWidth = 8; g.beginPath(); g.arc(256, 260, 150, -2.5, -1.9); g.stroke();
+    g.strokeStyle = 'rgba(0,0,0,.2)'; g.lineWidth = 5; for (const x of [200, 256, 312]) { g.beginPath(); g.moveTo(x, 112); g.quadraticCurveTo(x + (x - 256) * 0.3, 160, x + (x - 256) * 0.2, 205); g.stroke(); }
     face(g, 256, 290, expr);
   } else {
     P(g, circ(256, 290, 178), HAIR, 11, 0.1);
@@ -79,7 +81,7 @@ export function boySit(expr = 'scared_sweat') {
   P(g, rr(118, 712, 276, 74, 37), HOOD); P(g, circ(138, 748, 30), SKIN, 8, 0); P(g, circ(374, 748, 30), SKIN, 8, 0);
   P(g, circ(80, 390, 32), SKIN, 9, 0); P(g, circ(432, 390, 32), SKIN, 9, 0);
   P(g, circ(256, 380, 178), SKIN, 11);
-  P(g, g => { g.moveTo(72, 390); g.bezierCurveTo(52, 160, 460, 160, 440, 390); g.lineTo(424, 326); g.lineTo(392, 348); g.lineTo(360, 304); g.lineTo(322, 336); g.lineTo(290, 298); g.lineTo(250, 330); g.lineTo(214, 296); g.lineTo(180, 334); g.lineTo(146, 304); g.lineTo(114, 342); g.lineTo(90, 326); g.closePath(); }, HAIR, 11, 0.1);
+  P(g, g => { g.moveTo(72, 390); g.bezierCurveTo(46, 126, 466, 126, 440, 390); g.lineTo(424, 326); g.lineTo(392, 348); g.lineTo(360, 304); g.lineTo(322, 336); g.lineTo(290, 298); g.lineTo(250, 330); g.lineTo(214, 296); g.lineTo(180, 334); g.lineTo(146, 304); g.lineTo(114, 342); g.lineTo(90, 326); g.closePath(); }, HAIR, 11, 0.1);
   face(g, 256, 380, expr);
   return c;
 }
@@ -302,7 +304,7 @@ export function boyBed() {
   P(g, rr(40, 250, 940, 120, 30), '#ecebe6', 10, 0.05);
   P(g, rr(60, 200, 250, 110, 50), '#f6f4ef', 10, 0.05);
   P(g, circ(205, 205, 112), SKIN, 10);
-  P(g, g => { g.moveTo(96, 210); g.bezierCurveTo(90, 60, 330, 60, 316, 200); g.lineTo(300, 160); g.lineTo(270, 175); g.lineTo(240, 140); g.lineTo(205, 168); g.lineTo(170, 138); g.lineTo(140, 170); g.lineTo(110, 150); g.closePath(); }, HAIR, 9, 0.1);
+  P(g, g => { g.moveTo(92, 215); g.bezierCurveTo(70, 30, 340, 30, 320, 205); g.lineTo(300, 160); g.lineTo(270, 175); g.lineTo(240, 140); g.lineTo(205, 168); g.lineTo(170, 138); g.lineTo(140, 170); g.lineTo(110, 150); g.closePath(); }, HAIR, 9, 0.1);
   for (const s of [-1, 1]) { P(g, circ(205 + s * 36, 218, 20), '#fff', 5, 0); P(g, circ(205 + s * 34, 222, 7), OL, 0, 0); }
   line(g, [[150, 180], [186, 170]], 6); line(g, [[224, 170], [260, 180]], 6);
   P(g, ell(205, 280, 10, 13), '#5a2a1e', 4, 0);

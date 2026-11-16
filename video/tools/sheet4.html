@@ -1,0 +1,7 @@
+<!doctype html><html><body style="margin:0;background:#556"><canvas id=c width=2000 height=800></canvas>
+<script type=module>
+import * as C from '../src/chars.js';
+const g=document.getElementById('c').getContext('2d');
+[C.boy('front','neutral'),C.boy('front','scared_sweat'),C.ben('front','scared_sweat'),C.boySit()].forEach((c,i)=>g.drawImage(c,i*360,0,360,720));
+g.drawImage(C.boyBed(),1440,200,560,280); window.done=true;
+</script></body></html>
