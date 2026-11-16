@@ -447,6 +447,12 @@ const OUT = {
     for (let k = 0; k < 5; k++) line(c, [[BX - 60 + k * 30, BT + 2], [BX - 60 + k * 30, BT + 26]], 4, 'rgba(255,255,255,0.45)');
     rrect(c, BX - 50, BT + 20, 32, 110, 10); fillStroke(c, s.scarf || '#c8302a', 7);
   },
+  official(c, s) {
+    OUT.frock(c, { ...s, coat: s.coat || '#2a3a6a', vest: '#e8d8b0', cravat: '#1a1a2a' });
+    c.save(); bodyPath(c); c.clip(); c.beginPath(); c.moveTo(BX - 100, BT + 20); c.lineTo(BX - 60, BT); c.lineTo(BX + 100, BB - 80); c.lineTo(BX + 100, BB - 30); c.closePath(); c.fillStyle = '#c8202a'; c.fill(); c.restore();
+    line(c, [[BX - 80, BT + 10], [BX + 100, BB - 55]], 4, '#f2c23a');
+    circ(c, BX - 50, BT + 120, 18, '#f2c23a', 6); c.beginPath(); c.moveTo(BX - 62, BT + 100); c.lineTo(BX - 50, BT + 80); c.lineTo(BX - 38, BT + 100); c.closePath(); fillStroke(c, '#3a6ad8', 4);
+  },
   tourist(c, s) {
     bodyPath(c); c.fillStyle = s.shirt || '#f2d24a'; c.fill();
     c.save(); bodyPath(c); c.clip();
@@ -765,6 +771,8 @@ function drawChar(c, s) {
     case 'toss': post = () => { arm([SR, [420, 330], [450, 230]]); hand(450, 230); }; arm([SL, [150, 500], [196, 548]]); break;
     case 'tails': post = () => { arm([SR, [420, 340], [430, 250]]); for (let k = 0; k < 5; k++) ratTail(c, 430, 250, -0.5 + k * 0.25, 110); hand(430, 248); }; arm([SL, [150, 500], [196, 548]]); break;
     case 'throne': arm([SL, [140, 470], [130, 540]]); arm([SR, [372, 470], [382, 540]]); hand(130, 540); hand(382, 540); break;
+    case 'axe': post = () => { const a = s.swing ? 1.05 : 0.4; c.save(); c.translate(330, 380); c.rotate(a); line(c, [[0, 0], [0, -230]], 14); line(c, [[0, 0], [0, -230]], 7, '#a8783a'); c.beginPath(); c.moveTo(-6, -230); c.lineTo(80, -260); c.quadraticCurveTo(100, -205, 80, -160); c.lineTo(-6, -180); c.closePath(); fillStroke(c, '#c8ccd4', 7); c.restore(); const hx = 330 + Math.sin(a) * 40, hy = 360 - Math.cos(a) * 40; arm([SL, [230, 420], [hx, hy]]); arm([SR, [380, 380], [330, 360]]); hand(hx, hy); hand(330, 360); }; break;
+    case 'parasol': post = () => { line(c, [[380, 560], [380, 120]], 8, INK); c.beginPath(); c.moveTo(220, 130); c.quadraticCurveTo(380, -10, 540, 130); for (let k = 4; k >= 0; k--) c.quadraticCurveTo(540 - k * 32 - 16, 100, 540 - (5 - k) * 32 + (k === 0 ? 0 : 0), 130); c.closePath(); fillStroke(c, s.parasolCol || '#f2a8c8', 7); arm([SR, [400, 420], [380, 420]]); hand(380, 420); }; arm([SL, [150, 500], [196, 548]]); break;
     case 'saw': post = () => { const up = s.swing ? -40 : 30; c.save(); c.translate(300, 470 + up); c.rotate(1.2); rrect(c, -20, -16, 280, 32, 4); fillStroke(c, '#c8ccd4', 6); for (let k = 0; k < 13; k++) { c.beginPath(); c.moveTo(-16 + k * 22, 16); c.lineTo(-5 + k * 22, 30); c.lineTo(6 + k * 22, 16); fillStroke(c, '#c8ccd4', 4); } rrect(c, -50, -24, 40, 48, 8); fillStroke(c, '#8a5a2a', 6); c.restore(); arm([SL, [200, 470], [270, 460 + up]]); arm([SR, [360, 470], [300, 470 + up]]); hand(270, 460 + up); hand(300, 470 + up); }; break;
     case 'glass': post = () => { arm([SR, [420, 360], [430, 290]]); rrect(c, 396, 196, 70, 100, 10); fillStroke(c, 'rgba(200,235,255,0.75)', 6); c.fillStyle = s.drink || 'rgba(232,140,60,0.75)'; c.fillRect(402, 236, 58, 54); for (const [ix, iy] of [[414, 226], [440, 238]]) { rrect(c, ix, iy, 22, 22, 4); fillStroke(c, '#e8f8ff', 4); } line(c, [[452, 180], [440, 250]], 6, '#e84a6a'); hand(430, 296); }; arm([SL, [150, 500], [196, 548]]); break;
     case 'cone': post = () => { arm([SR, [420, 360], [420, 300]]); c.beginPath(); c.moveTo(398, 270); c.lineTo(442, 270); c.lineTo(420, 340); c.closePath(); fillStroke(c, '#d8a050', 6); circ(c, 420, 250, 30, s.scoop || '#f6b8c8', 6); circ(c, 410, 222, 22, '#fff4c8', 6); hand(420, 304); }; arm([SL, [150, 500], [196, 548]]); break;
