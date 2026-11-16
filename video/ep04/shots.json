@@ -1,0 +1,28 @@
+{
+  "monster": "SIREN HEAD",
+  "shots": [
+    {"id":"hook","scene":"roulette","segs":[{"v":"narr","t":"Eines dieser Monster ist ausgebrochen. Mal sehen, wer es ist.","sub":"EINES DIESER MONSTER IST *AUSGEBROCHEN.* MAL SEHEN, WER ES IST."}],"hold":1.55,"sfx":[{"n":"alarm","at":0},{"n":"ticks","atEnd":-8.31}],"noHeader":true},
+    {"id":"name","scene":"station_wide","clock":"03:00","segs":[{"v":"narr","t":"Siren Head. Drei Uhr nachts.","sub":"*SIREN HEAD.* 3 UHR NACHTS."}],"sfx":[{"n":"boom","at":-0.05}],"amb":"station"},
+    {"id":"shift","scene":"counter","clock":"03:01","segs":[{"v":"narr","t":"Du hast Nachtschicht an einer Tankstelle. Mitten im Wald, an der Landstraße.","sub":"DU HAST NACHTSCHICHT AN EINER *TANKSTELLE.* MITTEN IM WALD, AN DER LANDSTRASSE."}],"card":{"k":"NÄCHSTER ORT","v":"18 KM","at":0.4},"amb":"shop"},
+    {"id":"radio1","scene":"radio","clock":"03:04","segs":[{"v":"narr","t":"Das Radio wechselt von selbst den Sender.","sub":"DAS RADIO WECHSELT *VON SELBST* DEN SENDER."}],"sfx":[{"n":"sweep","atSeg":[0,0.6]}],"amb":"shop"},
+    {"id":"radio2","scene":"radio","clock":"03:04","segs":[{"v":"narr","t":"Nachrichten. Ein Kinderlied. Ein Wetterbericht.","sub":"NACHRICHTEN. EIN *KINDERLIED.* EIN WETTERBERICHT."}],"sfx":[{"n":"radiofrag","at":0}],"amb":"shop"},
+    {"id":"radio3","scene":"radio","clock":"03:05","segs":[{"v":"narr","t":"Alles mit demselben Knistern.","sub":"ALLES MIT DEMSELBEN *KNISTERN.*"}],"sfx":[{"n":"interference","at":0}],"amb":"shop"},
+    {"id":"mast","scene":"window_mast","clock":"03:05","segs":[{"v":"narr","t":"Draußen, über den Bäumen, steht ein Mast mit zwei Lautsprechern.","sub":"DRAUSSEN, ÜBER DEN BÄUMEN, STEHT EIN *MAST* MIT ZWEI LAUTSPRECHERN."}],"amb":"shop"},
+    {"id":"yesterday","scene":"window_mast2","clock":"03:06","segs":[{"v":"narr","t":"Gestern stand da noch kein Mast.","sub":"GESTERN STAND DA NOCH *KEIN MAST.*"}],"hold":0.3,"amb":"shop"},
+    {"id":"turn","scene":"mast_turn","clock":"03:06","segs":[{"v":"narr","t":"Dann dreht sich der Mast um.","sub":"DANN DREHT SICH DER MAST *UM.*"}],"hold":0.6,"sfx":[{"n":"creak","at":0.3},{"n":"hit_soft","atSeg":[0,-0.2]}],"amb":"station"},
+    {"id":"name2","scene":"red_siren","clock":"03:06","segs":[{"v":"narr","t":"Siren Head. Zwölf Meter groß. Blind.","sub":"*SIREN HEAD.* ZWÖLF METER GROSS. *BLIND.*"}],"card":{"k":"GRÖSSE","v":"12 M","at":0.6},"sfx":[{"n":"boom","at":0}]},
+    {"id":"hunt","scene":"red_waves","clock":"03:07","segs":[{"v":"narr","t":"Er jagt nach Gehör. Und er lockt mit jeder Stimme, die er je gehört hat.","sub":"ER JAGT NACH *GEHÖR.* UND ER LOCKT MIT JEDER *STIMME,* DIE ER JE GEHÖRT HAT."}],"sfx":[{"n":"sirenwail","at":0.2}]},
+    {"id":"rule","scene":"counter_rule","clock":"03:07","segs":[{"v":"narr","t":"Die Regel: Mach kein Geräusch. Und antworte keiner Stimme aus einem Lautsprecher.","sub":"DIE REGEL: MACH *KEIN GERÄUSCH.* UND ANTWORTE KEINER STIMME AUS EINEM LAUTSPRECHER."}],"rule":{"title":"REGEL #1","text":"KEIN GERÄUSCH","atSeg":[0,0.6]},"sfx":[{"n":"pop","atSeg":[0,0.6]}],"amb":"shop"},
+    {"id":"hide","scene":"hide","clock":"03:08","segs":[{"v":"narr","t":"Du ziehst den Stecker vom Radio. Du kauerst dich hinter die Kasse.","sub":"DU ZIEHST DEN *STECKER* VOM RADIO. DU KAUERST DICH HINTER DIE KASSE."}],"sfx":[{"n":"unplug","atSeg":[0,0.9]}],"amb":"shop_quiet"},
+    {"id":"pa","scene":"pa_speaker","clock":"03:12","segs":[{"v":"narr","t":"Dann knackt die Lautsprecheranlage der Tankstelle.","sub":"DANN KNACKT DIE *LAUTSPRECHERANLAGE* DER TANKSTELLE."},{"v":"pa","t":"Hilfe! Kommt schnell! Bitte, kommt her!","sub":"„HILFE! KOMMT SCHNELL! BITTE, *KOMMT HER!*“"}],"sfx":[{"n":"pafeedback","atSeg":[0,-0.6]},{"n":"flicker","atSeg":[1,0]}],"amb":"shop_quiet"},
+    {"id":"own","scene":"face_hand","clock":"03:12","segs":[{"v":"narr","t":"Es ist deine eigene Stimme.","sub":"ES IST DEINE *EIGENE STIMME.*"}],"card":{"k":"STIMMEN-MATCH","v":"DU 100 %","at":0.2},"hold":0.3,"sfx":[{"n":"heart","at":0}],"amb":"shop_quiet"},
+    {"id":"hours","scene":"clock_fast","clock":"03:20","segs":[{"v":"narr","t":"Du sagst nichts. Stundenlang.","sub":"DU SAGST NICHTS. *STUNDENLANG.*"}],"hold":0.4,"sfx":[{"n":"clock","at":0}],"amb":"shop_quiet"},
+    {"id":"dawn","scene":"dawn_ext","clock":"06:00","segs":[{"v":"narr","t":"Sechs Uhr. Es wird hell. Er ist weg.","sub":"6 UHR. ES WIRD HELL. ER IST *WEG.*"}],"sfx":[{"n":"birds","at":0.2}],"amb":"dawn"},
+    {"id":"coll","scene":"colleague_door","clock":"06:02","segs":[{"v":"narr","t":"Deine Kollegin kommt zur Frühschicht. Sie ist blass.","sub":"DEINE KOLLEGIN KOMMT ZUR FRÜHSCHICHT. SIE IST *BLASS.*"}],"sfx":[{"n":"chime","at":0.2}],"amb":"shop"},
+    {"id":"collq","scene":"colleague_face","clock":"06:02","segs":[{"v":"kollegin","t":"Warum hast du heute Nacht über Funk um Hilfe gerufen?","sub":"„WARUM HAST DU HEUTE NACHT ÜBER *FUNK* UM HILFE GERUFEN?“"}],"hold":0.3,"amb":"shop"},
+    {"id":"fire","scene":"dispatch","clock":"06:03","segs":[{"v":"narr","t":"Die Feuerwehr ist zu dir losgefahren. Durch den Wald.","sub":"DIE *FEUERWEHR* IST ZU DIR LOSGEFAHREN. DURCH DEN WALD."}],"sfx":[{"n":"radio","at":0}],"amb":"shop_quiet"},
+    {"id":"none","scene":"truck_forest","clock":"06:03","tint":"red","segs":[{"v":"narr","t":"Keiner von ihnen ist angekommen.","sub":"KEINER VON IHNEN IST *ANGEKOMMEN.*"}],"hold":1.0,"sfx":[{"n":"stinger","atSeg":[0,-0.25]},{"n":"sirenwail_close","atSeg":[0,-0.25]}]},
+    {"id":"cta","scene":"cta","segs":[{"v":"narr","t":"Folge mir, um zu sehen, wen du als Nächstes bekommst.","sub":"FOLGE MIR, UM ZU SEHEN, WEN DU ALS *NÄCHSTES* BEKOMMST."}],"hold":0.4,"noHeader":true,"sfx":[{"n":"sparkle","at":0}]},
+    {"id":"endcard","scene":"endcard","segs":[],"hold":2.6,"noHeader":true}
+  ]
+}

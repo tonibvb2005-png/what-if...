@@ -348,8 +348,8 @@ export function mothman(pose = 'open') {
 }
 
 // ------------------------------------------------------------- Folge 3: Mia (Schwester, lange Haare, Camcorder)
-export function mia(view = 'front', expr = 'neutral', cam = false) {
-  const o = [HOOD, HOOD2, HAIR]; HOOD = '#8a4fb0'; HOOD2 = '#6c3a8c'; HAIR = '#7a3b22';
+export function mia(view = 'front', expr = 'neutral', cam = false, pal = null) {
+  const o = [HOOD, HOOD2, HAIR]; [HOOD, HOOD2, HAIR] = pal || ['#8a4fb0', '#6c3a8c', '#7a3b22'];
   const base = boy(view, expr); const c = cv2(512, 1024), g = c.getContext('2d');
   const longHair = g => { g.moveTo(84, 250); g.bezierCurveTo(40, 420, 70, 560, 110, 600); g.lineTo(402, 600); g.bezierCurveTo(442, 560, 472, 420, 428, 250); g.closePath(); };
   P(g, longHair, HAIR, 11, 0.1);
@@ -370,3 +370,5 @@ export function mia(view = 'front', expr = 'neutral', cam = false) {
   }
   [HOOD, HOOD2, HAIR] = o; return c;
 }
+
+export const colleague = (view = 'front', expr = 'neutral') => mia(view, expr, false, ['#c0392b', '#962d22', '#2b1d16']);

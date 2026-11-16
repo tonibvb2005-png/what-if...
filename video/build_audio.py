@@ -401,6 +401,42 @@ def A_woods(d):
 def A_village(d): return rec("0110", 20.0, d, rms=0.02, fin=0.4, fout=0.4)
 def A_tvroom(d):  tt = t_(d); return (np.sin(2 * np.pi * 50 * tt) * 0.006 + lp(noise(d), 200) * 0.03 + hp(noise(d), 6000) * 0.006).astype(np.float32)
 
+
+# ---------------------------------------------------------------- Folge 4: Siren Head
+def _radio(x): return np.tanh(bp(x, 320, 3300) * 2.2) * 0.6
+def R_sweep():        return rec("2623", 2.0, 1.6, 0.45, 0.05, 0.3)
+def R_interference(): return rec("0310", 0.5, 3.0, 0.35, 0.1, 0.6)
+def R_radiofrag():
+    news = tts("de_thorsten.onnx", "Hier sind die Nachrichten.", os.path.join(B, "tts", "frag_news.wav"), 1.0, 0.5)
+    wett = tts("de_kerstin.onnx", "Morgen wird es regnerisch und kalt.", os.path.join(B, "tts", "frag_wetter.wav"), 1.0, 0.5)
+    notes = [261.6, 293.7, 329.6, 349.2, 392.0, 392.0, 440.0, 440.0]; mel = []
+    for f in notes: d = 0.16; tt = t_(d); mel.append((np.sin(2 * np.pi * f * tt) + 0.3 * np.sin(4 * np.pi * f * tt)) * np.exp(-tt * 9) * 0.5)
+    mel = np.concatenate(mel).astype(np.float32); sw = rec("2623", 4.0, 0.35, 0.6, 0.01, 0.05)
+    parts = [norm(trim(news), 0.8), sw, mel, sw, norm(trim(wett), 0.8)]
+    x = np.concatenate([np.asarray(q, np.float32) for q in parts])
+    cr = np.tile(rec("0312", 0.0, 4.4, rms=0.03, fin=0.01, fout=0.01), 3)[:len(x)]
+    x = _radio(x); x[:len(cr)] += cr
+    return norm(x, 0.32)
+def R_creak():    return reverb(_pitch(rec("0616", 0.1, 1.7, 0.9, 0.01, 0.5), 0.5), 2.2, 0.4)
+def R_sirenwail():       return norm(reverb(lp(rec("0172", 2.0, 5.0, 0.9, 0.6, 1.2), 2500), 3.2, 0.6, 0.08), 0.35)
+def R_sirenwail_close():
+    a = rec("0172", 8.0, 4.5, 0.9, 0.05, 1.5); b = lp(rec("2030", 6.0, 4.5, 0.9, 0.05, 1.5), 3000)
+    m = min(len(a), len(b)); return norm(reverb(a[:m] * 0.8 + b[:m] * 0.4, 2.4, 0.45), 0.7)
+def R_unplug():
+    x = np.zeros(int(0.6 * SR), np.float32); c = hp(noise(0.02), 1500) * np.linspace(1, 0, int(0.02 * SR)) * 0.6; x[:len(c)] += c
+    h = rec("0310", 1.0, 0.25, 0.25, 0.005, 0.15); x[:len(h)] += h; return x
+def R_pafeedback():
+    a = rec("2488", 0.0, 1.06, 0.35, 0.01, 0.4); c = np.zeros(int(0.3 * SR), np.float32); k = hp(noise(0.05), 800) * np.linspace(1, 0, int(0.05 * SR)) * 0.5; c[:len(k)] += k
+    return np.concatenate([c, a]).astype(np.float32)
+def R_flicker():  return rec("2143", 0.0, 0.53, 0.35, 0.002, 0.1)
+def R_chime():    return rec("2087", 0.0, 2.1, 0.4, 0.005, 0.5)
+def A_station(d):
+    h = rec("2118", 0.5, min(d, 9.0), rms=0.012, fin=0.3, fout=0.3); i = rec("1470", 50.0, d, rms=0.012, fin=0.3, fout=0.3)
+    n = len(i); x = i.copy(); x[:min(n, len(h))] += h[:n]; return x
+def A_shop(d):
+    tt = t_(d); return (np.sin(2 * np.pi * 100 * tt) * 0.008 + np.sin(2 * np.pi * 50 * tt) * 0.006 + lp(noise(d), 300) * 0.035 + hp(noise(d), 4000) * 0.004).astype(np.float32)
+def A_shop_quiet(d): return A_shop(d) * 0.5
+
 SFX = {k[2:]: v for k, v in globals().items() if k.startswith("S_")}
 SFX.update({k[2:]: v for k, v in globals().items() if k.startswith("R_")})
 
@@ -452,7 +488,7 @@ def A_dawn(d):
     w = lp(noise(len(b) / SR), 400) * 0.06; m = min(len(b), len(w)); return (b[:m] + w[:m]).astype(np.float32)
 
 
-AMB = {"day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn, "forest": A_forest, "car": A_car, "dusk": A_dusk, "bedroom": A_bedroom, "woods": A_woods, "village": A_village, "tvroom": A_tvroom}
+AMB = {"day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn, "forest": A_forest, "car": A_car, "dusk": A_dusk, "bedroom": A_bedroom, "woods": A_woods, "village": A_village, "tvroom": A_tvroom, "station": A_station, "shop": A_shop, "shop_quiet": A_shop_quiet}
 
 
 def drone(d):
@@ -480,6 +516,13 @@ def voice(shot, k, seg):
             if seg["v"] == "oma":  # gefilterte, leicht zitternde Stimme hinter der Tuer
                 x = ffx(x, SIL.format(d=0.25) + ",atempo=1.05,highpass=f=200,lowpass=f=4500,tremolo=f=5:d=0.12")
                 return norm(reverb(x, 1.6, 0.45), 0.7), len(x) / SR
+            if seg["v"] == "pa":   # Durchsage-Lautsprecher, verzerrt
+                x = ffx(x, SIL.format(d=0.25) + ",atempo=1.05,highpass=f=500,lowpass=f=3200")
+                x = np.tanh(x / (np.abs(x).max() + 1e-9) * 3.0) * 0.6
+                return norm(reverb(x, 1.4, 0.4), 0.72), len(x) / SR
+            if seg["v"] == "kollegin":
+                x = ffx(x, SIL.format(d=0.25) + ",atempo=1.05,highpass=f=90")
+                return norm(x, 0.82), len(x) / SR
             if seg["v"] == "opa":
                 x = ffx(x, SIL.format(d=0.25) + ",asetrate=44100*0.96,aresample=44100,atempo=1.1,highpass=f=120,lowpass=f=5000")
                 return norm(reverb(x, 1.2, 0.35), 0.72), len(x) / SR
