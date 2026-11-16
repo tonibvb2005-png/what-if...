@@ -1883,6 +1883,75 @@
       extra: (lt) => { aaronTag(-140, 1, lt); pill(0, 420, 'SHOUT-OUT TO AARON 🧢', eb(P(lt, .1, .45)), '#ffd400', OUT, 44); pill(0, 560, '@ TAG YOUR HELPER COACH', eb(P(lt, cue('tag', .7), cue('tag', .7) + .3)), '#fff', OUT, 36); } }
   });
 
+
+  // ---------- "Why it sucks being the sub" ----------
+  CH.ben = { skin: '#f0c19a', shirt: '#ffb000', trim: '#1b1035', number: '14', pants: '#1b1035', shoes: '#111', hair: 'spiky', hairColor: '#8a4a1c', bw: .95, blinkPh: .7 };
+  CH.sY9 = { skin: '#ffd9b8', shirt: '#ffb000', trim: '#1b1035', number: '9', pants: '#1b1035', shoes: '#111', hair: 'slick', hairColor: '#2a1a10', bw: 1, blinkPh: 1.5 };
+  CH.sY10 = { skin: '#8a5a3c', shirt: '#ffb000', trim: '#1b1035', number: '10', pants: '#1b1035', shoes: '#111', hair: 'buzz', hairColor: '#120a05', bw: .95, blinkPh: 2.2 };
+  function bench(x, w) {
+    ctx.lineWidth = 7; ctx.strokeStyle = OUT;
+    ctx.beginPath(); ctx.roundRect(x - w / 2, 1200, w, 40, 10); ctx.fillStyle = '#9a6238'; ctx.fill(); ctx.stroke();
+    for (const dx of [-w / 2 + 40, w / 2 - 40]) { ctx.beginPath(); ctx.rect(x + dx - 12, 1240, 24, 160); ctx.fillStyle = '#5a3a24'; ctx.fill(); ctx.stroke(); }
+    ctx.beginPath(); ctx.roundRect(x - w / 2 - 30, 900, w + 60, 60, [30, 30, 0, 0]); ctx.fillStyle = 'rgba(200,225,255,.35)'; ctx.fill(); ctx.stroke();
+  }
+  function blanket(x, k) { if (k <= 0) return; ctx.save(); ctx.globalAlpha = k; ctx.beginPath(); ctx.roundRect(x - 120, 1150, 240, 230, 50); ctx.fillStyle = '#6a7ab0'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke(); ctx.strokeStyle = '#8a9ad0'; ctx.lineWidth = 6; for (let i = 0; i < 4; i++) { ctx.beginPath(); ctx.moveTo(x - 110, 1190 + i * 50); ctx.lineTo(x + 110, 1190 + i * 50); ctx.stroke(); } ctx.restore(); }
+  function snow(t) { const r = R7(13); ctx.fillStyle = 'rgba(255,255,255,.85)'; for (let i = 0; i < 140; i++) { const x = (r() * W + Math.sin(t + i) * 20), y = ((r() * H + t * 160) % H); ctx.beginPath(); ctx.arc(x, y, 3 + r() * 4, 0, Math.PI * 2); ctx.fill(); } }
+  function subBoard(x, y, k, t) {
+    if (k <= 0) return; ctx.save(); ctx.translate(x, y); ctx.scale(k, k);
+    ctx.beginPath(); ctx.roundRect(-190, -90, 380, 180, 20); ctx.fillStyle = '#111'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke();
+    txt('14', -95, -10, 90, '#2fbf71', 900); txt('9', 95, -10, 90, '#e8364f', 900); txt('⇄', 0, -10, 60, '#fff', 900); txt("89'", 0, 60, 34, '#ffd400', 900);
+    ctx.beginPath(); ctx.moveTo(0, 90); ctx.lineTo(0, 200); ctx.lineWidth = 14; ctx.strokeStyle = OUT; ctx.stroke(); ctx.restore();
+  }
+  const SC = { x: 0, y: 900, z: 1 };
+  Object.assign(SHOTS, {
+    subhook: { set: 'flat', flat: (t) => bgStadium(t, false), titleFast: true, captionTop: 1235,
+      title: ['WHY IT SUCKS BEING THE', '<span class="box">SUB</span>'], titleSize: [66, 120],
+      cam: [[0, SC], [1, { x: 0, y: 900, z: 1.04 }]], cast: { sY9: { x: 300, scale: .58, y: 1180 }, ben: { x: -40, scale: .92, y: 1460 } },
+      back: () => bench(-40, 520), acts: { ben: [[0, { e: 'despair', p: 'crossed' }]], sY9: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: .5 } }]] } },
+    subseven: { set: 'flat', flat: bgPark, age: 'AGE 7', captionTop: 1235,
+      cam: [[0, SC], [1, SC]], cast: { sY9: { x: -340, scale: .62 }, sY10: { x: -110, scale: .62 }, kidB: { x: 120, scale: .62 }, ben: { x: 360, scale: .62 } },
+      acts: { sY9: [[0, { e: 'happy', p: 'cheer' }]], sY10: [[0, { e: 'happy', p: 'cheer' }]], kidB: [[0, { e: 'happy', p: 'cheer' }]], ben: [[0, { e: 'happy' }], ['yours', .7, { e: 'surprised', p: 'shrug', m: { lookY: .5 } }]] },
+      extra: (lt) => pill(360, 650, '#14 = SUB 😐', eb(P(lt, cue('yours', .7), cue('yours', .7) + .3)), '#fff', OUT, 40) },
+    subnine: { set: 'flat', flat: (t) => bgStadium(t, false), age: 'AGE 9', captionTop: 1235,
+      cam: [[0, SC], [1, SC]], cast: { ben: { x: 0, scale: .72 } },
+      move: { ben: [[0, -220], [.25, 220], [.5, -220], [.75, 220], [1, 0]] },
+      acts: { ben: [[0, { e: 'focused', m: { walk: 1 } }], ['second', .65, { e: 'despair', m: { walk: 1 } }]] },
+      extra: (lt) => { const s2 = cue('second', .65); pill(0, 600, lt < s2 ? '1ST HALF: WARMING UP 🏃' : '2ND HALF: WARMING UP 🏃', 1, lt < s2 ? '#fff' : '#ffd400', OUT, 36); } },
+    subcar: { set: 'flat', flat: bgCar, age: 'AGE 11', captionTop: 1650,
+      cam: [[0, SC], [1, SC]], cast: { dad: { x: -150, scale: .5, y: 1380 }, ben: { x: 190, scale: .42, y: 1360 } },
+      acts: { dad: [[0, { e: 'happy', m: { lookX: 1 } }]], ben: [[0, { e: 'happy', m: { lookX: -1 } }], ['play', .55, { e: 'despair' }]] },
+      front: (lt) => { car(20, 1330); statCard(0, 300, 'AWAY GAME', [['DRIVE', '2 HOURS', true], ['YOU PLAYED', lt > cue('play', .55) ? '4 MIN' : '…', false]], eb(P(lt, .1, .4))); pill(0, 640, '(INCL. STOPPAGE TIME)', eb(P(lt, cue('incl', .8), cue('incl', .8) + .3)), '#fff', OUT, 32); } },
+    subcold: { set: 'flat', flat: (t) => bgStadium(t, true), age: 'AGE 13', captionTop: 1235, bright: .7,
+      cam: [[0, SC], [1, SC]], cast: { sY9: { x: 330, scale: .6, y: 1190 }, sY10: { x: 470, scale: .6, y: 1190 }, ben: { x: -160, scale: .86, y: 1450 } },
+      back: () => bench(-160, 460),
+      acts: { ben: [[0, { e: 'worried', m: { tremble: 1 } }]], sY9: [[0, { e: 'tense', ex: { sweat: 1 }, m: { walk: 1 } }]], sY10: [[0, { e: 'tense', ex: { sweat: 1 }, m: { walk: 1 } }]] },
+      extra: (lt, t) => { blanket(-160, 1); snow(t); pill(400, 760, 'SWEATING 🥵', eb(P(lt, cue('sweat', .75), cue('sweat', .75) + .3)), '#e8364f', '#fff', 34); pill(-160, 560, '🥶 -2°C', eb(P(lt, .2, .5)), '#fff', OUT, 40); } },
+    subbottle: { set: 'flat', flat: (t) => bgStadium(t, false), age: 'AGE 15', captionTop: 1235,
+      cam: [[0, SC], [1, SC]], cast: { coach: { x: 260, scale: 1 }, ben: { x: -180, scale: .9 } },
+      acts: { coach: [[0, { e: 'neutral', p: 'crossed' }], ['look', .3, { e: 'neutral', m: { lookX: -1 } }], ['bottle', .8, { e: 'neutral', p: 'takeR', m: { lookX: -1 } }]], ben: [[0, { e: 'neutral', m: { lookX: 1 } }], ['jump', .5, { e: 'ecstatic', p: 'cheer', m: { jump: 1, lookX: 1 } }], ['bottle', .8, { e: 'despair', p: 'giveBagR', propR: 'bottle', m: { jump: 0 } }]] },
+      extra: (lt) => bubble(260, 760, 'PASS ME THE WATER BOTTLE.', eb(P(lt, cue('bottle', .8), cue('bottle', .8) + .3)), 60) },
+    sublate: { set: 'flat', flat: (t) => bgStadium(t, false), age: 'AGE 16', captionTop: 1235,
+      cam: [[0, SC], [1, SC]], cast: { ben: { x: -60, scale: .9 }, ref: { x: 330, scale: .95 } },
+      move: { ben: [[0, -460], ['on', .4, -460], ['touch', .65, -60]] },
+      ball: () => { const tc = cue('touch', .65); return [[0, 300, 1385], [tc - .5, 300, 1385], [tc, 0, 1385], [tc + .5, 120, 1385]]; },
+      acts: { ben: [[0, { e: 'happy', p: 'cheer' }], ['on', .4, { e: 'ecstatic', m: { walk: 1 } }], ['touch', .65, { e: 'focused', po: KICK, m: { walk: 0 } }], ['whistle', .9, { e: 'shock', p: 'handsOnHead', po: {} }]], ref: [[0, { e: 'neutral', m: { lookX: -1 } }], ['whistle', .9, { e: 'neutral', p: 'holdCashUp', propR: 'whistle' }]] },
+      extra: (lt, t) => { subBoard(330, 560, eb(P(lt, .1, .4)) * (1 - P(lt, cue('touch', .65) - .3, cue('touch', .65))), t); pill(0, 560, 'FULL TIME', eb(P(lt, cue('whistle', .9), cue('whistle', .9) + .3)), '#e8364f', '#fff', 50); } },
+    subwinner: { set: 'flat', flat: (t) => bgStadium(t, false), age: 'AGE 17', captionTop: 1235,
+      cam: [[0, SC], [1, SC]], cast: { ben: { x: -120, scale: .92 }, coach: { x: 290, scale: 1 } },
+      acts: { ben: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: .6 } }], ['next', .55, { e: 'despair', p: 'crossed', m: { jump: 0 } }]], coach: [[0, { e: 'happy', p: 'cheer' }], ['team', .8, { e: 'confident', p: 'pointL', m: { lookX: -1 } }]] },
+      back: (lt) => { if (lt > cue('next', .55)) bench(-120, 460); },
+      extra: (lt) => { const n = cue('next', .55); pill(-120, 560, 'WINNER! ⚽', eb(P(lt, .3, .6)) * (1 - P(lt, n - .2, n)), '#2fbf71', '#fff', 46); pill(-120, 560, 'NEXT WEEK: BENCH', eb(P(lt, n, n + .3)), '#fff', OUT, 40); bubble(90, 760, "DON'T CHANGE A WINNING TEAM!", eb(P(lt, cue('team', .8), cue('team', .8) + .3)), 200); } },
+    subready: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235, cam: [[0, SC], [1, SC]], cast: { ben: { x: 0, scale: .95 } },
+      acts: { ben: [[0, { e: 'confident', p: 'hips', m: { walk: .5 } }]] },
+      extra: (lt) => pill(0, 560, 'ALWAYS READY ✓', eb(P(lt, cue('ready', .65), cue('ready', .65) + .3)), '#2fbf71', '#fff', 46) },
+    subnobody: { set: 'flat', flat: bgDark, captionTop: 1700, cam: [[0, SC], [1, { x: 0, y: 930, z: 1.08 }]], cast: { ben: { x: 0, scale: 1 } },
+      acts: { ben: [[0, { e: 'despair', p: 'idle' }]] }, extra: (lt) => pill(0, 640, "NOBODY'S READY FOR YOU", eb(P(lt, .1, .4)), '#fff', OUT, 40) },
+    subtag: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235,
+      cam: [[0, SC], [1, SC]], cast: { sY9: { x: -360, scale: .9 }, ben: { x: -60, scale: 1 }, sY10: { x: 230, scale: .9 } },
+      acts: { ben: [[0, { e: 'surprised' }], [.35, { e: 'happy', p: 'thumbsUpR', handR: 'thumb' }]], sY9: [[0, { e: 'happy', p: 'pointR' }]], sY10: [[0, { e: 'happy', p: 'pointL', m: { lookX: -1 } }]] },
+      extra: (lt) => { pill(0, 520, '@ TAG YOUR SUB', eb(P(lt, .1, .4)), '#ffd400', OUT, 50); bubble(230, 790, 'NEVER GIVE UP!', eb(P(lt, cue('never', .6), cue('never', .6) + .3)), -60); } }
+  });
+
   // ---------- timeline ----------
   let spec, scenes = [], total = 0;
   function camAt(keys, lt, d) {
@@ -2137,6 +2206,17 @@
         case 'acup': add(st, 'cheer', -14); add(st + C('interview', .45), 'pop', -15); add(st + C('bibs', .7), 'pop', -15); break;
         case 'athing': add(st + C('his', .4), 'ding', -15); add(st + C('yours', .85), 'thump', -13); break;
         case 'atag': add(st + .1, 'sparkle', -14); add(st + C('tag', .7), 'pop', -14); break;
+        case 'subhook': add(st, 'thump', -10); break;
+        case 'subseven': add(st + C('yours', .7), 'pop', -14); break;
+        case 'subnine': add(st + C('second', .65), 'whistle', -20); break;
+        case 'subcar': add(st + C('play', .55), 'pop', -14); add(st + C('incl', .8), 'pop', -15); break;
+        case 'subcold': add(st + C('sweat', .75), 'pop', -15); break;
+        case 'subbottle': add(st + C('jump', .5), 'whoosh_soft', -16); add(st + C('bottle', .8), 'pop', -13); break;
+        case 'sublate': add(st + C('on', .4), 'whistle', -20); add(st + C('touch', .65), 'thump', -15); add(st + C('whistle', .9), 'whistle', -13); break;
+        case 'subwinner': add(st + .3, 'cheer', -14); add(st + C('next', .55), 'whoosh_soft', -15); add(st + C('team', .8), 'pop', -14); break;
+        case 'subready': add(st + C('ready', .65), 'ding', -15); break;
+        case 'subnobody': add(st + .1, 'heartbeat', -14); break;
+        case 'subtag': add(st + .1, 'pop', -14); add(st + C('never', .6), 'sparkle', -16); break;
         case 'imate': add(st + .1, 'whoosh_soft', -20); add(st + C('follow', .75) + .1, 'pop', -14); break;
       }
     });
