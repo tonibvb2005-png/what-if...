@@ -8,7 +8,7 @@ const srv = http.createServer((q, r) => { const f = path.join(__dirname, decodeU
   const b = await chromium.launch();
   const p = await b.newPage({ viewport: { width: 1080, height: 1920 } });
   p.on('console', m => console.log('PAGE:', m.text())); p.on('pageerror', e => console.log('ERR:', e.message));
-  await p.goto('http://localhost:8765/' + (process.env.PAGE || 'wasware.html') + '?ep=' + (process.env.EP || 'schweiz')); DUR = await p.evaluate(() => window.ready); console.log("DUR", DUR, await p.evaluate(() => JSON.stringify(SCRIPT.map(s => [s.id || s.type, +s.a.toFixed(2), +s.b.toFixed(2)]))));
+  await p.goto('http://localhost:8765/' + (process.env.PAGE || 'nomi.html') + '?ep=' + (process.env.EP || 'schweiz')); DUR = await p.evaluate(() => window.ready); console.log("DUR", DUR, await p.evaluate(() => JSON.stringify(SCRIPT.map(s => [s.id || s.type, +s.a.toFixed(2), +s.b.toFixed(2)]))));
   if (mode === 'test') {
     const ts = process.argv.slice(3).map(Number);
     for (const t of ts) { await p.evaluate(t => render(t), t); await p.locator('canvas').screenshot({ path: `test_${t}.png` }); }

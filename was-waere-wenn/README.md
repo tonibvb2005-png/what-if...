@@ -1,48 +1,61 @@
-# „Was wäre, wenn du in … geboren wärst?“ – TikTok-Serie
+# „Was wäre, wenn du in … geboren wärst?“ – mit Nomi
 
-Jeden Tag ein Land. Ein Moderator (Strichmännchen im Anzug) führt durch das Video,
-mit Untertiteln, die Wort für Wort mitlaufen, und Gesten passend zum Text.
+Eine tägliche TikTok-Serie: Jeden Tag entscheidet ein Länder-Roulette, wo du heute geboren bist.
+Danach erlebt **Nomi** einen ganzen Tag in diesem Land. Fakten und Klischees stecken mitten im Alltag,
+nicht in Nachrichten-Grafiken.
 
-## Aufbau einer Folge (ca. 45–60 s)
+## Nomi
 
-1. **Intro**: Globus dreht sich zum Land: „Was wäre, wenn du in … geboren wärst?“
-2. **Geburt**: Wie wahrscheinlich ist es, genau dort geboren zu werden („1 von X Babys“)
-3. **Sprache / Kultur**: Sprechblasen, Begrüßungen, Klischees
-4. **Essen**: ein typisches Klischee mit echter Zahl
-5. **Geld**: Lohn vs. Alltagspreis
-6. **Alltag**: Verkehr, Wetter, Gewohnheiten
-7. **Pflicht / Kurioses**: ein überraschender Fakt
-8. **Leben**: Lebenserwartung im Vergleich zum Weltschnitt
-9. **Outro**: „Tag X von 195 – welches Land kommt morgen? Schreib es in die Kommentare!“
+Nomi (von „Nomade“) ist ein Strichmännchen mit orangem Hoodie, gelbem Stern-Aufnäher und einer Haarlocke.
+Er ist in jeder Folge derselbe und wird jeden Tag woanders geboren.
+Er spricht, blinzelt, gestikuliert, setzt sich hin, isst und hält Dinge in der Hand.
+
+## Ablauf einer Folge
+
+| Uhrzeit | Szene | Idee |
+|---|---|---|
+| – | Roulette | „Wo bist du heute geboren?“ Die Länder rattern durch und das Roulette stoppt beim Land der Folge |
+| – | Ankunft | Landschaft des Landes: „Was wäre, wenn du in … geboren wärst? Komm mit!“ |
+| Tag 1 | Geburt | Babyzimmer: Wie selten ist es, genau hier geboren zu werden? |
+| 07:00 | Aufwachen | Blick aus dem Fenster: Landschaft, Klima |
+| 07:20 | Frühstück | typisches Essen |
+| 07:52 | Arbeitsweg | Verkehr, Pünktlichkeit, Alltag |
+| 08:15 | Schule | Sprache(n) |
+| 10:00 | Pause | Snack oder Klischee mit echter Zahl |
+| 17:30 | Jahre später | Lohn vs. Preise |
+| 21:00 | Abend | Lebenserwartung, Ausklang |
+| – | Outro | „Und wo bist du morgen geboren? Schreib's in die Kommentare!“ |
 
 ## Neues Land anlegen
 
 1. `src/episodes/schweiz.js` kopieren, z. B. nach `src/episodes/japan.js`
-2. Anpassen: `day`, `country`, `inCountry` („in Japan“), `flag` (Emoji), `isoId`
-   (ISO-3166-Zahl, z. B. Japan = `392`), `center` [Längengrad, Breitengrad], `zoom`, `accent` (Farbe)
-3. Szenen-Texte und Zahlen ersetzen. Bausteine: `intro`, `odds`, `bubbles`, `stat`, `versus`, `life`, `outro`
-4. `[Anzeige|Aussprache]`: Untertitel zeigt z. B. „1.600“, die Stimme liest „sechzehnhundert“
-5. `cue`: das Wort, bei dem ein Element erscheint; `host`: Gesten der Figur
-   (`idle, wave, present, point, shrug, think, tada, hips`) plus optional ein Emoji in der Hand
+2. `day`, `country`, `inCountry` („in Japan“), `flag`, `accent` und das letzte Feld in `reel` (Gewinner) anpassen
+3. Texte der Szenen ersetzen.
+   - `[Anzeige|Aussprache]`: Der Untertitel zeigt „1.600“, die Stimme liest „sechzehnhundert“.
+   - `{2}`: 2 Sekunden Pause
+   - `nomi`: Gesten `[Wort, Pose, Emoji in der Hand, Mund]`. Posen: idle, wave, present, point, think,
+     shrug, tada, stretch, hips, watch, hold, cup, raise, eat, munch, sitdesk, bench
+4. Bei Ländern ohne Berge, Schweizer Flagge usw. müssen die Kulissen in `nomi.html` (Funktionen in `SCENES`) angepasst werden
 
 ## Rendern
 
 ```bash
 cd src
-npm install && node setup.js    # einmalig
-node skript.js japan > skript_japan.md       # Sprechertext für ElevenLabs
-EP=japan node render.js test 2 10 20         # einzelne Testbilder
-EP=japan OUT=japan.mp4 node render.js video  # komplettes Video (1080×1920, 30 fps)
+npm install && node setup.js                  # einmalig
+node skript.js japan > ../skript_japan.md     # Sprechertext für ElevenLabs
+EP=japan node render.js test 3 15 30          # Testbilder
+EP=japan OUT=japan.mp4 node render.js video   # Video 1080×1920, 30 fps
 ```
 
 Benötigt Node.js, ffmpeg und Playwright (Chromium).
 
-## Fakten Schweiz (Folge 1), Stand der Zahlen
+## Fakten Schweiz (Tag 1)
 
-- ca. 80.000 Geburten/Jahr in der Schweiz vs. ca. 130 Mio. weltweit → etwa 1 von 1.600
-- 4 Landessprachen: Deutsch, Französisch, Italienisch, Rätoromanisch
-- Schokoladenkonsum ca. 10–11 kg pro Kopf und Jahr
-- Medianlohn ca. 6.800 CHF brutto/Monat (BFS, 2022); Kaffee im Café ca. 4,50–5 CHF
-- SBB-Pünktlichkeit über 90 %
-- Militärdienstpflicht für Schweizer Männer; die Dienstwaffe wird meist zu Hause aufbewahrt
-- Lebenserwartung ca. 84 Jahre (Weltschnitt ca. 73)
+- ca. 80.000 Geburten/Jahr vs. ca. 130 Mio. weltweit → etwa 1 von 1.600
+- Alpen: ca. 60 % der Landesfläche
+- Birchermüesli: um 1900 vom Arzt Maximilian Bircher-Benner in Zürich erfunden
+- SBB: über 90 % der Züge pünktlich
+- 4 Landessprachen; in der Schule wird früh eine zweite Landessprache gelernt
+- Schokolade: ca. 10–11 kg pro Kopf und Jahr
+- Medianlohn ca. 6.800 CHF brutto/Monat; Kaffee im Café ca. 4,50–5 CHF
+- Lebenserwartung ca. 84 Jahre

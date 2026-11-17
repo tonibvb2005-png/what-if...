@@ -1,38 +1,44 @@
-# Was wäre, wenn du in der Schweiz geboren wärst? – Tag 1/195
+# Was wäre, wenn du in der Schweiz geboren wärst? – Tag 1 mit Nomi
 
 ## Sprechertext für ElevenLabs (zum Kopieren)
 
-Was wäre, wenn du in der Schweiz geboren wärst?
+Wo bist du heute geboren? … In der Schweiz!
 
-Erstmal: Glück gehabt. Nur etwa eins von sechzehnhundert Babys weltweit kommt in der Schweiz zur Welt.
+Was wäre, wenn du in der Schweiz geboren wärst? Komm mit, ich zeig es dir!
 
-Je nach Region sprichst du Deutsch, Französisch, Italienisch oder Rätoromanisch. Aber zu Hause redest du Schweizerdeutsch – und das versteht in Deutschland kaum jemand.
+Du kommst in Zürich zur Welt. Nur etwa eins von sechzehnhundert Babys weltweit wird hier geboren.
 
-Du isst rund zehn Kilo Schokolade. Pro Jahr!
+Sieben Uhr. Aus deinem Fenster: die Alpen. Sie bedecken rund sechzig Prozent des Landes.
 
-Dein mittlerer Lohn: rund sechstausendachthundert Franken im Monat. Dafür kostet dich ein Kaffee fast fünf Franken.
+Zum Frühstück: Birchermüesli. Das wurde übrigens hier in Zürich erfunden.
 
-Dein Zug ist zu über neunzig Prozent pünktlich. Drei Minuten Verspätung? Ein Skandal!
+Dein Zug kommt auf die Minute. Über neunzig Prozent sind pünktlich. Drei Minuten zu spät? Ein Skandal!
 
-Als Mann musst du ins Militär. Und dein Sturmgewehr bewahrst du oft zu Hause im Schrank auf.
+In der Schule redest du Schweizerdeutsch und lernst früh Französisch. Das Land hat vier Sprachen!
 
-Und das Beste: Du wirst im Schnitt fast vierundachtzig Jahre alt.
+Pause! Und in der Pause gibt es natürlich Schokolade. Rund zehn Kilo pro Jahr isst man hier.
 
-Tag eins von hundertfünfundneunzig. Welches Land kommt morgen? Schreib es in die Kommentare!
+Jahre später verdienst du richtig gut. Aber ein Kaffee kostet dich fast fünf Franken!
 
-## Ablauf
+Und abends am See weißt du: Hier wirst du im Schnitt fast vierundachtzig Jahre alt.
 
-| # | Abschnitt | Was man sieht | Text (so wie im Untertitel) |
+Und wo bist du morgen geboren? Schreib es in die Kommentare!
+
+## Ablauf (Nomis Tag)
+
+| # | Uhrzeit | Szene | Text (so wie im Untertitel) |
 |---|---|---|---|
-| 1 | Intro | intro | Was wäre, wenn du in der Schweiz geboren wärst? |
-| 2 | 👶 GEBURT | odds | Erstmal: Glück gehabt. Nur etwa eins von 1.600 Babys weltweit kommt in der Schweiz zur Welt. |
-| 3 | 🗣️ SPRACHE | bubbles | Je nach Region sprichst du Deutsch, Französisch, Italienisch oder Rätoromanisch. Aber zu Hause redest du Schweizerdeutsch – und das versteht in Deutschland kaum jemand. |
-| 4 | 🍫 ESSEN | stat | Du isst rund 10 Kilo Schokolade. Pro Jahr! |
-| 5 | 💰 GELD | versus | Dein mittlerer Lohn: rund 6.800 Franken im Monat. Dafür kostet dich ein Kaffee fast fünf Franken. |
-| 6 | 🚆 ALLTAG | stat | Dein Zug ist zu über 90 Prozent pünktlich. Drei Minuten Verspätung? Ein Skandal! |
-| 7 | 🪖 PFLICHT | versus | Als Mann musst du ins Militär. Und dein Sturmgewehr bewahrst du oft zu Hause im Schrank auf. |
-| 8 | ❤️ LEBEN | life | Und das Beste: Du wirst im Schnitt fast 84 Jahre alt. |
-| 9 | Outro | outro | Tag 1 von 195. Welches Land kommt morgen? Schreib es in die Kommentare! |
+| 1 | – | roulette | Wo bist du heute geboren? In der Schweiz! |
+| 2 | – | title | Was wäre, wenn du in der Schweiz geboren wärst? Komm mit, ich zeig es dir! |
+| 3 | Tag 1 | birth | Du kommst in Zürich zur Welt. Nur etwa eins von 1.600 Babys weltweit wird hier geboren. |
+| 4 | 07:00 | bedroom | Sieben Uhr. Aus deinem Fenster: die Alpen. Sie bedecken rund 60 Prozent des Landes. |
+| 5 | 07:20 | kitchen | Zum Frühstück: Birchermüesli. Das wurde übrigens hier in Zürich erfunden. |
+| 6 | 07:52 | station | Dein Zug kommt auf die Minute. Über 90 Prozent sind pünktlich. Drei Minuten zu spät? Ein Skandal! |
+| 7 | 08:15 | classroom | In der Schule redest du Schweizerdeutsch und lernst früh Französisch. Das Land hat vier Sprachen! |
+| 8 | 10:00 | snack | Pause! Und in der Pause gibt es natürlich Schokolade. Rund 10 Kilo pro Jahr isst man hier. |
+| 9 | 17:30 | cafe | Jahre später verdienst du richtig gut. Aber ein Kaffee kostet dich fast fünf Franken! |
+| 10 | 21:00 | lake | Und abends am See weißt du: Hier wirst du im Schnitt fast 84 Jahre alt. |
+| 11 | – | outro | Und wo bist du morgen geboren? Schreib es in die Kommentare! |
 
 ## Hinweise
 
