@@ -1,0 +1,35 @@
+[calm, low voice] Stell dir vor, du kannst nachts nicht schlafen.
+[slowly] Um drei Uhr dreiunddreißig gehst du in den Keller, um deine Wäsche zu holen.
+[short pause]
+Das Licht hat einen Zeitschalter.
+[ominous] Dreißig Sekunden. [short pause] Dann ist es dunkel.
+[long pause]
+[quietly] Du drückst den Schalter.
+[short pause]
+[tense] Am Ende des Gangs steht jemand.
+[nervous] Du rufst: [whispers] Hallo?
+[short pause]
+[slowly] Keine Antwort.
+[long pause]
+[whispers] Dunkel.
+[short pause]
+[nervous] Du drückst wieder. [short pause] Licht.
+[slowly, ominous] Er steht näher.
+[short pause]
+[tense] Er bewegt sich nur, wenn es dunkel ist.
+[faster, nervous] Also drückst du immer wieder, bevor das Licht ausgeht.
+[short pause]
+[tense] Fünf Sekunden.
+[quickly] Du drückst.
+[frightened] Nichts passiert. [short pause] Der Schalter klemmt.
+[slowly] Dann geht das Licht aus.
+[long pause]
+[breathing heavily] [whispers] Dunkelheit.
+[long pause]
+[whispers, slowly] Dann flackert das Licht ein letztes Mal auf.
+[long pause]
+[calm, low voice] Rennst du im Dunkeln an ihm vorbei?
+[short pause]
+Oder drückst du weiter?
+[long pause]
+[ominous] Teil zwei. [short pause] Heute Nacht.

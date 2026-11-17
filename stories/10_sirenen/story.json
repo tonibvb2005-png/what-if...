@@ -1,0 +1,280 @@
+{
+ "series": "NACHTGESCHICHTEN",
+ "episode": "#10",
+ "title": "SIRENEN",
+ "part": 1,
+ "set": "cellar",
+ "ambience": "",
+ "noBasket": true,
+ "steelDoor": true,
+ "endArt": "switch",
+ "question": "TÜR oder HANDY? Schreib's in die Kommentare.",
+ "shots": [
+  {
+   "scene": "lock",
+   "clock": "1:47",
+   "notif": {
+    "from": "⚠ NOTFALLWARNUNG",
+    "text": "Suchen Sie sofort Schutz in Kellern oder innenliegenden Räumen."
+   },
+   "lines": [
+    {
+     "text": "Stell dir vor, mitten in der Nacht heulen in deiner Stadt alle Sirenen.",
+     "hl": {
+      "Sirenen": "r"
+     },
+     "sfx": [
+      [
+       "airraid",
+       "start"
+      ]
+     ]
+    },
+    {
+     "text": "Auf deinem Handy: eine Notfallwarnung.",
+     "hl": {
+      "Notfallwarnung": "r"
+     },
+     "sfx": [
+      [
+       "alert",
+       "start"
+      ]
+     ],
+     "pause": 0.4
+    }
+   ]
+  },
+  {
+   "scene": "chat",
+   "clock": "1:47",
+   "contact": "Mama",
+   "lines": [
+    {
+     "text": "Mama schreibt: Geh in den Keller. Jetzt.",
+     "msg": {
+      "from": "them",
+      "text": "Geh in den Keller. Jetzt.",
+      "atWord": 2
+     },
+     "hl": {
+      "Keller": "y"
+     },
+     "pause": 0.4
+    }
+   ]
+  },
+  {
+   "scene": "cellar_wide",
+   "clock": "1:49",
+   "place": "SCHUTZRAUM",
+   "eyes": "wide",
+   "lines": [
+    {
+     "text": "Du rennst runter in den Schutzraum.",
+     "hl": {
+      "Schutzraum": "y"
+     },
+     "sfx": [
+      [
+       "airraid_muff",
+       "start"
+      ]
+     ]
+    },
+    {
+     "text": "Niemand ist hier. Nur du.",
+     "hl": {
+      "Niemand": "r"
+     },
+     "pause": 0.4
+    }
+   ]
+  },
+  {
+   "scene": "cellar_door",
+   "clock": "1:50",
+   "place": "SCHUTZRAUM",
+   "lines": [
+    {
+     "text": "Hinter dir fällt die Stahltür ins Schloss.",
+     "hl": {
+      "Stahltür": "y"
+     },
+     "sfx": [
+      [
+       "boom",
+       "word5"
+      ]
+     ],
+     "knocks": [
+      "word5"
+     ]
+    },
+    {
+     "text": "Oben heulen gedämpft die Sirenen.",
+     "sfx": [
+      [
+       "airraid_muff",
+       "start"
+      ]
+     ],
+     "pause": 0.8
+    }
+   ]
+  },
+  {
+   "scene": "cellar_door",
+   "clock": "1:55",
+   "place": "SCHUTZRAUM",
+   "lines": [
+    {
+     "text": "Dann klopft es. Von draußen.",
+     "hl": {
+      "klopft": "r",
+      "draußen": "r"
+     },
+     "ev": [
+      [
+       "dread",
+       "word2"
+      ]
+     ],
+     "sfx": [
+      [
+       "knockmetal",
+       "end+0.1"
+      ]
+     ],
+     "knocks": [
+      "end+0.75",
+      "end+0.95",
+      "end+1.15",
+      "end+1.6",
+      "end+1.8"
+     ],
+     "pause": 1.4
+    },
+    {
+     "text": "Lass mich rein! Ich bin's. Mama.",
+     "hl": {
+      "Mama": "y"
+     },
+     "quote": {
+      "who": "STIMME",
+      "place": "VOR DER TÜR",
+      "text": "Lass mich rein! Ich bin's. Mama."
+     },
+     "pause": 0.5
+    }
+   ]
+  },
+  {
+   "scene": "chat",
+   "clock": "1:55",
+   "contact": "Mama",
+   "lines": [
+    {
+     "text": "Im selben Moment schreibt Mama:",
+     "msg": {
+      "from": "them",
+      "text": "Bin bei Tante Ilse. Bleib im Keller. Mach niemandem auf.",
+      "atWord": 3
+     }
+    },
+    {
+     "text": "Bin bei Tante Ilse. Mach niemandem auf.",
+     "hl": {
+      "Ilse": "y",
+      "niemandem": "r"
+     },
+     "pause": 0.5
+    }
+   ]
+  },
+  {
+   "scene": "cellar_face",
+   "clock": "1:56",
+   "place": "SCHUTZRAUM",
+   "lookDir": 1,
+   "lines": [
+    {
+     "text": "Es klopft wieder.",
+     "hl": {
+      "klopft": "r"
+     },
+     "sfx": [
+      [
+       "knockmetal",
+       "end+0.1"
+      ]
+     ],
+     "pause": 0.9
+    },
+    {
+     "text": "Lauter.",
+     "hl": {
+      "Lauter": "r"
+     },
+     "sfx": [
+      [
+       "boom",
+       "start"
+      ]
+     ],
+     "pause": 0.7
+    }
+   ]
+  },
+  {
+   "scene": "choice",
+   "heading": "WEM GLAUBST DU?",
+   "left": {
+    "label": "TÜR",
+    "text": "„Lass mich rein! Ich bin's.“",
+    "icon": "🚪",
+    "sub": "STIMME VOR DER TÜR",
+    "color": "#2f7cf6"
+   },
+   "right": {
+    "label": "HANDY",
+    "contact": "Mama",
+    "text": "Bin bei Tante Ilse. Mach niemandem auf.",
+    "color": "#ff3b30"
+   },
+   "lines": [
+    {
+     "text": "Wem glaubst du?",
+     "hl": {
+      "glaubst": "y"
+     }
+    },
+    {
+     "text": "Der Stimme vor der Tür oder Mamas Nachricht?",
+     "hl": {
+      "Tür": "b",
+      "Nachricht": "r"
+     },
+     "pause": 0.5
+    }
+   ]
+  },
+  {
+   "scene": "end",
+   "sfx": [
+    [
+     "boom",
+     0.0
+    ]
+   ],
+   "lines": [
+    {
+     "text": "Teil 2. Heute Nacht.",
+     "say": "Teil zwei. Heute Nacht.",
+     "nocap": true,
+     "pause": 1.2
+    }
+   ]
+  }
+ ]
+}

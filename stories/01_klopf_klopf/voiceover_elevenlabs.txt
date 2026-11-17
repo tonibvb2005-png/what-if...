@@ -1,0 +1,34 @@
+[calm, low voice] Stell dir vor, du wachst um drei Uhr dreiunddreißig auf.
+[slowly] Dein Handy vibriert auf dem Nachttisch.
+[short pause]
+Eine Nachricht von Mama.
+[short pause]
+[softly] Bist du wach?
+Du schreibst: Ja. Was ist los?
+[short pause]
+[slowly] Ich stehe vor deiner Tür. [short pause] Mach bitte auf.
+[long pause]
+[tense] Aber Mama ist seit Dienstag mit Papa im Urlaub.
+[long pause]
+[quietly] Dann klopft es.
+[long pause]
+[whispers] Dreimal.
+[short pause]
+[nervous] Du schreibst Papa: Ist Mama bei dir?
+[calm] Ja. Sie schläft neben mir.
+[nervous] Du schreibst: Sie steht vor meiner Tür.
+[short pause]
+[urgent, quietly] Mach nicht auf.
+[long pause]
+[tense] Dann schreibt wieder Mama.
+[slowly, ominous] Papa lügt. [short pause] Mach auf.
+[long pause]
+[whispers] Und die Türklinke bewegt sich.
+[short pause]
+[slowly, frightened] Die Tür geht auf. [short pause] Nur einen Spalt.
+[long pause]
+[calm, low voice] Wem glaubst du?
+[short pause]
+Mama oder Papa?
+[long pause]
+[ominous] Teil zwei. [short pause] Heute Nacht.

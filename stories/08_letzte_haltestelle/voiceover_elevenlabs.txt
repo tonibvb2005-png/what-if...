@@ -1,0 +1,30 @@
+[calm, low voice] Stell dir vor, du nimmst den letzten Nachtbus nach Hause.
+[slowly] Du bist der einzige Fahrgast.
+[long pause]
+Um drei Uhr dreiunddreißig knackt der Lautsprecher.
+[short pause]
+[serious] Der Fahrer sagt: [flat, slowly] Bitte nicht umdrehen, bis ich anhalte.
+[long pause]
+[nervous] Du starrst nach vorne.
+[short pause]
+[quietly] Dann siehst du es. In der dunklen Scheibe.
+[short pause]
+[slowly] Dein Spiegelbild.
+[short pause]
+[whispers, frightened] Und direkt hinter dir: [short pause] noch jemand.
+[long pause]
+[tense] Dann springt die Anzeige um.
+[slowly] Kein Halt mehr. [short pause] Nur noch: [whispers] Dreh dich nicht um.
+[long pause]
+[nervous] Du schaust nach vorne zum Fahrer.
+[frightened] Der Fahrersitz ist leer.
+[short pause]
+[slowly] Aber das Lenkrad dreht sich.
+[long pause]
+[breathing heavily] [whispers] Und hinter dir atmet jemand.
+[long pause]
+[calm, low voice] Drehst du dich um?
+[short pause]
+Oder bleibst du sitzen, bis er anhält?
+[long pause]
+[ominous] Teil zwei. [short pause] Heute Nacht.
