@@ -59,3 +59,20 @@ Benötigt Node.js, ffmpeg und Playwright (Chromium).
 - Schokolade: ca. 10–11 kg pro Kopf und Jahr
 - Medianlohn ca. 6.800 CHF brutto/Monat; Kaffee im Café ca. 4,50–5 CHF
 - Lebenserwartung ca. 84 Jahre
+
+## Stimme synchronisieren (nach ElevenLabs)
+
+1. MP3 in `audio/<land>_original.mp3` ablegen
+2. Wortzeiten erkennen (faster-whisper, läuft lokal):
+   ```bash
+   python3 -m venv wenv && ./wenv/bin/pip install --only-binary=:all: faster-whisper
+   ffmpeg -i audio/schweiz_original.mp3 -ac 1 -ar 16000 -f f32le voice.f32
+   ./wenv/bin/python src/tools/transcribe.py voice.f32 words.json
+   ```
+3. Mit dem Skript abgleichen → `src/episodes/<land>.times.js` (siehe `src/tools/align.py`)
+4. Video rendern und Ton darunterlegen:
+   ```bash
+   EP=schweiz OUT=silent.mp4 node render.js video
+   ffmpeg -i silent.mp4 -i voice.wav -map 0:v -map 1:a -c:v copy -c:a aac out.mp4
+   ```
+Für Tag 1 wurden zwei Pausen eingefügt (1,3 s nach „geboren?“ für das Roulette, 1,1 s nach „Mein Gesicht“ für den Zoom).
