@@ -437,6 +437,20 @@ def A_shop(d):
     tt = t_(d); return (np.sin(2 * np.pi * 100 * tt) * 0.008 + np.sin(2 * np.pi * 50 * tt) * 0.006 + lp(noise(d), 300) * 0.035 + hp(noise(d), 4000) * 0.004).astype(np.float32)
 def A_shop_quiet(d): return A_shop(d) * 0.5
 
+# ---------------------------------------------------------------- Folge 5: Skinwalker
+def R_carknock(): return reverb(rec("0618", 0.0, 1.3, 0.85, 0.002, 0.25), 0.6, 0.15)   # Klopfen an Autoscheibe
+def R_lock():     return rec("0190", 0.0, 0.45, 0.6, 0.002, 0.1)                       # Zentralverriegelung
+def R_start():    return rec("0189", 0.0, 3.6, 0.6, 0.01, 0.8)                        # Motor springt an
+def R_stall():    # Leerlauf, der stotternd ausgeht
+    x = rec("0189", 6.0, 2.6, 0.6, 0.01, 0.01); n = len(x); out = []
+    for i in range(8):
+        c = x[i * n // 8:(i + 1) * n // 8]; r = 1 - 0.08 * i
+        idx = np.arange(0, len(c) - 1, r); y = np.interp(idx, np.arange(len(c)), c).astype(np.float32) * (1 - i / 9)
+        if i >= 5 and i % 2: y *= 0.2
+        out.append(y)
+    y = np.concatenate(out); return norm(y * env(len(y), 0.01, 0.6), 0.55)
+def R_howl():     return norm(reverb(lp(_pitch(rec("2953", 0.3, 3.2, 0.9, 0.2, 0.8), 0.72), 1800), 2.8, 0.6, 0.06), 0.3)
+
 SFX = {k[2:]: v for k, v in globals().items() if k.startswith("S_")}
 SFX.update({k[2:]: v for k, v in globals().items() if k.startswith("R_")})
 
@@ -523,6 +537,12 @@ def voice(shot, k, seg):
             if seg["v"] == "kollegin":
                 x = ffx(x, SIL.format(d=0.25) + ",atempo=1.05,highpass=f=90")
                 return norm(x, 0.82), len(x) / SR
+            if seg["v"] == "papaout":  # nachgemachte Stimme draussen: hohl, etwas zu langsam
+                x = ffx(x, SIL.format(d=0.3) + ",asetrate=44100*0.93,aresample=44100,atempo=0.98,highpass=f=180,lowpass=f=3800")
+                return norm(reverb(x, 1.8, 0.5, 0.04), 0.7), len(x) / SR
+            if seg["v"] == "papa":
+                x = ffx(x, SIL.format(d=0.25) + ",atempo=1.0,highpass=f=90")
+                return norm(x, 0.8), len(x) / SR
             if seg["v"] == "opa":
                 x = ffx(x, SIL.format(d=0.25) + ",asetrate=44100*0.96,aresample=44100,atempo=1.1,highpass=f=120,lowpass=f=5000")
                 return norm(reverb(x, 1.2, 0.35), 0.72), len(x) / SR

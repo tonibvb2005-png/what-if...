@@ -374,3 +374,88 @@ export function mia(view = 'front', expr = 'neutral', cam = false, pal = null) {
 }
 
 export const colleague = (view = 'front', expr = 'neutral') => mia(view, expr, false, ['#c0392b', '#962d22', '#2b1d16']);
+
+// ------------------------------------------------------------- Folge 5: Papa, Skinwalker
+const PSK = '#efc49a', PHAIR = '#3b2a1f', SHIRT = '#2f5d8a', SHIRT2 = '#244a70';
+function papaHead(g, cx, cy, expr) {
+  P(g, circ(cx - 168, cy + 10, 32), PSK, 9, 0); P(g, circ(cx + 168, cy + 10, 32), PSK, 9, 0);
+  P(g, circ(cx, cy, 172), PSK, 11);
+  // Bartschatten
+  g.save(); g.beginPath(); g.arc(cx, cy, 166, 0, 7); g.clip(); g.fillStyle = 'rgba(70,45,30,.28)'; g.beginPath(); g.ellipse(cx, cy + 150, 150, 90, 0, 0, 7); g.fill(); g.restore();
+  // kurze Haare, voller Ansatz
+  P(g, g => { g.moveTo(cx - 176, cy + 10); g.bezierCurveTo(cx - 200, cy - 230, cx + 200, cy - 230, cx + 176, cy + 10); g.lineTo(cx + 150, cy - 60); g.quadraticCurveTo(cx + 40, cy - 110, cx - 30, cy - 80); g.quadraticCurveTo(cx - 110, cy - 100, cx - 150, cy - 60); g.closePath(); }, PHAIR, 11, 0.1);
+  line(g, [[cx - 92, cy - 18], [cx - 34, cy - 24]], 12, PHAIR); line(g, [[cx + 34, cy - 24], [cx + 92, cy - 18]], 12, PHAIR);
+  if (expr === 'eyeshine') {
+    for (const s of [-1, 1]) { const x = cx + s * 60, y = cy + 30, gr = g.createRadialGradient(x, y, 1, x, y, 46); gr.addColorStop(0, '#fff'); gr.addColorStop(0.35, 'rgba(255,230,140,1)'); gr.addColorStop(1, 'rgba(255,190,60,0)'); g.fillStyle = gr; g.beginPath(); g.arc(x, y, 46, 0, 7); g.fill(); }
+  } else if (expr === 'scared') {
+    for (const s of [-1, 1]) { P(g, circ(cx + s * 60, cy + 30, 26), '#fff', 6, 0); P(g, circ(cx + s * 58, cy + 32, 9), OL, 0, 0); }
+  } else for (const s of [-1, 1]) P(g, ell(cx + s * 60, cy + 30, 12, 15), OL, 0, 0);
+  if (expr === 'wide' || expr === 'eyeshine') {
+    P(g, g => { g.moveTo(cx - 128, cy + 82); g.quadraticCurveTo(cx, cy + 190, cx + 128, cy + 82); g.quadraticCurveTo(cx, cy + 128, cx - 128, cy + 82); }, '#fbf7ee', 7, 0);
+    g.strokeStyle = OL; g.lineWidth = 4; for (let i = -4; i <= 4; i++) { g.beginPath(); g.moveTo(cx + i * 25, cy + 100 - Math.abs(i) * 2); g.lineTo(cx + i * 25, cy + 134 - Math.abs(i) * 6); g.stroke(); }
+  } else if (expr === 'scared') { line(g, [[cx - 30, cy + 112], [cx + 30, cy + 112]], 8); }
+  else curve(g, [cx - 30, cy + 108], [cx, cy + 118], [cx + 30, cy + 108], 8);
+}
+export function papa(view = 'front', expr = 'neutral') {
+  const c = cv2(512, 1024), g = c.getContext('2d');
+  P(g, ell(214, 988, 44, 20), '#2a211d', 8, 0); P(g, ell(298, 988, 44, 20), '#2a211d', 8, 0);
+  P(g, rr(184, 716, 62, 266, 18), '#3b3f4a'); P(g, rr(266, 716, 62, 266, 18), '#3b3f4a');
+  P(g, rr(128, 462, 256, 300, 60), SHIRT);
+  g.strokeStyle = 'rgba(255,255,255,.14)'; g.lineWidth = 10; for (let x = 150; x < 380; x += 40) { g.beginPath(); g.moveTo(x, 470); g.lineTo(x, 755); g.stroke(); }
+  g.strokeStyle = 'rgba(0,0,0,.18)'; for (let y = 490; y < 755; y += 40) { g.beginPath(); g.moveTo(132, y); g.lineTo(380, y); g.stroke(); }
+  if (view === 'front') { P(g, g => { g.moveTo(206, 466); g.lineTo(256, 540); g.lineTo(306, 466); g.closePath(); }, PSK, 6, 0); line(g, [[256, 540], [256, 750]], 5); }
+  P(g, rr(82, 482, 64, 236, 30), SHIRT2); P(g, rr(366, 482, 64, 236, 30), SHIRT2);
+  P(g, circ(114, 728, 31), PSK, 8, 0); P(g, circ(398, 728, 31), PSK, 8, 0);
+  if (view === 'front') papaHead(g, 256, 290, expr);
+  else { P(g, circ(88, 300, 32), PSK, 9, 0); P(g, circ(424, 300, 32), PSK, 9, 0); P(g, circ(256, 290, 172), PHAIR, 11, 0.1); }
+  return c;
+}
+// Junge, dem Papa von der Seite den Mund zuhaelt
+export function boyHushed() {
+  const c = cv2(512, 1024), g = c.getContext('2d');
+  g.drawImage(boy('front', 'scared_sweat'), 0, 0, 512, 1024);
+  P(g, rr(330, 520, 200, 70, 34), SHIRT2, 9);                               // Arm von rechts
+  P(g, g => g.roundRect(196, 372, 170, 96, 44), PSK, 9);                      // Hand ueber dem Mund
+  for (let i = 0; i < 3; i++) line(g, [[220 + i * 34, 392], [220 + i * 34, 450]], 5, 'rgba(28,21,18,.5)');
+  return c;
+}
+const SKF = '#6f6257', SKF2 = '#4c4038', BONE = '#e3d8c2';
+function skinHead(g, cx, cy, s = 1, eyes = true) {
+  // Kojoten-Fell mit Ohren, knochige Schnauze
+  P(g, g => { g.moveTo(cx - 70 * s, cy + 40 * s); g.lineTo(cx - 92 * s, cy - 110 * s); g.lineTo(cx - 30 * s, cy - 50 * s); g.lineTo(cx + 30 * s, cy - 50 * s); g.lineTo(cx + 92 * s, cy - 110 * s); g.lineTo(cx + 70 * s, cy + 40 * s); g.quadraticCurveTo(cx, cy + 90 * s, cx - 70 * s, cy + 40 * s); }, SKF2, 9 * s, 0.1);
+  P(g, g => { g.moveTo(cx - 46 * s, cy - 10 * s); g.quadraticCurveTo(cx, cy - 30 * s, cx + 46 * s, cy - 10 * s); g.lineTo(cx + 22 * s, cy + 110 * s); g.quadraticCurveTo(cx, cy + 124 * s, cx - 22 * s, cy + 110 * s); g.closePath(); }, BONE, 8 * s, 0.12);
+  P(g, ell(cx, cy + 104 * s, 12 * s, 9 * s), OL, 0, 0);
+  if (eyes) glowEyes(g, [[cx - 26 * s, cy + 22 * s], [cx + 26 * s, cy + 22 * s]], 9 * s, '255,225,140');
+  else for (const k of [-1, 1]) P(g, ell(cx + k * 26 * s, cy + 22 * s, 12 * s, 9 * s), '#120c0a', 0, 0);
+}
+export function skinStand(run = false) {
+  const c = cv2(512, 1024), g = c.getContext('2d');
+  // Beine (lang, Kniegelenke nach hinten)
+  if (run) { line(g, [[236, 600], [170, 780], [200, 1000]], 30, SKF); line(g, [[276, 600], [350, 760], [400, 960]], 30, SKF); }
+  else { line(g, [[230, 600], [214, 800], [222, 1000]], 30, SKF); line(g, [[282, 600], [298, 800], [290, 1000]], 30, SKF); }
+  // Rumpf, abgemagert
+  P(g, g => { g.moveTo(196, 300); g.quadraticCurveTo(256, 280, 316, 300); g.lineTo(300, 620); g.quadraticCurveTo(256, 640, 212, 620); g.closePath(); }, SKF, 10, 0.12);
+  g.strokeStyle = 'rgba(30,20,14,.55)'; g.lineWidth = 6; for (let y = 360; y < 520; y += 28) { g.beginPath(); g.moveTo(214, y); g.quadraticCurveTo(256, y + 16, 298, y); g.stroke(); }
+  // Fell ueber den Schultern
+  P(g, g => { g.moveTo(170, 300); g.quadraticCurveTo(256, 230, 342, 300); g.lineTo(330, 420); g.lineTo(306, 380); g.lineTo(286, 430); g.lineTo(256, 386); g.lineTo(226, 430); g.lineTo(206, 380); g.lineTo(182, 420); g.closePath(); }, SKF2, 9, 0.1);
+  // Arme, viel zu lang, Krallen
+  const arm = (pts) => { line(g, pts, 24, SKF); const [x, y] = pts[pts.length - 1]; for (const d of [-14, 0, 14]) line(g, [[x, y], [x + d, y + 46]], 6, BONE); };
+  if (run) { arm([[186, 320], [110, 520], [160, 700]]); arm([[326, 320], [420, 480], [460, 640]]); }
+  else { arm([[186, 320], [150, 560], [140, 840]]); arm([[326, 320], [362, 560], [372, 840]]); }
+  skinHead(g, 256, 190);
+  return c;
+}
+export function skinRun(phase = 0) { // auf allen vieren, Blick nach rechts
+  const c = cv2(1024, 512), g = c.getContext('2d'), a = Math.sin(phase), b = Math.cos(phase);
+  line(g, [[330, 300], [260 + a * 60, 400], [230 + a * 90, 500]], 26, SKF2);
+  line(g, [[690, 300], [640 - a * 60, 400], [690 - a * 90, 500]], 26, SKF2);
+  P(g, g => { g.moveTo(300, 250); g.quadraticCurveTo(520, 190 + b * 10, 740, 240); g.quadraticCurveTo(760, 330, 700, 330); g.quadraticCurveTo(520, 300, 330, 330); g.quadraticCurveTo(270, 310, 300, 250); }, SKF, 10, 0.12);
+  g.strokeStyle = 'rgba(30,20,14,.55)'; g.lineWidth = 6; for (let x = 520; x < 700; x += 30) { g.beginPath(); g.moveTo(x, 255); g.quadraticCurveTo(x + 10, 290, x, 318); g.stroke(); }
+  P(g, g => { g.moveTo(560, 230); g.quadraticCurveTo(680, 190, 790, 240); g.lineTo(760, 300); g.lineTo(730, 270); g.lineTo(700, 300); g.lineTo(670, 262); g.lineTo(630, 290); g.closePath(); }, SKF2, 9, 0.1);
+  line(g, [[350, 300], [400 - a * 70, 410], [360 - a * 100, 500]], 28, SKF);
+  line(g, [[710, 290], [760 + a * 70, 400], [800 + a * 90, 500]], 28, SKF);
+  line(g, [[300, 260], [220, 230], [170, 250]], 10, SKF2);
+  g.save(); g.translate(860, 250); g.rotate(-Math.PI / 2 + 0.25); skinHead(g, 0, 0, 0.9); g.restore();
+  return c;
+}
+MONSTERS['SKINWALKER'] = () => { const c = cv2(512, 1024), g = c.getContext('2d'); g.drawImage(skinStand(false), 0, 0, 512, 1024); return c; };

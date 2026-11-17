@@ -1,0 +1,7 @@
+<!doctype html><html><body style="margin:0;background:#556"><canvas id=c width=2400 height=1100></canvas>
+<script type=module>
+import * as C from '../src/chars.js';
+const g=document.getElementById('c').getContext('2d');
+[C.papa('front','neutral'),C.papa('front','wide'),C.papa('front','eyeshine'),C.boyHushed(),C.skinStand(false),C.skinStand(true)].forEach((c,i)=>g.drawImage(c,i*370,0,360,720));
+g.drawImage(C.skinRun(0),0,740,700,350);g.drawImage(C.skinRun(1.6),720,740,700,350);g.drawImage(C.papa('back'),1500,740,170,340); window.done=true;
+</script></body></html>

@@ -18,3 +18,8 @@ frei nutzbar, auch kommerziell, ohne Namensnennung. https://bigsoundbank.com/lic
 | 3002, 0097 | Zikaden, Landschaft → Tag-Atmosphäre |
 | 0110 | Landschaft bei Nacht → Nacht-Atmosphäre |
 | 0222 | erwachende Vögel → Morgendämmerung |
+| 0618 | Klopfen an Autoscheibe (Folge 5) |
+| 0190 | Zentralverriegelung (Folge 5) |
+| 0189 | Auto startet / Leerlauf → Motor springt an, Motor stirbt ab (Folge 5) |
+| 0872, 0557 | Motorstart / Auto innen (heruntergeladen, Reserve) |
+| 2953 | Hunderudel → tief gepitchtes Heulen in der Ferne (Folge 5) |
