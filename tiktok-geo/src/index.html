@@ -1,0 +1,325 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#000}canvas{display:block}</style>
+<script src="d3-array.min.js"></script>
+<script src="d3-geo.min.js"></script>
+<script src="topojson-client.min.js"></script>
+<script src="data.js"></script>
+</head><body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script>
+const W = 1080, H = 1920, DURATION = 33;
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const HANDLE = '@geo.fakten';
+
+// ---------- palette ----------
+const C = {
+  bg1: '#070b1f', bg2: '#13214d', ocean: '#0f2a5c', oceanEdge: '#3a6fd8',
+  land: '#2a3b66', landStroke: '#0b1430', yellow: '#ffd23f', white: '#ffffff',
+  pink: '#ff4f8b', cyan: '#38e1ff', green: '#5cf29a', orange: '#ff8c42'
+};
+
+// ---------- data ----------
+const countries = topojson.feature(WORLD, WORLD.objects.countries).features;
+const byId = {}; countries.forEach(f => { if (f.id) byId[f.id] = f; });
+const AFRICA_IDS = ['012','024','072','108','120','140','148','178','180','204','226','231','232','262','266','270','288','324','384','404','426','430','434','450','454','466','478','504','508','516','562','566','624','646','686','694','706','710','716','728','729','732','748','800','818','834','854','894','768','788','174','132','678','480','690'];
+const africaSet = new Set(AFRICA_IDS);
+const africa = countries.filter(f => africaSet.has(f.id) || f.properties.name === 'Somaliland');
+const sphere = { type: 'Sphere' };
+
+function largestPolygon(f) {
+  if (f.geometry.type === 'Polygon') return f;
+  let best = null, ba = -1;
+  for (const p of f.geometry.coordinates) {
+    const g = { type: 'Polygon', coordinates: p }; const a = d3.geoArea(g);
+    if (a > ba) { ba = a; best = g; }
+  }
+  return { type: 'Feature', geometry: best };
+}
+const USA = largestPolygon(byId['840']);   // contiguous USA for the visual
+const CHN = largestPolygon(byId['156']);
+const IND = largestPolygon(byId['356']);
+
+// ---------- helpers ----------
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lerp = (a, b, t) => a + (b - a) * t;
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const easeOut = t => 1 - Math.pow(1 - t, 3);
+const easeInOut = t => t < .5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const easeBack = t => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(t - 1, 3) + c1 * Math.pow(t - 1, 2); };
+
+// deterministic stars
+const stars = []; { let s = 7; const r = () => (s = (s * 16807) % 2147483647) / 2147483647;
+  for (let i = 0; i < 160; i++) stars.push([r() * W, r() * H, r() * 2.2 + .4, r() * 6.28]); }
+
+function background(t) {
+  const g = ctx.createLinearGradient(0, 0, 0, H);
+  g.addColorStop(0, C.bg1); g.addColorStop(1, C.bg2);
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  for (const [x, y, r, p] of stars) {
+    ctx.globalAlpha = .25 + .35 * (0.5 + 0.5 * Math.sin(t * 2 + p));
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+}
+
+// segments: [[text, color], ...] drawn centered on one line
+function textLine(segs, x, y, size, opts = {}) {
+  const p = opts.p === undefined ? 1 : opts.p;
+  if (p <= 0) return;
+  const weight = opts.weight || 900;
+  ctx.save();
+  ctx.font = `${weight} ${size}px Montserrat`;
+  ctx.textBaseline = 'middle';
+  const widths = segs.map(s => ctx.measureText(s[0]).width);
+  const total = widths.reduce((a, b) => a + b, 0);
+  const s = opts.noPop ? 1 : easeBack(clamp(p));
+  ctx.translate(x, y + (1 - clamp(p)) * 40); ctx.scale(s, s);
+  ctx.globalAlpha = clamp(p * 1.5);
+  let cx = -total / 2;
+  segs.forEach((seg, i) => {
+    ctx.lineJoin = 'round'; ctx.lineWidth = size * 0.16; ctx.strokeStyle = 'rgba(0,0,0,0.85)';
+    ctx.strokeText(seg[0], cx, 0);
+    ctx.fillStyle = seg[1] || C.white; ctx.fillText(seg[0], cx, 0);
+    cx += widths[i];
+  });
+  ctx.restore();
+}
+
+function pill(label, x, y, p, color = C.pink) {
+  if (p <= 0) return;
+  ctx.save(); ctx.font = '900 44px Montserrat'; ctx.textBaseline = 'middle';
+  const w = ctx.measureText(label).width + 64, h = 84;
+  const s = easeBack(clamp(p)); ctx.translate(x, y); ctx.scale(s, s); ctx.globalAlpha = clamp(p * 2);
+  ctx.fillStyle = color; ctx.beginPath(); ctx.roundRect(-w / 2, -h / 2, w, h, 42); ctx.fill();
+  ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.fillText(label, 0, 3);
+  ctx.restore();
+}
+
+function label(text, x, y, color, p, size = 38) {
+  if (p <= 0) return;
+  ctx.save(); ctx.globalAlpha = clamp(p * 2);
+  ctx.font = `800 ${size}px Montserrat`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.lineJoin = 'round'; ctx.lineWidth = 9; ctx.strokeStyle = 'rgba(0,0,0,.85)';
+  const yy = y + (1 - easeOut(clamp(p))) * 20;
+  ctx.strokeText(text, x, yy); ctx.fillStyle = color; ctx.fillText(text, x, yy);
+  ctx.restore();
+}
+
+function drawGlobe(proj, highlights = {}, opts = {}) {
+  const path = d3.geoPath(proj, ctx);
+  // glow
+  const [cx, cy] = proj.translate(), r = proj.scale();
+  const glow = ctx.createRadialGradient(cx, cy, r * 0.9, cx, cy, r * 1.25);
+  glow.addColorStop(0, 'rgba(56,140,255,0.35)'); glow.addColorStop(1, 'rgba(56,140,255,0)');
+  ctx.fillStyle = glow; ctx.beginPath(); ctx.arc(cx, cy, r * 1.25, 0, 7); ctx.fill();
+  const og = ctx.createRadialGradient(cx - r * .35, cy - r * .35, r * .1, cx, cy, r);
+  og.addColorStop(0, '#1d4b9e'); og.addColorStop(1, '#0a1d45');
+  ctx.beginPath(); path(sphere); ctx.fillStyle = og; ctx.fill();
+  for (const f of countries) {
+    ctx.beginPath(); path(f);
+    ctx.fillStyle = highlights[f.id] || (opts.dim ? '#223154' : C.land); ctx.fill();
+    ctx.strokeStyle = C.landStroke; ctx.lineWidth = 1.2; ctx.stroke();
+  }
+  ctx.beginPath(); path(sphere); ctx.strokeStyle = 'rgba(120,180,255,0.6)'; ctx.lineWidth = 3; ctx.stroke();
+}
+
+function progressBar(t) {
+  ctx.fillStyle = 'rgba(255,255,255,0.15)'; ctx.fillRect(60, 70, W - 120, 10);
+  ctx.fillStyle = C.yellow; ctx.fillRect(60, 70, (W - 120) * clamp(t / DURATION), 10);
+  ctx.font = '700 34px Montserrat'; ctx.fillStyle = 'rgba(255,255,255,0.8)';
+  ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.fillText('🌍 ' + HANDLE, 60, 130);
+  ctx.textAlign = 'start';
+}
+
+// ---------- scenes ----------
+const SCENES = [
+  { a: 0,    b: 3.6,  fn: sceneHook },
+  { a: 3.6,  b: 12.4, fn: sceneAfrica },
+  { a: 12.4, b: 21.4, fn: sceneLandlocked },
+  { a: 21.4, b: 29.6, fn: sceneFrance },
+  { a: 29.6, b: 33,   fn: sceneOutro },
+];
+
+function sceneHook(u) {
+  const r = 400 * easeOut(prog(u, 0, 1));
+  const proj = d3.geoOrthographic().scale(Math.max(r, 1)).translate([W / 2, 1180]).rotate([-u * 35 + 20, -15]).clipAngle(90);
+  drawGlobe(proj);
+  textLine([['3 GEO-FAKTEN', C.yellow]], W / 2, 470, 112, { p: prog(u, 0.15, 0.6) });
+  textLine([['die kaum jemand', C.white]], W / 2, 590, 70, { p: prog(u, 0.5, 0.9) });
+  textLine([['kennt', C.white], [' 🤯', C.white]], W / 2, 680, 70, { p: prog(u, 0.7, 1.1) });
+}
+
+function sceneAfrica(u) {
+  // Equal-area projection centred on Africa → sizes are honest
+  const S = 820, center = [W / 2, 1180];
+  const proj = d3.geoAzimuthalEqualArea().rotate([-19, -2]).scale(S).translate(center).clipAngle(100);
+  const path = d3.geoPath(proj, ctx);
+  const zoom = easeOut(prog(u, 0, 0.8));
+  ctx.save(); ctx.translate(center[0], center[1]); ctx.scale(0.6 + 0.4 * zoom, 0.6 + 0.4 * zoom); ctx.translate(-center[0], -center[1]);
+  ctx.globalAlpha = zoom;
+  // other land faint
+  for (const f of countries) { if (africaSet.has(f.id)) continue; ctx.beginPath(); path(f); ctx.fillStyle = '#1b2850'; ctx.fill(); }
+  ctx.beginPath(); africa.forEach(f => path(f)); ctx.fillStyle = C.orange; ctx.fill();
+  ctx.strokeStyle = 'rgba(0,0,0,0.25)'; ctx.lineWidth = 1.5; africa.forEach(f => { ctx.beginPath(); path(f); ctx.stroke(); });
+  ctx.restore(); ctx.globalAlpha = 1;
+
+  pill('FAKT #1', W / 2, 330, prog(u, 0.1, 0.5));
+  textLine([['Afrika ist ', C.white], ['RIESIG', C.orange]], W / 2, 460, 92, { p: prog(u, 0.3, 0.8) });
+
+  // countries dropping in, each with own equal-area projection (same scale)
+  const drops = [
+    { f: USA, c: [-98.5, 39.5], to: [4.5, 22], g: 0, col: C.cyan,   name: 'USA',    t0: 1.6 },
+    { f: CHN, c: [103, 36],     to: [37, 5], g: 90, col: C.pink,   name: 'CHINA',  t0: 2.8 },
+    { f: IND, c: [79, 22],      to: [20, -20], g: 0, col: C.green, name: 'INDIEN', t0: 4.0 },
+  ];
+  for (const d of drops) {
+    const p = prog(u, d.t0, d.t0 + 0.7); if (p <= 0) continue;
+    const target = proj(d.to);
+    const e = easeBack(p);
+    const tx = target[0], ty = lerp(target[1] - 700, target[1], e);
+    const cp = d3.geoAzimuthalEqualArea().rotate([-d.c[0], -d.c[1], d.g]).scale(S).translate([tx, ty]);
+    const pth = d3.geoPath(cp, ctx);
+    ctx.globalAlpha = clamp(p * 2) * 0.88;
+    ctx.beginPath(); pth(d.f); ctx.fillStyle = d.col; ctx.fill();
+    ctx.globalAlpha = 1; ctx.lineWidth = 4; ctx.strokeStyle = '#fff'; ctx.stroke();
+    label(d.name, tx, ty, '#fff', prog(u, d.t0 + 0.4, d.t0 + 0.8), 44);
+  }
+  textLine([['…und es ist noch ', C.white], ['Platz übrig!', C.yellow]], W / 2, 570, 56, { p: prog(u, 5.3, 5.8) });
+
+  // area comparison
+  const pb = prog(u, 6.0, 6.6);
+  if (pb > 0) {
+    ctx.save(); ctx.globalAlpha = clamp(pb * 2);
+    const y0 = 1640, bw = 860, x0 = (W - bw) / 2;
+    ctx.fillStyle = 'rgba(0,0,0,0.55)'; ctx.beginPath(); ctx.roundRect(x0 - 30, y0 - 70, bw + 60, 230, 30); ctx.fill();
+    ctx.font = '800 34px Montserrat'; ctx.textBaseline = 'middle'; ctx.fillStyle = '#fff';
+    ctx.fillText('Afrika', x0, y0 - 30); ctx.textAlign = 'right'; ctx.fillText('30,4 Mio km²', x0 + bw, y0 - 30); ctx.textAlign = 'left';
+    ctx.fillStyle = C.orange; ctx.fillRect(x0, y0, bw * easeOut(pb), 26);
+    ctx.fillStyle = '#fff'; ctx.fillText('USA + China + Indien', x0, y0 + 70); ctx.textAlign = 'right'; ctx.fillText('22,7 Mio km²', x0 + bw, y0 + 70); ctx.textAlign = 'left';
+    const segs = [[9.8, C.cyan], [9.6, C.pink], [3.3, C.green]]; let xx = x0;
+    for (const [v, col] of segs) { const w = bw * v / 30.4 * easeOut(prog(u, 6.3, 7.0)); ctx.fillStyle = col; ctx.fillRect(xx, y0 + 100, w, 26); xx += w; }
+    ctx.restore();
+  }
+}
+
+function sceneLandlocked(u) {
+  // rotate from Uzbekistan to Liechtenstein
+  const k = easeInOut(prog(u, 4.6, 5.8));
+  const uz = [64, 41], li = [9.55, 47.15];
+  const rot = [-lerp(uz[0], li[0], k), -lerp(uz[1], li[1], k)];
+  const z1 = lerp(650, 1500, easeOut(prog(u, 0, 1)));
+  const scale = k <= 0 ? z1 : lerp(1500, 7000, easeInOut(prog(u, 4.6, 6.0))) * (1 - Math.sin(k * Math.PI) * 0.55);
+  const proj = d3.geoOrthographic().scale(scale).translate([W / 2, 1180]).rotate(rot).clipAngle(90);
+  const pulse = 0.5 + 0.5 * Math.sin(u * 6);
+  const hl = {
+    '860': C.yellow,
+    '398': C.cyan, '417': C.cyan, '762': C.cyan, '004': C.cyan, '795': C.cyan,
+    '438': C.yellow, '756': C.cyan, '040': C.cyan,
+  };
+  drawGlobe(proj, hl, { dim: true });
+
+  pill('FAKT #2', W / 2, 330, prog(u, 0.1, 0.5), C.cyan);
+  textLine([['Nur ', C.white], ['2 Länder', C.yellow], [' sind', C.white]], W / 2, 450, 78, { p: prog(u, 0.3, 0.8) });
+  textLine([['DOPPELT', C.cyan], [' ohne Meer', C.white]], W / 2, 550, 78, { p: prog(u, 0.6, 1.1) });
+  textLine([['Kein Meerzugang – und auch', C.white]], W / 2, 650, 42, { p: prog(u, 1.4, 1.8), weight: 700 });
+  textLine([['kein Nachbar hat einen!', C.white]], W / 2, 705, 42, { p: prog(u, 1.6, 2.0), weight: 700 });
+
+  if (k < 0.3) {
+    const a = 1 - k / 0.3;
+    const p = proj(uz); ctx.globalAlpha = a;
+    label('USBEKISTAN', p[0], p[1] - 10, C.yellow, prog(u, 1.0, 1.5), 48);
+    const nb = [['Kasachstan', [68, 48.5]], ['Turkmenistan', [59, 38.5]], ['Afghanistan', [66, 33.5]], ['Kirgistan', [74.5, 41.5]], ['Tadschik.', [71, 38.3]]];
+    nb.forEach(([n, ll], i) => { const q = proj(ll); label(n, q[0], q[1], '#fff', prog(u, 2.2 + i * 0.25, 2.6 + i * 0.25), 30); });
+    ctx.globalAlpha = 1;
+  }
+  if (k > 0.85) {
+    const p = proj(li), a = prog(u, 5.6, 6.0);
+    ctx.save(); ctx.globalAlpha = a;
+    for (let i = 0; i < 3; i++) {
+      const ph = ((u * 1.2 + i / 3) % 1);
+      ctx.beginPath(); ctx.arc(p[0], p[1], 20 + ph * 110, 0, 7); ctx.strokeStyle = `rgba(255,210,63,${1 - ph})`; ctx.lineWidth = 6; ctx.stroke();
+    }
+    ctx.restore();
+    label('LIECHTENSTEIN', p[0], p[1] - 150, C.yellow, prog(u, 5.8, 6.3), 52);
+    const s = proj([8.2, 46.7]), o = proj([13.6, 47.6]);
+    label('Schweiz', s[0], s[1] + 60, '#fff', prog(u, 6.2, 6.6), 34);
+    label('Österreich', o[0], o[1], '#fff', prog(u, 6.4, 6.8), 34);
+  }
+}
+
+const FR = [
+  ['−10', -17.6, -149.4, -50, 0], ['−9:30', -9.0, -139.5, 0, -42], ['−9', -23.1, -134.9, 30, 40], ['−8', 10.3, -109.2, 0, -42],
+  ['−4', 16.2, -61.5, 0, -42], ['−3', 4.0, -53.0, 30, 38], ['+1', 46.6, 2.4, 0, -42], ['+3', -12.8, 45.2, -44, 0],
+  ['+4', -21.1, 55.5, 44, 10], ['+5', -49.3, 69.5, 0, 40], ['+11', -21.3, 165.5, 0, -42], ['+12', -13.3, -176.2, 0, -42],
+];
+function sceneFrance(u) {
+  const proj = d3.geoNaturalEarth1().fitExtent([[10, 880], [W - 10, 1520]], sphere);
+  const path = d3.geoPath(proj, ctx);
+  const a = easeOut(prog(u, 0, 0.6)); ctx.globalAlpha = a;
+  ctx.beginPath(); path(sphere); ctx.fillStyle = '#0d2350'; ctx.fill(); ctx.strokeStyle = 'rgba(120,180,255,.5)'; ctx.lineWidth = 2; ctx.stroke();
+  // timezone stripes
+  for (let i = -12; i < 12; i += 2) {
+    ctx.beginPath(); path({ type: 'Polygon', coordinates: [[[i * 15 - 7.5, -89], [i * 15 + 7.5, -89], [i * 15 + 7.5, 89], [i * 15 - 7.5, 89], [i * 15 - 7.5, -89]].reverse()] });
+    ctx.fillStyle = 'rgba(255,255,255,0.04)'; ctx.fill();
+  }
+  for (const f of countries) { ctx.beginPath(); path(f); ctx.fillStyle = f.id === '250' && u > 3 ? '#3d7bff' : C.land; ctx.fill(); }
+  ctx.globalAlpha = 1;
+
+  pill('FAKT #3', W / 2, 330, prog(u, 0.1, 0.5), C.green);
+  if (u < 3.0) {
+  textLine([['Welches Land hat', C.white]], W / 2, 460, 70, { p: prog(u, 0.3, 0.7) });
+  textLine([['die ', C.white], ['MEISTEN', C.yellow], [' Zeitzonen?', C.white]], W / 2, 555, 70, { p: prog(u, 0.5, 0.9) });
+  textLine([['Russland? USA?', C.cyan]], W / 2, 680, 60, { p: prog(u, 1.3, 1.7) });
+  }
+  if (u > 2.9) {
+    textLine([['FRANKREICH!', '#5b95ff']], W / 2, 480, 110, { p: prog(u, 3.0, 3.4) });
+    const n = FR.filter((_, i) => u > 3.6 + i * 0.32).length;
+    textLine([[String(n), C.yellow], [' Zeitzonen', C.white]], W / 2, 620, 80, { p: prog(u, 3.5, 3.8), noPop: true });
+    textLine([['dank seiner Überseegebiete', C.white]], W / 2, 720, 42, { p: prog(u, 4.0, 4.4), weight: 700 });
+  }
+  FR.forEach(([off, lat, lon, dx, dy], i) => {
+    const p = prog(u, 3.6 + i * 0.32, 3.9 + i * 0.32); if (p <= 0) return;
+    const [x, y] = proj([lon, lat]);
+    const r = 14 * easeBack(p);
+    ctx.beginPath(); ctx.arc(x, y, r + 6, 0, 7); ctx.fillStyle = 'rgba(255,210,63,0.35)'; ctx.fill();
+    ctx.beginPath(); ctx.arc(x, y, r, 0, 7); ctx.fillStyle = C.yellow; ctx.fill();
+    ctx.lineWidth = 3; ctx.strokeStyle = '#000'; ctx.stroke();
+    label(off, x + dx, y + dy, '#fff', p, 30);
+  });
+  textLine([['Russland: 11  ·  USA: 11', 'rgba(255,255,255,0.85)']], W / 2, 1600, 44, { p: prog(u, 7.6, 8.0), weight: 800 });
+}
+
+function sceneOutro(u) {
+  const proj = d3.geoOrthographic().scale(360 * easeOut(prog(u, 0, 0.6)) + 1).translate([W / 2, 1200]).rotate([-u * 40 - 10, -20]).clipAngle(90);
+  drawGlobe(proj);
+  textLine([['Welcher Fakt hat', C.white]], W / 2, 450, 70, { p: prog(u, 0.1, 0.5) });
+  textLine([['dich überrascht?', C.yellow]], W / 2, 545, 70, { p: prog(u, 0.3, 0.7) });
+  pill('FOLGEN für mehr Geo-Fakten', W / 2, 1720, prog(u, 1.0, 1.4), C.pink);
+}
+
+window.render = function (t) {
+  background(t);
+  for (const s of SCENES) {
+    if (t >= s.a && t < s.b) {
+      const u = t - s.a;
+      ctx.save(); s.fn(u); ctx.restore();
+      // quick flash / fade at transitions
+      const fin = 1 - prog(u, 0, 0.18), fout = prog(u, s.b - s.a - 0.18, s.b - s.a);
+      const f = Math.max(s.a > 0 ? fin : 0, s.b < DURATION ? fout : 0);
+      if (f > 0) { ctx.fillStyle = `rgba(255,255,255,${f * 0.85})`; ctx.fillRect(0, 0, W, H); }
+    }
+  }
+  progressBar(t);
+};
+
+window.ready = (async () => {
+  for (const w of [600, 800, 900]) {
+    const ff = new FontFace('Montserrat', `url(montserrat-latin-${w}-normal.woff2)`, { weight: String(w) });
+    await ff.load(); document.fonts.add(ff);
+  }
+  render(0);
+  return true;
+})();
+</script>
+</body></html>
