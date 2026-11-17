@@ -126,6 +126,8 @@ const POSE = {
   raise:   { L: [-20, 45], R: [176, 0] },
   sitdesk: { L: [-22, 75], R: [22, -75] },
   bench:   { L: [-28, -12], R: [28, 12] },
+  lookL:   { L: [-95, -25], R: [12, 6], look: -1.6 },
+  lookR:   { L: [-12, -6], R: [95, 25], look: 1.6 },
 };
 const FN_POSE = {
   wave: u => ({ L: [-12, -6], R: [150, 25 + 25 * Math.sin(u * 11)] }),
@@ -133,7 +135,7 @@ const FN_POSE = {
   munch: u => ({ L: [-12, -6], R: [24, 140 + 8 * Math.sin(u * 9)] }),
 };
 function blendPose(a, b, k) {
-  return { L: [lerp(a.L[0], b.L[0], k), lerp(a.L[1], b.L[1], k)], R: [lerp(a.R[0], b.R[0], k), lerp(a.R[1], b.R[1], k)], brow: lerp(a.brow || 0, b.brow || 0, k) };
+  return { L: [lerp(a.L[0], b.L[0], k), lerp(a.L[1], b.L[1], k)], R: [lerp(a.R[0], b.R[0], k), lerp(a.R[1], b.R[1], k)], brow: lerp(a.brow || 0, b.brow || 0, k), look: lerp(a.look || 0, b.look || 0, k) };
 }
 function nomiState(s, u, defPose, pointTarget) {
   const getPose = (name) => FN_POSE[name] ? FN_POSE[name](u) : name === 'point' ? pointAtPose(pointTarget) : (POSE[name] || POSE.idle);
@@ -212,9 +214,9 @@ function drawNomi(t, o, st) {
   }
 
   // head
-  const tilt = talking ? Math.sin(t * 3.1) * 0.05 : Math.sin(t * 1.3) * 0.03;
+  const tilt = (talking ? Math.sin(t * 3.1) * 0.05 : Math.sin(t * 1.3) * 0.03) + (st.pose.look || 0) * 0.08;
   ctx.save(); ctx.translate(0, -200); ctx.rotate(tilt);
-  drawFace(t, st.expr || 'happy', w, o.look || 0);
+  drawFace(t, st.expr || 'happy', w, (o.look || 0) + (st.pose.look || 0));
   ctx.restore();
   ctx.restore();
 }
@@ -527,7 +529,17 @@ const SCENES = {
     for (let i = 0; i < 3; i++) { const ph = (u * 0.5 + i / 3) % 1; ctx.globalAlpha = 1 - ph;
       outlined('z', 620 + ph * 80 + i * 10, 1150 - ph * 160, 40 + i * 8, '#fff', { stroke: NC.ink }); }
     ctx.globalAlpha = 1;
-    return { stick: [[540, 980]] };
+    const tc = cue(s, s.card), pc = prog(u, tc, tc + 0.45);
+    if (pc > 0) {
+      ctx.save(); ctx.translate(lerp(1300, 830, easeOut(pc)), 1010); ctx.rotate(0.12 + Math.sin(u * 2) * 0.02);
+      rrect(-130, -85, 260, 170, 16, '#fff', NC.ink, 5);
+      ctx.save(); ctx.beginPath(); ctx.roundRect(-130, -85, 260, 170, 16); ctx.clip(); ctx.fillStyle = '#2b6fd6'; ctx.fillRect(-130, -85, 260, 48); ctx.restore();
+      ctx.font = `700 26px ${F}`; ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('KRANKENKASSE', 0, -60);
+      ctx.fillStyle = '#ccc'; ctx.fillRect(-100, -15, 120, 12); ctx.fillRect(-100, 10, 160, 12); ctx.fillRect(-100, 35, 90, 12);
+      ctx.font = `700 24px ${F}`; ctx.fillStyle = '#555'; ctx.textAlign = 'left'; ctx.fillText('Alter: 0', 20, 45);
+      ctx.restore();
+    }
+    return { stick: [[700, 1210]] };
   },
 
   bedroom(u, s) {
@@ -552,7 +564,15 @@ const SCENES = {
     ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(18, 10); ctx.stroke();
     ctx.restore();
     if (u < 1.4) for (const sg of [-1, 1]) { ctx.strokeStyle = NC.ink; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(935 + sg * 70, 1140); ctx.lineTo(935 + sg * 92, 1120); ctx.moveTo(935 + sg * 74, 1170); ctx.lineTo(935 + sg * 100, 1168); ctx.stroke(); }
-    return { nomi: { x: 400, feet: 1480 }, point: [780, 820], stick: [[780, 1110]] };
+    const tw = cue(s, s.cow), pw = prog(u, tw - 0.2, tw + 0.3);
+    if (pw > 0) {
+      ctx.save(); ctx.beginPath(); ctx.rect(569, 489, 422, 542); ctx.clip();
+      cow(640, lerp(1250, 900, easeBack(pw)) + Math.sin(u * 14) * 4 * (u < tw + 1.5 ? 1 : 0), 1.25);
+      ctx.restore();
+      ctx.fillStyle = '#fff'; ctx.fillRect(772, 480, 16, 560); ctx.fillRect(560, 752, 440, 16); rrect(560, 480, 440, 560, 6, null, '#fff', 18);
+      if (u < tw + 1.5) for (const sg of [-1, 1]) { ctx.strokeStyle = NC.ink; ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(762 + sg * 40, 1000); ctx.lineTo(762 + sg * 64, 985); ctx.stroke(); }
+    }
+    return { nomi: { x: 400, feet: 1480 }, point: [780, 820], stick: [[760, 430], [400, 600]] };
   },
 
   kitchen(u, s) {
@@ -588,8 +608,9 @@ const SCENES = {
     // track
     ctx.fillStyle = '#6b5a4c'; ctx.fillRect(0, 1330, W, 60);
     // train
-    const tA = cue(s, s.arrive);
-    const fx = lerp(1350, 120, easeOut(prog(u, 0.1, tA)));
+    const tL = cue(s, s.leave), tI = cue(s, 'ich');
+    const fx = 120 - 2800 * Math.pow(prog(u, tL - 0.1, tL + 1.6), 2);
+    s._late = u >= tL;
     ctx.save(); ctx.translate(fx, 0);
     rrect(0, 980, 1500, 350, [90, 20, 20, 20], '#e3262f');
     ctx.fillStyle = '#fff'; ctx.fillRect(0, 1210, 1500, 22);
@@ -605,11 +626,13 @@ const SCENES = {
     const cx = 130, cy = 700;
     ctx.beginPath(); ctx.arc(cx, cy, 80, 0, 7); ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 8; ctx.stroke();
     for (let i = 0; i < 12; i++) { const a = i / 12 * 2 * Math.PI; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(cx + Math.sin(a) * 58, cy - Math.cos(a) * 58); ctx.lineTo(cx + Math.sin(a) * 70, cy - Math.cos(a) * 70); ctx.stroke(); }
-    const mins = 52 + Math.min(u, 0.99) * 0; const ha = (7 + mins / 60) / 12 * 2 * Math.PI, ma = mins / 60 * 2 * Math.PI, sa = (u % 60) / 60 * 2 * Math.PI * 6;
+    const mins = u >= tL ? 53 : 52; const ha = (7 + mins / 60) / 12 * 2 * Math.PI, ma = mins / 60 * 2 * Math.PI, sa = (u % 60) / 60 * 2 * Math.PI * 6;
     ctx.lineWidth = 9; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.sin(ha) * 36, cy - Math.cos(ha) * 36); ctx.stroke();
     ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.sin(ma) * 56, cy - Math.cos(ma) * 56); ctx.stroke();
     ctx.strokeStyle = EP.accent; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.sin(sa) * 60, cy - Math.cos(sa) * 60); ctx.stroke();
-    return { nomi: { x: 330, feet: 1500 }, stick: [[700, 760], [620, 890]] };
+    const kr = prog(u, tI - 0.4, tL);
+    if (u > tL - 0.4 && u < tL + 1.6) for (let i = 0; i < 4; i++) { ctx.fillStyle = 'rgba(255,255,255,0.6)'; ctx.fillRect(fx + 1520 + i * 30, 1020 + i * 70, 120, 8); }
+    return { nomi: { x: lerp(-180, 360, easeOut(kr)), feet: 1500, walk: kr > 0 && kr < 1 }, stick: [[700, 760], [620, 890]] };
   },
 
   classroom(u, s) {
@@ -641,10 +664,11 @@ const SCENES = {
     for (let i = 0; i < 2; i++) for (let j = 0; j < 2; j++) rrect(30 + i * 140, 830 + j * 150, 100, 100, 6, '#bfe6ff');
     outlined('SCHULE', 145, 720, 34, '#fff', { stroke: NC.ink });
     ctx.fillStyle = '#7a4a2a'; ctx.fillRect(900, 900, 40, 320); ctx.beginPath(); ctx.arc(920, 860, 120, 0, 7); ctx.fillStyle = '#3f9b4b'; ctx.fill(); ctx.strokeStyle = NC.ink; ctx.lineWidth = 5; ctx.stroke();
-    const tR = cue(s, 'rund');
+    const tR = cue(s, s.stack);
     for (let i = 0; i < 10; i++) { const p = prog(u, tR + 0.1 + i * 0.1, tR + 0.3 + i * 0.1); if (p <= 0) continue;
-      emoji('🍫', 840 + (i % 2) * 14, lerp(1000, 1420 - i * 44, easeOut(p)), 80, 1, (i % 3 - 1) * 0.1); }
-    return { nomi: { x: 470, feet: 1480 }, stick: [[540, 520]] };
+      emoji('🍫', 860 + (i % 2) * 14, lerp(700, 1420 - i * 52, easeOut(p)), 90, 1, (i % 3 - 1) * 0.1); }
+    const tL2 = cue(s, 'lebensstil'); if (u > tL2) for (let i = 10; i < 16; i++) { const p = prog(u, tL2 + (i - 10) * 0.08, tL2 + 0.2 + (i - 10) * 0.08); if (p > 0) emoji('🍫', 860 + (i % 2) * 14, lerp(300, 1420 - i * 52, easeOut(p)), 90, 1, (i % 3 - 1) * 0.1); }
+    return { nomi: { x: 470, feet: 1480 }, stick: [[400, 560], [430, 690]] };
   },
 
   cafe(u, s) {
@@ -671,7 +695,8 @@ const SCENES = {
       ctx.font = `600 30px ${F}`; ctx.fillStyle = '#555'; ctx.fillText('Merci! 🙂', 0, 100);
       ctx.restore();
     }
-    return { nomi: { x: 380, feet: 1500 }, stick: [[540, 560]] };
+    const tz = cue(s, s.zoom);
+    return { nomi: { x: 380, feet: 1500 }, stick: [[540, 560]], cam: { x: 380, y: 1150, z: 2.7, p: easeOut(prog(u, tz - 0.1, tz + 0.25)) } };
   },
 
   lake(u, s) {
@@ -760,11 +785,25 @@ function iris(r, cx = 540, cy = 1050) {
   if (r >= 1400) return;
   ctx.save(); ctx.beginPath(); ctx.rect(0, 0, W, H); ctx.arc(cx, cy, Math.max(r, 0), 0, 7, true); ctx.fillStyle = '#120a24'; ctx.fill('evenodd'); ctx.restore();
 }
-window.render = function (t) {
-  const s = SCRIPT.find(s => t >= s.a && t < s.b) || SCRIPT[SCRIPT.length - 1];
-  const u = t - s.a, dur = s.b - s.a;
+const toMin = x => { const m = /^(\d\d):(\d\d)$/.exec(x || ''); return m ? +m[1] * 60 + +m[2] : null; };
+const fmt = m => String(Math.floor(m / 60)).padStart(2, '0') + ':' + String(Math.floor(m % 60)).padStart(2, '0');
+function badgeTime(s, u) {
+  let cur = s.time2 && s._late ? s.time2 : s.time;
+  const si = SCRIPT.indexOf(s), prev = SCRIPT.slice(0, si).reverse().find(x => x.time);
+  const a = toMin(prev && (prev.time2 || prev.time)), b = toMin(s.time);
+  if (a != null && b != null && u < 0.7 && !(s.time2 && s._late)) cur = fmt(lerp(a, b, easeInOut(prog(u, 0, 0.7))));
+  return cur;
+}
+
+function drawScene(s, u, t, xoff) {
+  const dur = s.b - s.a;
+  ctx.save(); ctx.beginPath(); ctx.rect(xoff, 0, W, H); ctx.clip();
+  // camera: slow push-in + optional comedic zoom
+  let zp = 0, tx = 540, ty = 1000;
+  if (s.zoom) { const tz = cue(s, s.zoom); zp = easeOut(prog(u, tz - 0.1, tz + 0.25)); [tx, ty] = s.zoomAt || [380, 1110]; }
+  const z = (1 + 0.03 * (u / dur)) * lerp(1, 2.8, zp);
   ctx.save();
-  const z = 1 + 0.035 * (u / dur); ctx.translate(540, 1000); ctx.scale(z, z); ctx.translate(-540, -1000);
+  ctx.translate(540 + xoff, 1000); ctx.scale(z, z); ctx.translate(-lerp(540, tx, zp), -lerp(1000, ty, zp));
   const r = SCENES[s.type](u, s) || {};
   if (r.nomi) {
     const st = nomiState(s, u, r.nomi.sit ? (r.nomi.hideLegs ? 'sitdesk' : 'bench') : 'idle', r.point);
@@ -772,17 +811,31 @@ window.render = function (t) {
   }
   if (r.front) { ctx.save(); r.front(); ctx.restore(); }
   ctx.restore();
-  if (s.time) clockBadge(s.time, s.icon, prog(u, 0.15, 0.5));
-  (s.stickers || []).forEach((st, i) => {
+  ctx.translate(xoff, 0);
+  if (s.time) clockBadge(badgeTime(s, u), s.icon, prog(u, 0.05, 0.35));
+  if (zp < 0.5) (s.stickers || []).forEach((st, i) => {
     const pos = (r.stick || [])[i] || [540, 520 + i * 130];
     const tt = cue(s, st.cue); sticker(st.text, pos[0], pos[1], prog(u, tt, tt + 0.35), i % 2 ? 0.06 : -0.06);
   });
+  ctx.restore();
+}
+
+const TR = 0.55;
+window.render = function (t) {
+  let i = SCRIPT.findIndex(s => t >= s.a && t < s.b); if (i < 0) i = SCRIPT.length - 1;
+  const s = SCRIPT[i];
+  let A = null, B = null, k = 0;
+  if (i < SCRIPT.length - 1 && t > s.b - TR / 2) { A = s; B = SCRIPT[i + 1]; k = (t - (s.b - TR / 2)) / TR; }
+  else if (i > 0 && t < s.a + TR / 2) { A = SCRIPT[i - 1]; B = s; k = (t - (s.a - TR / 2)) / TR; }
+  if (A) {
+    const e = easeInOut(clamp(k));
+    drawScene(A, t - A.a, t, -e * W);
+    drawScene(B, Math.max(0, t - B.a), t, (1 - e) * W);
+    const a = Math.sin(clamp(k) * Math.PI) * 0.5, r = rng(Math.floor(t * 30) + 3);
+    ctx.fillStyle = `rgba(255,255,255,${a})`;
+    for (let n = 0; n < 18; n++) ctx.fillRect(r() * W, r() * H, 200 + r() * 400, 4 + r() * 6);
+  } else drawScene(s, t - s.a, t, 0);
   drawSubtitles(t);
-  // iris transitions
-  const si = SCRIPT.indexOf(s);
-  if (si > 0) iris(lerp(0, 1400, easeOut(prog(u, 0, 0.4))));
-  if (si < SCRIPT.length - 1) iris(lerp(1400, 0, easeInOut(prog(u, dur - 0.35, dur))));
-  // handle
   ctx.font = `600 34px ${F}`; ctx.textAlign = 'left'; ctx.textBaseline = 'middle'; ctx.lineWidth = 6; ctx.strokeStyle = 'rgba(0,0,0,0.5)';
   ctx.strokeText(HANDLE, 50, 120); ctx.fillStyle = '#fff'; ctx.fillText(HANDLE, 50, 120);
   ctx.textAlign = 'right'; ctx.strokeText('Tag ' + EP.day, W - 50, 120); ctx.fillText('Tag ' + EP.day, W - 50, 120);

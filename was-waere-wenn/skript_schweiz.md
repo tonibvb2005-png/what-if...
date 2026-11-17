@@ -2,43 +2,43 @@
 
 ## Sprechertext für ElevenLabs (zum Kopieren)
 
-Wo bist du heute geboren? … In der Schweiz!
+Wo werde ich heute geboren? … In der Schweiz!
 
-Was wäre, wenn du in der Schweiz geboren wärst? Komm mit, ich zeig es dir!
+Was wäre, wenn du in der Schweiz geboren wärst? Ich probier es für dich aus!
 
-Du kommst in Zürich zur Welt. Nur etwa eins von sechzehnhundert Babys weltweit wird hier geboren.
+Tag eins. Ich bin noch keinen Tag alt – und habe schon eine Krankenversicherung. Die ist hier Pflicht.
 
-Sieben Uhr. Aus deinem Fenster: die Alpen. Sie bedecken rund sechzig Prozent des Landes.
+Sieben Uhr. Mein Wecker: eine Kuhglocke. Mein Ausblick: links Berge, rechts Berge. Sechzig Prozent des Landes sind Alpen.
 
-Zum Frühstück: Birchermüesli. Das wurde übrigens hier in Zürich erfunden.
+Frühstück: Birchermüesli. Erfunden in Zürich – von einem Arzt. Das schmeckt man auch.
 
-Dein Zug kommt auf die Minute. Über neunzig Prozent sind pünktlich. Drei Minuten zu spät? Ein Skandal!
+Mein Zug fährt um sieben Uhr zweiundfünfzig. Ich bin um sieben Uhr dreiundfünfzig da. Über neunzig Prozent der Züge sind pünktlich. Ich leider nicht.
 
-In der Schule redest du Schweizerdeutsch und lernst früh Französisch. Das Land hat vier Sprachen!
+In der Schule lerne ich Deutsch, Französisch und Italienisch. Und trotzdem verstehe ich meinen Opa aus dem Wallis nicht.
 
-Pause! Und in der Pause gibt es natürlich Schokolade. Rund zehn Kilo pro Jahr isst man hier.
+Pause! Schokolade. Rund zehn Kilo pro Jahr. Das ist keine Pause mehr, das ist ein Lebensstil.
 
-Jahre später verdienst du richtig gut. Aber ein Kaffee kostet dich fast fünf Franken!
+Jahre später verdiene ich richtig gut. Dann bestelle ich einen Kaffee. Fast fünf Franken. Mein Gesicht: … 
 
-Und abends am See weißt du: Hier wirst du im Schnitt fast vierundachtzig Jahre alt.
+Abends am See. Hier werde ich im Schnitt vierundachtzig Jahre alt. Bei den Kaffeepreisen muss ich wohl auch so lange arbeiten.
 
-Und wo bist du morgen geboren? Schreib es in die Kommentare!
+Morgen werde ich woanders geboren. Wo? Schreib es in die Kommentare!
 
 ## Ablauf (Nomis Tag)
 
 | # | Uhrzeit | Szene | Text (so wie im Untertitel) |
 |---|---|---|---|
-| 1 | – | roulette | Wo bist du heute geboren? In der Schweiz! |
-| 2 | – | title | Was wäre, wenn du in der Schweiz geboren wärst? Komm mit, ich zeig es dir! |
-| 3 | Tag 1 | birth | Du kommst in Zürich zur Welt. Nur etwa eins von 1.600 Babys weltweit wird hier geboren. |
-| 4 | 07:00 | bedroom | Sieben Uhr. Aus deinem Fenster: die Alpen. Sie bedecken rund 60 Prozent des Landes. |
-| 5 | 07:20 | kitchen | Zum Frühstück: Birchermüesli. Das wurde übrigens hier in Zürich erfunden. |
-| 6 | 07:52 | station | Dein Zug kommt auf die Minute. Über 90 Prozent sind pünktlich. Drei Minuten zu spät? Ein Skandal! |
-| 7 | 08:15 | classroom | In der Schule redest du Schweizerdeutsch und lernst früh Französisch. Das Land hat vier Sprachen! |
-| 8 | 10:00 | snack | Pause! Und in der Pause gibt es natürlich Schokolade. Rund 10 Kilo pro Jahr isst man hier. |
-| 9 | 17:30 | cafe | Jahre später verdienst du richtig gut. Aber ein Kaffee kostet dich fast fünf Franken! |
-| 10 | 21:00 | lake | Und abends am See weißt du: Hier wirst du im Schnitt fast 84 Jahre alt. |
-| 11 | – | outro | Und wo bist du morgen geboren? Schreib es in die Kommentare! |
+| 1 | – | roulette | Wo werde ich heute geboren? In der Schweiz! |
+| 2 | – | title | Was wäre, wenn du in der Schweiz geboren wärst? Ich probier es für dich aus! |
+| 3 | Tag 1 | birth | Tag eins. Ich bin noch keinen Tag alt – und habe schon eine Krankenversicherung. Die ist hier Pflicht. |
+| 4 | 07:00 | bedroom | Sieben Uhr. Mein Wecker: eine Kuhglocke. Mein Ausblick: links Berge, rechts Berge. 60 Prozent des Landes sind Alpen. |
+| 5 | 07:20 | kitchen | Frühstück: Birchermüesli. Erfunden in Zürich – von einem Arzt. Das schmeckt man auch. |
+| 6 | 07:52 | station | Mein Zug fährt um 7:52. Ich bin um 7:53 da. Über 90 Prozent der Züge sind pünktlich. Ich leider nicht. |
+| 7 | 08:15 | classroom | In der Schule lerne ich Deutsch, Französisch und Italienisch. Und trotzdem verstehe ich meinen Opa aus dem Wallis nicht. |
+| 8 | 10:00 | snack | Pause! Schokolade. Rund 10 Kilo pro Jahr. Das ist keine Pause mehr, das ist ein Lebensstil. |
+| 9 | 17:30 | cafe | Jahre später verdiene ich richtig gut. Dann bestelle ich einen Kaffee. Fast fünf Franken. Mein Gesicht:  |
+| 10 | 21:00 | lake | Abends am See. Hier werde ich im Schnitt 84 Jahre alt. Bei den Kaffeepreisen muss ich wohl auch so lange arbeiten. |
+| 11 | – | outro | Morgen werde ich woanders geboren. Wo? Schreib es in die Kommentare! |
 
 ## Hinweise
 

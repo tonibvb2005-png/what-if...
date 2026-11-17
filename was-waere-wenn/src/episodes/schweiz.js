@@ -1,11 +1,12 @@
 // =====================================================================
-// "Was wäre, wenn du in … geboren wärst?" – mit Nomi
-// Folge: SCHWEIZ
+// "Was wäre, wenn du in … geboren wärst?" – Nomi probiert's aus
+// Folge: SCHWEIZ (Tag 1)
 //
-// text:  Sprechertext. [Anzeige|Aussprache] → Untertitel zeigt "Anzeige",
-//        die Stimme liest "Aussprache". {1.5} = 1,5 s Pause.
-// cue:   Wort, bei dem etwas passiert (klein geschrieben, ohne Satzzeichen)
-// nomi:  Gesten von Nomi: [cue-Wort, Pose, Emoji in der Hand]
+// text:  Sprechertext (Nomi spricht in der Ich-Form).
+//        [Anzeige|Aussprache] → Untertitel zeigt "Anzeige", Stimme liest "Aussprache".
+//        {1.5} = 1,5 s Pause.
+// nomi:  Gesten: [cue-Wort, Pose, Emoji in der Hand, Gesichtsausdruck]
+//        Ausdrücke: happy, excited, surprised, thinking, sleepy, content, doubt
 // =====================================================================
 window.EPISODE = {
   day: 1,
@@ -16,57 +17,61 @@ window.EPISODE = {
          '🇹🇭 Thailand', '🇩🇪 Deutschland', '🇰🇪 Kenia', '🇵🇹 Portugal', '🇨🇭 Schweiz'],
   scenes: [
     { type: 'roulette',
-      text: 'Wo bist du heute geboren? {2.2} In der Schweiz!',
+      text: 'Wo werde ich heute geboren? {2.2} In der Schweiz!',
       stop: 'schweiz',
       nomi: [['wo', 'present'], ['in', 'think'], ['schweiz', 'tada']] },
 
     { type: 'title',
-      text: 'Was wäre, wenn du in der Schweiz geboren wärst? Komm mit, ich zeig es dir!',
-      nomi: [['was', 'present'], ['komm', 'wave']] },
+      text: 'Was wäre, wenn du in der Schweiz geboren wärst? Ich probier es für dich aus!',
+      nomi: [['was', 'present'], ['ich', 'wave', null, 'excited']] },
 
     { type: 'birth', time: 'Tag 1', icon: '👶',
-      text: 'Du kommst in Zürich zur Welt. Nur etwa eins von [1.600|sechzehnhundert] Babys weltweit wird hier geboren.',
-      stickers: [{ text: '1 von 1.600 Babys 🌍', cue: 'nur' }] },
+      text: 'Tag eins. Ich bin noch keinen Tag alt – und habe schon eine Krankenversicherung. Die ist hier Pflicht.',
+      card: 'krankenversicherung',
+      stickers: [{ text: 'Pflicht ab Geburt ✅', cue: 'pflicht' }] },
 
     { type: 'bedroom', time: '07:00', icon: '☀️',
-      text: 'Sieben Uhr. Aus deinem Fenster: die Alpen. Sie bedecken rund [60|sechzig] Prozent des Landes.',
-      stickers: [{ text: '~60 % Alpen 🏔️', cue: 'alpen' }],
-      nomi: [['sieben', 'stretch', null, 'yawn'], ['fenster', 'point'], ['bedecken', 'hips']] },
+      text: 'Sieben Uhr. Mein Wecker: eine Kuhglocke. Mein Ausblick: links Berge, rechts Berge. [60|Sechzig] Prozent des Landes sind Alpen.',
+      cow: 'kuhglocke',
+      stickers: [{ text: 'MUUUH! 🔔', cue: 'kuhglocke' }, { text: '~60 % Alpen 🏔️', cue: 'prozent' }],
+      nomi: [['sieben', 'stretch'], ['kuhglocke', 'shrug', null, 'surprised'], ['links', 'lookL'], ['rechts', 'lookR'], ['prozent', 'hips']] },
 
     { type: 'kitchen', time: '07:20', icon: '🥣',
-      text: 'Zum Frühstück: Birchermüesli. Das wurde übrigens hier in Zürich erfunden.',
-      stickers: [{ text: 'Erfunden in Zürich!', cue: 'erfunden' }],
-      nomi: [['zum', 'eat'], ['übrigens', 'present'], ['erfunden', 'eat']] },
+      text: 'Frühstück: Birchermüesli. Erfunden in Zürich – von einem Arzt. Das schmeckt man auch.',
+      stickers: [{ text: 'Dr. Bircher-Benner, um 1900 👨‍⚕️', cue: 'arzt' }],
+      nomi: [['frühstück', 'eat'], ['erfunden', 'present'], ['arzt', 'think'], ['schmeckt', 'eat', null, 'doubt']] },
 
-    { type: 'station', time: '07:52', icon: '🚆',
-      text: 'Dein Zug kommt auf die Minute. Über [90|neunzig] Prozent sind pünktlich. Drei Minuten zu spät? Ein Skandal!',
-      arrive: 'minute',
-      stickers: [{ text: '> 90 % pünktlich', cue: 'über' }, { text: '+3 Min = SKANDAL 😱', cue: 'skandal' }],
-      nomi: [['dein', 'watch'], ['minute', 'present'], ['drei', 'think'], ['skandal', 'shrug', null, 'wow']] },
+    { type: 'station', time: '07:52', time2: '07:53', icon: '🚆',
+      text: 'Mein Zug fährt um [7:52|sieben Uhr zweiundfünfzig]. Ich bin um [7:53|sieben Uhr dreiundfünfzig] da. Über [90|neunzig] Prozent der Züge sind pünktlich. Ich leider nicht.',
+      arrive: '753', leave: '753',
+      stickers: [{ text: '> 90 % pünktlich 🚆', cue: 'über' }, { text: 'Ich: nicht 🙃', cue: 'leider' }],
+      nomi: [['ich', 'idle'], ['über', 'shrug', null, 'doubt'], ['leider', 'shrug', null, 'doubt']] },
 
     { type: 'classroom', time: '08:15', icon: '🏫',
-      text: 'In der Schule redest du Schweizerdeutsch und lernst früh Französisch. Das Land hat vier Sprachen!',
-      board: [['Grüezi', 'schweizerdeutsch'], ['Bonjour', 'französisch'], ['Ciao', 'vier'], ['Allegra', 'sprachen']],
-      nomi: [['in', 'sitdesk'], ['französisch', 'raise'], ['vier', 'sitdesk']] },
+      text: 'In der Schule lerne ich Deutsch, Französisch und Italienisch. Und trotzdem verstehe ich meinen Opa aus dem Wallis nicht.',
+      board: [['Grüezi', 'deutsch'], ['Bonjour', 'französisch'], ['Ciao', 'italienisch'], ['???', 'wallis']],
+      stickers: [{ text: 'Walliserdeutsch = Endgegner 👾', cue: 'nicht' }],
+      nomi: [['in', 'sitdesk'], ['französisch', 'raise', null, 'excited'], ['trotzdem', 'sitdesk', null, 'doubt']] },
 
     { type: 'snack', time: '10:00', icon: '🍫',
-      text: 'Pause! Und in der Pause gibt es natürlich Schokolade. Rund [10|zehn] Kilo pro Jahr isst man hier.',
-      stickers: [{ text: '~10 kg pro Jahr 🍫', cue: 'rund' }],
-      nomi: [['pause', 'tada'], ['schokolade', 'munch', '🍫'], ['rund', 'hold', '🍫', 'wow']] },
+      text: 'Pause! Schokolade. Rund [10|zehn] Kilo pro Jahr. Das ist keine Pause mehr, das ist ein Lebensstil.',
+      stack: 'rund',
+      stickers: [{ text: '~10 kg pro Jahr', cue: 'rund' }, { text: 'Lebensstil 🍫😌', cue: 'lebensstil' }],
+      nomi: [['pause', 'tada'], ['schokolade', 'munch', '🍫', 'happy'], ['rund', 'hold', '🍫', 'surprised'], ['lebensstil', 'munch', '🍫', 'content']] },
 
     { type: 'cafe', time: '17:30', icon: '☕', later: 'Jahre später …',
-      text: 'Jahre später verdienst du richtig gut. Aber ein Kaffee kostet dich fast fünf Franken!',
-      stickers: [{ text: 'Lohn ~6.800 CHF / Monat', cue: 'verdienst' }],
-      receipt: { text: '4.90 CHF', cue: 'kaffee' },
-      nomi: [['jahre', 'idle'], ['verdienst', 'tada'], ['kaffee', 'cup', '☕'], ['fünf', 'cup', '☕', 'wow']] },
+      text: 'Jahre später verdiene ich richtig gut. Dann bestelle ich einen Kaffee. Fast fünf Franken. Mein Gesicht: {1.4}',
+      receipt: { text: '4.90 CHF', cue: 'fast' }, zoom: 'gesicht',
+      stickers: [{ text: 'Lohn ~6.800 CHF / Monat 💰', cue: 'verdiene' }],
+      nomi: [['jahre', 'idle'], ['verdiene', 'tada', null, 'excited'], ['bestelle', 'cup', '☕', 'happy'], ['fast', 'cup', '☕', 'surprised']] },
 
     { type: 'lake', time: '21:00', icon: '🌙',
-      text: 'Und abends am See weißt du: Hier wirst du im Schnitt fast [84|vierundachtzig] Jahre alt.',
-      stickers: [{ text: 'Ø 84 Jahre ❤️', cue: 'jahre' }],
-      nomi: [['und', 'bench'], ['jahre', 'bench']] },
+      text: 'Abends am See. Hier werde ich im Schnitt [84|vierundachtzig] Jahre alt. Bei den Kaffeepreisen muss ich wohl auch so lange arbeiten.',
+      stickers: [{ text: 'Ø 84 Jahre ❤️', cue: 'jahre' }, { text: '… für den Kaffee 😅', cue: 'arbeiten' }],
+      nomi: [['abends', 'bench', null, 'content'], ['bei', 'bench', null, 'doubt']] },
 
     { type: 'outro',
-      text: 'Und wo bist du morgen geboren? Schreib es in die Kommentare!',
-      nomi: [['und', 'think'], ['schreib', 'wave']] },
+      text: 'Morgen werde ich woanders geboren. Wo? Schreib es in die Kommentare!',
+      nomi: [['morgen', 'think'], ['schreib', 'wave', null, 'excited']] },
   ],
 };
