@@ -1,0 +1,286 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>html,body{margin:0;background:#000}canvas{display:block}</style>
+</head><body>
+<canvas id="c" width="1080" height="1920"></canvas>
+<script src="d3-array.min.js"></script>
+<script src="d3-geo.min.js"></script>
+<script src="topojson-client.min.js"></script>
+<script src="data.js"></script>
+<script>
+const W = 1080, H = 1920;
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+const HANDLE = '@wasware.wenn';
+const EP_NAME = new URLSearchParams(location.search).get('ep') || 'schweiz';
+document.write(`<script src="episodes/${EP_NAME}.js"><\/script>`);
+</script>
+<script src="core.js"></script>
+<script>
+const EP = window.EPISODE;
+window.CORNER = `TAG ${EP.day}/${EP.total}`;
+
+// =====================================================================
+// TIMING – words from the episode text. [Anzeige|Aussprache] supported.
+// window.WORD_TIMES (from real audio) can replace the estimate later.
+// =====================================================================
+const norm = w => w.toLowerCase().replace(/[^a-zäöüß0-9]/g, '');
+const SCRIPT = EP.scenes;
+const WORDS = [];
+let DURATION = 0;
+(function buildTiming() {
+  let t = 0, gi = 0;
+  const real = window.WORD_TIMES;
+  SCRIPT.forEach((s, si) => {
+    s.a = t; let c = t + 0.35; s.words = [];
+    const re = /\[([^|\]]+)\|([^\]]+)\](\S*)|(\S+)/g; let m;
+    while ((m = re.exec(s.text))) {
+      if (m[4] === '–') { c += 0.2; continue; }
+      const disp = m[4] || (m[1] + m[3]), spoken = m[4] || (m[2] + m[3]);
+      const letters = spoken.replace(/[^\p{L}0-9]/gu, '').length;
+      let w = { text: disp, spoken, start: c, end: c + 0.07 + 0.048 * letters, scene: si };
+      if (real && real[gi]) { w.start = real[gi].start; w.end = real[gi].end; }
+      gi++; WORDS.push(w); s.words.push(w); c = w.end;
+      if (/[.!?]$/.test(disp)) c += 0.3; else if (/[:]$/.test(disp)) c += 0.2; else if (/,$/.test(disp)) c += 0.12;
+    }
+    s.b = Math.max(c + (s.tail ?? 0.8), t + (s.min || 0));
+    if (si === SCRIPT.length - 1) s.b += 0.8;
+    t = s.b;
+  });
+  DURATION = t;
+})();
+window.DURATION = DURATION;
+function cue(s, word, n = 0) {
+  if (word === undefined) return 0;
+  const hits = s.words.filter(w => norm(w.text) === norm(word));
+  const w = hits[n] || hits[0];
+  if (!w) { console.log('CUE NOT FOUND: ' + word); return 0; }
+  return w.start - s.a;
+}
+
+// =====================================================================
+// SMALL DRAWING HELPERS
+// =====================================================================
+function emoji(e, x, y, size, alpha = 1, rot = 0) {
+  ctx.save(); ctx.globalAlpha *= alpha; ctx.translate(x, y); ctx.rotate(rot);
+  ctx.font = `${size}px sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.fillStyle = '#000'; ctx.fillText(e, 0, size * 0.05); ctx.restore();
+}
+function sticker(text, x, y, p, rot = -0.12, color = C.yellow, fg = '#111', size = 46) {
+  if (p <= 0) return;
+  ctx.save(); ctx.translate(x, y); ctx.rotate(rot); const s = easeBack(clamp(p)); ctx.scale(s, s);
+  ctx.globalAlpha = clamp(p * 2);
+  ctx.font = `900 ${size}px Montserrat`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  const w = ctx.measureText(text).width + 50, h = size * 1.7;
+  ctx.fillStyle = '#000'; ctx.beginPath(); ctx.roundRect(-w / 2 + 6, -h / 2 + 8, w, h, 16); ctx.fill();
+  ctx.fillStyle = color; ctx.beginPath(); ctx.roundRect(-w / 2, -h / 2, w, h, 16); ctx.fill();
+  ctx.fillStyle = fg; ctx.fillText(text, 0, 3); ctx.restore();
+}
+function rng(seed) { let s = seed; return () => (s = (s * 16807) % 2147483647) / 2147483647; }
+const VIS = [620, 960];   // centre of the visual area (right of the host)
+
+function tagAndTitle(u, s) {
+  if (s.tag) pill(s.tag, W / 2, 300, prog(u, 0.1, 0.5), EP.accent, 42);
+  if (s.title) textLine([[s.title, C.white]], W / 2, 430, 76, { p: prog(u, 0.3, 0.7) });
+}
+
+// =====================================================================
+// SCENE TYPES (reusable for every country)
+// =====================================================================
+const SCENES = {
+  intro(u, s) {
+    const tC = cue(s, EP.country.split(' ').pop()) || 1.5;
+    const z0 = 330, z = lerp(z0, EP.zoom, easeInOut(prog(u, tC - 0.3, tC + 1.4)));
+    const k = easeInOut(prog(u, 0, tC + 0.6));
+    const rot = [-lerp(EP.center[0] - 100, EP.center[0], k), -lerp(10, EP.center[1], k)];
+    const proj = d3.geoOrthographic().scale(z).translate([VIS[0], 1000]).rotate(rot).clipAngle(90);
+    const sc = easeOut(prog(u, 0, 0.6));
+    ctx.save(); ctx.translate(VIS[0], 1000); ctx.scale(sc, sc); ctx.translate(-VIS[0], -1000);
+    drawGlobe(proj, { [EP.isoId]: EP.accent });
+    ctx.restore();
+    if (u > tC + 1.2) {
+      const p = proj(EP.center);
+      for (let i = 0; i < 3; i++) { const ph = (u * 1.1 + i / 3) % 1;
+        ctx.beginPath(); ctx.arc(p[0], p[1], 30 + ph * 160, 0, 7); ctx.strokeStyle = `rgba(255,255,255,${(1 - ph) * 0.8})`; ctx.lineWidth = 6; ctx.stroke(); }
+      emoji(EP.flag, p[0], p[1] - 10, 150 * easeBack(prog(u, tC + 1.2, tC + 1.6)));
+    }
+    pill(`TAG ${EP.day} / ${EP.total}`, W / 2, 270, prog(u, 0, 0.4), EP.accent, 40);
+    const parts = EP.inCountry.split(' '); const pre = parts.slice(0, -1).join(' ');
+    textLine([['WAS WÄRE, WENN', C.yellow]], W / 2, 400, 100, { p: prog(u, 0.2, 0.6) });
+    textLine([['du ' + (pre ? pre + ' ' : ''), C.white], [EP.country.toUpperCase(), EP.accent]], W / 2, 510, 84, { p: prog(u, tC - 0.5, tC - 0.1) });
+    textLine([['geboren wärst?', C.white]], W / 2, 610, 84, { p: prog(u, tC, tC + 0.4) });
+    return { walk: u < 0.75, dx: -400 * (1 - easeOut(prog(u, 0, 0.75))) };
+  },
+
+  odds(u, s) {
+    tagAndTitle(u, s);
+    const t0 = cue(s, s.cue), tR = cue(s, s.reveal);
+    textLine([[s.big, C.yellow]], W / 2, 440, 110, { p: prog(u, t0, t0 + 0.4) });
+    textLine([[s.sub, C.white]], W / 2, 545, 52, { p: prog(u, t0 + 0.2, t0 + 0.6), weight: 800 });
+    const N = Math.round(Math.sqrt(s.n)), gap = 16, x0 = VIS[0] - (N - 1) * gap / 2, y0 = 990 - (N - 1) * gap / 2;
+    const pick = [Math.floor(N * 0.68), Math.floor(N * 0.55)];
+    if (s.pre) {
+      const a = 1 - prog(u, t0 - 0.2, t0 + 0.1);
+      if (a > 0) { emoji(s.pre.emoji, VIS[0], 930, 280 * easeBack(prog(u, 0.2, 0.6)), a, Math.sin(u * 4) * 0.1);
+        sticker(s.pre.text, VIS[0], 1180, prog(u, 0.5, 0.8) * a, -0.06, C.green, '#111', 56); }
+    }
+    const dim = prog(u, tR, tR + 0.4);
+    for (let r = 0; r < N; r++) for (let c = 0; c < N; c++) {
+      const a = prog(u, t0 + (r + c) / (2 * N) * 1.0, t0 + (r + c) / (2 * N) * 1.0 + 0.2);
+      if (a <= 0) continue;
+      const me = c === pick[0] && r === pick[1];
+      if (me) continue;
+      ctx.globalAlpha = a * (1 - 0.7 * dim);
+      ctx.fillStyle = '#9fb6ff'; ctx.beginPath(); ctx.arc(x0 + c * gap, y0 + r * gap, 5.5, 0, 7); ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    const px = x0 + pick[0] * gap, py = y0 + pick[1] * gap;
+    if (u > t0 + 0.6) {
+      ctx.beginPath(); ctx.arc(px, py, lerp(5.5, 14, easeBack(dim)), 0, 7); ctx.fillStyle = dim > 0 ? EP.accent : '#9fb6ff'; ctx.fill();
+    }
+    if (dim > 0) {
+      for (let i = 0; i < 3; i++) { const ph = (u * 1.2 + i / 3) % 1;
+        ctx.beginPath(); ctx.arc(px, py, 16 + ph * 80, 0, 7); ctx.strokeStyle = `rgba(255,255,255,${(1 - ph) * dim})`; ctx.lineWidth = 4; ctx.stroke(); }
+      sticker('DAS BIST DU! ' + EP.flag, px, py - 110, prog(u, tR + 0.2, tR + 0.6), -0.06, C.white);
+    }
+    return {};
+  },
+
+  bubbles(u, s) {
+    tagAndTitle(u, s);
+    const pos = [[440, 720], [810, 720], [440, 940], [810, 940]];
+    const cols = ['#ffd23f', '#38e1ff', '#5cf29a', '#ff8c42'];
+    const tFin = cue(s, s.finale.cue), fin = prog(u, tFin, tFin + 0.4);
+    textLine([[s.items.length + ' Landessprachen', C.white]], W / 2, 450, 76, { p: prog(u, cue(s, s.items[0].cue) - 0.6, cue(s, s.items[0].cue) - 0.2) });
+    const bubble = (it, x, y, w, h, col, p, alpha, big) => {
+      if (p <= 0) return;
+      ctx.save(); ctx.translate(x, y); const sc = easeBack(clamp(p)); ctx.scale(sc, sc); ctx.globalAlpha = clamp(p * 2) * alpha;
+      ctx.fillStyle = col; ctx.beginPath(); ctx.roundRect(-w / 2, -h / 2, w, h, 34);
+      ctx.moveTo(-w / 2 + 50, h / 2 - 2); ctx.lineTo(-w / 2 + 30, h / 2 + 36); ctx.lineTo(-w / 2 + 95, h / 2 - 2); ctx.fill();
+      ctx.fillStyle = '#111'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.font = `900 ${big ? 60 : 50}px Montserrat`; ctx.fillText(it.say, 0, -14);
+      ctx.font = `700 ${big ? 30 : 26}px Montserrat`; ctx.fillText(it.lang, 0, h / 2 - 30);
+      ctx.restore();
+    };
+    s.items.forEach((it, i) => { const t = cue(s, it.cue); bubble(it, pos[i][0], pos[i][1], 330, 160, cols[i], prog(u, t, t + 0.35), 1 - 0.65 * fin); });
+    bubble(s.finale, 640, 1190, 600, 180, '#ffffff', fin, 1, true);
+    if (s.sticker) { const t = cue(s, s.sticker.cue); sticker(s.sticker.text, 850, 1345, prog(u, t, t + 0.35), 0.1, C.pink, '#fff'); }
+    return {};
+  },
+
+  stat(u, s) {
+    tagAndTitle(u, s);
+    const t0 = cue(s, s.cue);
+    if (s.anim === 'rain') {
+      const r = rng(11);
+      for (let i = 0; i < 26; i++) {
+        const x = 280 + r() * 760, sp = 260 + r() * 200, ph = r() * 3, rot0 = r() * 6;
+        const tt = u - t0 - ph * 0.3; if (tt < 0) continue;
+        const y = 560 + ((tt * sp) % 900);
+        emoji(s.emoji, x, y, 60, 0.35, rot0 + tt * 1.5);
+      }
+    }
+    let ex = VIS[0], ey = 840, sz = 300 * easeBack(prog(u, t0, t0 + 0.5));
+    if (s.anim === 'slide') {
+      const k = easeOut(prog(u, t0, t0 + 0.9)); ex = lerp(1400, VIS[0], k); sz = 300;
+      if (k < 1) for (let i = 0; i < 4; i++) { ctx.fillStyle = `rgba(255,255,255,${0.5 * (1 - k)})`; ctx.fillRect(ex + 170 + i * 10, ey - 80 + i * 45, 160 - i * 25, 8); }
+    }
+    if (u > t0) emoji(s.emoji, ex, ey, sz);
+    const pc = prog(u, t0 + 0.3, t0 + 1.3);
+    if (pc > 0) {
+      const v = Math.round(s.value * easeOut(pc));
+      textLine([[(s.prefix || '') + v + (s.unit || ''), C.yellow]], VIS[0], 1090, 150, { p: prog(u, t0 + 0.3, t0 + 0.6), noPop: true });
+      textLine([[s.label, C.white]], VIS[0], 1200, 42, { p: prog(u, t0 + 0.5, t0 + 0.9), weight: 800 });
+    }
+    if (s.sticker) { const t = cue(s, s.sticker.cue, s.sticker.n || 0); sticker(s.sticker.text, 640, 600, prog(u, t, t + 0.35), -0.08, C.pink, '#fff'); }
+    return {};
+  },
+
+  versus(u, s) {
+    tagAndTitle(u, s);
+    const xs = [440, 820], y = 900, w = 340, h = 470;
+    s.cards.forEach((c, i) => {
+      const t = cue(s, c.cue), p = prog(u, t, t + 0.4); if (p <= 0) return;
+      ctx.save(); ctx.translate(xs[i], y); const sc = easeBack(p); ctx.scale(sc, sc); ctx.globalAlpha = clamp(p * 2);
+      ctx.fillStyle = 'rgba(255,255,255,0.08)'; ctx.beginPath(); ctx.roundRect(-w / 2, -h / 2, w, h, 36); ctx.fill();
+      ctx.strokeStyle = c.color; ctx.lineWidth = 6; ctx.stroke();
+      emoji(c.emoji, 0, -90, 170);
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.font = '900 54px Montserrat'; ctx.fillStyle = c.color; ctx.fillText(c.value, 0, 80);
+      ctx.font = '700 30px Montserrat'; ctx.fillStyle = '#fff'; ctx.fillText(c.label, 0, 150);
+      ctx.restore();
+    });
+    if (s.mid) { const t = cue(s, s.mid.cue); sticker(s.mid.text, 630, y, prog(u, t, t + 0.3), -0.15, C.yellow, '#111', 50); }
+    return {};
+  },
+
+  life(u, s) {
+    tagAndTitle(u, s);
+    const t0 = cue(s, s.cue), p = easeInOut(prog(u, t0, t0 + 1.8));
+    const x0 = 300, x1 = 980, y = 1000, xv = v => lerp(x0, x1, v / 100);
+    const v = s.value * p;
+    textLine([[Math.round(v) + ' Jahre', C.yellow]], VIS[0], 720, 140, { p: prog(u, t0, t0 + 0.3), noPop: true });
+    textLine([['Lebenserwartung', C.white]], VIS[0], 830, 44, { p: prog(u, t0 + 0.2, t0 + 0.6), weight: 800 });
+    if (u < t0) return {};
+    ctx.fillStyle = 'rgba(255,255,255,0.12)'; ctx.beginPath(); ctx.roundRect(x0, y - 18, x1 - x0, 36, 18); ctx.fill();
+    const g = ctx.createLinearGradient(x0, 0, x1, 0); g.addColorStop(0, C.green); g.addColorStop(1, EP.accent);
+    ctx.fillStyle = g; ctx.beginPath(); ctx.roundRect(x0, y - 18, Math.max(36, xv(v) - x0), 36, 18); ctx.fill();
+    emoji('👶', x0, y - 90, 80);
+    emoji(p < 0.6 ? '🧑' : '👴', xv(v), y - 90, 90);
+    const wp = prog(u, t0 + 1.9, t0 + 2.3);
+    if (wp > 0) {
+      ctx.globalAlpha = wp; ctx.fillStyle = '#fff'; ctx.fillRect(xv(s.world) - 3, y - 34, 6, 68); ctx.globalAlpha = 1;
+      label('Welt-Ø ' + s.world, xv(s.world), y + 80, '#fff', wp, 34);
+      label(EP.flag + ' ' + s.value, xv(s.value), y + 140, C.yellow, wp, 40);
+    }
+    return {};
+  },
+
+  outro(u, s) {
+    const proj = d3.geoOrthographic().scale(300 * easeOut(prog(u, 0, 0.6)) + 1).translate([VIS[0], 1000]).rotate([-u * 40 - EP.center[0] + 30, -20]).clipAngle(90);
+    drawGlobe(proj, { [EP.isoId]: EP.accent });
+    pill(`TAG ${EP.day} / ${EP.total}`, W / 2, 300, prog(u, 0.1, 0.5), EP.accent, 48);
+    const tW = cue(s, 'welches'), tS = cue(s, 'schreib');
+    textLine([['Welches Land', C.white]], W / 2, 440, 84, { p: prog(u, tW, tW + 0.4) });
+    textLine([['kommt morgen?', C.yellow]], W / 2, 545, 84, { p: prog(u, tW + 0.3, tW + 0.7) });
+    pill('⬇️ Schreib es in die Kommentare', VIS[0], 1370, prog(u, tS, tS + 0.4), C.pink, 36);
+    emoji('❓', VIS[0], 1000, 160 * easeBack(prog(u, tW, tW + 0.5)), 0.95, Math.sin(u * 3) * 0.15);
+    return {};
+  },
+};
+
+// host poses
+const POSES = { ...POSE, wave, point: pointAt(VIS[0], 950) };
+function hostState(s, u) {
+  const keys = [[0, POSE.idle]]; let prop = null, propT = 0;
+  for (const [w, pose, pr] of (s.host || [])) {
+    const t = cue(s, w); keys.push([t, POSES[pose] || POSE.idle]);
+    if (u >= t) { if (pr !== prop) propT = t; prop = pr || null; }
+  }
+  keys.sort((a, b) => a[0] - b[0]);
+  return { pose: poseAt(keys, u), prop, propA: easeOut(prog(u, propT, propT + 0.25)) };
+}
+
+window.render = function (t) {
+  background(t);
+  const s = SCRIPT.find(s => t >= s.a && t < s.b) || SCRIPT[SCRIPT.length - 1];
+  const u = t - s.a;
+  ctx.save(); const extra = SCENES[s.type](u, s) || {}; ctx.restore();
+  drawSubtitles(t);
+  const hs = hostState(s, u);
+  ctx.save(); drawHost(t, hs.pose, { ...extra, prop: hs.prop, propA: hs.propA }); ctx.restore();
+  const fin = 1 - prog(u, 0, 0.18), fout = prog(u, s.b - s.a - 0.18, s.b - s.a);
+  const f = Math.max(s.a > 0 ? fin : 0, s.b < DURATION ? fout : 0);
+  if (f > 0) { ctx.fillStyle = `rgba(255,255,255,${f * 0.6})`; ctx.fillRect(0, 0, W, H); }
+  progressBar(t);
+};
+
+window.ready = (async () => {
+  for (const w of [600, 800, 900]) {
+    const ff = new FontFace('Montserrat', `url(montserrat-latin-${w}-normal.woff2)`, { weight: String(w) });
+    await ff.load(); document.fonts.add(ff);
+  }
+  render(0);
+  return DURATION;
+})();
+</script>
+</body></html>

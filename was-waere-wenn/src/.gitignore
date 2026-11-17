@@ -1,0 +1,6 @@
+node_modules/
+data.js
+*.min.js
+*.woff2
+*.png
+*.mp4
