@@ -1,7 +1,7 @@
 // Folge 5 – Skinwalker: Wuestenstrasse in New Mexico bei Nacht/Morgen, Auto mit Innenraum + 2D-Szenen
 import * as THREE from 'three';
 import * as C from '../chars.js';
-import { lam, box, sprite, setTex, glow, gradTex, V, L, clamp, sm, lerpV, look, billboard, shake, rnd, ease } from '../world.js';
+import { tex, lam, box, sprite, setTex, glow, gradTex, V, L, clamp, sm, lerpV, look, billboard, shake, rnd, ease } from '../world.js';
 import { W as CW, H as CH } from '../overlay.js';
 
 const easeOut = t => 1 - Math.pow(1 - t, 3);
@@ -60,18 +60,17 @@ function buildDesert() {
   const moon = new THREE.DirectionalLight(0xa9bdff, 0.9); moon.position.set(-30, 40, 20); S.add(moon);
   // Boden: Sand mit Huegeln
   const gg = new THREE.PlaneGeometry(800, 2400, 80, 240); gg.rotateX(-Math.PI / 2); const col = [], P = gg.attributes.position;
-  for (let i = 0; i < P.count; i++) { const k = 0.85 + rnd() * 0.25; col.push(0.42 * k, 0.3 * k, 0.21 * k); const x = Math.abs(P.getX(i)); if (x > 6) P.setY(i, rnd() * 0.25 + Math.max(0, x - 40) * 0.02 * rnd()); }
+  for (let i = 0; i < P.count; i++) { const k = 0.85 + rnd() * 0.25; col.push(0.42 * k, 0.3 * k, 0.21 * k); const x = Math.abs(P.getX(i)); if (x > 14) P.setY(i, rnd() * 0.25 + Math.max(0, x - 40) * 0.02 * rnd()); }
   gg.setAttribute('color', new THREE.Float32BufferAttribute(col, 3)); gg.computeVertexNormals();
   S.add(new THREE.Mesh(gg, new THREE.MeshLambertMaterial({ vertexColors: true, flatShading: true })));
-  const road = new THREE.Mesh(new THREE.PlaneGeometry(7, 2400), lam(0x2f2d2c)); road.rotation.x = -Math.PI / 2; road.position.y = 0.03; S.add(road);
-  const dash = lam(0xd9b24a); for (let z = -1200; z < 1200; z += 10) S.add(box(0.14, 0.01, 3.5, dash, 0, 0.04, z));
+  S.add(makeRoad());
   // Tafelberge am Horizont
   for (let i = 0; i < 16; i++) { const side = i % 2 ? 1 : -1, x = side * (160 + rnd() * 160), z = -900 + i * 120 + rnd() * 60, w = 60 + rnd() * 90, h = 25 + rnd() * 35;
     const m = new THREE.Mesh(new THREE.CylinderGeometry(w * 0.8, w, h, 7), lam(0x4a2e24)); m.position.set(x, h / 2, z); S.add(m); }
   // Kakteen + Straeucher (instanziert)
   const N = 900, cact = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.22, 0.26, 2.6, 6), lam(0x2f4a2c), N), arm = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.16, 0.16, 1.1, 6), lam(0x2f4a2c), N);
   const bush = new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.6, 0), lam(0x5a5a36), N), M = new THREE.Matrix4(), Q = new THREE.Quaternion();
-  for (let i = 0; i < N; i++) { const side = rnd() > .5 ? 1 : -1, x = side * (6 + rnd() * 90), z = -1200 + rnd() * 2400, s = 0.7 + rnd() * 0.9;
+  for (let i = 0; i < N; i++) { const side = rnd() > .5 ? 1 : -1, x = side * (14 + rnd() * 90), z = -1200 + rnd() * 2400, s = 0.7 + rnd() * 0.9;
     M.compose(V(x, 1.3 * s, z), Q, V(s, s, s)); cact.setMatrixAt(i, M); M.compose(V(x + 0.45 * s, 1.7 * s, z), Q, V(s, s, s)); arm.setMatrixAt(i, M);
     M.compose(V(-side * (5 + rnd() * 60), 0.2, -1200 + rnd() * 2400), Q, V(s, 0.6 * s, s)); bush.setMatrixAt(i, M); }
   S.add(cact, arm, bush);
@@ -82,20 +81,37 @@ function buildDesert() {
   const sun = glow(160, [255, 200, 120]); sun.material.fog = false; sun.position.set(-60, 12, 500); S.add(sun);
   const car = makeCar(); S.add(car.G);
   // Skinwalker: laufend (Vierbeiner), aufrecht, Papa-Gestalt am Fenster
-  const runT = [0, 1, 2, 3].map(k => C.skinRun(k * Math.PI / 2));
+  const runT = Array.from({ length: 12 }, (_, k) => C.skinRun(k / 12));
   const run = sprite(runT[0], 1.25, 0.2); run.userData.noBB = true; run.children[0].visible = false; S.add(run);
   const stand = sprite(C.skinStand(true), 2.7, 0.2); stand.userData.noBB = true; stand.children[0].visible = false; S.add(stand);
   const shapeC = C.cv(1024, 2048), sx = shapeC.getContext('2d'); sx.filter = 'brightness(0.32) saturate(0.4)'; sx.drawImage(C.papa('front', 'neutral'), 0, 0, 1024, 2048); sx.filter = 'none';
   for (const x of [392, 632]) { const gr = sx.createRadialGradient(x, 640, 2, x, 640, 60); gr.addColorStop(0, '#fff'); gr.addColorStop(0.3, 'rgba(255,225,140,1)'); gr.addColorStop(1, 'rgba(255,200,80,0)'); sx.fillStyle = gr; sx.beginPath(); sx.arc(x, 640, 60, 0, 7); sx.fill(); }
   const shape = sprite(shapeC, 1.75, 0.0); shape.userData.noBB = true; shape.children[0].visible = false; S.add(shape);
   const hand = sprite(handTex(), 0.32, 0.1); hand.userData.noBB = true; hand.children[0].visible = false; S.add(hand);
-  return { S, BG, hemi, moon, stars, moonS, sun, car, run, runT, stand, shape, hand, cam: new THREE.PerspectiveCamera(50, 9 / 16, 0.03, 1500) };
+  return { S, BG, hemi, moon, stars, moonS, sun, car, run, runT, stand, shape, hand, cam: new THREE.PerspectiveCamera(50, 9 / 16, 0.08, 1500) };
 }
 function handTex() { // Knoechel von aussen am Glas
   const c = C.cv(256, 256), g = c.getContext('2d'); g.fillStyle = '#3a3029'; g.strokeStyle = '#120c0a'; g.lineWidth = 8;
   g.beginPath(); g.roundRect(40, 70, 170, 130, 50); g.fill(); g.stroke();
   for (let i = 0; i < 4; i++) { g.beginPath(); g.arc(70 + i * 38, 80, 22, 0, 7); g.fill(); g.stroke(); }
   return c;
+}
+
+// Strasse als Textur (Mipmaps -> kein Flimmern): Asphalt, weisse Randlinien, gelbe Mittellinie, Bankett
+function makeRoad() {
+  const c = C.cv(512, 1024), g = c.getContext('2d');
+  g.fillStyle = '#34322f'; g.fillRect(0, 0, 512, 1024);
+  for (let i = 0; i < 9000; i++) { const v = 40 + Math.floor(rnd() * 30); g.fillStyle = `rgba(${v},${v - 2},${v - 4},.6)`; g.fillRect(rnd() * 512, rnd() * 1024, 2, 2); }
+  g.fillStyle = 'rgba(0,0,0,.18)'; g.fillRect(120, 0, 70, 1024); g.fillRect(322, 0, 70, 1024);   // Fahrspuren
+  g.fillStyle = '#e8e6df'; g.fillRect(34, 0, 14, 1024); g.fillRect(464, 0, 14, 1024);          // Randlinien
+  g.fillStyle = '#e0b53c'; g.fillRect(250, 0, 12, 400);                                          // Mittelstrich
+  const t = tex(c); t.wrapS = THREE.ClampToEdgeWrapping; t.wrapT = THREE.RepeatWrapping; t.repeat.set(1, 240); t.generateMipmaps = true; t.minFilter = THREE.LinearMipmapLinearFilter;
+  const G = new THREE.Group();
+  const mat = new THREE.MeshLambertMaterial({ map: t, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+  const road = new THREE.Mesh(new THREE.PlaneGeometry(7.4, 2400), mat); road.rotation.x = -Math.PI / 2; road.position.y = 0.06; G.add(road);
+  const shoulder = new THREE.MeshLambertMaterial({ color: 0x7a6650, polygonOffset: true, polygonOffsetFactor: -1, polygonOffsetUnits: -1 });
+  for (const x of [-4.6, 4.6]) { const s = new THREE.Mesh(new THREE.PlaneGeometry(1.8, 2400), shoulder); s.rotation.x = -Math.PI / 2; s.position.set(x, 0.04, 0); G.add(s); }
+  return G;
 }
 export function build() { return { D: buildDesert() }; }
 
@@ -110,9 +126,9 @@ function base(D, mode = 'night', lights = true) {
 }
 // Skinwalker neben dem Auto (Beifahrerseite = -x), laeuft mit
 function runner(D, t, z, dx = -3.2, upright = 0) {
-  const k = Math.floor(t * 9) % 4; setTex(D.run, D.runT[k]); D.run.visible = upright < 0.5; D.stand.visible = upright >= 0.5;
-  const bob = Math.abs(Math.sin(t * 9 * Math.PI / 2)) * 0.12;
-  D.run.position.set(dx, bob, z); D.run.rotation.y = -Math.PI / 2; // Gesicht in Fahrtrichtung (+z)
+  const k = Math.floor(t * 2.4 * 12) % 12; setTex(D.run, D.runT[k]); D.run.visible = upright < 0.5; D.stand.visible = upright >= 0.5;
+  const bob = Math.abs(Math.sin(t * 2.4 * Math.PI * 2)) * 0.1;
+  D.run.position.set(dx, 0, z); D.run.rotation.y = -Math.PI / 2; // Gesicht in Fahrtrichtung (+z)
   D.stand.position.set(dx, bob * 0.6, z); D.stand.rotation.y = Math.PI / 2;
 }
 

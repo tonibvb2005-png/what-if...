@@ -445,17 +445,30 @@ export function skinStand(run = false) {
   skinHead(g, 256, 190);
   return c;
 }
-export function skinRun(phase = 0) { // auf allen vieren, Blick nach rechts
-  const c = cv2(1024, 512), g = c.getContext('2d'), a = Math.sin(phase), b = Math.cos(phase);
-  line(g, [[330, 300], [260 + a * 60, 400], [230 + a * 90, 500]], 26, SKF2);
-  line(g, [[690, 300], [640 - a * 60, 400], [690 - a * 90, 500]], 26, SKF2);
-  P(g, g => { g.moveTo(300, 250); g.quadraticCurveTo(520, 190 + b * 10, 740, 240); g.quadraticCurveTo(760, 330, 700, 330); g.quadraticCurveTo(520, 300, 330, 330); g.quadraticCurveTo(270, 310, 300, 250); }, SKF, 10, 0.12);
-  g.strokeStyle = 'rgba(30,20,14,.55)'; g.lineWidth = 6; for (let x = 520; x < 700; x += 30) { g.beginPath(); g.moveTo(x, 255); g.quadraticCurveTo(x + 10, 290, x, 318); g.stroke(); }
-  P(g, g => { g.moveTo(560, 230); g.quadraticCurveTo(680, 190, 790, 240); g.lineTo(760, 300); g.lineTo(730, 270); g.lineTo(700, 300); g.lineTo(670, 262); g.lineTo(630, 290); g.closePath(); }, SKF2, 9, 0.1);
-  line(g, [[350, 300], [400 - a * 70, 410], [360 - a * 100, 500]], 28, SKF);
-  line(g, [[710, 290], [760 + a * 70, 400], [800 + a * 90, 500]], 28, SKF);
-  line(g, [[300, 260], [220, 230], [170, 250]], 10, SKF2);
-  g.save(); g.translate(860, 250); g.rotate(-Math.PI / 2 + 0.25); skinHead(g, 0, 0, 0.9); g.restore();
+export function skinRun(ph = 0) { // ph 0..1: Galopp-Phase, Blick nach rechts, Boden bei y = 500
+  const c = cv2(1024, 512), g = c.getContext('2d'), TAU = Math.PI * 2;
+  const bob = Math.sin(ph * TAU * 2) * 10, flex = Math.cos(ph * TAU) * 22;
+  const hip = [330 - flex * 0.5, 268 + bob], sho = [690 + flex * 0.5, 262 + bob * 0.6];
+  const ik = (H, F, L1, L2, bend) => { let dx = F[0] - H[0], dy = F[1] - H[1], d = Math.hypot(dx, dy); const m = L1 + L2 - 2; if (d > m) { F = [H[0] + dx / d * m, H[1] + dy / d * m]; d = m; }
+    const a = Math.atan2(dy, dx), k = Math.acos(clampN((L1 * L1 + d * d - L2 * L2) / (2 * L1 * d))) * bend; return [[H[0] + Math.cos(a + k) * L1, H[1] + Math.sin(a + k) * L1], F]; };
+  const leg = (H, off, len, bend, col, w) => { const q = (ph + off) % 1, ang = q * TAU, sw = Math.cos(ang) * 120, lift = Math.max(0, Math.sin(ang)) * 90;
+    const F = [H[0] + sw, 498 - lift]; const [K, F2] = ik(H, F, len, len, bend);
+    line(g, [H, K, F2], w + 8, OL); line(g, [H, K, F2], w, col);
+    for (const d of [-10, 4, 18]) line(g, [F2, [F2[0] + d + 16, F2[1] + 6]], 5, BONE); };
+  // hintere (ferne) Beine
+  leg([hip[0] + 18, hip[1] + 20], 0.58, 126, -1, SKF2, 22); leg([sho[0] - 12, sho[1] + 28], 0.08, 120, 1, SKF2, 22);
+  // Schwanz
+  line(g, [[hip[0] - 20, hip[1] - 4], [hip[0] - 90, hip[1] - 20 + bob], [hip[0] - 150, hip[1] + 10 - bob]], 12, SKF2);
+  // Rumpf (abgemagert, Rippen)
+  P(g, g => { g.moveTo(hip[0] - 30, hip[1] - 10); g.quadraticCurveTo((hip[0] + sho[0]) / 2, hip[1] - 50 + bob * 0.3, sho[0] + 40, sho[1] - 20); g.quadraticCurveTo(sho[0] + 60, sho[1] + 50, sho[0] - 10, sho[1] + 62);
+    g.quadraticCurveTo((hip[0] + sho[0]) / 2, sho[1] + 40, hip[0] + 10, hip[1] + 52); g.quadraticCurveTo(hip[0] - 50, hip[1] + 40, hip[0] - 30, hip[1] - 10); }, SKF, 10, 0.12);
+  g.strokeStyle = 'rgba(30,20,14,.55)'; g.lineWidth = 6; for (let i = 0; i < 6; i++) { const x = sho[0] - 40 - i * 30; g.beginPath(); g.moveTo(x, sho[1] - 6); g.quadraticCurveTo(x + 10, sho[1] + 22, x, sho[1] + 50); g.stroke(); }
+  // Fell ueber dem Ruecken
+  P(g, g => { g.moveTo(sho[0] - 150, sho[1] - 24); g.quadraticCurveTo(sho[0] - 20, sho[1] - 70, sho[0] + 80, sho[1] - 24); g.lineTo(sho[0] + 50, sho[1] + 34); g.lineTo(sho[0] + 20, sho[1] + 4); g.lineTo(sho[0] - 10, sho[1] + 36); g.lineTo(sho[0] - 50, sho[1] + 2); g.lineTo(sho[0] - 90, sho[1] + 26); g.closePath(); }, SKF2, 9, 0.1);
+  // vordere (nahe) Beine
+  leg([hip[0], hip[1] + 26], 0.5, 130, -1, SKF, 26); leg([sho[0], sho[1] + 34], 0.0, 124, 1, SKF, 26);
+  g.save(); g.translate(sho[0] + 130, sho[1] - 12 + Math.sin(ph * TAU * 2 + 1) * 8); g.rotate(-Math.PI / 2 + 0.3); skinHead(g, 0, 0, 0.9); g.restore();
   return c;
 }
+const clampN = v => Math.max(-1, Math.min(1, v));
 MONSTERS['SKINWALKER'] = () => { const c = cv2(512, 1024), g = c.getContext('2d'); g.drawImage(skinStand(false), 0, 0, 512, 1024); return c; };
