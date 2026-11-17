@@ -9,6 +9,7 @@ const cv = document.getElementById('c'), ctx = cv.getContext('2d');
 const HANDLE = '@nomi.wasware';
 const EP_NAME = new URLSearchParams(location.search).get('ep') || 'schweiz';
 document.write(`<script src="episodes/${EP_NAME}.js"><\/script>`);
+if (!new URLSearchParams(location.search).has('estimate')) document.write(`<script src="episodes/${EP_NAME}.times.js" onerror=""><\/script>`);
 </script>
 <script>
 const EP = window.EPISODE;
@@ -52,6 +53,15 @@ let DURATION = 0;
     if (si === SCRIPT.length - 1) s.b += 0.8;
     t = s.b;
   });
+  if (real) {  // with real audio: cut between scenes in the middle of the pause
+    SCRIPT.forEach((s, i) => {
+      const last = s.words[s.words.length - 1], next = SCRIPT[i + 1];
+      if (i === 0) s.a = 0;
+      if (next) { const nf = next.words[0].start; s.b = Math.max(last.end + 0.12, (last.end + nf) / 2 + 0.1); s.b = Math.min(s.b, nf - 0.02); next.a = s.b; }
+      else s.b = last.end + 1.6;
+    });
+    t = SCRIPT[SCRIPT.length - 1].b;
+  }
   DURATION = t;
 })();
 window.DURATION = DURATION;
@@ -514,7 +524,7 @@ const SCENES = {
   roulette(u, s) {
     casinoBg(u);
     const tS = cue(s, s.stop) - 0.1;
-    popText([['Wo bist du', '#fff']], 540, 330, 92, prog(u, 0.1, 0.5));
+    popText([['Wo werde ich', '#fff']], 540, 330, 92, prog(u, 0.1, 0.5));
     popText([['heute geboren?', '#ffd23f']], 540, 440, 92, prog(u, 0.3, 0.7));
     reel(u, s, tS, false);
     if (u > tS) popText([[EP.flag + ' ' + EP.country.toUpperCase() + '!', '#fff']], 430, 1150, 84, prog(u, tS + 0.1, tS + 0.5));
@@ -806,7 +816,7 @@ const SCENES = {
 
   outro(u, s) {
     casinoBg(u);
-    popText([['Und wo bist du', '#fff']], 540, 330, 90, prog(u, 0.1, 0.5));
+    popText([['Wo werde ich', '#fff']], 540, 330, 90, prog(u, 0.1, 0.5));
     popText([['morgen geboren?', '#ffd23f']], 540, 440, 90, prog(u, 0.3, 0.7));
     reel(u, s, 0, true);
     const tS = cue(s, 'schreib');
