@@ -1,1 +1,5 @@
 probevideo/*.mp4
+
+# Heruntergeladene Werkzeug-Pakete
+/*.whl
+/*.tar.gz
