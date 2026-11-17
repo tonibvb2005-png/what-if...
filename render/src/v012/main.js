@@ -169,9 +169,9 @@ const shots = [
       const ringT = WT('shrug', 4);
       setPlace('inn', t, { brass: true, ring: t >= ringT });
       kenyon.set(kenyonSpec({ expr: t < ringT ? 'bored' : 'smirk', pose: t < ringT ? 'shrug' : 'bellrope', swing: Math.floor(t * 6) % 2 === 0, sweat: false }));
-      at(kenyon, t < ringT ? POLE.x + 1.4 : 4.3, 0, t < ringT ? POLE.z + 1.2 : 2.9, t >= ringT);
+      at(kenyon, t < ringT ? POLE.x + 1.4 : 4.3, 0, t < ringT ? POLE.z + 1.2 : 2.9);
       if (t < ringT) look(v3(POLE.x + 1.6, 1.75, POLE.z + 3.8), v3(POLE.x + 1.4, 1.7, POLE.z + 1.2), 40);
-      else look(v3(2.0, 2.2, 5.3).add(shake(t, 0.012)), v3(4.3, 2.2, 2.6), 50, -0.04);
+      else look(v3(2.4, 2.0, 5.3).add(shake(t, 0.012)), v3(4.2, 2.5, 2.7), 50, -0.04);
       return {};
   } },
   { id: 'race', start: S.race, trans: { type: 'whip', dur: 0.12 }, run(t, u) {
@@ -193,7 +193,7 @@ const shots = [
   { id: 'payoff', start: S.payoff, trans: { type: 'whip', dur: 0.12 }, run(t, u) {
       const livesT = WT('payoff', 8);
       setPlace('out', t, { doorsOpen: 1, brass: true, fire: t >= livesT ? 0.6 : 1 });
-      if (t < WT('payoff', 6)) { R.others.forEach((f) => f.userData.doors.forEach((d, i) => (d.rotation.y = (i ? -1 : 1) * 1.6 * sw(t, S.payoff + 0.3, S.payoff + 1)))); R.others.forEach((f) => (f.userData.dark.visible = false)); const e = ease.io(sw(t, S.payoff, WT('payoff', 6))); look(v3(lerp(-30, 60, e), 5, 14), v3(lerp(-24, 54, e), 4, 6), 58); return {}; }
+      if (t < WT('payoff', 6)) { R.others.forEach((f) => f.userData.doors.forEach((d, i) => (d.rotation.y = (i ? -1 : 1) * 1.6 * sw(t, S.payoff + 0.3, S.payoff + 1)))); R.others.forEach((f) => (f.userData.dark.visible = false)); const e = ease.io(sw(t, S.payoff, WT('payoff', 6))); look(v3(lerp(-26, 24, e), 5, 15), v3(lerp(-22, 20, e), 4, 6), 58); return {}; }
       R.others.forEach((f) => f.userData.doors.forEach((d) => (d.rotation.y = 0)));
       reid.set({ ...RE, expr: t >= livesT ? 'grin' : 'determined', pose: 'rescue', cheeks: true }); at(reid, FIRE_POS.x - 2.2, 0, FIRE_POS.z - 6.2);
       mom.set({ expr: t >= livesT ? 'happy' : 'cry', pose: t >= livesT ? 'stuck' : 'stand' }); at(mom, FIRE_POS.x - 4.2, 0, FIRE_POS.z - 6.8, true);
