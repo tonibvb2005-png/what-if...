@@ -1,0 +1,3256 @@
+<roblox version="4">
+  <Item class="ReplicatedStorage" referent="0">
+    <Properties>
+      <string name="Name">ReplicatedStorage</string>
+    </Properties>
+    <Item class="Folder" referent="1">
+      <Properties>
+        <string name="Name">HorrorRoulette</string>
+      </Properties>
+      <Item class="ModuleScript" referent="2">
+        <Properties>
+          <string name="Name">Config</string>
+          <string name="Source"><![CDATA[-- HORROR ROULETTE – zentrale Einstellungen (Server und Client lesen diese Datei)
+-- Alles, was man ohne Programmierkenntnisse anpassen möchte, steht hier.
+
+local Config = {}
+
+-- Zeiten in Sekunden
+Config.IntermissionSeconds = 20   -- Countdown in der Lobby, bevor das Roulette dreht
+Config.RouletteSeconds = 7        -- Dauer der Roulette-Animation inkl. Einrasten
+Config.NightSeconds = 300         -- eine Nacht (00:00 bis 06:00) dauert 5 Minuten
+Config.ResultsSeconds = 9         -- Ergebnis-Bildschirm
+
+-- Bewegung
+Config.WalkSpeed = 14
+Config.SprintSpeed = 24
+Config.RunThreshold = 19          -- ab dieser Geschwindigkeit (Studs/s) gilt ein Spieler als "rennend"
+
+-- Belohnungen
+Config.Coins = {
+	Survive = 50,
+	NoteFirstRead = 5,
+	RuleFirst = 15,
+}
+
+Config.Ranks = {
+	{ name = "Praktikant", nights = 0 },
+	{ name = "Wächter", nights = 3 },
+	{ name = "Agent", nights = 10 },
+	{ name = "Direktor", nights = 25 },
+}
+
+-- Sounds: Hier die Roblox-Asset-IDs eintragen, z. B. "rbxassetid://1234567890".
+-- Leere Einträge werden einfach übersprungen (das Spiel läuft auch ohne Ton).
+-- Passende CC0-Dateien zum Hochladen liegen im Ordner "sounds_zum_hochladen".
+Config.Sounds = {
+	RouletteTick = "",
+	RouletteLock = "",
+	Alarm = "",
+	Knock = "",
+	PoPoPo = "",
+	Siren = "",
+	Static = "",
+	Jumpscare = "",
+	DoorOpen = "",
+	DoorClose = "",
+	RadioNoise = "",
+	Ambient = "",
+	Sunrise = "",
+	PageFlip = "",
+	Heartbeat = "",
+}
+
+-- Die Monster. Reihenfolge = Reihenfolge im Roulette und in der Akte.
+Config.Monsters = {
+	{
+		id = "Hutfrau",
+		name = "DIE HUTFRAU",
+		origin = "Japanische Sage (Hachishakusama)",
+		rule = "ÖFFNE KEINE TÜR",
+		ruleLong = "Öffne keine Tür nach draußen bis zum Sonnenaufgang – egal, wer ruft.",
+		color = Color3.fromRGB(235, 230, 220),
+		story = "Zweieinhalb Meter groß, weißer Sonnenhut. Wen sie einmal gesehen hat, den holt sie. Sie kommt nur herein, wenn du ihr öffnest.",
+		notes = {
+			{ title = "Zettel von Oma", text = "Mach niemandem die Tür auf.\nNicht einmal uns.\nWarte, bis die Sonne aufgeht." },
+			{ title = "Gekritzel an der Wand", text = "Sie ist größer als die Tür.\nWenn du \"po… po… po…\" hörst, ist sie nah." },
+			{ title = "Notiz im Schlafzimmer", text = "Salz in jede Ecke.\nSie klopft. Sie ruft mit bekannten Stimmen.\nDie Tür bleibt zu." },
+		},
+		lures = {
+			"Mach auf, ich bin's! Mir ist so kalt hier draußen.",
+			"Schnell, lass mich rein, da ist etwas im Wald!",
+			"Ich hab mich ausgesperrt. Öffnest du kurz die Hintertür?",
+			"Hallo? Ich bin's. Mach doch bitte die Tür auf.",
+		},
+	},
+	{
+		id = "Schreier",
+		name = "DER SCHREIER",
+		origin = "Eigene Figur (Lautsprecher-Wesen)",
+		rule = "MACH KEIN GERÄUSCH",
+		ruleLong = "Mach kein Geräusch: nicht rennen, keine Türen benutzen, das Radio sofort ausschalten.",
+		color = Color3.fromRGB(160, 110, 80),
+		story = "Zwölf Meter groß, blind, zwei Lautsprecher statt Kopf. Er jagt nach Gehör und lockt mit jeder Stimme, die er je gehört hat.",
+		notes = {
+			{ title = "Zettel am Kühlschrank", text = "Er ist blind.\nAber er hört ALLES." },
+			{ title = "Notiz im Schlafzimmer", text = "Nicht rennen. Keine Türen.\nWenn das Radio von selbst angeht: sofort aus!" },
+			{ title = "Gekritzel auf dem Tisch", text = "Er ruft mit unseren Stimmen.\nAntworte nicht. Beweg dich langsam." },
+		},
+		lures = {
+			"Hilfe! Ich bin draußen, kommt schnell!",
+			"Rennt! Er ist im Haus!",
+			"Macht das Radio lauter, ich kann nichts hören!",
+			"Ich bin hinten an der Tür, beeilt euch!",
+		},
+	},
+	{
+		id = "Gesichtslose",
+		name = "DER GESICHTSLOSE",
+		origin = "Eigene Figur (groß, ohne Gesicht)",
+		rule = "RENN NICHT",
+		ruleLong = "Renn nicht, wenn die Kamera rauscht. Man sieht ihn nur durch die Kamera.",
+		color = Color3.fromRGB(30, 30, 34),
+		story = "Viel zu groß, schwarzer Anzug, kein Gesicht. Das Auge sieht ihn nicht – nur die Kamera. Er holt jeden, der vor ihm wegrennt.",
+		notes = {
+			{ title = "Zettel am Kamin", text = "Die Kamera zeigt, was das Auge nicht sieht.\nNimm sie in die Hand (Taste 1)." },
+			{ title = "Notiz in der Küche", text = "Wenn die Kamera rauscht:\nRENN NICHT." },
+			{ title = "Gekritzel im Schlafzimmer", text = "Geh langsam.\nDreh dich nicht um.\nEr steht immer hinter jemandem." },
+		},
+		lures = {
+			"Lauf! Er steht direkt hinter dir!",
+			"Schnell weg da, rennt in die Küche!",
+			"Wo seid ihr? Kommt schnell her!",
+			"Er ist weg, ihr könnt rennen!",
+		},
+	},
+}
+
+-- Gesperrte Zellen in der Lobby (kommen mit späteren Updates)
+Config.LockedCells = 2
+
+-- Stimmen, die Monster nutzen, wenn nur ein Spieler da ist
+Config.SoloVoices = { "Oma", "Mama", "Papa", "Opa" }
+
+function Config.GetMonster(id: string)
+	for index, monster in ipairs(Config.Monsters) do
+		if monster.id == id then
+			return monster, index
+		end
+	end
+	return nil, nil
+end
+
+function Config.GetRank(nights: number): string
+	local rank = Config.Ranks[1].name
+	for _, entry in ipairs(Config.Ranks) do
+		if nights >= entry.nights then
+			rank = entry.name
+		end
+	end
+	return rank
+end
+
+return Config
+]]></string>
+        </Properties>
+      </Item>
+    </Item>
+  </Item>
+  <Item class="ServerScriptService" referent="3">
+    <Properties>
+      <string name="Name">ServerScriptService</string>
+    </Properties>
+    <Item class="Folder" referent="4">
+      <Properties>
+        <string name="Name">HorrorRoulette</string>
+      </Properties>
+      <Item class="Script" referent="5">
+        <Properties>
+          <string name="Name">Main</string>
+          <string name="Source"><![CDATA[-- HORROR ROULETTE – Server-Start
+-- Baut die Welt, legt die Fernsteuerungen (RemoteEvents) an und startet den Rundenablauf.
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+
+local shared = ReplicatedStorage:WaitForChild("HorrorRoulette")
+local Config = require(shared:WaitForChild("Config"))
+
+local modules = script.Parent
+local WorldBuilder = require(modules.WorldBuilder)
+local DataService = require(modules.DataService)
+local RoundService = require(modules.RoundService)
+local Monsters = {
+	Hutfrau = require(modules.Monsters.Hutfrau),
+	Schreier = require(modules.Monsters.Schreier),
+	Gesichtslose = require(modules.Monsters.Gesichtslose),
+}
+
+-- RemoteEvents (Server → Client und Client → Server)
+local REMOTE_NAMES = {
+	"State", "Roulette", "Notice", "Note", "RuleReveal", "Jumpscare", "Profile", "FakeChat", "Results",
+	"SetReady", "SaveSettings",
+}
+local remotesFolder = shared:FindFirstChild("Remotes")
+if not remotesFolder then
+	remotesFolder = Instance.new("Folder")
+	remotesFolder.Name = "Remotes"
+	remotesFolder.Parent = shared
+end
+local remotes = {}
+for _, name in ipairs(REMOTE_NAMES) do
+	local remote = remotesFolder:FindFirstChild(name)
+	if not remote then
+		remote = Instance.new("RemoteEvent")
+		remote.Name = name
+		remote.Parent = remotesFolder
+	end
+	remotes[name] = remote
+end
+
+local world = WorldBuilder.build(Config)
+
+RoundService.start({
+	Config = Config,
+	World = world,
+	WorldBuilder = WorldBuilder,
+	Data = DataService,
+	Remotes = remotes,
+	Monsters = Monsters,
+})
+
+print("[HorrorRoulette] Server bereit.")
+]]></string>
+        </Properties>
+      </Item>
+      <Item class="ModuleScript" referent="6">
+        <Properties>
+          <string name="Name">Build</string>
+          <string name="Source"><![CDATA[-- Kleine Hilfsfunktionen zum Bauen von Teilen per Skript.
+local Build = {}
+
+local DEG = math.rad
+
+-- Erstellt ein verankertes Teil. props: zusätzliche Eigenschaften (Name = Wert)
+function Build.part(parent, name, size, cframe, color, material, props)
+	local p = Instance.new("Part")
+	p.Name = name
+	p.Anchored = true
+	p.Size = size
+	p.CFrame = cframe
+	p.Color = color
+	p.Material = material or Enum.Material.SmoothPlastic
+	p.TopSurface = Enum.SurfaceType.Smooth
+	p.BottomSurface = Enum.SurfaceType.Smooth
+	if props then
+		for key, value in pairs(props) do
+			p[key] = value
+		end
+	end
+	p.Parent = parent
+	return p
+end
+
+-- Senkrechter Zylinder: height = Höhe, diameter = Durchmesser, base = CFrame der Mitte
+function Build.cylinder(parent, name, height, diameter, cframe, color, material, props)
+	local p = Build.part(parent, name, Vector3.new(height, diameter, diameter),
+		cframe * CFrame.Angles(0, 0, DEG(90)), color, material, props)
+	p.Shape = Enum.PartType.Cylinder
+	return p
+end
+
+-- Zylinder, dessen Achse nach vorne (Z) zeigt (z. B. Lautsprecher)
+function Build.cylinderZ(parent, name, length, diameter, cframe, color, material, props)
+	local p = Build.part(parent, name, Vector3.new(length, diameter, diameter),
+		cframe * CFrame.Angles(0, DEG(90), 0), color, material, props)
+	p.Shape = Enum.PartType.Cylinder
+	return p
+end
+
+function Build.ball(parent, name, diameter, cframe, color, material, props)
+	local p = Build.part(parent, name, Vector3.new(diameter, diameter, diameter), cframe, color, material, props)
+	p.Shape = Enum.PartType.Ball
+	return p
+end
+
+-- Ellipsoid über ein SpecialMesh (z. B. ein ovaler Kopf)
+function Build.ellipsoid(parent, name, size, cframe, color, material, props)
+	local p = Build.part(parent, name, size, cframe, color, material, props)
+	local mesh = Instance.new("SpecialMesh")
+	mesh.MeshType = Enum.MeshType.Sphere
+	mesh.Parent = p
+	return p
+end
+
+function Build.folder(parent, name)
+	local f = Instance.new("Folder")
+	f.Name = name
+	f.Parent = parent
+	return f
+end
+
+-- Text auf einer Fläche (SurfaceGui). face: Enum.NormalId
+function Build.sign(part, face, text, textColor, options)
+	options = options or {}
+	local gui = Instance.new("SurfaceGui")
+	gui.Name = "Sign"
+	gui.Face = face
+	gui.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
+	gui.PixelsPerStud = options.pixelsPerStud or 40
+	gui.LightInfluence = options.lightInfluence or 0
+	gui.Parent = part
+	local label = Instance.new("TextLabel")
+	label.Name = "Text"
+	label.BackgroundTransparency = 1
+	label.Size = UDim2.fromScale(1, 1)
+	label.Font = options.font or Enum.Font.GothamBlack
+	label.TextScaled = true
+	label.RichText = true
+	label.Text = text
+	label.TextColor3 = textColor
+	label.Parent = gui
+	local pad = Instance.new("UIPadding")
+	pad.PaddingTop = UDim.new(0.12, 0)
+	pad.PaddingBottom = UDim.new(0.12, 0)
+	pad.PaddingLeft = UDim.new(0.04, 0)
+	pad.PaddingRight = UDim.new(0.04, 0)
+	pad.Parent = label
+	return gui, label
+end
+
+function Build.light(part, kind, color, brightness, range, props)
+	local light = Instance.new(kind)
+	light.Color = color
+	light.Brightness = brightness
+	light.Range = range
+	if props then
+		for key, value in pairs(props) do
+			light[key] = value
+		end
+	end
+	light.Parent = part
+	return light
+end
+
+-- Ein Model mit unsichtbarem Fuß-Teil "Root" als PrimaryPart
+function Build.model(parent, name)
+	local model = Instance.new("Model")
+	model.Name = name
+	local root = Build.part(model, "Root", Vector3.new(2, 0.2, 2), CFrame.new(0, 0, 0), Color3.new(0, 0, 0), nil,
+		{ Transparency = 1, CanCollide = false, CanQuery = false, CanTouch = false })
+	model.PrimaryPart = root
+	model.Parent = parent
+	return model
+end
+
+return Build
+]]></string>
+        </Properties>
+      </Item>
+      <Item class="ModuleScript" referent="7">
+        <Properties>
+          <string name="Name">MonsterModels</string>
+          <string name="Source"><![CDATA[-- Die drei Monster als Modelle aus Grundteilen (keine externen Assets nötig).
+-- Alle Modelle stehen mit den Füßen bei y = 0 und schauen nach -Z (Roblox "vorne").
+local Build = require(script.Parent.Build)
+
+local MonsterModels = {}
+
+local V = Vector3.new
+local C = CFrame.new
+local RGB = Color3.fromRGB
+
+local function noCollide(model)
+	for _, d in ipairs(model:GetDescendants()) do
+		if d:IsA("BasePart") then
+			d.CanCollide = false
+			d.CanTouch = false
+			d.Anchored = true
+			d.CastShadow = true
+		end
+	end
+end
+
+-- DIE HUTFRAU: weißes Kleid, langes schwarzes Haar, breiter weißer Hut, ca. 14,5 Studs
+local function buildHutfrau(parent)
+	local m = Build.model(parent, "Hutfrau")
+	local white = RGB(242, 238, 228)
+	local pale = RGB(236, 226, 214)
+	local hair = RGB(14, 12, 14)
+	Build.part(m, "FootL", V(0.6, 0.4, 0.9), C(-0.5, 0.2, -0.1), pale)
+	Build.part(m, "FootR", V(0.6, 0.4, 0.9), C(0.5, 0.2, -0.1), pale)
+	Build.cylinder(m, "Dress", 8.6, 3.3, C(0, 4.7, 0), white, Enum.Material.Fabric)
+	Build.cylinder(m, "Chest", 2.2, 2.3, C(0, 9.9, 0), white, Enum.Material.Fabric)
+	Build.part(m, "HairBack", V(2.4, 5.2, 0.9), C(0, 10.4, 0.65), hair, Enum.Material.Fabric)
+	Build.part(m, "ArmL", V(0.42, 6.4, 0.42), C(-1.55, 7.6, 0), pale)
+	Build.part(m, "ArmR", V(0.42, 6.4, 0.42), C(1.55, 7.6, 0), pale)
+	Build.cylinder(m, "Neck", 1.0, 0.6, C(0, 11.3, 0), pale)
+	Build.ellipsoid(m, "Head", V(1.8, 2.1, 1.8), C(0, 12.5, 0), pale)
+	Build.part(m, "HairL", V(0.35, 4.5, 1.2), C(-0.95, 11.2, 0.05), hair, Enum.Material.Fabric)
+	Build.part(m, "HairR", V(0.35, 4.5, 1.2), C(0.95, 11.2, 0.05), hair, Enum.Material.Fabric)
+	Build.part(m, "Smile", V(1.0, 0.12, 0.08), C(0, 11.95, -0.9), RGB(60, 10, 14))
+	Build.ball(m, "EyeL", 0.26, C(-0.35, 12.6, -0.82), RGB(255, 245, 240), Enum.Material.Neon)
+	Build.ball(m, "EyeR", 0.26, C(0.35, 12.6, -0.82), RGB(255, 245, 240), Enum.Material.Neon)
+	Build.cylinder(m, "HatBrim", 0.18, 6.2, C(0, 13.6, 0), white, Enum.Material.Fabric)
+	Build.cylinder(m, "HatCrown", 1.4, 2.5, C(0, 14.35, 0), white, Enum.Material.Fabric)
+	Build.cylinder(m, "HatBand", 0.35, 2.56, C(0, 13.85, 0), RGB(20, 18, 20), Enum.Material.Fabric)
+	noCollide(m)
+	return m
+end
+
+-- DER SCHREIER: dürrer brauner Körper, Mast als Hals, zwei Lautsprecher, ca. 40 Studs
+local function buildSchreier(parent)
+	local m = Build.model(parent, "Schreier")
+	local skin = RGB(128, 86, 58)
+	local dark = RGB(90, 60, 42)
+	local metal = RGB(112, 106, 102)
+	Build.part(m, "LegL", V(1.2, 18, 1.2), C(-1.3, 9, 0), skin, Enum.Material.Fabric)
+	Build.part(m, "LegR", V(1.2, 18, 1.2), C(1.3, 9, 0), skin, Enum.Material.Fabric)
+	Build.part(m, "Pelvis", V(3.6, 2, 1.7), C(0, 18.6, 0), dark, Enum.Material.Fabric)
+	Build.part(m, "Torso", V(3.4, 11, 1.8), C(0, 25, 0), skin, Enum.Material.Fabric)
+	for i = 0, 4 do
+		Build.part(m, "Rib" .. i, V(3.0, 0.25, 0.1), C(0, 22.5 + i * 1.3, -0.92), dark)
+	end
+	Build.part(m, "ArmL", V(0.8, 17, 0.8), C(-2.6, 22, 0), skin, Enum.Material.Fabric)
+	Build.part(m, "ArmR", V(0.8, 17, 0.8), C(2.6, 22, 0), skin, Enum.Material.Fabric)
+	Build.cylinder(m, "Pole", 7, 0.6, C(0, 34, 0), metal, Enum.Material.Metal)
+	Build.part(m, "Crossbar", V(9.4, 0.5, 0.5), C(0, 37.4, 0), metal, Enum.Material.Metal)
+	for _, side in ipairs({ -1, 1 }) do
+		local x = side * 4.3
+		Build.cylinderZ(m, "Horn", 3.6, 2.8, C(x, 37.4, -0.9), metal, Enum.Material.Metal)
+		Build.cylinderZ(m, "HornInner", 0.12, 2.2, C(x, 37.4, -2.72), RGB(15, 12, 12))
+		Build.cylinderZ(m, "HornBack", 1.6, 1.3, C(x, 37.4, 1.7), metal, Enum.Material.Metal)
+	end
+	noCollide(m)
+	return m
+end
+
+-- DER GESICHTSLOSE: schwarzer Anzug, weißer ovaler Kopf ohne Gesicht, ca. 14 Studs
+local function buildGesichtslose(parent)
+	local m = Build.model(parent, "Gesichtslose")
+	local suit = RGB(22, 22, 26)
+	local white = RGB(238, 238, 238)
+	Build.part(m, "LegL", V(1, 6.6, 1), C(-0.65, 3.3, 0), suit)
+	Build.part(m, "LegR", V(1, 6.6, 1), C(0.65, 3.3, 0), suit)
+	Build.part(m, "Torso", V(3, 5.2, 1.4), C(0, 9.2, 0), suit)
+	Build.part(m, "Shirt", V(0.8, 5, 0.06), C(0, 9.3, -0.72), white)
+	Build.part(m, "Tie", V(0.3, 3.6, 0.08), C(0, 9.6, -0.77), RGB(120, 14, 20))
+	Build.part(m, "ArmL", V(0.7, 7.8, 0.7), C(-1.9, 8.1, 0), suit)
+	Build.part(m, "ArmR", V(0.7, 7.8, 0.7), C(1.9, 8.1, 0), suit)
+	for _, side in ipairs({ -1, 1 }) do
+		for f = -1, 1 do
+			Build.part(m, "Finger", V(0.14, 1.7, 0.14), C(side * 1.9 + f * 0.2, 3.4, 0), white)
+		end
+	end
+	Build.cylinder(m, "Neck", 0.8, 0.5, C(0, 12.2, 0), white)
+	Build.ellipsoid(m, "Head", V(2, 2.9, 2), C(0, 13.8, 0), white)
+	noCollide(m)
+	return m
+end
+
+-- Gesperrte Zelle: dunkle Silhouette mit Fragezeichen-Wirkung
+local function buildUnknown(parent)
+	local m = Build.model(parent, "Unbekannt")
+	local black = RGB(8, 8, 10)
+	Build.part(m, "Body", V(3, 8, 1.6), C(0, 4.5, 0), black)
+	Build.ellipsoid(m, "Head", V(2.4, 2.8, 2.4), C(0, 10, 0), black)
+	Build.ball(m, "EyeL", 0.3, C(-0.4, 10.2, -1.1), RGB(255, 40, 30), Enum.Material.Neon)
+	Build.ball(m, "EyeR", 0.3, C(0.4, 10.2, -1.1), RGB(255, 40, 30), Enum.Material.Neon)
+	noCollide(m)
+	return m
+end
+
+local builders = {
+	Hutfrau = buildHutfrau,
+	Schreier = buildSchreier,
+	Gesichtslose = buildGesichtslose,
+	Unbekannt = buildUnknown,
+}
+
+-- Baut ein Monster, skaliert es und stellt es an cframe (Füße = cframe.Position)
+function MonsterModels.build(id, parent, cframe, scale)
+	local builder = builders[id] or buildUnknown
+	local model = builder(parent)
+	if scale and scale ~= 1 then
+		pcall(function()
+			model:ScaleTo(scale)
+		end)
+	end
+	if cframe then
+		model:PivotTo(cframe)
+	end
+	return model
+end
+
+return MonsterModels
+]]></string>
+        </Properties>
+      </Item>
+      <Item class="ModuleScript" referent="8">
+        <Properties>
+          <string name="Name">WorldBuilder</string>
+          <string name="Source"><![CDATA[-- Baut die komplette Spielwelt per Skript: Lobby (Zellentrakt) und Hütte im Schneewald.
+-- Gibt eine Tabelle mit allen wichtigen Orten und Objekten zurück.
+local CollectionService = game:GetService("CollectionService")
+
+local Build = require(script.Parent.Build)
+local MonsterModels = require(script.Parent.MonsterModels)
+
+local WorldBuilder = {}
+
+local V = Vector3.new
+local C = CFrame.new
+local RGB = Color3.fromRGB
+local DEG = math.rad
+
+-- ===================================================================== LOBBY
+local RING_COLORS = {
+	RGB(163, 92, 255), RGB(63, 224, 138), RGB(67, 212, 255), RGB(255, 92, 168), RGB(255, 196, 64),
+}
+
+local function buildLobby(root, monsters, lockedCount)
+	local lobby = Build.folder(root, "Lobby")
+	local metal = RGB(28, 30, 36)
+	local wall = RGB(34, 36, 42)
+
+	Build.part(lobby, "Floor", V(132, 1, 72), C(0, -0.5, 0), RGB(22, 23, 28), Enum.Material.DiamondPlate)
+	Build.part(lobby, "Ceiling", V(132, 1, 72), C(0, 30.5, 0), RGB(14, 14, 18), Enum.Material.Metal)
+	Build.part(lobby, "WallBack", V(132, 31, 1), C(0, 15, -36.5), wall, Enum.Material.Metal)
+	Build.part(lobby, "WallFront", V(132, 31, 1), C(0, 15, 36.5), wall, Enum.Material.Metal)
+	Build.part(lobby, "WallLeft", V(1, 31, 72), C(-66.5, 15, 0), wall, Enum.Material.Metal)
+	Build.part(lobby, "WallRight", V(1, 31, 72), C(66.5, 15, 0), wall, Enum.Material.Metal)
+
+	-- Zellen: aktive Monster + gesperrte Zellen
+	local entries = {}
+	for _, m in ipairs(monsters) do
+		table.insert(entries, { id = m.id, name = m.name })
+	end
+	for _ = 1, lockedCount do
+		table.insert(entries, { id = "Unbekannt", name = "???" })
+	end
+	local count = #entries
+	local spacing = 22
+	local startX = -spacing * (count - 1) / 2
+	local cells = {}
+	for i, entry in ipairs(entries) do
+		local x = startX + (i - 1) * spacing
+		local cell = Build.folder(lobby, "Cell_" .. entry.id)
+		local ring = RING_COLORS[((i - 1) % #RING_COLORS) + 1]
+		-- Rückwand und Trennwände
+		Build.part(cell, "Back", V(20, 30, 1), C(x, 15, -35.5), RGB(26, 28, 33), Enum.Material.Metal)
+		Build.part(cell, "SideL", V(1, 30, 18), C(x - 10.5, 15, -27), metal, Enum.Material.Metal)
+		Build.part(cell, "SideR", V(1, 30, 18), C(x + 10.5, 15, -27), metal, Enum.Material.Metal)
+		Build.part(cell, "Glass", V(20, 24, 0.3), C(x, 12, -18), RGB(160, 190, 220), Enum.Material.Glass,
+			{ Transparency = 0.85, CanCollide = true })
+		-- Podest mit Leuchtring
+		Build.cylinder(cell, "Podium", 1, 9, C(x, 0.5, -27), RGB(20, 21, 26), Enum.Material.Metal)
+		local ringPart = Build.cylinder(cell, "Ring", 0.3, 9.8, C(x, 0.18, -27), ring, Enum.Material.Neon)
+		-- Deckenlampe mit Spotlight
+		local lamp = Build.part(cell, "Lamp", V(3.5, 0.4, 1.2), C(x, 29.7, -27), RGB(255, 252, 240), Enum.Material.Neon)
+		local spot = Build.light(lamp, "SpotLight", RGB(255, 246, 230), 4, 36, { Face = Enum.NormalId.Bottom, Angle = 55, Shadows = true })
+		-- Namensschild über der Zelle
+		local sign = Build.part(cell, "NameSign", V(13, 2.6, 0.3), C(x, 25.5, -17.8), RGB(18, 18, 22), Enum.Material.SmoothPlastic)
+		local _, label = Build.sign(sign, Enum.NormalId.Back, entry.name, RGB(255, 255, 255), { font = Enum.Font.GothamBlack })
+		local stroke = Instance.new("UIStroke")
+		stroke.Color = ring
+		stroke.Thickness = 3
+		stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+		stroke.Parent = sign
+		-- Monster auf dem Podest (verkleinert, schaut zu den Spielern)
+		local scale = 1
+		if entry.id == "Schreier" then
+			scale = 0.48
+		end
+		local figure = MonsterModels.build(entry.id, cell, C(x, 1, -27) * CFrame.Angles(0, math.pi, 0), scale)
+		cells[entry.id] = { x = x, ring = ringPart, spot = spot, label = label, model = figure, ringColor = ring }
+	end
+
+	-- "AUSBRUCH"-Schilder zwischen den Zellen
+	for i = 1, count - 1 do
+		local x = startX + (i - 0.5) * spacing
+		local s = Build.part(lobby, "BreachSign", V(1.2, 1.6, 6), C(x, 20, -26), RGB(90, 10, 14), Enum.Material.SmoothPlastic)
+		Build.sign(s, Enum.NormalId.Right, "AUSBRUCH", RGB(255, 70, 70), { font = Enum.Font.GothamBold })
+	end
+
+	-- Gefahrenstreifen am Boden
+	for i = 0, 64 do
+		local x = -64 + i * 2
+		local color = (i % 2 == 0) and RGB(232, 185, 35) or RGB(17, 17, 17)
+		Build.part(lobby, "Hazard", V(2, 0.06, 1.4), C(x, 0.03, -15) * CFrame.Angles(0, DEG(25), 0), color)
+	end
+
+	-- Titel über den Zellen
+	local title = Build.part(lobby, "Title", V(44, 5, 0.4), C(0, 27.5, -14), RGB(10, 10, 12))
+	Build.sign(title, Enum.NormalId.Back, '<font color="#FFFFFF">Horror </font><font color="#E3262B">ROULETTE</font>',
+		RGB(255, 255, 255), { font = Enum.Font.GothamBlack })
+
+	-- Rotierende Alarmlichter
+	local alarms = {}
+	for _, x in ipairs({ -40, 0, 40 }) do
+		local a = Build.part(lobby, "Alarm", V(1.6, 1, 1.6), C(x, 29.6, 4), RGB(255, 40, 40), Enum.Material.Neon)
+		Build.light(a, "SpotLight", RGB(255, 30, 30), 6, 60, { Face = Enum.NormalId.Front, Angle = 40 })
+		a:SetAttribute("BasePos", V(x, 29.6, 4))
+		CollectionService:AddTag(a, "HR_Alarm")
+		table.insert(alarms, { part = a, base = V(x, 29.6, 4), phase = x * 0.05 })
+	end
+
+	-- Schwaches rotes Raumlicht
+	for _, x in ipairs({ -45, -15, 15, 45 }) do
+		local p = Build.part(lobby, "Glow", V(1, 1, 1), C(x, 18, 20), RGB(0, 0, 0), nil, { Transparency = 1, CanCollide = false })
+		Build.light(p, "PointLight", RGB(255, 60, 60), 0.6, 40)
+	end
+
+	-- Spawn
+	local spawn = Instance.new("SpawnLocation")
+	spawn.Name = "LobbySpawn"
+	spawn.Anchored = true
+	spawn.Size = V(12, 1, 12)
+	spawn.CFrame = C(0, -0.45, 22)
+	spawn.Transparency = 1
+	spawn.CanCollide = false
+	spawn.Neutral = true
+	spawn.Duration = 0
+	spawn.Parent = lobby
+	local decal = spawn:FindFirstChildOfClass("Decal")
+	if decal then
+		decal:Destroy()
+	end
+
+	return {
+		folder = lobby,
+		cells = cells,
+		alarms = alarms,
+		spawnCFrame = C(0, 3, 22),
+		spawnSpread = 10,
+	}
+end
+
+-- ===================================================================== HÜTTE
+local CX, CZ = 600, 0      -- Mitte der Hütte (weit weg von der Lobby)
+local FLOOR = 1            -- Oberkante Fußboden
+local WALL_TOP = 13        -- Oberkante Wände
+
+local function wallAlongX(parent, z, x1, x2, openings, color)
+	table.sort(openings, function(a, b)
+		return a.c < b.c
+	end)
+	local function seg(a, b, y1, y2)
+		if b - a > 0.01 and y2 - y1 > 0.01 then
+			Build.part(parent, "Wall", V(b - a, y2 - y1, 1), C((a + b) / 2, (y1 + y2) / 2, z), color, Enum.Material.WoodPlanks)
+		end
+	end
+	local cur = x1
+	for _, o in ipairs(openings) do
+		local a, b = o.c - o.w / 2, o.c + o.w / 2
+		seg(cur, a, FLOOR, WALL_TOP)
+		seg(a, b, FLOOR, o.y1)
+		seg(a, b, o.y2, WALL_TOP)
+		if o.glass then
+			Build.part(parent, "Window", V(b - a, o.y2 - o.y1, 0.2), C((a + b) / 2, (o.y1 + o.y2) / 2, z),
+				RGB(150, 180, 220), Enum.Material.Glass, { Transparency = 0.7 })
+		end
+		cur = b
+	end
+	seg(cur, x2, FLOOR, WALL_TOP)
+end
+
+local function wallAlongZ(parent, x, z1, z2, openings, color)
+	table.sort(openings, function(a, b)
+		return a.c < b.c
+	end)
+	local function seg(a, b, y1, y2)
+		if b - a > 0.01 and y2 - y1 > 0.01 then
+			Build.part(parent, "Wall", V(1, y2 - y1, b - a), C(x, (y1 + y2) / 2, (a + b) / 2), color, Enum.Material.WoodPlanks)
+		end
+	end
+	local cur = z1
+	for _, o in ipairs(openings) do
+		local a, b = o.c - o.w / 2, o.c + o.w / 2
+		seg(cur, a, FLOOR, WALL_TOP)
+		seg(a, b, FLOOR, o.y1)
+		seg(a, b, o.y2, WALL_TOP)
+		if o.glass then
+			Build.part(parent, "Window", V(0.2, o.y2 - o.y1, b - a), C(x, (o.y1 + o.y2) / 2, (a + b) / 2),
+				RGB(150, 180, 220), Enum.Material.Glass, { Transparency = 0.7 })
+		end
+		cur = b
+	end
+	seg(cur, z2, FLOOR, WALL_TOP)
+end
+
+local function window(c)
+	return { c = c, w = 5, y1 = 4.5, y2 = 9, glass = true }
+end
+local function doorway(c)
+	return { c = c, w = 5, y1 = FLOOR, y2 = 10 }
+end
+
+-- Außentür mit Scharnier. axis "X": Tür in einer Wand entlang Z (Wand bei festem x)
+local function buildDoor(parent, name, x, z, outward)
+	local panelCF = C(x, FLOOR + 4.3, z)
+	local panel = Build.part(parent, name, V(0.5, 8.6, 5), panelCF, RGB(96, 58, 34), Enum.Material.Wood, { CanCollide = true })
+	-- Türknauf: unverankert und angeschweißt, damit er mit der Tür mitschwingt
+	local knob = Build.part(panel, "Knob", V(0.4, 0.4, 0.4), C(x + outward * 0.35, FLOOR + 4.2, z + 1.8), RGB(200, 170, 80), Enum.Material.Metal,
+		{ Anchored = false, CanCollide = false, Massless = true })
+	local weld = Instance.new("WeldConstraint")
+	weld.Part0 = panel
+	weld.Part1 = knob
+	weld.Parent = knob
+	local hinge = C(x, FLOOR + 4.3, z - 2.5)
+	local offset = hinge:ToObjectSpace(panelCF)
+	local openCF = hinge * CFrame.Angles(0, outward * DEG(100), 0) * offset
+	local prompt = Instance.new("ProximityPrompt")
+	prompt.Name = "DoorPrompt"
+	prompt.ActionText = "Öffnen"
+	prompt.ObjectText = name
+	prompt.HoldDuration = 0.35
+	prompt.MaxActivationDistance = 9
+	prompt.RequiresLineOfSight = false
+	prompt.Parent = panel
+	local sound = Instance.new("Sound")
+	sound.Name = "DoorSound"
+	sound.RollOffMaxDistance = 120
+	sound.Parent = panel
+	return {
+		name = name,
+		panel = panel,
+		closedCF = panelCF,
+		openCF = openCF,
+		prompt = prompt,
+		sound = sound,
+		isOpen = false,
+		outsidePos = V(x + outward * 5, FLOOR, z),
+		insidePos = V(x - outward * 4, FLOOR, z),
+		outward = outward,
+	}
+end
+
+local function note(parent, name, cf, index)
+	local paper = Build.part(parent, name, V(1.4, 0.06, 1.0), cf, RGB(242, 234, 210), Enum.Material.Fabric, { CanCollide = false })
+	local glow = Build.light(paper, "PointLight", RGB(255, 240, 200), 0.6, 5)
+	local prompt = Instance.new("ProximityPrompt")
+	prompt.Name = "NotePrompt"
+	prompt.ActionText = "Lesen"
+	prompt.ObjectText = "Zettel"
+	prompt.HoldDuration = 0.2
+	prompt.MaxActivationDistance = 8
+	prompt.RequiresLineOfSight = false
+	prompt.Parent = paper
+	return { part = paper, prompt = prompt, index = index, glow = glow }
+end
+
+local function lantern(parent, pos)
+	local base = Build.part(parent, "Lantern", V(0.8, 1.2, 0.8), C(pos), RGB(255, 196, 110), Enum.Material.Neon)
+	local light = Build.light(base, "PointLight", RGB(255, 170, 90), 1.3, 20, { Shadows = true })
+	CollectionService:AddTag(light, "HR_Flicker")
+	return base
+end
+
+local function tree(parent, x, z, s)
+	local trunkColor = RGB(58, 42, 30)
+	local green = RGB(30, 52, 44)
+	local snow = RGB(232, 238, 246)
+	Build.cylinder(parent, "Trunk", 6 * s, 1.1 * s, C(x, 3 * s, z), trunkColor, Enum.Material.Wood)
+	local rot = math.random() * math.pi
+	local sizes = { 8, 6.2, 4.4, 2.6 }
+	for i, w in ipairs(sizes) do
+		local y = (4 + i * 3.2) * s
+		Build.part(parent, "Needles", V(w * s, 3.4 * s, w * s), C(x, y, z) * CFrame.Angles(0, rot + i * 0.6, 0), green, Enum.Material.Grass)
+		Build.part(parent, "Snow", V(w * s * 0.8, 0.5 * s, w * s * 0.8), C(x, y + 1.9 * s, z) * CFrame.Angles(0, rot + i * 0.6, 0), snow, Enum.Material.Snow)
+	end
+end
+
+local function buildCabin(root)
+	local cabin = Build.folder(root, "Cabin")
+	local wood = RGB(110, 72, 44)
+	local woodDark = RGB(70, 46, 30)
+
+	-- Boden draußen (Schnee) und Wald
+	Build.part(cabin, "Snowfield", V(520, 2, 520), C(CX, -1, CZ), RGB(222, 230, 240), Enum.Material.Snow)
+	local forest = Build.folder(cabin, "Forest")
+	local rng = Random.new(42)
+	local placed = 0
+	local guard = 0
+	while placed < 170 and guard < 2000 do
+		guard = guard + 1
+		local angle = rng:NextNumber(0, math.pi * 2)
+		local dist = rng:NextNumber(38, 230)
+		local x, z = CX + math.cos(angle) * dist, CZ + math.sin(angle) * dist
+		tree(forest, x, z, rng:NextNumber(0.9, 1.6))
+		placed = placed + 1
+	end
+
+	-- Fußboden, Decke, Dach
+	local house = Build.folder(cabin, "House")
+	Build.part(house, "Floor", V(40, 1, 30), C(CX, FLOOR - 0.5, CZ), RGB(120, 82, 52), Enum.Material.WoodPlanks)
+	Build.part(house, "Ceiling", V(42, 1, 32), C(CX, WALL_TOP + 0.5, CZ), woodDark, Enum.Material.WoodPlanks)
+	Build.part(house, "Roof", V(46, 1.6, 36), C(CX, WALL_TOP + 1.8, CZ), RGB(46, 40, 38), Enum.Material.Slate)
+	Build.part(house, "RoofSnow", V(46, 0.5, 36), C(CX, WALL_TOP + 2.85, CZ), RGB(236, 240, 246), Enum.Material.Snow)
+	Build.part(house, "Porch", V(6, 0.6, 10), C(CX + 23, FLOOR - 0.6, CZ), woodDark, Enum.Material.WoodPlanks)
+
+	-- Außenwände (lokal: x -20..20, z -15..15)
+	wallAlongX(house, CZ - 15, CX - 20, CX + 20, { window(CX - 10), window(CX + 10) }, wood)
+	wallAlongX(house, CZ + 15, CX - 20, CX + 20, { window(CX - 10), window(CX + 10) }, wood)
+	wallAlongZ(house, CX + 20, CZ - 15, CZ + 15, { doorway(CZ), window(CZ - 9), window(CZ + 9) }, wood)
+	wallAlongZ(house, CX - 20, CZ - 15, CZ + 15, { doorway(CZ + 8), window(CZ - 8) }, wood)
+	-- Innenwände
+	wallAlongZ(house, CX, CZ - 15, CZ + 15, { doorway(CZ + 8), doorway(CZ - 8) }, RGB(130, 92, 60))
+	wallAlongX(house, CZ, CX - 20, CX, { doorway(CX - 10) }, RGB(130, 92, 60))
+
+	-- Türen nach draußen
+	local doors = {
+		buildDoor(house, "Haustür", CX + 20, CZ, 1),
+		buildDoor(house, "Hintertür", CX - 20, CZ + 8, -1),
+	}
+
+	-- Wohnzimmer (x 0..20): Kamin, Sofa, Tisch, Radio
+	local living = Build.folder(house, "Wohnzimmer")
+	Build.part(living, "Chimney", V(8, 12, 2), C(CX + 10, FLOOR + 6, CZ + 13.8), RGB(96, 94, 98), Enum.Material.Slate)
+	Build.part(living, "FireBox", V(4, 3, 1.2), C(CX + 10, FLOOR + 1.6, CZ + 12.9), RGB(20, 16, 14))
+	local fire = Build.part(living, "Fire", V(3, 1.4, 0.6), C(CX + 10, FLOOR + 0.9, CZ + 12.6), RGB(255, 120, 40), Enum.Material.Neon, { CanCollide = false })
+	local fireLight = Build.light(fire, "PointLight", RGB(255, 130, 60), 2.2, 32, { Shadows = true })
+	CollectionService:AddTag(fireLight, "HR_Flicker")
+	Build.part(living, "Rug", V(10, 0.1, 7), C(CX + 10, FLOOR + 0.05, CZ + 1), RGB(120, 30, 34), Enum.Material.Fabric)
+	Build.part(living, "Sofa", V(9, 2.4, 3), C(CX + 10, FLOOR + 1.2, CZ - 6), RGB(70, 50, 80), Enum.Material.Fabric)
+	Build.part(living, "SofaBack", V(9, 2.6, 0.8), C(CX + 10, FLOOR + 2.6, CZ - 7.3), RGB(60, 42, 70), Enum.Material.Fabric)
+	Build.part(living, "Table", V(4, 0.3, 2.6), C(CX + 10, FLOOR + 2, CZ + 1), RGB(90, 60, 36), Enum.Material.Wood)
+	Build.part(living, "TableLeg", V(0.4, 1.9, 0.4), C(CX + 10, FLOOR + 0.95, CZ + 1), RGB(70, 46, 30), Enum.Material.Wood)
+	Build.part(living, "SideTable", V(2.4, 2.4, 2.4), C(CX + 17, FLOOR + 1.2, CZ - 12), RGB(90, 60, 36), Enum.Material.Wood)
+	local radio = Build.part(living, "Radio", V(1.8, 1.1, 0.8), C(CX + 17, FLOOR + 2.95, CZ - 12), RGB(120, 84, 52), Enum.Material.Wood)
+	local dial = Build.part(radio, "Dial", V(0.9, 0.35, 0.06), C(CX + 17.2, FLOOR + 3.1, CZ - 12.42), RGB(60, 40, 20), Enum.Material.Neon)
+	local radioPrompt = Instance.new("ProximityPrompt")
+	radioPrompt.Name = "RadioPrompt"
+	radioPrompt.ActionText = "Einschalten"
+	radioPrompt.ObjectText = "Radio"
+	radioPrompt.HoldDuration = 0.2
+	radioPrompt.MaxActivationDistance = 8
+	radioPrompt.RequiresLineOfSight = false
+	radioPrompt.Parent = radio
+	local radioSound = Instance.new("Sound")
+	radioSound.Name = "RadioSound"
+	radioSound.Looped = true
+	radioSound.Volume = 0.6
+	radioSound.RollOffMaxDistance = 80
+	radioSound.Parent = radio
+	lantern(living, V(CX + 3, FLOOR + 2.6, CZ - 13))
+	for _, p in ipairs({ { 1, -14 }, { 19, -14 }, { 19, 14 }, { 1, 14 } }) do
+		Build.part(living, "Salt", V(0.9, 0.4, 0.9), C(CX + p[1], FLOOR + 0.2, CZ + p[2]), RGB(245, 245, 245), Enum.Material.Sand)
+	end
+
+	-- Küche (x -20..0, z 0..15)
+	local kitchen = Build.folder(house, "Küche")
+	Build.part(kitchen, "Counter", V(14, 3, 2.4), C(CX - 11, FLOOR + 1.5, CZ + 13.6), RGB(170, 160, 150), Enum.Material.Granite)
+	Build.part(kitchen, "Stove", V(3, 3.2, 2.4), C(CX - 2.5, FLOOR + 1.6, CZ + 13.6), RGB(40, 40, 44), Enum.Material.Metal)
+	Build.part(kitchen, "Table", V(5, 0.3, 3.4), C(CX - 10, FLOOR + 2.4, CZ + 6), RGB(96, 64, 38), Enum.Material.Wood)
+	Build.part(kitchen, "TableLeg", V(0.5, 2.3, 0.5), C(CX - 10, FLOOR + 1.15, CZ + 6), RGB(70, 46, 30), Enum.Material.Wood)
+	lantern(kitchen, V(CX - 17, FLOOR + 3.2, CZ + 13.5))
+
+	-- Schlafzimmer (x -20..0, z -15..0)
+	local bedroom = Build.folder(house, "Schlafzimmer")
+	Build.part(bedroom, "BedFrame", V(6, 1.4, 9), C(CX - 14, FLOOR + 0.7, CZ - 9), RGB(90, 60, 36), Enum.Material.Wood)
+	Build.part(bedroom, "Blanket", V(5.8, 0.6, 6.4), C(CX - 14, FLOOR + 1.7, CZ - 8), RGB(52, 74, 130), Enum.Material.Fabric)
+	Build.part(bedroom, "Pillow", V(4, 0.6, 1.8), C(CX - 14, FLOOR + 1.7, CZ - 12.4), RGB(240, 238, 232), Enum.Material.Fabric)
+	Build.part(bedroom, "Nightstand", V(2.2, 2.4, 2.2), C(CX - 9.5, FLOOR + 1.2, CZ - 13), RGB(90, 60, 36), Enum.Material.Wood)
+	lantern(bedroom, V(CX - 9.5, FLOOR + 3, CZ - 13))
+
+	-- Drei Zettel (Inhalt setzt der RoundService je nach Monster)
+	local notes = {
+		note(house, "Note1", C(CX + 10, FLOOR + 2.2, CZ + 1.2), 1),
+		note(house, "Note2", C(CX - 10, FLOOR + 2.6, CZ + 6), 2),
+		note(house, "Note3", C(CX - 9.5, FLOOR + 2.45, CZ - 13), 3),
+	}
+
+	-- Außenlampe über der Haustür
+	local porchLamp = Build.part(house, "PorchLamp", V(0.8, 0.8, 0.8), C(CX + 21, FLOOR + 10, CZ - 3.5), RGB(255, 220, 160), Enum.Material.Neon)
+	local porchLight = Build.light(porchLamp, "PointLight", RGB(255, 210, 150), 1.4, 24)
+	CollectionService:AddTag(porchLight, "HR_Flicker")
+
+	-- Orte für die Nacht
+	local spawns = {}
+	for i = 0, 7 do
+		table.insert(spawns, C(CX + 6 + (i % 4) * 3, FLOOR + 3, CZ - 2 + math.floor(i / 4) * 4))
+	end
+	local baitSpots = {
+		C(CX - 10, FLOOR, CZ - 19) * CFrame.Angles(0, 0, 0),
+		C(CX + 10, FLOOR, CZ + 19) * CFrame.Angles(0, math.pi, 0),
+		C(CX + 24, FLOOR, CZ - 9) * CFrame.Angles(0, -math.pi / 2, 0),
+		C(CX - 24, FLOOR, CZ - 8) * CFrame.Angles(0, math.pi / 2, 0),
+	}
+	local path = {
+		V(CX + 27, 0, CZ - 22), V(CX + 27, 0, CZ + 22), V(CX - 27, 0, CZ + 22), V(CX - 27, 0, CZ - 22),
+	}
+
+	return {
+		folder = cabin,
+		center = V(CX, FLOOR, CZ),
+		spawns = spawns,
+		doors = doors,
+		notes = notes,
+		radio = { part = radio, dial = dial, prompt = radioPrompt, sound = radioSound, isOn = false },
+		baitSpots = baitSpots,
+		path = path,
+		bounds = { minX = CX - 20, maxX = CX + 20, minZ = CZ - 15, maxZ = CZ + 15 },
+	}
+end
+
+-- ===================================================================== START
+function WorldBuilder.build(config)
+	local root = workspace:FindFirstChild("HorrorRoulette")
+	if root then
+		root:Destroy()
+	end
+	root = Build.folder(workspace, "HorrorRoulette")
+	local lobby = buildLobby(root, config.Monsters, config.LockedCells)
+	local cabin = buildCabin(root)
+	local night = Build.folder(root, "Night") -- hier landen die Monster einer Nacht
+	return { root = root, lobby = lobby, cabin = cabin, nightFolder = night }
+end
+
+-- ===================================================================== LICHT
+local function ensure(className, name)
+	local Lighting = game:GetService("Lighting")
+	local existing = Lighting:FindFirstChild(name)
+	if existing then
+		return existing
+	end
+	local inst = Instance.new(className)
+	inst.Name = name
+	inst.Parent = Lighting
+	return inst
+end
+
+function WorldBuilder.applyLighting(mode)
+	local Lighting = game:GetService("Lighting")
+	local atmosphere = ensure("Atmosphere", "HR_Atmosphere")
+	local cc = ensure("ColorCorrectionEffect", "HR_Color")
+	local bloom = ensure("BloomEffect", "HR_Bloom")
+	Lighting.GlobalShadows = true
+	bloom.Intensity = 0.6
+	bloom.Size = 30
+	bloom.Threshold = 1.6
+	if mode == "Lobby" then
+		Lighting.ClockTime = 0
+		Lighting.Brightness = 0
+		Lighting.Ambient = RGB(46, 30, 34)
+		Lighting.OutdoorAmbient = RGB(30, 20, 26)
+		Lighting.EnvironmentDiffuseScale = 0.2
+		Lighting.EnvironmentSpecularScale = 0.3
+		atmosphere.Density = 0
+		atmosphere.Haze = 0
+		cc.Contrast = 0.15
+		cc.Saturation = -0.05
+		cc.TintColor = RGB(255, 236, 236)
+		cc.Brightness = 0
+	elseif mode == "Night" then
+		Lighting.ClockTime = 0
+		Lighting.Brightness = 1.2
+		Lighting.Ambient = RGB(24, 28, 44)
+		Lighting.OutdoorAmbient = RGB(52, 62, 96)
+		Lighting.EnvironmentDiffuseScale = 0.3
+		Lighting.EnvironmentSpecularScale = 0.3
+		atmosphere.Density = 0.42
+		atmosphere.Offset = 0.1
+		atmosphere.Color = RGB(150, 168, 210)
+		atmosphere.Decay = RGB(60, 70, 100)
+		atmosphere.Glare = 0
+		atmosphere.Haze = 1.4
+		cc.Contrast = 0.12
+		cc.Saturation = -0.2
+		cc.TintColor = RGB(214, 226, 255)
+		cc.Brightness = 0
+	end
+end
+
+-- Fortschritt der Nacht 0..1: Himmel wird gegen 6 Uhr heller
+function WorldBuilder.setNightProgress(u)
+	local Lighting = game:GetService("Lighting")
+	Lighting.ClockTime = math.clamp(u, 0, 1) * 6.3
+	local cc = Lighting:FindFirstChild("HR_Color")
+	if cc and u > 0.85 then
+		local k = (u - 0.85) / 0.15
+		cc.TintColor = RGB(214, 226, 255):Lerp(RGB(255, 222, 196), math.clamp(k, 0, 1))
+	end
+end
+
+return WorldBuilder
+]]></string>
+        </Properties>
+      </Item>
+      <Item class="ModuleScript" referent="9">
+        <Properties>
+          <string name="Name">DataService</string>
+          <string name="Source"><![CDATA[-- Speichert pro Spieler: Münzen, überlebte Nächte, Eindämmungsakte, Einstellungen.
+-- Funktioniert in Studio nur, wenn unter Spiel-Einstellungen > Sicherheit
+-- "Studio-Zugriff auf API-Dienste" aktiviert ist. Sonst wird nur im Speicher gezählt.
+local DataStoreService = game:GetService("DataStoreService")
+local Players = game:GetService("Players")
+
+local DataService = {}
+
+local STORE_NAME = "HorrorRoulette_v1"
+local profiles = {}
+local store = nil
+local storeWarned = false
+
+local function getStore()
+	if store then
+		return store
+	end
+	local ok, result = pcall(function()
+		return DataStoreService:GetDataStore(STORE_NAME)
+	end)
+	if ok then
+		store = result
+	elseif not storeWarned then
+		storeWarned = true
+		warn("[HorrorRoulette] DataStore nicht verfügbar – Fortschritt wird nur für diese Sitzung gezählt.", result)
+	end
+	return store
+end
+
+local function defaultProfile()
+	return {
+		coins = 0,
+		nights = 0,
+		akte = {},
+		settings = { sound = true, shake = true },
+	}
+end
+
+local function merge(base, saved)
+	if type(saved) ~= "table" then
+		return base
+	end
+	if type(saved.coins) == "number" then
+		base.coins = math.max(0, math.floor(saved.coins))
+	end
+	if type(saved.nights) == "number" then
+		base.nights = math.max(0, math.floor(saved.nights))
+	end
+	if type(saved.akte) == "table" then
+		for id, value in pairs(saved.akte) do
+			if type(id) == "string" and value == true then
+				base.akte[id] = true
+			end
+		end
+	end
+	if type(saved.settings) == "table" then
+		if type(saved.settings.sound) == "boolean" then
+			base.settings.sound = saved.settings.sound
+		end
+		if type(saved.settings.shake) == "boolean" then
+			base.settings.shake = saved.settings.shake
+		end
+	end
+	return base
+end
+
+function DataService.load(player)
+	local profile = defaultProfile()
+	local ds = getStore()
+	if ds then
+		local ok, saved = pcall(function()
+			return ds:GetAsync("p_" .. player.UserId)
+		end)
+		if ok then
+			profile = merge(profile, saved)
+		elseif not storeWarned then
+			storeWarned = true
+			warn("[HorrorRoulette] Laden fehlgeschlagen (in Studio API-Zugriff aktivieren):", saved)
+		end
+	end
+	profiles[player] = profile
+	return profile
+end
+
+function DataService.save(player)
+	local profile = profiles[player]
+	local ds = getStore()
+	if not profile or not ds then
+		return
+	end
+	local ok, err = pcall(function()
+		ds:SetAsync("p_" .. player.UserId, profile)
+	end)
+	if not ok and not storeWarned then
+		storeWarned = true
+		warn("[HorrorRoulette] Speichern fehlgeschlagen:", err)
+	end
+end
+
+function DataService.get(player)
+	return profiles[player]
+end
+
+function DataService.release(player)
+	DataService.save(player)
+	profiles[player] = nil
+end
+
+function DataService.addCoins(player, amount)
+	local profile = profiles[player]
+	if profile then
+		profile.coins = profile.coins + amount
+	end
+end
+
+function DataService.recordSurvival(player, monsterId)
+	local profile = profiles[player]
+	if not profile then
+		return false
+	end
+	profile.nights = profile.nights + 1
+	local isNew = profile.akte[monsterId] ~= true
+	profile.akte[monsterId] = true
+	return isNew
+end
+
+function DataService.setSettings(player, settings)
+	local profile = profiles[player]
+	if not profile or type(settings) ~= "table" then
+		return
+	end
+	if type(settings.sound) == "boolean" then
+		profile.settings.sound = settings.sound
+	end
+	if type(settings.shake) == "boolean" then
+		profile.settings.shake = settings.shake
+	end
+end
+
+-- Beim Herunterfahren alle speichern
+game:BindToClose(function()
+	for _, player in ipairs(Players:GetPlayers()) do
+		DataService.save(player)
+	end
+end)
+
+return DataService
+]]></string>
+        </Properties>
+      </Item>
+      <Item class="ModuleScript" referent="10">
+        <Properties>
+          <string name="Name">RoundService</string>
+          <string name="Source"><![CDATA[-- Rundenablauf: Lobby → Countdown → Roulette → Nacht → Ergebnis → Lobby
+-- Alle spielentscheidenden Dinge (Auslosung, Regelbruch, Belohnung) passieren hier auf dem Server.
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local Debris = game:GetService("Debris")
+
+local RoundService = {}
+
+local Config, World, WorldBuilder, Data, Remotes, MonsterModules
+local state = {
+	phase = "Lobby",
+	endsAt = 0,
+	ready = {},
+	night = nil,
+	monsterIndex = nil,
+}
+
+local function now()
+	return workspace:GetServerTimeNow()
+end
+
+local function fire(name, player, ...)
+	local remote = Remotes[name]
+	if remote and player and player.Parent == Players then
+		remote:FireClient(player, ...)
+	end
+end
+
+local function fireAll(name, ...)
+	Remotes[name]:FireAllClients(...)
+end
+
+-- ===================================================================== SOUND
+function RoundService.playSound(key, parent, volume, props)
+	local id = Config.Sounds[key]
+	if not id or id == "" or not parent then
+		return nil
+	end
+	local sound = Instance.new("Sound")
+	sound.Name = "HR_" .. key
+	sound.SoundId = id
+	sound.Volume = volume or 0.8
+	sound.RollOffMaxDistance = 220
+	if props then
+		for k, v in pairs(props) do
+			sound[k] = v
+		end
+	end
+	sound.Parent = parent
+	sound:Play()
+	Debris:AddItem(sound, 12)
+	return sound
+end
+
+-- ===================================================================== HILFEN
+local function rootOf(player)
+	local character = player.Character
+	return character and character:FindFirstChild("HumanoidRootPart")
+end
+
+local function readyPlayers()
+	local list = {}
+	for _, player in ipairs(Players:GetPlayers()) do
+		if state.ready[player] and player.Character and rootOf(player) then
+			table.insert(list, player)
+		end
+	end
+	return list
+end
+
+local function teleport(player, cframe)
+	local character = player.Character
+	if character then
+		local root = rootOf(player)
+		if root then
+			root.Anchored = false
+		end
+		character:PivotTo(cframe)
+	end
+end
+
+local function lobbyCFrame()
+	local lobby = World.lobby
+	local spread = lobby.spawnSpread
+	return lobby.spawnCFrame * CFrame.new(math.random(-spread, spread), 0, math.random(-spread / 2, spread / 2))
+end
+
+local function profilePayload(player)
+	local profile = Data.get(player)
+	if not profile then
+		return nil
+	end
+	return {
+		coins = profile.coins,
+		nights = profile.nights,
+		rank = Config.GetRank(profile.nights),
+		akte = profile.akte,
+		settings = profile.settings,
+	}
+end
+
+function RoundService.pushProfile(player)
+	local payload = profilePayload(player)
+	if payload then
+		fire("Profile", player, payload)
+	end
+end
+
+-- Zustand an einen Spieler senden (jeder bekommt seine eigene Sicht)
+local function sendState(player)
+	local night = state.night
+	local info = night and night.players[player]
+	fire("State", player, {
+		phase = state.phase,
+		endsAt = state.endsAt,
+		ready = state.ready[player] == true,
+		monsterId = night and night.def.id or nil,
+		nightStart = night and night.startedAt or nil,
+		nightSeconds = Config.NightSeconds,
+		participant = info ~= nil,
+		alive = info ~= nil and info.alive or false,
+		revealed = night and night.revealed or false,
+		notesFound = night and night.foundCount or 0,
+		playersReady = #readyPlayers(),
+	})
+end
+
+local function sendStateAll()
+	for _, player in ipairs(Players:GetPlayers()) do
+		sendState(player)
+	end
+end
+
+-- ===================================================================== TÜREN & RADIO
+local function setDoor(door, open)
+	door.isOpen = open
+	door.prompt.ActionText = open and "Schließen" or "Öffnen"
+	TweenService:Create(door.panel, TweenInfo.new(0.45, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+		{ CFrame = open and door.openCF or door.closedCF }):Play()
+	RoundService.playSound(open and "DoorOpen" or "DoorClose", door.panel, 0.9)
+end
+
+function RoundService.setRadio(on)
+	local radio = World.cabin.radio
+	radio.isOn = on
+	radio.prompt.ActionText = on and "Ausschalten" or "Einschalten"
+	radio.dial.Color = on and Color3.fromRGB(255, 190, 90) or Color3.fromRGB(60, 40, 20)
+	local id = Config.Sounds.RadioNoise
+	if on and id ~= "" then
+		radio.sound.SoundId = id
+		radio.sound:Play()
+	else
+		radio.sound:Stop()
+	end
+end
+
+-- ===================================================================== DIE NACHT
+local Night = {}
+Night.__index = Night
+
+function Night:alive()
+	local list = {}
+	for player, info in pairs(self.players) do
+		if info.alive and player.Parent == Players and rootOf(player) then
+			table.insert(list, player)
+		end
+	end
+	return list
+end
+
+function Night:root(player)
+	return rootOf(player)
+end
+
+function Night:notice(text, kind, except)
+	for player in pairs(self.players) do
+		if player ~= except then
+			fire("Notice", player, text, kind or "info")
+		end
+	end
+end
+
+-- Falsche Nachricht im Namen eines Mitspielers (oder einer bekannten Stimme, wenn allein)
+function Night:lure(text)
+	local alive = self:alive()
+	if #alive == 0 then
+		return
+	end
+	local speakerName
+	local targets = {}
+	if #alive >= 2 then
+		local speaker = alive[math.random(#alive)]
+		speakerName = speaker.DisplayName
+		for _, p in ipairs(alive) do
+			if p ~= speaker then
+				table.insert(targets, p)
+			end
+		end
+	else
+		speakerName = Config.SoloVoices[math.random(#Config.SoloVoices)]
+		targets = alive
+	end
+	for _, p in ipairs(targets) do
+		fire("FakeChat", p, speakerName, text)
+	end
+end
+
+function Night:sound(key, parent, volume)
+	return RoundService.playSound(key, parent, volume)
+end
+
+-- Spieler wird geholt: Jumpscare, dann steht er als Köder vor einem Fenster
+function Night:take(player, reason)
+	local info = self.players[player]
+	if not info or not info.alive or not self.active then
+		return
+	end
+	info.alive = false
+	info.reason = reason
+	fire("Jumpscare", player, self.def.id)
+	self:notice(player.DisplayName .. " wurde geholt.", "danger", player)
+	sendStateAll()
+	task.delay(1.8, function()
+		if not self.active then
+			return
+		end
+		local spots = World.cabin.baitSpots
+		local spot = spots[math.random(#spots)]
+		teleport(player, spot + Vector3.new(0, 3, 0))
+		local root = rootOf(player)
+		if root then
+			root.Anchored = true
+		end
+	end)
+	if #self:alive() == 0 then
+		task.delay(3, function()
+			RoundService.endNight("taken")
+		end)
+	end
+end
+
+local function giveCamera(player)
+	local backpack = player:FindFirstChildOfClass("Backpack")
+	if not backpack or backpack:FindFirstChild("Kamera") then
+		return
+	end
+	local tool = Instance.new("Tool")
+	tool.Name = "Kamera"
+	tool.ToolTip = "Camcorder – zeigt, was das Auge nicht sieht"
+	tool.CanBeDropped = false
+	tool.RequiresHandle = true
+	local handle = Instance.new("Part")
+	handle.Name = "Handle"
+	handle.Size = Vector3.new(0.7, 0.6, 1.3)
+	handle.Color = Color3.fromRGB(30, 31, 36)
+	handle.Material = Enum.Material.SmoothPlastic
+	handle.CanCollide = false
+	handle.Massless = true
+	handle.Parent = tool
+	local lens = Instance.new("Part")
+	lens.Name = "Lens"
+	lens.Shape = Enum.PartType.Cylinder
+	lens.Size = Vector3.new(0.3, 0.45, 0.45)
+	lens.Color = Color3.fromRGB(20, 30, 60)
+	lens.CanCollide = false
+	lens.Massless = true
+	lens.CFrame = handle.CFrame * CFrame.new(0, 0, -0.75) * CFrame.Angles(0, math.rad(90), 0)
+	local weld = Instance.new("WeldConstraint")
+	weld.Part0 = handle
+	weld.Part1 = lens
+	weld.Parent = lens
+	lens.Parent = tool
+	tool.Parent = backpack
+end
+
+local function removeCameras(player)
+	for _, container in ipairs({ player:FindFirstChildOfClass("Backpack"), player.Character }) do
+		if container then
+			local tool = container:FindFirstChild("Kamera")
+			if tool then
+				tool:Destroy()
+			end
+		end
+	end
+end
+
+local function resetHouse()
+	for _, door in ipairs(World.cabin.doors) do
+		door.isOpen = false
+		door.prompt.ActionText = "Öffnen"
+		door.panel.CFrame = door.closedCF
+	end
+	RoundService.setRadio(false)
+end
+
+local function highlightCell(monsterId, on)
+	for id, cell in pairs(World.lobby.cells) do
+		local active = on and id == monsterId
+		cell.ring.Color = active and Color3.fromRGB(255, 40, 40) or cell.ringColor
+		cell.spot.Color = active and Color3.fromRGB(255, 60, 50) or Color3.fromRGB(255, 246, 230)
+	end
+end
+
+local function runNight(def, participants)
+	resetHouse()
+	WorldBuilder.applyLighting("Night")
+	local night = setmetatable({
+		def = def,
+		round = RoundService,
+		world = World,
+		players = {},
+		found = {},
+		foundCount = 0,
+		revealed = false,
+		active = true,
+		startedAt = now(),
+		elapsed = 0,
+	}, Night)
+	for _, player in ipairs(participants) do
+		night.players[player] = { alive = true, read = {}, coins = 0 }
+	end
+	state.night = night
+	state.phase = "Night"
+	state.endsAt = night.startedAt + Config.NightSeconds
+
+	local spawns = World.cabin.spawns
+	for i, player in ipairs(participants) do
+		teleport(player, spawns[((i - 1) % #spawns) + 1])
+		if def.id == "Gesichtslose" then
+			giveCamera(player)
+		end
+	end
+	sendStateAll()
+	night:notice(def.name .. ". Mitternacht.", "title")
+	task.delay(4, function()
+		if night.active then
+			night:notice("Finde die Regel. Überlebe bis 6 Uhr.", "info")
+		end
+	end)
+
+	local module = MonsterModules[def.id]
+	night.module = module
+	local ok, err = pcall(module.start, night, World)
+	if not ok then
+		warn("[HorrorRoulette] Monster-Start fehlgeschlagen:", err)
+	end
+
+	while night.active do
+		local dt = task.wait(0.2)
+		night.elapsed = now() - night.startedAt
+		local progress = night.elapsed / Config.NightSeconds
+		WorldBuilder.setNightProgress(progress)
+		if progress >= 1 then
+			RoundService.endNight("sunrise")
+			break
+		end
+		local okUpdate, errUpdate = pcall(module.update, night, World, dt)
+		if not okUpdate then
+			warn("[HorrorRoulette] Monster-Fehler:", errUpdate)
+		end
+	end
+end
+
+function RoundService.endNight(reason)
+	local night = state.night
+	if not night or not night.active then
+		return
+	end
+	night.active = false
+	if night.module and night.module.stop then
+		pcall(night.module.stop, night, World)
+	end
+	World.nightFolder:ClearAllChildren()
+
+	state.phase = "Results"
+	state.endsAt = now() + Config.ResultsSeconds
+	if reason == "sunrise" then
+		night:notice("6 Uhr. Die Sonne geht auf.", "title")
+		RoundService.playSound("Sunrise", workspace, 0.7)
+	else
+		night:notice("Keiner hat die Nacht überlebt.", "danger")
+	end
+	for player, info in pairs(night.players) do
+		if player.Parent == Players then
+			local survived = info.alive and reason == "sunrise"
+			local isNew = false
+			if survived then
+				Data.addCoins(player, Config.Coins.Survive)
+				info.coins = info.coins + Config.Coins.Survive
+				isNew = Data.recordSurvival(player, night.def.id)
+			end
+			fire("Results", player, {
+				survived = survived,
+				monsterId = night.def.id,
+				coins = info.coins,
+				newEntry = isNew,
+				ruleRevealed = night.revealed,
+			})
+			RoundService.pushProfile(player)
+			task.spawn(Data.save, player)
+		end
+	end
+	sendStateAll()
+end
+
+-- ===================================================================== HAUPTSCHLEIFE
+local function returnToLobby(night)
+	WorldBuilder.applyLighting("Lobby")
+	highlightCell(nil, false)
+	for player in pairs(night.players) do
+		if player.Parent == Players then
+			removeCameras(player)
+			teleport(player, lobbyCFrame())
+		end
+	end
+	resetHouse()
+	state.night = nil
+end
+
+local function mainLoop()
+	while true do
+		state.phase = "Lobby"
+		state.endsAt = 0
+		WorldBuilder.applyLighting("Lobby")
+		sendStateAll()
+		while #readyPlayers() == 0 do
+			task.wait(1)
+		end
+
+		state.phase = "Countdown"
+		state.endsAt = now() + Config.IntermissionSeconds
+		sendStateAll()
+		local aborted = false
+		while now() < state.endsAt do
+			task.wait(0.5)
+			if #readyPlayers() == 0 then
+				aborted = true
+				break
+			end
+		end
+
+		if not aborted then
+			local participants = readyPlayers()
+			local index = math.random(#Config.Monsters)
+			local def = Config.Monsters[index]
+			state.phase = "Roulette"
+			state.monsterIndex = index
+			state.endsAt = now() + Config.RouletteSeconds
+			sendStateAll()
+			fireAll("Roulette", index, Config.RouletteSeconds)
+			task.delay(Config.RouletteSeconds - 1.2, function()
+				highlightCell(def.id, true)
+			end)
+			task.wait(Config.RouletteSeconds + 0.4)
+
+			runNight(def, participants)
+			local finished = state.night
+			task.wait(Config.ResultsSeconds)
+			if finished then
+				returnToLobby(finished)
+			end
+		end
+	end
+end
+
+-- ===================================================================== SPIELER
+local function onCharacter(player, character)
+	local root = character:WaitForChild("HumanoidRootPart", 10)
+	if not root then
+		return
+	end
+	task.wait()
+	local night = state.night
+	local info = night and night.players[player]
+	if night and night.active and info then
+		if info.alive then
+			teleport(player, World.cabin.spawns[1])
+			if night.def.id == "Gesichtslose" then
+				giveCamera(player)
+			end
+		else
+			local spot = World.cabin.baitSpots[1]
+			teleport(player, spot + Vector3.new(0, 3, 0))
+			root.Anchored = true
+		end
+	else
+		teleport(player, lobbyCFrame())
+	end
+end
+
+local function onPlayerAdded(player)
+	Data.load(player)
+	player.CharacterAdded:Connect(function(character)
+		onCharacter(player, character)
+	end)
+	if player.Character then
+		task.spawn(onCharacter, player, player.Character)
+	end
+	RoundService.pushProfile(player)
+	sendState(player)
+end
+
+local function onPlayerRemoving(player)
+	state.ready[player] = nil
+	local night = state.night
+	if night and night.players[player] then
+		night.players[player] = nil
+		if night.active and #night:alive() == 0 then
+			task.defer(RoundService.endNight, "taken")
+		end
+	end
+	Data.release(player)
+end
+
+-- ===================================================================== START
+function RoundService.start(deps)
+	Config = deps.Config
+	World = deps.World
+	WorldBuilder = deps.WorldBuilder
+	Data = deps.Data
+	Remotes = deps.Remotes
+	MonsterModules = deps.Monsters
+	RoundService.runThreshold = Config.RunThreshold
+
+	-- Türen
+	for _, door in ipairs(World.cabin.doors) do
+		door.prompt.Triggered:Connect(function(player)
+			local night = state.night
+			local opening = not door.isOpen
+			if night and night.active then
+				local info = night.players[player]
+				if not info or not info.alive then
+					return
+				end
+				if night.module and night.module.onDoor then
+					local ok, err = pcall(night.module.onDoor, night, player, door, opening)
+					if not ok then
+						warn("[HorrorRoulette] onDoor:", err)
+					end
+				end
+			end
+			setDoor(door, opening)
+		end)
+	end
+
+	-- Radio
+	local radio = World.cabin.radio
+	radio.prompt.Triggered:Connect(function(player)
+		local turnOn = not radio.isOn
+		local night = state.night
+		if night and night.active then
+			local info = night.players[player]
+			if not info or not info.alive then
+				return
+			end
+		end
+		RoundService.setRadio(turnOn)
+		if night and night.active and night.module and night.module.onRadio then
+			pcall(night.module.onRadio, night, player, turnOn)
+		end
+	end)
+
+	-- Zettel
+	for _, note in ipairs(World.cabin.notes) do
+		note.prompt.Triggered:Connect(function(player)
+			local night = state.night
+			local info = night and night.active and night.players[player]
+			RoundService.playSound("PageFlip", note.part, 0.6)
+			if not info then
+				fire("Note", player, "Leerer Zettel", "Hier steht nichts.\nNoch nicht.")
+				return
+			end
+			local entry = night.def.notes[note.index]
+			fire("Note", player, entry.title, entry.text)
+			if not info.read[note.index] then
+				info.read[note.index] = true
+				info.coins = info.coins + Config.Coins.NoteFirstRead
+				Data.addCoins(player, Config.Coins.NoteFirstRead)
+			end
+			if not night.found[note.index] then
+				night.found[note.index] = true
+				night.foundCount = night.foundCount + 1
+				if night.foundCount >= 2 and not night.revealed then
+					night.revealed = true
+					info.coins = info.coins + Config.Coins.RuleFirst
+					Data.addCoins(player, Config.Coins.RuleFirst)
+					for p in pairs(night.players) do
+						fire("RuleReveal", p, night.def.id, player.DisplayName)
+					end
+				end
+				sendStateAll()
+			end
+		end)
+	end
+
+	-- Fernsteuerungen vom Client (streng geprüft)
+	Remotes.SetReady.OnServerEvent:Connect(function(player, value)
+		if type(value) ~= "boolean" then
+			return
+		end
+		state.ready[player] = value
+		sendStateAll()
+	end)
+	Remotes.SaveSettings.OnServerEvent:Connect(function(player, settings)
+		if type(settings) ~= "table" then
+			return
+		end
+		Data.setSettings(player, settings)
+		RoundService.pushProfile(player)
+	end)
+
+	Players.PlayerAdded:Connect(onPlayerAdded)
+	Players.PlayerRemoving:Connect(onPlayerRemoving)
+	for _, player in ipairs(Players:GetPlayers()) do
+		task.spawn(onPlayerAdded, player)
+	end
+
+	task.spawn(mainLoop)
+end
+
+return RoundService
+]]></string>
+        </Properties>
+      </Item>
+      <Item class="Folder" referent="11">
+        <Properties>
+          <string name="Name">Monsters</string>
+        </Properties>
+        <Item class="ModuleScript" referent="12">
+          <Properties>
+            <string name="Name">Hutfrau</string>
+            <string name="Source"><![CDATA[-- DIE HUTFRAU – Regel: Öffne keine Tür nach draußen.
+-- Sie umrundet die Hütte, klopft an Türen und ruft mit den Stimmen der Mitspieler.
+local MonsterModels = require(script.Parent.Parent.MonsterModels)
+
+local Hutfrau = {}
+
+local WALK_SPEED = 6
+
+local function flat(v)
+	return Vector3.new(v.X, 0, v.Z)
+end
+
+local function face(model, pos, lookAt)
+	local dir = flat(lookAt - pos)
+	if dir.Magnitude < 0.01 then
+		dir = Vector3.new(0, 0, -1)
+	end
+	model:PivotTo(CFrame.lookAt(pos, pos + dir))
+end
+
+function Hutfrau.start(night, world)
+	local cabin = world.cabin
+	local first = cabin.path[1]
+	night.monster = {
+		model = MonsterModels.build("Hutfrau", world.nightFolder, CFrame.new(first), 1),
+		pos = first,
+		pathIndex = 2,
+		mode = "walk",
+		nextKnock = 18 + math.random() * 10,
+		nextWhisper = 10,
+		door = nil,
+		wait = 0,
+	}
+end
+
+local function knock(night, door)
+	night:sound("Knock", door.panel, 1)
+	night:notice("Es klopft an der " .. door.name .. ".", "warn")
+	local def = night.def
+	task.delay(1.6, function()
+		if night.active then
+			night:lure(def.lures[math.random(#def.lures)])
+		end
+	end)
+end
+
+function Hutfrau.update(night, world, dt)
+	local s = night.monster
+	if not s then
+		return
+	end
+	local cabin = world.cabin
+	s.nextKnock = s.nextKnock - dt
+	s.nextWhisper = s.nextWhisper - dt
+
+	if s.nextWhisper <= 0 then
+		s.nextWhisper = 12 + math.random() * 8
+		night:sound("PoPoPo", s.model.PrimaryPart, 1)
+	end
+
+	if s.mode == "walk" then
+		if s.nextKnock <= 0 and not s.door then
+			s.door = cabin.doors[math.random(#cabin.doors)]
+			s.nextKnock = 28 + math.random() * 14
+		end
+		local target
+		if s.door then
+			target = Vector3.new(s.door.outsidePos.X, 0, s.door.outsidePos.Z)
+		else
+			target = cabin.path[s.pathIndex]
+		end
+		local delta = flat(target - s.pos)
+		local dist = delta.Magnitude
+		if dist < 0.6 then
+			if s.door then
+				s.mode = "knock"
+				s.wait = 6
+				knock(night, s.door)
+			else
+				s.pathIndex = (s.pathIndex % #cabin.path) + 1
+			end
+		else
+			s.pos = s.pos + delta.Unit * math.min(dist, WALK_SPEED * dt)
+			face(s.model, s.pos, target)
+		end
+	elseif s.mode == "knock" then
+		s.wait = s.wait - dt
+		face(s.model, s.pos, Vector3.new(s.door.insidePos.X, 0, s.door.insidePos.Z))
+		if s.wait <= 0 then
+			s.mode = "walk"
+			s.door = nil
+		end
+	elseif s.mode == "inside" then
+		s.wait = s.wait - dt
+		if s.wait <= 0 then
+			s.mode = "walk"
+			s.pos = cabin.path[1]
+			s.pathIndex = 2
+			face(s.model, s.pos, cabin.path[2])
+		end
+	end
+end
+
+-- Regel: Wer eine Außentür öffnet, wird geholt. Sie steht sofort im Türrahmen.
+function Hutfrau.onDoor(night, player, door, opening)
+	local s = night.monster
+	if not opening or not s then
+		return
+	end
+	s.mode = "inside"
+	s.wait = 6
+	s.door = nil
+	s.pos = Vector3.new(door.outsidePos.X, 0, door.outsidePos.Z)
+	face(s.model, s.pos, Vector3.new(door.insidePos.X, 0, door.insidePos.Z))
+	night:take(player, "door")
+end
+
+function Hutfrau.stop(night)
+	local s = night.monster
+	if s and s.model then
+		s.model:Destroy()
+	end
+	night.monster = nil
+end
+
+return Hutfrau
+]]></string>
+          </Properties>
+        </Item>
+        <Item class="ModuleScript" referent="13">
+          <Properties>
+            <string name="Name">Schreier</string>
+            <string name="Source"><![CDATA[-- DER SCHREIER – Regel: Mach kein Geräusch.
+-- Er ist blind und hört alles: Rennen, Türen, das Radio. Erstes Geräusch = Warnung,
+-- zweites Geräusch innerhalb von 25 Sekunden = der Spieler wird geholt.
+local MonsterModels = require(script.Parent.Parent.MonsterModels)
+
+local Schreier = {}
+
+local MOVE_SPEED = 7
+local MIN_DIST_FROM_HOUSE = 34
+local STRIKE_WINDOW = 25
+local GRACE_AFTER_WARNING = 3
+local RADIO_TOLERANCE = 8
+
+local function flat(v)
+	return Vector3.new(v.X, 0, v.Z)
+end
+
+function Schreier.start(night, world)
+	local center = world.cabin.center
+	local angle = math.random() * math.pi * 2
+	local pos = Vector3.new(center.X + math.cos(angle) * 80, 0, center.Z + math.sin(angle) * 80)
+	night.monster = {
+		model = MonsterModels.build("Schreier", world.nightFolder, CFrame.lookAt(pos, Vector3.new(center.X, 0, center.Z)), 1),
+		pos = pos,
+		target = nil,
+		lastWarning = -100,
+		lastNoise = {},
+		radioOnAt = nil,
+		nextRadio = 35 + math.random() * 15,
+		nextLure = 30 + math.random() * 15,
+		wanderAngle = angle,
+	}
+end
+
+-- Ein Geräusch wurde gemacht
+local function noise(night, player, what)
+	local s = night.monster
+	if not s or not player then
+		return
+	end
+	local t = night.elapsed
+	if s.lastNoise[player] and t - s.lastNoise[player] < 1.5 then
+		return
+	end
+	s.lastNoise[player] = t
+	local root = night:root(player)
+	if root then
+		s.target = flat(root.CFrame.Position)
+	end
+	local sinceWarning = t - s.lastWarning
+	if sinceWarning < GRACE_AFTER_WARNING then
+		return
+	end
+	if sinceWarning <= STRIKE_WINDOW then
+		night:sound("Siren", s.model.PrimaryPart, 1)
+		night:take(player, what)
+		s.lastWarning = -100
+	else
+		s.lastWarning = t
+		night:sound("Siren", s.model.PrimaryPart, 0.8)
+		night:notice("ER HAT ETWAS GEHÖRT (" .. what .. "). Keinen Laut mehr!", "danger")
+	end
+end
+
+function Schreier.update(night, world, dt)
+	local s = night.monster
+	if not s then
+		return
+	end
+	local cabin = world.cabin
+	local center = flat(cabin.center)
+
+	-- Rennen ist laut
+	for _, player in ipairs(night:alive()) do
+		local root = night:root(player)
+		if root then
+			local v = root.AssemblyLinearVelocity
+			local speed = Vector3.new(v.X, 0, v.Z).Magnitude
+			if speed > night.round.runThreshold then
+				noise(night, player, "Rennen")
+			end
+		end
+	end
+
+	-- Das Radio geht von selbst an
+	local radio = cabin.radio
+	s.nextRadio = s.nextRadio - dt
+	if s.nextRadio <= 0 and not radio.isOn then
+		s.nextRadio = 40 + math.random() * 20
+		night.round.setRadio(true)
+		s.radioOnAt = night.elapsed
+		night:notice("Das Radio geht von selbst an.", "warn")
+	end
+	if radio.isOn and s.radioOnAt and night.elapsed - s.radioOnAt > RADIO_TOLERANCE then
+		-- Wer am nächsten am Radio ist, wird gehört
+		local nearest, best = nil, math.huge
+		for _, player in ipairs(night:alive()) do
+			local root = night:root(player)
+			if root then
+				local d = (root.CFrame.Position - radio.part.CFrame.Position).Magnitude
+				if d < best then
+					nearest, best = player, d
+				end
+			end
+		end
+		s.radioOnAt = night.elapsed
+		noise(night, nearest, "Radio")
+	end
+
+	-- Lockrufe
+	s.nextLure = s.nextLure - dt
+	if s.nextLure <= 0 then
+		s.nextLure = 40 + math.random() * 20
+		local lures = night.def.lures
+		night:lure(lures[math.random(#lures)])
+	end
+
+	-- Bewegung: zum letzten Geräusch, aber nie näher als MIN_DIST an die Hütte
+	local goal
+	if s.target then
+		local away = flat(s.target - center)
+		if away.Magnitude < 1 then
+			away = Vector3.new(1, 0, 0)
+		end
+		goal = center + away.Unit * math.max(MIN_DIST_FROM_HOUSE, away.Magnitude)
+	else
+		s.wanderAngle = s.wanderAngle + dt * 0.04
+		goal = center + Vector3.new(math.cos(s.wanderAngle), 0, math.sin(s.wanderAngle)) * 70
+	end
+	local delta = goal - s.pos
+	if delta.Magnitude > 0.5 then
+		s.pos = s.pos + delta.Unit * math.min(delta.Magnitude, MOVE_SPEED * dt)
+	end
+	s.model:PivotTo(CFrame.lookAt(s.pos, Vector3.new(center.X, 0, center.Z)))
+end
+
+function Schreier.onDoor(night, player)
+	noise(night, player, "Tür")
+end
+
+function Schreier.onRadio(night, player, turnedOn)
+	local s = night.monster
+	if not s then
+		return
+	end
+	if turnedOn then
+		s.radioOnAt = night.elapsed
+		noise(night, player, "Radio")
+	else
+		s.radioOnAt = nil
+	end
+end
+
+function Schreier.stop(night)
+	local s = night.monster
+	if s and s.model then
+		s.model:Destroy()
+	end
+	night.monster = nil
+end
+
+return Schreier
+]]></string>
+          </Properties>
+        </Item>
+        <Item class="ModuleScript" referent="14">
+          <Properties>
+            <string name="Name">Gesichtslose</string>
+            <string name="Source"><![CDATA[-- DER GESICHTSLOSE – Regel: Renn nicht (in seiner Nähe).
+-- Nur durch die Kamera sichtbar (Attribut "CameraOnly", der Client blendet ihn sonst aus).
+-- Er taucht immer wieder hinter einem Spieler auf.
+local MonsterModels = require(script.Parent.Parent.MonsterModels)
+
+local Gesichtslose = {}
+
+local DANGER_RADIUS = 32
+local RUN_TIME_LIMIT = 0.35
+
+local function flat(v)
+	return Vector3.new(v.X, 0, v.Z)
+end
+
+function Gesichtslose.start(night, world)
+	local center = world.cabin.center
+	local start = Vector3.new(center.X - 40, 0, center.Z)
+	local model = MonsterModels.build("Gesichtslose", world.nightFolder, CFrame.lookAt(start, Vector3.new(center.X, 0, center.Z)), 1)
+	model:SetAttribute("CameraOnly", true)
+	night.monster = {
+		model = model,
+		nextJump = 9,
+		runTime = {},
+		nextLure = 25 + math.random() * 10,
+	}
+end
+
+local function jumpBehind(night, player)
+	local s = night.monster
+	local root = night:root(player)
+	if not s or not root then
+		return
+	end
+	local behind = root.CFrame * CFrame.new(0, 0, 9)
+	local feetY = root.CFrame.Position.Y - 3
+	local pos = Vector3.new(behind.Position.X, feetY, behind.Position.Z)
+	local lookAt = Vector3.new(root.CFrame.Position.X, feetY, root.CFrame.Position.Z)
+	s.model:PivotTo(CFrame.lookAt(pos, lookAt))
+	night:sound("Static", s.model.PrimaryPart, 0.7)
+end
+
+function Gesichtslose.update(night, world, dt)
+	local s = night.monster
+	if not s then
+		return
+	end
+	local alive = night:alive()
+
+	s.nextJump = s.nextJump - dt
+	if s.nextJump <= 0 and #alive > 0 then
+		s.nextJump = 15 + math.random() * 10
+		jumpBehind(night, alive[math.random(#alive)])
+	end
+
+	-- Regel prüfen: rennen in seiner Nähe
+	local mPos = flat(s.model:GetPivot().Position)
+	for _, player in ipairs(alive) do
+		local root = night:root(player)
+		if root then
+			local dist = (flat(root.CFrame.Position) - mPos).Magnitude
+			local v = root.AssemblyLinearVelocity
+			local speed = Vector3.new(v.X, 0, v.Z).Magnitude
+			if dist < DANGER_RADIUS and speed > night.round.runThreshold then
+				s.runTime[player] = (s.runTime[player] or 0) + dt
+				if s.runTime[player] >= RUN_TIME_LIMIT then
+					s.runTime[player] = 0
+					night:take(player, "Rennen")
+				end
+			else
+				s.runTime[player] = 0
+			end
+		end
+	end
+
+	s.nextLure = s.nextLure - dt
+	if s.nextLure <= 0 then
+		s.nextLure = 35 + math.random() * 15
+		local lures = night.def.lures
+		night:lure(lures[math.random(#lures)])
+	end
+end
+
+function Gesichtslose.stop(night)
+	local s = night.monster
+	if s and s.model then
+		s.model:Destroy()
+	end
+	night.monster = nil
+end
+
+return Gesichtslose
+]]></string>
+          </Properties>
+        </Item>
+      </Item>
+    </Item>
+  </Item>
+  <Item class="StarterPlayer" referent="15">
+    <Properties>
+      <string name="Name">StarterPlayer</string>
+    </Properties>
+    <Item class="StarterPlayerScripts" referent="16">
+      <Properties>
+        <string name="Name">StarterPlayerScripts</string>
+      </Properties>
+      <Item class="LocalScript" referent="17">
+        <Properties>
+          <string name="Name">HorrorRouletteClient</string>
+          <string name="Source"><![CDATA[-- HORROR ROULETTE – Client-Start: verbindet Server-Nachrichten mit Oberfläche und Effekten
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local TextChatService = game:GetService("TextChatService")
+
+local shared = ReplicatedStorage:WaitForChild("HorrorRoulette")
+local Config = require(shared:WaitForChild("Config"))
+local remotesFolder = shared:WaitForChild("Remotes")
+local function remote(name)
+	return remotesFolder:WaitForChild(name)
+end
+
+local UI = require(script:WaitForChild("UI"))
+local Effects = require(script:WaitForChild("Effects"))
+
+local state = { phase = "Lobby" }
+local profile = { coins = 0, nights = 0, rank = "Praktikant", akte = {}, settings = { sound = true, shake = true } }
+
+local function saveSettings()
+	remote("SaveSettings"):FireServer({ sound = profile.settings.sound, shake = profile.settings.shake })
+end
+
+local gui = UI.build(Config, {
+	onPlay = function()
+		remote("SetReady"):FireServer(true)
+	end,
+	onToggleSetting = function(key)
+		profile.settings[key] = not (profile.settings[key] ~= false)
+		UI.updateSettings(profile.settings)
+		Effects.setSettings(profile.settings)
+		saveSettings()
+	end,
+})
+Effects.init(Config, gui)
+UI.updateAkte(profile.akte)
+UI.updateSettings(profile.settings)
+UI.showMenu(true)
+
+local function clockText(nightStart)
+	local elapsed = workspace:GetServerTimeNow() - nightStart
+	local u = math.clamp(elapsed / Config.NightSeconds, 0, 1)
+	local minutes = math.floor(u * 6 * 60)
+	return string.format("%02d:%02d", math.floor(minutes / 60), minutes % 60)
+end
+
+local function applyState(s)
+	state = s
+	local def = s.monsterId and Config.GetMonster(s.monsterId) or nil
+	local inNight = s.phase == "Night" and s.participant
+	UI.setLobbyMode(not inNight and s.phase ~= "Roulette")
+	UI.setNightHud(inNight and s.alive, s.notesFound or 0, 3)
+	UI.setTaken(inNight and not s.alive)
+	if inNight and def then
+		UI.setHeader("HORROR ROULETTE  •  " .. def.name)
+	else
+		UI.setHeader("HORROR ROULETTE  •  LOBBY")
+	end
+	if (s.phase ~= "Night" and s.phase ~= "Results") or not s.participant then
+		UI.hideRule()
+	end
+end
+
+remote("State").OnClientEvent:Connect(applyState)
+
+remote("Profile").OnClientEvent:Connect(function(p)
+	profile = p
+	UI.setProfile(p)
+	UI.updateAkte(p.akte)
+	UI.updateSettings(p.settings)
+	Effects.setSettings(p.settings)
+end)
+
+remote("Roulette").OnClientEvent:Connect(function(index, duration)
+	UI.showMenu(false)
+	Effects.play("Alarm", 0.5)
+	UI.playRoulette(index, duration, function()
+		Effects.play("RouletteTick", 0.5)
+	end, function()
+		Effects.play("RouletteLock", 1)
+		Effects.shake(0.4, 0.3)
+	end)
+end)
+
+remote("Notice").OnClientEvent:Connect(function(text, kind)
+	UI.subtitle(text, kind)
+	if kind == "danger" then
+		Effects.shake(0.5, 0.35)
+	end
+end)
+
+remote("Note").OnClientEvent:Connect(function(title, text)
+	UI.showNote(title, text)
+	Effects.play("PageFlip", 0.7)
+end)
+
+remote("RuleReveal").OnClientEvent:Connect(function(monsterId, byName)
+	local def = Config.GetMonster(monsterId)
+	if def then
+		UI.showRule(def, byName)
+		UI.subtitle("Regel erkannt: " .. def.rule, "warn")
+	end
+end)
+
+remote("Jumpscare").OnClientEvent:Connect(function(monsterId)
+	Effects.jumpscare(monsterId)
+end)
+
+remote("Results").OnClientEvent:Connect(function(data)
+	local def = Config.GetMonster(data.monsterId)
+	task.delay(1.2, function()
+		UI.showResults(data, def)
+	end)
+end)
+
+-- Falsche Chat-Nachricht: sieht aus wie eine echte Nachricht eines Mitspielers.
+-- Kleiner Hinweis für Aufmerksame: das "≈"-Rauschzeichen am Ende.
+remote("FakeChat").OnClientEvent:Connect(function(speaker, text)
+	local ok = pcall(function()
+		local channels = TextChatService:FindFirstChild("TextChannels")
+		local general = channels and channels:FindFirstChild("RBXGeneral")
+		if not general then
+			error("kein Kanal")
+		end
+		general:DisplaySystemMessage(string.format('<font color="#9FD4FF">%s:</font> %s <font transparency="0.55">≈</font>', speaker, text))
+	end)
+	if not ok then
+		UI.fakeChatFallback(speaker, text)
+	end
+end)
+
+-- Laufende Anzeige: Uhr in der Nacht, Countdown in der Lobby
+RunService.Heartbeat:Connect(function()
+	local s = state
+	if s.phase == "Night" and s.nightStart then
+		UI.setClock(true, clockText(s.nightStart))
+		if not s.participant then
+			UI.setStatus("Eine Nacht läuft – du bist in der nächsten Runde dabei.")
+		else
+			UI.setStatus("")
+		end
+	elseif s.phase == "Countdown" then
+		UI.setClock(false)
+		local left = math.max(0, math.ceil((s.endsAt or 0) - workspace:GetServerTimeNow()))
+		UI.setStatus(s.ready and ("Nächste Nacht in " .. left) or "Drücke SPIELEN im Menü, um mitzuspielen")
+	elseif s.phase == "Lobby" then
+		UI.setClock(false)
+		UI.setStatus(s.ready and "Warte auf die nächste Nacht …" or "")
+	elseif s.phase == "Roulette" then
+		UI.setClock(false)
+		UI.setStatus("")
+	elseif s.phase == "Results" then
+		UI.setStatus("")
+	end
+end)
+]]></string>
+        </Properties>
+        <Item class="ModuleScript" referent="18">
+          <Properties>
+            <string name="Name">UI</string>
+            <string name="Source"><![CDATA[-- Benutzeroberfläche im Stil der TikTok-Videos (rote Kopfzeile, Uhr, Untertitel, Regel-Karte, Roulette)
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+
+local UI = {}
+
+local RED = Color3.fromRGB(216, 32, 42)
+local RED_TEXT = Color3.fromRGB(255, 43, 43)
+local DARK = Color3.fromRGB(14, 14, 18)
+local PANEL = Color3.fromRGB(22, 23, 29)
+local WHITE = Color3.fromRGB(255, 255, 255)
+local GOLD = Color3.fromRGB(233, 185, 73)
+local YELLOW = Color3.fromRGB(245, 197, 24)
+
+local HEAD_FONT = Enum.Font.GothamBlack
+local BODY_FONT = Enum.Font.GothamMedium
+local SUB_FONT = Enum.Font.Oswald
+
+local gui, refs = nil, {}
+local config, callbacks = nil, {}
+
+-- ===================================================================== BAUSTEINE
+local function new(className, props, children)
+	local inst = Instance.new(className)
+	for key, value in pairs(props or {}) do
+		if key ~= "Parent" then
+			inst[key] = value
+		end
+	end
+	for _, child in ipairs(children or {}) do
+		child.Parent = inst
+	end
+	if props and props.Parent then
+		inst.Parent = props.Parent
+	end
+	return inst
+end
+
+local function corner(radius)
+	return new("UICorner", { CornerRadius = radius or UDim.new(0, 12) })
+end
+
+local function stroke(color, thickness)
+	return new("UIStroke", { Color = color, Thickness = thickness or 2, ApplyStrokeMode = Enum.ApplyStrokeMode.Border })
+end
+
+local function maxText(size)
+	return new("UITextSizeConstraint", { MaxTextSize = size, MinTextSize = 8 })
+end
+
+local function label(props)
+	local defaults = {
+		BackgroundTransparency = 1,
+		TextColor3 = WHITE,
+		Font = BODY_FONT,
+		TextScaled = true,
+		RichText = true,
+	}
+	for k, v in pairs(props) do
+		defaults[k] = v
+	end
+	return new("TextLabel", defaults)
+end
+
+local function button(parent, text, position, size, color)
+	local b = new("TextButton", {
+		Parent = parent,
+		Text = text,
+		Font = HEAD_FONT,
+		TextScaled = true,
+		TextColor3 = WHITE,
+		BackgroundColor3 = color or RED,
+		AutoButtonColor = true,
+		Position = position,
+		Size = size,
+		AnchorPoint = Vector2.new(0.5, 0.5),
+	}, { corner(UDim.new(0.5, 0)), maxText(26), new("UIPadding", { PaddingTop = UDim.new(0.22, 0), PaddingBottom = UDim.new(0.22, 0) }) })
+	return b
+end
+
+local function hexOf(color)
+	return string.format("#%02X%02X%02X", math.floor(color.R * 255), math.floor(color.G * 255), math.floor(color.B * 255))
+end
+UI.hex = hexOf
+
+local function tween(inst, time, goal, style)
+	local t = TweenService:Create(inst, TweenInfo.new(time, style or Enum.EasingStyle.Quad, Enum.EasingDirection.Out), goal)
+	t:Play()
+	return t
+end
+
+-- ===================================================================== AUFBAU
+function UI.build(cfg, cbs)
+	config, callbacks = cfg, cbs
+	local playerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
+	gui = new("ScreenGui", {
+		Name = "HorrorRouletteUI",
+		ResetOnSpawn = false,
+		IgnoreGuiInset = true,
+		ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+		DisplayOrder = 5,
+		Parent = playerGui,
+	})
+	refs.gui = gui
+
+	-- Kopfzeile: rote Pille + Uhr (wie in den Videos)
+	local header = new("Frame", { Parent = gui, Name = "Header", BackgroundTransparency = 1, Size = UDim2.fromScale(1, 0.12), Position = UDim2.fromScale(0, 0.015) })
+	refs.headerPill = new("TextLabel", {
+		Parent = header, AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0.05), Size = UDim2.fromScale(0.34, 0.32),
+		BackgroundColor3 = RED, Text = "HORROR ROULETTE  •  LOBBY", Font = HEAD_FONT, TextColor3 = WHITE, TextScaled = true,
+	}, { corner(UDim.new(0.5, 0)), maxText(20), new("UIPadding", { PaddingTop = UDim.new(0.18, 0), PaddingBottom = UDim.new(0.18, 0) }),
+		new("UISizeConstraint", { MinSize = Vector2.new(240, 26) }) })
+	refs.clockPill = new("TextLabel", {
+		Parent = header, AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0.43), Size = UDim2.fromScale(0.1, 0.27),
+		BackgroundColor3 = DARK, BackgroundTransparency = 0.1, Text = "<font color=\"#FF3030\">●</font> 00:00", Font = HEAD_FONT,
+		TextColor3 = WHITE, TextScaled = true, RichText = true, Visible = false,
+	}, { corner(UDim.new(0.5, 0)), maxText(18), new("UIPadding", { PaddingTop = UDim.new(0.16, 0), PaddingBottom = UDim.new(0.16, 0) }),
+		new("UISizeConstraint", { MinSize = Vector2.new(96, 22) }) })
+
+	-- Status unten (Lobby)
+	refs.status = label({
+		Parent = gui, AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.fromScale(0.5, 0.95), Size = UDim2.fromScale(0.6, 0.06),
+		Text = "", Font = HEAD_FONT, TextColor3 = WHITE,
+	})
+	maxText(30).Parent = refs.status
+	new("UIStroke", { Parent = refs.status, Thickness = 2, Transparency = 0.4 })
+
+	-- Lobby-Seitenleiste: Profil, Akte, Einstellungen
+	local side = new("Frame", { Parent = gui, Name = "Side", BackgroundTransparency = 1, Position = UDim2.fromScale(0.015, 0.3), Size = UDim2.fromScale(0.16, 0.4) })
+	refs.side = side
+	refs.profile = label({ Parent = side, Size = UDim2.fromScale(1, 0.32), Text = "", TextXAlignment = Enum.TextXAlignment.Left, Font = HEAD_FONT })
+	maxText(20).Parent = refs.profile
+	local akteBtn = button(side, "AKTE", UDim2.fromScale(0.5, 0.5), UDim2.fromScale(0.9, 0.16), PANEL)
+	stroke(Color3.fromRGB(90, 90, 100), 2).Parent = akteBtn
+	akteBtn.Activated:Connect(function()
+		UI.showAkte(true)
+	end)
+	local setBtn = button(side, "EINSTELLUNGEN", UDim2.fromScale(0.5, 0.72), UDim2.fromScale(0.9, 0.16), PANEL)
+	stroke(Color3.fromRGB(90, 90, 100), 2).Parent = setBtn
+	setBtn.Activated:Connect(function()
+		UI.showSettings(true)
+	end)
+
+	-- Hinweis-Zähler (Nacht)
+	refs.hints = new("TextLabel", {
+		Parent = gui, Position = UDim2.fromScale(0.02, 0.13), Size = UDim2.fromScale(0.16, 0.06), BackgroundColor3 = DARK, BackgroundTransparency = 0.12,
+		Text = "", Font = HEAD_FONT, TextScaled = true, TextColor3 = WHITE, RichText = true, Visible = false,
+	}, { corner(), stroke(Color3.fromRGB(200, 200, 210), 1.5), maxText(20), new("UIPadding", { PaddingTop = UDim.new(0.2, 0), PaddingBottom = UDim.new(0.2, 0) }) })
+	refs.controls = label({
+		Parent = gui, AnchorPoint = Vector2.new(1, 1), Position = UDim2.fromScale(0.985, 0.985), Size = UDim2.fromScale(0.3, 0.035),
+		Text = "SHIFT: rennen  ·  E: benutzen", TextColor3 = Color3.fromRGB(200, 200, 210), Font = BODY_FONT, TextXAlignment = Enum.TextXAlignment.Right, Visible = false,
+	})
+	maxText(16).Parent = refs.controls
+
+	-- Untertitel (Ansagen wie in den Videos)
+	refs.subtitle = label({
+		Parent = gui, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.78), Size = UDim2.fromScale(0.8, 0.08),
+		Text = "", Font = SUB_FONT, TextColor3 = WHITE, TextTransparency = 1,
+	})
+	maxText(46).Parent = refs.subtitle
+	refs.subtitleStroke = new("UIStroke", { Parent = refs.subtitle, Thickness = 3, Transparency = 1 })
+
+	-- Regel-Karte
+	refs.rule = new("Frame", {
+		Parent = gui, AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0.13), Size = UDim2.fromScale(0.3, 0.13),
+		BackgroundColor3 = Color3.fromRGB(247, 243, 234), Rotation = -3, Visible = false,
+	}, { corner(UDim.new(0, 10)), stroke(Color3.fromRGB(22, 18, 15), 2), new("UISizeConstraint", { MinSize = Vector2.new(260, 90) }) })
+	local ruleHead = new("Frame", { Parent = refs.rule, BackgroundColor3 = RED, Size = UDim2.fromScale(1, 0.36) }, { corner(UDim.new(0, 10)) })
+	label({ Parent = ruleHead, Size = UDim2.fromScale(1, 1), Text = "REGEL #1", Font = SUB_FONT })
+	refs.ruleText = label({ Parent = refs.rule, Position = UDim2.fromScale(0.05, 0.4), Size = UDim2.fromScale(0.9, 0.55), Text = "", Font = SUB_FONT, TextColor3 = Color3.fromRGB(22, 18, 15) })
+	refs.ruleBy = label({ Parent = refs.rule, AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 1.04), Size = UDim2.fromScale(1, 0.22), Text = "", TextColor3 = Color3.fromRGB(220, 220, 230) })
+
+	-- Spieler-Bildschirm "geholt"
+	refs.taken = label({
+		Parent = gui, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.62), Size = UDim2.fromScale(0.7, 0.1),
+		Text = "", Font = SUB_FONT, TextColor3 = RED_TEXT, Visible = false,
+	})
+	maxText(34).Parent = refs.taken
+
+	-- Falscher Chat (Ersatz, falls der Roblox-Chat nicht verfügbar ist)
+	refs.chatFeed = new("Frame", { Parent = gui, Position = UDim2.fromScale(0.02, 0.62), Size = UDim2.fromScale(0.34, 0.2), BackgroundTransparency = 1 },
+		{ new("UIListLayout", { VerticalAlignment = Enum.VerticalAlignment.Bottom, Padding = UDim.new(0, 4) }) })
+
+	UI.buildMenu()
+	UI.buildNote()
+	UI.buildAkte()
+	UI.buildSettings()
+	UI.buildResults()
+	UI.buildRoulette()
+	return gui
+end
+
+-- ===================================================================== HAUPTMENÜ
+function UI.buildMenu()
+	local menu = new("Frame", { Parent = gui, Name = "Menu", Size = UDim2.fromScale(1, 1), BackgroundColor3 = Color3.fromRGB(8, 8, 11), ZIndex = 20 },
+		{ new("UIGradient", { Rotation = 90, Color = ColorSequence.new(Color3.fromRGB(40, 6, 8), Color3.fromRGB(8, 8, 11)) }) })
+	refs.menu = menu
+	label({
+		Parent = menu, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.3), Size = UDim2.fromScale(0.8, 0.14), ZIndex = 21,
+		Text = '<font color="#FFFFFF">Horror </font><font color="#E3262B">ROULETTE</font>', Font = HEAD_FONT,
+	})
+	label({
+		Parent = menu, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.41), Size = UDim2.fromScale(0.6, 0.045), ZIndex = 21,
+		Text = "Ein Monster ist ausgebrochen. Finde seine Regel. Überlebe bis 6 Uhr.", TextColor3 = Color3.fromRGB(205, 205, 215),
+	})
+	local play = button(menu, "SPIELEN", UDim2.fromScale(0.5, 0.56), UDim2.fromScale(0.24, 0.085), RED)
+	play.ZIndex = 21
+	play.Activated:Connect(function()
+		UI.showMenu(false)
+		callbacks.onPlay()
+	end)
+	local akte = button(menu, "EINDÄMMUNGSAKTE", UDim2.fromScale(0.5, 0.67), UDim2.fromScale(0.24, 0.07), PANEL)
+	akte.ZIndex = 21
+	akte.Activated:Connect(function()
+		UI.showAkte(true)
+	end)
+	local settings = button(menu, "EINSTELLUNGEN", UDim2.fromScale(0.5, 0.76), UDim2.fromScale(0.24, 0.07), PANEL)
+	settings.ZIndex = 21
+	settings.Activated:Connect(function()
+		UI.showSettings(true)
+	end)
+	for _, b in ipairs({ akte, settings }) do
+		stroke(Color3.fromRGB(90, 90, 100), 2).Parent = b
+	end
+	label({
+		Parent = menu, AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.fromScale(0.5, 0.97), Size = UDim2.fromScale(0.5, 0.03), ZIndex = 21,
+		Text = "Zur TikTok-Serie @interestingstuff", TextColor3 = Color3.fromRGB(150, 150, 160),
+	})
+end
+
+function UI.showMenu(visible)
+	refs.menu.Visible = visible
+end
+
+-- ===================================================================== ZETTEL
+function UI.buildNote()
+	local note = new("Frame", {
+		Parent = gui, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.48), Size = UDim2.fromScale(0.3, 0.42),
+		BackgroundColor3 = Color3.fromRGB(242, 234, 210), Rotation = 2, Visible = false, ZIndex = 12,
+	}, { corner(UDim.new(0, 6)), new("UISizeConstraint", { MinSize = Vector2.new(260, 220) }), new("UIAspectRatioConstraint", { AspectRatio = 0.85 }) })
+	refs.note = note
+	refs.noteTitle = label({ Parent = note, Position = UDim2.fromScale(0.08, 0.05), Size = UDim2.fromScale(0.84, 0.12), Text = "", Font = SUB_FONT, TextColor3 = Color3.fromRGB(150, 30, 30), ZIndex = 13 })
+	refs.noteText = label({
+		Parent = note, Position = UDim2.fromScale(0.08, 0.2), Size = UDim2.fromScale(0.84, 0.62), Text = "", Font = Enum.Font.IndieFlower,
+		TextColor3 = Color3.fromRGB(40, 32, 26), TextYAlignment = Enum.TextYAlignment.Top, ZIndex = 13,
+	})
+	maxText(34).Parent = refs.noteText
+	local close = button(note, "WEGLEGEN", UDim2.fromScale(0.5, 0.9), UDim2.fromScale(0.5, 0.1), Color3.fromRGB(60, 50, 44))
+	close.ZIndex = 13
+	close.Activated:Connect(function()
+		note.Visible = false
+	end)
+end
+
+function UI.showNote(title, text)
+	refs.noteTitle.Text = title
+	refs.noteText.Text = text
+	refs.note.Visible = true
+	local token = {}
+	refs.noteToken = token
+	task.delay(9, function()
+		if refs.noteToken == token then
+			refs.note.Visible = false
+		end
+	end)
+end
+
+-- ===================================================================== AKTE
+function UI.buildAkte()
+	local panel = new("Frame", {
+		Parent = gui, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.72, 0.72),
+		BackgroundColor3 = Color3.fromRGB(16, 17, 22), Visible = false, ZIndex = 30,
+	}, { corner(UDim.new(0, 16)), stroke(Color3.fromRGB(70, 70, 80), 2) })
+	refs.akte = panel
+	label({ Parent = panel, Position = UDim2.fromScale(0.04, 0.03), Size = UDim2.fromScale(0.7, 0.09), Text = 'EINDÄMMUNGS<font color="#E3262B">AKTE</font>', Font = HEAD_FONT, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 31 })
+	local close = button(panel, "X", UDim2.fromScale(0.95, 0.07), UDim2.fromScale(0.06, 0.08), RED)
+	close.ZIndex = 31
+	close.Activated:Connect(function()
+		UI.showAkte(false)
+	end)
+	local grid = new("Frame", { Parent = panel, Position = UDim2.fromScale(0.04, 0.15), Size = UDim2.fromScale(0.92, 0.8), BackgroundTransparency = 1, ZIndex = 31 },
+		{ new("UIGridLayout", { CellSize = UDim2.fromScale(0.31, 0.95), CellPadding = UDim2.fromScale(0.035, 0), HorizontalAlignment = Enum.HorizontalAlignment.Center }) })
+	refs.akteCards = {}
+	for _, m in ipairs(config.Monsters) do
+		local card = new("Frame", { Parent = grid, BackgroundColor3 = PANEL, ZIndex = 32 }, { corner(), stroke(m.color, 2) })
+		local name = label({ Parent = card, Position = UDim2.fromScale(0.06, 0.04), Size = UDim2.fromScale(0.88, 0.1), Text = m.name, Font = HEAD_FONT, ZIndex = 33 })
+		local status = label({ Parent = card, Position = UDim2.fromScale(0.06, 0.15), Size = UDim2.fromScale(0.88, 0.06), Text = "", TextColor3 = GOLD, ZIndex = 33 })
+		local body = label({
+			Parent = card, Position = UDim2.fromScale(0.06, 0.24), Size = UDim2.fromScale(0.88, 0.7), Text = "", TextColor3 = Color3.fromRGB(215, 215, 222),
+			TextYAlignment = Enum.TextYAlignment.Top, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 33,
+		})
+		maxText(18).Parent = body
+		refs.akteCards[m.id] = { name = name, status = status, body = body, def = m }
+	end
+end
+
+function UI.updateAkte(akte)
+	for id, card in pairs(refs.akteCards) do
+		local def = card.def
+		if akte and akte[id] then
+			card.name.Text = def.name
+			card.status.Text = "ÜBERLEBT ✓"
+			card.body.Text = string.format('<b>Regel:</b> %s\n\n<b>Herkunft:</b> %s\n\n%s', def.ruleLong, def.origin, def.story)
+		else
+			card.name.Text = "???"
+			card.status.Text = "NOCH NICHT ÜBERLEBT"
+			card.body.Text = "Überlebe eine Nacht mit diesem Monster, um seine Akte freizuschalten."
+		end
+	end
+end
+
+function UI.showAkte(visible)
+	refs.akte.Visible = visible
+	if visible then
+		refs.settings.Visible = false
+	end
+end
+
+-- ===================================================================== EINSTELLUNGEN
+function UI.buildSettings()
+	local panel = new("Frame", {
+		Parent = gui, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(0.36, 0.42),
+		BackgroundColor3 = Color3.fromRGB(16, 17, 22), Visible = false, ZIndex = 30,
+	}, { corner(UDim.new(0, 16)), stroke(Color3.fromRGB(70, 70, 80), 2), new("UISizeConstraint", { MinSize = Vector2.new(280, 220) }) })
+	refs.settings = panel
+	label({ Parent = panel, Position = UDim2.fromScale(0.06, 0.05), Size = UDim2.fromScale(0.7, 0.14), Text = "EINSTELLUNGEN", Font = HEAD_FONT, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 31 })
+	local close = button(panel, "X", UDim2.fromScale(0.9, 0.12), UDim2.fromScale(0.12, 0.13), RED)
+	close.ZIndex = 31
+	close.Activated:Connect(function()
+		UI.showSettings(false)
+	end)
+	refs.settingButtons = {}
+	local function toggle(key, text, y)
+		label({ Parent = panel, Position = UDim2.fromScale(0.06, y), Size = UDim2.fromScale(0.55, 0.12), Text = text, TextXAlignment = Enum.TextXAlignment.Left, ZIndex = 31 })
+		local b = button(panel, "AN", UDim2.fromScale(0.8, y + 0.06), UDim2.fromScale(0.26, 0.13), Color3.fromRGB(40, 120, 70))
+		b.ZIndex = 31
+		b.Activated:Connect(function()
+			callbacks.onToggleSetting(key)
+		end)
+		refs.settingButtons[key] = b
+	end
+	toggle("sound", "Sound", 0.3)
+	toggle("shake", "Kamerawackeln", 0.52)
+	label({ Parent = panel, Position = UDim2.fromScale(0.06, 0.78), Size = UDim2.fromScale(0.88, 0.14), Text = "Einstellungen werden gespeichert.", TextColor3 = Color3.fromRGB(150, 150, 160), ZIndex = 31 })
+end
+
+function UI.updateSettings(settings)
+	for key, b in pairs(refs.settingButtons) do
+		local on = settings[key] ~= false
+		b.Text = on and "AN" or "AUS"
+		b.BackgroundColor3 = on and Color3.fromRGB(40, 120, 70) or Color3.fromRGB(110, 40, 40)
+	end
+end
+
+function UI.showSettings(visible)
+	refs.settings.Visible = visible
+	if visible then
+		refs.akte.Visible = false
+	end
+end
+
+-- ===================================================================== ERGEBNIS
+function UI.buildResults()
+	local panel = new("Frame", { Parent = gui, Size = UDim2.fromScale(1, 1), BackgroundColor3 = Color3.fromRGB(8, 8, 11), BackgroundTransparency = 0.25, Visible = false, ZIndex = 25 })
+	refs.results = panel
+	refs.resTitle = label({ Parent = panel, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.36), Size = UDim2.fromScale(0.8, 0.14), Text = "", Font = SUB_FONT, ZIndex = 26 })
+	refs.resBody = label({ Parent = panel, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.52), Size = UDim2.fromScale(0.6, 0.14), Text = "", TextColor3 = Color3.fromRGB(220, 220, 228), ZIndex = 26 })
+	maxText(28).Parent = refs.resBody
+	refs.resFoot = label({ Parent = panel, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.68), Size = UDim2.fromScale(0.5, 0.045), Text = "Zurück in die Lobby …", TextColor3 = Color3.fromRGB(160, 160, 170), ZIndex = 26 })
+end
+
+function UI.showResults(data, def)
+	local p = refs.results
+	if data.survived then
+		refs.resTitle.Text = '<font color="#FFFFFF">DU HAST </font><font color="#FF2B2B">ÜBERLEBT</font>'
+	else
+		refs.resTitle.Text = '<font color="#FF2B2B">GEHOLT</font>'
+	end
+	local lines = { string.format("Monster: <b>%s</b>", def and def.name or "?"), string.format("+%d Münzen", data.coins or 0) }
+	if data.newEntry then
+		table.insert(lines, '<font color="#E9B949">Neuer Eintrag in deiner Eindämmungsakte!</font>')
+	end
+	if not data.ruleRevealed and def then
+		table.insert(lines, "Die Regel war: " .. def.rule)
+	end
+	refs.resBody.Text = table.concat(lines, "\n")
+	p.Visible = true
+	task.delay(config.ResultsSeconds - 0.3, function()
+		p.Visible = false
+	end)
+end
+
+-- ===================================================================== KOPFZEILE & STATUS
+function UI.setHeader(text)
+	refs.headerPill.Text = text
+end
+
+function UI.setClock(visible, text)
+	refs.clockPill.Visible = visible
+	if text then
+		refs.clockPill.Text = '<font color="#FF3030">●</font> ' .. text
+	end
+end
+
+function UI.setStatus(text)
+	refs.status.Text = text or ""
+end
+
+function UI.setLobbyMode(inLobby)
+	refs.side.Visible = inLobby
+end
+
+function UI.setNightHud(visible, found, total)
+	refs.hints.Visible = visible
+	refs.controls.Visible = visible
+	if found then
+		refs.hints.Text = string.format('HINWEISE <font color="#E9B949">%d/%d</font>', found, total)
+	end
+end
+
+function UI.setProfile(profile)
+	refs.profile.Text = string.format('<font color="#E9B949">%s</font>\n%d Münzen\n%d Nächte überlebt', profile.rank, profile.coins, profile.nights)
+end
+
+function UI.setTaken(visible)
+	refs.taken.Visible = visible
+	refs.taken.Text = "DU WURDEST GEHOLT.\nDu stehst jetzt draußen vor dem Fenster – und siehst zu."
+end
+
+-- Untertitel. kind: title | info | warn | danger
+function UI.subtitle(text, kind)
+	local color = WHITE
+	if kind == "danger" then
+		color = RED_TEXT
+	elseif kind == "warn" then
+		color = Color3.fromRGB(255, 200, 90)
+	end
+	local sub = refs.subtitle
+	sub.Text = string.upper(text)
+	sub.TextColor3 = color
+	sub.Size = kind == "title" and UDim2.fromScale(0.86, 0.11) or UDim2.fromScale(0.8, 0.07)
+	sub.TextTransparency = 0
+	refs.subtitleStroke.Transparency = 0.2
+	sub.Position = UDim2.fromScale(0.5, 0.8)
+	tween(sub, 0.25, { Position = UDim2.fromScale(0.5, 0.78) }, Enum.EasingStyle.Back)
+	local token = {}
+	refs.subToken = token
+	task.delay(kind == "title" and 4 or 3.4, function()
+		if refs.subToken == token then
+			tween(sub, 0.5, { TextTransparency = 1 })
+			tween(refs.subtitleStroke, 0.5, { Transparency = 1 })
+		end
+	end)
+end
+
+function UI.showRule(def, byName)
+	local card = refs.rule
+	refs.ruleText.Text = def.rule
+	refs.ruleBy.Text = byName and ("erkannt von " .. byName) or ""
+	card.Visible = true
+	card.Size = UDim2.fromScale(0.05, 0.02)
+	tween(card, 0.45, { Size = UDim2.fromScale(0.3, 0.13) }, Enum.EasingStyle.Back)
+end
+
+function UI.hideRule()
+	refs.rule.Visible = false
+end
+
+function UI.fakeChatFallback(speaker, text)
+	local line = label({
+		Parent = refs.chatFeed, Size = UDim2.new(1, 0, 0, 22), TextScaled = false, TextSize = 18, Font = BODY_FONT,
+		TextXAlignment = Enum.TextXAlignment.Left, Text = string.format('<font color="#9FD4FF"><b>%s:</b></font> %s', speaker, text),
+	})
+	task.delay(8, function()
+		line:Destroy()
+	end)
+end
+
+-- ===================================================================== ROULETTE
+function UI.buildRoulette()
+	local overlay = new("Frame", { Parent = gui, Name = "Roulette", Size = UDim2.fromScale(1, 1), BackgroundColor3 = Color3.fromRGB(10, 10, 14), BackgroundTransparency = 0.08, Visible = false, ZIndex = 40 })
+	refs.roulette = overlay
+	label({ Parent = overlay, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.17), Size = UDim2.fromScale(0.6, 0.1), ZIndex = 41,
+		Text = '<font color="#FFFFFF">Horror </font><font color="#E3262B">ROULETTE</font>', Font = HEAD_FONT })
+	refs.rouletteSub = label({ Parent = overlay, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.26), Size = UDim2.fromScale(0.6, 0.045), ZIndex = 41,
+		Text = "Eines dieser Monster ist ausgebrochen …", TextColor3 = Color3.fromRGB(210, 210, 220) })
+	local band = new("Frame", { Parent = overlay, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.52), Size = UDim2.fromScale(1, 0.34), BackgroundColor3 = Color3.fromRGB(18, 19, 24), ClipsDescendants = true, ZIndex = 41 })
+	refs.band = band
+	-- Gefahrenstreifen unter dem Band
+	local stripe = new("Frame", { Parent = overlay, AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0.7), Size = UDim2.fromScale(1, 0.025), BackgroundColor3 = Color3.fromRGB(232, 185, 35), ZIndex = 41 })
+	new("UIGradient", { Parent = stripe, Color = ColorSequence.new({
+		ColorSequenceKeypoint.new(0, Color3.fromRGB(232, 185, 35)), ColorSequenceKeypoint.new(0.5, Color3.fromRGB(232, 185, 35)),
+		ColorSequenceKeypoint.new(0.501, Color3.fromRGB(17, 17, 17)), ColorSequenceKeypoint.new(1, Color3.fromRGB(17, 17, 17)) }) })
+	-- Gelbe Zeigerlinie
+	refs.pointer = new("Frame", { Parent = overlay, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.52), Size = UDim2.new(0, 5, 0.42, 0), BackgroundColor3 = YELLOW, BorderSizePixel = 0, ZIndex = 44 })
+	for _, y in ipairs({ 0.29, 0.75 }) do
+		new("Frame", { Parent = overlay, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, y), Size = UDim2.new(0, 22, 0, 22), Rotation = 45, BackgroundColor3 = YELLOW, BorderSizePixel = 0, ZIndex = 44 })
+	end
+	refs.rouletteResult = label({ Parent = overlay, AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.84), Size = UDim2.fromScale(0.7, 0.08), Text = "", Font = SUB_FONT, ZIndex = 45 })
+	refs.rouletteFlash = new("Frame", { Parent = overlay, Size = UDim2.fromScale(1, 1), BackgroundColor3 = Color3.fromRGB(255, 20, 20), BackgroundTransparency = 1, ZIndex = 46 })
+end
+
+local CARD_W = 0.24
+local CYCLES = 7
+
+-- Spielt die Roulette-Animation; onTick() wird bei jedem vorbeilaufenden Feld aufgerufen
+function UI.playRoulette(index, duration, onTick, onLock)
+	local overlay, band = refs.roulette, refs.band
+	band:ClearAllChildren()
+	refs.rouletteResult.Text = ""
+	refs.rouletteFlash.BackgroundTransparency = 1
+	overlay.Visible = true
+	local monsters = config.Monsters
+	local n = #monsters
+	local total = n * (CYCLES + 2)
+	local cards = {}
+	for i = 1, total do
+		local def = monsters[((i - 1) % n) + 1]
+		local card = new("Frame", { Parent = band, AnchorPoint = Vector2.new(0.5, 0.5), Size = UDim2.fromScale(CARD_W * 0.88, 0.86), BackgroundColor3 = Color3.fromRGB(28, 30, 37), ZIndex = 42 },
+			{ corner(UDim.new(0, 14)), stroke(def.color, 3) })
+		new("Frame", { Parent = card, AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0.08), Size = UDim2.fromScale(0.3, 0.5), BackgroundColor3 = def.color, ZIndex = 43 },
+			{ corner(UDim.new(0.5, 0)), new("UIAspectRatioConstraint", { AspectRatio = 1 }) })
+		label({ Parent = card, AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0.66), Size = UDim2.fromScale(0.9, 0.2), Text = def.name, Font = HEAD_FONT, ZIndex = 43 })
+		cards[i] = card
+	end
+	-- Ziel: das passende Feld im vorletzten Durchlauf
+	local targetSlot = n * CYCLES + index
+	local spinTime = math.max(2, duration - 1.6)
+	local start = os.clock()
+	local lastSlot = 0
+	local locked = false
+	local conn
+	conn = RunService.RenderStepped:Connect(function()
+		local t = math.clamp((os.clock() - start) / spinTime, 0, 1)
+		local eased = 1 - (1 - t) ^ 4
+		local pos = 1 + (targetSlot - 1) * eased
+		for i, card in ipairs(cards) do
+			card.Position = UDim2.fromScale(0.5 + (i - pos) * CARD_W, 0.5)
+		end
+		local slot = math.floor(pos + 0.5)
+		if slot ~= lastSlot then
+			lastSlot = slot
+			if onTick then
+				onTick()
+			end
+		end
+		if t >= 1 and not locked then
+			locked = true
+			conn:Disconnect()
+			local def = monsters[index]
+			local card = cards[targetSlot]
+			tween(card, 0.3, { Size = UDim2.fromScale(CARD_W * 1.02, 0.96) }, Enum.EasingStyle.Back)
+			local st = card:FindFirstChildOfClass("UIStroke")
+			if st then
+				st.Color = Color3.fromRGB(255, 40, 40)
+				st.Thickness = 5
+			end
+			refs.rouletteFlash.BackgroundTransparency = 0.55
+			tween(refs.rouletteFlash, 0.8, { BackgroundTransparency = 1 })
+			refs.rouletteResult.Text = string.format('<font color="#FF2B2B">%s</font> IST AUSGEBROCHEN', def.name)
+			if onLock then
+				onLock(def)
+			end
+		end
+	end)
+	task.delay(duration, function()
+		if conn.Connected then
+			conn:Disconnect()
+		end
+		overlay.Visible = false
+	end)
+end
+
+return UI
+]]></string>
+          </Properties>
+        </Item>
+        <Item class="ModuleScript" referent="19">
+          <Properties>
+            <string name="Name">Effects</string>
+            <string name="Source"><![CDATA[-- Client-Effekte: Rennen, Alarmlichter, Flackern, Kamera-Sucher mit Rauschen, Jumpscare, Kamerawackeln
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+local ContextActionService = game:GetService("ContextActionService")
+local CollectionService = game:GetService("CollectionService")
+local SoundService = game:GetService("SoundService")
+local TweenService = game:GetService("TweenService")
+
+local Effects = {}
+
+local player = Players.LocalPlayer
+local config
+local settings = { sound = true, shake = true }
+local gui
+local viewfinder, noiseBars, recDot, timecode
+local jumpLayer
+local shakeUntil, shakeAmount = 0, 0
+local staticSound
+
+-- ===================================================================== TON
+function Effects.play(key, volume)
+	if not settings.sound then
+		return
+	end
+	local id = config.Sounds[key]
+	if not id or id == "" then
+		return
+	end
+	local s = Instance.new("Sound")
+	s.SoundId = id
+	s.Volume = volume or 0.8
+	s.Parent = SoundService
+	s:Play()
+	task.delay(10, function()
+		s:Destroy()
+	end)
+end
+
+function Effects.setSettings(newSettings)
+	settings.sound = newSettings.sound ~= false
+	settings.shake = newSettings.shake ~= false
+end
+
+-- ===================================================================== RENNEN
+local function applySpeed(sprinting)
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		humanoid.WalkSpeed = sprinting and config.SprintSpeed or config.WalkSpeed
+	end
+end
+
+local function bindSprint()
+	ContextActionService:BindAction("HR_Sprint", function(_, inputState)
+		if inputState == Enum.UserInputState.Begin then
+			applySpeed(true)
+		elseif inputState == Enum.UserInputState.End or inputState == Enum.UserInputState.Cancel then
+			applySpeed(false)
+		end
+		return Enum.ContextActionResult.Pass
+	end, true, Enum.KeyCode.LeftShift, Enum.KeyCode.ButtonL3)
+	ContextActionService:SetTitle("HR_Sprint", "Rennen")
+	ContextActionService:SetPosition("HR_Sprint", UDim2.new(1, -170, 1, -170))
+	player.CharacterAdded:Connect(function()
+		task.wait(0.2)
+		applySpeed(false)
+	end)
+	applySpeed(false)
+end
+
+-- ===================================================================== SUCHER (Kamera-Werkzeug)
+local function buildViewfinder()
+	viewfinder = Instance.new("Frame")
+	viewfinder.Name = "Viewfinder"
+	viewfinder.Size = UDim2.fromScale(1, 1)
+	viewfinder.BackgroundTransparency = 1
+	viewfinder.Visible = false
+	viewfinder.ZIndex = 8
+	viewfinder.Parent = gui
+	local function cornerMark(ax, ay)
+		local f = Instance.new("Frame")
+		f.BackgroundTransparency = 1
+		f.AnchorPoint = Vector2.new(ax, ay)
+		f.Position = UDim2.fromScale(ax == 0 and 0.06 or 0.94, ay == 0 and 0.1 or 0.9)
+		f.Size = UDim2.fromOffset(60, 60)
+		f.ZIndex = 9
+		f.Parent = viewfinder
+		local h = Instance.new("Frame")
+		h.BackgroundColor3 = Color3.new(1, 1, 1)
+		h.BorderSizePixel = 0
+		h.Size = UDim2.new(1, 0, 0, 5)
+		h.Position = UDim2.fromScale(0, ay)
+		h.AnchorPoint = Vector2.new(0, ay)
+		h.ZIndex = 9
+		h.Parent = f
+		local v = h:Clone()
+		v.Size = UDim2.new(0, 5, 1, 0)
+		v.Position = UDim2.fromScale(ax, 0)
+		v.AnchorPoint = Vector2.new(ax, 0)
+		v.Parent = f
+	end
+	cornerMark(0, 0)
+	cornerMark(1, 0)
+	cornerMark(0, 1)
+	cornerMark(1, 1)
+	recDot = Instance.new("TextLabel")
+	recDot.BackgroundTransparency = 1
+	recDot.Position = UDim2.fromScale(0.08, 0.12)
+	recDot.Size = UDim2.fromScale(0.12, 0.05)
+	recDot.Font = Enum.Font.Code
+	recDot.TextScaled = true
+	recDot.RichText = true
+	recDot.TextColor3 = Color3.new(1, 1, 1)
+	recDot.TextXAlignment = Enum.TextXAlignment.Left
+	recDot.Text = '<font color="#FF2A20">●</font> REC'
+	recDot.ZIndex = 9
+	recDot.Parent = viewfinder
+	timecode = recDot:Clone()
+	timecode.AnchorPoint = Vector2.new(1, 1)
+	timecode.Position = UDim2.fromScale(0.92, 0.88)
+	timecode.Size = UDim2.fromScale(0.2, 0.04)
+	timecode.TextXAlignment = Enum.TextXAlignment.Right
+	timecode.Text = "00:00:00:00"
+	timecode.Parent = viewfinder
+	noiseBars = {}
+	for i = 1, 48 do
+		local bar = Instance.new("Frame")
+		bar.BorderSizePixel = 0
+		bar.BackgroundColor3 = Color3.new(1, 1, 1)
+		bar.BackgroundTransparency = 1
+		bar.Size = UDim2.new(1.2, 0, 1 / 48, 1)
+		bar.Position = UDim2.fromScale(-0.1, (i - 1) / 48)
+		bar.ZIndex = 8
+		bar.Parent = viewfinder
+		noiseBars[i] = bar
+	end
+end
+
+local function hasCamera()
+	local character = player.Character
+	return character ~= nil and character:FindFirstChild("Kamera") ~= nil
+end
+
+local function cameraOnlyModels()
+	local list = {}
+	local root = workspace:FindFirstChild("HorrorRoulette")
+	local night = root and root:FindFirstChild("Night")
+	if night then
+		for _, model in ipairs(night:GetChildren()) do
+			if model:GetAttribute("CameraOnly") then
+				table.insert(list, model)
+			end
+		end
+	end
+	return list
+end
+
+-- ===================================================================== JUMPSCARE
+local function box(parent, props)
+	local f = Instance.new("Frame")
+	f.BorderSizePixel = 0
+	for k, v in pairs(props) do
+		f[k] = v
+	end
+	f.Parent = parent
+	return f
+end
+
+local function roundBox(parent, props, radius)
+	local f = box(parent, props)
+	local c = Instance.new("UICorner")
+	c.CornerRadius = radius or UDim.new(0.5, 0)
+	c.Parent = f
+	return f
+end
+
+local function buildFace(monsterId)
+	jumpLayer:ClearAllChildren()
+	local face = box(jumpLayer, { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.5), Size = UDim2.fromScale(1, 1), BackgroundTransparency = 1, ZIndex = 61 })
+	local aspect = Instance.new("UIAspectRatioConstraint")
+	aspect.AspectRatio = 1
+	aspect.Parent = face
+	local z = 62
+	if monsterId == "Hutfrau" then
+		roundBox(face, { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.62), Size = UDim2.fromScale(0.9, 0.9), BackgroundColor3 = Color3.fromRGB(10, 8, 10), ZIndex = z })
+		roundBox(face, { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.55), Size = UDim2.fromScale(0.46, 0.56), BackgroundColor3 = Color3.fromRGB(236, 226, 214), ZIndex = z + 1 })
+		box(face, { AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0.27), Size = UDim2.fromScale(0.5, 0.2), BackgroundColor3 = Color3.fromRGB(10, 8, 10), BackgroundTransparency = 0.15, ZIndex = z + 2 })
+		roundBox(face, { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.26), Size = UDim2.fromScale(1.05, 0.2), BackgroundColor3 = Color3.fromRGB(250, 248, 242), ZIndex = z + 3 })
+		roundBox(face, { AnchorPoint = Vector2.new(0.5, 1), Position = UDim2.fromScale(0.5, 0.25), Size = UDim2.fromScale(0.4, 0.2), BackgroundColor3 = Color3.fromRGB(250, 248, 242), ZIndex = z + 3 }, UDim.new(0.3, 0))
+		for _, x in ipairs({ 0.41, 0.59 }) do
+			roundBox(face, { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(x, 0.43), Size = UDim2.fromScale(0.07, 0.07), BackgroundColor3 = Color3.fromRGB(255, 255, 255), ZIndex = z + 4 })
+		end
+		roundBox(face, { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.66), Size = UDim2.fromScale(0.36, 0.05), BackgroundColor3 = Color3.fromRGB(70, 10, 14), ZIndex = z + 4 })
+	elseif monsterId == "Schreier" then
+		box(face, { AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0.45), Size = UDim2.fromScale(0.06, 0.6), BackgroundColor3 = Color3.fromRGB(110, 104, 100), ZIndex = z })
+		box(face, { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.45), Size = UDim2.fromScale(1, 0.05), BackgroundColor3 = Color3.fromRGB(110, 104, 100), ZIndex = z })
+		for _, x in ipairs({ 0.24, 0.76 }) do
+			roundBox(face, { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(x, 0.45), Size = UDim2.fromScale(0.46, 0.46), BackgroundColor3 = Color3.fromRGB(125, 118, 112), ZIndex = z + 1 })
+			roundBox(face, { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(x, 0.45), Size = UDim2.fromScale(0.34, 0.34), BackgroundColor3 = Color3.fromRGB(12, 10, 10), ZIndex = z + 2 })
+			roundBox(face, { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(x, 0.45), Size = UDim2.fromScale(0.1, 0.1), BackgroundColor3 = Color3.fromRGB(60, 10, 10), ZIndex = z + 3 })
+		end
+	else
+		box(face, { AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0.7), Size = UDim2.fromScale(0.9, 0.4), BackgroundColor3 = Color3.fromRGB(18, 18, 22), ZIndex = z })
+		box(face, { AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0.7), Size = UDim2.fromScale(0.1, 0.4), BackgroundColor3 = Color3.fromRGB(238, 238, 238), ZIndex = z + 1 })
+		box(face, { AnchorPoint = Vector2.new(0.5, 0), Position = UDim2.fromScale(0.5, 0.72), Size = UDim2.fromScale(0.035, 0.3), BackgroundColor3 = Color3.fromRGB(120, 14, 20), ZIndex = z + 2 })
+		roundBox(face, { AnchorPoint = Vector2.new(0.5, 0.5), Position = UDim2.fromScale(0.5, 0.4), Size = UDim2.fromScale(0.5, 0.66), BackgroundColor3 = Color3.fromRGB(240, 240, 240), ZIndex = z + 1 })
+	end
+end
+
+function Effects.jumpscare(monsterId)
+	buildFace(monsterId)
+	jumpLayer.Visible = true
+	jumpLayer.BackgroundTransparency = 0
+	local face = jumpLayer:FindFirstChildWhichIsA("Frame")
+	if face then
+		face.Size = UDim2.fromScale(0.5, 0.5)
+		TweenService:Create(face, TweenInfo.new(0.18, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Size = UDim2.fromScale(1.15, 1.15) }):Play()
+	end
+	Effects.play("Jumpscare", 1)
+	Effects.shake(0.9, 0.6)
+	task.delay(1.3, function()
+		TweenService:Create(jumpLayer, TweenInfo.new(0.4), { BackgroundTransparency = 1 }):Play()
+		task.wait(0.15)
+		jumpLayer.Visible = false
+	end)
+end
+
+function Effects.shake(seconds, amount)
+	if not settings.shake then
+		return
+	end
+	shakeUntil = os.clock() + seconds
+	shakeAmount = amount
+end
+
+-- ===================================================================== START
+function Effects.init(cfg, screenGui)
+	config = cfg
+	gui = screenGui
+	buildViewfinder()
+	jumpLayer = Instance.new("Frame")
+	jumpLayer.Name = "Jumpscare"
+	jumpLayer.Size = UDim2.fromScale(1, 1)
+	jumpLayer.BackgroundColor3 = Color3.fromRGB(120, 0, 0)
+	jumpLayer.Visible = false
+	jumpLayer.ZIndex = 60
+	jumpLayer.Parent = gui
+	bindSprint()
+
+	if config.Sounds.Static ~= "" then
+		staticSound = Instance.new("Sound")
+		staticSound.SoundId = config.Sounds.Static
+		staticSound.Looped = true
+		staticSound.Volume = 0
+		staticSound.Parent = SoundService
+		staticSound:Play()
+	end
+
+	-- Kamerawackeln nach der Kamera-Steuerung anwenden
+	RunService:BindToRenderStep("HR_Shake", Enum.RenderPriority.Camera.Value + 1, function()
+		local remaining = shakeUntil - os.clock()
+		if remaining > 0 then
+			local cam = workspace.CurrentCamera
+			local a = shakeAmount * math.min(1, remaining * 2)
+			cam.CFrame = cam.CFrame * CFrame.Angles(math.rad((math.random() - 0.5) * 4 * a), math.rad((math.random() - 0.5) * 4 * a), 0)
+		end
+	end)
+
+	local clock = 0
+	RunService.RenderStepped:Connect(function(dt)
+		clock = clock + dt
+		-- Alarmlichter in der Lobby drehen sich
+		for _, part in ipairs(CollectionService:GetTagged("HR_Alarm")) do
+			local base = part:GetAttribute("BasePos")
+			if typeof(base) == "Vector3" then
+				part.CFrame = CFrame.new(base) * CFrame.Angles(0, clock * 2.4 + base.X * 0.05, 0) * CFrame.Angles(math.rad(-50), 0, 0)
+			end
+		end
+		-- Laternen und Kamin flackern
+		for _, light in ipairs(CollectionService:GetTagged("HR_Flicker")) do
+			local base = light:GetAttribute("BaseBrightness")
+			if not base then
+				base = light.Brightness
+				light:SetAttribute("BaseBrightness", base)
+			end
+			light.Brightness = base * (0.82 + 0.18 * math.noise(clock * 3, base * 10))
+		end
+		-- Monster, die nur durch die Kamera sichtbar sind
+		local camOn = hasCamera()
+		local nearest = math.huge
+		local myRoot = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+		for _, model in ipairs(cameraOnlyModels()) do
+			for _, d in ipairs(model:GetDescendants()) do
+				if d:IsA("BasePart") and d.Name ~= "Root" then
+					d.LocalTransparencyModifier = camOn and 0 or 1
+				end
+			end
+			if myRoot then
+				nearest = math.min(nearest, (model:GetPivot().Position - myRoot.Position).Magnitude)
+			end
+		end
+		local intensity = math.clamp(1 - (nearest - 6) / 40, 0, 1)
+		-- Sucher und Rauschen
+		viewfinder.Visible = camOn
+		if camOn then
+			recDot.TextTransparency = (math.floor(clock * 1.6) % 2 == 0) and 0 or 0.6
+			local s = math.floor(clock)
+			timecode.Text = string.format("00:%02d:%02d:%02d", math.floor(s / 60) % 60, s % 60, math.floor((clock % 1) * 25))
+			for _, bar in ipairs(noiseBars) do
+				local v = math.random()
+				bar.BackgroundColor3 = Color3.new(v, v, v)
+				bar.BackgroundTransparency = 1 - intensity * (0.25 + 0.5 * math.random())
+				bar.Position = UDim2.new(-0.1 + (math.random() - 0.5) * 0.06 * intensity, 0, bar.Position.Y.Scale, 0)
+			end
+		end
+		if staticSound then
+			staticSound.Volume = settings.sound and (intensity * 0.6) or 0
+		end
+	end)
+end
+
+return Effects
+]]></string>
+          </Properties>
+        </Item>
+      </Item>
+    </Item>
+  </Item>
+  <Item class="Workspace" referent="20">
+    <Properties>
+      <string name="Name">Workspace</string>
+    </Properties>
+  </Item>
+  <Item class="Lighting" referent="21">
+    <Properties>
+      <string name="Name">Lighting</string>
+    </Properties>
+  </Item>
+  <Item class="Players" referent="22">
+    <Properties>
+      <string name="Name">Players</string>
+      <bool name="CharacterAutoLoads">true</bool>
+    </Properties>
+  </Item>
+</roblox>
