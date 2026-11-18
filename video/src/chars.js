@@ -570,7 +570,9 @@ function momoHead(g, cx, cy, r, mood = 'photo', hl = 1.9) {
     for (let i = 10; i >= 0; i--) { const x = cx - r * 1.05 + i * r * 0.21; g.lineTo(x + r * 0.1, cy + r * hl * (0.86 + (i % 2) * 0.04)); g.lineTo(x, cy + r * hl * (1.0 + ((i * 7) % 3) * 0.05)); } g.closePath(); };
   g.beginPath(); hair(g); g.fillStyle = MHAIR; g.fill();
   g.save(); g.beginPath(); hair(g); g.clip();
-  g.strokeStyle = '#2a2628'; g.lineWidth = r * 0.03; for (let i = -5; i <= 5; i++) { g.beginPath(); g.moveTo(cx + i * r * 0.18, cy - r * 0.9); g.quadraticCurveTo(cx + i * r * 0.22, cy + r * 0.6, cx + i * r * 0.2 + Math.sin(i) * r * 0.1, cy + r * hl * 1.1); g.stroke(); }
+  g.strokeStyle = '#2a2628'; g.lineWidth = r * 0.03; g.lineCap = 'round';
+  for (let i = -5; i <= 5; i++) { const u = i / 5; g.beginPath(); g.moveTo(cx + u * r * 0.08, cy - r * 1.4); // vom Scheitel aus, ueber den Kopf, bis in die Spitzen
+    g.bezierCurveTo(cx + u * r * 1.25, cy - r * 1.05, cx + u * r * 1.2, cy + r * 0.4, cx + u * r * 1.0 + Math.sin(i) * r * 0.06, cy + r * hl * 1.1); g.stroke(); }
   g.restore();
   g.beginPath(); hair(g); g.lineWidth = r * 0.04; g.strokeStyle = OL; g.lineJoin = 'round'; g.stroke();
   // Gesicht: oben breit, unten spitz
