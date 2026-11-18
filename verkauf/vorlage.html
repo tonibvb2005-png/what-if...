@@ -1,0 +1,219 @@
+<title>Horror Roulette Kit</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Mach deine eigenen Horror-Roulette-Videos für TikTok: Anleitung, Prompt-Vorlagen und Video-Generator für 15 €.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Montserrat:wght@500;700;800&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: eine Spalte wie ein Handy-Feed, Hero mit Roulette-Band und Video-Standbildern */
+:root {
+  --bg: #0d0b0c; --panel: #17131a; --line: #2c2329; --fg: #f1ebe6; --muted: #a99ea2;
+  --red: #e0261d; --red-2: #ff4a3d; --gold: #ffd24a;
+  --display: 'Anton', 'Impact', 'Arial Narrow', sans-serif;
+  --body: 'Montserrat', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1040px; margin: 0 auto; }
+h1, h2, h3 { font-family: var(--display); font-weight: 400; text-transform: uppercase; letter-spacing: .01em; line-height: 1.02; text-wrap: balance; margin: 0; }
+h2 { font-size: clamp(34px, 6vw, 56px); }
+h3 { font-size: 24px; }
+p { margin: 0; }
+a { color: inherit; }
+.red { color: var(--red-2); }
+.label { font-family: var(--body); font-weight: 800; font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+section { padding-block: 72px; border-top: 1px solid var(--line); }
+.label + h1, .label + h2 { margin-top: 12px; }
+.hero h1 { overflow-wrap: anywhere; }
+
+/* Kopfzeile */
+.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-block: 18px; }
+.pill { font-weight: 800; font-size: 12px; letter-spacing: .1em; text-transform: uppercase; background: var(--red); color: #fff; padding: 6px 14px; border-radius: 999px; white-space: nowrap; }
+.handle { font-family: var(--mono); font-size: 13px; color: var(--muted); }
+
+/* Hero */
+.hero { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; padding-block: 40px 72px; }
+.hero > * { min-width: 0; }
+.hero h1 { font-size: clamp(52px, 9vw, 104px); }
+.hero h1 .out { -webkit-text-stroke: 2px var(--fg); color: transparent; }
+.lede { font-size: 18px; color: var(--muted); max-width: 34ch; margin-top: 22px; }
+.buy { display: flex; flex-wrap: wrap; align-items: center; gap: 18px; margin-top: 32px; }
+.btn { display: inline-flex; align-items: center; gap: 12px; background: var(--red); color: #fff; text-decoration: none; font-weight: 800; font-size: 17px;
+  padding: 18px 28px; border-radius: 14px; box-shadow: 0 0 0 0 rgba(224,38,29,.6); animation: pulse 2.4s infinite; }
+.btn:hover { background: var(--red-2); }
+.btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+.price { font-family: var(--display); font-size: 44px; line-height: 1; }
+.price small { display: block; font-family: var(--body); font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 6px; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(224,38,29,.55); } 70% { box-shadow: 0 0 0 18px rgba(224,38,29,0); } 100% { box-shadow: 0 0 0 0 rgba(224,38,29,0); } }
+
+/* Roulette-Band */
+.reel { margin-top: 34px; position: relative; overflow: hidden; border-block: 2px solid var(--line); padding-block: 12px;
+  mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent); }
+.reel-track { display: flex; gap: 10px; width: max-content; animation: spin 22s linear infinite; }
+.reel span { font-family: var(--display); font-size: 20px; padding: 6px 16px; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); white-space: nowrap; }
+.reel span.hit { color: #fff; background: var(--red); border-color: var(--red); }
+.reel::after { content: ""; position: absolute; left: 50%; top: 0; bottom: 0; width: 3px; background: var(--gold); transform: translateX(-50%); }
+@keyframes spin { to { transform: translateX(-50%); } }
+
+/* Handy-Vorschau */
+.phones { position: relative; height: 560px; }
+.phone { position: absolute; width: 230px; aspect-ratio: 9 / 16; max-width: 100%; border-radius: 26px; overflow: hidden; border: 6px solid #000; box-shadow: 0 30px 60px rgba(0,0,0,.6); background: #000; }
+.phone img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.phone.a { left: 0; top: 40px; transform: rotate(-6deg); }
+.phone.b { right: 0; top: 0; transform: rotate(5deg); z-index: 2; }
+.tag { position: absolute; z-index: 3; left: 50%; bottom: 10px; transform: translateX(-50%) rotate(-3deg); background: var(--gold); color: #111; font-weight: 800; font-size: 13px; letter-spacing: .06em; text-transform: uppercase; padding: 8px 14px; border-radius: 8px; white-space: nowrap; }
+
+/* Inhalt */
+.grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 36px; }
+.item { background: var(--panel); border: 1px solid var(--line); border-radius: 18px; padding: 26px; display: grid; gap: 10px; align-content: start; }
+.item .kind { font-family: var(--mono); font-size: 12px; color: var(--gold); }
+.item p { color: var(--muted); }
+
+/* Ablauf */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 36px; counter-reset: s; }
+.step { display: grid; gap: 12px; align-content: start; }
+.step img { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 16px; border: 1px solid var(--line); }
+.step h3 { display: flex; gap: 10px; align-items: baseline; }
+.step h3::before { counter-increment: s; content: counter(s); color: var(--red-2); }
+.step p { color: var(--muted); font-size: 15px; }
+
+/* Voraussetzungen */
+.need { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 36px; }
+.need > * { min-width: 0; }
+.need ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+.need li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; }
+.need li b { display: block; }
+.need li span { color: var(--muted); font-size: 15px; }
+.ok, .no { font-weight: 800; }
+.ok { color: var(--gold); } .no { color: var(--red-2); }
+.note { background: var(--panel); border: 1px solid var(--line); border-left: 4px solid var(--gold); border-radius: 12px; padding: 18px 20px; color: var(--muted); font-size: 15px; margin-top: 28px; }
+
+/* FAQ */
+details { border-bottom: 1px solid var(--line); padding-block: 18px; }
+details summary { cursor: pointer; font-weight: 800; font-size: 17px; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+details summary::after { content: "+"; font-family: var(--display); color: var(--red-2); font-size: 22px; line-height: 1; }
+details[open] summary::after { content: "–"; }
+details summary:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+details p { color: var(--muted); margin-top: 10px; max-width: 65ch; }
+.faq { margin-top: 24px; }
+
+/* Abschluss */
+.final { text-align: center; display: grid; justify-items: center; gap: 20px; }
+.final h2 { font-size: clamp(40px, 8vw, 80px); }
+footer { border-top: 1px solid var(--line); padding-block: 32px 48px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; color: var(--muted); font-size: 13px; }
+footer nav { display: flex; flex-wrap: wrap; gap: 18px; }
+.ph { background: rgba(255,210,74,.12); color: var(--gold); padding: 0 4px; border-radius: 4px; }
+
+@media (max-width: 860px) {
+  .hero { grid-template-columns: 1fr; gap: 24px; }
+  .phones { height: 440px; max-width: 420px; width: 100%; margin: 0 auto; }
+  .phone { width: 190px; }
+  .steps { grid-template-columns: repeat(2, 1fr); }
+  .need { grid-template-columns: 1fr; }
+}
+@media (max-width: 520px) {
+  .grid { grid-template-columns: 1fr; }
+  .phones { height: 380px; }
+  .phone { width: 160px; }
+  section { padding-block: 56px; }
+}
+@media (prefers-reduced-motion: reduce) { .btn, .reel-track { animation: none; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <span class="pill">Horror Roulette</span>
+    <span class="handle">@interestingstuff</span>
+  </header>
+
+  <div class="hero">
+    <div>
+      <p class="label">Das komplette Kit für TikTok</p>
+      <h1>Mach deine eigenen <span class="red">Horror</span><span class="out">videos</span></h1>
+      <p class="lede">Die genaue Anleitung und alle Vorlagen, mit denen meine Horror-Roulette-Folgen entstehen. Vom Skript über die Stimmen bis zum fertigen Video im Hochformat.</p>
+      <div class="buy">
+        <a class="btn" href="#kaufen" id="buy-top">Kit holen <span aria-hidden="true">→</span></a>
+        <div class="price">15 €<small>einmalig · sofort zum Download</small></div>
+      </div>
+      <div class="reel" aria-hidden="true">
+        <div class="reel-track">
+          <span>Mothman</span><span>Slender Man</span><span class="hit">Skinwalker</span><span>Wendigo</span><span>Hachishakusama</span><span>The Smiler</span><span>Momo</span><span>Siren Head</span>
+          <span>Mothman</span><span>Slender Man</span><span class="hit">Skinwalker</span><span>Wendigo</span><span>Hachishakusama</span><span>The Smiler</span><span>Momo</span><span>Siren Head</span>
+        </div>
+      </div>
+    </div>
+    <div class="phones">
+      <div class="phone a"><img src="{{IMG_6.5}}" alt="Szene aus Folge 5: Auto auf einer Wüstenstraße bei Nacht"></div>
+      <div class="phone b"><img src="{{IMG_53.5}}" alt="Szene aus Folge 5: Papa grinst zu breit"></div>
+      <span class="tag">Echte Bilder aus Folge 5</span>
+    </div>
+  </div>
+
+  <section id="inhalt">
+    <p class="label">Was du bekommst</p>
+    <h2>Alles, was hinter <span class="red">meinen Folgen</span> steckt</h2>
+    <div class="grid">
+      <div class="item"><span class="kind">PDF</span><h3>Schritt-für-Schritt-Anleitung</h3><p>Der ganze Ablauf auf Deutsch: Monster wählen, Geschichte aufbauen, Stimmen aufnehmen, Video erstellen, posten. Mit Bildern zu jedem Schritt.</p></div>
+      <div class="item"><span class="kind">TEXT</span><h3>Prompt-Vorlagen</h3><p>Zum Kopieren: für das Skript mit Hook und Twist, die Regie-Tags für ElevenLabs v3 und die Anweisungen, mit denen Claude das Video baut.</p></div>
+      <div class="item"><span class="kind">CODE</span><h3>Der Video-Generator</h3><p>Die Vorlage, mit der meine Videos entstehen: Roulette-Intro, 3D-Szenen, Figuren, Untertitel, Regel-Karte und Sound-Mischung. 1080 × 1920, 30 fps.</p></div>
+      <div class="item"><span class="kind">LISTE</span><h3>Freie Geräusche</h3><p>Die Liste der Sounds, die ich nutze, alle unter CC0. Damit darfst du sie auch in Videos verwenden, mit denen du Geld verdienst.</p></div>
+    </div>
+  </section>
+
+  <section id="ablauf">
+    <p class="label">So entsteht eine Folge</p>
+    <h2>Vier Schritte bis zum <span class="red">fertigen Video</span></h2>
+    <div class="steps">
+      <div class="step"><img src="{{IMG_31.8}}" alt="Regel-Karte im Video"><h3>Skript</h3><p>Monster wählen, Regel festlegen, Twist am Ende. Die Vorlage gibt dir den Aufbau vor.</p></div>
+      <div class="step"><img src="{{IMG_40.6}}" alt="Unheimliche Gestalt am Autofenster"><h3>Stimmen</h3><p>Erzähler und Figuren in ElevenLabs aufnehmen. Die Regie-Tags stehen schon im Skript.</p></div>
+      <div class="step"><img src="{{IMG_13.0}}" alt="Skinwalker rennt neben dem Auto"><h3>Video</h3><p>Aufnahmen hochladen, Claude baut Szenen, Figuren, Sounds und Untertitel.</p></div>
+      <div class="step"><img src="{{IMG_61.5}}" alt="Schluss-Szene mit leuchtenden Augen im Rückspiegel"><h3>Posten</h3><p>Fertiges Video auf TikTok laden. Beschreibung und Hashtags sind in der Vorlage.</p></div>
+    </div>
+  </section>
+
+  <section id="voraussetzungen">
+    <p class="label">Bevor du kaufst</p>
+    <h2>Was du <span class="red">brauchst</span></h2>
+    <div class="need">
+      <ul>
+        <li><span class="ok">✓</span><div><b>Ein Claude-Abo mit Claude Code</b><span>Claude schreibt und rendert das Video für dich. Das Abo ist nicht im Kit enthalten und kostet monatlich.</span></div></li>
+        <li><span class="ok">✓</span><div><b>Ein ElevenLabs-Konto</b><span>Für die Stimmen. Wenn du mit den Videos Geld verdienen willst, brauchst du einen bezahlten Plan.</span></div></li>
+        <li><span class="ok">✓</span><div><b>Einen Computer oder Laptop</b><span>Am Handy allein geht es nicht.</span></div></li>
+      </ul>
+      <ul>
+        <li><span class="no">✕</span><div><b>Keine Programmierkenntnisse</b><span>Du gibst Claude die Anweisungen aus der Vorlage, den Code schreibt Claude.</span></div></li>
+        <li><span class="no">✕</span><div><b>Kein Videoschnitt-Programm</b><span>Schnitt, Ton und Untertitel macht der Generator.</span></div></li>
+        <li><span class="no">✕</span><div><b>Keine Kamera, kein Mikrofon</b><span>Alle Stimmen kommen aus ElevenLabs.</span></div></li>
+      </ul>
+    </div>
+    <p class="note">Ehrlich gesagt: Die erste Folge braucht etwas Geduld. Du arbeitest Schritt für Schritt mit Claude und gibst Rückmeldung, bis alles passt. So sind auch meine Folgen entstanden.</p>
+  </section>
+
+  <section id="fragen">
+    <p class="label">Fragen</p>
+    <h2>Häufige <span class="red">Fragen</span></h2>
+    <div class="faq">
+      <details><summary>Bekomme ich deine fertigen Videos?</summary><p>Nein. Du bekommst die Anleitung, die Vorlagen und den Generator, um eigene Folgen zu machen. Meine Videos bleiben auf meinem Kanal.</p></details>
+      <details><summary>Darf ich meine Videos dann auch monetarisieren?</summary><p>Die Geräusche im Kit sind CC0 und frei nutzbar. Für die Stimmen gelten die Regeln deines ElevenLabs-Plans. Monster-Figuren, die bestimmte Künstler erfunden haben, solltest du nicht als eigene Marke verkaufen. Alte Legenden wie Mothman oder Skinwalker sind unproblematisch.</p></details>
+      <details><summary>Wie bekomme ich das Kit?</summary><p>Nach dem Kauf bekommst du sofort einen Download-Link per E-Mail.</p></details>
+      <details><summary>Kann ich das Kit zurückgeben?</summary><p>Es ist ein digitaler Inhalt. Mit dem Download stimmst du zu, dass dein Widerrufsrecht erlischt. Die Details stehen in der Widerrufsbelehrung.</p></details>
+    </div>
+  </section>
+
+  <section class="final" id="kaufen">
+    <p class="label">Nächste Runde</p>
+    <h2>Welches Monster <span class="red">ziehst du?</span></h2>
+    <div class="buy" style="justify-content:center">
+      <a class="btn" href="{{KAUF_LINK}}" id="buy-bottom" rel="noopener">Jetzt für 15 € holen <span aria-hidden="true">→</span></a>
+    </div>
+    <p class="label">Sichere Zahlung über <span class="ph">{{ZAHLUNGSANBIETER}}</span></p>
+  </section>
+
+  <footer>
+    <span>© 2026 Horror Roulette · @interestingstuff</span>
+    <nav><a href="{{IMPRESSUM_LINK}}">Impressum</a><a href="{{DATENSCHUTZ_LINK}}">Datenschutz</a><a href="{{WIDERRUF_LINK}}">Widerruf</a></nav>
+  </footer>
+</div>
