@@ -1988,7 +1988,7 @@
     ctx.restore();
   }
   function confetti2d(t, k, cols) { if (k <= 0) return; ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); const r = R7(21); for (let i = 0; i < 160; i++) { const x = r() * W + Math.sin(t * 2 + i) * 30, y = ((r() * H * .9 + t * (300 + r() * 200)) % (H + 100)) - 100; ctx.save(); ctx.translate(x, y); ctx.rotate(t * 4 + i); ctx.globalAlpha = k; ctx.fillStyle = cols[i % cols.length]; ctx.fillRect(-9, -5, 18, 10); ctx.restore(); } ctx.restore(); }
-  function scrTitle(l1, l2, k2, col2) { ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); txt(l1, 540, 250, 66, '#fff', 900, 'center', 16); if (l2) { ctx.translate(540, 360); const k = k2 == null ? 1 : k2; ctx.scale(lerp(1.8, 1, eo(Math.min(1, k))), lerp(1.8, 1, eo(Math.min(1, k)))); ctx.globalAlpha = Math.min(1, k * 2); ctx.font = '900 92px Inter Display'; const w = ctx.measureText(l2).width + 70; ctx.beginPath(); ctx.roundRect(-w / 2, -62, w, 124, 20); ctx.fillStyle = col2 || '#ffd400'; ctx.fill(); ctx.lineWidth = 9; ctx.strokeStyle = OUT; ctx.stroke(); txt(l2, 0, 4, 92, col2 && col2 !== '#ffd400' && col2 !== '#ffffff' ? '#fff' : OUT, 900); } ctx.restore(); }
+  function scrTitle(l1, l2, k2, col2) { ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); txt(l1, 540, 250, 66, '#fff', 900, 'center', 16); if (l2) { ctx.translate(540, 360); const k = k2 == null ? 1 : k2; ctx.scale(lerp(1.8, 1, eo(Math.min(1, k))), lerp(1.8, 1, eo(Math.min(1, k)))); ctx.globalAlpha = Math.min(1, k * 2); const fz = l2.length > 14 ? 62 : 92; ctx.font = `900 ${fz}px Inter Display`; const w = ctx.measureText(l2).width + 70; ctx.beginPath(); ctx.roundRect(-w / 2, -fz * .67, w, fz * 1.35, 20); ctx.fillStyle = col2 || '#ffd400'; ctx.fill(); ctx.lineWidth = 9; ctx.strokeStyle = OUT; ctx.stroke(); txt(l2, 0, 4, fz, col2 && col2 !== '#ffd400' && col2 !== '#ffffff' ? '#fff' : OUT, 900); } ctx.restore(); }
   for (let i = 0; i < 11; i++) CH['k' + i] = { skin: ['#ffd9b8', '#c98d63', '#e8b08a', '#8a5a3c', '#f0c19a'][i % 5], shirt: '#034694', trim: '#fff', number: String([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11][i]), pants: '#fff', shoes: '#111', hair: ['spiky', 'short', 'buzz', 'slick'][i % 4], hairColor: ['#2a1a10', '#c9a46a', '#120a05', '#6a4a2a'][i % 4], bw: .95, blinkPh: i * .3 };
   CH.finn = { skin: '#ffd9b8', shirt: '#b9bec9', trim: '#8a8f9c', pants: '#2b2f4a', shoes: '#111', hair: 'spiky', hairColor: '#6a4a2a', bw: 1, blinkPh: .4 };
   const FANKIT = () => (spec && spec.fanKit) || { shirt: '#034694', trim: '#ffffff', pants: '#ffffff' };
@@ -2001,33 +2001,33 @@
       acts: { finn: [[0, { e: 'surprised', p: 'idle', m: { lookY: -.5 } }], ['land', .55, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: .5 } }]] },
       extra: (lt, t) => { const s = CUR, cfg = ROUL(s), L = cfg.spin; roulette(lt, cfg); scrTitle('WHY IT SUCKS BEING A', lt < L ? '. . .' : (s.club || 'CHELSEA') + ' FAN', lt < L ? 1 : P(lt, L, L + .3), lt < L ? '#ffffff' : FANKIT().shirt); confetti2d(t, P(lt, L, L + .2), [FANKIT().shirt, '#ffffff', '#ffd400']); } },
     fan7: { set: 'flat', flat: bgPark, age: 'AGE 7', captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { finn: { x: -200, scale: .66 } },
-      acts: { finn: [[0, { e: 'ecstatic', p: 'holdCashUp', m: { jump: .3 } }], ['sold', .65, { e: 'shock', p: 'handsOnHead', m: { jump: 0 } }]] },
-      extra: (lt) => { shirtProp(200, 1100, eb(P(lt, .2, .5)), 'STAR', '10'); pill(200, 820, 'NEXT SEASON: SOLD 💸', eb(P(lt, cue('sold', .65), cue('sold', .65) + .3)), '#e8364f', '#fff', 36); } },
+      acts: { finn: [[0, { e: 'ecstatic', p: 'holdCashUp', m: { jump: .3 } }], ['sold', .45, { e: 'shock', p: 'handsOnHead', m: { jump: 0 } }], ['newshirt', .62, { e: 'happy', p: 'holdCashUp' }], ['again', .78, { e: 'despair', p: 'handsOnHead' }]] },
+      extra: (lt) => { shirtProp(200, 1100, eb(P(lt, .2, .5)), 'STAR', '10'); const ag = cue('again', .78); pill(200, 820, lt < ag ? 'NEXT SEASON: SOLD 💸' : 'SOLD TOO 💸💸', eb(P(lt, cue('sold', .45), cue('sold', .45) + .3)), '#e8364f', '#fff', 36); if (lt > ag - .4) shirtProp(200, 1100, 1, 'STAR 2', '11'); } },
     fan9: { set: 'flat', flat: (t) => bgStadium(t, false), clubCrowd: true, age: 'AGE 9', captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { finn: { x: -260, scale: .74 }, coach: { x: 230, scale: 1 } },
       looks: { coach: [['new', .6, { capColor: '#e8364f', skin: '#c98d63', hairColor: '#120a05' }]] },
-      acts: { finn: [[0, { e: 'happy', p: 'waveR', m: { wave: 1, lookX: 1 } }], ['new', .6, { e: 'surprised', p: 'shrug', m: { lookX: 1 } }]], coach: [[0, { e: 'happy', p: 'waveR', m: { wave: 1, lookX: -1 } }], ['new', .6, { e: 'confident', p: 'crossed', m: { lookX: -1 } }]] },
-      extra: (lt) => { const n = cue('new', .6); statCard(230, 300, 'MANAGERS', [['THIS SEASON', lt < n ? 1 : 2, lt < n]], eb(P(lt, .1, .4))); pill(230, 780, 'NEW MANAGER 🎄', eb(P(lt, n, n + .3)), '#fff', OUT, 36); } },
+      acts: { finn: [[0, { e: 'happy', p: 'waveR', m: { wave: 1, lookX: 1 } }], ['new', .6, { e: 'surprised', p: 'shrug', m: { lookX: 1 } }]], coach: [[0, { e: 'happy', p: 'waveR', m: { wave: 1, lookX: -1 } }], ['new', .6, { e: 'confident', p: 'crossed', m: { lookX: -1 } }], ['teacher', .7, { e: 'neutral', p: 'pointL', m: { lookX: -1 } }]] },
+      extra: (lt) => { const n = cue('new', .6); statCard(230, 300, 'MANAGERS', [['THIS SEASON', lt < n ? 1 : 2, lt < n]], eb(P(lt, .1, .4))); pill(230, 780, 'NEW MANAGER 🎄', eb(P(lt, n, n + .3)) * (1 - P(lt, cue('teacher', .7) - .2, cue('teacher', .7))), '#fff', OUT, 36); bubble(230, 760, 'FAVOURITE MANAGER?', eb(P(lt, cue('teacher', .7), cue('teacher', .7) + .3)) * (1 - P(lt, cue('week', .88) - .1, cue('week', .88))), 60); bubble(-260, 860, "THIS WEEK'S? 🤷", eb(P(lt, cue('week', .88), cue('week', .88) + .3)), 0); } },
     fan12: { set: 'flat', flat: (t) => bgStadium(t, false), clubCrowd: true, age: 'AGE 12', captionTop: 1235, cam: [[0, FC], [.5, FC], [1, { x: 0, y: 940, z: .82 }]],
       cast: Object.fromEntries([...Array(11)].map((_, i) => ['k' + i, { x: -600 + i * 120, scale: .62 }])),
-      extra: (lt) => { pill(0, 560, 'SQUAD: 40+ PLAYERS 📸', eb(P(lt, cue('wide', .5), cue('wide', .5) + .3)), '#fff', OUT, 40); } },
+      extra: (lt) => { pill(0, 560, '📸 DRONE REQUIRED', eb(P(lt, cue('wide', .5), cue('wide', .5) + .3)), '#fff', OUT, 40); } },
     fan14: { set: 'flat', flat: (t) => bgStadium(t, false), clubCrowd: true, age: 'AGE 14', captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { dad: { x: -230, scale: 1 }, finn: { x: 230, scale: .86 } },
-      acts: { dad: [[0, { e: 'neutral' }], ['dad', .45, { e: 'ecstatic', p: 'cheer' }], ['twelfth', .85, { e: 'despair', p: 'handsOnHead' }]], finn: [[0, { e: 'happy' }], ['twelfth', .85, { e: 'despair', p: 'crossed' }]] },
-      extra: (lt) => { const tw = cue('twelfth', .85); statCard(0, 280, 'TRANSFERS', [['SPENT', (v => v >= 1000 ? '€1 BILLION' : '€' + v + 'M')(Math.round(lerp(0, 1000, P(lt, .2, cue('dad', .45))))), true]], eb(P(lt, .1, .4))); bubble(-230, 760, "WE'LL WIN EVERYTHING!", eb(P(lt, cue('dad', .45), cue('dad', .45) + .3)) * (1 - P(lt, tw - .2, tw)), 60); pill(0, 660, 'FINAL TABLE: 12TH 😐', eb(P(lt, tw, tw + .3)), '#e8364f', '#fff', 40); } },
+      acts: { dad: [[0, { e: 'neutral' }], ['dad', .45, { e: 'ecstatic', p: 'cheer' }], ['twelfth', .85, { e: 'despair', p: 'handsOnHead' }]], finn: [[0, { e: 'happy' }], ['twelfth', .85, { e: 'despair', p: 'crossed' }], ['nice', .9, { e: 'smirk', p: 'hips' }]] },
+      extra: (lt) => { const tw = cue('twelfth', .85); statCard(0, 280, 'TRANSFERS', [['SPENT', (v => v >= 1000 ? '€1 BILLION' : '€' + v + 'M')(Math.round(lerp(0, 1000, P(lt, .2, cue('dad', .45))))), true]], eb(P(lt, .1, .4))); bubble(-230, 760, "WE'LL WIN EVERYTHING!", eb(P(lt, cue('dad', .45), cue('dad', .45) + .3)) * (1 - P(lt, tw - .2, tw)), 60); pill(0, 660, 'FINAL TABLE: 12TH 😐', eb(P(lt, tw, tw + .3)), '#e8364f', '#fff', 40); pill(0, 820, 'AT LEAST THE SHIRTS ARE NICE 👕', eb(P(lt, cue('nice', .9), cue('nice', .9) + .3)), '#fff', OUT, 32); } },
     fan16: { set: 'flat', flat: (t) => bgStadium(t, true), age: 'AGE 16 · MUNICH', captionTop: 1235, bright: .8, cam: [[0, FC], [1, FC]], cast: { finn: { x: 0, scale: .96 } },
-      acts: { finn: [[0, { e: 'tense', p: 'pleading', m: { tremble: .6 } }], ['win', .82, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: 1 } }]] },
-      extra: (lt, t) => { const w = cue('win', .82); scoreboard(lt < w ? 'PENALTIES 3 – 3' : 'PENALTIES 4 – 3', lt < w ? 'CHAMPIONS LEAGUE FINAL' : 'CHAMPIONS OF EUROPE 🏆'); confetti2d(t, P(lt, w, w + .2), [FANKIT().shirt, '#ffffff', '#ffd400']); } },
+      acts: { finn: [[0, { e: 'tense', p: 'pleading', m: { tremble: .6 } }], ['win', .7, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: 1 } }], ['expect', .85, { e: 'neutral', ex: { mouthCurve: -.3 }, p: 'crossed', propR: null, m: { jump: 0 } }]] },
+      extra: (lt, t) => { const w = cue('win', .7), ex = cue('expect', .85); scoreboard(lt < w ? 'PENALTIES 3 – 3' : 'PENALTIES 4 – 3', lt < w ? 'CHAMPIONS LEAGUE FINAL' : 'CHAMPIONS OF EUROPE 🏆'); confetti2d(t, P(lt, w, w + .2) * (1 - P(lt, ex, ex + .3)), [FANKIT().shirt, '#ffffff', '#ffd400']); pill(0, 820, 'TERRIBLE. NOW YOU EXPECT IT 😩', eb(P(lt, ex, ex + .3)), '#fff', OUT, 34); } },
     fan17: { set: 'flat', flat: (t) => bgStadium(t, false), clubCrowd: true, age: 'AGE 17', captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { finn: { x: -230, scale: .96 } },
-      acts: { finn: [[0, { e: 'happy', p: 'idle' }], ['loan', .8, { e: 'shock', p: 'handsOnHead' }]] },
-      extra: (lt) => { shirtProp(240, 1120, eb(P(lt, .2, .5)), 'NEW GUY', '7'); statCard(240, 300, 'CONTRACT', [['YEARS', 8, true]], eb(P(lt, cue('eight', .5), cue('eight', .5) + .3))); pill(240, 760, 'JANUARY: ON LOAN ✈️', eb(P(lt, cue('loan', .8), cue('loan', .8) + .3)), '#e8364f', '#fff', 36); } },
+      acts: { finn: [[0, { e: 'happy', p: 'idle' }], ['loan', .72, { e: 'shock', p: 'handsOnHead' }], ['item', .88, { e: 'wink', p: 'thumbsUpR', handR: 'thumb' }]] },
+      extra: (lt) => { shirtProp(240, 1120, eb(P(lt, .2, .5)), 'NEW GUY', '7'); statCard(240, 300, 'CONTRACT', [['YEARS', 8, true]], eb(P(lt, cue('eight', .5), cue('eight', .5) + .3))); pill(240, 760, 'JANUARY: ON LOAN ✈️', eb(P(lt, cue('loan', .72), cue('loan', .72) + .3)), '#e8364f', '#fff', 36); pill(240, 880, "COLLECTOR'S ITEM 🏷️", eb(P(lt, cue('item', .88), cue('item', .88) + .3)), '#ffd400', OUT, 34); } },
     fanthing: { set: 'flat', flat: (t) => bgStadium(t, false), clubCrowd: true, captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { finn: { x: 0, scale: .96 } },
       acts: { finn: [[0, { e: 'neutral', p: 'hips' }]] },
       extra: (lt) => { [['MANAGER', 'mgr', .4], ['PLAYERS', 'pl', .6], ['OWNER', 'own', .8]].forEach(([l, n, f], i) => pill(-300 + i * 300, 560, l + ' 🔄', eb(P(lt, cue(n, f), cue(n, f) + .3)), '#fff', OUT, 34)); } },
     fancolour: { set: 'flat', flat: bgDark, captionTop: 1700, cam: [[0, FC], [1, { x: 0, y: 930, z: 1.08 }]], cast: { finn: { x: 0, scale: 1 } },
-      acts: { finn: [[0, { e: 'happy', p: 'holdCashUp', propR: 'scarf' }]] },
-      extra: (lt) => pill(0, 640, 'BLUE IS THE COLOUR 💙', eb(P(lt, .3, .6)), FANKIT().shirt, '#fff', 44) },
+      acts: { finn: [[0, { e: 'neutral', p: 'crossed' }], ['boring', .5, { e: 'wink', p: 'holdCashUp', propR: 'scarf' }]] },
+      extra: (lt) => pill(0, 640, 'NEVER BORING 😎', eb(P(lt, cue('boring', .5), cue('boring', .5) + .3)), FANKIT().shirt, '#fff', 50) },
     fanout: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { finn: { x: 0, scale: 1 } },
       acts: { finn: [[0, { e: 'happy', p: 'thumbsUpR', handR: 'thumb' }], ['next', .45, { e: 'surprised', p: 'shrug', m: { lookY: -.5 } }]] },
-      extra: (lt, t) => { const n = cue('next', .45); if (lt < n) { scrTitle('@ TAG A ' + (CUR.club || 'CHELSEA') + ' FAN', null); } else { roulette(lt - n, Object.assign(ROUL(CUR), { land: false, seed: 3 })); scrTitle('NEXT: WHY IT SUCKS BEING A', '. . . FAN? 👇', 1, '#ffffff'); } } }
+      extra: (lt, t) => { const n = cue('next', .45); if (lt < n) { scrTitle('@ TAG A ' + (CUR.club || 'CHELSEA') + ' FAN', 'STILL RECOVERING 🩹', 1, '#ffffff'); } else { roulette(lt - n, Object.assign(ROUL(CUR), { land: false, seed: 3 })); scrTitle('NEXT: WHY IT SUCKS BEING A', '. . . FAN? 👇', 1, '#ffffff'); } } }
   });
 
   // ---------- timeline ----------
@@ -2300,10 +2300,10 @@
         case 'fan9': add(st + C('new', .6), 'whoosh_soft', -15); break;
         case 'fan12': add(st + C('wide', .5), 'sparkle', -16); break;
         case 'fan14': for (let k = 0; k < 10; k++) add(st + .2 + k * .12, 'tick', -20); add(st + C('dad', .45), 'pop', -15); add(st + C('twelfth', .85), 'thump', -13); break;
-        case 'fan16': for (let x = .2; x < C('win', .82); x += .85) add(st + x, 'heartbeat', -14); add(st + C('win', .82), 'cheer', -12); break;
-        case 'fan17': add(st + C('eight', .5), 'pop', -15); add(st + C('loan', .8), 'whoosh_soft', -14); break;
+        case 'fan16': for (let x = .2; x < C('win', .7); x += .85) add(st + x, 'heartbeat', -14); add(st + C('win', .7), 'cheer', -12); add(st + C('expect', .85), 'pop', -14); break;
+        case 'fan17': add(st + C('eight', .5), 'pop', -15); add(st + C('loan', .72), 'whoosh_soft', -14); add(st + C('item', .88), 'sparkle', -15); break;
         case 'fanthing': [['mgr', .4], ['pl', .6], ['own', .8]].forEach(([n, f]) => add(st + C(n, f), 'pop', -15)); break;
-        case 'fancolour': add(st + .3, 'sparkle', -15); break;
+        case 'fancolour': add(st + C('boring', .5), 'sparkle', -14); break;
         case 'fanout': add(st + .1, 'pop', -14); for (let x = C('next', .45); x < d; x += .14) add(st + x, 'tick', -20); break;
         case 'imate': add(st + .1, 'whoosh_soft', -20); add(st + C('follow', .75) + .1, 'pop', -14); break;
       }

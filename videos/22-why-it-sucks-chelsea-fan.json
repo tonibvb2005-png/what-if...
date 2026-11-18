@@ -31,42 +31,46 @@
     },
     {
       "shot": "fan7",
-      "text": "It starts when you're seven. You get your first shirt, with your favourite player on the back. Next season, he's sold.",
+      "text": "It starts when you're seven. You get your first shirt, with your favourite player on the back. Next season, he's sold. So you buy a new shirt. He's sold too.",
       "audio": "../audio/22-why-it-sucks-chelsea-fan/02.wav",
       "club": "CHELSEA",
-      "seed": 11
+      "seed": 11,
+      "cues": {
+        "newshirt": 5.6,
+        "again": 6.9
+      }
     },
     {
       "shot": "fan9",
-      "text": "Age nine. You finally learn the manager's name. By Christmas, there's a new one.",
+      "text": "Age nine. You finally learn the manager's name. By Christmas, there's a new one. Your teacher asks: \"Who's your favourite manager?\" You say: \"This week's?\"",
       "audio": "../audio/22-why-it-sucks-chelsea-fan/03.wav",
       "club": "CHELSEA",
       "seed": 11
     },
     {
       "shot": "fan12",
-      "text": "Age twelve. The club signs so many players... the team photo needs a wider camera.",
+      "text": "Age twelve. The club signs so many players... the team photo needs a drone.",
       "audio": "../audio/22-why-it-sucks-chelsea-fan/04.wav",
       "club": "CHELSEA",
       "seed": 11
     },
     {
       "shot": "fan14",
-      "text": "Age fourteen. The club spends over a billion on new players. Your dad says: \"We'll win everything.\" You finish twelfth.",
+      "text": "Age fourteen. The club spends over a billion on new players. Your dad says: \"We'll win everything.\" You finish twelfth. At least the shirts are nice.",
       "audio": "../audio/22-why-it-sucks-chelsea-fan/05.wav",
       "club": "CHELSEA",
       "seed": 11
     },
     {
       "shot": "fan16",
-      "text": "Age sixteen. One night in Munich. Champions League final. Penalties. Against Bayern. In their own stadium. And you win!",
+      "text": "Age sixteen. One night in Munich. Champions League final. Penalties. Against Bayern. In their own stadium. And you win! Terrible. Now you expect it every year.",
       "audio": "../audio/22-why-it-sucks-chelsea-fan/06.wav",
       "club": "CHELSEA",
       "seed": 11
     },
     {
       "shot": "fan17",
-      "text": "Age seventeen. You buy the shirt of the new signing. His contract? Eight years. By January... he's on loan.",
+      "text": "Age seventeen. You buy the shirt of the new signing. His contract? Eight years. By January... he's on loan. Don't worry. It's a collector's item now.",
       "audio": "../audio/22-why-it-sucks-chelsea-fan/07.wav",
       "club": "CHELSEA",
       "seed": 11
@@ -80,14 +84,14 @@
     },
     {
       "shot": "fancolour",
-      "text": "But the colour never does.",
+      "text": "But honestly? It's never boring.",
       "audio": "../audio/22-why-it-sucks-chelsea-fan/09.wav",
       "club": "CHELSEA",
       "seed": 11
     },
     {
       "shot": "fanout",
-      "text": "Tag a Chelsea fan who never left. And which club is next? Drop it in the comments!",
+      "text": "Tag a Chelsea fan who's still recovering. And which club is next? Drop it in the comments!",
       "audio": "../audio/22-why-it-sucks-chelsea-fan/10.wav",
       "club": "CHELSEA",
       "seed": 11,
