@@ -564,10 +564,11 @@ export function sister() {
 
 // ------------------------------------------------------------- Folge 6b: Momo (eigene Zeichnung)
 const MSK = '#d9d2c8', MHAIR = '#0d0b0c';
-function momoHead(g, cx, cy, r, mood = 'photo') {
-  // lange, strähnige schwarze Haare hinter dem Kopf
-  P(g, g => { g.moveTo(cx - r * 1.05, cy + r * 1.9); g.bezierCurveTo(cx - r * 1.35, cy - r * 0.2, cx - r * 1.0, cy - r * 1.25, cx, cy - r * 1.25); g.bezierCurveTo(cx + r * 1.0, cy - r * 1.25, cx + r * 1.35, cy - r * 0.2, cx + r * 1.05, cy + r * 1.9); g.closePath(); }, MHAIR, r * 0.04, 0);
-  g.strokeStyle = '#2a2628'; g.lineWidth = r * 0.03; for (let i = -5; i <= 5; i++) { g.beginPath(); g.moveTo(cx + i * r * 0.18, cy - r * 0.9); g.quadraticCurveTo(cx + i * r * 0.22, cy + r * 0.6, cx + i * r * 0.2 + Math.sin(i) * r * 0.1, cy + r * 1.85); g.stroke(); }
+function momoHead(g, cx, cy, r, mood = 'photo', hl = 1.9) {
+  // lange, strähnige schwarze Haare hinter dem Kopf, unten in Spitzen auslaufend
+  P(g, g => { g.moveTo(cx - r * 1.05, cy + r * hl * 0.92); g.bezierCurveTo(cx - r * 1.35, cy - r * 0.2, cx - r * 1.0, cy - r * 1.25, cx, cy - r * 1.25); g.bezierCurveTo(cx + r * 1.0, cy - r * 1.25, cx + r * 1.35, cy - r * 0.2, cx + r * 1.05, cy + r * hl * 0.92);
+    for (let i = 10; i >= 0; i--) { const x = cx - r * 1.05 + i * r * 0.21; g.lineTo(x + r * 0.1, cy + r * hl * (0.86 + (i % 2) * 0.04)); g.lineTo(x, cy + r * hl * (1.0 + ((i * 7) % 3) * 0.05)); } g.closePath(); }, MHAIR, r * 0.04, 0);
+  g.strokeStyle = '#2a2628'; g.lineWidth = r * 0.03; for (let i = -5; i <= 5; i++) { g.beginPath(); g.moveTo(cx + i * r * 0.18, cy - r * 0.9); g.quadraticCurveTo(cx + i * r * 0.22, cy + r * 0.6, cx + i * r * 0.2 + Math.sin(i) * r * 0.1, cy + r * hl * 0.95); g.stroke(); }
   // Gesicht: oben breit, unten spitz
   P(g, g => { g.moveTo(cx - r * 0.78, cy - r * 0.2); g.bezierCurveTo(cx - r * 0.85, cy - r * 1.0, cx + r * 0.85, cy - r * 1.0, cx + r * 0.78, cy - r * 0.2); g.bezierCurveTo(cx + r * 0.75, cy + r * 0.55, cx + r * 0.3, cy + r * 1.0, cx, cy + r * 1.02); g.bezierCurveTo(cx - r * 0.3, cy + r * 1.0, cx - r * 0.75, cy + r * 0.55, cx - r * 0.78, cy - r * 0.2); }, MSK, r * 0.045, 0.12);
   // Mittelscheitel
@@ -589,9 +590,12 @@ function momoHead(g, cx, cy, r, mood = 'photo') {
 export function momoFace(mood = 'photo', size = 512) { const c = cv(size, size), g = c.getContext('2d'); g.scale(size / 512, size / 512); g.fillStyle = '#1a1414'; g.fillRect(0, 0, 512, 512); momoHead(g, 256, 230, 190, mood); return c; }
 export function momoFaceT(mood = 'close', size = 512) { const c = cv(size, size), g = c.getContext('2d'); g.scale(size / 512, size / 512); momoHead(g, 256, 230, 190, mood); return c; }
 MONSTERS['MOMO'] = () => sil(g => { // Frauenkopf auf Vogelkoerper mit Krallenfuessen
-  for (const x of [222, 290]) { line(g, [[x, 720], [x, 960]], 14, '#c79a2a'); for (const d of [-30, 0, 30]) line(g, [[x, 960], [x + d, 1000]], 9, '#c79a2a'); line(g, [[x, 960], [x - 8, 930]], 8, '#c79a2a'); }
-  P(g, g => { g.moveTo(256, 420); g.bezierCurveTo(400, 430, 430, 640, 360, 740); g.quadraticCurveTo(256, 790, 152, 740); g.bezierCurveTo(82, 640, 112, 430, 256, 420); }, '#141012', 10, 0.08);
-  g.strokeStyle = '#2a2224'; g.lineWidth = 6; for (let i = 0; i < 6; i++) { g.beginPath(); g.moveTo(180 + i * 30, 520); g.quadraticCurveTo(170 + i * 32, 640, 190 + i * 28, 740); g.stroke(); }
-  for (const s of [-1, 1]) P(g, g => { g.moveTo(256 + s * 90, 470); g.quadraticCurveTo(256 + s * 230, 560, 256 + s * 200, 760); g.quadraticCurveTo(256 + s * 150, 640, 256 + s * 110, 560); g.closePath(); }, '#0e0b0c', 8, 0);
-  momoHead(g, 256, 250, 140, 'photo');
+  for (const x of [222, 290]) { line(g, [[x, 740], [x, 960]], 14, '#c79a2a'); for (const d of [-30, 0, 30]) line(g, [[x, 960], [x + d, 1000]], 9, '#c79a2a'); line(g, [[x, 960], [x - 8, 930]], 8, '#c79a2a'); }
+  // Fluegel hinter dem Koerper
+  for (const s of [-1, 1]) P(g, g => { g.moveTo(256 + s * 70, 430); g.quadraticCurveTo(256 + s * 240, 500, 256 + s * 215, 770); g.lineTo(256 + s * 190, 720); g.lineTo(256 + s * 175, 770); g.lineTo(256 + s * 150, 715); g.quadraticCurveTo(256 + s * 120, 600, 256 + s * 90, 540); g.closePath(); }, '#0e0b0c', 8, 0);
+  // Rumpf mit Hals, direkt unter dem Kinn
+  P(g, g => { g.moveTo(232, 360); g.lineTo(280, 360); g.quadraticCurveTo(300, 420, 330, 440); g.bezierCurveTo(400, 480, 410, 650, 350, 750); g.quadraticCurveTo(256, 795, 162, 750); g.bezierCurveTo(102, 650, 112, 480, 182, 440); g.quadraticCurveTo(212, 420, 232, 360); }, '#16121a', 10, 0.08);
+  // Federn-Schuppen
+  g.strokeStyle = '#2e262c'; g.lineWidth = 5; for (let row = 0; row < 7; row++) for (let k = 0; k < 6; k++) { const x = 175 + k * 33 + (row % 2) * 16, y = 470 + row * 40; if (Math.abs(x - 256) > 95 - row * 2) continue; g.beginPath(); g.arc(x, y, 16, 0.2, Math.PI - 0.2); g.stroke(); }
+  momoHead(g, 256, 250, 140, 'photo', 1.75);
 });
