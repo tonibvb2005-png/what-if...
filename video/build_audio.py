@@ -451,6 +451,31 @@ def R_stall():    # Leerlauf, der stotternd ausgeht
     y = np.concatenate(out); return norm(y * env(len(y), 0.01, 0.6), 0.55)
 def R_howl():     return norm(reverb(lp(_pitch(rec("2953", 0.3, 3.2, 0.9, 0.2, 0.8), 0.72), 1800), 2.8, 0.6, 0.06), 0.3)
 
+# ---------------------------------------------------------------- Folge 6: Verity
+def R_vibrate():
+    d = 1.4; tt = t_(d); b = np.sin(2 * np.pi * 165 * tt) * (np.sin(2 * np.pi * 330 * tt) * 0.3 + 0.7)
+    gate = ((tt % 0.7) < 0.42).astype(np.float32); return norm(lp(b.astype(np.float32) * gate, 900) * env(len(tt), 0.01, 0.1), 0.45)
+def R_glitch():
+    d = 0.9; x = np.zeros(int(d * SR), np.float32)
+    for k in range(7):
+        i = int(rng.uniform(0, d - 0.12) * SR); n = int(rng.uniform(0.02, 0.1) * SR); f = rng.uniform(300, 2400)
+        nz = hp(rng.standard_normal(n).astype(np.float32), 2000); seg = np.sign(np.sin(2 * np.pi * f * np.arange(n) / SR)).astype(np.float32) * 0.5 + nz * 0.4
+        x[i:i + n] += seg[: len(x) - i]
+    return norm(x, 0.4)
+def R_type():
+    d = 1.8; x = np.zeros(int(d * SR), np.float32); t0 = 0.0
+    while t0 < d - 0.05:
+        c = bp(noise(0.03), 1500, 6000) * env(int(0.03 * SR), 0.001, 0.025, 2); i = int(t0 * SR); x[i:i + len(c)] += c[: len(x) - i]; t0 += rng.uniform(0.07, 0.16)
+    return norm(x, 0.3)
+def R_tvon(): return _static(3.0, 0.45)
+def R_fanoff():
+    d = 1.6; tt = t_(d); f = 120 * np.exp(-tt * 1.6); ph = np.cumsum(2 * np.pi * f / SR)
+    return norm((np.sin(ph) * 0.4 + lp(noise(d), 600) * 0.5).astype(np.float32) * np.exp(-tt * 2.0), 0.3)
+def A_pc(d):
+    tt = t_(d); return (lp(noise(d), 260) * 0.06 + np.sin(2 * np.pi * 118 * tt) * 0.004 + bp(noise(d), 2500, 4500) * 0.004).astype(np.float32)
+def A_pc_off(d): return (lp(noise(d), 200) * 0.03).astype(np.float32)
+def A_kitchen(d): return (A_dawn(d) * 0.6 + rec("0222", 30.0, d, rms=0.015, fin=0.4, fout=0.4)[: int(d * SR)]).astype(np.float32) if False else A_dawn(d) * 0.6
+
 SFX = {k[2:]: v for k, v in globals().items() if k.startswith("S_")}
 SFX.update({k[2:]: v for k, v in globals().items() if k.startswith("R_")})
 
@@ -502,7 +527,7 @@ def A_dawn(d):
     w = lp(noise(len(b) / SR), 400) * 0.06; m = min(len(b), len(w)); return (b[:m] + w[:m]).astype(np.float32)
 
 
-AMB = {"day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn, "forest": A_forest, "car": A_car, "dusk": A_dusk, "bedroom": A_bedroom, "woods": A_woods, "village": A_village, "tvroom": A_tvroom, "station": A_station, "shop": A_shop, "shop_quiet": A_shop_quiet}
+AMB = {"pc": A_pc, "pc_off": A_pc_off, "kitchen": A_kitchen, "day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn, "forest": A_forest, "car": A_car, "dusk": A_dusk, "bedroom": A_bedroom, "woods": A_woods, "village": A_village, "tvroom": A_tvroom, "station": A_station, "shop": A_shop, "shop_quiet": A_shop_quiet}
 
 
 def drone(d):
@@ -543,6 +568,15 @@ def voice(shot, k, seg):
             if seg["v"] == "papa":
                 x = ffx(x, SIL.format(d=0.25) + ",atempo=1.0,highpass=f=90")
                 return norm(x, 0.8), len(x) / SR
+            if seg["v"] == "verity":   # saubere, leicht digitale KI-Stimme
+                x = ffx(x, SIL.format(d=0.25) + ",atempo=1.04,highpass=f=120,aecho=0.6:0.3:18:0.18")
+                return norm(x, 0.78), len(x) / SR
+            if seg["v"] == "verity_glitch":  # verzerrt, abgehackt
+                x = ffx(x, SIL.format(d=0.25) + ",atempo=0.98,highpass=f=200,lowpass=f=5000,acrusher=bits=6:mix=0.45,tremolo=f=11:d=0.35")
+                return norm(reverb(x, 1.0, 0.25), 0.75), len(x) / SR
+            if seg["v"] == "verity_close":   # hohl, tiefer, ganz nah
+                x = ffx(x, SIL.format(d=0.3) + ",asetrate=44100*0.9,aresample=44100,atempo=0.95,highpass=f=90,lowpass=f=4200")
+                return norm(reverb(x, 2.2, 0.45, 0.03), 0.8), len(x) / SR
             if seg["v"] == "opa":
                 x = ffx(x, SIL.format(d=0.25) + ",asetrate=44100*0.96,aresample=44100,atempo=1.1,highpass=f=120,lowpass=f=5000")
                 return norm(reverb(x, 1.2, 0.35), 0.72), len(x) / SR

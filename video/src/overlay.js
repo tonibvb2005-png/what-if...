@@ -104,6 +104,8 @@ const ROSTER = ['SKINWALKER', 'MOTHMAN', 'SLENDER MAN', 'SIREN HEAD', 'WENDIGO',
 const RING = ['#a35cff', '#3fe08a', '#43d4ff', '#ff5ca8', '#3fe08a', '#a35cff', '#ff5ca8', '#43d4ff'];
 let MON = null;
 export function roulette(g, t, tEnd, monster = 'HACHISHAKUSAMA') {
+  // Neue Monster (z. B. Zuschauerwuensche) ersetzen den letzten Platz im Band
+  if (!ROSTER.includes(monster) && C.MONSTERS[monster]) { ROSTER[7] = monster; MON = null; }
   if (!MON) MON = ROSTER.map(n => C.MONSTERS[n]());
   const SP = 480, TARGET = Math.max(0, ROSTER.indexOf(monster)) + 16, tLand = tEnd - 0.35;
   const off = SP * TARGET * easeOut(clamp(t / tLand)) ** 1.0;

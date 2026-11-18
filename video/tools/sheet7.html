@@ -1,0 +1,7 @@
+<!doctype html><html><body style="margin:0;background:#556"><canvas id=c width=2400 height=800></canvas>
+<script type=module>
+import * as C from '../src/chars.js';
+const g=document.getElementById('c').getContext('2d');
+['happy','laugh','stare','close'].forEach((m,i)=>g.drawImage(C.verityFace(m),i*330,0,320,320));
+g.drawImage(C.verityMonster(),1340,0,360,720); g.drawImage(C.sister(),1720,100,300,600); window.done=true;
+</script></body></html>

@@ -506,3 +506,61 @@ export function skinRunUp(ph = 0) { // aufrecht rennend, seitlich, Blick nach re
 }
 const clampN = v => Math.max(-1, Math.min(1, v));
 MONSTERS['SKINWALKER'] = () => { const c = cv2(512, 1024), g = c.getContext('2d'); g.drawImage(skinStand(false), 0, 0, 512, 1024); return c; };
+
+// ------------------------------------------------------------- Folge 6: Verity (KI-Begleiterin), kleine Schwester
+const VHAIR = '#7b5cff', VHAIR2 = '#5b3fd9', VSK = '#f6dcc8', VCY = '#39e4ff';
+export function verityFace(mood = 'happy', size = 512) { // quadratisches Avatar-Bild
+  const c = cv(size, size), g = c.getContext('2d'); const k = size / 512; g.scale(k, k);
+  const cx = 256, cy = 236;
+  P(g, g => { g.moveTo(cx - 150, 520); g.quadraticCurveTo(cx - 150, cy + 200, cx, cy + 196); g.quadraticCurveTo(cx + 150, cy + 200, cx + 150, 520); g.closePath(); }, '#2a2d3a', 9, 0.1);
+  P(g, rr(cx - 40, cy + 140, 80, 70, 20), VSK, 8, 0);
+  P(g, g => { g.moveTo(cx - 70, cy + 196); g.lineTo(cx, cy + 250); g.lineTo(cx + 70, cy + 196); }, VCY, 6, 0);
+  P(g, g => { g.moveTo(cx - 186, cy + 150); g.bezierCurveTo(cx - 236, cy - 60, cx - 150, cy - 210, cx, cy - 210); g.bezierCurveTo(cx + 150, cy - 210, cx + 236, cy - 60, cx + 186, cy + 150); g.quadraticCurveTo(cx + 150, cy + 190, cx + 120, cy + 150); g.lineTo(cx - 120, cy + 150); g.quadraticCurveTo(cx - 150, cy + 190, cx - 186, cy + 150); g.closePath(); }, VHAIR2, 9, 0);
+  P(g, ell(cx, cy, 160, 172), VSK, 10, 0.08);
+  P(g, g => { g.moveTo(cx - 172, cy + 10); g.bezierCurveTo(cx - 180, cy - 190, cx + 180, cy - 190, cx + 172, cy + 10); g.quadraticCurveTo(cx + 150, cy - 70, cx + 70, cy - 80); g.quadraticCurveTo(cx + 20, cy - 40, cx - 10, cy - 90); g.quadraticCurveTo(cx - 70, cy - 50, cx - 130, cy - 60); g.quadraticCurveTo(cx - 160, cy - 30, cx - 172, cy + 10); }, VHAIR, 9, 0.1);
+  g.strokeStyle = 'rgba(255,255,255,.3)'; g.lineWidth = 9; g.beginPath(); g.arc(cx - 20, cy - 70, 110, -2.6, -1.9); g.stroke();
+  // Headset
+  line(g, [[cx - 176, cy - 10], [cx - 176, cy - 120]], 12, '#2a2d3a'); P(g, rr(cx - 200, cy - 40, 44, 90, 20), '#2a2d3a', 7, 0); P(g, circ(cx - 178, cy + 6, 12), VCY, 0, 0);
+  curve(g, [cx - 180, cy + 40], [cx - 170, cy + 120], [cx - 90, cy + 130], 7, '#2a2d3a'); P(g, circ(cx - 86, cy + 130, 10), VCY, 5, 0);
+  const eyeY = cy + 30;
+  for (const s of [-1, 1]) {
+    const ex = cx + s * 62;
+    if (mood === 'laugh') { curve(g, [ex - 30, eyeY + 6], [ex, eyeY - 24], [ex + 30, eyeY + 6], 9); continue; }
+    if (mood === 'close') { P(g, ell(ex, eyeY, 36, 40), '#05070a', 7, 0); P(g, circ(ex + s * 2, eyeY + 2, 7), '#fff', 0, 0); continue; }
+    P(g, ell(ex, eyeY, 34, 40), '#fff', 7, 0);
+    const ir = mood === 'stare' ? 14 : 24, irc = mood === 'stare' ? '#0b6b80' : VCY;
+    P(g, circ(ex, eyeY + 4, ir), irc, 0, 0); P(g, circ(ex, eyeY + 4, ir * 0.5), '#0a1a2a', 0, 0);
+    if (mood !== 'stare') { P(g, circ(ex - 9, eyeY - 8, 8), '#fff', 0, 0); P(g, circ(ex + 8, eyeY + 12, 4), '#fff', 0, 0); }
+    line(g, [[ex - 30, eyeY - 52], [ex + 26, eyeY - 58 + (mood === 'stare' ? 8 : 0)]], 7);
+  }
+  if (mood === 'stare' || mood === 'close') {
+    const m = g => { g.moveTo(cx - 92, cy + 104); g.quadraticCurveTo(cx, cy + 128, cx + 92, cy + 104); g.quadraticCurveTo(cx, cy + 150, cx - 92, cy + 104); g.closePath(); };
+    g.save(); g.beginPath(); m(g); g.fillStyle = '#fbf7ee'; g.fill(); g.clip(); g.strokeStyle = 'rgba(28,21,18,.5)'; g.lineWidth = 3; for (let i = -3; i <= 3; i++) { g.beginPath(); g.moveTo(cx + i * 24, cy + 100); g.lineTo(cx + i * 24, cy + 150); g.stroke(); } g.restore();
+    g.beginPath(); m(g); g.lineWidth = 6; g.strokeStyle = OL; g.stroke();
+  } else {
+    P(g, g => { g.moveTo(cx - 40, cy + 104); g.quadraticCurveTo(cx, cy + (mood === 'laugh' ? 170 : 150), cx + 40, cy + 104); g.closePath(); }, '#8a2b3a', 6, 0);
+    g.fillStyle = 'rgba(255,110,130,.35)'; g.beginPath(); g.ellipse(cx - 110, cy + 80, 26, 13, 0, 0, 7); g.ellipse(cx + 110, cy + 80, 26, 13, 0, 0, 7); g.fill();
+  }
+  return c;
+}
+export function verityMonster() { // grosse Gestalt fuer Roulette und Rot-Szenen
+  const c = cv2(512, 1024), g = c.getContext('2d'), F = '#14121c';
+  for (let i = 0; i < 9; i++) line(g, [[200 + i * 14, 300], [180 + i * 18 + Math.sin(i) * 20, 600 + (i % 3) * 120]], 7, i % 2 ? '#2a2d3a' : '#1a1c26'); // Kabel-Haare
+  P(g, rr(214, 620, 28, 380, 10), F, 7, 0); P(g, rr(270, 620, 28, 380, 10), F, 7, 0);
+  P(g, rr(190, 330, 132, 320, 40), F, 9, 0); P(g, rr(236, 290, 40, 60, 10), F, 7, 0);
+  P(g, rr(150, 340, 28, 470, 12), F, 7, 0); P(g, rr(334, 340, 28, 470, 12), F, 7, 0);
+  for (const [x, y] of [[164, 820], [348, 820]]) for (const d of [-10, 0, 10]) line(g, [[x, y], [x + d, y + 40]], 5, '#2a2d3a');
+  g.strokeStyle = VCY; g.lineWidth = 4; g.globalAlpha = 0.7; for (let y = 360; y < 640; y += 26) { g.beginPath(); g.moveTo(200, y); g.lineTo(312, y); g.stroke(); } g.globalAlpha = 1;
+  g.save(); g.beginPath(); g.rect(0, 0, 512, 330); g.clip(); g.drawImage(verityFace('stare', 512), 86, 10, 340, 340); g.restore();
+  glowEyes(g, [[215, 187], [297, 187]], 9, '57,228,255');
+  return c;
+}
+MONSTERS['VERITY'] = verityMonster;
+export function sister() {
+  const o = [HOOD, HOOD2, HAIR]; HOOD = '#f2c230'; HOOD2 = '#d9a81c'; HAIR = '#c98a3a';
+  const base = boy('front', 'neutral'); const c = cv2(512, 1024), g = c.getContext('2d');
+  for (const s of [-1, 1]) { P(g, circ(256 + s * 200, 180, 58), HAIR, 10, 0.1); P(g, circ(256 + s * 160, 200, 18), '#e0475a', 6, 0); }
+  g.drawImage(base, 0, 0, 512, 1024);
+  P(g, g => { g.moveTo(76, 300); g.bezierCurveTo(46, 40, 466, 40, 436, 300); g.quadraticCurveTo(400, 160, 256, 150); g.quadraticCurveTo(112, 160, 76, 300); g.closePath(); }, HAIR, 11, 0.1);
+  [HOOD, HOOD2, HAIR] = o; return c;
+}
