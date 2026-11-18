@@ -561,3 +561,37 @@ export function sister() {
   P(g, g => { g.moveTo(76, 300); g.bezierCurveTo(46, 40, 466, 40, 436, 300); g.quadraticCurveTo(400, 160, 256, 150); g.quadraticCurveTo(112, 160, 76, 300); g.closePath(); }, HAIR, 11, 0.1);
   [HOOD, HOOD2, HAIR] = o; return c;
 }
+
+// ------------------------------------------------------------- Folge 6b: Momo (eigene Zeichnung)
+const MSK = '#d9d2c8', MHAIR = '#0d0b0c';
+function momoHead(g, cx, cy, r, mood = 'photo') {
+  // lange, strähnige schwarze Haare hinter dem Kopf
+  P(g, g => { g.moveTo(cx - r * 1.05, cy + r * 1.9); g.bezierCurveTo(cx - r * 1.35, cy - r * 0.2, cx - r * 1.0, cy - r * 1.25, cx, cy - r * 1.25); g.bezierCurveTo(cx + r * 1.0, cy - r * 1.25, cx + r * 1.35, cy - r * 0.2, cx + r * 1.05, cy + r * 1.9); g.closePath(); }, MHAIR, r * 0.04, 0);
+  g.strokeStyle = '#2a2628'; g.lineWidth = r * 0.03; for (let i = -5; i <= 5; i++) { g.beginPath(); g.moveTo(cx + i * r * 0.18, cy - r * 0.9); g.quadraticCurveTo(cx + i * r * 0.22, cy + r * 0.6, cx + i * r * 0.2 + Math.sin(i) * r * 0.1, cy + r * 1.85); g.stroke(); }
+  // Gesicht: oben breit, unten spitz
+  P(g, g => { g.moveTo(cx - r * 0.78, cy - r * 0.2); g.bezierCurveTo(cx - r * 0.85, cy - r * 1.0, cx + r * 0.85, cy - r * 1.0, cx + r * 0.78, cy - r * 0.2); g.bezierCurveTo(cx + r * 0.75, cy + r * 0.55, cx + r * 0.3, cy + r * 1.0, cx, cy + r * 1.02); g.bezierCurveTo(cx - r * 0.3, cy + r * 1.0, cx - r * 0.75, cy + r * 0.55, cx - r * 0.78, cy - r * 0.2); }, MSK, r * 0.045, 0.12);
+  // Mittelscheitel
+  P(g, g => { g.moveTo(cx - r * 0.82, cy - r * 0.1); g.bezierCurveTo(cx - r * 0.8, cy - r * 0.95, cx - r * 0.2, cy - r * 1.05, cx, cy - r * 0.9); g.bezierCurveTo(cx - r * 0.3, cy - r * 0.7, cx - r * 0.6, cy - r * 0.4, cx - r * 0.82, cy - r * 0.1); }, MHAIR, 0, 0);
+  P(g, g => { g.moveTo(cx + r * 0.82, cy - r * 0.1); g.bezierCurveTo(cx + r * 0.8, cy - r * 0.95, cx + r * 0.2, cy - r * 1.05, cx, cy - r * 0.9); g.bezierCurveTo(cx + r * 0.3, cy - r * 0.7, cx + r * 0.6, cy - r * 0.4, cx + r * 0.82, cy - r * 0.1); }, MHAIR, 0, 0);
+  // riesige, vorstehende Augen
+  const er = r * (mood === 'close' ? 0.34 : 0.3), ey = cy - r * 0.12;
+  for (const s of [-1, 1]) { const ex = cx + s * r * 0.4;
+    g.fillStyle = 'rgba(60,40,40,.35)'; g.beginPath(); g.arc(ex, ey + er * 0.15, er * 1.18, 0, 7); g.fill();
+    P(g, circ(ex, ey, er), '#f6f1ea', r * 0.035, 0.1);
+    g.strokeStyle = 'rgba(200,30,30,.75)'; g.lineWidth = r * 0.012; for (let a = 0; a < 9; a++) { const an = a * 0.7 + s; g.beginPath(); g.moveTo(ex + Math.cos(an) * er * 0.95, ey + Math.sin(an) * er * 0.95); g.quadraticCurveTo(ex + Math.cos(an + 0.2) * er * 0.7, ey + Math.sin(an + 0.2) * er * 0.7, ex + Math.cos(an) * er * 0.45, ey + Math.sin(an) * er * 0.45); g.stroke(); }
+    P(g, circ(ex - s * er * 0.12, ey + er * 0.05, er * (mood === 'close' ? 0.22 : 0.16)), '#0a0808', 0, 0);
+    if (mood === 'close') { const gr = g.createRadialGradient(ex, ey, 1, ex, ey, er * 1.4); gr.addColorStop(0, 'rgba(255,255,255,.0)'); gr.addColorStop(0.7, 'rgba(255,255,255,.0)'); gr.addColorStop(1, 'rgba(255,220,220,0)'); g.fillStyle = gr; } }
+  // kleine, schnabelartige Nase
+  P(g, g => { g.moveTo(cx - r * 0.06, cy + r * 0.2); g.lineTo(cx, cy + r * 0.34); g.lineTo(cx + r * 0.06, cy + r * 0.2); g.closePath(); }, '#b9afa4', r * 0.02, 0);
+  // Mund: extrem breit, bis zu den "Ohren"
+  P(g, g => { g.moveTo(cx - r * 0.72, cy + r * 0.38); g.quadraticCurveTo(cx, cy + r * 0.78, cx + r * 0.72, cy + r * 0.38); g.quadraticCurveTo(cx, cy + r * 0.62, cx - r * 0.72, cy + r * 0.38); g.closePath(); }, '#3a1012', r * 0.03, 0);
+}
+export function momoFace(mood = 'photo', size = 512) { const c = cv(size, size), g = c.getContext('2d'); g.scale(size / 512, size / 512); g.fillStyle = '#1a1414'; g.fillRect(0, 0, 512, 512); momoHead(g, 256, 230, 190, mood); return c; }
+export function momoFaceT(mood = 'close', size = 512) { const c = cv(size, size), g = c.getContext('2d'); g.scale(size / 512, size / 512); momoHead(g, 256, 230, 190, mood); return c; }
+MONSTERS['MOMO'] = () => sil(g => { // Frauenkopf auf Vogelkoerper mit Krallenfuessen
+  for (const x of [222, 290]) { line(g, [[x, 720], [x, 960]], 14, '#c79a2a'); for (const d of [-30, 0, 30]) line(g, [[x, 960], [x + d, 1000]], 9, '#c79a2a'); line(g, [[x, 960], [x - 8, 930]], 8, '#c79a2a'); }
+  P(g, g => { g.moveTo(256, 420); g.bezierCurveTo(400, 430, 430, 640, 360, 740); g.quadraticCurveTo(256, 790, 152, 740); g.bezierCurveTo(82, 640, 112, 430, 256, 420); }, '#141012', 10, 0.08);
+  g.strokeStyle = '#2a2224'; g.lineWidth = 6; for (let i = 0; i < 6; i++) { g.beginPath(); g.moveTo(180 + i * 30, 520); g.quadraticCurveTo(170 + i * 32, 640, 190 + i * 28, 740); g.stroke(); }
+  for (const s of [-1, 1]) P(g, g => { g.moveTo(256 + s * 90, 470); g.quadraticCurveTo(256 + s * 230, 560, 256 + s * 200, 760); g.quadraticCurveTo(256 + s * 150, 640, 256 + s * 110, 560); g.closePath(); }, '#0e0b0c', 8, 0);
+  momoHead(g, 256, 250, 140, 'photo');
+});

@@ -1,0 +1,6 @@
+<!doctype html><html><body style="margin:0;background:#556"><canvas id=c width=1800 height=760></canvas>
+<script type=module>
+import * as C from '../src/chars.js';
+const g=document.getElementById('c').getContext('2d');
+g.drawImage(C.momoFace('photo'),0,0,500,500); g.drawImage(C.momoFaceT('close'),520,0,500,500); g.drawImage(C.MONSTERS['MOMO'](),1060,0,370,740); window.done=true;
+</script></body></html>

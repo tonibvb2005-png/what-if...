@@ -476,6 +476,18 @@ def A_pc(d):
 def A_pc_off(d): return (lp(noise(d), 200) * 0.03).astype(np.float32)
 def A_kitchen(d): return (A_dawn(d) * 0.6 + rec("0222", 30.0, d, rms=0.015, fin=0.4, fout=0.4)[: int(d * SR)]).astype(np.float32) if False else A_dawn(d) * 0.6
 
+# ---------------------------------------------------------------- Folge 6b: Momo
+def R_msg():
+    d = 0.5; tt = t_(d); x = (np.sin(2 * np.pi * 1320 * tt) * env(len(tt), 0.002, 0.18, 2) * 0.5)
+    i = int(0.12 * SR); y = np.sin(2 * np.pi * 1760 * tt[: len(tt) - i]) * env(len(tt) - i, 0.002, 0.2, 2) * 0.5; x[i:] += y
+    return norm(x.astype(np.float32), 0.35)
+def R_lightoff():
+    c = hp(noise(0.03), 1200) * env(int(0.03 * SR), 0.001, 0.025, 2); x = np.zeros(int(1.2 * SR), np.float32); x[:len(c)] += c * 0.8
+    tt = t_(1.2); x += (np.sin(2 * np.pi * 100 * tt) * 0.05 * np.exp(-tt * 6)).astype(np.float32); return norm(x, 0.45)
+def R_drawer(): return reverb(rec("1268", 2.0, 1.0, 0.5, 0.02, 0.25), 0.6, 0.15)
+def A_bed(d):
+    a = lp(noise(d), 220) * 0.035; b = A_night(d) * 0.25; m = min(len(a), len(b)); return (a[:m] + b[:m]).astype(np.float32)
+
 SFX = {k[2:]: v for k, v in globals().items() if k.startswith("S_")}
 SFX.update({k[2:]: v for k, v in globals().items() if k.startswith("R_")})
 
@@ -527,7 +539,7 @@ def A_dawn(d):
     w = lp(noise(len(b) / SR), 400) * 0.06; m = min(len(b), len(w)); return (b[:m] + w[:m]).astype(np.float32)
 
 
-AMB = {"pc": A_pc, "pc_off": A_pc_off, "kitchen": A_kitchen, "day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn, "forest": A_forest, "car": A_car, "dusk": A_dusk, "bedroom": A_bedroom, "woods": A_woods, "village": A_village, "tvroom": A_tvroom, "station": A_station, "shop": A_shop, "shop_quiet": A_shop_quiet}
+AMB = {"bed": A_bed, "pc": A_pc, "pc_off": A_pc_off, "kitchen": A_kitchen, "day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn, "forest": A_forest, "car": A_car, "dusk": A_dusk, "bedroom": A_bedroom, "woods": A_woods, "village": A_village, "tvroom": A_tvroom, "station": A_station, "shop": A_shop, "shop_quiet": A_shop_quiet}
 
 
 def drone(d):
@@ -577,6 +589,12 @@ def voice(shot, k, seg):
             if seg["v"] == "verity_close":   # hohl, tiefer, ganz nah
                 x = ffx(x, SIL.format(d=0.3) + ",asetrate=44100*0.9,aresample=44100,atempo=0.95,highpass=f=90,lowpass=f=4200")
                 return norm(reverb(x, 2.2, 0.45, 0.03), 0.8), len(x) / SR
+            if seg["v"] == "momo":   # duenn wie eine Handy-Sprachnachricht
+                x = ffx(x, SIL.format(d=0.3) + ",atempo=1.0,highpass=f=350,lowpass=f=3400,acompressor=threshold=0.1:ratio=4")
+                return norm(np.tanh(x / (np.abs(x).max() + 1e-9) * 1.6) * 0.7, 0.72), len(x) / SR
+            if seg["v"] == "momo_close":  # hohl, tief, ganz nah
+                x = ffx(x, SIL.format(d=0.3) + ",asetrate=44100*0.9,aresample=44100,atempo=0.96,highpass=f=80,lowpass=f=4200")
+                return norm(reverb(x, 2.4, 0.5, 0.03), 0.82), len(x) / SR
             if seg["v"] == "opa":
                 x = ffx(x, SIL.format(d=0.25) + ",asetrate=44100*0.96,aresample=44100,atempo=1.1,highpass=f=120,lowpass=f=5000")
                 return norm(reverb(x, 1.2, 0.35), 0.72), len(x) / SR
