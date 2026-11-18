@@ -172,10 +172,12 @@ def child(c, x, y, s, phase=0.0, seed=0, silhouette=0.85, walk=True, a=1.0):
     c.restore()
 
 
-def rat(c, x, y, s, phase=0.0, facing=1, eyes=True, color=(62, 54, 58)):
+def rat(c, x, y, s, phase=0.0, facing=1, eyes=True, color=(62, 54, 58), a=1.0):
     c.save()
     c.translate(x, y)
     c.scale(s * facing, s)
+    if a < 1:
+        c.saveLayer(None, paint(a=a))
     c.drawOval(R(-22, -20, 16, 0), paint(color))
     c.drawPath(poly([(10, -18), (32, -6), (10, -1)]), paint(color))
     c.drawCircle(10, -17, 5, paint(mix(color, (120, 90, 90), 0.3)))
@@ -189,6 +191,8 @@ def rat(c, x, y, s, phase=0.0, facing=1, eyes=True, color=(62, 54, 58)):
     if eyes:
         glow(c, 22, -11, 12, EYE, 0.45)
         c.drawCircle(22, -11, 1.8, paint(EYE))
+    if a < 1:
+        c.restore()
     c.restore()
 
 
@@ -329,12 +333,16 @@ def procession_night(c, x):
     with layer(c, x, 0.55):
         hills(c, 1215, 14, (14, 14, 20), seed=5)
         # path climbing to the right
-        prog = (x.T * 18) % 60
-        piper(c, 640 + prog * 0.6, 1206 - prog * 0.25, 0.32, phase=x.T * 5, silhouette=0.92, T=x.T)
+        prog = x.t * 14.0                      # continuous, never resets
+
+        def path(p):
+            return 640 + p * 0.6, 1210 - max(0.0, p) * 0.25
+        pxp, pyp = path(prog)
+        piper(c, pxp, pyp - 4, 0.32, phase=x.T * 5, silhouette=0.92, T=x.T)
         for i in range(14):
-            px = 610 + prog * 0.6 - (i + 1) * 40
-            child(c, px, 1210 + i * 1.5, 0.62 - i * 0.01, phase=x.T * 6 + i, seed=i, silhouette=0.95)
-        song(c, 680 + prog * 0.6, 1080, 340, x.T, a=0.35, seed=1, amp=26)
+            cx_, cy_ = path(prog - (i + 1) * 66)
+            child(c, cx_, cy_, 0.62 - i * 0.01, phase=x.T * 6 + i, seed=i, silhouette=0.95)
+        song(c, pxp + 40, pyp - 130, 340, x.T, a=0.35, seed=1, amp=26)
     with layer(c, x, 0.95):
         c.drawRect(R(-500, 1260, 1600, 2600), lin_paint(0, 1220, 0, 1500, [(0, GROUND, 0), (1, GROUND, 1)]))
         fog(c, x, 1290, a=0.22, speed=20, seed=5, scale=1.4)
@@ -389,11 +397,14 @@ def town_records(c, x):
 def rats(c, x):
     x.push, x.focus = 0.12, (W / 2, 1100)
     tc = x.wt("cradles", x.dur * 0.85)
-    with layer(c, x, 0.2):
+    VY = 1000
+
+    def floor_half(yy):                       # half width of the street floor at screen height yy
+        return 70 + (yy - VY) / 900 * 640
+    with layer(c, x, 0.3):                    # street, window and rats share one layer -> no sliding
         sky(c, horizon=900)
         moon(c, W / 2, 300, 70)
-        street(c, x, vy=1000, seed=61, lit=0.55)
-    with layer(c, x, 0.5):
+        street(c, x, vy=VY, seed=61, lit=0.55)
         ca = ease(ramp(x.t, tc - 0.4, tc + 0.3))
         if ca > 0:  # lit window with a cradle ... and a rat on it
             wx, wy = 200, 760
@@ -404,18 +415,31 @@ def rats(c, x):
                        paint((28, 20, 16), ca))
             c.drawLine(wx - 70, wy + 120, wx - 90, wy + 140, paint((28, 20, 16), ca, stroke=8))
             c.drawLine(wx + 70, wy + 120, wx + 90, wy + 140, paint((28, 20, 16), ca, stroke=8))
-            rat(c, wx + 30, wy + 62, 1.2, phase=x.T * 3, facing=-1, color=(20, 16, 16))
+            rat(c, wx + 30, wy + 62, 1.2, phase=x.T * 3, facing=-1, color=(20, 16, 16), a=ca)
         rng = np.random.default_rng(12)
-        n = int(20 + 60 * ease(ramp(x.t, 0, x.dur * 0.6)))
+        n = int(24 + 56 * ease(ramp(x.t, 0, x.dur * 0.6)))
+        todo = []
         for i in range(n):
-            spd = rng.uniform(140, 320)
-            lane = rng.uniform(0, 1)
-            yy = 1060 + lane ** 1.3 * 760
-            facing = 1 if rng.uniform() < 0.5 else -1
-            off = rng.uniform(0, 1600)
-            xx = (off + x.T * spd * facing) % 1600 - 260
-            sc = 0.8 + lane * 2.4
-            rat(c, xx, yy, sc, phase=x.T * 8 + i, facing=facing)
+            ph0 = rng.uniform(0, 1)
+            if rng.uniform() < 0.55:
+                # crossing the street: out of a hole at one wall base, into the other
+                g = rng.uniform(0.06, 0.95) ** 1.2
+                yy = VY + g * 900
+                d = 1 if rng.uniform() < 0.5 else -1
+                u = (((ph0 + x.T * rng.uniform(0.22, 0.5)) % 1.0) * 2 - 1) * d
+                xx = W / 2 + u * floor_half(yy) * 0.93
+                facing, fade = d, (1 - abs(u)) * 8
+            else:
+                # scurrying along the bottom of a house wall, toward the camera
+                side = -1 if rng.uniform() < 0.5 else 1
+                g = (ph0 + x.T * rng.uniform(0.1, 0.22)) % 1.0
+                yy = VY + g * 900
+                xx = W / 2 + side * floor_half(yy) * rng.uniform(0.82, 0.92)
+                facing, fade = side, min(g, 1 - g) * 10
+            todo.append((yy, xx, 0.55 + g * 3.0, facing, min(1.0, fade), i))
+        for yy, xx, sc, facing, fade, i in sorted(todo):
+            if fade > 0.02:
+                rat(c, xx, yy, sc, phase=x.T * 8 + i, facing=facing, a=fade)
     with layer(c, x, 0.95):
         fog(c, x, 1500, a=0.15, speed=14, seed=7, scale=1.4)
 
