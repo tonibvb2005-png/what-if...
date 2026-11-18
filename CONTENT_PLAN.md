@@ -52,3 +52,10 @@ Für später aufheben: **Perchta** 🇦🇹 (5./6. Januar, Ende der Rauhnächte)
 
 - **TikTok:** 02:00 Uhr (= 20:00 US-Ostküste), vorgeplant
 - **YouTube Shorts:** 21:00 Uhr am Vortag (= 15:00 US-Ostküste)
+
+## Regeln für alle Skripte
+
+- **Alle Zahlen und Jahreszahlen auf Englisch ausschreiben**, sonst liest die Stimme sie auf Deutsch:
+  `1284` → `twelve eighty-four`, `130` → `a hundred and thirty`, `1966` → `nineteen sixty-six`,
+  `26th` → `twenty-sixth`. (Die Hooks in der Tabelle oben sind nur Notizen – im fertigen Skript ausgeschrieben.)
+- Wörter im Skript nach dem Einsprechen nicht mehr ändern (Untertitel-Sync).

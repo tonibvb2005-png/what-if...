@@ -18,7 +18,7 @@ LOCATION = "HAMELIN · GERMANY"
 
 SCENES = [
     {"kind": "procession_night", "hook": True,             # NEW: line of tiny children silhouettes behind a piper
-     "text": "In 1284, a hundred and thirty children followed a song… *and never came back.*"},
+     "text": "In twelve eighty-four, a hundred and thirty children followed a song… *and never came back.*"},
     {"kind": "town_records", "location": True,             # NEW: old town under moon, then chronicle page
      "text": "In the German town of *Hamelin*, this isn't just a fairy tale. It's written in the town's own records."},
     {"kind": "rats",                                       # NEW: rats swarming houses, eyes glinting
