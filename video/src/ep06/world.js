@@ -34,10 +34,10 @@ function screenUI(g, w, h, t, st = {}) {
   const s = st.big ? h * 0.8 : h * 0.42, ax = st.big ? w / 2 - s / 2 : w * 0.04, ay = st.big ? h * 0.12 : h * 0.13;
   g.fillStyle = 'rgba(14,16,26,.8)'; g.beginPath(); g.roundRect(ax - 6, ay - 6, s + 12, s + 12, s * 0.08); g.fill();
   g.save(); g.beginPath(); g.roundRect(ax, ay, s, s, s * 0.07); g.clip();
-  const bgc = g.createLinearGradient(0, ay, 0, ay + s); bgc.addColorStop(0, '#2b2350'); bgc.addColorStop(1, '#141028'); g.fillStyle = bgc; g.fillRect(ax, ay, s, s);
+  const bgc = g.createLinearGradient(0, ay, 0, ay + s); bgc.addColorStop(0, st.dark ? '#120f08' : '#2b2350'); bgc.addColorStop(1, st.dark ? '#050403' : '#141028'); g.fillStyle = bgc; g.fillRect(ax, ay, s, s);
   const bob = Math.sin(t * 2.2) * s * 0.01;
-  g.drawImage(face(st.mood || 'happy'), ax, ay + bob, s, s);
-  if (st.wave) { const a = Math.sin(t * 9) * 0.35; g.save(); g.translate(ax + s * 0.85, ay + s * 0.78); g.rotate(a); g.fillStyle = '#f6dcc8'; g.strokeStyle = '#1c1512'; g.lineWidth = s * 0.012; g.beginPath(); g.roundRect(-s * 0.06, -s * 0.2, s * 0.12, s * 0.2, s * 0.05); g.fill(); g.stroke(); g.beginPath(); g.arc(0, -s * 0.22, s * 0.07, 0, 7); g.fill(); g.stroke(); g.restore(); }
+  g.drawImage(face(st.mood || 'happy'), ax + s * 0.08, ay + s * 0.08 + bob, s * 0.84, s * 0.84);
+  if (st.wave) { const a = Math.sin(t * 9) * 0.35; g.save(); g.translate(ax + s * 0.85, ay + s * 0.78); g.rotate(a); g.fillStyle = '#ffd21f'; g.strokeStyle = '#1c1512'; g.lineWidth = s * 0.012; g.beginPath(); g.roundRect(-s * 0.06, -s * 0.2, s * 0.12, s * 0.2, s * 0.05); g.fill(); g.stroke(); g.beginPath(); g.arc(0, -s * 0.22, s * 0.07, 0, 7); g.fill(); g.stroke(); g.restore(); }
   g.restore();
   // Chat
   if (st.chat && st.chat.length) {
