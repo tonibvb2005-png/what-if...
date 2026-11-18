@@ -55,4 +55,4 @@ pip install skia-python numpy scipy pyloudnorm faster-whisper
 ## Eigene Geschichten
 
 Alles Inhaltliche steht in `story.py`: Text pro Szene, `*rote Wörter*`, Titel, Ort und **Kanalname fürs Outro**
-(`CHANNEL_NAME`, aktuell Platzhalter "THE FORGOTTEN TALES"). Neue Bildmotive = neue Funktion in `scenes.py`.
+(`CHANNEL_NAME`, aktuell "BY LANTERN LIGHT"). Profilbilder: `python profile_pic.py`. Neue Bildmotive = neue Funktion in `scenes.py`.
