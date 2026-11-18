@@ -187,10 +187,10 @@ function redSkin(g, p, t) {
 function redShift(g, p, t) {
   if (!SKS) SKS = C.skinStand(false); if (!SKR) SKR = C.skinRun(0.8); if (!PAPA) PAPA = C.papa('front', 'neutral');
   redSky(g); mesas(g, 1560);
-  const forms = [[SKR, 1100, 550], [SKS, 600, 1200], [PAPA, 600, 1200]], u = p * 3, i = Math.min(2, Math.floor(u)), f = u - i;
+  const forms = [[SKS, 600, 1200], [PAPA, 600, 1200]], u = p * 2, i = Math.min(1, Math.floor(u)), f = u - i;
   const draw = (k, a) => { const [im, w, h] = forms[k]; g.globalAlpha = a; g.save(); g.filter = 'brightness(0.15)'; g.drawImage(im, CW / 2 - w / 2, 1450 - h, w, h); g.restore(); };
-  const fade = sm(0.75, 1, f); draw(i, i < 2 ? 1 - fade : 1); if (i < 2) draw(i + 1, fade); g.globalAlpha = 1; g.filter = 'none';
-  const ex = CW / 2, ey = i === 0 ? 1450 - 550 + 120 : 1450 - 1200 + 360; const pulse = 0.7 + 0.3 * Math.sin(t * 7);
+  const fade = sm(0.6, 1, f); draw(i, i < 1 ? 1 - fade : 1); if (i < 1) draw(i + 1, fade); g.globalAlpha = 1; g.filter = 'none';
+  const ex = CW / 2, ey = 1450 - 1200 + L(270, 360, i === 0 ? fade : 1); const pulse = 0.7 + 0.3 * Math.sin(t * 7);
   g.save(); g.globalCompositeOperation = 'lighter'; for (const dx of [-38, 38]) { const gr = g.createRadialGradient(ex + dx, ey, 1, ex + dx, ey, 50); gr.addColorStop(0, `rgba(255,230,150,${pulse})`); gr.addColorStop(1, 'rgba(255,160,40,0)'); g.fillStyle = gr; g.beginPath(); g.arc(ex + dx, ey, 50, 0, 7); g.fill(); } g.restore();
   g.fillStyle = 'rgba(255,230,210,.85)'; g.font = '400 50px Anton'; g.textAlign = 'center';
   ['„PAPA?“', '„MACH AUF“', '„ICH BIN\'S“'].forEach((s2, k) => { const v = (t * 0.6 + k / 3) % 1; g.globalAlpha = Math.sin(v * Math.PI) * sm(0.3, 0.6, p); g.fillText(s2, CW / 2 + (k - 1) * 320, 420 - v * 160); }); g.globalAlpha = 1;
