@@ -1319,7 +1319,7 @@
   }
   function crowdBand(top, bot, night) {
     ctx.fillStyle = night ? '#141a36' : '#2b3a6b'; ctx.fillRect(0, top, W, bot - top);
-    const r = R7(11), pal = night ? ['#3a4a8a', '#6a7ab0', '#8a3040', '#c9c9d9'] : ['#e8364f', '#1f6fe0', '#ffd400', '#ffffff', '#ff8c1a', '#2fbf71'];
+    const r = R7(11), pal = night ? ((spec && spec.nightCrowd) || ['#3a4a8a', '#6a7ab0', '#8a3040', '#c9c9d9']) : ((spec && CUR && CUR.sh && CUR.sh.clubCrowd && spec.flatCrowd) || ['#e8364f', '#1f6fe0', '#ffd400', '#ffffff', '#ff8c1a', '#2fbf71']);
     for (let y = top + 18; y < bot - 10; y += 26) for (let x = (y / 26 % 2) * 11; x < W; x += 22) { ctx.fillStyle = pal[Math.floor(r() * pal.length)]; ctx.fillRect(x, y, 14, 16); ctx.fillStyle = night ? '#8a7a6a' : '#f0c19a'; ctx.beginPath(); ctx.arc(x + 7, y - 4, 6, 0, Math.PI * 2); ctx.fill(); }
   }
   function adStrip(y) {
@@ -1952,6 +1952,84 @@
       extra: (lt) => { pill(0, 520, '@ TAG YOUR SUB', eb(P(lt, .1, .4)), '#ffd400', OUT, 50); bubble(230, 790, 'NEVER GIVE UP!', eb(P(lt, cue('never', .6), cue('never', .6) + .3)), -60); } }
   });
 
+
+  // ---------- club roulette + "Why it sucks being a <club> fan" ----------
+  const CLUBS = [
+    { n: 'CHELSEA', t: 'CFC', c1: '#034694', c2: '#ffffff', p: 'plain' }, { n: 'ARSENAL', t: 'AFC', c1: '#ef0107', c2: '#ffffff', p: 'chief' },
+    { n: 'LIVERPOOL', t: 'LFC', c1: '#c8102e', c2: '#ffffff', p: 'plain' }, { n: 'MAN CITY', t: 'MCFC', c1: '#6cabdd', c2: '#ffffff', p: 'plain' },
+    { n: 'MAN UNITED', t: 'MUFC', c1: '#da291c', c2: '#fbe122', p: 'plain', tc: '#fbe122' }, { n: 'REAL MADRID', t: 'RM', c1: '#ffffff', c2: '#e0b84a', p: 'chief', tc: '#e0b84a' },
+    { n: 'BARCELONA', t: 'FCB', c1: '#a50044', c2: '#004d98', p: 'stripes', tc: '#ffd400' }, { n: 'BAYERN', t: 'FCB', c1: '#dc052d', c2: '#0066b2', p: 'half' },
+    { n: 'DORTMUND', t: 'BVB', c1: '#fde100', c2: '#111111', p: 'band', tc: '#111' }, { n: 'JUVENTUS', t: 'J', c1: '#ffffff', c2: '#111111', p: 'stripes', tc: '#e0b84a' },
+    { n: 'AC MILAN', t: 'ACM', c1: '#d81e2c', c2: '#111111', p: 'stripes' }, { n: 'PSG', t: 'PSG', c1: '#004170', c2: '#da291c', p: 'vband' },
+    { n: 'INTER', t: 'I', c1: '#0b4ea2', c2: '#111111', p: 'stripes' }, { n: 'TOTTENHAM', t: 'THFC', c1: '#ffffff', c2: '#132257', p: 'chief', tc: '#132257' }
+  ];
+  function rouletteOrder(seed) { const r = R7(seed || 7), a = CLUBS.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+  // float position (index under the pointer) at local time lt
+  function rpos(lt, cfg) {
+    const N = cfg.order.length, ti = cfg.order.findIndex(c => c.n === cfg.target);
+    if (!cfg.land) return lt * 7 + (cfg.seed || 0);
+    const T1 = cfg.spin * .8, start = ti - N * 3 - 1.6, near = ti - .9;
+    if (lt <= T1) return lerp(start, near, eo(lt / T1));
+    if (lt <= T1 + .25) return near;
+    return lerp(near, ti, eb(P(lt, T1 + .25, cfg.spin)));
+  }
+  function roulette(lt, cfg, y = 560) {
+    const N = cfg.order.length, pos = rpos(lt, cfg), landed = cfg.land && lt >= cfg.spin;
+    ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.beginPath(); ctx.roundRect(-20, y - 105, W + 40, 210, 0); ctx.fillStyle = 'rgba(15,18,40,.78)'; ctx.fill();
+    ctx.fillStyle = '#ffd400'; ctx.fillRect(0, y - 109, W, 6); ctx.fillRect(0, y + 103, W, 6);
+    for (let k = Math.floor(pos) - 4; k <= Math.floor(pos) + 4; k++) {
+      const x = 540 + (k - pos) * 190, c = cfg.order[((k % N) + N) % N], d = Math.abs(x - 540) / 540;
+      const sc = (1.25 - d * .45) * (landed && Math.abs(x - 540) < 20 ? 1 + .12 * Math.sin(P(lt, cfg.spin, cfg.spin + .4) * Math.PI) : 1);
+      ctx.globalAlpha = 1 - Math.min(.65, d * .9); crest(x, y, c, sc * 1.35); ctx.globalAlpha = 1;
+    }
+    ctx.beginPath(); ctx.arc(540, y, 98, 0, Math.PI * 2); ctx.lineWidth = 10; ctx.strokeStyle = landed ? '#ffd400' : '#e8364f'; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(540, y - 135); ctx.lineTo(515, y - 175); ctx.lineTo(565, y - 175); ctx.closePath(); ctx.fillStyle = '#e8364f'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = OUT; ctx.stroke();
+    ctx.restore();
+  }
+  function confetti2d(t, k, cols) { if (k <= 0) return; ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); const r = R7(21); for (let i = 0; i < 160; i++) { const x = r() * W + Math.sin(t * 2 + i) * 30, y = ((r() * H * .9 + t * (300 + r() * 200)) % (H + 100)) - 100; ctx.save(); ctx.translate(x, y); ctx.rotate(t * 4 + i); ctx.globalAlpha = k; ctx.fillStyle = cols[i % cols.length]; ctx.fillRect(-9, -5, 18, 10); ctx.restore(); } ctx.restore(); }
+  function scrTitle(l1, l2, k2, col2) { ctx.save(); ctx.setTransform(1, 0, 0, 1, 0, 0); txt(l1, 540, 250, 66, '#fff', 900, 'center', 16); if (l2) { ctx.translate(540, 360); const k = k2 == null ? 1 : k2; ctx.scale(lerp(1.8, 1, eo(Math.min(1, k))), lerp(1.8, 1, eo(Math.min(1, k)))); ctx.globalAlpha = Math.min(1, k * 2); ctx.font = '900 92px Inter Display'; const w = ctx.measureText(l2).width + 70; ctx.beginPath(); ctx.roundRect(-w / 2, -62, w, 124, 20); ctx.fillStyle = col2 || '#ffd400'; ctx.fill(); ctx.lineWidth = 9; ctx.strokeStyle = OUT; ctx.stroke(); txt(l2, 0, 4, 92, col2 && col2 !== '#ffd400' && col2 !== '#ffffff' ? '#fff' : OUT, 900); } ctx.restore(); }
+  for (let i = 0; i < 11; i++) CH['k' + i] = { skin: ['#ffd9b8', '#c98d63', '#e8b08a', '#8a5a3c', '#f0c19a'][i % 5], shirt: '#034694', trim: '#fff', number: String([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11][i]), pants: '#fff', shoes: '#111', hair: ['spiky', 'short', 'buzz', 'slick'][i % 4], hairColor: ['#2a1a10', '#c9a46a', '#120a05', '#6a4a2a'][i % 4], bw: .95, blinkPh: i * .3 };
+  CH.finn = { skin: '#ffd9b8', shirt: '#b9bec9', trim: '#8a8f9c', pants: '#2b2f4a', shoes: '#111', hair: 'spiky', hairColor: '#6a4a2a', bw: 1, blinkPh: .4 };
+  const FANKIT = () => (spec && spec.fanKit) || { shirt: '#034694', trim: '#ffffff', pants: '#ffffff' };
+  const ROUL = s => ({ order: rouletteOrder(s.seed), target: s.club || 'CHELSEA', spin: s.cues && s.cues.land != null ? s.cues.land : 2.4, land: true, seed: s.seed });
+  function shirtProp(x, y, k, label, num) { if (k <= 0) return; const K = FANKIT(); ctx.save(); ctx.translate(x, y); ctx.scale(k, k); const sh = new Path2D(); sh.moveTo(-80, -150); sh.lineTo(-140, -110); sh.lineTo(-115, -60); sh.lineTo(-88, -72); sh.lineTo(-88, 60); sh.lineTo(88, 60); sh.lineTo(88, -72); sh.lineTo(115, -60); sh.lineTo(140, -110); sh.lineTo(80, -150); sh.quadraticCurveTo(0, -120, -80, -150); sh.closePath(); ctx.fillStyle = K.shirt; ctx.fill(sh); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke(sh); txt(label, 0, -70, 30, K.trim, 900); txt(num, 0, 0, 80, K.trim, 900, 'center', 8); ctx.restore(); }
+  Object.assign(SHOTS, {
+    fanhook: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235, clubCrowd: false,
+      cam: [[0, FC], [1, FC]], cast: { finn: { x: 0, scale: 1 } },
+      looks: { finn: [['land', .55, null]] },
+      acts: { finn: [[0, { e: 'surprised', p: 'idle', m: { lookY: -.5 } }], ['land', .55, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: .5 } }]] },
+      extra: (lt, t) => { const s = CUR, cfg = ROUL(s), L = cfg.spin; roulette(lt, cfg); scrTitle('WHY IT SUCKS BEING A', lt < L ? '. . .' : (s.club || 'CHELSEA') + ' FAN', lt < L ? 1 : P(lt, L, L + .3), lt < L ? '#ffffff' : FANKIT().shirt); confetti2d(t, P(lt, L, L + .2), [FANKIT().shirt, '#ffffff', '#ffd400']); } },
+    fan7: { set: 'flat', flat: bgPark, age: 'AGE 7', captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { finn: { x: -200, scale: .66 } },
+      acts: { finn: [[0, { e: 'ecstatic', p: 'holdCashUp', m: { jump: .3 } }], ['sold', .65, { e: 'shock', p: 'handsOnHead', m: { jump: 0 } }]] },
+      extra: (lt) => { shirtProp(200, 1100, eb(P(lt, .2, .5)), 'STAR', '10'); pill(200, 820, 'NEXT SEASON: SOLD 💸', eb(P(lt, cue('sold', .65), cue('sold', .65) + .3)), '#e8364f', '#fff', 36); } },
+    fan9: { set: 'flat', flat: (t) => bgStadium(t, false), clubCrowd: true, age: 'AGE 9', captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { finn: { x: -260, scale: .74 }, coach: { x: 230, scale: 1 } },
+      looks: { coach: [['new', .6, { capColor: '#e8364f', skin: '#c98d63', hairColor: '#120a05' }]] },
+      acts: { finn: [[0, { e: 'happy', p: 'waveR', m: { wave: 1, lookX: 1 } }], ['new', .6, { e: 'surprised', p: 'shrug', m: { lookX: 1 } }]], coach: [[0, { e: 'happy', p: 'waveR', m: { wave: 1, lookX: -1 } }], ['new', .6, { e: 'confident', p: 'crossed', m: { lookX: -1 } }]] },
+      extra: (lt) => { const n = cue('new', .6); statCard(230, 300, 'MANAGERS', [['THIS SEASON', lt < n ? 1 : 2, lt < n]], eb(P(lt, .1, .4))); pill(230, 780, 'NEW MANAGER 🎄', eb(P(lt, n, n + .3)), '#fff', OUT, 36); } },
+    fan12: { set: 'flat', flat: (t) => bgStadium(t, false), clubCrowd: true, age: 'AGE 12', captionTop: 1235, cam: [[0, FC], [.5, FC], [1, { x: 0, y: 940, z: .82 }]],
+      cast: Object.fromEntries([...Array(11)].map((_, i) => ['k' + i, { x: -600 + i * 120, scale: .62 }])),
+      extra: (lt) => { pill(0, 560, 'SQUAD: 40+ PLAYERS 📸', eb(P(lt, cue('wide', .5), cue('wide', .5) + .3)), '#fff', OUT, 40); } },
+    fan14: { set: 'flat', flat: (t) => bgStadium(t, false), clubCrowd: true, age: 'AGE 14', captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { dad: { x: -230, scale: 1 }, finn: { x: 230, scale: .86 } },
+      acts: { dad: [[0, { e: 'neutral' }], ['dad', .45, { e: 'ecstatic', p: 'cheer' }], ['twelfth', .85, { e: 'despair', p: 'handsOnHead' }]], finn: [[0, { e: 'happy' }], ['twelfth', .85, { e: 'despair', p: 'crossed' }]] },
+      extra: (lt) => { const tw = cue('twelfth', .85); statCard(0, 280, 'TRANSFERS', [['SPENT', (v => v >= 1000 ? '€1 BILLION' : '€' + v + 'M')(Math.round(lerp(0, 1000, P(lt, .2, cue('dad', .45))))), true]], eb(P(lt, .1, .4))); bubble(-230, 760, "WE'LL WIN EVERYTHING!", eb(P(lt, cue('dad', .45), cue('dad', .45) + .3)) * (1 - P(lt, tw - .2, tw)), 60); pill(0, 660, 'FINAL TABLE: 12TH 😐', eb(P(lt, tw, tw + .3)), '#e8364f', '#fff', 40); } },
+    fan16: { set: 'flat', flat: (t) => bgStadium(t, true), age: 'AGE 16 · MUNICH', captionTop: 1235, bright: .8, cam: [[0, FC], [1, FC]], cast: { finn: { x: 0, scale: .96 } },
+      acts: { finn: [[0, { e: 'tense', p: 'pleading', m: { tremble: .6 } }], ['win', .82, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: 1 } }]] },
+      extra: (lt, t) => { const w = cue('win', .82); scoreboard(lt < w ? 'PENALTIES 3 – 3' : 'PENALTIES 4 – 3', lt < w ? 'CHAMPIONS LEAGUE FINAL' : 'CHAMPIONS OF EUROPE 🏆'); confetti2d(t, P(lt, w, w + .2), [FANKIT().shirt, '#ffffff', '#ffd400']); } },
+    fan17: { set: 'flat', flat: (t) => bgStadium(t, false), clubCrowd: true, age: 'AGE 17', captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { finn: { x: -230, scale: .96 } },
+      acts: { finn: [[0, { e: 'happy', p: 'idle' }], ['loan', .8, { e: 'shock', p: 'handsOnHead' }]] },
+      extra: (lt) => { shirtProp(240, 1120, eb(P(lt, .2, .5)), 'NEW GUY', '7'); statCard(240, 300, 'CONTRACT', [['YEARS', 8, true]], eb(P(lt, cue('eight', .5), cue('eight', .5) + .3))); pill(240, 760, 'JANUARY: ON LOAN ✈️', eb(P(lt, cue('loan', .8), cue('loan', .8) + .3)), '#e8364f', '#fff', 36); } },
+    fanthing: { set: 'flat', flat: (t) => bgStadium(t, false), clubCrowd: true, captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { finn: { x: 0, scale: .96 } },
+      acts: { finn: [[0, { e: 'neutral', p: 'hips' }]] },
+      extra: (lt) => { [['MANAGER', 'mgr', .4], ['PLAYERS', 'pl', .6], ['OWNER', 'own', .8]].forEach(([l, n, f], i) => pill(-300 + i * 300, 560, l + ' 🔄', eb(P(lt, cue(n, f), cue(n, f) + .3)), '#fff', OUT, 34)); } },
+    fancolour: { set: 'flat', flat: bgDark, captionTop: 1700, cam: [[0, FC], [1, { x: 0, y: 930, z: 1.08 }]], cast: { finn: { x: 0, scale: 1 } },
+      acts: { finn: [[0, { e: 'happy', p: 'holdCashUp', propR: 'scarf' }]] },
+      extra: (lt) => pill(0, 640, 'BLUE IS THE COLOUR 💙', eb(P(lt, .3, .6)), FANKIT().shirt, '#fff', 44) },
+    fanout: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { finn: { x: 0, scale: 1 } },
+      acts: { finn: [[0, { e: 'happy', p: 'thumbsUpR', handR: 'thumb' }], ['next', .45, { e: 'surprised', p: 'shrug', m: { lookY: -.5 } }]] },
+      extra: (lt, t) => { const n = cue('next', .45); if (lt < n) { scrTitle('@ TAG A ' + (CUR.club || 'CHELSEA') + ' FAN', null); } else { roulette(lt - n, Object.assign(ROUL(CUR), { land: false, seed: 3 })); scrTitle('NEXT: WHY IT SUCKS BEING A', '. . . FAN? 👇', 1, '#ffffff'); } } }
+  });
+
   // ---------- timeline ----------
   let spec, scenes = [], total = 0;
   function camAt(keys, lt, d) {
@@ -2217,6 +2295,16 @@
         case 'subready': add(st + C('ready', .65), 'ding', -15); break;
         case 'subnobody': add(st + .1, 'heartbeat', -14); break;
         case 'subtag': add(st + .1, 'pop', -14); add(st + C('never', .6), 'sparkle', -16); break;
+        case 'fanhook': { const cfg = ROUL(s); let last = Math.floor(rpos(0, cfg)); for (let x = 0; x <= cfg.spin; x += .01) { const q = Math.floor(rpos(x, cfg)); if (q !== last) { add(st + x, 'tick', -16); last = q; } } add(st + cfg.spin, 'thump', -9); add(st + cfg.spin + .05, 'cheer', -14); break; }
+        case 'fan7': add(st + C('sold', .65), 'pop', -14); break;
+        case 'fan9': add(st + C('new', .6), 'whoosh_soft', -15); break;
+        case 'fan12': add(st + C('wide', .5), 'sparkle', -16); break;
+        case 'fan14': for (let k = 0; k < 10; k++) add(st + .2 + k * .12, 'tick', -20); add(st + C('dad', .45), 'pop', -15); add(st + C('twelfth', .85), 'thump', -13); break;
+        case 'fan16': for (let x = .2; x < C('win', .82); x += .85) add(st + x, 'heartbeat', -14); add(st + C('win', .82), 'cheer', -12); break;
+        case 'fan17': add(st + C('eight', .5), 'pop', -15); add(st + C('loan', .8), 'whoosh_soft', -14); break;
+        case 'fanthing': [['mgr', .4], ['pl', .6], ['own', .8]].forEach(([n, f]) => add(st + C(n, f), 'pop', -15)); break;
+        case 'fancolour': add(st + .3, 'sparkle', -15); break;
+        case 'fanout': add(st + .1, 'pop', -14); for (let x = C('next', .45); x < d; x += .14) add(st + x, 'tick', -20); break;
         case 'imate': add(st + .1, 'whoosh_soft', -20); add(st + C('follow', .75) + .1, 'pop', -14); break;
       }
     });
@@ -2309,7 +2397,8 @@
     CASTX = castX;
     if (sh.propFix) for (const n in sh.propFix) for (const [f, pr] of sh.propFix[n]) if (lt >= f * d) states[n].propL = pr;
     const drawC = name => { if (!sh.cast[name]) return; const c = Object.assign({}, CH[name], sh.cast[name], { y: sh.cast[name].y || GROUND }, castX[name] != null ? { x: castX[name] } : {});
-      if (sh.looks && sh.looks[name]) for (const [n, df, ov] of sh.looks[name]) if (lt >= cue(n, df)) Object.assign(c, ov); Puppet.draw(ctx, c, states[name], t); };
+      if (sh.looks && sh.looks[name]) for (const [n, df, ov] of sh.looks[name]) if (lt >= cue(n, df)) Object.assign(c, ov || FANKIT());
+      if (name === 'finn' && s.shot !== 'fanhook') Object.assign(c, FANKIT()); Puppet.draw(ctx, c, states[name], t); };
     if (sh.draw) {
       sh.draw(s, lt, d, t);
     } else if (sh.set === 'flat') {

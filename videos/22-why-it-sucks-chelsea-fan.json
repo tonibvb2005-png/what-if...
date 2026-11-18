@@ -1,0 +1,97 @@
+{
+  "title": "Why it sucks being a Chelsea fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "scarf": [
+    "#034694",
+    "#ffffff"
+  ],
+  "fanKit": {
+    "shirt": "#034694",
+    "trim": "#ffffff",
+    "pants": "#ffffff"
+  },
+  "flatCrowd": [
+    "#034694",
+    "#034694",
+    "#ffffff",
+    "#1f6fe0"
+  ],
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Chelsea fan!",
+      "audio": "../audio/22-why-it-sucks-chelsea-fan/01.wav",
+      "duration": 4.2,
+      "club": "CHELSEA",
+      "seed": 11,
+      "cues": {
+        "land": 2.6
+      }
+    },
+    {
+      "shot": "fan7",
+      "text": "It starts when you're seven. You get your first shirt, with your favourite player on the back. Next season, he's sold.",
+      "audio": "../audio/22-why-it-sucks-chelsea-fan/02.wav",
+      "club": "CHELSEA",
+      "seed": 11
+    },
+    {
+      "shot": "fan9",
+      "text": "Age nine. You finally learn the manager's name. By Christmas, there's a new one.",
+      "audio": "../audio/22-why-it-sucks-chelsea-fan/03.wav",
+      "club": "CHELSEA",
+      "seed": 11
+    },
+    {
+      "shot": "fan12",
+      "text": "Age twelve. The club signs so many players... the team photo needs a wider camera.",
+      "audio": "../audio/22-why-it-sucks-chelsea-fan/04.wav",
+      "club": "CHELSEA",
+      "seed": 11
+    },
+    {
+      "shot": "fan14",
+      "text": "Age fourteen. The club spends over a billion on new players. Your dad says: \"We'll win everything.\" You finish twelfth.",
+      "audio": "../audio/22-why-it-sucks-chelsea-fan/05.wav",
+      "club": "CHELSEA",
+      "seed": 11
+    },
+    {
+      "shot": "fan16",
+      "text": "Age sixteen. One night in Munich. Champions League final. Penalties. Against Bayern. In their own stadium. And you win!",
+      "audio": "../audio/22-why-it-sucks-chelsea-fan/06.wav",
+      "club": "CHELSEA",
+      "seed": 11
+    },
+    {
+      "shot": "fan17",
+      "text": "Age seventeen. You buy the shirt of the new signing. His contract? Eight years. By January... he's on loan.",
+      "audio": "../audio/22-why-it-sucks-chelsea-fan/07.wav",
+      "club": "CHELSEA",
+      "seed": 11
+    },
+    {
+      "shot": "fanthing",
+      "text": "That's the thing about being a Chelsea fan. The manager changes. The players change. Even the owner changes.",
+      "audio": "../audio/22-why-it-sucks-chelsea-fan/08.wav",
+      "club": "CHELSEA",
+      "seed": 11
+    },
+    {
+      "shot": "fancolour",
+      "text": "But the colour never does.",
+      "audio": "../audio/22-why-it-sucks-chelsea-fan/09.wav",
+      "club": "CHELSEA",
+      "seed": 11
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a Chelsea fan who never left. And which club is next? Drop it in the comments!",
+      "audio": "../audio/22-why-it-sucks-chelsea-fan/10.wav",
+      "club": "CHELSEA",
+      "seed": 11,
+      "pad": 1.6
+    }
+  ]
+}
