@@ -8,8 +8,11 @@ const srv = http.createServer((q, r) => { const f = path.join(__dirname, decodeU
   const b = await chromium.launch();
   const p = await b.newPage({ viewport: { width: 1080, height: 1920 } });
   p.on('console', m => console.log('PAGE:', m.text())); p.on('pageerror', e => console.log('ERR:', e.message));
-  await p.goto('http://localhost:8765/' + (process.env.PAGE || 'nomi.html') + '?ep=' + (process.env.EP || 'schweiz')); DUR = await p.evaluate(() => window.ready); console.log("DUR", DUR, await p.evaluate(() => JSON.stringify(SCRIPT.map(s => [s.id || s.type, +s.a.toFixed(2), +s.b.toFixed(2)]))));
-  if (mode === 'test') {
+  await p.goto('http://localhost:8765/' + (process.env.PAGE || 'nomi.html') + '?ep=' + (process.env.EP || 'schweiz')); DUR = await p.evaluate(() => window.ready); console.log("DUR", DUR, await p.evaluate(() => JSON.stringify((typeof SCRIPT !== "undefined" ? SCRIPT : BEATS).map(s => [s.id || s.type || s.shot, +s.a.toFixed(2), +s.b.toFixed(2)]))));
+  if (mode === 'events') {
+    const ev = await p.evaluate(() => ({ duration: window.DURATION, beats: window.EVENTS() }));
+    require('fs').writeFileSync(process.argv[3] || 'events.json', JSON.stringify(ev));
+  } else if (mode === 'test') {
     const ts = process.argv.slice(3).map(Number);
     for (const t of ts) { await p.evaluate(t => render(t), t); await p.locator('canvas').screenshot({ path: `test_${t}.png` }); }
   } else {
