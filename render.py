@@ -66,6 +66,66 @@ def estimate_times(words, start=0.5, wps=1.0):
     return words
 
 
+_ONES = "zero one two three four five six seven eight nine ten eleven twelve thirteen fourteen fifteen sixteen " \
+        "seventeen eighteen nineteen".split()
+_TENS = "_ _ twenty thirty forty fifty sixty seventy eighty ninety".split()
+
+
+def number_words(n):
+    if n < 20:
+        return _ONES[n]
+    if n < 100:
+        return _TENS[n // 10] + ("-" + _ONES[n % 10] if n % 10 else "")
+    if n < 1000:
+        rest = n % 100
+        return _ONES[n // 100] + " hundred" + (" and " + number_words(rest) if rest else "")
+    if n < 1_000_000:
+        rest = n % 1000
+        return number_words(n // 1000) + " thousand" + ((" and " if rest < 100 else " ") + number_words(rest)
+                                                         if rest else "")
+    return str(n)
+
+
+def year_words(n):
+    hi, lo = divmod(n, 100)
+    if lo == 0:
+        return number_words(hi) + " hundred"
+    return number_words(hi) + " " + (("oh " + _ONES[lo]) if lo < 10 else number_words(lo))
+
+
+def ordinal_words(n):
+    w = number_words(n)
+    irregular = {"one": "first", "two": "second", "three": "third", "five": "fifth", "eight": "eighth",
+                 "nine": "ninth", "twelve": "twelfth"}
+    head, sep, last = w.rpartition("-") if "-" in w.split()[-1] else w.rpartition(" ")
+    if last in irregular:
+        last = irregular[last]
+    elif last.endswith("y"):
+        last = last[:-1] + "ieth"
+    else:
+        last += "th"
+    return head + sep + last
+
+
+def expand_numbers(word, t0, t1):
+    """Whisper writes '1284' / '130' / '26th' as digits - spell them out like the script does."""
+    m = re.fullmatch(r"\W*(\d+)(st|nd|rd|th)?\W*", word.strip())
+    if not m:
+        return [(word, t0, t1)]
+    n = int(m.group(1))
+    if m.group(2):
+        txt = ordinal_words(n)
+    elif 1100 <= n <= 1999 or 2010 <= n <= 2099:
+        txt = year_words(n)
+    else:
+        txt = number_words(n)
+    toks = txt.replace(",", "").split()
+    if toks and toks[0] == "one" and n >= 100:     # "one hundred" ~ "a hundred"
+        toks[0] = "a"
+    step = (t1 - t0) / max(1, len(toks))
+    return [(tok, t0 + i * step, t0 + (i + 1) * step) for i, tok in enumerate(toks)]
+
+
 def align_to_voice(words, voice_path, model_size="base.en"):
     """Word timestamps from faster-whisper, matched to the script words."""
     import difflib
@@ -76,7 +136,12 @@ def align_to_voice(words, voice_path, model_size="base.en"):
     pcm = np.frombuffer(raw, np.float32).copy()
     segs, _ = model.transcribe(pcm, word_timestamps=True, language="en",
                                initial_prompt=full_script()[:400])
-    rec = [(norm(w.word), w.start, w.end) for s in segs for w in s.words if norm(w.word)]
+    rec = []
+    for s in segs:
+        for w in s.words:
+            for tok, t0, t1 in expand_numbers(w.word, w.start, w.end):
+                if norm(tok):
+                    rec.append((norm(tok), t0, t1))
     a = [w["n"] for w in words]
     b = [r[0] for r in rec]
     sm = difflib.SequenceMatcher(a=a, b=b, autojunk=False)
@@ -256,7 +321,10 @@ def draw_title(c, tl, T):
         a = ramp(t, 0.15, 0.7) * (1 - ramp(t, sc["end"] - sc["start"] - 0.4, sc["end"] - sc["start"]))
         if a <= 0:
             continue
-        fb = font("Oswald-Bold.ttf", 136)
+        size = 136
+        while size > 60 and text_width(story.TITLE, font("Oswald-Bold.ttf", size), 8) > 980:
+            size -= 4
+        fb = font("Oswald-Bold.ttf", size)
         sh = paint((0, 0, 0), 0.6 * a, blur=14)
         draw_text(c, story.TITLE, W / 2 + 3, 330, fb, sh, spacing=8, align="center")
         draw_text(c, story.TITLE, W / 2, 326, fb, paint(CREAM, a), spacing=8, align="center")

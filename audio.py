@@ -210,6 +210,25 @@ def wind(length):
 
 
 # ------------------------------------------------------------------ score
+SFX = {}   # scene kind -> fn(mix, scene, timeline) -> optional [(t0, t1, bed_level)]
+
+
+def reveal_time(tl):
+    """Jump-scare moment: first red word of the final hook scene."""
+    last = tl["scenes"][-1]
+    if not last["cfg"].get("hook"):
+        return None
+    reds = [w["t"] for w in tl["words"] if w["scene"] == last["i"] and w["red"]]
+    return (reds[0] - 0.05) if reds else None
+
+
+def creak(length=1.4, amp=0.5):
+    n2 = int(length * SR)
+    tt = np.arange(n2) / SR
+    x = filt(noise(n2) * (0.5 + 0.5 * np.sign(np.sin(2 * np.pi * (28 + 10 * tt) * tt))), "band", (300, 1400))
+    return reverb(x * env_adsr(n2, 0.3, 0.6) * amp, 0.4)
+
+
 def build_soundtrack(tl, outro_len):
     dur = tl["duration"] + 1.0
     m = Mix(dur)
@@ -226,9 +245,17 @@ def build_soundtrack(tl, outro_len):
     t = np.arange(n) / SR
     gain = np.ones(n, np.float32)
     gain *= np.clip(t / 1.5, 0, 1)                              # fade in
-    if "eyes_reveal" in scenes:                                    # silence before the scare
-        sc = scenes["eyes_reveal"]
-        tr = sc["start"] + sc["words"].get("don't", (sc["end"] - sc["start"]) * 0.5) - 0.05
+    tr = reveal_time(tl)
+    # story-specific sound effects (registered by scene modules); they may return bed ducks
+    ducks = []
+    for s in tl["scenes"]:
+        fn = SFX.get(s["kind"])
+        if fn:
+            ducks += fn(m, s, tl) or []
+    for d0, d1, lvl in ducks:
+        k = np.clip((t - d0) / 0.5, 0, 1) * np.clip((d1 - t) / 0.5, 0, 1)
+        gain *= 1 - (1 - lvl) * k
+    if tr is not None:                                             # silence before the scare
         dip = np.clip(1 - (t - (tr - 1.2)) / 0.6, 0.05, 1)
         dip[t > tr] = np.clip(0.05 + (t[t > tr] - tr) / 2.0, 0.05, 0.8)
         gain *= dip
@@ -260,10 +287,10 @@ def build_soundtrack(tl, outro_len):
             while k < s["end"] - 0.2:
                 m.add(k, footstep(heavy), 0.22, pan=rng.uniform(-0.2, 0.2))
                 k += 1 / rate
-    if "title_creature" in scenes:
-        s = scenes["title_creature"]
-        m.add(s["start"] - 0.05, boom(f0=70, f1=26), 1.0)
-        m.add(s["start"] + 0.2, sting(), 0.9)
+    for s in tl["scenes"]:
+        if s["cfg"].get("title"):
+            m.add(s["start"] - 0.05, boom(f0=70, f1=26), 1.0)
+            m.add(s["start"] + 0.2, sting(), 0.9)
     if "crossroads" in scenes:
         s = scenes["crossroads"]
         m.add(s["start"] + (s["end"] - s["start"]) * 0.45, sting(2.0), 0.7)
@@ -315,12 +342,11 @@ def build_soundtrack(tl, outro_len):
         tt = np.arange(n2) / SR
         creak = filt(noise(n2) * (0.5 + 0.5 * np.sign(np.sin(2 * np.pi * (28 + 10 * tt) * tt))), "band", (300, 1400))
         m.add(s["start"] + 1.0, reverb(creak * env_adsr(n2, 0.3, 0.6) * 0.5, 0.4), 0.6)
-    if "pov_end" in scenes and "eyes_reveal" in scenes:
-        s = scenes["pov_end"]
-        tr = wt("eyes_reveal", "don't") - 0.05
+    if tr is not None and len(tl["scenes"]) >= 2:                 # riser -> silence -> jump scare
+        s = tl["scenes"][-2]
         rl = max(2.0, tr - 1.25 - s["start"])
         m.add(tr - 1.25 - rl, riser(rl), 0.55)
-        m.add(scenes["eyes_reveal"]["start"] + 0.2, sting(2.0), 1.0)
+        m.add(tl["scenes"][-1]["start"] + 0.2, sting(2.0), 1.0)
         m.add(tr, hit(4.5), 1.25)
     # outro logo sting
     m.add(story_end + 0.25, boom(3.5, f0=60, f1=25), 0.8)
