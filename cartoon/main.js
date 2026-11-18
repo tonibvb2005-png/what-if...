@@ -1310,29 +1310,92 @@
     ctx.fillStyle = c1; ctx.fillRect(0, top, W, H - top);
     ctx.fillStyle = c2; for (let i = 0; i < 12; i++) { ctx.beginPath(); const x0 = i * 180 - 540, x1 = x0 + 90; ctx.moveTo(540 + (x0 - 540) * .35, top); ctx.lineTo(540 + (x1 - 540) * .35, top); ctx.lineTo(540 + (x1 - 540) * 2.2, H); ctx.lineTo(540 + (x0 - 540) * 2.2, H); ctx.closePath(); ctx.fill(); }
   }
+  function birds(t, y0) { ctx.strokeStyle = OUT; ctx.lineWidth = 4; ctx.lineCap = 'round'; for (let i = 0; i < 4; i++) { const x = ((t * (60 + i * 12) + i * 300) % (W + 200)) - 100, y = y0 + i * 40 + Math.sin(t * 2 + i) * 12, f = Math.sin(t * 9 + i) * 8; ctx.beginPath(); ctx.moveTo(x - 16, y - f); ctx.quadraticCurveTo(x - 6, y - 8, x, y); ctx.quadraticCurveTo(x + 6, y - 8, x + 16, y - f); ctx.stroke(); } }
+  function blimp(t) {
+    const x = ((t * 45) % (W + 700)) - 350, y = 420 + Math.sin(t * .8) * 8;
+    ctx.save(); ctx.translate(x, y);
+    ctx.beginPath(); ctx.ellipse(0, 0, 150, 55, 0, 0, Math.PI * 2); ctx.fillStyle = '#ffd400'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = OUT; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-140, -10); ctx.lineTo(-190, -50); ctx.lineTo(-190, 40); ctx.lineTo(-140, 10); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.roundRect(-40, 50, 80, 26, 8); ctx.fillStyle = '#1c2238'; ctx.fill(); ctx.stroke();
+    txt('FOOTBALLPAGE', 0, 2, 26, OUT, 900); ctx.restore();
+  }
   function bgPark(t) {
-    skyDay(t);
+    skyDay(t); birds(t, 230);
     ctx.fillStyle = '#7fd36a'; ctx.fillRect(0, 900, W, 140);
     const r = R7(5); for (let x = -40; x < W + 60; x += 70) { const h = 70 + r() * 50; ctx.fillStyle = '#5b3a24'; ctx.fillRect(x - 6, 920 - 10, 12, 40); ctx.beginPath(); ctx.arc(x, 900 - h * .3, h * .55, 0, Math.PI * 2); ctx.fillStyle = r() < .5 ? '#3f9a46' : '#358a3d'; ctx.fill(); }
+    // spectators on the touchline (parents, a dog), bobbing
+    const r2 = R7(8), cols = ['#e8364f', '#1f6fe0', '#ffd400', '#2fae9a', '#c96a9a', '#5a6a8a'];
+    for (let i = 0; i < 16; i++) { const x = 30 + i * 66 + r2() * 20, b = Math.sin(t * 3 + i) * 3, cheer = Math.sin(t * 1.3 + i * .8) > .85;
+      ctx.fillStyle = cols[i % cols.length]; ctx.beginPath(); ctx.roundRect(x - 14, 990 + b, 28, 40, 8); ctx.fill();
+      ctx.fillStyle = ['#ffd9b8', '#c98d63', '#e8b08a', '#8a5a3c'][i % 4]; ctx.beginPath(); ctx.arc(x, 980 + b, 11, 0, Math.PI * 2); ctx.fill();
+      if (cheer) { ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(x - 12, 995 + b); ctx.lineTo(x - 18, 968 + b); ctx.moveTo(x + 12, 995 + b); ctx.lineTo(x + 18, 968 + b); ctx.stroke(); } }
+    const dx = ((t * 80) % (W + 200)) - 100; ctx.fillStyle = '#c98a3c'; ctx.beginPath(); ctx.ellipse(dx, 1022, 22, 11, 0, 0, Math.PI * 2); ctx.fill(); ctx.beginPath(); ctx.arc(dx + 20, 1012, 9, 0, Math.PI * 2); ctx.fill();
+    // little goal + cones + ball bag far side
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(880, 1040); ctx.lineTo(880, 990); ctx.lineTo(1010, 990); ctx.lineTo(1010, 1040); ctx.stroke();
+    ctx.lineWidth = 1.5; ctx.strokeStyle = 'rgba(255,255,255,.6)'; for (let x = 890; x < 1010; x += 12) { ctx.beginPath(); ctx.moveTo(x, 990); ctx.lineTo(x, 1040); ctx.stroke(); }
     ctx.fillStyle = '#e8f5e0'; ctx.fillRect(0, 1036, W, 6);
     stripes(1040, '#4caf50', '#43a047');
+    for (const x of [90, 170, 250]) { ctx.beginPath(); ctx.moveTo(x - 14, 1080); ctx.lineTo(x, 1052); ctx.lineTo(x + 14, 1080); ctx.closePath(); ctx.fillStyle = '#ff8c1a'; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = OUT; ctx.stroke(); }
   }
   function crowdBand(top, bot, night) {
+    const t = TNOW;
+    // roof + trusses
+    ctx.fillStyle = night ? '#0b0f24' : '#3a4566'; ctx.fillRect(0, top - 70, W, 70);
+    ctx.strokeStyle = night ? '#1e2440' : '#56628a'; ctx.lineWidth = 6; for (let x = 0; x < W + 60; x += 90) { ctx.beginPath(); ctx.moveTo(x, top - 70); ctx.lineTo(x + 45, top); ctx.lineTo(x + 90, top - 70); ctx.stroke(); }
     ctx.fillStyle = night ? '#141a36' : '#2b3a6b'; ctx.fillRect(0, top, W, bot - top);
     const r = R7(11), pal = night ? ((spec && spec.nightCrowd) || ['#3a4a8a', '#6a7ab0', '#8a3040', '#c9c9d9']) : ((spec && CUR && CUR.sh && CUR.sh.clubCrowd && spec.flatCrowd) || ['#e8364f', '#1f6fe0', '#ffd400', '#ffffff', '#ff8c1a', '#2fbf71']);
-    for (let y = top + 18; y < bot - 10; y += 26) for (let x = (y / 26 % 2) * 11; x < W; x += 22) { ctx.fillStyle = pal[Math.floor(r() * pal.length)]; ctx.fillRect(x, y, 14, 16); ctx.fillStyle = night ? '#8a7a6a' : '#f0c19a'; ctx.beginPath(); ctx.arc(x + 7, y - 4, 6, 0, Math.PI * 2); ctx.fill(); }
+    const wave = ((t * 420) % (W + 500)) - 250;           // Mexican wave sweeping across
+    let row = 0;
+    for (let y = top + 18; y < bot - 10; y += 26, row++) for (let x = (row % 2) * 11; x < W; x += 22) {
+      const c = pal[Math.floor(r() * pal.length)], ph = r() * 6.28, up = Math.max(0, 1 - Math.abs(x - wave) / 90);
+      const b = Math.sin(t * 4 + ph) * 1.6 - up * 9;
+      ctx.fillStyle = c; ctx.fillRect(x, y + b, 14, 16);
+      ctx.fillStyle = night ? '#8a7a6a' : '#f0c19a'; ctx.beginPath(); ctx.arc(x + 7, y - 4 + b, 6, 0, Math.PI * 2); ctx.fill();
+      if (up > .4) { ctx.strokeStyle = c; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(x + 1, y + b); ctx.lineTo(x - 2, y - 14 + b); ctx.moveTo(x + 13, y + b); ctx.lineTo(x + 16, y - 14 + b); ctx.stroke(); }
+    }
+    // waving flags + held-up scarves
+    const fr = R7(4);
+    for (let i = 0; i < 9; i++) {
+      const x = 40 + i * 120 + fr() * 40, y = top + 40 + fr() * (bot - top - 120), c1 = pal[i % pal.length], c2 = pal[(i + 2) % pal.length];
+      if (i % 3 === 2) { ctx.strokeStyle = c1; ctx.lineWidth = 7; ctx.beginPath(); for (let k = 0; k <= 8; k++) ctx.lineTo(x - 40 + k * 10, y + Math.sin(t * 5 + k * .7 + i) * 4); ctx.stroke(); continue; }
+      ctx.strokeStyle = '#ddd'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(x, y + 30); ctx.lineTo(x, y - 40); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(x, y - 40);
+      for (let k = 0; k <= 6; k++) ctx.lineTo(x + k * 10, y - 40 + Math.sin(t * 6 + k * .9 + i) * 5);
+      for (let k = 6; k >= 0; k--) ctx.lineTo(x + k * 10, y - 10 + Math.sin(t * 6 + k * .9 + i) * 5);
+      ctx.closePath(); ctx.fillStyle = c1; ctx.fill(); ctx.strokeStyle = c2; ctx.lineWidth = 3; ctx.stroke();
+    }
+    // camera flashes in the crowd
+    const fl = R7(Math.floor(t * 6)); for (let i = 0; i < 3; i++) if (fl() < .5) { const x = fl() * W, y = top + fl() * (bot - top); ctx.fillStyle = 'rgba(255,255,255,.9)'; ctx.beginPath(); ctx.arc(x, y, 5 + fl() * 4, 0, Math.PI * 2); ctx.fill(); }
   }
   function adStrip(y) {
-    ctx.fillStyle = '#1c2238'; ctx.fillRect(0, y, W, 56);
-    for (let x = 0; x < W; x += 360) { ctx.fillStyle = '#ffd400'; ctx.fillRect(x + 10, y + 8, 160, 40); txt('FOOTBALLPAGE', x + 90, y + 29, 22, '#1c2238', 900); txt('FOOTBALLPAGE', x + 270, y + 29, 22, '#ffffff', 900); }
+    const t = TNOW, msgs = ['FOOTBALLPAGE.TV', '#WHYITSUCKS', (spec && spec.adText) || 'FOLLOW FOR MORE', 'TAG A FRIEND 👇'];
+    ctx.fillStyle = '#0d1126'; ctx.fillRect(0, y, W, 56);
+    const off = (t * 160) % 1600;
+    for (let k = -1; k < 3; k++) { const x0 = k * 1600 - off; msgs.forEach((m, i) => { const x = x0 + i * 400, on = (Math.floor(t * 2) + i) % 2; ctx.fillStyle = on ? '#ffd400' : '#1f6fe0'; ctx.fillRect(x + 8, y + 8, 384, 40); txt(m, x + 200, y + 29, 24, on ? '#0d1126' : '#ffffff', 900); }); }
+    ctx.fillStyle = 'rgba(255,255,255,.08)'; for (let x = 0; x < W; x += 6) ctx.fillRect(x, y, 2, 56);
+  }
+  function pitchside(t, night) {
+    // photographers + steward along the touchline, corner flag
+    for (const [x, flip] of [[70, 1], [1000, -1]]) { const y = 1215; ctx.fillStyle = night ? '#2b2f3a' : '#3a3f52'; ctx.beginPath(); ctx.roundRect(x - 18, y - 40, 36, 44, 8); ctx.fill(); ctx.fillStyle = '#f0c19a'; ctx.beginPath(); ctx.arc(x, y - 52, 12, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#111'; ctx.fillRect(x + flip * 6, y - 60, flip * 26, 16); ctx.fillRect(x + flip * 30, y - 58, flip * 14, 12);
+      if (Math.sin(t * 2.3 + x) > .96) { ctx.fillStyle = 'rgba(255,255,255,.95)'; ctx.beginPath(); ctx.arc(x + flip * 44, y - 52, 16, 0, Math.PI * 2); ctx.fill(); } }
+    const cx = 1050, cy = 1260; ctx.strokeStyle = '#ddd'; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx, cy - 70); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx, cy - 70); for (let k = 0; k <= 4; k++) ctx.lineTo(cx - k * 9, cy - 70 + Math.sin(t * 6 + k) * 4); for (let k = 4; k >= 0; k--) ctx.lineTo(cx - k * 9, cy - 46 + Math.sin(t * 6 + k) * 4); ctx.closePath(); ctx.fillStyle = '#ffd400'; ctx.fill();
   }
   function bgStadium(t, night) {
     if (night) { const g = ctx.createLinearGradient(0, 0, 0, 600); g.addColorStop(0, '#060a1e'); g.addColorStop(1, '#16204a'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
-      for (const x of [140, 940]) { ctx.fillStyle = '#2b2f3a'; ctx.fillRect(x - 6, 260, 12, 300); ctx.fillStyle = '#fff8d0'; ctx.fillRect(x - 70, 220, 140, 50); ctx.save(); ctx.globalAlpha = .12; ctx.beginPath(); ctx.moveTo(x - 70, 270); ctx.lineTo(x - 300, 1500); ctx.lineTo(x + 300, 1500); ctx.lineTo(x + 70, 270); ctx.fillStyle = '#fff8d0'; ctx.fill(); ctx.restore(); }
-    } else skyDay(t);
+      const sr = R7(17); ctx.fillStyle = 'rgba(255,255,255,.7)'; for (let i = 0; i < 40; i++) { const x = sr() * W, y = sr() * 600, tw = .5 + .5 * Math.sin(t * 3 + i); ctx.globalAlpha = tw; ctx.fillRect(x, y, 3, 3); } ctx.globalAlpha = 1;
+      for (const x of [140, 940]) { ctx.fillStyle = '#2b2f3a'; ctx.fillRect(x - 6, 260, 12, 300); ctx.fillStyle = '#fff8d0'; ctx.fillRect(x - 70, 220, 140, 50); ctx.save(); ctx.globalAlpha = .12 + .03 * Math.sin(t * 2 + x); ctx.beginPath(); ctx.moveTo(x - 70, 270); ctx.lineTo(x - 300, 1500); ctx.lineTo(x + 300, 1500); ctx.lineTo(x + 70, 270); ctx.fillStyle = '#fff8d0'; ctx.fill(); ctx.restore(); }
+    } else { skyDay(t); blimp(t); birds(t, 260);
+      for (const x of [110, 970]) { ctx.fillStyle = '#56628a'; ctx.fillRect(x - 6, 470, 12, 200); ctx.fillStyle = '#e8eefc'; ctx.fillRect(x - 55, 440, 110, 40); ctx.strokeStyle = OUT; ctx.lineWidth = 4; ctx.strokeRect(x - 55, 440, 110, 40); } }
     crowdBand(720, 1100, night); adStrip(1100);
     stripes(1156, night ? '#2e8f45' : '#4caf50', night ? '#29803e' : '#43a047');
     ctx.fillStyle = 'rgba(255,255,255,.8)'; ctx.fillRect(0, 1180, W, 5);
+    // pitch markings for depth: centre circle + halfway line, sprinkler mist in daylight
+    ctx.strokeStyle = 'rgba(255,255,255,.75)'; ctx.lineWidth = 8; ctx.beginPath(); ctx.ellipse(540, 1720, 420, 150, 0, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(540, 1185); ctx.lineTo(540, H); ctx.lineWidth = 6; ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(540, 1720, 14, 6, 0, 0, Math.PI * 2); ctx.fillStyle = '#fff'; ctx.fill();
+    pitchside(t, night);
   }
   function bgCar(t) {
     const g = ctx.createLinearGradient(0, 0, 0, 1300); g.addColorStop(0, '#ff9a5a'); g.addColorStop(1, '#ffd08a'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
@@ -2360,7 +2423,9 @@
   }
   const setOf = (s, which) => s.sh.cuts ? s.sh.cuts[which === 'first' ? 0 : s.sh.cuts.length - 1].set : s.sh.set;
 
+  let TNOW = 0;
   window.frame = function (t) {
+    TNOW = t;
     let idx = spec.scenes.findIndex(s => t < s._end); if (idx < 0) idx = spec.scenes.length - 1;
     const s = spec.scenes[idx], lt = t - s._start, d = s.duration;
     CUR = s;
