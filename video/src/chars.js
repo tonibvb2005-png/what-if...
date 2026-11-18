@@ -391,8 +391,15 @@ function papaHead(g, cx, cy, expr) {
     for (const s of [-1, 1]) { P(g, circ(cx + s * 60, cy + 30, 26), '#fff', 6, 0); P(g, circ(cx + s * 58, cy + 32, 9), OL, 0, 0); }
   } else for (const s of [-1, 1]) P(g, ell(cx + s * 60, cy + 30, 12, 15), OL, 0, 0);
   if (expr === 'wide' || expr === 'eyeshine') {
-    P(g, g => { g.moveTo(cx - 128, cy + 82); g.quadraticCurveTo(cx, cy + 190, cx + 128, cy + 82); g.quadraticCurveTo(cx, cy + 128, cx - 128, cy + 82); }, '#fbf7ee', 7, 0);
-    g.strokeStyle = OL; g.lineWidth = 4; for (let i = -4; i <= 4; i++) { g.beginPath(); g.moveTo(cx + i * 25, cy + 100 - Math.abs(i) * 2); g.lineTo(cx + i * 25, cy + 134 - Math.abs(i) * 6); g.stroke(); }
+    const mouth = g => { g.moveTo(cx - 118, cy + 78); g.bezierCurveTo(cx - 60, cy + 100, cx + 60, cy + 100, cx + 118, cy + 78); g.bezierCurveTo(cx + 92, cy + 168, cx - 92, cy + 168, cx - 118, cy + 78); g.closePath(); };
+    g.save(); g.beginPath(); mouth(g); g.fillStyle = '#5a1f1a'; g.fill(); g.clip();
+    g.fillStyle = '#fbf7ee'; g.beginPath(); g.moveTo(cx - 130, cy + 70); g.bezierCurveTo(cx - 60, cy + 92, cx + 60, cy + 92, cx + 130, cy + 70); g.lineTo(cx + 130, cy + 122); g.bezierCurveTo(cx + 60, cy + 136, cx - 60, cy + 136, cx - 130, cy + 122); g.closePath(); g.fill();
+    g.strokeStyle = 'rgba(28,21,18,.45)'; g.lineWidth = 3; g.beginPath(); g.moveTo(cx - 130, cy + 110); g.bezierCurveTo(cx - 60, cy + 122, cx + 60, cy + 122, cx + 130, cy + 110); g.stroke();
+    for (let i = -4; i <= 4; i++) { if (!i) continue; g.beginPath(); g.moveTo(cx + i * 24, cy + 80); g.lineTo(cx + i * 24, cy + 140); g.stroke(); }
+    g.restore();
+    g.beginPath(); mouth(g); g.lineWidth = 7; g.strokeStyle = OL; g.lineJoin = 'round'; g.stroke();
+    for (const k of [-1, 1]) curve(g, [cx + k * 112, cy + 70], [cx + k * 128, cy + 80], [cx + k * 124, cy + 96], 5);
+    if (expr === 'wide') for (const k of [-1, 1]) curve(g, [cx + k * 84, cy + 50], [cx + k * 60, cy + 58], [cx + k * 36, cy + 50], 5); // gespannte Wangen
   } else if (expr === 'scared') { line(g, [[cx - 30, cy + 112], [cx + 30, cy + 112]], 8); }
   else curve(g, [cx - 30, cy + 108], [cx, cy + 118], [cx + 30, cy + 108], 8);
 }
@@ -445,29 +452,56 @@ export function skinStand(run = false) {
   skinHead(g, 256, 190);
   return c;
 }
-export function skinRun(ph = 0) { // ph 0..1: Galopp-Phase, Blick nach rechts, Boden bei y = 500
+function skinHeadSide(g, x, y, s = 1) { // Kojotenschaedel im Profil, Schnauze nach rechts, Ursprung = Genick
+  g.save(); g.translate(x, y); g.scale(s, s);
+  P(g, g => { g.moveTo(-40, 40); g.quadraticCurveTo(-60, -10, -30, -40); g.lineTo(-62, -120); g.lineTo(0, -62); g.lineTo(20, -110); g.lineTo(46, -56); g.quadraticCurveTo(90, -48, 120, -26); g.lineTo(60, 10); g.quadraticCurveTo(20, 52, -40, 40); }, SKF2, 9, 0.1);
+  P(g, g => { g.moveTo(20, -34); g.quadraticCurveTo(70, -40, 120, -26); g.quadraticCurveTo(160, -16, 182, 0); g.quadraticCurveTo(186, 10, 176, 14); g.lineTo(80, 22); g.quadraticCurveTo(30, 26, 20, -34); }, BONE, 8, 0.12);
+  P(g, g => { g.moveTo(80, 24); g.lineTo(166, 18); g.quadraticCurveTo(150, 40, 96, 44); g.quadraticCurveTo(70, 42, 80, 24); }, '#cbbfa6', 7, 0);
+  g.strokeStyle = OL; g.lineWidth = 3; for (let i = 0; i < 5; i++) { g.beginPath(); g.moveTo(100 + i * 14, 21); g.lineTo(104 + i * 14, 30); g.stroke(); }
+  P(g, ell(178, 4, 8, 6), OL, 0, 0);
+  P(g, ell(58, -12, 20, 13, -0.2), '#120c0a', 0, 0); glowEyes(g, [[60, -12]], 8, '255,225,140');
+  g.restore();
+}
+function ikLeg(H, F, L1, L2, bend) { let dx = F[0] - H[0], dy = F[1] - H[1], d = Math.hypot(dx, dy); const m = L1 + L2 - 2; if (d > m) { F = [H[0] + dx / d * m, H[1] + dy / d * m]; d = m; }
+  const a = Math.atan2(dy, dx), k = Math.acos(clampN((L1 * L1 + d * d - L2 * L2) / (2 * L1 * d))) * bend; return [[H[0] + Math.cos(a + k) * L1, H[1] + Math.sin(a + k) * L1], F]; }
+function limb(g, pts, w, col) { line(g, pts, w + 8, OL); line(g, pts, w, col); }
+export function skinRun(ph = 0) { // Galopp auf allen vieren, Blick nach rechts, Boden bei y = 500
   const c = cv2(1024, 512), g = c.getContext('2d'), TAU = Math.PI * 2;
-  const bob = Math.sin(ph * TAU * 2) * 10, flex = Math.cos(ph * TAU) * 22;
-  const hip = [330 - flex * 0.5, 268 + bob], sho = [690 + flex * 0.5, 262 + bob * 0.6];
-  const ik = (H, F, L1, L2, bend) => { let dx = F[0] - H[0], dy = F[1] - H[1], d = Math.hypot(dx, dy); const m = L1 + L2 - 2; if (d > m) { F = [H[0] + dx / d * m, H[1] + dy / d * m]; d = m; }
-    const a = Math.atan2(dy, dx), k = Math.acos(clampN((L1 * L1 + d * d - L2 * L2) / (2 * L1 * d))) * bend; return [[H[0] + Math.cos(a + k) * L1, H[1] + Math.sin(a + k) * L1], F]; };
-  const leg = (H, off, len, bend, col, w) => { const q = (ph + off) % 1, ang = q * TAU, sw = Math.cos(ang) * 120, lift = Math.max(0, Math.sin(ang)) * 90;
-    const F = [H[0] + sw, 498 - lift]; const [K, F2] = ik(H, F, len, len, bend);
-    line(g, [H, K, F2], w + 8, OL); line(g, [H, K, F2], w, col);
-    for (const d of [-10, 4, 18]) line(g, [F2, [F2[0] + d + 16, F2[1] + 6]], 5, BONE); };
-  // hintere (ferne) Beine
-  leg([hip[0] + 18, hip[1] + 20], 0.58, 126, -1, SKF2, 22); leg([sho[0] - 12, sho[1] + 28], 0.08, 120, 1, SKF2, 22);
-  // Schwanz
-  line(g, [[hip[0] - 20, hip[1] - 4], [hip[0] - 90, hip[1] - 20 + bob], [hip[0] - 150, hip[1] + 10 - bob]], 12, SKF2);
-  // Rumpf (abgemagert, Rippen)
-  P(g, g => { g.moveTo(hip[0] - 30, hip[1] - 10); g.quadraticCurveTo((hip[0] + sho[0]) / 2, hip[1] - 50 + bob * 0.3, sho[0] + 40, sho[1] - 20); g.quadraticCurveTo(sho[0] + 60, sho[1] + 50, sho[0] - 10, sho[1] + 62);
-    g.quadraticCurveTo((hip[0] + sho[0]) / 2, sho[1] + 40, hip[0] + 10, hip[1] + 52); g.quadraticCurveTo(hip[0] - 50, hip[1] + 40, hip[0] - 30, hip[1] - 10); }, SKF, 10, 0.12);
-  g.strokeStyle = 'rgba(30,20,14,.55)'; g.lineWidth = 6; for (let i = 0; i < 6; i++) { const x = sho[0] - 40 - i * 30; g.beginPath(); g.moveTo(x, sho[1] - 6); g.quadraticCurveTo(x + 10, sho[1] + 22, x, sho[1] + 50); g.stroke(); }
-  // Fell ueber dem Ruecken
-  P(g, g => { g.moveTo(sho[0] - 150, sho[1] - 24); g.quadraticCurveTo(sho[0] - 20, sho[1] - 70, sho[0] + 80, sho[1] - 24); g.lineTo(sho[0] + 50, sho[1] + 34); g.lineTo(sho[0] + 20, sho[1] + 4); g.lineTo(sho[0] - 10, sho[1] + 36); g.lineTo(sho[0] - 50, sho[1] + 2); g.lineTo(sho[0] - 90, sho[1] + 26); g.closePath(); }, SKF2, 9, 0.1);
-  // vordere (nahe) Beine
-  leg([hip[0], hip[1] + 26], 0.5, 130, -1, SKF, 26); leg([sho[0], sho[1] + 34], 0.0, 124, 1, SKF, 26);
-  g.save(); g.translate(sho[0] + 130, sho[1] - 12 + Math.sin(ph * TAU * 2 + 1) * 8); g.rotate(-Math.PI / 2 + 0.3); skinHead(g, 0, 0, 0.9); g.restore();
+  const bob = Math.sin(ph * TAU * 2) * 10, flex = Math.cos(ph * TAU) * 26;
+  const hip = [330 - flex * 0.5, 236 + bob], sho = [680 + flex * 0.5, 222 + bob * 0.6];
+  const leg = (H, off, len, bend, col, w) => { const q = (ph + off) % 1, ang = q * TAU, sw = Math.cos(ang) * 120, lift = Math.max(0, Math.sin(ang)) * 80;
+    const [K, F] = ikLeg(H, [H[0] + sw, 498 - lift], len, len, bend); limb(g, [H, K, F], w, col);
+    for (const d of [-10, 4, 18]) line(g, [F, [F[0] + d + 16, F[1] + 6]], 5, BONE); };
+  leg([hip[0] + 20, hip[1] + 40], 0.58, 128, -1, SKF2, 22); leg([sho[0] - 14, sho[1] + 70], 0.08, 118, 1, SKF2, 22);
+  line(g, [[hip[0] - 30, hip[1] + 10], [hip[0] - 100, hip[1] - 10 + bob], [hip[0] - 160, hip[1] + 20 - bob]], 14, OL); line(g, [[hip[0] - 30, hip[1] + 10], [hip[0] - 100, hip[1] - 10 + bob], [hip[0] - 160, hip[1] + 20 - bob]], 8, SKF2);
+  // Rumpf: tiefer Brustkorb, eingefallener Bauch, Buckel
+  const mid = (hip[0] + sho[0]) / 2;
+  P(g, g => { g.moveTo(hip[0] - 40, hip[1] + 20); g.quadraticCurveTo(hip[0] - 20, hip[1] - 30, hip[0] + 60, hip[1] - 34); g.quadraticCurveTo(mid, hip[1] - 70 + bob * 0.3, sho[0] - 20, sho[1] - 40);
+    g.quadraticCurveTo(sho[0] + 70, sho[1] - 30, sho[0] + 60, sho[1] + 50); g.quadraticCurveTo(sho[0] + 30, sho[1] + 120, sho[0] - 60, sho[1] + 118);
+    g.quadraticCurveTo(mid - 40, sho[1] + 70, hip[0] + 50, hip[1] + 70); g.quadraticCurveTo(hip[0] - 40, hip[1] + 76, hip[0] - 40, hip[1] + 20); }, SKF, 10, 0.12);
+  g.strokeStyle = 'rgba(30,20,14,.55)'; g.lineWidth = 6; for (let i = 0; i < 6; i++) { const x = sho[0] - 10 - i * 34; g.beginPath(); g.moveTo(x, sho[1] - 10); g.quadraticCurveTo(x + 14, sho[1] + 40, x - 4, sho[1] + 96 - i * 8); g.stroke(); }
+  g.fillStyle = SKF2; for (let i = 0; i < 7; i++) { const x = hip[0] + 60 + i * 40; g.beginPath(); g.arc(x, hip[1] - 38 - Math.sin(i / 6 * Math.PI) * 26 + (sho[1] - hip[1]) * i / 6, 8, 0, 7); g.fill(); } // Wirbelsaeule
+  P(g, g => { g.moveTo(sho[0] - 160, sho[1] - 30); g.quadraticCurveTo(sho[0] - 20, sho[1] - 90, sho[0] + 70, sho[1] - 24); g.lineTo(sho[0] + 46, sho[1] + 46); g.lineTo(sho[0] + 16, sho[1] + 14); g.lineTo(sho[0] - 16, sho[1] + 50); g.lineTo(sho[0] - 56, sho[1] + 12); g.lineTo(sho[0] - 100, sho[1] + 34); g.lineTo(sho[0] - 130, sho[1] + 4); g.closePath(); }, SKF2, 9, 0.1);
+  leg([hip[0], hip[1] + 46], 0.5, 132, -1, SKF, 26); leg([sho[0], sho[1] + 76], 0.0, 120, 1, SKF, 26);
+  skinHeadSide(g, sho[0] + 60, sho[1] - 6 + Math.sin(ph * TAU * 2 + 1) * 8, 0.95);
+  return c;
+}
+export function skinRunUp(ph = 0) { // aufrecht rennend, seitlich, Blick nach rechts, Boden bei y = 1000
+  const c = cv2(512, 1024), g = c.getContext('2d'), TAU = Math.PI * 2;
+  const bob = -Math.abs(Math.sin(ph * TAU)) * 22;
+  const hip = [220, 540 + bob], sho = [280, 300 + bob];
+  const leg = (off, col, w) => { const a = (ph + off) * TAU, F = [hip[0] + Math.cos(a) * 150, 996 - Math.max(0, Math.sin(a)) * 130];
+    const [K, F2] = ikLeg(hip, F, 235, 235, -1); limb(g, [hip, K, F2], w, col); for (const d of [-8, 6, 20]) line(g, [F2, [F2[0] + d + 14, F2[1] + 4]], 5, BONE); };
+  const arm = (off, col, w) => { let a = Math.sin((ph + off) * TAU) * 0.8; if (a > 0) a *= 0.55; const E = [sho[0] + Math.sin(a) * 165, sho[1] + Math.cos(a) * 165];
+    const fa = a + 0.25 + Math.max(0, Math.sin((ph + off) * TAU)) * 0.45, Hd = [E[0] + Math.sin(fa) * 185, E[1] + Math.cos(fa) * 185];
+    limb(g, [sho, E, Hd], w, col); for (const d of [-12, 0, 12]) line(g, [Hd, [Hd[0] + Math.sin(fa) * 40 + d, Hd[1] + Math.cos(fa) * 40]], 5, BONE); };
+  arm(0.5, SKF2, 18); leg(0.5, SKF2, 24);
+  P(g, g => { g.moveTo(hip[0] - 50, hip[1] + 20); g.quadraticCurveTo(hip[0] - 60, hip[1] - 120, sho[0] - 60, sho[1] - 20); g.quadraticCurveTo(sho[0] + 10, sho[1] - 50, sho[0] + 60, sho[1] + 10);
+    g.quadraticCurveTo(sho[0] + 60, sho[1] + 120, hip[0] + 40, hip[1] - 60); g.quadraticCurveTo(hip[0] + 40, hip[1] + 20, hip[0] - 50, hip[1] + 20); }, SKF, 10, 0.12);
+  g.strokeStyle = 'rgba(30,20,14,.55)'; g.lineWidth = 6; for (let i = 0; i < 5; i++) { const y = sho[1] + 30 + i * 32; g.beginPath(); g.moveTo(sho[0] - 50 - i * 6, y); g.quadraticCurveTo(sho[0] + 10 - i * 8, y + 14, sho[0] + 40 - i * 12, y - 4); g.stroke(); }
+  P(g, g => { g.moveTo(sho[0] - 90, sho[1] + 60); g.quadraticCurveTo(sho[0] - 70, sho[1] - 60, sho[0] + 40, sho[1] - 40); g.lineTo(sho[0] + 50, sho[1] + 40); g.lineTo(sho[0] + 20, sho[1] + 10); g.lineTo(sho[0] - 10, sho[1] + 60); g.lineTo(sho[0] - 40, sho[1] + 24); g.lineTo(sho[0] - 70, sho[1] + 80); g.closePath(); }, SKF2, 9, 0.1);
+  leg(0, SKF, 28); arm(0, SKF, 22);
+  skinHeadSide(g, sho[0] + 20, sho[1] - 40, 0.9);
   return c;
 }
 const clampN = v => Math.max(-1, Math.min(1, v));

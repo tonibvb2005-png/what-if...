@@ -1,0 +1,9 @@
+<!doctype html><html><body style="margin:0;background:#556"><canvas id=c width=2400 height=1500></canvas>
+<script type=module>
+import * as C from '../src/chars.js';
+const g=document.getElementById('c').getContext('2d');
+for(let i=0;i<6;i++) g.drawImage(C.skinRunUp(i/6),i*300,0,280,560);
+for(let i=0;i<3;i++) g.drawImage(C.skinRun(i/3),i*800,600,760,380);
+g.drawImage(C.papa('front','wide'),1800,0,280,560); g.drawImage(C.papa('front','eyeshine'),2100,0,280,560);
+g.drawImage(C.papa('front','wide'),0,1000,500,1000); window.done=true;
+</script></body></html>

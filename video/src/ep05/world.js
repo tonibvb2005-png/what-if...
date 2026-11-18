@@ -83,12 +83,13 @@ function buildDesert() {
   // Skinwalker: laufend (Vierbeiner), aufrecht, Papa-Gestalt am Fenster
   const runT = Array.from({ length: 12 }, (_, k) => C.skinRun(k / 12));
   const run = sprite(runT[0], 1.25, 0.2); run.userData.noBB = true; run.children[0].visible = false; S.add(run);
-  const stand = sprite(C.skinStand(true), 2.7, 0.2); stand.userData.noBB = true; stand.children[0].visible = false; S.add(stand);
+  const upT = Array.from({ length: 12 }, (_, k) => C.skinRunUp(k / 12));
+  const stand = sprite(upT[0], 2.7, 0.2); stand.userData.noBB = true; stand.children[0].visible = false; S.add(stand);
   const shapeC = C.cv(1024, 2048), sx = shapeC.getContext('2d'); sx.filter = 'brightness(0.32) saturate(0.4)'; sx.drawImage(C.papa('front', 'neutral'), 0, 0, 1024, 2048); sx.filter = 'none';
   for (const x of [392, 632]) { const gr = sx.createRadialGradient(x, 640, 2, x, 640, 60); gr.addColorStop(0, '#fff'); gr.addColorStop(0.3, 'rgba(255,225,140,1)'); gr.addColorStop(1, 'rgba(255,200,80,0)'); sx.fillStyle = gr; sx.beginPath(); sx.arc(x, 640, 60, 0, 7); sx.fill(); }
   const shape = sprite(shapeC, 1.75, 0.0); shape.userData.noBB = true; shape.children[0].visible = false; S.add(shape);
   const hand = sprite(handTex(), 0.32, 0.1); hand.userData.noBB = true; hand.children[0].visible = false; S.add(hand);
-  return { S, BG, hemi, moon, stars, moonS, sun, car, run, runT, stand, shape, hand, cam: new THREE.PerspectiveCamera(50, 9 / 16, 0.08, 1500) };
+  return { S, BG, hemi, moon, stars, moonS, sun, car, run, runT, upT, stand, shape, hand, cam: new THREE.PerspectiveCamera(50, 9 / 16, 0.08, 1500) };
 }
 function handTex() { // Knoechel von aussen am Glas
   const c = C.cv(256, 256), g = c.getContext('2d'); g.fillStyle = '#3a3029'; g.strokeStyle = '#120c0a'; g.lineWidth = 8;
@@ -129,7 +130,7 @@ function runner(D, t, z, dx = -3.2, upright = 0) {
   const k = Math.floor(t * 2.4 * 12) % 12; setTex(D.run, D.runT[k]); D.run.visible = upright < 0.5; D.stand.visible = upright >= 0.5;
   const bob = Math.abs(Math.sin(t * 2.4 * Math.PI * 2)) * 0.1;
   D.run.position.set(dx, 0, z); D.run.rotation.y = -Math.PI / 2; // Gesicht in Fahrtrichtung (+z)
-  D.stand.position.set(dx, bob * 0.6, z); D.stand.rotation.y = Math.PI / 2;
+  setTex(D.stand, D.upT[Math.floor(t * 2.0 * 12) % 12]); D.stand.position.set(dx, 0, z); D.stand.rotation.y = -Math.PI / 2;
 }
 
 export const SHOTS = {
