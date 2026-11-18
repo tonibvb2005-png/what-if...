@@ -69,14 +69,66 @@ def variant_traveler(c):
     vignette(c)
 
 
+BW, BH = 2560, 1440          # YouTube banner; safe area for all devices: 1546 x 423 centred
+SAFE = (BW / 2 - 773, BH / 2 - 211.5, BW / 2 + 773, BH / 2 + 211.5)
+
+
+def youtube_banner(c):
+    import story
+
+    class _X:
+        T = 0.0
+    c.drawRect(R(0, 0, BW, BH), lin_paint(0, 0, 0, 980, [(0, SKY_TOP, 1), (0.6, SKY_MID, 1), (1, SKY_HAZE, 1)]))
+    c.save()
+    c.scale(BW / 1080, BW / 1080)
+    gfx.stars(c, _X, n=90, ymax=420, seed=8)
+    c.restore()
+    moon(c, 1885, 700, 165, gfx.MOON_WARM)
+    haze(c, 820, 990, a=0.6)
+    forest_row(c, 945, 70, 90, 190, (28, 28, 40), seed=21, x0=-100, x1=BW + 100)
+    c.drawRect(R(-10, 960, BW + 10, BH + 10), paint((14, 14, 20)))
+    forest_row(c, 1000, 14, 330, 520, (12, 12, 18), seed=22, x0=-200, x1=560)
+    forest_row(c, 1000, 14, 330, 520, (12, 12, 18), seed=23, x0=2080, x1=BW + 200)
+    c.drawRect(R(-10, 1000, BW + 10, BH + 10), paint((12, 12, 18)))
+    # traveler walking toward the moon, inside the safe area
+    traveler(c, 1790, 925, 0.72, phase=0.6, silhouette=0.9, flicker=1.0)
+    # channel name + tagline (left half of the safe area)
+    cx = 1200
+    f1 = gfx.font("Cinzel-SemiBold.ttf", 86)
+    gfx.draw_text(c, story.CHANNEL_NAME, cx + 4, 741, f1, paint((0, 0, 0), 0.6, blur=12), spacing=8, align="center")
+    gfx.draw_text(c, story.CHANNEL_NAME, cx, 736, f1, paint(CREAM), spacing=8, align="center")
+    c.drawRect(R(cx - 60, 768, cx + 60, 772), paint(RED))
+    gfx.draw_text(c, "DARK FOLKLORE  •  URBAN LEGENDS  •  NEW TALES WEEKLY", cx, 828,
+                  gfx.font("Oswald-Medium.ttf", 32), paint(CREAM, 0.75), spacing=5, align="center")
+    lantern_icon(c, 610, 745, k=0.42)
+    c.drawRect(R(0, 0, BW, BH), rad_paint(BW / 2, BH / 2, BW * 0.62, [
+        (0, (0, 0, 0), 0), (0.7, (0, 0, 0), 0.2), (1, (0, 0, 0), 0.7)]))
+
+
+def watermark(c, size=300):
+    c.clear(skia.ColorTRANSPARENT)
+    c.drawCircle(size / 2, size / 2, size / 2 - 4, paint((10, 11, 16), 0.85))
+    lantern_icon(c, size / 2, size / 2 + 22, k=0.62)
+
+
+def save(fn, w, h, path, fmt=skia.kPNG):
+    surf = skia.Surface(w, h)
+    fn(surf.getCanvas())
+    surf.makeImageSnapshot().save(path, fmt)
+    print(path)
+
+
 def main(out_dir):
     os.makedirs(out_dir, exist_ok=True)
     for name, fn in (("profile_A_lantern", variant_emblem), ("profile_B_traveler", variant_traveler)):
-        surf = skia.Surface(S, S)
-        fn(surf.getCanvas())
-        path = os.path.join(out_dir, name + ".png")
-        surf.makeImageSnapshot().save(path, skia.kPNG)
-        print(path)
+        save(fn, S, S, os.path.join(out_dir, name + ".png"))
+    # YouTube: 800x800 profile, 2560x1440 banner, 150x150 video watermark (rendered 2x)
+    def yt_profile(c):
+        c.scale(800 / S, 800 / S)
+        variant_traveler(c)
+    save(yt_profile, 800, 800, os.path.join(out_dir, "youtube_profile_800.png"))
+    save(youtube_banner, BW, BH, os.path.join(out_dir, "youtube_banner_2560x1440.jpg"), skia.kJPEG)
+    save(watermark, 300, 300, os.path.join(out_dir, "youtube_watermark.png"))
 
 
 if __name__ == "__main__":
