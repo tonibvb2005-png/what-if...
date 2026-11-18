@@ -566,9 +566,13 @@ export function sister() {
 const MSK = '#d9d2c8', MHAIR = '#0d0b0c';
 function momoHead(g, cx, cy, r, mood = 'photo', hl = 1.9) {
   // lange, strähnige schwarze Haare hinter dem Kopf, unten in Spitzen auslaufend
-  P(g, g => { g.moveTo(cx - r * 1.05, cy + r * hl * 0.92); g.bezierCurveTo(cx - r * 1.35, cy - r * 0.2, cx - r * 1.0, cy - r * 1.25, cx, cy - r * 1.25); g.bezierCurveTo(cx + r * 1.0, cy - r * 1.25, cx + r * 1.35, cy - r * 0.2, cx + r * 1.05, cy + r * hl * 0.92);
-    for (let i = 10; i >= 0; i--) { const x = cx - r * 1.05 + i * r * 0.21; g.lineTo(x + r * 0.1, cy + r * hl * (0.86 + (i % 2) * 0.04)); g.lineTo(x, cy + r * hl * (1.0 + ((i * 7) % 3) * 0.05)); } g.closePath(); }, MHAIR, r * 0.04, 0);
-  g.strokeStyle = '#2a2628'; g.lineWidth = r * 0.03; for (let i = -5; i <= 5; i++) { g.beginPath(); g.moveTo(cx + i * r * 0.18, cy - r * 0.9); g.quadraticCurveTo(cx + i * r * 0.22, cy + r * 0.6, cx + i * r * 0.2 + Math.sin(i) * r * 0.1, cy + r * hl * 0.95); g.stroke(); }
+  const hair = g => { g.moveTo(cx - r * 1.05, cy + r * hl * 0.92); g.bezierCurveTo(cx - r * 1.35, cy - r * 0.2, cx - r * 1.0, cy - r * 1.25, cx, cy - r * 1.25); g.bezierCurveTo(cx + r * 1.0, cy - r * 1.25, cx + r * 1.35, cy - r * 0.2, cx + r * 1.05, cy + r * hl * 0.92);
+    for (let i = 10; i >= 0; i--) { const x = cx - r * 1.05 + i * r * 0.21; g.lineTo(x + r * 0.1, cy + r * hl * (0.86 + (i % 2) * 0.04)); g.lineTo(x, cy + r * hl * (1.0 + ((i * 7) % 3) * 0.05)); } g.closePath(); };
+  g.beginPath(); hair(g); g.fillStyle = MHAIR; g.fill();
+  g.save(); g.beginPath(); hair(g); g.clip();
+  g.strokeStyle = '#2a2628'; g.lineWidth = r * 0.03; for (let i = -5; i <= 5; i++) { g.beginPath(); g.moveTo(cx + i * r * 0.18, cy - r * 0.9); g.quadraticCurveTo(cx + i * r * 0.22, cy + r * 0.6, cx + i * r * 0.2 + Math.sin(i) * r * 0.1, cy + r * hl * 1.1); g.stroke(); }
+  g.restore();
+  g.beginPath(); hair(g); g.lineWidth = r * 0.04; g.strokeStyle = OL; g.lineJoin = 'round'; g.stroke();
   // Gesicht: oben breit, unten spitz
   P(g, g => { g.moveTo(cx - r * 0.78, cy - r * 0.2); g.bezierCurveTo(cx - r * 0.85, cy - r * 1.0, cx + r * 0.85, cy - r * 1.0, cx + r * 0.78, cy - r * 0.2); g.bezierCurveTo(cx + r * 0.75, cy + r * 0.55, cx + r * 0.3, cy + r * 1.0, cx, cy + r * 1.02); g.bezierCurveTo(cx - r * 0.3, cy + r * 1.0, cx - r * 0.75, cy + r * 0.55, cx - r * 0.78, cy - r * 0.2); }, MSK, r * 0.045, 0.12);
   // Mittelscheitel
