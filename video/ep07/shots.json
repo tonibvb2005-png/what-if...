@@ -1,25 +1,434 @@
 {
-  "monster": "MOMO",
-  "shots": [
-    {"id":"hook","scene":"roulette","segs":[{"v":"narr","t":"Eines dieser Monster ist ausgebrochen. Mal sehen, wer es ist.","sub":"EINES DIESER MONSTER IST *AUSGEBROCHEN.* MAL SEHEN, WER ES IST."}],"hold":1.55,"sfx":[{"n":"alarm","at":0},{"n":"ticks","atEnd":-8.31}],"noHeader":true},
-    {"id":"name","scene":"room_bed","clock":"02:00","segs":[{"v":"narr","t":"Momo. Zwei Uhr nachts.","sub":"*MOMO.* 2 UHR NACHTS."}],"sfx":[{"n":"boom","at":-0.05},{"n":"vibrate","at":0.6}],"amb":"bed"},
-    {"id":"msg1","scene":"chat1","clock":"02:01","segs":[{"v":"narr","t":"Eine unbekannte Nummer schreibt dir. Nur ein Bild.","sub":"EINE *UNBEKANNTE NUMMER* SCHREIBT DIR. NUR EIN BILD."}],"sfx":[{"n":"msg","at":0.8}],"amb":"bed"},
-    {"id":"eyes","scene":"photo_big","clock":"02:01","segs":[{"v":"narr","t":"Große, leere Augen. Ein Grinsen bis zu den Ohren.","sub":"GROSSE, *LEERE AUGEN.* EIN GRINSEN BIS ZU DEN OHREN."}],"sfx":[{"n":"hit_soft","at":0}],"amb":"bed"},
-    {"id":"voice","scene":"voice_msg","clock":"02:02","segs":[{"v":"narr","t":"Dann kommt eine Sprachnachricht.","sub":"DANN KOMMT EINE *SPRACHNACHRICHT.*"},{"v":"momo","t":"Hallo. Ich bin Momo. Willst du mit mir spielen?","sub":"„HALLO. ICH BIN *MOMO.* WILLST DU MIT MIR SPIELEN?“"}],"sfx":[{"n":"msg","at":0.5}],"amb":"bed"},
-    {"id":"block","scene":"blocked","clock":"02:04","segs":[{"v":"narr","t":"Du blockierst die Nummer. Sie schreibt dir von einer neuen.","sub":"DU *BLOCKIERST* DIE NUMMER. SIE SCHREIBT DIR VON EINER *NEUEN.*"}],"sfx":[{"n":"pop","at":0.4},{"n":"msg","at":1.5}],"amb":"bed"},
-    {"id":"know","scene":"knows","clock":"02:05","segs":[{"v":"narr","t":"Sie kennt deinen Namen. Und deine Adresse.","sub":"SIE KENNT *DEINEN NAMEN.* UND DEINE *ADRESSE.*"}],"sfx":[{"n":"msg","at":0.2},{"n":"msg","at":1.6},{"n":"heart","at":1.7}],"amb":"bed"},
-    {"id":"name2","scene":"red_momo","clock":"02:06","segs":[{"v":"narr","t":"Momo. Ein Gespenst aus dem Internet. Halb Frau, halb Vogel.","sub":"*MOMO.* EIN GESPENST AUS DEM INTERNET. HALB FRAU, *HALB VOGEL.*"}],"sfx":[{"n":"boom","at":0}]},
-    {"id":"tasks","scene":"red_tasks","clock":"02:06","segs":[{"v":"narr","t":"Sie schickt dir Aufgaben. Und wer eine davon erfüllt, gehört ihr.","sub":"SIE SCHICKT DIR *AUFGABEN.* UND WER EINE DAVON ERFÜLLT, *GEHÖRT IHR.*"}],"sfx":[{"n":"whisper","at":0.6}]},
-    {"id":"rule","scene":"bed_rule","clock":"02:08","segs":[{"v":"narr","t":"Die Regel: Antworte ihr nicht. Und mach keine ihrer Aufgaben.","sub":"DIE REGEL: *ANTWORTE IHR NICHT.* UND MACH KEINE IHRER AUFGABEN."}],"rule":{"title":"REGEL #1","text":"ANTWORTE IHR NICHT","atSeg":[0,0.6]},"sfx":[{"n":"pop","atSeg":[0,0.6]}],"amb":"bed"},
-    {"id":"task1","scene":"task","clock":"02:09","segs":[{"v":"narr","t":"Ihre erste Aufgabe: Schalte um drei Uhr das Licht aus.","sub":"IHRE ERSTE AUFGABE: SCHALTE UM 3 UHR *DAS LICHT AUS.*"}],"sfx":[{"n":"msg","at":0.3},{"n":"msg","at":1.2}],"amb":"bed"},
-    {"id":"drawer","scene":"drawer_put","clock":"02:10","segs":[{"v":"narr","t":"Du legst das Handy in die Schublade. Das Licht lässt du an.","sub":"DU LEGST DAS HANDY IN DIE *SCHUBLADE.* DAS LICHT LÄSST DU AN."}],"sfx":[{"n":"drawer","atSeg":[0,1.4]}],"amb":"bed"},
-    {"id":"three","scene":"drawer_buzz","clock":"03:00","segs":[{"v":"narr","t":"Drei Uhr. Die Schublade vibriert.","sub":"3 UHR. DIE SCHUBLADE *VIBRIERT.*"}],"sfx":[{"n":"vibrate","at":0.3},{"n":"vibrate","at":1.5}],"amb":"bed"},
-    {"id":"light","scene":"light_out","clock":"03:00","segs":[{"v":"narr","t":"Dann geht das Licht aus. Von selbst.","sub":"DANN GEHT DAS LICHT AUS. *VON SELBST.*"},{"v":"momo_close","t":"Dann mache ich es eben für dich.","sub":"„DANN MACHE ICH ES EBEN *FÜR DICH.*“"}],"hold":0.4,"sfx":[{"n":"flicker","atSeg":[0,0.05]},{"n":"lightoff","atSeg":[0,0.5]},{"n":"heart","atSeg":[1,0]}],"amb":"bed"},
-    {"id":"blanket","scene":"bed_clock","clock":"03:02","segs":[{"v":"narr","t":"Du ziehst die Decke über den Kopf. Bis es hell wird.","sub":"DU ZIEHST DIE DECKE ÜBER DEN KOPF. *BIS ES HELL WIRD.*"}],"hold":0.3,"sfx":[{"n":"clock","at":0}],"amb":"bed"},
-    {"id":"morning","scene":"room_dawn","clock":"06:45","segs":[{"v":"narr","t":"Am Morgen ist alles ruhig. Keine neue Nachricht.","sub":"AM MORGEN IST ALLES RUHIG. *KEINE NEUE NACHRICHT.*"}],"sfx":[{"n":"birds","at":0.2}],"amb":"dawn"},
-    {"id":"sent","scene":"sent","clock":"06:46","segs":[{"v":"narr","t":"Dann siehst du, was dein Handy um drei Uhr verschickt hat.","sub":"DANN SIEHST DU, WAS DEIN HANDY UM 3 UHR *VERSCHICKT* HAT."}],"amb":"dawn"},
-    {"id":"ja","scene":"ja","clock":"06:46","segs":[{"v":"narr","t":"Ein einziges Wort. Ja.","sub":"EIN EINZIGES WORT. *JA.*"},{"v":"momo_close","t":"Bis heute Nacht.","sub":"„BIS *HEUTE NACHT.*“"}],"hold":1.0,"sfx":[{"n":"stinger","atSeg":[1,-0.35]}]},
-    {"id":"cta","scene":"cta","segs":[{"v":"narr","t":"Folge mir, um zu sehen, wen du als Nächstes bekommst.","sub":"FOLGE MIR, UM ZU SEHEN, WEN DU ALS *NÄCHSTES* BEKOMMST."}],"hold":0.4,"noHeader":true,"sfx":[{"n":"sparkle","at":0}]},
-    {"id":"endcard","scene":"endcard","segs":[],"hold":2.6,"noHeader":true}
-  ]
+ "monster": "MOMO",
+ "shots": [
+  {
+   "id": "hook",
+   "scene": "roulette",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Eines dieser Monster ist ausgebrochen. Mal sehen, wer es ist.",
+     "sub": "EINES DIESER MONSTER IST *AUSGEBROCHEN.* MAL SEHEN, WER ES IST."
+    }
+   ],
+   "hold": 0.83,
+   "sfx": [
+    {
+     "n": "alarm",
+     "at": 0
+    },
+    {
+     "n": "ticks",
+     "atEnd": -8.31
+    }
+   ],
+   "noHeader": true
+  },
+  {
+   "id": "name",
+   "scene": "room_bed",
+   "clock": "02:00",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Momo. Zwei Uhr nachts.",
+     "sub": "*MOMO.* 2 UHR NACHTS."
+    }
+   ],
+   "sfx": [
+    {
+     "n": "boom",
+     "at": -0.05
+    },
+    {
+     "n": "whisper",
+     "at": 0.05
+    },
+    {
+     "n": "vibrate",
+     "at": 0.9
+    },
+    {
+     "n": "heart",
+     "at": 0.6
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "msg1",
+   "scene": "chat1",
+   "clock": "02:01",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Eine unbekannte Nummer schreibt dir. Nur ein Bild.",
+     "sub": "EINE *UNBEKANNTE NUMMER* SCHREIBT DIR. NUR EIN BILD."
+    }
+   ],
+   "sfx": [
+    {
+     "n": "msg",
+     "at": 0.8
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "eyes",
+   "scene": "photo_big",
+   "clock": "02:01",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Große, leere Augen. Ein Grinsen bis zu den Ohren.",
+     "sub": "GROSSE, *LEERE AUGEN.* EIN GRINSEN BIS ZU DEN OHREN."
+    }
+   ],
+   "sfx": [
+    {
+     "n": "hit_soft",
+     "at": 0
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "voice",
+   "scene": "voice_msg",
+   "clock": "02:02",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Dann kommt eine Sprachnachricht.",
+     "sub": "DANN KOMMT EINE *SPRACHNACHRICHT.*"
+    },
+    {
+     "v": "momo",
+     "t": "Hallo. Ich bin Momo. Willst du mit mir spielen?",
+     "sub": "„HALLO. ICH BIN *MOMO.* WILLST DU MIT MIR SPIELEN?“"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "msg",
+     "at": 0.5
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "block",
+   "scene": "blocked",
+   "clock": "02:04",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Du blockierst die Nummer. Sie schreibt dir von einer neuen.",
+     "sub": "DU *BLOCKIERST* DIE NUMMER. SIE SCHREIBT DIR VON EINER *NEUEN.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "pop",
+     "at": 0.4
+    },
+    {
+     "n": "msg",
+     "at": 1.5
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "know",
+   "scene": "knows",
+   "clock": "02:05",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Sie kennt deinen Namen. Und deine Adresse.",
+     "sub": "SIE KENNT *DEINEN NAMEN.* UND DEINE *ADRESSE.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "msg",
+     "at": 0.2
+    },
+    {
+     "n": "msg",
+     "at": 1.6
+    },
+    {
+     "n": "heart",
+     "at": 1.7
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "name2",
+   "scene": "red_momo",
+   "clock": "02:06",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Momo. Ein Gespenst aus dem Internet. Halb Frau, halb Vogel.",
+     "sub": "*MOMO.* EIN GESPENST AUS DEM INTERNET. HALB FRAU, *HALB VOGEL.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "boom",
+     "at": 0
+    }
+   ]
+  },
+  {
+   "id": "tasks",
+   "scene": "red_tasks",
+   "clock": "02:06",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Sie schickt dir Aufgaben. Und wer eine davon erfüllt, gehört ihr.",
+     "sub": "SIE SCHICKT DIR *AUFGABEN.* UND WER EINE DAVON ERFÜLLT, *GEHÖRT IHR.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "whisper",
+     "at": 0.6
+    }
+   ]
+  },
+  {
+   "id": "rule",
+   "scene": "bed_rule",
+   "clock": "02:08",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Die Regel: Antworte ihr nicht. Und mach keine ihrer Aufgaben.",
+     "sub": "DIE REGEL: *ANTWORTE IHR NICHT.* UND MACH KEINE IHRER AUFGABEN."
+    }
+   ],
+   "rule": {
+    "title": "REGEL #1",
+    "text": "ANTWORTE IHR NICHT",
+    "atSeg": [
+     0,
+     0.6
+    ]
+   },
+   "sfx": [
+    {
+     "n": "pop",
+     "atSeg": [
+      0,
+      0.6
+     ]
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "task1",
+   "scene": "task",
+   "clock": "02:09",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Ihre erste Aufgabe: Schalte um drei Uhr das Licht aus.",
+     "sub": "IHRE ERSTE AUFGABE: SCHALTE UM 3 UHR *DAS LICHT AUS.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "msg",
+     "at": 0.3
+    },
+    {
+     "n": "msg",
+     "at": 1.2
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "drawer",
+   "scene": "drawer_put",
+   "clock": "02:10",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Du legst das Handy in die Schublade. Das Licht lässt du an.",
+     "sub": "DU LEGST DAS HANDY IN DIE *SCHUBLADE.* DAS LICHT LÄSST DU AN."
+    }
+   ],
+   "sfx": [
+    {
+     "n": "drawer",
+     "atSeg": [
+      0,
+      1.4
+     ]
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "three",
+   "scene": "drawer_buzz",
+   "clock": "03:00",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Drei Uhr. Die Schublade vibriert.",
+     "sub": "3 UHR. DIE SCHUBLADE *VIBRIERT.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "vibrate",
+     "at": 0.3
+    },
+    {
+     "n": "vibrate",
+     "at": 1.5
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "light",
+   "scene": "light_out",
+   "clock": "03:00",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Dann geht das Licht aus. Von selbst.",
+     "sub": "DANN GEHT DAS LICHT AUS. *VON SELBST.*"
+    },
+    {
+     "v": "momo_close",
+     "t": "Dann mache ich es eben für dich.",
+     "sub": "„DANN MACHE ICH ES EBEN *FÜR DICH.*“"
+    }
+   ],
+   "hold": 0.2,
+   "sfx": [
+    {
+     "n": "flicker",
+     "atSeg": [
+      0,
+      0.05
+     ]
+    },
+    {
+     "n": "lightoff",
+     "atSeg": [
+      0,
+      0.5
+     ]
+    },
+    {
+     "n": "heart",
+     "atSeg": [
+      1,
+      0
+     ]
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "morning",
+   "scene": "room_dawn",
+   "clock": "06:45",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Am Morgen ist alles ruhig. Keine neue Nachricht.",
+     "sub": "AM MORGEN IST ALLES RUHIG. *KEINE NEUE NACHRICHT.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "birds",
+     "at": 0.2
+    }
+   ],
+   "amb": "dawn"
+  },
+  {
+   "id": "sent",
+   "scene": "sent",
+   "clock": "06:46",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Dann siehst du, was dein Handy um drei Uhr verschickt hat.",
+     "sub": "DANN SIEHST DU, WAS DEIN HANDY UM 3 UHR *VERSCHICKT* HAT."
+    }
+   ],
+   "amb": "dawn"
+  },
+  {
+   "id": "ja",
+   "scene": "ja",
+   "clock": "06:46",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Ein einziges Wort. Ja.",
+     "sub": "EIN EINZIGES WORT. *JA.*"
+    },
+    {
+     "v": "momo_close",
+     "t": "Bis heute Nacht.",
+     "sub": "„BIS *HEUTE NACHT.*“"
+    }
+   ],
+   "hold": 1.0,
+   "sfx": [
+    {
+     "n": "stinger",
+     "atSeg": [
+      1,
+      -0.35
+     ]
+    }
+   ]
+  },
+  {
+   "id": "cta",
+   "scene": "cta",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Folge mir, um zu sehen, wen du als Nächstes bekommst.",
+     "sub": "FOLGE MIR, UM ZU SEHEN, WEN DU ALS *NÄCHSTES* BEKOMMST."
+    }
+   ],
+   "hold": 0.3,
+   "noHeader": true,
+   "sfx": [
+    {
+     "n": "sparkle",
+     "at": 0
+    }
+   ]
+  },
+  {
+   "id": "endcard",
+   "scene": "endcard",
+   "segs": [],
+   "hold": 2.0,
+   "noHeader": true
+  }
+ ],
+ "tempo": 1.2,
+ "pause": 0.17
 }

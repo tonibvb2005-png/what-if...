@@ -16,6 +16,7 @@ B = os.path.join(EPDIR, "build")
 os.makedirs(os.path.join(B, "tts"), exist_ok=True)
 rng = np.random.default_rng(7)
 VOICE_DIR = None
+NARR_TEMPO, NARR_SIL = 1.15, 0.2   # pro Folge in shots.json ueberschreibbar ("tempo", "pause")
 if "--voice-dir" in sys.argv:
     VOICE_DIR = sys.argv[sys.argv.index("--voice-dir") + 1]
 
@@ -598,7 +599,7 @@ def voice(shot, k, seg):
             if seg["v"] == "opa":
                 x = ffx(x, SIL.format(d=0.25) + ",asetrate=44100*0.96,aresample=44100,atempo=1.1,highpass=f=120,lowpass=f=5000")
                 return norm(reverb(x, 1.2, 0.35), 0.72), len(x) / SR
-            x = ffx(x, SIL.format(d=0.2) + ",atempo=1.15,highpass=f=70,acompressor=threshold=0.1:ratio=2.5:attack=5:release=80")
+            x = ffx(x, SIL.format(d=NARR_SIL) + f",atempo={NARR_TEMPO},highpass=f=70,acompressor=threshold=0.1:ratio=2.5:attack=5:release=80")
             return norm(x, 0.85), len(x) / SR
     base = os.path.join(B, "tts", f"{shot['id']}_{k}")
     v, txt = seg["v"], seg["t"]
@@ -648,6 +649,8 @@ def chunks(sub, start, dur):
 
 def main():
     data = json.load(open(os.path.join(EPDIR, "shots.json")))
+    global NARR_TEMPO, NARR_SIL
+    NARR_TEMPO = data.get("tempo", NARR_TEMPO); NARR_SIL = data.get("pause", NARR_SIL)
     shots = data["shots"]
     cur = 0.0
     vox_parts, tl = [], []

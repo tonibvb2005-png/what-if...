@@ -80,7 +80,9 @@ function buildRoom() {
   S.add(box(1.8, 0.06, 0.7, lam(0xe6e2da), 2.4, 0.75, -3.5), box(0.95, 0.6, 0.05, lam(0x15161a), 2.4, 1.2, -3.62));
   const T = { boyF: C.boy('front', 'neutral'), boyS: C.boy('front', 'scared_sweat') };
   const boy = sprite(T.boyF, 1.3); boy.userData.noBB = true; boy.children[0].visible = false; boy.position.set(-3.1, 0.35, 0.05); boy.rotation.y = Math.PI / 2 * 0.85; S.add(boy);
-  return { S, BG, hemi, moon, door, eyes, blanket, ns, drawer, dglow, phone, phG, phT, phL, lampB, lamp, boy, T, cam: new THREE.PerspectiveCamera(50, 9 / 16, 0.05, 200) };
+  const wfC = C.cv(512, 512), wfG = wfC.getContext('2d'); wfG.filter = 'brightness(0.55) contrast(1.2)'; wfG.drawImage(C.momoFaceT('close', 512), 0, 0); 
+  const winFace = new THREE.Mesh(new THREE.PlaneGeometry(1.25, 1.25), new THREE.MeshBasicMaterial({ map: tex(wfC), transparent: true, opacity: 0.85, depthWrite: false })); winFace.position.set(-4.35, 1.55, -0.1); winFace.rotation.y = Math.PI / 2; winFace.visible = false; S.add(winFace);
+  return { S, BG, hemi, moon, door, eyes, winFace, blanket, ns, drawer, dglow, phone, phG, phT, phL, lampB, lamp, boy, T, cam: new THREE.PerspectiveCamera(50, 9 / 16, 0.05, 200) };
 }
 export function build() { return { R: buildRoom() }; }
 
@@ -91,13 +93,13 @@ function phoneTex(R, t, mode) { const g = R.phG; g.setTransform(1, 0, 0, 1, 0, 0
 function base(R, o = {}) {
   const dawn = o.mode === 'dawn'; R.S.background = dawn ? R.BG.dawn : R.BG.night; R.hemi.intensity = dawn ? 1.1 : 0.3; R.moon.intensity = dawn ? 1.0 : 0.35; R.moon.color.set(dawn ? 0xffd2a0 : 0x8fa4e0);
   R.lamp.intensity = o.lamp ? 7 : 0; R.lampB.material.color.set(o.lamp ? 0xfff2cc : 0x444038);
-  R.eyes.forEach(e => e.visible = !!o.eyes); R.dglow.visible = false; R.drawer.position.z = 0.26; R.phone.visible = o.phone !== false;
+  R.eyes.forEach(e => e.visible = !!o.eyes); R.winFace.visible = false; R.dglow.visible = false; R.drawer.position.z = 0.26; R.phone.visible = o.phone !== false;
   phoneTex(R, o.t || 0, o.phone === false ? 'off' : (o.phoneMode || 'off'));
   R.boy.visible = !!o.boy; if (o.boy) setTex(R.boy, R.T[o.boy]);
 }
 export const SHOTS = {
-  room_bed(W, p, t) { const R = W.R; base(R, { t, phoneMode: 'notif', boy: 'boyF' }); R.phone.position.y = 0.56 + (Math.floor(t * 20) % 2 && t % 1.2 < 0.6 ? 0.004 : 0);
-    R.phL.intensity = 4; look(R.cam, lerpV(V(-0.4, 1.6, 1.6), V(-1.0, 1.4, 1.0), ease(p)), V(-3.15, 0.85, -0.4)); return { world: R, vig: 0.65 }; },
+  room_bed(W, p, t, sh) { const R = W.R; base(R, { t, phoneMode: 'notif', boy: 'boyS' }); const dt = t - sh.s; R.winFace.visible = dt < 1.1 && !(dt > 0.55 && dt < 0.62); R.winFace.material.opacity = dt < 0.9 ? 0.85 : 0.85 * (1 - (dt - 0.9) / 0.2); R.phone.position.y = 0.56 + (Math.floor(t * 20) % 2 && t % 1.2 < 0.6 ? 0.004 : 0);
+    R.phL.intensity = 4; look(R.cam, lerpV(V(-0.2, 1.65, 1.9), V(-0.9, 1.45, 1.1), ease(p)), V(-3.3, 1.2, -0.1)); return { world: R, vig: 0.75, shake: dt < 0.5 ? 0.004 * (1 - dt / 0.5) : 0.0008 }; },
   bed_rule(W, p, t) { const R = W.R; base(R, { t, phoneMode: 'notif', boy: 'boyS', lamp: true }); R.lamp.intensity = 4;
     look(R.cam, V(-1.7, 1.15, L(0.4, 0.3, ease(p))), V(-3.1, 1.15, 0.05)); return { world: R, vig: 0.7 }; },
   drawer_buzz(W, p, t) { const R = W.R; base(R, { t, phone: false, lamp: true }); R.lamp.intensity = 6; const b = Math.sin(t * 80) * 0.004 * (t % 1.0 < 0.6 ? 1 : 0); R.drawer.position.x = b; R.dglow.visible = t % 1.0 < 0.6;
