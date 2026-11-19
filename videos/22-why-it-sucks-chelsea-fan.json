@@ -22,12 +22,21 @@
       "shot": "fanhook",
       "text": "Why it sucks being a... Chelsea fan!",
       "audio": "../audio/22-why-it-sucks-chelsea-fan/01.wav",
-      "duration": 4.2,
       "club": "CHELSEA",
       "seed": 11,
       "cues": {
-        "land": 2.6
-      }
+        "land": 2.86
+      },
+      "wordTimes": [
+        0.0,
+        0.32,
+        0.52,
+        0.82,
+        1.2,
+        2.86,
+        3.38
+      ],
+      "pad": 0.6
     },
     {
       "shot": "fan7",
@@ -36,58 +45,275 @@
       "club": "CHELSEA",
       "seed": 11,
       "cues": {
-        "newshirt": 5.6,
-        "again": 6.9
-      }
+        "sold": 6.08,
+        "newshirt": 7.22,
+        "again": 8.68
+      },
+      "wordTimes": [
+        0.26,
+        0.46,
+        0.72,
+        0.96,
+        1.2,
+        1.92,
+        2.0,
+        2.12,
+        2.28,
+        2.52,
+        2.86,
+        3.18,
+        3.36,
+        3.64,
+        4.0,
+        4.18,
+        4.28,
+        5.12,
+        5.32,
+        6.08,
+        6.28,
+        7.22,
+        7.36,
+        7.46,
+        7.6,
+        7.72,
+        7.88,
+        8.68,
+        9.04,
+        9.2
+      ]
     },
     {
       "shot": "fan9",
       "text": "Age nine. You finally learn the manager's name. By Christmas, there's a new one. Your teacher asks: \"Who's your favourite manager?\" You say: \"This week's?\"",
       "audio": "../audio/22-why-it-sucks-chelsea-fan/03.wav",
       "club": "CHELSEA",
-      "seed": 11
+      "seed": 11,
+      "cues": {
+        "new": 3.6,
+        "teacher": 5.92,
+        "week": 9.32
+      },
+      "wordTimes": [
+        0.3,
+        0.3,
+        1.1,
+        1.24,
+        1.62,
+        2.0,
+        2.2,
+        2.68,
+        3.6,
+        3.76,
+        4.56,
+        4.82,
+        4.9,
+        5.02,
+        5.92,
+        6.04,
+        6.28,
+        7.1,
+        7.24,
+        7.36,
+        7.58,
+        8.56,
+        8.68,
+        9.32,
+        9.6
+      ]
     },
     {
       "shot": "fan12",
       "text": "Age twelve. The club signs so many players... the team photo needs a drone.",
       "audio": "../audio/22-why-it-sucks-chelsea-fan/04.wav",
       "club": "CHELSEA",
-      "seed": 11
+      "seed": 11,
+      "cues": {
+        "wide": 3.83
+      },
+      "wordTimes": [
+        0.13,
+        0.79,
+        1.45,
+        1.61,
+        1.83,
+        2.11,
+        2.11,
+        2.73,
+        3.83,
+        3.93,
+        4.17,
+        4.53,
+        4.77,
+        4.99
+      ]
     },
     {
       "shot": "fan14",
       "text": "Age fourteen. The club spends over a billion on new players. Your dad says: \"We'll win everything.\" You finish twelfth. At least the shirts are nice.",
       "audio": "../audio/22-why-it-sucks-chelsea-fan/05.wav",
       "club": "CHELSEA",
-      "seed": 11
+      "seed": 11,
+      "cues": {
+        "dad": 4.36,
+        "twelfth": 7.22,
+        "nice": 8.94
+      },
+      "wordTimes": [
+        0.32,
+        0.95,
+        1.58,
+        1.66,
+        1.88,
+        2.16,
+        2.52,
+        2.72,
+        3.02,
+        3.42,
+        3.66,
+        4.36,
+        4.46,
+        4.68,
+        5.28,
+        5.6,
+        5.78,
+        7.22,
+        7.4,
+        7.64,
+        8.94,
+        9.04,
+        9.16,
+        9.3,
+        9.48,
+        9.64
+      ]
     },
     {
       "shot": "fan16",
       "text": "Age sixteen. One night in Munich. Champions League final. Penalties. Against Bayern. In their own stadium. And you win! Terrible. Now you expect it every year.",
       "audio": "../audio/22-why-it-sucks-chelsea-fan/06.wav",
       "club": "CHELSEA",
-      "seed": 11
+      "seed": 11,
+      "cues": {
+        "win": 8.22,
+        "expect": 10.1
+      },
+      "wordTimes": [
+        0.36,
+        0.93,
+        1.5,
+        1.76,
+        2.0,
+        2.26,
+        3.14,
+        3.36,
+        3.66,
+        4.5,
+        4.88,
+        5.6,
+        6.06,
+        6.5,
+        6.68,
+        7.04,
+        8.22,
+        8.5,
+        8.72,
+        10.1,
+        11.04,
+        11.06,
+        11.18,
+        11.46,
+        11.64,
+        11.8
+      ]
     },
     {
       "shot": "fan17",
       "text": "Age seventeen. You buy the shirt of the new signing. His contract? Eight years. By January... he's on loan. Don't worry. It's a collector's item now.",
       "audio": "../audio/22-why-it-sucks-chelsea-fan/07.wav",
       "club": "CHELSEA",
-      "seed": 11
+      "seed": 11,
+      "cues": {
+        "eight": 3.78,
+        "loan": 6.24,
+        "item": 8.66
+      },
+      "wordTimes": [
+        0.36,
+        0.93,
+        1.5,
+        1.74,
+        1.96,
+        2.14,
+        2.36,
+        2.58,
+        2.74,
+        2.92,
+        3.78,
+        3.9,
+        4.92,
+        5.1,
+        6.24,
+        6.38,
+        7.46,
+        7.6,
+        7.74,
+        8.66,
+        8.84,
+        9.48,
+        9.64,
+        9.72,
+        10.1,
+        10.22
+      ]
     },
     {
       "shot": "fanthing",
       "text": "That's the thing about being a Chelsea fan. The manager changes. The players change. Even the owner changes.",
       "audio": "../audio/22-why-it-sucks-chelsea-fan/08.wav",
       "club": "CHELSEA",
-      "seed": 11
+      "seed": 11,
+      "cues": {
+        "mgr": 2.3,
+        "pl": 3.54,
+        "own": 4.72
+      },
+      "wordTimes": [
+        0.22,
+        0.52,
+        0.64,
+        0.8,
+        1.02,
+        1.22,
+        1.44,
+        1.64,
+        2.3,
+        2.46,
+        2.8,
+        3.54,
+        3.62,
+        3.92,
+        4.72,
+        4.88,
+        5.02,
+        5.18
+      ]
     },
     {
       "shot": "fancolour",
       "text": "But honestly? It's never boring.",
       "audio": "../audio/22-why-it-sucks-chelsea-fan/09.wav",
       "club": "CHELSEA",
-      "seed": 11
+      "seed": 11,
+      "cues": {
+        "boring": 1.14
+      },
+      "wordTimes": [
+        0.12,
+        0.26,
+        1.14,
+        1.48,
+        1.76
+      ]
     },
     {
       "shot": "fanout",
@@ -95,7 +321,29 @@
       "audio": "../audio/22-why-it-sucks-chelsea-fan/10.wav",
       "club": "CHELSEA",
       "seed": 11,
-      "pad": 1.6
+      "pad": 1.6,
+      "cues": {
+        "next": 2.06
+      },
+      "wordTimes": [
+        0.38,
+        0.44,
+        0.6,
+        0.86,
+        1.18,
+        1.42,
+        1.56,
+        2.06,
+        2.68,
+        2.86,
+        3.06,
+        3.18,
+        3.96,
+        3.98,
+        4.1,
+        4.2,
+        4.3
+      ]
     }
   ]
 }
