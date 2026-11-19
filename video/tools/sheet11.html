@@ -1,0 +1,7 @@
+<!doctype html><html><body style="margin:0;background:#556"><canvas id=c width=2200 height=800></canvas>
+<script type=module>
+import * as C from '../src/chars.js';
+const g=document.getElementById('c').getContext('2d');
+g.drawImage(C.rakeCrouch(0,0),0,0,500,500); g.drawImage(C.rakeCrouch(-0.4,0.5),500,0,500,500); g.drawImage(C.rakeFaceBig('stare'),1000,0,380,380); g.drawImage(C.rakeFaceBig('open'),1000,390,380,380);
+g.drawImage(C.MONSTERS['THE RAKE'](),1400,0,380,760); g.drawImage(C.rakeHandBig(0.4),0,500,300,300); window.done=true;
+</script></body></html>

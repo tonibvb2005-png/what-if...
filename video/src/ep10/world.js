@@ -34,27 +34,31 @@ function buildRoom() {
   const boyT = { open: C.boy('front', 'scared_sweat'), closed: C.boy('front', 'closed') };
   const boy = sprite(boyT.open, 1.35, 0.35); boy.userData.noBB = true; boy.children[0].visible = false; boy.rotation.x = -Math.PI / 2; boy.position.set(0, 0.725, -2.35); S.add(boy);
   // The Rake am Fussende
-  const rake = sprite(C.rakeCrouch(), 1.25, 0.12); rake.userData.noBB = true; rake.children[0].visible = false; rake.position.set(0, 0.6, -1.35); rake.rotation.y = Math.PI; S.add(rake);
+  const RT = [], RTD = []; for (let i = 0; i < 6; i++) { const tl = -0.45 * i / 5; RT.push([C.rakeCrouch(tl, 0), C.rakeCrouch(tl, 0.45)]); RTD.push(C.rakeCrouch(tl, 0.2, true)); }
+  const rake = sprite(RT[0][0], 1.3, 0.14); rake.userData.noBB = true; rake.children[0].visible = false; rake.position.set(0, 0.38, -1.1); rake.rotation.y = Math.PI; S.add(rake);
   const rakeEyes = [glow(0.12, [235, 235, 230]), glow(0.12, [235, 235, 230])]; S.add(...rakeEyes);
   // Schwester in der Tuer, Rake im Flur dahinter
   const sis = sprite(C.sister('scared'), 1.05, 0.3); sis.userData.noBB = true; sis.children[0].visible = false; sis.position.set(1.2, 0, 3.9); sis.rotation.y = Math.PI; S.add(sis);
-  const rake2 = sprite(C.rakeCrouch(), 1.1, 0.05); rake2.userData.noBB = true; rake2.children[0].visible = false; rake2.position.set(1.3, 0.0, 5.2); rake2.rotation.y = Math.PI; S.add(rake2);
-  return { S, BG, hemi, moon, moonS, blanket, T, boy, boyT, rake, rakeEyes, sis, rake2, cam: new THREE.PerspectiveCamera(50, 9 / 16, 0.05, 200) };
+  const rake2 = sprite(C.MONSTERS['THE RAKE'](), 2.0, 0.05); rake2.userData.noBB = true; rake2.children[0].visible = false; rake2.position.set(1.25, 0.0, 5.3); rake2.rotation.y = Math.PI; S.add(rake2);
+  return { S, BG, hemi, moon, moonS, blanket, T, boy, boyT, rake, RT, RTD, rakeEyes, sis, rake2, cam: new THREE.PerspectiveCamera(50, 9 / 16, 0.05, 200) };
 }
 export function build() { return { R: buildRoom() }; }
 
 function base(R, mode = 'night') { const d = mode === 'dawn'; R.S.background = d ? R.BG.dawn : R.BG.night; R.hemi.intensity = d ? 1.1 : 0.25; R.moon.intensity = d ? 1.2 : 0.9; R.moon.color.set(d ? 0xffd2a0 : 0x9fb4ee); R.moonS.visible = !d;
   R.rake.visible = R.sis.visible = R.rake2.visible = false; R.rakeEyes.forEach(e => e.visible = false); R.rake.rotation.z = 0; R.boy.visible = true; setTex(R.boy, R.boyT.open);
   R.blanket.material[2].map = R.T.bl; R.blanket.material[2].needsUpdate = true; }
+function pose(R, tiltK, t, dark = false) { const i = Math.round(clamp(tiltK) * 5); const tw = Math.sin(t * 2.6) > 0.7 ? 1 : 0; setTex(R.rake, dark ? R.RTD[i] : R.RT[i][tw]);
+  R.rake.scale.set(1, 1 + Math.sin(t * 1.7) * 0.012, 1); }
 const pillowCam = (R, p, tgtY = 0.95) => { look(R.cam, lerpV(V(0, 0.95, -3.35), V(0.05, 0.9, -3.15), ease(p)), V(0, tgtY, -1.3)); fov(R.cam, 55); };
 
 export const SHOTS = {
-  pov_open(W, p, t, sh) { const R = W.R; base(R); R.boy.visible = false; const dt = t - sh.s; R.rake.visible = true; R.rake.rotation.z = -0.4 * easeOut(clamp((dt - 0.4) / 1.2));
-    R.rakeEyes.forEach(e => e.visible = false); pillowCam(R, p); return { world: R, vig: 0.9, shake: dt < 0.4 ? 0.004 : 0.0006 }; },
+  pov_open(W, p, t, sh) { const R = W.R; base(R); R.boy.visible = false; const dt = t - sh.s; R.rake.visible = true; R.rake.position.set(0, 0.38, -1.1); pose(R, easeOut(clamp((dt - 0.3) / 1.6)), t);
+    pillowCam(R, p, 0.85); return { world: R, vig: 0.88, shake: dt < 0.4 ? 0.004 : 0.0006 }; },
   bed_top(W, p, t) { const R = W.R; base(R); look(R.cam, lerpV(V(0.05, 1.9, -3.05), V(0.05, 1.6, -3.2), ease(p)), V(0, 0.72, -3.4)); return { world: R, vig: 0.7 }; },
-  pov_dark(W, p, t) { const R = W.R; base(R); R.boy.visible = false; R.rake.visible = true; R.rake.material.emissiveIntensity = 0.02; pillowCam(R, p, 0.9); return { world: R, vig: 0.95 }; },
-  claws(W, p, t) { const R = W.R; base(R); R.boy.visible = false; R.rake.visible = true; R.rake.material.emissiveIntensity = 0.12;
-    look(R.cam, lerpV(V(0.5, 0.85, -2.4), V(0.4, 0.8, -2.1), ease(p)), V(0, 0.75, -1.35)); fov(R.cam, 45); return { world: R, vig: 0.85 }; },
+  pov_dark(W, p, t) { const R = W.R; base(R); R.boy.visible = false; R.rake.visible = true; const k = ease(sm(0.2, 1, p)); // kriecht langsam aufs Bett
+    R.rake.position.set(0, L(0.38, 0.51, k), L(-1.1, -1.55, k)); pose(R, 1, t, true); R.rake.material.emissiveIntensity = 0.05; pillowCam(R, p, 0.85); return { world: R, vig: 0.95 }; },
+  perch(W, p, t) { const R = W.R; base(R); R.boy.visible = false; R.rake.visible = true; R.rake.position.set(0, 0.38, -1.1); pose(R, 0.6 + Math.sin(t * 0.9) * 0.3, t); R.rake.material.emissiveIntensity = 0.16;
+    look(R.cam, lerpV(V(0.75, 1.05, -2.9), V(0.55, 0.95, -2.55), ease(p)), V(0, 0.95, -1.1)); fov(R.cam, 48); return { world: R, vig: 0.85 }; },
   bed_rule(W, p, t) { const R = W.R; base(R); look(R.cam, V(0.02, 1.8, L(-3.1, -3.2, ease(p))), V(0, 0.72, -3.4)); fov(R.cam, 50); return { world: R, vig: 0.8 }; },
   morning(W, p, t) { const R = W.R; base(R, 'dawn'); R.boy.visible = false; R.blanket.material[2].map = R.T.blS; R.blanket.material[2].needsUpdate = true;
     look(R.cam, lerpV(V(0.9, 1.7, -0.2), V(0.6, 1.5, -0.6), ease(p)), V(0, 0.6, -1.9)); return { world: R, vig: 0.45 }; },
@@ -91,4 +95,13 @@ function bedClock(g, p, t) { g.fillStyle = '#05060a'; g.fillRect(0, 0, CW, CH); 
   const mins = L(3 * 60 + 8, 6 * 60 + 30, ease(p)), hh = Math.floor(mins / 60), mm = Math.floor(mins % 60);
   g.fillStyle = '#0b0c10'; g.beginPath(); g.roundRect(CW / 2 - 330, 640, 660, 300, 40); g.fill();
   g.save(); g.shadowColor = 'rgba(255,60,50,.8)'; g.shadowBlur = 40; g.fillStyle = '#ff4a3d'; g.font = '400 220px Anton'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(`0${hh}:${String(mm).padStart(2, '0')}`, CW / 2, 795); g.restore(); return { vig: 0.7 }; }
-export const TWO = { face_dark: faceDark, red_rake: redRake, red_bed: redBed, eyes_closed: eyesClosed, ear_close: earClose, bed_clock: bedClock };
+let RH = null;
+function fingers(g, p, t) { if (!RH) RH = [C.rakeHandBig(0.1), C.rakeHandBig(0.55)];
+  g.fillStyle = '#0b1424'; g.fillRect(0, 0, CW, CH); // Decke
+  g.strokeStyle = 'rgba(160,190,255,.07)'; g.lineWidth = 40; for (let y = -200; y < CH + 200; y += 160) { g.beginPath(); g.moveTo(0, y); g.bezierCurveTo(300, y + 90, 700, y - 90, CW, y + 40); g.stroke(); }
+  const k = ease(p), hx = L(CW * 0.34, CW * 0.3, k), hy = L(560, 800, k);
+  g.strokeStyle = 'rgba(220,225,235,.55)'; g.lineCap = 'round'; for (let i = 0; i < 4; i++) { g.lineWidth = 9; g.beginPath(); g.moveTo(hx - 120 + i * 70, 560); g.lineTo(hx - 120 + i * 70 + (hx - CW * 0.62) * 0.3, hy + 380); g.stroke(); } // Kratzspuren
+  const lg = g.createRadialGradient(CW / 2, 700, 100, CW / 2, 700, 1000); lg.addColorStop(0, 'rgba(150,180,255,.18)'); lg.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = lg; g.fillRect(0, 0, CW, CH);
+  const s = 1700; g.drawImage(RH[Math.sin(t * 5) > 0 ? 1 : 0], hx - s * 0.36, hy - s * 0.36, s, s);
+  return { vig: 0.85 }; }
+export const TWO = { fingers, face_dark: faceDark, red_rake: redRake, red_bed: redBed, eyes_closed: eyesClosed, ear_close: earClose, bed_clock: bedClock };

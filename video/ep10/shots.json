@@ -1,21 +1,357 @@
 {
-  "monster": "THE RAKE",
-  "shots": [
-    {"id":"hook","scene":"roulette","segs":[{"v":"narr","t":"Eines dieser Monster ist ausgebrochen. Mal sehen, wer es ist.","sub":"EINES DIESER MONSTER IST *AUSGEBROCHEN.* MAL SEHEN, WER ES IST."}],"hold":0.74,"sfx":[{"n":"alarm","at":0},{"n":"ticks","atEnd":-8.31}],"noHeader":true},
-    {"id":"name","scene":"pov_open","clock":"03:00","segs":[{"v":"narr","t":"The Rake. Drei Uhr nachts.","sub":"*THE RAKE.* 3 UHR NACHTS."}],"hold":0.3,"sfx":[{"n":"boom","at":-0.05},{"n":"creak","at":0.4},{"n":"breath","at":0.6}],"amb":"bed"},
-    {"id":"wake","scene":"bed_top","clock":"03:00","segs":[{"v":"narr","t":"Du wachst auf. Deine Bettdecke ist schwer.","sub":"DU WACHST AUF. DEINE BETTDECKE IST *SCHWER.*"}],"amb":"bed"},
-    {"id":"end","scene":"pov_dark","clock":"03:00","segs":[{"v":"narr","t":"Am Bettende sitzt etwas.","sub":"AM BETTENDE *SITZT ETWAS.*"}],"sfx":[{"n":"heart","at":0.2}],"amb":"bed"},
-    {"id":"dog","scene":"claws","clock":"03:01","segs":[{"v":"narr","t":"Es hockt wie ein Hund. Blass. Keine Haare. Viel zu lange Finger.","sub":"ES HOCKT WIE EIN HUND. BLASS. KEINE HAARE. *VIEL ZU LANGE FINGER.*"}],"sfx":[{"n":"scratch","at":1.0}],"amb":"bed"},
-    {"id":"watch","scene":"face_dark","clock":"03:01","segs":[{"v":"narr","t":"Es schaut dir beim Schlafen zu.","sub":"ES SCHAUT DIR *BEIM SCHLAFEN* ZU."}],"hold":0.3,"sfx":[{"n":"breath","at":0.2}],"amb":"bed"},
-    {"id":"name2","scene":"red_rake","clock":"03:01","segs":[{"v":"narr","t":"The Rake. Eine Legende aus dem Internet.","sub":"*THE RAKE.* EINE LEGENDE AUS DEM INTERNET."}],"sfx":[{"n":"boom","at":0}]},
-    {"id":"night","scene":"red_bed","clock":"03:01","segs":[{"v":"narr","t":"Es kommt nur nachts. Und es geht erst, wenn es glaubt, dass du schläfst.","sub":"ES KOMMT NUR NACHTS. UND ES GEHT ERST, WENN ES GLAUBT, *DASS DU SCHLÄFST.*"}],"sfx":[{"n":"whisper","at":0.4}]},
-    {"id":"rule","scene":"bed_rule","clock":"03:02","segs":[{"v":"narr","t":"Die Regel: Beweg dich nicht. Und mach die Augen nicht wieder auf.","sub":"DIE REGEL: *BEWEG DICH NICHT.* UND MACH DIE AUGEN NICHT WIEDER AUF."}],"rule":{"title":"REGEL #1","text":"BEWEG DICH NICHT","atSeg":[0,0.6]},"sfx":[{"n":"pop","atSeg":[0,0.6]}],"amb":"bed"},
-    {"id":"close","scene":"eyes_closed","clock":"03:02","segs":[{"v":"narr","t":"Du schließt die Augen. Dein Herz rast.","sub":"DU SCHLIESST DIE AUGEN. DEIN HERZ *RAST.*"}],"sfx":[{"n":"heart","at":0}],"amb":"bed"},
-    {"id":"breath","scene":"ear_close","clock":"03:03","segs":[{"v":"narr","t":"Dann spürst du seinen Atem. Direkt an deinem Ohr.","sub":"DANN SPÜRST DU SEINEN ATEM. *DIREKT AN DEINEM OHR.*"},{"v":"rake","t":"Ich weiß, dass du wach bist.","sub":"„ICH WEISS, *DASS DU WACH BIST.*“"}],"hold":0.3,"sfx":[{"n":"breath","at":0.3},{"n":"heart","atSeg":[1,0]}],"amb":"bed"},
-    {"id":"hours","scene":"bed_clock","clock":"03:08","segs":[{"v":"narr","t":"Du rührst dich nicht. Stundenlang.","sub":"DU RÜHRST DICH NICHT. *STUNDENLANG.*"}],"hold":0.3,"sfx":[{"n":"clock","at":0}],"amb":"bed"},
-    {"id":"morning","scene":"morning","clock":"06:30","segs":[{"v":"narr","t":"Am Morgen ist das Bettende leer. Nur die Decke ist zerkratzt.","sub":"AM MORGEN IST DAS BETTENDE LEER. NUR DIE DECKE IST *ZERKRATZT.*"}],"sfx":[{"n":"birds","at":0.2}],"amb":"dawn"},
-    {"id":"sister","scene":"sister","clock":"06:31","segs":[{"v":"narr","t":"Deine kleine Schwester steht in der Tür. Sie ist blass.","sub":"DEINE KLEINE SCHWESTER STEHT IN DER TÜR. SIE IST *BLASS.*"},{"v":"schwester","t":"Warum hast du heute Nacht an meinem Bett gesessen?","sub":"„WARUM HAST DU HEUTE NACHT *AN MEINEM BETT* GESESSEN?“"}],"hold":1.0,"sfx":[{"n":"stinger","atSeg":[1,-0.3]}],"amb":"dawn"},
-    {"id":"cta","scene":"cta","segs":[{"v":"narr","t":"Folge mir, um zu sehen, wen du als Nächstes bekommst.","sub":"FOLGE MIR, UM ZU SEHEN, WEN DU ALS *NÄCHSTES* BEKOMMST."}],"hold":0.3,"noHeader":true,"sfx":[{"n":"sparkle","at":0}]},
-    {"id":"endcard","scene":"endcard","segs":[],"hold":2.2,"noHeader":true}
-  ]
+ "monster": "THE RAKE",
+ "shots": [
+  {
+   "id": "hook",
+   "scene": "roulette",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Eines dieser Monster ist ausgebrochen. Mal sehen, wer es ist.",
+     "sub": "EINES DIESER MONSTER IST *AUSGEBROCHEN.* MAL SEHEN, WER ES IST."
+    }
+   ],
+   "hold": 0.74,
+   "sfx": [
+    {
+     "n": "alarm",
+     "at": 0
+    },
+    {
+     "n": "ticks",
+     "atEnd": -8.31
+    }
+   ],
+   "noHeader": true
+  },
+  {
+   "id": "name",
+   "scene": "pov_open",
+   "clock": "03:00",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "The Rake. Drei Uhr nachts.",
+     "sub": "*THE RAKE.* 3 UHR NACHTS."
+    }
+   ],
+   "hold": 0.3,
+   "sfx": [
+    {
+     "n": "boom",
+     "at": -0.05
+    },
+    {
+     "n": "creak",
+     "at": 0.4
+    },
+    {
+     "n": "breath",
+     "at": 0.6
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "wake",
+   "scene": "bed_top",
+   "clock": "03:00",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Du wachst auf. Deine Bettdecke ist schwer.",
+     "sub": "DU WACHST AUF. DEINE BETTDECKE IST *SCHWER.*"
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "end",
+   "scene": "pov_dark",
+   "clock": "03:00",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Am Bettende sitzt etwas.",
+     "sub": "AM BETTENDE *SITZT ETWAS.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "heart",
+     "at": 0.2
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "dog",
+   "scene": "perch",
+   "clock": "03:01",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Es hockt wie ein Hund. Blass. Keine Haare.",
+     "sub": "ES HOCKT WIE EIN HUND. BLASS. *KEINE HAARE.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "creak",
+     "at": 0.5
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "fingers",
+   "scene": "fingers",
+   "clock": "03:01",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Viel zu lange Finger.",
+     "sub": "VIEL ZU *LANGE FINGER.*"
+    }
+   ],
+   "hold": 0.3,
+   "sfx": [
+    {
+     "n": "scratch",
+     "at": 0.3
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "watch",
+   "scene": "face_dark",
+   "clock": "03:01",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Es schaut dir beim Schlafen zu.",
+     "sub": "ES SCHAUT DIR *BEIM SCHLAFEN* ZU."
+    }
+   ],
+   "hold": 0.3,
+   "sfx": [
+    {
+     "n": "breath",
+     "at": 0.2
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "name2",
+   "scene": "red_rake",
+   "clock": "03:01",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "The Rake. Eine Legende aus dem Internet.",
+     "sub": "*THE RAKE.* EINE LEGENDE AUS DEM INTERNET."
+    }
+   ],
+   "sfx": [
+    {
+     "n": "boom",
+     "at": 0
+    }
+   ]
+  },
+  {
+   "id": "night",
+   "scene": "red_bed",
+   "clock": "03:01",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Es kommt nur nachts. Und es geht erst, wenn es glaubt, dass du schläfst.",
+     "sub": "ES KOMMT NUR NACHTS. UND ES GEHT ERST, WENN ES GLAUBT, *DASS DU SCHLÄFST.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "whisper",
+     "at": 0.4
+    }
+   ]
+  },
+  {
+   "id": "rule",
+   "scene": "bed_rule",
+   "clock": "03:02",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Die Regel: Beweg dich nicht. Und mach die Augen nicht wieder auf.",
+     "sub": "DIE REGEL: *BEWEG DICH NICHT.* UND MACH DIE AUGEN NICHT WIEDER AUF."
+    }
+   ],
+   "rule": {
+    "title": "REGEL #1",
+    "text": "BEWEG DICH NICHT",
+    "atSeg": [
+     0,
+     0.6
+    ]
+   },
+   "sfx": [
+    {
+     "n": "pop",
+     "atSeg": [
+      0,
+      0.6
+     ]
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "close",
+   "scene": "eyes_closed",
+   "clock": "03:02",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Du schließt die Augen. Dein Herz rast.",
+     "sub": "DU SCHLIESST DIE AUGEN. DEIN HERZ *RAST.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "heart",
+     "at": 0
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "breath",
+   "scene": "ear_close",
+   "clock": "03:03",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Dann spürst du seinen Atem. Direkt an deinem Ohr.",
+     "sub": "DANN SPÜRST DU SEINEN ATEM. *DIREKT AN DEINEM OHR.*"
+    },
+    {
+     "v": "rake",
+     "t": "Ich weiß, dass du wach bist.",
+     "sub": "„ICH WEISS, *DASS DU WACH BIST.*“"
+    }
+   ],
+   "hold": 0.3,
+   "sfx": [
+    {
+     "n": "breath",
+     "at": 0.3
+    },
+    {
+     "n": "heart",
+     "atSeg": [
+      1,
+      0
+     ]
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "hours",
+   "scene": "bed_clock",
+   "clock": "03:08",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Du rührst dich nicht. Stundenlang.",
+     "sub": "DU RÜHRST DICH NICHT. *STUNDENLANG.*"
+    }
+   ],
+   "hold": 0.3,
+   "sfx": [
+    {
+     "n": "clock",
+     "at": 0
+    }
+   ],
+   "amb": "bed"
+  },
+  {
+   "id": "morning",
+   "scene": "morning",
+   "clock": "06:30",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Am Morgen ist das Bettende leer. Nur die Decke ist zerkratzt.",
+     "sub": "AM MORGEN IST DAS BETTENDE LEER. NUR DIE DECKE IST *ZERKRATZT.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "birds",
+     "at": 0.2
+    }
+   ],
+   "amb": "dawn"
+  },
+  {
+   "id": "sister",
+   "scene": "sister",
+   "clock": "06:31",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Deine kleine Schwester steht in der Tür. Sie ist blass.",
+     "sub": "DEINE KLEINE SCHWESTER STEHT IN DER TÜR. SIE IST *BLASS.*"
+    },
+    {
+     "v": "schwester",
+     "t": "Warum hast du heute Nacht an meinem Bett gesessen?",
+     "sub": "„WARUM HAST DU HEUTE NACHT *AN MEINEM BETT* GESESSEN?“"
+    }
+   ],
+   "hold": 1.0,
+   "sfx": [
+    {
+     "n": "stinger",
+     "atSeg": [
+      1,
+      -0.3
+     ]
+    }
+   ],
+   "amb": "dawn"
+  },
+  {
+   "id": "cta",
+   "scene": "cta",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Folge mir, um zu sehen, wen du als Nächstes bekommst.",
+     "sub": "FOLGE MIR, UM ZU SEHEN, WEN DU ALS *NÄCHSTES* BEKOMMST."
+    }
+   ],
+   "hold": 0.3,
+   "noHeader": true,
+   "sfx": [
+    {
+     "n": "sparkle",
+     "at": 0
+    }
+   ]
+  },
+  {
+   "id": "endcard",
+   "scene": "endcard",
+   "segs": [],
+   "hold": 2.2,
+   "noHeader": true
+  }
+ ]
 }

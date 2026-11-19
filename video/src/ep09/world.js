@@ -26,7 +26,7 @@ function buildStation() {
   const neons = []; for (let z = 24; z > -32; z -= 6) { const n = box(0.12, 0.06, 1.6, basic(0xe8f2ff), 2.5, 5.35, z); S.add(n); neons.push(n); }
   const nl = []; for (let z = 18; z > -30; z -= 12) { const l = new THREE.PointLight(0xdfe9ff, 6, 14, 1.4); l.position.set(2.5, 4.8, z); S.add(l); nl.push(l); }
   // Bank, Anzeigetafel, Saeulen
-  S.add(box(1.8, 0.08, 0.5, lam(0x6a4a30), 3.6, 1.45, -2), box(1.8, 0.5, 0.08, lam(0x6a4a30), 3.6, 1.7, -1.78)); for (const x of [2.9, 4.3]) S.add(box(0.08, 0.45, 0.4, lam(0x333333), x, 1.22, -2));
+  S.add(box(1.8, 0.08, 0.5, lam(0x6a4a30), 3.6, 1.45, -4), box(1.8, 0.5, 0.08, lam(0x6a4a30), 3.6, 1.7, -4.22)); for (const x of [2.9, 4.3]) S.add(box(0.08, 0.45, 0.4, lam(0x333333), x, 1.22, -4));
   for (let z = 20; z > -32; z -= 10) S.add(box(0.5, 4.6, 0.5, lam(0x8a948e), 3.2, 3.3, z));
   const board = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 0.7), new THREE.MeshBasicMaterial({ map: textTex(['LETZTER ZUG 23:58  ✕', 'KEINE WEITEREN ZÜGE']) })); board.position.set(2.2, 3.6, -6); S.add(board); S.add(box(2.3, 0.8, 0.1, lam(0x15161a), 2.2, 3.6, -6.06));
   // Zug
@@ -38,7 +38,7 @@ function buildStation() {
   // Kriechende Figur
   const sideT = [0, 1, 2, 3, 4, 5].map(k => C.tekeSide(k / 6)), frontT = [0, 1, 2, 3, 4, 5].map(k => C.tekeFront(k / 6));
   const teke = sprite(frontT[0], 0.9, 0.15); teke.userData.noBB = true; teke.children[0].visible = false; S.add(teke);
-  const T = { boyB: C.boy('back'), boyS: C.boy('front', 'scared_sweat'), boyC: C.boy('front', 'closed') };
+  const T = { boyB: C.boy('back'), boyS: C.boy('front', 'scared_sweat'), boyC: C.boy('front', 'closed'), sit: C.boySit('scared_sweat') };
   const boy = sprite(T.boyS, 1.35); boy.userData.noBB = true; boy.children[0].visible = false; S.add(boy);
   // Waggon innen (bei x = 60)
   const Wg = new THREE.Group(); Wg.position.set(60, 0, 0); S.add(Wg);
@@ -61,8 +61,8 @@ export const SHOTS = {
   st_open(W, p, t, sh) { const A = W.St; base(A, t); const dt = t - sh.s; const z = L(-31, -24, clamp(dt / 2.5)); crawl(A, t, -2, z, true);
     const fl = dt < 0.35 || (dt > 0.9 && dt < 1.05); A.nl.forEach(l => l.intensity = fl ? 0.3 : 6); A.neons.forEach(n => n.material.color.set(fl ? 0x202428 : 0xe8f2ff));
     look(A.cam, V(0.8, 1.7, 6), V(-1.8, 0.8, -30)); fov(A.cam, L(40, 32, ease(p))); return { world: A, vig: 0.85, shake: dt < 0.4 ? 0.004 : 0.0008 }; },
-  st_bench(W, p, t) { const A = W.St; base(A, t); A.boy.visible = true; setTex(A.boy, A.T.boyS); A.boy.position.set(3.6, 1.0, -1.9); A.boy.scale.set(1, 0.92, 1);
-    look(A.cam, lerpV(V(1.2, 2.6, 4.2), V(1.4, 2.5, 3.2), ease(p)), V(2.8, 2.6, -4)); return { world: A, vig: 0.65 }; },
+  st_bench(W, p, t) { const A = W.St; base(A, t); A.boy.visible = true; setTex(A.boy, A.T.sit); A.boy.position.set(3.6, 1.0, -3.68); A.boy.scale.set(0.92, 0.92, 1);
+    look(A.cam, lerpV(V(2.0, 2.2, -0.2), V(2.4, 2.05, -1.2), ease(p)), V(3.5, 1.85, -4.6)); return { world: A, vig: 0.65 }; },
   st_tunnel(W, p, t) { const A = W.St; base(A, t); look(A.cam, lerpV(V(0.3, 2.0, -10), V(-0.6, 1.8, -20), ease(p)), V(-2, 1.6, -34)); return { world: A, vig: 0.9 }; },
   st_crawl(W, p, t) { const A = W.St; base(A, t); const z = L(-18, -9, p); crawl(A, t, -2, z, true);
     look(A.cam, V(-2, 0.45, -5.5), V(-2, 0.35, -14)); fov(A.cam, 46); return { world: A, vig: 0.85 }; },
@@ -71,8 +71,8 @@ export const SHOTS = {
   st_rule(W, p, t) { const A = W.St; base(A, t); A.boy.visible = true; setTex(A.boy, A.T.boyS); A.boy.position.set(1.4, 1.0, -3); A.boy.scale.set(1, 1, 1);
     look(A.cam, V(1.45, 2.1, L(-1.95, -2.05, ease(p))), V(1.4, 2.02, -3)); fov(A.cam, 58); return { world: A, vig: 0.8 }; },
   st_behind(W, p, t, sh) { const A = W.St; base(A, t); A.boy.visible = true; setTex(A.boy, A.T.boyS); A.boy.position.set(1.4, 1.0, -3); A.boy.scale.set(1, 1, 1);
-    const rise = ease(sm(0.15, 0.6, p)); A.teke.visible = true; setTex(A.teke, A.frontT[1]); A.teke.position.set(0.3, L(0.0, 0.62, rise), -3.9); A.teke.rotation.y = 0.35;
-    look(A.cam, V(1.7, 1.95, L(-0.9, -1.2, ease(p))), V(1.0, 1.7, -3.5)); fov(A.cam, 55); return { world: A, vig: 0.85, shake: rise > 0.9 ? 0.0012 : 0 }; },
+    const rise = ease(sm(0.1, 0.65, p)); A.teke.visible = true; setTex(A.teke, A.frontT[Math.floor(t * 5) % 6]); A.teke.position.set(-0.3, L(0.25, 0.62, rise), -3.7); A.teke.rotation.y = 0.5; // zieht sich von den Gleisen ueber die Bahnsteigkante
+    look(A.cam, V(2.2, 1.95, L(0.2, -0.1, ease(p))), V(0.6, 1.55, -3.5)); fov(A.cam, 55); return { world: A, vig: 0.85, shake: rise > 0.9 ? 0.0012 : 0 }; },
   st_closed(W, p, t) { const A = W.St; base(A, t); A.boy.visible = true; setTex(A.boy, A.T.boyC); A.boy.position.set(1.4, 1.0, -3);
     look(A.cam, V(1.42, 2.08, L(-2.15, -2.3, ease(p))), V(1.4, 2.02, -3)); fov(A.cam, 54); return { world: A, vig: 0.85 }; },
   st_train(W, p, t, sh) { const A = W.St; base(A, t); const dt = t - sh.s, dur = sh.e - sh.s; const arrive = sm(0.35, 1, dt / dur);

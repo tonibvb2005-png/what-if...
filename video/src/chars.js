@@ -694,30 +694,61 @@ export function tekeSide(ph = 0) { // seitlich, zieht sich nach rechts
 }
 MONSTERS['TEKE TEKE'] = () => { const c = cv2(512, 1024), g = c.getContext('2d'); g.drawImage(tekeFront(0.25), 0, 430, 512, 512); return c; };
 
-const RSK = '#d8d4cf';
-function rakeFace(g, cx, cy, r, mood = 'stare') {
-  P(g, ell(cx, cy, r * 0.82, r), RSK, r * 0.05, 0.14);
-  g.strokeStyle = 'rgba(80,70,70,.35)'; g.lineWidth = r * 0.02; for (const y of [-0.55, -0.45]) { g.beginPath(); g.moveTo(cx - r * 0.4, cy + y * r); g.quadraticCurveTo(cx, cy + (y - 0.06) * r, cx + r * 0.4, cy + y * r); g.stroke(); }
-  for (const s of [-1, 1]) { P(g, ell(cx + s * r * 0.33, cy - r * 0.05, r * 0.22, r * 0.28, s * 0.25), '#050404', 0, 0); if (mood !== 'blind') P(g, circ(cx + s * r * 0.3, cy - r * 0.1, r * 0.04), '#e8e4dc', 0, 0); }
-  P(g, ell(cx, cy + r * 0.25, r * 0.05, r * 0.08), '#8a8078', 0, 0);
-  const m = g => { g.moveTo(cx - r * 0.32, cy + r * 0.55); g.quadraticCurveTo(cx, cy + r * 0.48, cx + r * 0.32, cy + r * 0.55); g.quadraticCurveTo(cx, cy + r * 0.78, cx - r * 0.32, cy + r * 0.55); g.closePath(); };
-  g.save(); g.beginPath(); m(g); g.fillStyle = '#1a0a0a'; g.fill(); g.clip(); g.fillStyle = '#e9e2d2'; for (let i = -4; i <= 4; i++) { g.beginPath(); g.moveTo(cx + i * r * 0.075 - r * 0.03, cy + r * 0.5); g.lineTo(cx + i * r * 0.075, cy + r * 0.64); g.lineTo(cx + i * r * 0.075 + r * 0.03, cy + r * 0.5); g.fill(); } g.restore();
-  g.beginPath(); m(g); g.lineWidth = r * 0.03; g.strokeStyle = OL; g.stroke();
+const RSK = '#d6d2cb', RSK2 = '#a9a39a', RSKD = '#6f6a64';
+// Glied mit Umriss und Schattenkante
+function rlimb(g, pts, w) { line(g, pts, w + 9, OL); line(g, pts, w, RSK); g.save(); g.globalAlpha = 0.35; line(g, pts.map(([x, y]) => [x + w * 0.22, y + w * 0.12]), w * 0.4, RSK2); g.restore(); }
+// lange Hand: Handflaeche + 4 Finger mit je 2 Gelenken + dunkle Krallen
+function rhand(g, x, y, ang, len = 1, curl = 0, spread = 0.18) {
+  g.save(); g.translate(x, y); g.rotate(ang);
+  P(g, ell(0, 0, 26 * len, 20 * len), RSK, 7, 0.12);
+  for (let i = 0; i < 4; i++) { const a = (i - 1.5) * spread, l1 = (62 + (i === 1 || i === 2 ? 16 : 0)) * len, l2 = 58 * len;
+    const p1 = [Math.cos(a) * 18 * len, Math.sin(a) * 18 * len], p2 = [p1[0] + Math.cos(a) * l1, p1[1] + Math.sin(a) * l1], a2 = a + curl * 0.9, p3 = [p2[0] + Math.cos(a2) * l2, p2[1] + Math.sin(a2) * l2];
+    line(g, [p1, p2, p3], 15 * len, OL); line(g, [p1, p2, p3], 9 * len, RSK); P(g, circ(p2[0], p2[1], 6 * len), RSK2, 3, 0);
+    const a3 = a2 + 0.5 + curl * 0.6; P(g, g => { g.moveTo(p3[0] - 4 * len, p3[1] - 4 * len); g.lineTo(p3[0] + Math.cos(a3) * 30 * len, p3[1] + Math.sin(a3) * 30 * len); g.lineTo(p3[0] + 4 * len, p3[1] + 4 * len); g.closePath(); }, '#1d1916', 3, 0); }
+  g.restore();
 }
-function claw(g, x, y, dir = 1, len = 1) { for (let k = -1; k <= 1; k++) line(g, [[x, y], [x + dir * 26 * len, y + 50 * len + k * 6], [x + dir * (20 + k * 14) * len, y + 110 * len]], 9, RSK); }
-export function rakeCrouch() { // hockt frontal (am Bettende), Knie hochgezogen, Arme dazwischen
-  const c = cv2(512, 512), g = c.getContext('2d');
-  for (const s of [-1, 1]) { P(g, g => { g.moveTo(256 + s * 60, 380); g.quadraticCurveTo(256 + s * 210, 200, 256 + s * 150, 460); g.lineTo(256 + s * 110, 460); g.quadraticCurveTo(256 + s * 150, 300, 256 + s * 40, 400); g.closePath(); }, RSK, 9, 0.14); }
-  P(g, ell(256, 340, 110, 120), RSK, 9, 0.14);
-  g.strokeStyle = 'rgba(80,70,70,.5)'; g.lineWidth = 5; for (let y = 300; y < 420; y += 22) { g.beginPath(); g.moveTo(190, y); g.quadraticCurveTo(256, y + 10, 322, y); g.stroke(); }
-  for (const s of [-1, 1]) { line(g, [[256 + s * 80, 280], [256 + s * 70, 380], [256 + s * 40, 450]], 26, OL); line(g, [[256 + s * 80, 280], [256 + s * 70, 380], [256 + s * 40, 450]], 18, RSK); claw(g, 256 + s * 40, 440, -s, 0.55); }
-  rakeFace(g, 256, 190, 92, 'stare');
+function rakeFace(g, cx, cy, r, mood = 'stare') { // ausgemergelt, eingefallene Augen, schiefes Gebiss
+  P(g, g => { g.moveTo(cx, cy - r); g.bezierCurveTo(cx + r * 0.95, cy - r, cx + r * 0.85, cy + r * 0.45, cx + r * 0.35, cy + r * 0.95); g.quadraticCurveTo(cx, cy + r * 1.08, cx - r * 0.35, cy + r * 0.95); g.bezierCurveTo(cx - r * 0.85, cy + r * 0.45, cx - r * 0.95, cy - r, cx, cy - r); }, RSK, r * 0.05, 0.16);
+  g.fillStyle = 'rgba(90,80,75,.28)'; for (const s of [-1, 1]) { g.beginPath(); g.ellipse(cx + s * r * 0.48, cy + r * 0.35, r * 0.16, r * 0.3, s * 0.3, 0, 7); g.fill(); } // eingefallene Wangen
+  g.strokeStyle = 'rgba(80,70,65,.35)'; g.lineWidth = r * 0.018; for (const y of [-0.62, -0.52, -0.43]) { g.beginPath(); g.moveTo(cx - r * 0.42, cy + y * r); g.quadraticCurveTo(cx, cy + (y - 0.05) * r, cx + r * 0.42, cy + y * r); g.stroke(); }
+  for (const s of [-1, 1]) { const ex = cx + s * r * 0.34, ey = cy - r * 0.12;
+    g.fillStyle = 'rgba(40,30,30,.55)'; g.beginPath(); g.ellipse(ex, ey, r * 0.3, r * 0.33, s * 0.3, 0, 7); g.fill();
+    P(g, ell(ex, ey + r * 0.02, r * 0.2, r * 0.25, s * 0.3), '#030202', 0, 0);
+    if (mood !== 'blind') { const gr = g.createRadialGradient(ex - s * r * 0.03, ey - r * 0.04, 1, ex - s * r * 0.03, ey - r * 0.04, r * 0.09); gr.addColorStop(0, 'rgba(245,240,230,1)'); gr.addColorStop(1, 'rgba(245,240,230,0)'); g.fillStyle = gr; g.beginPath(); g.arc(ex - s * r * 0.03, ey - r * 0.04, r * 0.09, 0, 7); g.fill(); } }
+  P(g, g => { g.moveTo(cx - r * 0.07, cy + r * 0.28); g.lineTo(cx, cy + r * 0.2); g.lineTo(cx + r * 0.07, cy + r * 0.28); g.closePath(); }, '#2a2220', 0, 0); // Nasenloecher-Schlitz
+  const m = g => { g.moveTo(cx - r * 0.38, cy + r * 0.52); g.quadraticCurveTo(cx, cy + r * (mood === 'open' ? 0.44 : 0.5), cx + r * 0.38, cy + r * 0.52); g.quadraticCurveTo(cx, cy + r * (mood === 'open' ? 1.0 : 0.76), cx - r * 0.38, cy + r * 0.52); g.closePath(); };
+  g.save(); g.beginPath(); m(g); g.fillStyle = '#120606'; g.fill(); g.clip(); g.fillStyle = '#d9cfb8';
+  for (let i = -5; i <= 5; i++) { const h = (0.1 + ((i * 7 + 11) % 5) * 0.025) * r, x = cx + i * r * 0.068; g.beginPath(); g.moveTo(x - r * 0.026, cy + r * 0.5); g.lineTo(x + ((i % 2) ? r * 0.01 : -r * 0.008), cy + r * 0.5 + h); g.lineTo(x + r * 0.026, cy + r * 0.5); g.fill();
+    g.beginPath(); g.moveTo(x - r * 0.024, cy + r * (mood === 'open' ? 0.98 : 0.75)); g.lineTo(x, cy + r * (mood === 'open' ? 0.98 : 0.75) - h * 0.8); g.lineTo(x + r * 0.024, cy + r * (mood === 'open' ? 0.98 : 0.75)); g.fill(); }
+  g.restore(); g.beginPath(); m(g); g.lineWidth = r * 0.03; g.strokeStyle = OL; g.stroke();
+}
+// Hockt auf dem Fussende: ganzer Koerper sichtbar, Zehen umklammern das Brett, Haende haengen mit langen Fingern herab
+export function rakeCrouch(tilt = 0, curl = 0, dark = false) {
+  const c = cv2(768, 768), g = c.getContext('2d'), cx = 384;
+  // Fuesse auf dem Brett (Brett-Kante bei y = 640)
+  for (const s of [-1, 1]) { const fx = cx + s * 120; rlimb(g, [[cx + s * 70, 470], [cx + s * 175, 300], [fx, 600]], 30);
+    rhand(g, fx, 600, Math.PI / 2 + s * 0.25, 0.85, 0.9, 0.24); }
+  // Rumpf: gebueckt, Rippen, Wirbel
+  P(g, g => { g.moveTo(cx - 70, 500); g.quadraticCurveTo(cx - 120, 360, cx - 80, 250); g.quadraticCurveTo(cx, 200, cx + 80, 250); g.quadraticCurveTo(cx + 120, 360, cx + 70, 500); g.quadraticCurveTo(cx, 530, cx - 70, 500); }, RSK, 9, 0.16);
+  g.strokeStyle = 'rgba(90,80,75,.55)'; g.lineWidth = 6; for (let i = 0; i < 6; i++) { const y = 290 + i * 28; g.beginPath(); g.moveTo(cx - 78 + i * 4, y); g.quadraticCurveTo(cx, y + 18, cx + 78 - i * 4, y); g.stroke(); }
+  P(g, ell(cx, 470, 40, 14), 'rgba(80,70,65,.35)', 0, 0);
+  // Knie vorne drueber (zweite Schicht, damit sie vor dem Rumpf liegen)
+  for (const s of [-1, 1]) { P(g, ell(cx + s * 165, 305, 34, 30), RSK, 8, 0.14); }
+  // Arme haengen zwischen den Knien herab, Haende ueber der Brettkante
+  for (const s of [-1, 1]) { const sx = cx + s * 78, hx = cx + s * 46; rlimb(g, [[sx, 265], [cx + s * 118, 420], [hx, 560]], 22);
+    rhand(g, hx, 575, Math.PI / 2 + s * 0.12, 0.95, curl + (s > 0 ? 0.15 : 0), 0.2); }
+  // Kopf tief zwischen den Schultern, geneigt
+  g.save(); g.translate(cx, 205); g.rotate(tilt); line(g, [[0, 30], [0, -10]], 30, OL); line(g, [[0, 30], [0, -10]], 22, RSK); rakeFace(g, 0, -70, 82, 'stare'); g.restore();
+  if (dark) { g.globalCompositeOperation = 'source-atop'; g.fillStyle = 'rgba(5,6,12,.5)'; g.fillRect(0, 0, 768, 768); g.globalCompositeOperation = 'source-over'; }
   return c;
 }
-export function rakeFaceBig(mood = 'stare') { const c = cv(512, 512), g = c.getContext('2d'); rakeFace(g, 256, 256, 210, mood); return c; }
-MONSTERS['THE RAKE'] = () => { const c = cv2(512, 1024), g = c.getContext('2d'); // stehend, gebueckt
-  for (const s of [-1, 1]) { line(g, [[256 + s * 40, 620], [256 + s * 80, 800], [256 + s * 60, 990]], 30, OL); line(g, [[256 + s * 40, 620], [256 + s * 80, 800], [256 + s * 60, 990]], 22, RSK); }
-  P(g, g => { g.moveTo(200, 360); g.quadraticCurveTo(256, 320, 312, 360); g.lineTo(300, 640); g.quadraticCurveTo(256, 660, 212, 640); g.closePath(); }, RSK, 9, 0.14);
-  g.strokeStyle = 'rgba(80,70,70,.5)'; g.lineWidth = 5; for (let y = 400; y < 560; y += 26) { g.beginPath(); g.moveTo(214, y); g.quadraticCurveTo(256, y + 12, 298, y); g.stroke(); }
-  for (const s of [-1, 1]) { line(g, [[256 + s * 52, 370], [256 + s * 110, 560], [256 + s * 120, 760]], 26, OL); line(g, [[256 + s * 52, 370], [256 + s * 110, 560], [256 + s * 120, 760]], 18, RSK); claw(g, 256 + s * 120, 750, s, 0.8); }
-  rakeFace(g, 256, 250, 90, 'stare'); return c; };
+export function rakeFaceBig(mood = 'stare') { const c = cv(512, 512), g = c.getContext('2d'); rakeFace(g, 256, 236, 200, mood); return c; }
+// Nahaufnahme Hand mit langen Fingern (fuer die Finger-Szene)
+export function rakeHandBig(curl = 0) { const c = cv2(512, 512), g = c.getContext('2d'); rlimb(g, [[-40, 60], [140, 150]], 46); rhand(g, 170, 170, 0.75, 2.1, curl, 0.22); return c; }
+// stehend, stark gebueckt, Arme bis zu den Knien
+MONSTERS['THE RAKE'] = () => { const c = cv2(512, 1024), g = c.getContext('2d');
+  for (const s of [-1, 1]) { rlimb(g, [[256 + s * 36, 600], [256 + s * 80, 780], [256 + s * 54, 960]], 26); P(g, ell(256 + s * 66, 975, 40, 16), RSK, 7, 0.12); }
+  P(g, g => { g.moveTo(200, 610); g.quadraticCurveTo(150, 460, 210, 340); g.quadraticCurveTo(256, 300, 320, 330); g.quadraticCurveTo(350, 470, 312, 610); g.quadraticCurveTo(256, 640, 200, 610); }, RSK, 9, 0.16);
+  g.strokeStyle = 'rgba(90,80,75,.55)'; g.lineWidth = 6; for (let i = 0; i < 6; i++) { const y = 380 + i * 30; g.beginPath(); g.moveTo(206, y); g.quadraticCurveTo(256, y + 16, 316, y); g.stroke(); }
+  for (const s of [-1, 1]) { rlimb(g, [[256 + s * 64, 350], [256 + s * 120, 560], [256 + s * 112, 760]], 20); rhand(g, 256 + s * 110, 770, Math.PI / 2 - s * 0.15, 0.95, 0.25, 0.2); }
+  g.save(); g.translate(270, 300); g.rotate(0.18); line(g, [[0, 30], [0, -20]], 30, OL); line(g, [[0, 30], [0, -20]], 22, RSK); rakeFace(g, 0, -90, 88, 'stare'); g.restore(); return c; };
