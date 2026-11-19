@@ -25,7 +25,7 @@ Status: ✅ fertig gerendert · ✍️ Skript fertig · leer = offen
 | 1 | Der Aufhocker | 🇩🇪 | ✅ | If something jumps on your back at night… don't turn around. |
 | 2 | Der Rattenfänger von Hameln | 🇩🇪 | ✅ | In 1284, 130 children followed a song… and never came back. |
 | 3 | Black Shuck | 🇬🇧 | ✅ | If you see a black dog with burning eyes… you won't live the year. |
-| 4 | Baba Yaga | 🇷🇺 | ✍️ | If you see a hut walking on chicken legs… don't knock. |
+| 4 | Baba Yaga | 🇷🇺 | ✅ | If you see a hut walking on chicken legs… don't knock. |
 | 5 | Der Erlkönig | 🇩🇪 | | If a voice in the forest promises your child gifts… ride faster. |
 | 6 | Teke Teke | 🇯🇵 | | If you hear "teke… teke…" behind you at night… don't look down. |
 | 7 | Banshee | 🇮🇪 | | If you hear a woman screaming outside… someone in your family will die. |
@@ -97,3 +97,11 @@ Status: ✅ fertig gerendert · ✍️ Skript fertig · leer = offen
   `26th` → `twenty-sixth`.
 - Wörter im Skript nach dem Einsprechen nicht mehr ändern (Untertitel-Sync).
 - Bewegungen laufen immer durchgehend (nichts springt zurück), Tiere/Figuren bleiben auf dem Boden.
+- **Länge: max. ~160 Wörter (≈ 60–70 s)**, ca. 11–12 Szenen statt 14. Keine Füllsätze.
+- **Gruseliger & spannender:**
+  - Hook in den ersten 2 Sekunden, direkte Gefahr für den Zuschauer („If you…“)
+  - spätestens alle ~10 s ein Schockmoment (Detail, Geräusch, Enthüllung)
+  - kurze, harte Sätze; die Hintergrundgeschichte nur so weit wie nötig
+  - zum Ende hin Tempo steigern, Schluss mit Gänsehaut-Twist + Jumpscare
+- Automatisch im Video: Punch-ins auf roten Wörtern, Schnitt-Zooms in langen Szenen,
+  2 unterschwellige Kreatur-Blitze, beschleunigender Herzschlag vor dem Jumpscare.

@@ -188,7 +188,61 @@ def build_timeline(words):
                 local[w["n"]] = w["t"] - s0
         scenes.append({"i": si, "kind": story.SCENES[si]["kind"], "start": s0, "end": s1, "words": local,
                        "cfg": story.SCENES[si]})
-    return {"scenes": scenes, "words": words, "story_end": end, "duration": end + OUTRO}
+    add_dynamics(scenes, words)
+    tl = {"scenes": scenes, "words": words, "story_end": end, "duration": end + OUTRO}
+    tl["flashes"], tl["reveal_T"] = pick_flashes(scenes, words)
+    return tl
+
+
+# ------------------------------------------------------------------ pacing / scares
+PUNCH = 0.045      # zoom bump on every red keyword
+CUT_ZOOM = 1.13    # 'cut' to a closer shot inside long scenes
+
+
+def add_dynamics(scenes, words):
+    """Punch-ins on red keywords + one in-scene cut (closer shot) for long scenes."""
+    for sc in scenes:
+        sw = [w for w in words if w["scene"] == sc["i"]]
+        dur = sc["end"] - sc["start"]
+        punches = []
+        for k, w in enumerate(sw):
+            if w["red"] and (k == 0 or not sw[k - 1]["red"]):
+                punches.append(round(w["t"] - sc["start"], 3))
+        cuts = []
+        if dur > 5.5 and not sc["cfg"].get("title") and sc["i"] < len(scenes) - 1:
+            for k in range(len(sw) - 1):
+                lt = sw[k + 1]["t"] - sc["start"]
+                if sw[k]["text"][-1] in ".\u2026?!" and 0.4 * dur < lt < dur - 1.5:
+                    cuts.append(round(lt - 0.05, 3))
+                    break
+        sc["punches"], sc["cuts"] = punches, cuts
+
+
+def pick_flashes(scenes, words):
+    """Two subliminal flashes of the final creature, in the middle of the story."""
+    last = scenes[-1]
+    reds = [w["t"] for w in words if w["scene"] == last["i"] and w["red"]]
+    if not last["cfg"].get("hook") or not reds:
+        return [], None
+    out = []
+    n = len(scenes)
+    for frac in (0.45, 0.72):
+        sc = scenes[min(n - 3, max(1, round(n * frac)))]
+        if sc["cfg"].get("title"):
+            sc = scenes[sc["i"] + 1]
+        t = sc["start"] + (sc["punches"][0] if sc["punches"] else (sc["end"] - sc["start"]) * 0.5) + 0.35
+        out.append(round(t, 3))
+    return out, reds[0] + 0.7
+
+
+def scene_zoom(sc, t):
+    z = 1.0
+    for p in sc.get("punches", []):
+        z *= 1 + PUNCH * ease(ramp(t, p - 0.03, p + 0.12))
+    for q in sc.get("cuts", []):
+        if t >= q:
+            z *= CUT_ZOOM
+    return z
 
 
 # ------------------------------------------------------------------ captions
@@ -391,6 +445,11 @@ def draw_scene(c, sc, T):
     dur = sc["end"] - sc["start"]
     ctx = Ctx(t, dur, T, sc["words"], seed=sc["i"])
     c.save()
+    z = scene_zoom(sc, t)
+    if z != 1.0:
+        c.translate(W / 2, H * 0.47)
+        c.scale(z, z)
+        c.translate(-W / 2, -H * 0.47)
     SCENES[sc["kind"]](c, ctx)
     c.restore()
 
@@ -410,6 +469,11 @@ def render_frame(c, tl, chunks, T):
         c.saveLayer(None, paint(a=a))
         draw_scene(c, prev, T)
         c.restore()
+    # subliminal flash: the creature for three frames, tinted red
+    for ft in tl.get("flashes", []):
+        if ft <= T < ft + 0.1 and tl.get("reveal_T"):
+            draw_scene(c, scenes[-1], tl["reveal_T"])
+            c.drawRect(R(0, 0, W, H), paint((120, 0, 0), 0.25))
     vignette(c)
     # fade in at very start, dip at the end of the story
     if T < 0.4:

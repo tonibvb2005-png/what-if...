@@ -348,6 +348,25 @@ def build_soundtrack(tl, outro_len):
         m.add(tr - 1.25 - rl, riser(rl), 0.55)
         m.add(tl["scenes"][-1]["start"] + 0.2, sting(2.0), 1.0)
         m.add(tr, hit(4.5), 1.25)
+    # --- pacing: thud on every punch-in, swish on in-scene cuts, hits on subliminal flashes
+    for s in tl["scenes"]:
+        for p in s.get("punches", []):
+            m.add(s["start"] + p - 0.02, boom(1.2, f0=75, f1=38), 0.22)
+        for q in s.get("cuts", []):
+            m.add(s["start"] + q - 0.3, whoosh(0.45), 0.25)
+    for ft in tl.get("flashes", []):
+        n3 = int(0.4 * SR)
+        burst = filt(noise(n3), "band", (500, 6000)) * env_adsr(n3, 0.002, 0.08)
+        m.add(ft, reverb(burst, 0.3), 0.7)
+        m.add(ft, boom(1.5, f0=110, f1=40), 0.6)
+    # --- heartbeat speeding up through the second-to-last scene
+    if tr is not None and len(tl["scenes"]) >= 2:
+        s = tl["scenes"][-2]
+        k, bpm = s["start"], 72.0
+        while k < tr - 1.3:
+            m.add(k, heartbeat(), 0.7)
+            bpm = min(130.0, bpm + 4.0)
+            k += 60 / bpm
     # outro logo sting
     m.add(story_end + 0.25, boom(3.5, f0=60, f1=25), 0.8)
     lg = pad(3.5, [73.4, 110.0, 146.8, 174.6], bright=0.4)
