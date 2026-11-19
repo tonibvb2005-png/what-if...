@@ -1,0 +1,6 @@
+<!doctype html><html><body style="margin:0;background:#556"><canvas id=c width=1800 height=760></canvas>
+<script type=module>
+import * as C from '../src/chars.js';
+const g=document.getElementById('c').getContext('2d');
+[C.kuchisake(true,false),C.kuchisake(false,true,'wide'),C.hostmom(true,'smile'),C.hostmom(false,'smile')].forEach((c,i)=>g.drawImage(c,i*360,0,350,700)); window.done=true;
+</script></body></html>

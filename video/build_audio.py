@@ -489,6 +489,13 @@ def R_drawer(): return reverb(rec("1268", 2.0, 1.0, 0.5, 0.02, 0.25), 0.6, 0.15)
 def A_bed(d):
     a = lp(noise(d), 220) * 0.035; b = A_night(d) * 0.25; m = min(len(a), len(b)); return (a[:m] + b[:m]).astype(np.float32)
 
+# ---------------------------------------------------------------- Folge 7: Kuchisake-onna
+def R_buzz():
+    d = 2.2; tt = t_(d); x = (np.sign(np.sin(2 * np.pi * 100 * tt)) * 0.3 + np.sin(2 * np.pi * 200 * tt) * 0.4).astype(np.float32)
+    x = lp(x, 1200) * (0.6 + 0.4 * (np.sin(2 * np.pi * 9 * tt) > 0)); return norm(x * env(len(tt), 0.05, 0.4), 0.18)
+def A_street(d):
+    a = lp(noise(d), 180) * 0.05; b = A_night(d) * 0.18; m = min(len(a), len(b)); return (a[:m] + b[:m]).astype(np.float32)
+
 SFX = {k[2:]: v for k, v in globals().items() if k.startswith("S_")}
 SFX.update({k[2:]: v for k, v in globals().items() if k.startswith("R_")})
 
@@ -540,7 +547,7 @@ def A_dawn(d):
     w = lp(noise(len(b) / SR), 400) * 0.06; m = min(len(b), len(w)); return (b[:m] + w[:m]).astype(np.float32)
 
 
-AMB = {"bed": A_bed, "pc": A_pc, "pc_off": A_pc_off, "kitchen": A_kitchen, "day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn, "forest": A_forest, "car": A_car, "dusk": A_dusk, "bedroom": A_bedroom, "woods": A_woods, "village": A_village, "tvroom": A_tvroom, "station": A_station, "shop": A_shop, "shop_quiet": A_shop_quiet}
+AMB = {"street": A_street, "bed": A_bed, "pc": A_pc, "pc_off": A_pc_off, "kitchen": A_kitchen, "day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn, "forest": A_forest, "car": A_car, "dusk": A_dusk, "bedroom": A_bedroom, "woods": A_woods, "village": A_village, "tvroom": A_tvroom, "station": A_station, "shop": A_shop, "shop_quiet": A_shop_quiet}
 
 
 def drone(d):
@@ -596,6 +603,12 @@ def voice(shot, k, seg):
             if seg["v"] == "momo_close":  # hohl, tief, ganz nah
                 x = ffx(x, SIL.format(d=0.3) + ",asetrate=44100*0.9,aresample=44100,atempo=0.96,highpass=f=80,lowpass=f=4200")
                 return norm(reverb(x, 2.4, 0.5, 0.03), 0.82), len(x) / SR
+            if seg["v"] == "kuchi_mask":  # gedaempft hinter der Maske, leicht hallig
+                x = ffx(x, SIL.format(d=0.3) + ",atempo=0.95,highpass=f=150,lowpass=f=2600")
+                return norm(reverb(x, 1.6, 0.4, 0.03), 0.75), len(x) / SR
+            if seg["v"] == "kuchi":  # ganz nah, klar, etwas tiefer
+                x = ffx(x, SIL.format(d=0.3) + ",asetrate=44100*0.96,aresample=44100,atempo=0.97,highpass=f=90")
+                return norm(reverb(x, 0.9, 0.18), 0.82), len(x) / SR
             if seg["v"] == "opa":
                 x = ffx(x, SIL.format(d=0.25) + ",asetrate=44100*0.96,aresample=44100,atempo=1.1,highpass=f=120,lowpass=f=5000")
                 return norm(reverb(x, 1.2, 0.35), 0.72), len(x) / SR

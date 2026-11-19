@@ -605,3 +605,59 @@ MONSTERS['MOMO'] = () => sil(g => { // Frauenkopf auf Vogelkoerper mit Krallenfu
   g.strokeStyle = '#2e262c'; g.lineWidth = 5; for (let row = 0; row < 7; row++) for (let k = 0; k < 6; k++) { const x = 175 + k * 33 + (row % 2) * 16, y = 470 + row * 40; if (Math.abs(x - 256) > 95 - row * 2) continue; g.beginPath(); g.arc(x, y, 16, 0.2, Math.PI - 0.2); g.stroke(); }
   momoHead(g, 256, 250, 140, 'photo', 1.75);
 });
+
+// ------------------------------------------------------------- Folge 7: Kuchisake-onna, Gastmutter
+const KSK = '#f1d6c0', KHAIR = '#121014', COAT = '#c9b48e', COAT2 = '#a8936e';
+function kuchiHead(g, cx, cy, mask = true, eyes = 'calm', hairLong = true) {
+  if (hairLong) P(g, g => { g.moveTo(cx - 150, cy + 330); g.bezierCurveTo(cx - 190, cy - 40, cx - 150, cy - 190, cx, cy - 190); g.bezierCurveTo(cx + 150, cy - 190, cx + 190, cy - 40, cx + 150, cy + 330); g.closePath(); }, KHAIR, 10, 0);
+  else P(g, g => { g.moveTo(cx - 160, cy + 90); g.bezierCurveTo(cx - 190, cy - 120, cx - 120, cy - 190, cx, cy - 190); g.bezierCurveTo(cx + 120, cy - 190, cx + 190, cy - 120, cx + 160, cy + 90); g.closePath(); }, KHAIR, 10, 0);
+  P(g, ell(cx, cy + 10, 130, 158), KSK, 10, 0.1);
+  P(g, g => { g.moveTo(cx - 142, cy + 10); g.bezierCurveTo(cx - 160, cy - 210, cx + 160, cy - 210, cx + 142, cy + 10); g.quadraticCurveTo(cx + 70, cy - 80, cx, cy - 66); g.quadraticCurveTo(cx - 70, cy - 80, cx - 142, cy + 10); }, KHAIR, 9, 0);
+  for (const s of [-1, 1]) { const x = cx + s * 52, y = cy + 2;
+    if (eyes === 'smile') { curve(g, [x - 26, y + 6], [x, y - 18], [x + 26, y + 6], 7); }
+    else if (eyes === 'wide') { P(g, ell(x, y, 26, 22), '#fff', 6, 0); P(g, circ(x, y + 2, 9), OL, 0, 0); }
+    else { P(g, g => { g.moveTo(x - 30, y); g.quadraticCurveTo(x, y - 20, x + 30, y); g.quadraticCurveTo(x, y + 12, x - 30, y); }, '#fff', 6, 0); P(g, circ(x, y - 2, 8), OL, 0, 0); }
+    line(g, [[x - 26, y - 34], [x + 24, y - 38]], 6); }
+  if (mask === 'normal') { curve(g, [cx - 30, cy + 92], [cx, cy + 106], [cx + 30, cy + 92], 7); g.fillStyle = 'rgba(230,120,120,.3)'; g.beginPath(); g.ellipse(cx - 80, cy + 64, 22, 11, 0, 0, 7); g.ellipse(cx + 80, cy + 64, 22, 11, 0, 0, 7); g.fill(); }
+  else if (mask) {
+    P(g, g => { g.moveTo(cx - 118, cy + 40); g.quadraticCurveTo(cx, cy + 20, cx + 118, cy + 40); g.quadraticCurveTo(cx + 110, cy + 150, cx, cy + 172); g.quadraticCurveTo(cx - 110, cy + 150, cx - 118, cy + 40); }, '#f4f6f8', 8, 0.08);
+    g.strokeStyle = 'rgba(120,130,140,.5)'; g.lineWidth = 4; for (const y of [70, 100, 130]) { g.beginPath(); g.moveTo(cx - 100, cy + y); g.quadraticCurveTo(cx, cy + y + 12, cx + 100, cy + y); g.stroke(); }
+    line(g, [[cx - 118, cy + 44], [cx - 132, cy + 10]], 4, '#e8eaee'); line(g, [[cx + 118, cy + 44], [cx + 132, cy + 10]], 4, '#e8eaee');
+  } else { // Mund bis zu den Ohren (Cartoon, ohne Blut)
+    const m = g => { g.moveTo(cx - 128, cy + 40); g.quadraticCurveTo(cx, cy + 110, cx + 128, cy + 40); g.quadraticCurveTo(cx, cy + 190, cx - 128, cy + 40); g.closePath(); };
+    g.save(); g.beginPath(); m(g); g.fillStyle = '#3a0a0c'; g.fill(); g.clip(); g.fillStyle = '#f7f2e8';
+    g.beginPath(); g.moveTo(cx - 140, cy + 30); g.quadraticCurveTo(cx, cy + 104, cx + 140, cy + 30); g.lineTo(cx + 140, cy + 80); g.quadraticCurveTo(cx, cy + 140, cx - 140, cy + 80); g.closePath(); g.fill();
+    g.beginPath(); g.moveTo(cx - 140, cy + 120); g.quadraticCurveTo(cx, cy + 186, cx + 140, cy + 120); g.lineTo(cx + 140, cy + 200); g.lineTo(cx - 140, cy + 200); g.closePath(); g.fill();
+    g.strokeStyle = 'rgba(30,20,20,.5)'; g.lineWidth = 3; for (let i = -6; i <= 6; i++) { g.beginPath(); g.moveTo(cx + i * 20, cy + 40); g.lineTo(cx + i * 20, cy + 200); g.stroke(); } g.restore();
+    g.beginPath(); m(g); g.lineWidth = 7; g.strokeStyle = OL; g.stroke();
+    for (const s of [-1, 1]) for (let k = 0; k < 3; k++) line(g, [[cx + s * (96 + k * 12), cy + 34 + k * 8], [cx + s * (104 + k * 12), cy + 58 + k * 8]], 4, '#5a1a1c'); // Narben-Naehte
+  }
+}
+export function kuchisake(mask = true, scissors = false, eyes = 'calm') {
+  const c = cv2(512, 1024), g = c.getContext('2d');
+  P(g, g => { g.moveTo(256 - 150, 560); g.bezierCurveTo(256 - 190, 190, 256 - 150, 40, 256, 40); g.bezierCurveTo(256 + 150, 40, 256 + 190, 190, 256 + 150, 560); g.closePath(); }, KHAIR, 10, 0); // Haare hinten
+  P(g, ell(222, 1000, 30, 14), '#1a1416', 7, 0); P(g, ell(290, 1000, 30, 14), '#1a1416', 7, 0);
+  P(g, rr(206, 880, 30, 120, 10), KSK, 7, 0); P(g, rr(276, 880, 30, 120, 10), KSK, 7, 0);
+  // langer Trenchcoat
+  P(g, g => { g.moveTo(170, 380); g.lineTo(342, 380); g.lineTo(372, 900); g.lineTo(140, 900); g.closePath(); }, COAT, 10, 0.12);
+  line(g, [[256, 400], [262, 900]], 5, COAT2); for (const y of [520, 600, 680]) { P(g, circ(236, y, 8), '#6a5a40', 4, 0); P(g, circ(290, y, 8), '#6a5a40', 4, 0); }
+  P(g, rr(150, 600, 212, 26, 8), COAT2, 6, 0);
+  P(g, g => { g.moveTo(200, 380); g.lineTo(256, 470); g.lineTo(312, 380); }, COAT2, 7, 0);
+  P(g, rr(116, 400, 52, 380, 24), COAT, 8, 0.1); P(g, rr(344, 400, 52, 380, 24), COAT, 8, 0.1);
+  P(g, circ(142, 790, 24), KSK, 7, 0); P(g, circ(370, 790, 24), KSK, 7, 0);
+  if (scissors) { g.save(); g.translate(380, 800); g.rotate(0.3); P(g, rr(-10, 0, 20, 150, 6), '#c9ced6', 6, 0); P(g, rr(4, 0, 18, 150, 6), '#aeb4bd', 6, 0); P(g, circ(-6, -14, 20), '#2a2a2e', 6, 0); P(g, circ(24, -14, 20), '#2a2a2e', 6, 0); g.restore(); }
+  kuchiHead(g, 256, 230, mask, eyes, false);
+  for (const sd of [-1, 1]) P(g, g => { g.moveTo(256 + sd * 150, 300); g.quadraticCurveTo(256 + sd * 160, 420, 256 + sd * 130, 520); g.lineTo(256 + sd * 108, 500); g.quadraticCurveTo(256 + sd * 128, 400, 256 + sd * 124, 300); g.closePath(); }, KHAIR, 7, 0); // Straehnen vorne
+  return c;
+}
+export function hostmom(mask = true, eyes = 'calm') {
+  const c = cv2(512, 1024), g = c.getContext('2d');
+  P(g, rr(206, 760, 40, 220, 14), '#3a3f52'); P(g, rr(266, 760, 40, 220, 14), '#3a3f52');
+  P(g, rr(150, 420, 212, 360, 60), '#7a9a8a', 10, 0.12);
+  P(g, g => { g.moveTo(206, 424); g.lineTo(256, 520); g.lineTo(306, 424); }, '#f2efe6', 7, 0);
+  P(g, rr(108, 440, 56, 300, 26), '#7a9a8a', 8, 0.1); P(g, rr(348, 440, 56, 300, 26), '#7a9a8a', 8, 0.1);
+  P(g, circ(136, 748, 26), KSK, 7, 0); P(g, circ(376, 748, 26), KSK, 7, 0);
+  kuchiHead(g, 256, 250, mask, eyes, false);
+  return c;
+}
+MONSTERS['KUCHISAKE-ONNA'] = () => kuchisake(true, true);

@@ -1,0 +1,349 @@
+{
+ "monster": "KUCHISAKE-ONNA",
+ "shots": [
+  {
+   "id": "hook",
+   "scene": "roulette",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Eines dieser Monster ist ausgebrochen. Mal sehen, wer es ist.",
+     "sub": "EINES DIESER MONSTER IST *AUSGEBROCHEN.* MAL SEHEN, WER ES IST."
+    }
+   ],
+   "hold": 0.74,
+   "sfx": [
+    {
+     "n": "alarm",
+     "at": 0
+    },
+    {
+     "n": "ticks",
+     "atEnd": -8.31
+    }
+   ],
+   "noHeader": true
+  },
+  {
+   "id": "name",
+   "scene": "alley_open",
+   "clock": "19:00",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Kuchisake-onna. Sieben Uhr abends.",
+     "sub": "*KUCHISAKE-ONNA.* 19 UHR."
+    }
+   ],
+   "hold": 0.3,
+   "sfx": [
+    {
+     "n": "boom",
+     "at": -0.05
+    },
+    {
+     "n": "buzz",
+     "at": 0.1
+    },
+    {
+     "n": "flicker",
+     "at": 0.55
+    },
+    {
+     "n": "hit_soft",
+     "at": 0.75
+    },
+    {
+     "n": "flicker",
+     "at": 1.25
+    },
+    {
+     "n": "hit_soft",
+     "at": 1.4
+    }
+   ],
+   "amb": "street"
+  },
+  {
+   "id": "exchange",
+   "scene": "home_warn",
+   "clock": "18:30",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Du bist im Austausch in Japan. Deine Gastmutter sagt: Geh nie allein im Dunkeln nach Hause.",
+     "sub": "DU BIST IM AUSTAUSCH IN JAPAN. DEINE GASTMUTTER SAGT: *GEH NIE ALLEIN IM DUNKELN NACH HAUSE.*"
+    }
+   ],
+   "card": {
+    "k": "TOKIO",
+    "v": "AUSTAUSCH",
+    "at": 0.3
+   },
+   "amb": "kitchen"
+  },
+  {
+   "id": "alone",
+   "scene": "alley_walk",
+   "clock": "19:02",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Du gehst allein im Dunkeln nach Hause.",
+     "sub": "DU GEHST *ALLEIN* IM DUNKELN NACH HAUSE."
+    }
+   ],
+   "sfx": [
+    {
+     "n": "steps",
+     "at": 0.1
+    }
+   ],
+   "amb": "street"
+  },
+  {
+   "id": "woman",
+   "scene": "alley_lamp",
+   "clock": "19:04",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Unter einer Laterne steht eine Frau. Langer Mantel. Weiße Maske.",
+     "sub": "UNTER EINER LATERNE STEHT EINE FRAU. LANGER MANTEL. *WEISSE MASKE.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "buzz",
+     "at": 0.2
+    }
+   ],
+   "amb": "street"
+  },
+  {
+   "id": "whisper",
+   "scene": "close_mask",
+   "clock": "19:04",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Sie kommt näher. Und flüstert:",
+     "sub": "SIE KOMMT *NÄHER.* UND FLÜSTERT:"
+    },
+    {
+     "v": "kuchi_mask",
+     "t": "Bin ich hübsch?",
+     "sub": "„BIN ICH *HÜBSCH?*“"
+    }
+   ],
+   "hold": 0.3,
+   "sfx": [
+    {
+     "n": "heart",
+     "at": 0
+    }
+   ],
+   "amb": "street"
+  },
+  {
+   "id": "name2",
+   "scene": "red_kuchi",
+   "clock": "19:04",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Kuchisake-onna. Die Frau mit dem aufgeschlitzten Mund.",
+     "sub": "*KUCHISAKE-ONNA.* DIE FRAU MIT DEM *AUFGESCHLITZTEN MUND.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "boom",
+     "at": 0
+    }
+   ]
+  },
+  {
+   "id": "yesno",
+   "scene": "red_mask",
+   "clock": "19:04",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Sagst du Nein, holt sie dich. Sagst du Ja, nimmt sie die Maske ab.",
+     "sub": "SAGST DU NEIN, *HOLT SIE DICH.* SAGST DU JA, NIMMT SIE DIE *MASKE AB.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "whisper",
+     "at": 0.3
+    }
+   ]
+  },
+  {
+   "id": "mouth",
+   "scene": "red_mouth",
+   "clock": "19:04",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Ihr Mund reicht von Ohr zu Ohr.",
+     "sub": "IHR MUND REICHT *VON OHR ZU OHR.*"
+    }
+   ],
+   "hold": 0.3,
+   "sfx": [
+    {
+     "n": "hit_soft",
+     "at": 0
+    }
+   ]
+  },
+  {
+   "id": "rule",
+   "scene": "boy_rule",
+   "clock": "19:05",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Die Regel: Sag nie Ja. Und sag nie Nein.",
+     "sub": "DIE REGEL: *SAG NIE JA.* UND *SAG NIE NEIN.*"
+    }
+   ],
+   "rule": {
+    "title": "REGEL #1",
+    "text": "SAG NIE JA – SAG NIE NEIN",
+    "atSeg": [
+     0,
+     0.6
+    ]
+   },
+   "sfx": [
+    {
+     "n": "pop",
+     "atSeg": [
+      0,
+      0.6
+     ]
+    }
+   ],
+   "amb": "street"
+  },
+  {
+   "id": "answer",
+   "scene": "boy_answer",
+   "clock": "19:05",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Du schluckst. Und sagst: Du siehst ganz normal aus.",
+     "sub": "DU SCHLUCKST. UND SAGST: *DU SIEHST GANZ NORMAL AUS.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "heart",
+     "at": 0.2
+    }
+   ],
+   "amb": "street"
+  },
+  {
+   "id": "gone",
+   "scene": "alley_tilt",
+   "clock": "19:05",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Sie legt den Kopf schief. Dann ist sie weg.",
+     "sub": "SIE LEGT DEN KOPF SCHIEF. DANN IST SIE *WEG.*"
+    }
+   ],
+   "hold": 0.3,
+   "sfx": [
+    {
+     "n": "flicker",
+     "atSeg": [
+      0,
+      -1.4
+     ]
+    }
+   ],
+   "amb": "street"
+  },
+  {
+   "id": "morning",
+   "scene": "breakfast",
+   "clock": "07:30",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Am nächsten Morgen sitzt deine Gastmutter am Frühstückstisch. Mit einer weißen Maske.",
+     "sub": "AM NÄCHSTEN MORGEN SITZT DEINE GASTMUTTER AM FRÜHSTÜCKSTISCH. MIT EINER *WEISSEN MASKE.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "birds",
+     "at": 0.2
+    }
+   ],
+   "amb": "kitchen"
+  },
+  {
+   "id": "cold",
+   "scene": "mom_close",
+   "clock": "07:31",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Sie sagt, sie ist erkältet.",
+     "sub": "SIE SAGT, SIE IST *ERKÄLTET.*"
+    },
+    {
+     "v": "kuchi",
+     "t": "Sag mal... findest du mich hübsch?",
+     "sub": "„SAG MAL… FINDEST DU MICH *HÜBSCH?*“"
+    }
+   ],
+   "hold": 1.0,
+   "sfx": [
+    {
+     "n": "stinger",
+     "atSeg": [
+      1,
+      -0.3
+     ]
+    }
+   ],
+   "amb": "kitchen"
+  },
+  {
+   "id": "cta",
+   "scene": "cta",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Folge mir, um zu sehen, wen du als Nächstes bekommst.",
+     "sub": "FOLGE MIR, UM ZU SEHEN, WEN DU ALS *NÄCHSTES* BEKOMMST."
+    }
+   ],
+   "hold": 0.3,
+   "noHeader": true,
+   "sfx": [
+    {
+     "n": "sparkle",
+     "at": 0
+    }
+   ]
+  },
+  {
+   "id": "endcard",
+   "scene": "endcard",
+   "segs": [],
+   "hold": 2.2,
+   "noHeader": true
+  }
+ ]
+}
