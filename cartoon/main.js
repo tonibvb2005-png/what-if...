@@ -2090,7 +2090,7 @@
       extra: (lt) => pill(0, 640, 'NEVER BORING 😎', eb(P(lt, cue('boring', .5), cue('boring', .5) + .3)), FANKIT().shirt, '#fff', 50) },
     fanout: { set: 'flat', flat: (t) => bgStadium(t, false), captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { finn: { x: 0, scale: 1 } },
       acts: { finn: [[0, { e: 'happy', p: 'thumbsUpR', handR: 'thumb' }], ['next', .45, { e: 'surprised', p: 'shrug', m: { lookY: -.5 } }]] },
-      extra: (lt, t) => { const n = cue('next', .45); if (lt < n) { scrTitle('@ TAG A ' + (CUR.club || 'CHELSEA') + ' FAN', 'STILL RECOVERING 🩹', 1, '#ffffff'); } else { roulette(lt - n, Object.assign(ROUL(CUR), { land: false, seed: 3 })); scrTitle('NEXT: WHY IT SUCKS BEING A', '. . . FAN? 👇', 1, '#ffffff'); } } }
+      extra: (lt, t) => { const n = cue('next', .45); if (lt < n) { scrTitle('@ TAG A ' + (CUR.club || 'CHELSEA') + ' FAN', (spec && spec.tagLine) || 'STILL RECOVERING 🩹', 1, '#ffffff'); } else { roulette(lt - n, Object.assign(ROUL(CUR), { land: false, seed: 3 })); scrTitle('NEXT: WHY IT SUCKS BEING A', '. . . FAN? 👇', 1, '#ffffff'); } } }
   });
 
 
