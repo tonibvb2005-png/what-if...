@@ -2539,6 +2539,7 @@
     spec.scenes.forEach((x, i) => { x._ov.style.display = i === idx ? 'block' : 'none'; });
     const prev = spec.scenes[idx - 1], next = spec.scenes[idx + 1];
     let cam = camAt(sh.cam, clt, cd);
+    if (spec.punch && s.cues) { let last = -9; for (const k in s.cues) { const ct = s.cues[k]; if (ct <= lt && ct > last) last = ct; } if (s.wordTimes && s.wordTimes[0] != null && lt < .25) last = 0; const k = 1 - P(lt - last, 0, .35); if (k > 0) cam = Object.assign({}, cam, { z: cam.z * (1 + .07 * eo(k)) }); }
     const shake = sh.shake ? Math.max(0, 1 - clt / 1.5) * 14 : 0;
     const br = sh.bright != null ? sh.bright : 1;
     const pbr = !sh.cuts && prev && prev.sh.set === sh.set ? (prev.sh.bright != null ? prev.sh.bright : 1) : br;
