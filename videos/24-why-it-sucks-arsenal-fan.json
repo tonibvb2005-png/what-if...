@@ -1,0 +1,379 @@
+{
+  "title": "24-why-it-sucks-arsenal-fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "arsenal",
+  "article": "AN",
+  "fanKit": {
+    "shirt": "#ef0107",
+    "trim": "#ffffff",
+    "pants": "#ffffff"
+  },
+  "flatCrowd": [
+    "#ef0107",
+    "#ef0107",
+    "#ffffff",
+    "#9c0005"
+  ],
+  "scarf": [
+    "#ef0107",
+    "#ffffff"
+  ],
+  "tagLine": "STILL TRUSTING 🙏",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being an... Arsenal fan!",
+      "club": "ARSENAL",
+      "seed": 24,
+      "audio": "../audio/24-why-it-sucks-arsenal-fan/01.wav",
+      "wordTimes": [
+        0.0,
+        0.32,
+        0.58,
+        0.96,
+        1.46,
+        2.24,
+        3.98
+      ],
+      "cues": {
+        "land": 2.24
+      },
+      "pad": 0.35
+    },
+    {
+      "shot": "ar6",
+      "text": "It starts when you're six. Your dad tells you about the Invincibles. A whole season. Unbeaten. He tells you again. Every Sunday. For the rest of your life.",
+      "club": "ARSENAL",
+      "seed": 24,
+      "cueWords": {
+        "again": "He"
+      },
+      "audio": "../audio/24-why-it-sucks-arsenal-fan/02.wav",
+      "wordTimes": [
+        0.1,
+        0.1,
+        0.28,
+        0.48,
+        0.7,
+        1.24,
+        1.3,
+        1.52,
+        1.76,
+        1.9,
+        2.04,
+        2.2,
+        3.3,
+        3.34,
+        3.76,
+        4.68,
+        5.42,
+        5.46,
+        5.62,
+        5.8,
+        6.38,
+        6.58,
+        6.96,
+        7.34,
+        7.46,
+        7.68,
+        7.92,
+        8.04
+      ],
+      "cues": {
+        "again": 5.42
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "ar9",
+      "text": "Age nine. Champions League final in Paris! Your keeper gets sent off after eighteen minutes. You lose 2-1. But hey... great atmosphere.",
+      "club": "ARSENAL",
+      "seed": 24,
+      "cueWords": {
+        "red": "Your",
+        "lose": "You",
+        "hey": "But"
+      },
+      "audio": "../audio/24-why-it-sucks-arsenal-fan/03.wav",
+      "wordTimes": [
+        0.1,
+        0.1,
+        0.98,
+        0.98,
+        1.2,
+        1.44,
+        1.66,
+        2.56,
+        2.66,
+        2.84,
+        3.02,
+        3.24,
+        3.42,
+        3.75,
+        4.08,
+        4.84,
+        4.92,
+        5.12,
+        6.02,
+        6.1,
+        6.6,
+        6.74
+      ],
+      "cues": {
+        "red": 2.56,
+        "lose": 4.84,
+        "hey": 6.02
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "ar12",
+      "text": "Age twelve. You finish second. Behind Leicester. Yes. That Leicester. Five thousand to one Leicester.",
+      "club": "ARSENAL",
+      "seed": 24,
+      "cueWords": {
+        "behind": "Behind",
+        "that": "Yes"
+      },
+      "audio": "../audio/24-why-it-sucks-arsenal-fan/04.wav",
+      "wordTimes": [
+        0.1,
+        0.51,
+        0.92,
+        0.98,
+        1.28,
+        2.14,
+        2.44,
+        3.22,
+        3.86,
+        4.0,
+        4.45,
+        4.89,
+        5.34,
+        5.5,
+        5.84
+      ],
+      "cues": {
+        "behind": 2.14,
+        "that": 3.22
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "ar14",
+      "text": "Age fourteen. You're top of the league. For two hundred and forty-eight days. You start planning the parade. You finish second.",
+      "club": "ARSENAL",
+      "seed": 24,
+      "cueWords": {
+        "parade": [
+          "You",
+          1
+        ],
+        "second": [
+          "You",
+          2
+        ]
+      },
+      "audio": "../audio/24-why-it-sucks-arsenal-fan/05.wav",
+      "wordTimes": [
+        0.1,
+        0.86,
+        1.62,
+        1.74,
+        1.88,
+        2.02,
+        2.1,
+        2.34,
+        2.59,
+        2.84,
+        3.1,
+        3.35,
+        3.6,
+        4.62,
+        4.62,
+        4.8,
+        5.04,
+        5.22,
+        5.86,
+        5.9,
+        6.22
+      ],
+      "cues": {
+        "parade": 4.62,
+        "second": 5.86
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "ar1516",
+      "text": "Age fifteen. Second again. Age sixteen. Second again. Your friends start calling you \"Silver.\"",
+      "club": "ARSENAL",
+      "seed": 24,
+      "cueWords": {
+        "m1": "Second",
+        "m2": [
+          "Second",
+          2
+        ],
+        "silver": "Your"
+      },
+      "audio": "../audio/24-why-it-sucks-arsenal-fan/06.wav",
+      "wordTimes": [
+        0.1,
+        0.6,
+        1.1,
+        1.2,
+        1.82,
+        2.3,
+        2.78,
+        2.94,
+        3.56,
+        3.64,
+        3.84,
+        4.1,
+        4.34,
+        4.72
+      ],
+      "cues": {
+        "m1": 1.1,
+        "m2": 2.78,
+        "silver": 3.56
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "ar17",
+      "text": "Age seventeen. The manager says: \"Trust the process.\" You trust it. Your dad trusts it. Your dad's dad trusts it.",
+      "club": "ARSENAL",
+      "seed": 24,
+      "cueWords": {
+        "f": "You",
+        "d": "Your",
+        "g": [
+          "Your",
+          2
+        ]
+      },
+      "audio": "../audio/24-why-it-sucks-arsenal-fan/07.wav",
+      "wordTimes": [
+        0.1,
+        0.6,
+        1.1,
+        1.12,
+        1.34,
+        2.26,
+        2.32,
+        2.6,
+        3.46,
+        3.56,
+        3.76,
+        4.22,
+        4.32,
+        4.56,
+        4.88,
+        5.38,
+        5.5,
+        5.88,
+        6.16,
+        6.54
+      ],
+      "cues": {
+        "f": 3.46,
+        "d": 4.22,
+        "g": 5.38
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "arthing",
+      "text": "That's the thing about being an Arsenal fan. You're always so close.",
+      "club": "ARSENAL",
+      "seed": 24,
+      "cueWords": {
+        "close": "You're"
+      },
+      "audio": "../audio/24-why-it-sucks-arsenal-fan/08.wav",
+      "wordTimes": [
+        0.1,
+        0.26,
+        0.38,
+        0.52,
+        0.76,
+        0.94,
+        1.14,
+        1.32,
+        1.84,
+        1.98,
+        2.28,
+        2.7
+      ],
+      "cues": {
+        "close": 1.84
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "arnext",
+      "text": "So close you can almost touch it. Next season. Definitely.",
+      "club": "ARSENAL",
+      "seed": 24,
+      "cueWords": {
+        "next": "Next"
+      },
+      "audio": "../audio/24-why-it-sucks-arsenal-fan/09.wav",
+      "wordTimes": [
+        0.1,
+        0.26,
+        0.7,
+        0.7,
+        0.7,
+        1.0,
+        1.28,
+        1.46,
+        1.6,
+        2.24
+      ],
+      "cues": {
+        "next": 1.46
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag an Arsenal fan who still trusts the process. And which club is next? Drop it in the comments!",
+      "club": "ARSENAL",
+      "seed": 24,
+      "cueWords": {
+        "next": "And"
+      },
+      "audio": "../audio/24-why-it-sucks-arsenal-fan/10.wav",
+      "wordTimes": [
+        0.1,
+        0.22,
+        0.4,
+        0.6,
+        0.96,
+        1.16,
+        1.5,
+        1.92,
+        2.18,
+        2.99,
+        3.18,
+        3.38,
+        3.56,
+        3.72,
+        4.38,
+        4.44,
+        4.54,
+        4.62,
+        4.7
+      ],
+      "cues": {
+        "next": 2.99
+      },
+      "pad": 0.9
+    }
+  ],
+  "punch": true
+}

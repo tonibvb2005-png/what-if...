@@ -1,0 +1,132 @@
+{
+  "title": "24-why-it-sucks-arsenal-fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "arsenal",
+  "article": "AN",
+  "fanKit": {
+    "shirt": "#ef0107",
+    "trim": "#ffffff",
+    "pants": "#ffffff"
+  },
+  "flatCrowd": [
+    "#ef0107",
+    "#ef0107",
+    "#ffffff",
+    "#9c0005"
+  ],
+  "scarf": [
+    "#ef0107",
+    "#ffffff"
+  ],
+  "tagLine": "WHO STILL TRUSTS THE PROCESS 🙏",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being an... Arsenal fan!",
+      "club": "ARSENAL",
+      "seed": 24
+    },
+    {
+      "shot": "ar6",
+      "text": "It starts when you're six. Your dad tells you about the Invincibles. A whole season. Unbeaten. He tells you again. Every Sunday. For the rest of your life.",
+      "club": "ARSENAL",
+      "seed": 24,
+      "cueWords": {
+        "again": "He"
+      }
+    },
+    {
+      "shot": "ar9",
+      "text": "Age nine. Champions League final in Paris! Your keeper gets sent off after eighteen minutes. You lose 2-1. But hey... great atmosphere.",
+      "club": "ARSENAL",
+      "seed": 24,
+      "cueWords": {
+        "red": "Your",
+        "lose": "You",
+        "hey": "But"
+      }
+    },
+    {
+      "shot": "ar12",
+      "text": "Age twelve. You finish second. Behind Leicester. Yes. That Leicester. Five thousand to one Leicester.",
+      "club": "ARSENAL",
+      "seed": 24,
+      "cueWords": {
+        "behind": "Behind",
+        "that": "Yes"
+      }
+    },
+    {
+      "shot": "ar14",
+      "text": "Age fourteen. You're top of the league. For two hundred and forty-eight days. You start planning the parade. You finish second.",
+      "club": "ARSENAL",
+      "seed": 24,
+      "cueWords": {
+        "parade": [
+          "You",
+          2
+        ],
+        "second": [
+          "You",
+          3
+        ]
+      }
+    },
+    {
+      "shot": "ar1516",
+      "text": "Age fifteen. Second again. Age sixteen. Second again. Your friends start calling you \"Silver.\"",
+      "club": "ARSENAL",
+      "seed": 24,
+      "cueWords": {
+        "m1": "Second",
+        "m2": [
+          "Second",
+          2
+        ],
+        "silver": "Your"
+      }
+    },
+    {
+      "shot": "ar17",
+      "text": "Age seventeen. The manager says: \"Trust the process.\" You trust it. Your dad trusts it. Your dad's dad trusts it.",
+      "club": "ARSENAL",
+      "seed": 24,
+      "cueWords": {
+        "f": "You",
+        "d": "Your",
+        "g": [
+          "Your",
+          2
+        ]
+      }
+    },
+    {
+      "shot": "arthing",
+      "text": "That's the thing about being an Arsenal fan. You're always so close.",
+      "club": "ARSENAL",
+      "seed": 24,
+      "cueWords": {
+        "close": "You're"
+      }
+    },
+    {
+      "shot": "arnext",
+      "text": "So close you can almost touch it. Next season. Definitely.",
+      "club": "ARSENAL",
+      "seed": 24,
+      "cueWords": {
+        "next": "Next"
+      }
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag an Arsenal fan who still trusts the process. And which club is next? Drop it in the comments!",
+      "club": "ARSENAL",
+      "seed": 24,
+      "cueWords": {
+        "next": "And"
+      }
+    }
+  ]
+}

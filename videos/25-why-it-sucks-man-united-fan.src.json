@@ -1,0 +1,128 @@
+{
+  "title": "25-why-it-sucks-man-united-fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "manchester",
+  "article": "A",
+  "fanKit": {
+    "shirt": "#da291c",
+    "trim": "#ffffff",
+    "pants": "#ffffff"
+  },
+  "flatCrowd": [
+    "#da291c",
+    "#da291c",
+    "#ffffff",
+    "#111111"
+  ],
+  "scarf": [
+    "#da291c",
+    "#111111"
+  ],
+  "tagLine": "WHO'S STILL WAITING ⏳",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Manchester United fan!",
+      "club": "MAN UNITED",
+      "seed": 25
+    },
+    {
+      "shot": "mu6",
+      "text": "It starts when you're six. Your dad shows you the trophy cabinet. Thirteen league titles. One manager. You think this is normal.",
+      "club": "MAN UNITED",
+      "seed": 25,
+      "cueWords": {
+        "normal": [
+          "You",
+          2
+        ]
+      }
+    },
+    {
+      "shot": "mu9",
+      "text": "Age nine. The legend retires. Fans put up a banner for the new manager: \"The Chosen One.\" A few months later, a plane flies over the stadium. The banner says: \"Wrong One.\"",
+      "club": "MAN UNITED",
+      "seed": 25,
+      "cueWords": {
+        "banner": "Fans",
+        "plane": "A"
+      }
+    },
+    {
+      "shot": "mu12",
+      "text": "Age twelve. New manager. Again. And again. You stop learning their names. You just call them \"Gaffer.\"",
+      "club": "MAN UNITED",
+      "seed": 25,
+      "cueWords": {
+        "again2": "And",
+        "gaffer": [
+          "You",
+          2
+        ]
+      }
+    },
+    {
+      "shot": "mu14",
+      "text": "Age fourteen. Ronaldo comes back! The king is home! One year later, he leaves... after a TV interview.",
+      "club": "MAN UNITED",
+      "seed": 25,
+      "cueWords": {
+        "back": "Ronaldo",
+        "king": "The",
+        "leave": "One",
+        "tv": "after"
+      }
+    },
+    {
+      "shot": "mu16",
+      "text": "Age sixteen. You finish fifteenth. Your dad says: \"I remember when we won the treble.\" You say: \"I remember when it didn't rain inside the stadium.\"",
+      "club": "MAN UNITED",
+      "seed": 25,
+      "cueWords": {
+        "dad": "Your",
+        "you": [
+          "You",
+          2
+        ]
+      }
+    },
+    {
+      "shot": "mu17",
+      "text": "Age seventeen. Europa League final. Against Tottenham. You lose. Your Spurs friend still hasn't stopped talking about it.",
+      "club": "MAN UNITED",
+      "seed": 25,
+      "cueWords": {
+        "lose": "You",
+        "mate": "Your"
+      }
+    },
+    {
+      "shot": "muthing",
+      "text": "That's the thing about being a United fan. Your dad had the glory years.",
+      "club": "MAN UNITED",
+      "seed": 25,
+      "cueWords": {
+        "glory": "Your"
+      }
+    },
+    {
+      "shot": "mubucket",
+      "text": "You have the stories. And a bucket for the roof.",
+      "club": "MAN UNITED",
+      "seed": 25,
+      "cueWords": {
+        "bucket": "And"
+      }
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a United fan who's still waiting. And which club is next? Drop it in the comments!",
+      "club": "MAN UNITED",
+      "seed": 25,
+      "cueWords": {
+        "next": "And"
+      }
+    }
+  ]
+}

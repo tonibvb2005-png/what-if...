@@ -1,0 +1,391 @@
+{
+  "title": "25-why-it-sucks-man-united-fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "manchester",
+  "article": "A",
+  "fanKit": {
+    "shirt": "#da291c",
+    "trim": "#ffffff",
+    "pants": "#ffffff"
+  },
+  "flatCrowd": [
+    "#da291c",
+    "#da291c",
+    "#ffffff",
+    "#111111"
+  ],
+  "scarf": [
+    "#da291c",
+    "#111111"
+  ],
+  "tagLine": "WHO'S STILL WAITING ⏳",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Manchester United fan!",
+      "club": "MAN UNITED",
+      "seed": 25,
+      "audio": "../audio/25-why-it-sucks-man-united-fan/01.wav",
+      "wordTimes": [
+        0.0,
+        0.32,
+        0.56,
+        0.9,
+        1.36,
+        3.56,
+        3.98,
+        4.56
+      ],
+      "cues": {
+        "land": 3.56
+      },
+      "pad": 0.35
+    },
+    {
+      "shot": "mu6",
+      "text": "It starts when you're six. Your dad shows you the trophy cabinet. Thirteen league titles. One manager. You think this is normal.",
+      "club": "MAN UNITED",
+      "seed": 25,
+      "cueWords": {
+        "normal": [
+          "You",
+          2
+        ]
+      },
+      "audio": "../audio/25-why-it-sucks-man-united-fan/02.wav",
+      "wordTimes": [
+        0.1,
+        0.12,
+        0.34,
+        0.54,
+        0.7,
+        1.44,
+        1.46,
+        1.68,
+        1.94,
+        2.12,
+        2.22,
+        2.48,
+        3.07,
+        3.66,
+        4.02,
+        4.9,
+        5.08,
+        5.84,
+        5.9,
+        6.08,
+        6.24,
+        6.42
+      ],
+      "cues": {
+        "normal": 5.84
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "mu9",
+      "text": "Age nine. The legend retires. Fans put up a banner for the new manager: \"The Chosen One.\" A few months later, a plane flies over the stadium. The banner says: \"Wrong One.\"",
+      "club": "MAN UNITED",
+      "seed": 25,
+      "cueWords": {
+        "banner": "Fans",
+        "plane": [
+          "A",
+          2
+        ]
+      },
+      "audio": "../audio/25-why-it-sucks-man-united-fan/03.wav",
+      "wordTimes": [
+        0.1,
+        0.14,
+        0.76,
+        0.84,
+        1.14,
+        2.42,
+        2.54,
+        2.72,
+        2.82,
+        2.98,
+        3.12,
+        3.32,
+        3.46,
+        3.66,
+        4.34,
+        4.46,
+        4.84,
+        5.54,
+        5.62,
+        5.72,
+        5.88,
+        6.4,
+        6.56,
+        6.88,
+        7.22,
+        7.46,
+        7.6,
+        8.22,
+        8.32,
+        8.54,
+        9.44,
+        9.56
+      ],
+      "cues": {
+        "banner": 2.42,
+        "plane": 5.54
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "mu12",
+      "text": "Age twelve. New manager. Again. And again. You stop learning their names. You just call them \"Gaffer.\"",
+      "club": "MAN UNITED",
+      "seed": 25,
+      "cueWords": {
+        "again2": "And",
+        "gaffer": [
+          "You",
+          2
+        ]
+      },
+      "audio": "../audio/25-why-it-sucks-man-united-fan/04.wav",
+      "wordTimes": [
+        0.1,
+        0.51,
+        0.92,
+        1.04,
+        1.96,
+        2.0,
+        2.4,
+        2.98,
+        3.06,
+        3.24,
+        3.48,
+        3.72,
+        4.46,
+        4.58,
+        4.76,
+        4.92,
+        5.1
+      ],
+      "cues": {
+        "again2": 2.0,
+        "gaffer": 4.46
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "mu14",
+      "text": "Age fourteen. Ronaldo comes back! The king is home! One year later, he leaves... after a TV interview.",
+      "club": "MAN UNITED",
+      "seed": 25,
+      "cueWords": {
+        "back": "Ronaldo",
+        "king": "The",
+        "leave": "One",
+        "tv": "after"
+      },
+      "audio": "../audio/25-why-it-sucks-man-united-fan/05.wav",
+      "wordTimes": [
+        0.1,
+        0.39,
+        0.68,
+        1.3,
+        1.68,
+        2.5,
+        2.6,
+        2.92,
+        3.22,
+        4.18,
+        4.28,
+        4.42,
+        4.98,
+        5.08,
+        5.42,
+        6.04,
+        6.24,
+        6.5
+      ],
+      "cues": {
+        "back": 0.68,
+        "king": 2.5,
+        "leave": 4.18,
+        "tv": 5.42
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "mu16",
+      "text": "Age sixteen. You finish fifteenth. Your dad says: \"I remember when we won the treble.\" You say: \"I remember when it didn't rain inside the stadium.\"",
+      "club": "MAN UNITED",
+      "seed": 25,
+      "cueWords": {
+        "dad": "Your",
+        "you": [
+          "You",
+          2
+        ]
+      },
+      "audio": "../audio/25-why-it-sucks-man-united-fan/06.wav",
+      "wordTimes": [
+        0.1,
+        0.53,
+        0.96,
+        1.06,
+        1.38,
+        2.36,
+        2.44,
+        2.62,
+        3.4,
+        3.4,
+        3.64,
+        3.86,
+        3.98,
+        4.12,
+        4.26,
+        4.84,
+        5.02,
+        5.56,
+        5.72,
+        5.94,
+        6.16,
+        6.28,
+        6.52,
+        6.74,
+        7.08,
+        7.26
+      ],
+      "cues": {
+        "dad": 2.36,
+        "you": 4.84
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "mu17",
+      "text": "Age seventeen. Europa League final. Against Tottenham. You lose. Your Spurs friend still hasn't stopped talking about it.",
+      "club": "MAN UNITED",
+      "seed": 25,
+      "cueWords": {
+        "lose": "You",
+        "mate": "Your"
+      },
+      "audio": "../audio/25-why-it-sucks-man-united-fan/07.wav",
+      "wordTimes": [
+        0.1,
+        0.69,
+        1.28,
+        1.28,
+        1.64,
+        2.02,
+        2.52,
+        3.28,
+        3.36,
+        4.24,
+        4.34,
+        4.6,
+        4.94,
+        5.3,
+        5.7,
+        5.96,
+        6.28,
+        6.54
+      ],
+      "cues": {
+        "lose": 3.28,
+        "mate": 4.24
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "muthing",
+      "text": "That's the thing about being a United fan. Your dad had the glory years.",
+      "club": "MAN UNITED",
+      "seed": 25,
+      "cueWords": {
+        "glory": "Your"
+      },
+      "audio": "../audio/25-why-it-sucks-man-united-fan/08.wav",
+      "wordTimes": [
+        0.1,
+        0.24,
+        0.34,
+        0.46,
+        0.66,
+        0.84,
+        0.98,
+        1.28,
+        1.88,
+        1.96,
+        2.28,
+        2.52,
+        2.64,
+        2.92
+      ],
+      "cues": {
+        "glory": 1.88
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "mubucket",
+      "text": "You have the stories. And a bucket for the roof.",
+      "club": "MAN UNITED",
+      "seed": 25,
+      "cueWords": {
+        "bucket": "And"
+      },
+      "audio": "../audio/25-why-it-sucks-man-united-fan/09.wav",
+      "wordTimes": [
+        0.1,
+        0.24,
+        0.42,
+        0.56,
+        1.22,
+        1.4,
+        1.56,
+        1.76,
+        2.0,
+        2.14
+      ],
+      "cues": {
+        "bucket": 1.22
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a United fan who's still waiting. And which club is next? Drop it in the comments!",
+      "club": "MAN UNITED",
+      "seed": 25,
+      "cueWords": {
+        "next": "And"
+      },
+      "audio": "../audio/25-why-it-sucks-man-united-fan/10.wav",
+      "wordTimes": [
+        0.1,
+        0.22,
+        0.34,
+        0.6,
+        0.92,
+        1.24,
+        1.42,
+        1.7,
+        2.08,
+        2.26,
+        2.46,
+        2.58,
+        3.26,
+        3.36,
+        3.46,
+        3.54,
+        3.64
+      ],
+      "cues": {
+        "next": 1.7
+      },
+      "pad": 0.9
+    }
+  ],
+  "punch": true
+}
