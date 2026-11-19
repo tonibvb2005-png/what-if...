@@ -1,0 +1,97 @@
+{
+  "title": "Why it sucks being a Tottenham fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "scarf": [
+    "#132257",
+    "#ffffff"
+  ],
+  "fanKit": {
+    "shirt": "#ffffff",
+    "trim": "#132257",
+    "pants": "#132257"
+  },
+  "flatCrowd": [
+    "#ffffff",
+    "#ffffff",
+    "#132257",
+    "#c9ced8"
+  ],
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Tottenham fan!",
+      "club": "TOTTENHAM",
+      "seed": 23,
+      "audio": "../audio/23-why-it-sucks-tottenham-fan/01.wav",
+      "duration": 4.2,
+      "cues": {
+        "land": 2.6
+      }
+    },
+    {
+      "shot": "sp7",
+      "text": "It starts when you're seven. Last day of the season. Win, and you're in the Champions League. The night before... the team eats lasagne. Half the squad gets food poisoning. You lose.",
+      "club": "TOTTENHAM",
+      "seed": 23,
+      "audio": "../audio/23-why-it-sucks-tottenham-fan/02.wav"
+    },
+    {
+      "shot": "sp10",
+      "text": "Age ten. Your Arsenal friends have a special day. St Totteringham's Day. It's the day you can't finish above them anymore. They celebrate it... almost every year.",
+      "club": "TOTTENHAM",
+      "seed": 23,
+      "audio": "../audio/23-why-it-sucks-tottenham-fan/03.wav"
+    },
+    {
+      "shot": "sp13",
+      "text": "Age thirteen. Champions League final! In Madrid! You lose 2-0. But hey... you got there.",
+      "club": "TOTTENHAM",
+      "seed": 23,
+      "audio": "../audio/23-why-it-sucks-tottenham-fan/04.wav"
+    },
+    {
+      "shot": "sp15",
+      "text": "Age fifteen. New stadium. Over a billion pounds. It even has its own cheese room. A trophy room? Let's not get ahead of ourselves.",
+      "club": "TOTTENHAM",
+      "seed": 23,
+      "audio": "../audio/23-why-it-sucks-tottenham-fan/05.wav"
+    },
+    {
+      "shot": "sp16",
+      "text": "Age sixteen. Your best striker leaves. To win trophies. He joins Bayern Munich. And that season... even Bayern win nothing.",
+      "club": "TOTTENHAM",
+      "seed": 23,
+      "audio": "../audio/23-why-it-sucks-tottenham-fan/06.wav"
+    },
+    {
+      "shot": "sp17",
+      "text": "Age seventeen. Europa League final. You finally win a trophy! Now nobody knows how to celebrate.",
+      "club": "TOTTENHAM",
+      "seed": 23,
+      "audio": "../audio/23-why-it-sucks-tottenham-fan/07.wav"
+    },
+    {
+      "shot": "spthing",
+      "text": "That's the thing about being a Spurs fan. It's never easy.",
+      "club": "TOTTENHAM",
+      "seed": 23,
+      "audio": "../audio/23-why-it-sucks-tottenham-fan/08.wav"
+    },
+    {
+      "shot": "spworth",
+      "text": "But one trophy... and it's all worth it. Probably.",
+      "club": "TOTTENHAM",
+      "seed": 23,
+      "audio": "../audio/23-why-it-sucks-tottenham-fan/09.wav"
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a Spurs fan who still believes. And which club is next? Drop it in the comments!",
+      "club": "TOTTENHAM",
+      "seed": 23,
+      "audio": "../audio/23-why-it-sucks-tottenham-fan/10.wav",
+      "pad": 1.6
+    }
+  ]
+}

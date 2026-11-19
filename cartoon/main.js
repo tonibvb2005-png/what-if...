@@ -2093,6 +2093,98 @@
       extra: (lt, t) => { const n = cue('next', .45); if (lt < n) { scrTitle('@ TAG A ' + (CUR.club || 'CHELSEA') + ' FAN', 'STILL RECOVERING 🩹', 1, '#ffffff'); } else { roulette(lt - n, Object.assign(ROUL(CUR), { land: false, seed: 3 })); scrTitle('NEXT: WHY IT SUCKS BEING A', '. . . FAN? 👇', 1, '#ffffff'); } } }
   });
 
+
+  // ---------- indoor / city flat sets (less pitch, more locations) ----------
+  function floor(y, c1, c2) { ctx.fillStyle = c1; ctx.fillRect(0, y, W, H - y); ctx.fillStyle = c2; for (let x = -200; x < W + 200; x += 120) { ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + 60, y); ctx.lineTo(x + 60 + (x - 540) * .9, H); ctx.lineTo(x + (x - 540) * .9, H); ctx.closePath(); ctx.fill(); } ctx.fillStyle = 'rgba(0,0,0,.15)'; ctx.fillRect(0, y, W, 14); }
+  function bgLiving(t, tv) {
+    ctx.fillStyle = '#f2d9b8'; ctx.fillRect(0, 0, W, 1250); ctx.fillStyle = '#ead0ad'; for (let x = 0; x < W; x += 80) ctx.fillRect(x, 0, 40, 1250);
+    // window with drifting clouds
+    ctx.save(); ctx.beginPath(); ctx.rect(70, 260, 260, 300); ctx.clip(); ctx.fillStyle = '#7fc6f5'; ctx.fillRect(70, 260, 260, 300); ctx.fillStyle = '#fff'; for (let i = 0; i < 3; i++) { const x = ((t * 20 + i * 140) % 420) + 20; ctx.beginPath(); ctx.arc(x, 330 + i * 70, 26, 0, 7); ctx.arc(x + 30, 320 + i * 70, 32, 0, 7); ctx.fill(); } ctx.restore();
+    ctx.lineWidth = 12; ctx.strokeStyle = '#fff'; ctx.strokeRect(70, 260, 260, 300); ctx.beginPath(); ctx.moveTo(200, 260); ctx.lineTo(200, 560); ctx.stroke();
+    // lamp + plant
+    ctx.fillStyle = '#5a3a24'; ctx.fillRect(946, 640, 8, 600); ctx.beginPath(); ctx.moveTo(900, 640); ctx.lineTo(1000, 640); ctx.lineTo(975, 560); ctx.lineTo(925, 560); ctx.closePath(); ctx.fillStyle = '#ffd98a'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = OUT; ctx.stroke();
+    ctx.save(); ctx.globalAlpha = .18 + .05 * Math.sin(t * 3); ctx.beginPath(); ctx.moveTo(925, 640); ctx.lineTo(820, 1000); ctx.lineTo(1080, 1000); ctx.lineTo(975, 640); ctx.fillStyle = '#ffe9a8'; ctx.fill(); ctx.restore();
+    // TV
+    ctx.fillStyle = '#20233a'; ctx.beginPath(); ctx.roundRect(330, 330, 420, 270, 18); ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke();
+    ctx.save(); ctx.beginPath(); ctx.roundRect(348, 348, 384, 234, 8); ctx.clip(); ctx.fillStyle = '#1b5e2f'; ctx.fillRect(348, 348, 384, 234); ctx.fillStyle = '#227a3a'; for (let x = 348; x < 732; x += 48) ctx.fillRect(x, 348, 24, 234); if (tv) tv(540, 465); ctx.restore();
+    ctx.fillStyle = '#5a3a24'; ctx.fillRect(470, 600, 140, 20);
+    floor(1250, '#b98a5a', '#a87a4a');
+    ctx.beginPath(); ctx.ellipse(540, 1480, 420, 80, 0, 0, 7); ctx.fillStyle = '#c94f6a'; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = OUT; ctx.stroke();
+  }
+  function bgClass(t, board) {
+    ctx.fillStyle = '#cfe6d6'; ctx.fillRect(0, 0, W, 1250);
+    ctx.fillStyle = '#2f4a3a'; ctx.beginPath(); ctx.roundRect(140, 300, 800, 380, 12); ctx.fill(); ctx.lineWidth = 16; ctx.strokeStyle = '#8a5a34'; ctx.stroke();
+    if (board) board(540, 490); ctx.fillStyle = '#fff'; ctx.fillRect(820, 690, 60, 10);
+    // clock ticking
+    ctx.beginPath(); ctx.arc(980, 200, 56, 0, 7); ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 7; ctx.strokeStyle = OUT; ctx.stroke(); const a = Math.floor(t) * Math.PI / 30; ctx.beginPath(); ctx.moveTo(980, 200); ctx.lineTo(980 + Math.sin(a) * 44, 200 - Math.cos(a) * 44); ctx.lineWidth = 4; ctx.stroke(); ctx.beginPath(); ctx.moveTo(980, 200); ctx.lineTo(980 + 26, 200); ctx.lineWidth = 7; ctx.stroke();
+    // pennants
+    for (let i = 0; i < 9; i++) { const x = 60 + i * 120, y = 160 + Math.sin(t * 2 + i) * 4; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + 100, y); ctx.lineTo(x + 50, y + 60); ctx.closePath(); ctx.fillStyle = ['#e8364f', '#ffd400', '#1f6fe0', '#2fbf71'][i % 4]; ctx.fill(); }
+    floor(1250, '#d8c3a0', '#cbb390');
+    for (const x of [140, 940]) { ctx.fillStyle = '#c98a3c'; ctx.beginPath(); ctx.roundRect(x - 110, 1300, 220, 30, 6); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = OUT; ctx.stroke(); ctx.fillRect(x - 100, 1330, 12, 120); ctx.fillRect(x + 88, 1330, 12, 120); }
+  }
+  function bgFood(t) {
+    ctx.fillStyle = '#2b2f4a'; ctx.fillRect(0, 0, W, 1250);
+    // hanging lights swinging
+    for (let i = 0; i < 5; i++) { const x = 120 + i * 210, sw = Math.sin(t * 1.5 + i) * 12; ctx.strokeStyle = '#111'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x + sw, 170); ctx.stroke(); ctx.beginPath(); ctx.arc(x + sw, 190, 26, Math.PI, 0); ctx.fillStyle = '#ffd98a'; ctx.fill(); ctx.save(); ctx.globalAlpha = .12; ctx.beginPath(); ctx.moveTo(x + sw - 26, 190); ctx.lineTo(x + sw - 120, 700); ctx.lineTo(x + sw + 120, 700); ctx.lineTo(x + sw + 26, 190); ctx.fillStyle = '#ffd98a'; ctx.fill(); ctx.restore(); }
+    // counters
+    const shops = [['🧀 THE CHEESE ROOM', '#ffd400', OUT], ['🍔 BURGERS', '#e8364f', '#fff'], ['🍺 BREWERY', '#2fbf71', '#fff']];
+    shops.forEach(([n, bg, fg], i) => { const x = 60 + i * 340; ctx.beginPath(); ctx.roundRect(x, 520, 300, 70, 10); ctx.fillStyle = bg; ctx.fill(); ctx.lineWidth = 6; ctx.strokeStyle = OUT; ctx.stroke(); txt(n, x + 150, 556, 30, fg, 900); ctx.fillStyle = '#d9c3a0'; ctx.fillRect(x, 600, 300, 260); ctx.strokeRect(x, 600, 300, 260); });
+    for (let i = 0; i < 4; i++) { const x = 120 + i * 50; ctx.beginPath(); ctx.moveTo(x, 700); ctx.lineTo(x + 40, 700); ctx.lineTo(x + 20, 660); ctx.closePath(); ctx.fillStyle = '#ffcf4a'; ctx.fill(); ctx.lineWidth = 3; ctx.strokeStyle = OUT; ctx.stroke(); }
+    // fans walking past
+    for (let i = 0; i < 6; i++) { const x = ((t * (60 + i * 15) + i * 220) % (W + 200)) - 100, y = 1000; ctx.fillStyle = i % 2 ? '#ffffff' : '#132257'; ctx.beginPath(); ctx.roundRect(x - 22, y - 60, 44, 70, 12); ctx.fill(); ctx.fillStyle = '#f0c19a'; ctx.beginPath(); ctx.arc(x, y - 78, 18, 0, 7); ctx.fill(); }
+    floor(1250, '#8a8f9c', '#7d828f');
+  }
+  function bgAirport(t) {
+    ctx.fillStyle = '#e8eefc'; ctx.fillRect(0, 0, W, 1250);
+    ctx.fillStyle = '#9fd2f5'; ctx.fillRect(0, 380, W, 520); ctx.fillStyle = '#c9ced8'; ctx.fillRect(0, 820, W, 80);
+    const px = ((t * 160) % (W + 600)) - 300, py = 760 - Math.max(0, px - 300) * .35;
+    ctx.save(); ctx.translate(px, py); ctx.rotate(-Math.min(.3, Math.max(0, px - 300) * .0012)); ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.roundRect(-140, -26, 280, 52, 26); ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = OUT; ctx.stroke(); ctx.beginPath(); ctx.moveTo(-20, 0); ctx.lineTo(-70, 70); ctx.lineTo(-30, 70); ctx.lineTo(30, 0); ctx.closePath(); ctx.fillStyle = '#dc052d'; ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(-120, -20); ctx.lineTo(-150, -70); ctx.lineTo(-110, -70); ctx.lineTo(-90, -20); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+    for (let x = 0; x <= W; x += 180) { ctx.fillStyle = '#5a6a8a'; ctx.fillRect(x - 6, 380, 12, 520); }
+    // departures board
+    ctx.fillStyle = '#111'; ctx.beginPath(); ctx.roundRect(160, 120, 760, 220, 14); ctx.fill(); txt('DEPARTURES', 540, 160, 32, '#ffd400', 900);
+    [['MUNICH', 'BOARDING', '#2fbf71'], ['MADRID', 'ON TIME', '#fff'], ['BILBAO', 'ON TIME', '#fff']].forEach(([c, st, col], i) => { const fl = (Math.floor(t * 3) + i) % 7 === 0; txt(fl ? '------' : c, 300, 210 + i * 42, 28, '#fff', 800, 'left'); txt(st, 880, 210 + i * 42, 28, col, 800, 'right'); });
+    floor(1250, '#d8dce6', '#ccd0da');
+  }
+  function bgCityNight(t) {
+    const g = ctx.createLinearGradient(0, 0, 0, 1250); g.addColorStop(0, '#0a0f2e'); g.addColorStop(1, '#2a1b4a'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    // fireworks
+    for (let i = 0; i < 3; i++) { const ph = (t * .6 + i / 3) % 1, x = 200 + i * 340, y = 300 + i * 40, r = ph * 170, c = ['#ffffff', '#ffd400', '#7fd8ff'][i]; ctx.globalAlpha = 1 - ph; for (let k = 0; k < 14; k++) { const a = k / 14 * Math.PI * 2; ctx.fillStyle = c; ctx.beginPath(); ctx.arc(x + Math.cos(a) * r, y + Math.sin(a) * r, 6, 0, 7); ctx.fill(); } ctx.globalAlpha = 1; }
+    // skyline with lit windows
+    const r = R7(31); for (let x = 0; x < W; x += 110) { const h = 260 + r() * 260; ctx.fillStyle = '#1c1640'; ctx.fillRect(x, 1250 - h, 100, h); for (let wy = 1250 - h + 20; wy < 1230; wy += 44) for (let wx = x + 14; wx < x + 90; wx += 30) if (r() < .55) { ctx.fillStyle = 'rgba(255,220,140,.85)'; ctx.fillRect(wx, wy, 14, 20); } }
+    // jumping crowd silhouettes
+    for (let i = 0; i < 14; i++) { const x = 40 + i * 76, j = Math.abs(Math.sin(t * 5 + i)) * 18; ctx.fillStyle = '#0d0a24'; ctx.beginPath(); ctx.roundRect(x - 22, 1190 - j, 44, 80, 12); ctx.fill(); ctx.beginPath(); ctx.arc(x, 1172 - j, 18, 0, 7); ctx.fill(); ctx.strokeStyle = '#0d0a24'; ctx.lineWidth = 8; ctx.beginPath(); ctx.moveTo(x - 18, 1200 - j); ctx.lineTo(x - 30, 1150 - j); ctx.moveTo(x + 18, 1200 - j); ctx.lineTo(x + 30, 1150 - j); ctx.stroke(); }
+    floor(1250, '#3a3550', '#332e48');
+  }
+  function lasagne(x, y, k) { if (k <= 0) return; ctx.save(); ctx.translate(x, y); ctx.scale(k, k); ctx.beginPath(); ctx.ellipse(0, 20, 120, 30, 0, 0, 7); ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 5; ctx.strokeStyle = OUT; ctx.stroke(); for (let i = 0; i < 4; i++) { ctx.fillStyle = i % 2 ? '#e8473a' : '#f5d58a'; ctx.fillRect(-80, -40 + i * 14, 160, 14); } ctx.strokeRect(-80, -40, 160, 56); ctx.restore(); }
+  const FK = () => FANKIT();
+  Object.assign(SHOTS, {
+    sp7: { set: 'flat', flat: (t, lt) => bgLiving(t, (x, y) => { const L = cue('lose', .9); txt(lt < L ? 'LAST DAY OF THE SEASON' : 'WEST HAM 2–1 SPURS', x, y - 50, 26, '#fff', 900, 'center', 6); txt(lt < L ? 'WIN = CHAMPIONS LEAGUE' : 'FULL TIME', x, y + 10, 24, lt < L ? '#ffd400' : '#ff5a6a', 900, 'center', 6); }), age: 'AGE 7', captionTop: 1600, cam: [[0, FC], [1, FC]], cast: { finn: { x: -200, scale: .66 } },
+      acts: { finn: [[0, { e: 'happy', p: 'cheer', propR: 'scarf' }], ['food', .7, { e: 'shock', p: 'handsOnHead' }], ['lose', .9, { e: 'despair', p: 'idle' }]] },
+      extra: (lt) => { const la = cue('lasagne', .5); lasagne(230, 1160, eb(P(lt, la, la + .3))); pill(230, 1000, 'LASAGNE 🍝', eb(P(lt, la, la + .3)) * (1 - P(lt, cue('food', .7) - .1, cue('food', .7))), '#fff', OUT, 34); pill(230, 1000, 'FOOD POISONING 🤢', eb(P(lt, cue('food', .7), cue('food', .7) + .3)), '#2fbf71', '#fff', 34); } },
+    sp10: { set: 'flat', flat: (t, lt) => bgClass(t, (x, y) => { txt('CALENDAR', x, y - 120, 36, '#fff', 800); txt('ST TOTTERINGHAM\'S DAY 🎉', x, y - 30, 40, '#ffd400', 900); const k = P(lt, cue('every', .8), cue('every', .8) + .4); if (k > 0) { ctx.globalAlpha = k; txt('(ALMOST) EVERY YEAR', x, y + 60, 34, '#fff', 800); ctx.globalAlpha = 1; } }), age: 'AGE 10', captionTop: 1600, cam: [[0, FC], [1, FC]],
+      cast: { kidR: { x: -350, scale: .64 }, finn: { x: 0, scale: .66 }, k1: { x: 340, scale: .64 } }, looks: { k1: [[null, 0, { shirt: '#ef0107', trim: '#fff', number: '14' }]] },
+      acts: { kidR: [[0, { e: 'ecstatic', p: 'cheer', m: { dance: .7 } }]], k1: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: .4 } }]], finn: [[0, { e: 'neutral', p: 'crossed' }], ['every', .8, { e: 'despair', p: 'handsOnHead' }]] } },
+    sp13: { set: 'flat', flat: (t, lt) => bgLiving(t, (x, y) => { const L = cue('lose', .6); txt('CHAMPIONS LEAGUE FINAL · MADRID', x, y - 60, 20, '#ffd400', 900, 'center', 5); txt(lt < L ? 'SPURS 0–0 LIVERPOOL' : 'SPURS 0–2 LIVERPOOL', x, y, 32, '#fff', 900, 'center', 6); }), age: 'AGE 13', captionTop: 1600, cam: [[0, FC], [1, FC]], cast: { finn: { x: 0, scale: .76 } },
+      acts: { finn: [[0, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: .4 } }], ['lose', .6, { e: 'despair', p: 'idle', m: { jump: 0 } }], ['hey', .85, { e: 'happy', p: 'thumbsUpR', handR: 'thumb' }]] },
+      extra: (lt) => pill(0, 760, 'BUT HEY… YOU GOT THERE 👍', eb(P(lt, cue('hey', .85), cue('hey', .85) + .3)), '#fff', OUT, 34) },
+    sp15: { set: 'flat', flat: bgFood, age: 'AGE 15', captionTop: 1600, cam: [[0, FC], [1, FC]], cast: { finn: { x: -60, scale: .86 } },
+      acts: { finn: [[0, { e: 'ecstatic', p: 'cheer' }], ['cheese', .45, { e: 'happy', p: 'holdCashUp' }], ['trophy', .7, { e: 'surprised', p: 'shrug' }], ['ahead', .85, { e: 'neutral', p: 'crossed' }]] },
+      extra: (lt) => { statCard(300, 300, 'NEW STADIUM', [['COST', '£1 BILLION+', true], ['CHEESE ROOM', '✓', true], ['TROPHY ROOM', lt > cue('trophy', .7) ? '…' : '', false]], eb(P(lt, .1, .4))); pill(-60, 900, "LET'S NOT GET AHEAD OF OURSELVES", eb(P(lt, cue('ahead', .85), cue('ahead', .85) + .3)), '#fff', OUT, 28); } },
+    sp16: { set: 'flat', flat: bgAirport, age: 'AGE 16', captionTop: 1600, cam: [[0, FC], [1, FC]], cast: { finn: { x: -260, scale: .9 }, k8: { x: 260, scale: .9 } },
+      looks: { k8: [[null, 0, { shirt: '#ffffff', trim: '#132257', number: '10', pants: '#132257' }], ['bayern', .45, { shirt: '#dc052d', trim: '#fff', number: '9', pants: '#dc052d' }]] },
+      move: { k8: [[0, 260], ['bayern', .45, 260], [1, 560]] },
+      acts: { finn: [[0, { e: 'worried', p: 'waveR', m: { wave: 1, lookX: 1 } }], ['nothing', .82, { e: 'surprised', p: 'shrug' }]], k8: [[0, { e: 'neutral', m: { lookX: 1 } }], ['bayern', .45, { e: 'happy', p: 'waveR', m: { walk: .8, wave: 1, lookX: 1 } }]] },
+      extra: (lt) => pill(0, 760, 'EVEN BAYERN WIN NOTHING 🤯', eb(P(lt, cue('nothing', .82), cue('nothing', .82) + .3)), '#e8364f', '#fff', 34) },
+    sp17: { set: 'flat', flat: bgCityNight, age: 'AGE 17', captionTop: 1600, cam: [[0, FC], [1, FC]], cast: { finn: { x: 0, scale: .92 } },
+      acts: { finn: [[0, { e: 'tense', p: 'pleading' }], ['win', .4, { e: 'ecstatic', p: 'holdBag', m: { jump: .6 } }], ['how', .75, { e: 'surprised', p: 'shrug', m: { jump: 0 } }]] },
+      extra: (lt, t) => { const w = cue('win', .4); if (lt > w && lt < cue('how', .75)) trophy(0, 1400 - 553 * .92 - 250, 1.1, t, 'EUROPA LEAGUE'); confetti2d(t, P(lt, w, w + .2) * (1 - P(lt, cue('how', .75), cue('how', .75) + .3)), ['#ffffff', '#132257', '#ffd400']); bubble(160, 760, 'HOW DO WE CELEBRATE?? 🤔', eb(P(lt, cue('how', .75), cue('how', .75) + .3)), -100); } },
+    spthing: { set: 'flat', flat: bgFood, captionTop: 1600, cam: [[0, FC], [1, FC]], cast: { finn: { x: 0, scale: .92 } },
+      acts: { finn: [[0, { e: 'neutral', p: 'hips', m: { tremble: .2 } }]] }, extra: (lt) => pill(0, 760, 'NEVER EASY 😮‍💨', eb(P(lt, cue('easy', .6), cue('easy', .6) + .3)), '#fff', OUT, 44) },
+    spworth: { set: 'flat', flat: bgDark, captionTop: 1700, cam: [[0, FC], [1, { x: 0, y: 930, z: 1.08 }]], cast: { finn: { x: 0, scale: 1 } },
+      acts: { finn: [[0, { e: 'happy', p: 'holdCashUp', propR: 'scarf' }], ['prob', .75, { e: 'neutral', ex: { mouthCurve: -.2 }, p: 'shrug' }]] },
+      extra: (lt) => { pill(0, 640, 'ALL WORTH IT 💙', eb(P(lt, .3, .6)) * (1 - P(lt, cue('prob', .75) - .1, cue('prob', .75))), '#132257', '#fff', 46); pill(0, 640, '…PROBABLY 🤷', eb(P(lt, cue('prob', .75), cue('prob', .75) + .3)), '#fff', OUT, 46); } }
+  });
+
   // ---------- timeline ----------
   let spec, scenes = [], total = 0;
   function camAt(keys, lt, d) {
@@ -2368,6 +2460,14 @@
         case 'fanthing': [['mgr', .4], ['pl', .6], ['own', .8]].forEach(([n, f]) => add(st + C(n, f), 'pop', -15)); break;
         case 'fancolour': add(st + C('boring', .5), 'sparkle', -14); break;
         case 'fanout': add(st + .1, 'pop', -14); for (let x = C('next', .45); x < d; x += .14) add(st + x, 'tick', -20); break;
+        case 'sp7': add(st + C('lasagne', .5), 'pop', -15); add(st + C('food', .7), 'thump', -13); add(st + C('lose', .9), 'whistle', -17); break;
+        case 'sp10': add(st + .2, 'cheer', -18); add(st + C('every', .8), 'pop', -14); break;
+        case 'sp13': add(st + C('lose', .6), 'thump', -13); add(st + C('hey', .85), 'pop', -15); break;
+        case 'sp15': add(st + C('cheese', .45), 'sparkle', -16); add(st + C('ahead', .85), 'pop', -14); break;
+        case 'sp16': add(st + C('bayern', .45), 'whoosh_long', -15); add(st + C('nothing', .82), 'thump', -12); break;
+        case 'sp17': add(st + C('win', .4), 'cheer', -12); add(st + C('how', .75), 'pop', -14); break;
+        case 'spthing': add(st + C('easy', .6), 'pop', -15); break;
+        case 'spworth': add(st + .3, 'sparkle', -15); add(st + C('prob', .75), 'pop', -14); break;
         case 'imate': add(st + .1, 'whoosh_soft', -20); add(st + C('follow', .75) + .1, 'pop', -14); break;
       }
     });
@@ -2462,7 +2562,7 @@
     CASTX = castX;
     if (sh.propFix) for (const n in sh.propFix) for (const [f, pr] of sh.propFix[n]) if (lt >= f * d) states[n].propL = pr;
     const drawC = name => { if (!sh.cast[name]) return; const c = Object.assign({}, CH[name], sh.cast[name], { y: sh.cast[name].y || GROUND }, castX[name] != null ? { x: castX[name] } : {});
-      if (sh.looks && sh.looks[name]) for (const [n, df, ov] of sh.looks[name]) if (lt >= cue(n, df)) Object.assign(c, ov || FANKIT());
+      if (sh.looks && sh.looks[name]) for (const [n, df, ov] of sh.looks[name]) if (n === null || lt >= cue(n, df)) Object.assign(c, ov || FANKIT());
       if (name === 'finn' && s.shot !== 'fanhook') Object.assign(c, FANKIT()); Puppet.draw(ctx, c, states[name], t); };
     if (sh.draw) {
       sh.draw(s, lt, d, t);
