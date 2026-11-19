@@ -1,0 +1,7 @@
+<!doctype html><html><body style="margin:0;background:#556"><canvas id=c width=2200 height=800></canvas>
+<script type=module>
+import * as C from '../src/chars.js';
+const g=document.getElementById('c').getContext('2d');
+g.drawImage(C.tekeFront(0),0,0,380,380); g.drawImage(C.tekeSide(0.3),390,0,760,380); g.drawImage(C.MONSTERS['TEKE TEKE'](),1160,0,200,400);
+g.drawImage(C.rakeCrouch(),0,400,380,380); g.drawImage(C.rakeFaceBig(),400,400,380,380); g.drawImage(C.MONSTERS['THE RAKE'](),800,400,200,400); g.drawImage(C.sister('scared'),1020,400,200,400); window.done=true;
+</script></body></html>

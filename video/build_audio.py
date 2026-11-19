@@ -496,6 +496,24 @@ def R_buzz():
 def A_street(d):
     a = lp(noise(d), 180) * 0.05; b = A_night(d) * 0.18; m = min(len(a), len(b)); return (a[:m] + b[:m]).astype(np.float32)
 
+# ---------------------------------------------------------------- Folge 8/9: Teke Teke, The Rake
+def R_teketap():
+    d = 3.0; x = np.zeros(int(d * SR), np.float32); t0 = 0.05
+    while t0 < d - 0.1:
+        c = lp(noise(0.05), 900) * env(int(0.05 * SR), 0.001, 0.045, 2) * 0.9; i = int(t0 * SR); x[i:i + len(c)] += c[: len(x) - i]; t0 += 0.32 if int(t0 / 0.32) % 2 else 0.22
+    return norm(reverb(x, 2.2, 0.45, 0.04), 0.5)
+def R_train():
+    r = lp(noise(5.0), 140) * np.linspace(0.1, 1.0, int(5.0 * SR)); tt = t_(5.0); r = r + (np.sin(2 * np.pi * 55 * tt) * 0.2 * np.linspace(0, 1, len(tt))).astype(np.float32)
+    b = rec("2368", 0.0, 2.2, 0.5, 0.01, 0.3); x = np.zeros(int(6.0 * SR), np.float32); x[:len(r)] += r.astype(np.float32) * 0.8; i = int(3.4 * SR); x[i:i + len(b)] += b[: len(x) - i] * 0.6
+    return norm(x, 0.7)
+def R_breath():
+    d = 2.4; tt = t_(d); a = bp(noise(d), 300, 2500) * (np.maximum(0, np.sin(2 * np.pi * 0.42 * tt)) ** 2)
+    return norm(a.astype(np.float32), 0.35)
+def A_metro(d):
+    a = lp(noise(d), 120) * 0.05; tt = t_(d); b = np.sin(2 * np.pi * 100 * tt) * 0.006; m = min(len(a), len(b)); return (a[:m] + b[:m]).astype(np.float32)
+def A_wagon(d):
+    tt = t_(d); a = lp(noise(d), 200) * 0.09 * (0.8 + 0.2 * np.sin(2 * np.pi * 1.3 * tt)); return a.astype(np.float32)
+
 SFX = {k[2:]: v for k, v in globals().items() if k.startswith("S_")}
 SFX.update({k[2:]: v for k, v in globals().items() if k.startswith("R_")})
 
@@ -547,7 +565,7 @@ def A_dawn(d):
     w = lp(noise(len(b) / SR), 400) * 0.06; m = min(len(b), len(w)); return (b[:m] + w[:m]).astype(np.float32)
 
 
-AMB = {"street": A_street, "bed": A_bed, "pc": A_pc, "pc_off": A_pc_off, "kitchen": A_kitchen, "day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn, "forest": A_forest, "car": A_car, "dusk": A_dusk, "bedroom": A_bedroom, "woods": A_woods, "village": A_village, "tvroom": A_tvroom, "station": A_station, "shop": A_shop, "shop_quiet": A_shop_quiet}
+AMB = {"metro": A_metro, "wagon": A_wagon, "street": A_street, "bed": A_bed, "pc": A_pc, "pc_off": A_pc_off, "kitchen": A_kitchen, "day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn, "forest": A_forest, "car": A_car, "dusk": A_dusk, "bedroom": A_bedroom, "woods": A_woods, "village": A_village, "tvroom": A_tvroom, "station": A_station, "shop": A_shop, "shop_quiet": A_shop_quiet}
 
 
 def drone(d):
@@ -609,6 +627,18 @@ def voice(shot, k, seg):
             if seg["v"] == "kuchi":  # ganz nah, klar, etwas tiefer
                 x = ffx(x, SIL.format(d=0.3) + ",asetrate=44100*0.96,aresample=44100,atempo=0.97,highpass=f=90")
                 return norm(reverb(x, 0.9, 0.18), 0.82), len(x) / SR
+            if seg["v"] == "teke_far":   # aus dem Tunnel: hohl, viel Hall
+                x = ffx(x, SIL.format(d=0.45) + ",highpass=f=200,lowpass=f=3200")
+                return norm(reverb(x, 3.0, 0.6, 0.06), 0.7), len(x) / SR
+            if seg["v"] == "teke":       # nah, heiser
+                x = ffx(x, SIL.format(d=0.3) + ",atempo=0.97,highpass=f=120")
+                return norm(reverb(x, 1.0, 0.22), 0.8), len(x) / SR
+            if seg["v"] == "rake":       # bruechig, ganz nah, tiefer
+                x = ffx(x, SIL.format(d=0.3) + ",asetrate=44100*0.88,aresample=44100,atempo=0.92,highpass=f=80,lowpass=f=5000")
+                return norm(reverb(x, 0.6, 0.12), 0.85), len(x) / SR
+            if seg["v"] == "schwester":
+                x = ffx(x, SIL.format(d=0.25) + ",highpass=f=120")
+                return norm(reverb(x, 0.9, 0.2), 0.75), len(x) / SR
             if seg["v"] == "opa":
                 x = ffx(x, SIL.format(d=0.25) + ",asetrate=44100*0.96,aresample=44100,atempo=1.1,highpass=f=120,lowpass=f=5000")
                 return norm(reverb(x, 1.2, 0.35), 0.72), len(x) / SR

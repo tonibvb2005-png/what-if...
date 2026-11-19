@@ -553,9 +553,9 @@ export function verityMonster() { // duerre gelbe Gestalt mit Smiley-Kopf
   return c;
 }
 MONSTERS['VERITY'] = verityMonster;
-export function sister() {
+export function sister(expr = 'neutral') {
   const o = [HOOD, HOOD2, HAIR]; HOOD = '#f2c230'; HOOD2 = '#d9a81c'; HAIR = '#c98a3a';
-  const base = boy('front', 'neutral'); const c = cv2(512, 1024), g = c.getContext('2d');
+  const base = boy('front', expr); const c = cv2(512, 1024), g = c.getContext('2d');
   for (const s of [-1, 1]) { P(g, circ(256 + s * 200, 180, 58), HAIR, 10, 0.1); P(g, circ(256 + s * 160, 200, 18), '#e0475a', 6, 0); }
   g.drawImage(base, 0, 0, 512, 1024);
   P(g, g => { g.moveTo(76, 300); g.bezierCurveTo(46, 40, 466, 40, 436, 300); g.quadraticCurveTo(400, 160, 256, 150); g.quadraticCurveTo(112, 160, 76, 300); g.closePath(); }, HAIR, 11, 0.1);
@@ -661,3 +661,63 @@ export function hostmom(mask = true, eyes = 'calm') {
   return c;
 }
 MONSTERS['KUCHISAKE-ONNA'] = () => kuchisake(true, true);
+
+// ------------------------------------------------------------- Folge 8: Teke Teke · Folge 9: The Rake
+const TSK = '#e9e2dc', THAIR = '#0e0c10', UNI = '#1f2a44', UNI2 = '#f2f2ee';
+function tekeHead(g, cx, cy, r, look = 'down') {
+  P(g, g => { g.moveTo(cx - r * 1.05, cy + r * 1.35); g.bezierCurveTo(cx - r * 1.35, cy - r * 0.2, cx - r * 1.0, cy - r * 1.2, cx, cy - r * 1.2); g.bezierCurveTo(cx + r * 1.0, cy - r * 1.2, cx + r * 1.35, cy - r * 0.2, cx + r * 1.05, cy + r * 1.35); for (let i = 8; i >= 0; i--) { const x = cx - r * 1.05 + i * r * 0.2625; g.lineTo(x + r * 0.12, cy + r * 1.25); g.lineTo(x, cy + r * (1.5 + (i % 3) * 0.12)); } g.closePath(); }, THAIR, r * 0.05, 0);
+  P(g, ell(cx, cy + r * 0.1, r * 0.78, r * 0.95), TSK, r * 0.05, 0.12);
+  // Haare haengen ins Gesicht, nur ein Auge sichtbar
+  P(g, g => { g.moveTo(cx - r * 0.85, cy + r * 1.3); g.bezierCurveTo(cx - r * 0.95, cy - r * 0.8, cx - r * 0.1, cy - r * 1.1, cx + r * 0.25, cy - r * 0.9); g.bezierCurveTo(cx + r * 0.05, cy - r * 0.2, cx - r * 0.05, cy + r * 0.6, cx - r * 0.2, cy + r * 1.4); g.closePath(); }, THAIR, 0, 0);
+  const ex = cx + r * 0.3, ey = cy - (look === 'up' ? 0.05 : -0.05) * r;
+  P(g, ell(ex, ey, r * 0.2, r * 0.17), '#fff', r * 0.03, 0); P(g, circ(ex, ey + r * 0.02, r * 0.06), '#0a0808', 0, 0);
+  g.strokeStyle = 'rgba(200,40,40,.6)'; g.lineWidth = r * 0.012; for (let a = 0; a < 5; a++) { g.beginPath(); g.moveTo(ex + Math.cos(a * 1.2) * r * 0.19, ey + Math.sin(a * 1.2) * r * 0.15); g.lineTo(ex + Math.cos(a * 1.2) * r * 0.1, ey + Math.sin(a * 1.2) * r * 0.08); g.stroke(); }
+  line(g, [[cx + r * 0.05, cy + r * 0.62], [cx + r * 0.45, cy + r * 0.58]], r * 0.035);
+}
+export function tekeFront(ph = 0) { // kriecht auf die Kamera zu, Oberkoerper + Arme auf den Ellbogen
+  const c = cv2(512, 512), g = c.getContext('2d'), a = Math.sin(ph * Math.PI * 2);
+  for (const s of [-1, 1]) { const lift = Math.max(0, s * a) * 30; line(g, [[256 + s * 90, 300], [256 + s * 190, 380 - lift], [256 + s * 170, 470 - lift * 0.4]], 34, OL); line(g, [[256 + s * 90, 300], [256 + s * 190, 380 - lift], [256 + s * 170, 470 - lift * 0.4]], 26, UNI); P(g, ell(256 + s * 172, 478 - lift * 0.4, 30, 18), TSK, 7, 0); }
+  P(g, g => { g.moveTo(150, 280); g.quadraticCurveTo(256, 240, 362, 280); g.lineTo(340, 470); g.quadraticCurveTo(256, 500, 172, 470); g.closePath(); }, UNI, 10, 0.1);
+  P(g, g => { g.moveTo(186, 268); g.lineTo(256, 350); g.lineTo(326, 268); g.lineTo(300, 262); g.lineTo(256, 318); g.lineTo(212, 262); g.closePath(); }, UNI2, 6, 0); P(g, g => { g.moveTo(240, 330); g.lineTo(272, 330); g.lineTo(256, 370); g.closePath(); }, '#c0302a', 5, 0);
+  tekeHead(g, 256, 190 + a * 6, 90, 'up');
+  return c;
+}
+export function tekeSide(ph = 0) { // seitlich, zieht sich nach rechts
+  const c = cv2(1024, 512), g = c.getContext('2d'), a = Math.sin(ph * Math.PI * 2);
+  const sx = 560 + a * 20; line(g, [[sx, 330], [sx + 140 + a * 60, 380], [sx + 230 + a * 80, 470]], 34, OL); line(g, [[sx, 330], [sx + 140 + a * 60, 380], [sx + 230 + a * 80, 470]], 26, UNI);
+  P(g, g => { g.moveTo(330, 470); g.quadraticCurveTo(360, 300, sx + 20, 300); g.quadraticCurveTo(sx + 60, 420, sx - 10, 470); g.closePath(); }, UNI, 10, 0.1);
+  P(g, g => { g.moveTo(340, 470); g.lineTo(330, 500); g.lineTo(560, 500); g.lineTo(555, 470); g.closePath(); }, '#141016', 0, 0); // Schatten, kein Unterkoerper
+  P(g, g => { g.moveTo(sx - 60, 300); g.lineTo(sx + 20, 300); g.lineTo(sx - 30, 360); g.closePath(); }, UNI2, 6, 0);
+  line(g, [[sx - 40, 330], [sx + 60 - a * 50, 400], [sx + 150 - a * 70, 470]], 34, OL); line(g, [[sx - 40, 330], [sx + 60 - a * 50, 400], [sx + 150 - a * 70, 470]], 26, UNI);
+  tekeHead(g, sx + 60, 250 + a * 6, 72, 'down');
+  return c;
+}
+MONSTERS['TEKE TEKE'] = () => { const c = cv2(512, 1024), g = c.getContext('2d'); g.drawImage(tekeFront(0.25), 0, 430, 512, 512); return c; };
+
+const RSK = '#d8d4cf';
+function rakeFace(g, cx, cy, r, mood = 'stare') {
+  P(g, ell(cx, cy, r * 0.82, r), RSK, r * 0.05, 0.14);
+  g.strokeStyle = 'rgba(80,70,70,.35)'; g.lineWidth = r * 0.02; for (const y of [-0.55, -0.45]) { g.beginPath(); g.moveTo(cx - r * 0.4, cy + y * r); g.quadraticCurveTo(cx, cy + (y - 0.06) * r, cx + r * 0.4, cy + y * r); g.stroke(); }
+  for (const s of [-1, 1]) { P(g, ell(cx + s * r * 0.33, cy - r * 0.05, r * 0.22, r * 0.28, s * 0.25), '#050404', 0, 0); if (mood !== 'blind') P(g, circ(cx + s * r * 0.3, cy - r * 0.1, r * 0.04), '#e8e4dc', 0, 0); }
+  P(g, ell(cx, cy + r * 0.25, r * 0.05, r * 0.08), '#8a8078', 0, 0);
+  const m = g => { g.moveTo(cx - r * 0.32, cy + r * 0.55); g.quadraticCurveTo(cx, cy + r * 0.48, cx + r * 0.32, cy + r * 0.55); g.quadraticCurveTo(cx, cy + r * 0.78, cx - r * 0.32, cy + r * 0.55); g.closePath(); };
+  g.save(); g.beginPath(); m(g); g.fillStyle = '#1a0a0a'; g.fill(); g.clip(); g.fillStyle = '#e9e2d2'; for (let i = -4; i <= 4; i++) { g.beginPath(); g.moveTo(cx + i * r * 0.075 - r * 0.03, cy + r * 0.5); g.lineTo(cx + i * r * 0.075, cy + r * 0.64); g.lineTo(cx + i * r * 0.075 + r * 0.03, cy + r * 0.5); g.fill(); } g.restore();
+  g.beginPath(); m(g); g.lineWidth = r * 0.03; g.strokeStyle = OL; g.stroke();
+}
+function claw(g, x, y, dir = 1, len = 1) { for (let k = -1; k <= 1; k++) line(g, [[x, y], [x + dir * 26 * len, y + 50 * len + k * 6], [x + dir * (20 + k * 14) * len, y + 110 * len]], 9, RSK); }
+export function rakeCrouch() { // hockt frontal (am Bettende), Knie hochgezogen, Arme dazwischen
+  const c = cv2(512, 512), g = c.getContext('2d');
+  for (const s of [-1, 1]) { P(g, g => { g.moveTo(256 + s * 60, 380); g.quadraticCurveTo(256 + s * 210, 200, 256 + s * 150, 460); g.lineTo(256 + s * 110, 460); g.quadraticCurveTo(256 + s * 150, 300, 256 + s * 40, 400); g.closePath(); }, RSK, 9, 0.14); }
+  P(g, ell(256, 340, 110, 120), RSK, 9, 0.14);
+  g.strokeStyle = 'rgba(80,70,70,.5)'; g.lineWidth = 5; for (let y = 300; y < 420; y += 22) { g.beginPath(); g.moveTo(190, y); g.quadraticCurveTo(256, y + 10, 322, y); g.stroke(); }
+  for (const s of [-1, 1]) { line(g, [[256 + s * 80, 280], [256 + s * 70, 380], [256 + s * 40, 450]], 26, OL); line(g, [[256 + s * 80, 280], [256 + s * 70, 380], [256 + s * 40, 450]], 18, RSK); claw(g, 256 + s * 40, 440, -s, 0.55); }
+  rakeFace(g, 256, 190, 92, 'stare');
+  return c;
+}
+export function rakeFaceBig(mood = 'stare') { const c = cv(512, 512), g = c.getContext('2d'); rakeFace(g, 256, 256, 210, mood); return c; }
+MONSTERS['THE RAKE'] = () => { const c = cv2(512, 1024), g = c.getContext('2d'); // stehend, gebueckt
+  for (const s of [-1, 1]) { line(g, [[256 + s * 40, 620], [256 + s * 80, 800], [256 + s * 60, 990]], 30, OL); line(g, [[256 + s * 40, 620], [256 + s * 80, 800], [256 + s * 60, 990]], 22, RSK); }
+  P(g, g => { g.moveTo(200, 360); g.quadraticCurveTo(256, 320, 312, 360); g.lineTo(300, 640); g.quadraticCurveTo(256, 660, 212, 640); g.closePath(); }, RSK, 9, 0.14);
+  g.strokeStyle = 'rgba(80,70,70,.5)'; g.lineWidth = 5; for (let y = 400; y < 560; y += 26) { g.beginPath(); g.moveTo(214, y); g.quadraticCurveTo(256, y + 12, 298, y); g.stroke(); }
+  for (const s of [-1, 1]) { line(g, [[256 + s * 52, 370], [256 + s * 110, 560], [256 + s * 120, 760]], 26, OL); line(g, [[256 + s * 52, 370], [256 + s * 110, 560], [256 + s * 120, 760]], 18, RSK); claw(g, 256 + s * 120, 750, s, 0.8); }
+  rakeFace(g, 256, 250, 90, 'stare'); return c; };

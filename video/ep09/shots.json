@@ -1,0 +1,21 @@
+{
+  "monster": "TEKE TEKE",
+  "shots": [
+    {"id":"hook","scene":"roulette","segs":[{"v":"narr","t":"Eines dieser Monster ist ausgebrochen. Mal sehen, wer es ist.","sub":"EINES DIESER MONSTER IST *AUSGEBROCHEN.* MAL SEHEN, WER ES IST."}],"hold":0.74,"sfx":[{"n":"alarm","at":0},{"n":"ticks","atEnd":-8.31}],"noHeader":true},
+    {"id":"name","scene":"st_open","clock":"00:00","segs":[{"v":"narr","t":"Teke Teke. Mitternacht.","sub":"*TEKE TEKE.* MITTERNACHT."}],"hold":0.3,"sfx":[{"n":"boom","at":-0.05},{"n":"flicker","at":0.0},{"n":"teketap","at":0.3},{"n":"flicker","at":0.9}],"amb":"metro"},
+    {"id":"missed","scene":"st_bench","clock":"00:01","segs":[{"v":"narr","t":"Du hast den letzten Zug verpasst. Der Bahnsteig ist leer.","sub":"DU HAST DEN *LETZTEN ZUG* VERPASST. DER BAHNSTEIG IST LEER."}],"amb":"metro"},
+    {"id":"hear","scene":"st_tunnel","clock":"00:03","segs":[{"v":"narr","t":"Dann hörst du es. Aus dem Tunnel.","sub":"DANN HÖRST DU ES. *AUS DEM TUNNEL.*"},{"v":"teke_far","t":"Teke... teke... teke... teke...","sub":"*TEKE… TEKE… TEKE…*"}],"sfx":[{"n":"teketap","atSeg":[1,0]}],"amb":"metro"},
+    {"id":"crawl","scene":"st_crawl","clock":"00:03","segs":[{"v":"narr","t":"Auf den Gleisen kriecht etwas. Auf den Ellbogen.","sub":"AUF DEN GLEISEN KRIECHT ETWAS. *AUF DEN ELLBOGEN.*"}],"sfx":[{"n":"teketap","at":0.2}],"amb":"metro"},
+    {"id":"nolegs","scene":"st_hands","clock":"00:04","segs":[{"v":"narr","t":"Es hat keine Beine.","sub":"ES HAT *KEINE BEINE.*"}],"hold":0.3,"sfx":[{"n":"hit_soft","at":0}],"amb":"metro"},
+    {"id":"name2","scene":"red_teke","clock":"00:04","segs":[{"v":"narr","t":"Teke Teke. Ein Mädchen, das vor vielen Jahren unter einen Zug geriet.","sub":"*TEKE TEKE.* EIN MÄDCHEN, DAS VOR VIELEN JAHREN UNTER EINEN ZUG GERIET."}],"sfx":[{"n":"boom","at":0}]},
+    {"id":"fast","scene":"red_fast","clock":"00:04","segs":[{"v":"narr","t":"Sie ist schneller als jeder Mensch. Und sie sucht ihre Beine.","sub":"SIE IST *SCHNELLER* ALS JEDER MENSCH. UND SIE SUCHT IHRE BEINE."}],"sfx":[{"n":"whoosh","at":0.3},{"n":"teketap","at":0.5}]},
+    {"id":"rule","scene":"st_rule","clock":"00:05","segs":[{"v":"narr","t":"Die Regel: Lauf nicht weg. Und wenn sie fragt, sag: Auf den Gleisen.","sub":"DIE REGEL: *LAUF NICHT WEG.* UND WENN SIE FRAGT, SAG: *AUF DEN GLEISEN.*"}],"rule":{"title":"REGEL #1","text":"LAUF NICHT WEG","atSeg":[0,0.6]},"sfx":[{"n":"pop","atSeg":[0,0.6]}],"amb":"metro"},
+    {"id":"behind","scene":"st_behind","clock":"00:05","segs":[{"v":"narr","t":"Das Geräusch ist jetzt direkt hinter dir.","sub":"DAS GERÄUSCH IST JETZT *DIREKT HINTER DIR.*"},{"v":"teke","t":"Hast du meine Beine gesehen?","sub":"„HAST DU MEINE *BEINE* GESEHEN?“"}],"sfx":[{"n":"teketap","at":0},{"n":"heart","atSeg":[1,0]}],"amb":"metro"},
+    {"id":"whisper","scene":"st_closed","clock":"00:05","segs":[{"v":"narr","t":"Du drehst dich nicht um. Du flüsterst: Auf den Gleisen.","sub":"DU DREHST DICH NICHT UM. DU FLÜSTERST: *AUF DEN GLEISEN.*"}],"hold":0.3,"amb":"metro"},
+    {"id":"silence","scene":"st_train","clock":"00:08","segs":[{"v":"narr","t":"Stille. Dann kommt doch noch ein Zug.","sub":"STILLE. DANN KOMMT DOCH NOCH *EIN ZUG.*"}],"hold":0.5,"sfx":[{"n":"train","atSeg":[0,0.3]}]},
+    {"id":"board","scene":"wagon","clock":"00:09","segs":[{"v":"narr","t":"Du steigst ein. Der Wagen ist leer.","sub":"DU STEIGST EIN. DER WAGEN IST *LEER.*"}],"amb":"wagon"},
+    {"id":"seat","scene":"wagon_under","clock":"00:09","segs":[{"v":"narr","t":"Unter deinem Sitz hörst du es wieder.","sub":"UNTER DEINEM SITZ HÖRST DU ES *WIEDER.*"},{"v":"teke","t":"Danke. Jetzt brauche ich nur noch deine.","sub":"„DANKE. JETZT BRAUCHE ICH NUR NOCH *DEINE.*“"}],"hold":1.0,"sfx":[{"n":"teketap","at":0.3},{"n":"stinger","atSeg":[1,-0.3]}],"amb":"wagon"},
+    {"id":"cta","scene":"cta","segs":[{"v":"narr","t":"Folge mir, um zu sehen, wen du als Nächstes bekommst.","sub":"FOLGE MIR, UM ZU SEHEN, WEN DU ALS *NÄCHSTES* BEKOMMST."}],"hold":0.3,"noHeader":true,"sfx":[{"n":"sparkle","at":0}]},
+    {"id":"endcard","scene":"endcard","segs":[],"hold":2.2,"noHeader":true}
+  ]
+}
