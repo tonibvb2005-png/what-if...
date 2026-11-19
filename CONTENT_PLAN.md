@@ -1,61 +1,99 @@
-# By Lantern Light – 30-Tage-Plan (1 Legende pro Tag)
+# By Lantern Light – Content-Plan (2 Videos pro Tag)
 
-Start: Do 20.11.2026. Bewusst **keine** Legenden, die der Referenzkanal schon hatte
+Bewusst **keine** Legenden, die der Referenzkanal schon hatte
 (Silbón, Llorona, Manananggal, Pisadeira, Kuchisake-onna, Chupacabra, Jersey Devil, Caleuche …).
 Mischung: deutsche Sagen als Markenkern + weltweit, damit alle Zielgruppen etwas finden.
 
-| Tag | Datum | Legende | Land | Hook (erster Satz) |
+## Feste Posting-Zeiten (täglich, deutsche Zeit)
+
+| Slot | Deutschland | US-Ostküste | UK | Wer schaut |
 |---|---|---|---|---|
-| 1 | Do 20.11. | Der Aufhocker | 🇩🇪 | If something jumps on your back at night… don't turn around. |
-| 2 | Fr 21.11. | Der Rattenfänger von Hameln | 🇩🇪 | In 1284, 130 children followed a song… and never came back. |
-| 3 | Sa 22.11. | Black Shuck | 🇬🇧 | If you see a black dog with burning eyes… you won't live the year. |
-| 4 | So 23.11. | Baba Yaga | 🇷🇺 | If you see a hut walking on chicken legs… don't knock. |
-| 5 | Mo 24.11. | Der Erlkönig | 🇩🇪 | If a voice in the forest promises your child gifts… ride faster. |
-| 6 | Di 25.11. | Teke Teke | 🇯🇵 | If you hear "teke… teke…" behind you at night… don't look down. |
-| 7 | Mi 26.11. | Banshee | 🇮🇪 | If you hear a woman screaming outside… someone in your family will die. |
-| 8 | Do 27.11. | Der Nachzehrer | 🇩🇪 | If you hear chewing from inside a grave… the whole village is in danger. |
-| 9 | Fr 28.11. | Wendigo | 🇨🇦 | If you're starving in the frozen woods… never take the first bite. |
-| 10 | Sa 29.11. | Huldra | 🇳🇴 | If a beautiful woman in the forest hides her back… run. |
-| 11 | So 30.11. | La Mula Sin Cabeza | 🇧🇷 | If you hear hooves but see no head… hide your eyes. |
-| 12 | Mo 01.12. | Die Weiße Frau | 🇩🇪 | If you see a woman in white in the castle window… someone will die. |
-| 13 | Di 02.12. | Gumiho | 🇰🇷 | If a stranger smiles too perfectly at night… count her tails. |
-| 14 | Mi 03.12. | Draugr | 🇮🇸 | Some Vikings never stayed in their graves. |
-| 15 | Do 04.12. | Tokoloshe | 🇿🇦 | Why people in South Africa raise their beds on bricks. |
-| 16 | **Fr 05.12.** | **Krampus** (Krampusnacht!) | 🇦🇹🇩🇪 | Tonight, he comes for the children who were bad. |
-| 17 | Sa 06.12. | Rusalka | 🇺🇦 | If a girl by the river asks you to dance… say no. |
-| 18 | So 07.12. | Mothman | 🇺🇸 | In 1966, people saw red eyes over Point Pleasant… then the bridge fell. |
-| 19 | Mo 08.12. | Der Nöck | 🇸🇪 | If you hear a violin playing from the lake… don't go closer. |
-| 20 | Di 09.12. | Pontianak | 🇲🇾 | If you smell frangipani at night… she is already near. |
-| 21 | Mi 10.12. | Strigoi | 🇷🇴 | In Romania, they still put garlic in the coffins. |
-| 22 | Do 11.12. | Bunyip | 🇦🇺 | If you hear a roar from the billabong at night… stay away from the water. |
-| 23 | Fr 12.12. | Jorōgumo | 🇯🇵 | If a woman by the waterfall asks you to stay… look at her shadow. |
-| 24 | Sa 13.12. | Nuckelavee | 🏴 | The demon of Orkney has no skin… and only fears fresh water. |
-| 25 | So 14.12. | Bell Witch | 🇺🇸 | The only haunting in America that killed a man. |
-| 26 | Mo 15.12. | Likho | 🇷🇺 | If a one-eyed woman follows you home… your luck is gone. |
-| 27 | Di 16.12. | Krasue | 🇹🇭 | If you see a floating head with glowing organs… don't scream. |
-| 28 | Mi 17.12. | El Lobisón | 🇦🇷 | Why Argentina's president became godfather to every seventh son. |
-| 29 | Do 18.12. | Kappa | 🇯🇵 | If a creature in the river bows to you… bow back. |
-| 30 | Fr 19.12. | Die Wilde Jagd | 🇩🇪 | If you hear hounds in the sky during the Rauhnächte… lie flat on the ground. |
+| **A – Mittag** | **14:00** (13–15 Uhr) | 08:00 | 13:00 | Europa/UK Mittagspause, US-Ostküste morgens |
+| **B – Abend** | **22:30** (22–23 Uhr) | 16:30 | 21:30 | US nach Schule/Arbeit, UK/Europa später Abend |
 
-Für später aufheben: **Perchta** 🇦🇹 (5./6. Januar, Ende der Rauhnächte).
+- Gleiche Zeiten auf TikTok **und** YouTube Shorts, beides vorplanen (TikTok Studio / YouTube Studio).
+- Das **stärkere/gruseligere Video in Slot B** (größtes US-Publikum, Horror wirkt abends besser).
+- Abstand zwischen den Slots ~8,5 h → die Videos nehmen sich gegenseitig keine Reichweite weg.
+- Nach 2–3 Wochen in den Analysen prüfen, welcher Slot besser läuft, und ggf. verschieben.
 
-## Wochenablauf
+## Videos
+
+Status: ✅ fertig gerendert · ✍️ Skript fertig · leer = offen
+
+| # | Legende | Land | Status | Hook (Notiz – im Skript Zahlen ausgeschrieben) |
+|---|---|---|---|---|
+| 1 | Der Aufhocker | 🇩🇪 | ✅ | If something jumps on your back at night… don't turn around. |
+| 2 | Der Rattenfänger von Hameln | 🇩🇪 | ✅ | In 1284, 130 children followed a song… and never came back. |
+| 3 | Black Shuck | 🇬🇧 | ✅ | If you see a black dog with burning eyes… you won't live the year. |
+| 4 | Baba Yaga | 🇷🇺 | | If you see a hut walking on chicken legs… don't knock. |
+| 5 | Der Erlkönig | 🇩🇪 | | If a voice in the forest promises your child gifts… ride faster. |
+| 6 | Teke Teke | 🇯🇵 | | If you hear "teke… teke…" behind you at night… don't look down. |
+| 7 | Banshee | 🇮🇪 | | If you hear a woman screaming outside… someone in your family will die. |
+| 8 | Der Nachzehrer | 🇩🇪 | | If you hear chewing from inside a grave… the whole village is in danger. |
+| 9 | Wendigo | 🇨🇦 | | If you're starving in the frozen woods… never take the first bite. |
+| 10 | Huldra | 🇳🇴 | | If a beautiful woman in the forest hides her back… run. |
+| 11 | La Mula Sin Cabeza | 🇧🇷 | | If you hear hooves but see no head… hide your eyes. |
+| 12 | Die Weiße Frau | 🇩🇪 | | If you see a woman in white in the castle window… someone will die. |
+| 13 | Gumiho | 🇰🇷 | | If a stranger smiles too perfectly at night… count her tails. |
+| 14 | Draugr | 🇮🇸 | | Some Vikings never stayed in their graves. |
+| 15 | Tokoloshe | 🇿🇦 | | Why people in South Africa raise their beds on bricks. |
+| 16 | **Krampus** – fest: **Fr 05.12., Slot B** (Krampusnacht) | 🇦🇹🇩🇪 | | Tonight, he comes for the children who were bad. |
+| 17 | Rusalka | 🇺🇦 | | If a girl by the river asks you to dance… say no. |
+| 18 | Mothman | 🇺🇸 | | In 1966, people saw red eyes over Point Pleasant… then the bridge fell. |
+| 19 | Der Nöck | 🇸🇪 | | If you hear a violin playing from the lake… don't go closer. |
+| 20 | Pontianak | 🇲🇾 | | If you smell frangipani at night… she is already near. |
+| 21 | Strigoi | 🇷🇴 | | In Romania, they still put garlic in the coffins. |
+| 22 | Bunyip | 🇦🇺 | | If you hear a roar from the billabong at night… stay away from the water. |
+| 23 | Jorōgumo | 🇯🇵 | | If a woman by the waterfall asks you to stay… look at her shadow. |
+| 24 | Nuckelavee | 🏴 | | The demon of Orkney has no skin… and only fears fresh water. |
+| 25 | Bell Witch | 🇺🇸 | | The only haunting in America that killed a man. |
+| 26 | Likho | 🇷🇺 | | If a one-eyed woman follows you home… your luck is gone. |
+| 27 | Krasue | 🇹🇭 | | If you see a floating head with glowing organs… don't scream. |
+| 28 | El Lobisón | 🇦🇷 | | Why Argentina's president became godfather to every seventh son. |
+| 29 | Kappa | 🇯🇵 | | If a creature in the river bows to you… bow back. |
+| 30 | Die Wilde Jagd – um Weihnachten (Rauhnächte) | 🇩🇪 | | If you hear hounds in the sky… lie flat on the ground. |
+| 31 | Der Klabautermann | 🇩🇪 | | |
+| 32 | Der Golem von Prag | 🇨🇿 | | |
+| 33 | Yuki-onna | 🇯🇵 | | |
+| 34 | Spring-heeled Jack | 🇬🇧 | | |
+| 35 | The Flying Dutchman | 🇳🇱 | | |
+| 36 | Leshy | 🇷🇺 | | |
+| 37 | Der Nachtkrapp | 🇩🇪 | | |
+| 38 | Die Mittagsfrau (Południca) | 🇩🇪🇵🇱 | | |
+| 39 | Bloody Mary | 🇺🇸 | | |
+| 40 | Popobawa | 🇹🇿 | | |
+| 41 | Mapinguari | 🇧🇷 | | |
+| 42 | El Coco | 🇪🇸 | | |
+| 43 | Bean Nighe | 🏴 | | |
+| 44 | Black Annis | 🇬🇧 | | |
+| 45 | Kikimora | 🇷🇺 | | |
+| 46 | Dullahan | 🇮🇪 | | |
+| 47 | Lamia | 🇬🇷 | | |
+| 48 | Der Vampir von Kisiljevo (1725) | 🇷🇸 | | |
+| 49 | Der Werwolf von Bedburg (1589) | 🇩🇪 | | |
+| 50 | Okiku – die Puppe, deren Haare wachsen | 🇯🇵 | | |
+| 51 | Robert the Doll | 🇺🇸 | | |
+| 52 | Mokele-mbembe | 🇨🇬 | | |
+| 53 | Adze | 🇬🇭 | | |
+| 54 | Tikbalang | 🇵🇭 | | |
+| 55 | Ahuizotl | 🇲🇽 | | |
+| 56 | Muma Pădurii | 🇷🇴 | | |
+| 57 | Der Schimmelreiter | 🇩🇪 | | |
+| 58 | Perchta – fest: **5./6. Januar** (Ende der Rauhnächte) | 🇦🇹 | | |
+
+## Wochenablauf (14 Videos/Woche)
 
 | Wann | Wer | Was |
 |---|---|---|
-| Sonntag | Claude | 7 Skripte mit Regieanweisungen + neue Szenen |
-| Sonntag/Montag | du | 7 Aufnahmen in ElevenLabs (ca. 30–45 Min) → MP3s schicken |
-| Montag | Claude | 7 Videos rendern + Texte/Hashtags pro Video |
-| Montag | du | alles vorplanen: TikTok Studio + YouTube Studio |
-
-## Feste Posting-Zeiten (täglich, deutsche Zeit)
-
-- **TikTok:** 02:00 Uhr (= 20:00 US-Ostküste), vorgeplant
-- **YouTube Shorts:** 21:00 Uhr am Vortag (= 15:00 US-Ostküste)
+| 2× pro Woche (z. B. So + Mi) | Claude | 7 Skripte mit Regieanweisungen |
+| danach | du | 7 Aufnahmen in ElevenLabs → MP3s schicken |
+| danach | Claude | 7 Videos (neue Szenen + Sounds) rendern, Upload-Texte pro Video |
+| danach | du | alles vorplanen: Slot A 14:00 + Slot B 22:30, TikTok + YouTube |
 
 ## Regeln für alle Skripte
 
 - **Alle Zahlen und Jahreszahlen auf Englisch ausschreiben**, sonst liest die Stimme sie auf Deutsch:
   `1284` → `twelve eighty-four`, `130` → `a hundred and thirty`, `1966` → `nineteen sixty-six`,
-  `26th` → `twenty-sixth`. (Die Hooks in der Tabelle oben sind nur Notizen – im fertigen Skript ausgeschrieben.)
+  `26th` → `twenty-sixth`.
 - Wörter im Skript nach dem Einsprechen nicht mehr ändern (Untertitel-Sync).
+- Bewegungen laufen immer durchgehend (nichts springt zurück), Tiere/Figuren bleiben auf dem Boden.
