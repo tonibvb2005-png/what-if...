@@ -77,9 +77,9 @@ export function boySit(expr = 'scared_sweat') {
   // Schuhe + Unterschenkel
   P(g, ell(198, 990, 46, 22), '#3a2a22', 8, 0); P(g, ell(314, 990, 46, 22), '#3a2a22', 8, 0);
   P(g, rr(166, 770, 66, 210, 26), JEANS); P(g, rr(280, 770, 66, 210, 26), JEANS);
-  // Oberschenkel von vorne (verkuerzt): runder Schoss mit Mittelnaht
-  P(g, g => { g.moveTo(150, 720); g.quadraticCurveTo(150, 690, 200, 688); g.lineTo(312, 688); g.quadraticCurveTo(362, 690, 362, 720); g.lineTo(354, 800); g.quadraticCurveTo(300, 818, 256, 804); g.quadraticCurveTo(212, 818, 158, 800); g.closePath(); }, JEANS, 10, 0.12);
-  line(g, [[256, 700], [256, 800]], 5, 'rgba(20,24,40,.5)');
+  // Oberschenkel von vorne (verkuerzt): zwei getrennte Beine, Knie zeigen zum Betrachter
+  for (const sd of [-1, 1]) { const x = 256 + sd * 56; P(g, rr(x - 40, 690, 80, 108, 34), JEANS, 10, 0.14);
+    P(g, ell(x, 778, 34, 22), '#3f4c70', 0, 0); g.strokeStyle = 'rgba(20,24,40,.45)'; g.lineWidth = 4; g.beginPath(); g.arc(x, 770, 26, 0.3, Math.PI - 0.3); g.stroke(); }
   // Pulli-Rumpf, endet an der Huefte
   P(g, g => { g.moveTo(170, 560); g.quadraticCurveTo(256, 530, 342, 560); g.lineTo(352, 712); g.quadraticCurveTo(256, 732, 160, 712); g.closePath(); }, HOOD, 10, 0.12);
   // Buendchen (geripptes Bund) ueber dem Hosenbund -> sauberer Uebergang
