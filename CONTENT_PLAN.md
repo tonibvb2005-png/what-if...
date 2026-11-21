@@ -103,5 +103,8 @@ Status: ✅ fertig gerendert · ✍️ Skript fertig · leer = offen
   - spätestens alle ~10 s ein Schockmoment (Detail, Geräusch, Enthüllung)
   - kurze, harte Sätze; die Hintergrundgeschichte nur so weit wie nötig
   - zum Ende hin Tempo steigern, Schluss mit Gänsehaut-Twist + Jumpscare
+- **ElevenLabs-Filter beachten:** keine drastischen Verletzungs-Beschreibungen („cut in half“, „blood“,
+  „wounds“, „screaming“), schon gar nicht in Verbindung mit Kindern/Mädchen. Grusel durch Andeutung
+  („The train never stopped.“) – wirkt oft sogar stärker.
 - Automatisch im Video: Punch-ins auf roten Wörtern, Schnitt-Zooms in langen Szenen,
   2 unterschwellige Kreatur-Blitze, beschleunigender Herzschlag vor dem Jumpscare.
