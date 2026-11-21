@@ -76,11 +76,11 @@ export const SHOTS = {
   ribbon(W, p, t, sh) { const A = W.Vl; base(A, t); const s1 = sh.segs[1] ? sh.segs[1].s : 1e9, k = ease(sm(0, 1, clamp((t - s1 + 0.8) / 1.2)));
     A.oma.visible = true; setTex(A.oma, A.T.omaN); A.oma.position.set(40.3, 0, -2.0); A.ribbon.rotation.z = Math.sin(t * 2) * 0.08;
     look(A.cam, lerpV(V(40.85, 1.1, -2.0), V(40.35, 1.15, -0.95), k), lerpV(V(40.82, 0.95, -2.65), V(40.3, 1.12, -2.0), k)); fov(A.cam, L(40, 50, k)); return { world: A, vig: 0.6 }; },
-  vigil(W, p, t) { const A = W.Vl; base(A, t); A.boy.visible = true; setTex(A.boy, A.T.sit); A.boy.position.set(39.0, 0.3, -0.32); A.boy.scale.set(0.82, 0.82, 1);
-    look(A.cam, lerpV(V(39.5, 1.2, 1.9), V(39.4, 1.1, 1.3), ease(p)), V(39.3, 0.75, -0.6)); return { world: A, vig: 0.7 }; },
+  vigil(W, p, t) { const A = W.Vl; base(A, t); A.boy.visible = true; setTex(A.boy, A.T.boyF); A.boy.position.set(39.0, 0, -0.15); A.boy.scale.set(1, 1, 1);
+    look(A.cam, lerpV(V(39.3, 1.4, 2.2), V(39.25, 1.3, 1.6), ease(p)), V(39.15, 0.9, -0.5)); return { world: A, vig: 0.7 }; },
   window_barn(W, p, t) { const A = W.Vl; base(A, t); horsesAnim(A, t, 1.2); look(A.cam, lerpV(V(4, 2.2, 3), V(5, 2.0, 2.2), ease(p)), V(12, 1.3, -4.8)); fov(A.cam, 38); return { world: A, vig: 0.85, shake: 0.001 }; },
-  boy_rule(W, p, t) { const A = W.Vl; base(A, t); A.boy.visible = true; setTex(A.boy, A.T.sit); A.boy.position.set(39.0, 0.3, -0.32); A.boy.scale.set(0.82, 0.82, 1);
-    look(A.cam, V(39.02, 0.95, L(0.6, 0.48, ease(p))), V(39.0, 0.85, -0.32)); fov(A.cam, 58); return { world: A, vig: 0.75 }; },
+  boy_rule(W, p, t) { const A = W.Vl; base(A, t); A.boy.visible = true; setTex(A.boy, A.T.boyS); A.boy.position.set(39.0, 0, -0.15); A.boy.scale.set(1, 1, 1);
+    look(A.cam, V(39.02, 1.05, L(1.05, 0.9, ease(p))), V(39.0, 0.98, -0.15)); fov(A.cam, 58); return { world: A, vig: 0.75 }; },
   door_knock(W, p, t, sh) { const A = W.Vl; base(A, t); const s1 = sh.segs[1] ? sh.segs[1].s : 1e9; A.door.rotation.y = -0.55 * ease(sm(0, 0.35, p)); A.nb.visible = true;
     const k = ease(clamp((t - s1 + 0.3) / 1.2)); look(A.cam, lerpV(V(70.6, 1.55, 0.6), V(70.15, 1.55, -2.35), k), lerpV(V(70.0, 1.3, -3.4), V(70.05, 1.55, -3.6), k)); fov(A.cam, L(50, 42, k));
     return { world: A, vig: 0.8 }; },

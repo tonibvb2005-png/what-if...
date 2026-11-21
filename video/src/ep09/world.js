@@ -61,8 +61,8 @@ export const SHOTS = {
   st_open(W, p, t, sh) { const A = W.St; base(A, t); const dt = t - sh.s; const z = L(-31, -24, clamp(dt / 2.5)); crawl(A, t, -2, z, true);
     const fl = dt < 0.35 || (dt > 0.9 && dt < 1.05); A.nl.forEach(l => l.intensity = fl ? 0.3 : 6); A.neons.forEach(n => n.material.color.set(fl ? 0x202428 : 0xe8f2ff));
     look(A.cam, V(0.8, 1.7, 6), V(-1.8, 0.8, -30)); fov(A.cam, L(40, 32, ease(p))); return { world: A, vig: 0.85, shake: dt < 0.4 ? 0.004 : 0.0008 }; },
-  st_bench(W, p, t) { const A = W.St; base(A, t); A.boy.visible = true; setTex(A.boy, A.T.sit); A.boy.position.set(3.6, 1.0, -3.68); A.boy.scale.set(0.92, 0.92, 1);
-    look(A.cam, lerpV(V(2.0, 2.2, -0.2), V(2.4, 2.05, -1.2), ease(p)), V(3.5, 1.85, -4.6)); return { world: A, vig: 0.65 }; },
+  st_bench(W, p, t) { const A = W.St; base(A, t); A.boy.visible = true; setTex(A.boy, A.T.boyS); A.boy.position.set(3.4, 1.0, -3.45); A.boy.scale.set(1, 1, 1);
+    look(A.cam, lerpV(V(2.0, 2.3, -0.2), V(2.4, 2.2, -1.2), ease(p)), V(3.4, 2.0, -4.4)); return { world: A, vig: 0.65 }; },
   st_tunnel(W, p, t) { const A = W.St; base(A, t); look(A.cam, lerpV(V(0.3, 2.0, -10), V(-0.6, 1.8, -20), ease(p)), V(-2, 1.6, -34)); return { world: A, vig: 0.9 }; },
   st_crawl(W, p, t) { const A = W.St; base(A, t); const z = L(-18, -9, p); crawl(A, t, -2, z, true);
     look(A.cam, V(-2, 0.45, -5.5), V(-2, 0.35, -14)); fov(A.cam, 46); return { world: A, vig: 0.85 }; },
