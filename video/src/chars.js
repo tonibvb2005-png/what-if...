@@ -752,3 +752,27 @@ MONSTERS['THE RAKE'] = () => { const c = cv2(512, 1024), g = c.getContext('2d');
   g.strokeStyle = 'rgba(90,80,75,.55)'; g.lineWidth = 6; for (let i = 0; i < 6; i++) { const y = 380 + i * 30; g.beginPath(); g.moveTo(206, y); g.quadraticCurveTo(256, y + 16, 316, y); g.stroke(); }
   for (const s of [-1, 1]) { rlimb(g, [[256 + s * 64, 350], [256 + s * 120, 560], [256 + s * 112, 760]], 20); rhand(g, 256 + s * 110, 770, Math.PI / 2 - s * 0.15, 0.95, 0.25, 0.2); }
   g.save(); g.translate(270, 300); g.rotate(0.18); line(g, [[0, 30], [0, -20]], 30, OL); line(g, [[0, 30], [0, -20]], 22, RSK); rakeFace(g, 0, -90, 88, 'stare'); g.restore(); return c; };
+
+// ------------------------------------------------------------- Folge 10: Aka Manto (roter Umhang, weisse Maske)
+const ARED = '#b3161c', ARED2 = '#7e0e13', AMASK = '#f3efe6';
+function akaMask(g, cx, cy, r, smile = true) {
+  P(g, g => { g.moveTo(cx, cy - r); g.bezierCurveTo(cx + r * 0.9, cy - r, cx + r * 0.85, cy + r * 0.6, cx, cy + r * 1.05); g.bezierCurveTo(cx - r * 0.85, cy + r * 0.6, cx - r * 0.9, cy - r, cx, cy - r); }, AMASK, r * 0.05, 0.1);
+  for (const s of [-1, 1]) { P(g, g => { g.moveTo(cx + s * r * 0.55, cy - r * 0.05); g.quadraticCurveTo(cx + s * r * 0.3, cy - r * 0.28, cx + s * r * 0.08, cy - r * 0.05); g.quadraticCurveTo(cx + s * r * 0.3, cy + r * 0.02, cx + s * r * 0.55, cy - r * 0.05); }, '#050404', 0, 0);
+    g.strokeStyle = '#b3161c'; g.lineWidth = r * 0.025; g.beginPath(); g.moveTo(cx + s * r * 0.6, cy - r * 0.35); g.quadraticCurveTo(cx + s * r * 0.3, cy - r * 0.5, cx + s * r * 0.08, cy - r * 0.33); g.stroke(); }
+  if (smile) { g.strokeStyle = '#1c1512'; g.lineWidth = r * 0.04; g.beginPath(); g.moveTo(cx - r * 0.42, cy + r * 0.42); g.quadraticCurveTo(cx, cy + r * 0.72, cx + r * 0.42, cy + r * 0.42); g.stroke();
+    g.fillStyle = '#b3161c'; g.beginPath(); g.ellipse(cx, cy + r * 0.58, r * 0.1, r * 0.05, 0, 0, 7); g.fill(); }
+}
+export function akaManto(pose = 'stand') {
+  const c = cv2(512, 1024), g = c.getContext('2d');
+  // Umhang: weit, bodenlang, mit Kapuze
+  P(g, g => { g.moveTo(256, 120); g.bezierCurveTo(380, 130, 400, 300, 390, 420); g.lineTo(470, 1010); g.quadraticCurveTo(256, 1040, 42, 1010); g.lineTo(122, 420); g.bezierCurveTo(112, 300, 132, 130, 256, 120); }, ARED, 10, 0.18);
+  g.strokeStyle = 'rgba(60,0,0,.45)'; g.lineWidth = 8; for (const x of [170, 230, 290, 350]) { g.beginPath(); g.moveTo(x + (x - 256) * 0.1, 440); g.quadraticCurveTo(x + (x - 256) * 0.4, 720, x + (x - 256) * 0.75, 1010); g.stroke(); }
+  P(g, g => { g.moveTo(256, 90); g.bezierCurveTo(360, 92, 372, 250, 350, 330); g.quadraticCurveTo(256, 360, 162, 330); g.bezierCurveTo(140, 250, 152, 92, 256, 90); }, ARED2, 9, 0.1); // Kapuze
+  P(g, ell(256, 250, 80, 98), '#120606', 0, 0);
+  akaMask(g, 256, 238, 72, true);
+  if (pose === 'hands') { line(g, [[256, 480], [256, 700]], 8, '#3a0306'); for (const s of [-1, 1]) rhand(g, 256 + s * 26, 600, Math.PI / 2 + s * 0.35, 0.55, 0.35, 0.16); }
+  return c;
+}
+MONSTERS['AKA MANTO'] = () => akaManto('hands');
+export function redCloth() { const c = cv2(512, 256), g = c.getContext('2d'); P(g, g => { g.moveTo(10, 40); g.quadraticCurveTo(256, 10, 500, 50); g.lineTo(480, 230); g.quadraticCurveTo(256, 250, 30, 220); g.closePath(); }, ARED, 8, 0.15);
+  g.strokeStyle = 'rgba(60,0,0,.5)'; g.lineWidth = 7; for (const x of [90, 180, 270, 360, 440]) { g.beginPath(); g.moveTo(x, 40); g.quadraticCurveTo(x + 20, 140, x - 10, 230); g.stroke(); } return c; }

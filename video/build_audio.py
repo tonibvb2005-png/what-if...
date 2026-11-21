@@ -514,6 +514,18 @@ def A_metro(d):
 def A_wagon(d):
     tt = t_(d); a = lp(noise(d), 200) * 0.09 * (0.8 + 0.2 * np.sin(2 * np.pi * 1.3 * tt)); return a.astype(np.float32)
 
+# ---------------------------------------------------------------- Folge 10: Aka Manto
+def R_doorcreak(): return reverb(_pitch(rec("0616", 0.1, 1.7, 0.7, 0.01, 0.5), 0.8), 1.2, 0.3)
+def R_cloth():
+    d = 1.4; return norm((bp(noise(d), 800, 5000) * env(int(d * SR), 0.2, 0.6) * (0.6 + 0.4 * np.sin(2 * np.pi * 3 * t_(d)))).astype(np.float32), 0.25)
+def R_bell():
+    d = 2.5; tt = t_(d); x = sum(np.sin(2 * np.pi * f * tt) * a for f, a in [(880, 0.5), (1320, 0.25), (1760, 0.12)]) * np.exp(-tt * 2.2)
+    return norm(reverb(x.astype(np.float32), 1.6, 0.3), 0.35)
+def A_wc(d):
+    tt = t_(d); a = lp(noise(d), 300) * 0.03 + np.sin(2 * np.pi * 120 * tt) * 0.006 + (bp(noise(d), 1800, 3000) * ((tt % 3.1) < 0.05)) * 0.05
+    return a.astype(np.float32)
+def A_class(d): return (lp(noise(d), 400) * 0.04).astype(np.float32)
+
 SFX = {k[2:]: v for k, v in globals().items() if k.startswith("S_")}
 SFX.update({k[2:]: v for k, v in globals().items() if k.startswith("R_")})
 
@@ -565,7 +577,7 @@ def A_dawn(d):
     w = lp(noise(len(b) / SR), 400) * 0.06; m = min(len(b), len(w)); return (b[:m] + w[:m]).astype(np.float32)
 
 
-AMB = {"metro": A_metro, "wagon": A_wagon, "street": A_street, "bed": A_bed, "pc": A_pc, "pc_off": A_pc_off, "kitchen": A_kitchen, "day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn, "forest": A_forest, "car": A_car, "dusk": A_dusk, "bedroom": A_bedroom, "woods": A_woods, "village": A_village, "tvroom": A_tvroom, "station": A_station, "shop": A_shop, "shop_quiet": A_shop_quiet}
+AMB = {"wc": A_wc, "class": A_class, "metro": A_metro, "wagon": A_wagon, "street": A_street, "bed": A_bed, "pc": A_pc, "pc_off": A_pc_off, "kitchen": A_kitchen, "day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn, "forest": A_forest, "car": A_car, "dusk": A_dusk, "bedroom": A_bedroom, "woods": A_woods, "village": A_village, "tvroom": A_tvroom, "station": A_station, "shop": A_shop, "shop_quiet": A_shop_quiet}
 
 
 def drone(d):
@@ -639,6 +651,12 @@ def voice(shot, k, seg):
             if seg["v"] == "schwester":
                 x = ffx(x, SIL.format(d=0.25) + ",highpass=f=120")
                 return norm(reverb(x, 0.9, 0.2), 0.75), len(x) / SR
+            if seg["v"] == "aka":   # aus der Nachbarkabine: hohl, gekachelter Raum
+                x = ffx(x, SIL.format(d=0.35) + ",asetrate=44100*0.95,aresample=44100,atempo=0.95,highpass=f=120,lowpass=f=3600")
+                return norm(reverb(x, 1.4, 0.42, 0.02), 0.78), len(x) / SR
+            if seg["v"] == "ben":
+                x = ffx(x, SIL.format(d=0.3) + ",atempo=1.03,highpass=f=100")
+                return norm(x, 0.8), len(x) / SR
             if seg["v"] == "opa":
                 x = ffx(x, SIL.format(d=0.25) + ",asetrate=44100*0.96,aresample=44100,atempo=1.1,highpass=f=120,lowpass=f=5000")
                 return norm(reverb(x, 1.2, 0.35), 0.72), len(x) / SR

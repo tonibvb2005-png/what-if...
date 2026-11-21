@@ -1,0 +1,21 @@
+{
+  "monster": "AKA MANTO",
+  "shots": [
+    {"id":"hook","scene":"roulette","segs":[{"v":"narr","t":"Eines dieser Monster ist ausgebrochen. Mal sehen, wer es ist.","sub":"EINES DIESER MONSTER IST *AUSGEBROCHEN.* MAL SEHEN, WER ES IST."}],"hold":0.74,"sfx":[{"n":"alarm","at":0},{"n":"ticks","atEnd":-8.31}],"noHeader":true},
+    {"id":"name","scene":"wc_open","clock":"15:40","segs":[{"v":"narr","t":"Aka Manto. Kurz vor Schulschluss.","sub":"*AKA MANTO.* KURZ VOR SCHULSCHLUSS."}],"hold":0.3,"sfx":[{"n":"boom","at":-0.05},{"n":"flicker","at":0.2},{"n":"doorcreak","at":0.3},{"n":"cloth","at":0.5},{"n":"flicker","at":1.0}],"amb":"wc"},
+    {"id":"loo","scene":"hall","clock":"15:41","segs":[{"v":"narr","t":"Du musst noch schnell aufs Klo. Alle anderen sind schon im Unterricht.","sub":"DU MUSST NOCH SCHNELL AUFS KLO. ALLE ANDEREN SIND SCHON *IM UNTERRICHT.*"}],"sfx":[{"n":"steps","at":0.1}],"amb":"class"},
+    {"id":"last","scene":"stalls","clock":"15:42","segs":[{"v":"narr","t":"Nur die letzte Kabine ist frei.","sub":"NUR DIE *LETZTE KABINE* IST FREI."}],"amb":"wc"},
+    {"id":"paper","scene":"empty_roll","clock":"15:43","segs":[{"v":"narr","t":"Du merkst es zu spät. Es gibt kein Klopapier.","sub":"DU MERKST ES ZU SPÄT. ES GIBT *KEIN KLOPAPIER.*"}],"amb":"wc"},
+    {"id":"whisper","scene":"under","clock":"15:43","segs":[{"v":"narr","t":"Dann flüstert jemand. Direkt hinter der Wand.","sub":"DANN FLÜSTERT JEMAND. *DIREKT HINTER DER WAND.*"},{"v":"aka","t":"Möchtest du rotes Papier... oder blaues Papier?","sub":"„MÖCHTEST DU *ROTES* PAPIER… ODER *BLAUES* PAPIER?“"}],"hold":0.3,"sfx":[{"n":"cloth","at":0.3},{"n":"heart","atSeg":[1,0]}],"amb":"wc"},
+    {"id":"name2","scene":"red_aka","clock":"15:43","segs":[{"v":"narr","t":"Aka Manto. Der Mann mit dem roten Umhang.","sub":"*AKA MANTO.* DER MANN MIT DEM *ROTEN UMHANG.*"}],"sfx":[{"n":"boom","at":0}]},
+    {"id":"redblue","scene":"red_rolls","clock":"15:43","segs":[{"v":"narr","t":"Wer Rot sagt, wird nie wieder gesehen. Wer Blau sagt, auch nicht.","sub":"WER ROT SAGT, WIRD *NIE WIEDER GESEHEN.* WER BLAU SAGT, *AUCH NICHT.*"}],"sfx":[{"n":"whisper","at":0.3}]},
+    {"id":"rule","scene":"stall_rule","clock":"15:44","segs":[{"v":"narr","t":"Die Regel: Sag nicht Rot. Sag nicht Blau. Sag: Ich brauche kein Papier.","sub":"DIE REGEL: SAG NICHT ROT. SAG NICHT BLAU. SAG: *ICH BRAUCHE KEIN PAPIER.*"}],"rule":{"title":"REGEL #1","text":"SAG: KEIN PAPIER","atSeg":[0,0.6]},"sfx":[{"n":"pop","atSeg":[0,0.6]}],"amb":"wc"},
+    {"id":"answer","scene":"stall_answer","clock":"15:44","segs":[{"v":"narr","t":"Deine Stimme zittert. Ich brauche kein Papier.","sub":"DEINE STIMME ZITTERT. *ICH BRAUCHE KEIN PAPIER.*"}],"sfx":[{"n":"heart","at":0.1}],"amb":"wc"},
+    {"id":"cloth","scene":"retreat","clock":"15:44","segs":[{"v":"narr","t":"Unter der Tür zieht sich ein roter Stoff zurück. Dann ist es still.","sub":"UNTER DER TÜR ZIEHT SICH EIN *ROTER STOFF* ZURÜCK. DANN IST ES STILL."}],"hold":0.3,"sfx":[{"n":"cloth","at":0.3}],"amb":"wc"},
+    {"id":"class","scene":"classroom","clock":"15:46","segs":[{"v":"narr","t":"Du rennst zurück in die Klasse. Nach dir geht Ben aufs Klo.","sub":"DU RENNST ZURÜCK IN DIE KLASSE. NACH DIR GEHT *BEN* AUFS KLO."}],"amb":"class"},
+    {"id":"pale","scene":"ben_pale","clock":"15:52","segs":[{"v":"narr","t":"Als er zurückkommt, ist er kreidebleich.","sub":"ALS ER ZURÜCKKOMMT, IST ER *KREIDEBLEICH.*"},{"v":"ben","t":"Da hat jemand gefragt, ob ich rotes oder blaues Papier will. Ich hab Rot gesagt.","sub":"„DA HAT JEMAND GEFRAGT, OB ICH ROTES ODER BLAUES PAPIER WILL. *ICH HAB ROT GESAGT.*“"}],"amb":"class"},
+    {"id":"empty","scene":"empty_seat","clock":"16:00","segs":[{"v":"narr","t":"Nach der Pause ist sein Platz leer. Über seinem Stuhl hängt ein roter Umhang.","sub":"NACH DER PAUSE IST SEIN PLATZ LEER. ÜBER SEINEM STUHL HÄNGT EIN *ROTER UMHANG.*"}],"hold":1.0,"sfx":[{"n":"bell","at":0.1},{"n":"stinger","atSeg":[0,-0.3]}],"amb":"class"},
+    {"id":"cta","scene":"cta","segs":[{"v":"narr","t":"Folge mir, um zu sehen, wen du als Nächstes bekommst.","sub":"FOLGE MIR, UM ZU SEHEN, WEN DU ALS *NÄCHSTES* BEKOMMST."}],"hold":0.3,"noHeader":true,"sfx":[{"n":"sparkle","at":0}]},
+    {"id":"endcard","scene":"endcard","segs":[],"hold":2.2,"noHeader":true}
+  ]
+}
