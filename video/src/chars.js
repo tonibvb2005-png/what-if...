@@ -74,11 +74,22 @@ export function boy(view = 'front', expr = 'neutral') {
 
 export function boySit(expr = 'scared_sweat') {
   const c = cv2(512, 1024), g = c.getContext('2d');
-  P(g, ell(196, 990, 44, 22), '#3a2a22', 8, 0); P(g, ell(316, 990, 44, 22), '#3a2a22', 8, 0);
-  P(g, rr(160, 560, 192, 300, 60), HOOD);
-  P(g, rr(168, 790, 70, 190, 26), JEANS); P(g, rr(274, 790, 70, 190, 26), JEANS);
-  P(g, rr(150, 690, 212, 150, 70), JEANS);
-  P(g, rr(118, 712, 276, 74, 37), HOOD); P(g, circ(138, 748, 30), SKIN, 8, 0); P(g, circ(374, 748, 30), SKIN, 8, 0);
+  // Schuhe + Unterschenkel
+  P(g, ell(198, 990, 46, 22), '#3a2a22', 8, 0); P(g, ell(314, 990, 46, 22), '#3a2a22', 8, 0);
+  P(g, rr(166, 770, 66, 210, 26), JEANS); P(g, rr(280, 770, 66, 210, 26), JEANS);
+  // Oberschenkel von vorne (verkuerzt): runder Schoss mit Mittelnaht
+  P(g, g => { g.moveTo(150, 720); g.quadraticCurveTo(150, 690, 200, 688); g.lineTo(312, 688); g.quadraticCurveTo(362, 690, 362, 720); g.lineTo(354, 800); g.quadraticCurveTo(300, 818, 256, 804); g.quadraticCurveTo(212, 818, 158, 800); g.closePath(); }, JEANS, 10, 0.12);
+  line(g, [[256, 700], [256, 800]], 5, 'rgba(20,24,40,.5)');
+  // Pulli-Rumpf, endet an der Huefte
+  P(g, g => { g.moveTo(170, 560); g.quadraticCurveTo(256, 530, 342, 560); g.lineTo(352, 712); g.quadraticCurveTo(256, 732, 160, 712); g.closePath(); }, HOOD, 10, 0.12);
+  // Buendchen (geripptes Bund) ueber dem Hosenbund -> sauberer Uebergang
+  P(g, g => { g.moveTo(156, 694); g.quadraticCurveTo(256, 716, 356, 694); g.lineTo(358, 728); g.quadraticCurveTo(256, 752, 154, 728); g.closePath(); }, HOOD2, 8, 0);
+  g.strokeStyle = 'rgba(0,0,0,.18)'; g.lineWidth = 4; for (let x = 172; x <= 340; x += 16) { g.beginPath(); g.moveTo(x, 702 + Math.abs(x - 256) * -0.05 + 8); g.lineTo(x, 734 + Math.abs(x - 256) * -0.06 + 8); g.stroke(); }
+  P(g, rr(196, 630, 120, 56, 20), HOOD2, 6, 0); // Bauchtasche
+  P(g, ell(256, 566, 98, 28), HOOD2, 8, 0); line(g, [[230, 572], [226, 630]], 6, '#fff'); line(g, [[282, 572], [286, 630]], 6, '#fff');
+  // Aermel an den Seiten herab, Haende auf den Knien
+  for (const sd of [-1, 1]) { P(g, g => { g.moveTo(256 + sd * 86, 560); g.quadraticCurveTo(256 + sd * 136, 600, 256 + sd * 128, 700); g.lineTo(256 + sd * 104, 760); g.lineTo(256 + sd * 70, 748); g.lineTo(256 + sd * 88, 690); g.quadraticCurveTo(256 + sd * 92, 620, 256 + sd * 70, 590); g.closePath(); }, HOOD, 9, 0.12);
+    P(g, circ(256 + sd * 88, 768, 28), SKIN, 8, 0); }
   P(g, circ(80, 390, 32), SKIN, 9, 0); P(g, circ(432, 390, 32), SKIN, 9, 0);
   P(g, circ(256, 380, 178), SKIN, 11);
   P(g, g => { g.moveTo(72, 390); g.bezierCurveTo(46, 126, 466, 126, 440, 390); g.lineTo(424, 326); g.lineTo(392, 348); g.lineTo(360, 304); g.lineTo(322, 336); g.lineTo(290, 298); g.lineTo(250, 330); g.lineTo(214, 296); g.lineTo(180, 334); g.lineTo(146, 304); g.lineTo(114, 342); g.lineTo(90, 326); g.closePath(); }, HAIR, 11, 0.1);
