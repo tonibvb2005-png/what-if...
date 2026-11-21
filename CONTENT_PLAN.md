@@ -29,7 +29,8 @@ Status: ✅ fertig gerendert · ✍️ Skript fertig · leer = offen
 | 5 | Der Erlkönig | 🇩🇪 | ✅ | If a voice in the forest promises your child gifts… ride faster. |
 | 6 | Teke Teke | 🇯🇵 | ✅ | If you hear "teke… teke…" behind you at night… don't look down. |
 | 6b | La Ciguapa (Test: Lateinamerika-Thema, starker Einstieg) | 🇩🇴 | ✅ | If you find footprints in the forest leading away from you… you're walking toward her. |
-| 7 | Banshee | 🇮🇪 | | If you hear a woman screaming outside… someone in your family will die. |
+| 6c | El Cadejo | 🇸🇻🇬🇹 | ✍️ | If a dog with burning red eyes starts following you home at night… pray it's white. |
+| 7 | Banshee | 🇮🇪 | ✍️ | If you hear a woman screaming outside… someone in your family will die. |
 | 8 | Der Nachzehrer | 🇩🇪 | | If you hear chewing from inside a grave… the whole village is in danger. |
 | 9 | Wendigo | 🇨🇦 | | If you're starving in the frozen woods… never take the first bite. |
 | 10 | Huldra | 🇳🇴 | | If a beautiful woman in the forest hides her back… run. |
