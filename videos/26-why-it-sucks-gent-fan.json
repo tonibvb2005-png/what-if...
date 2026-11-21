@@ -27,7 +27,7 @@
    "club": "KAA GENT",
    "seed": 26,
    "cues": {
-    "land": 3.2
+    "land": 3.0
    },
    "audio": "../audio/26-why-it-sucks-gent-fan/01.wav",
    "wordTimes": [
@@ -36,9 +36,9 @@
     0.66,
     1.08,
     1.56,
-    3.05,
-    3.39,
-    3.8
+    3.0,
+    3.02,
+    3.32
    ],
    "pad": 0.35
   },
