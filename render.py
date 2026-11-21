@@ -182,12 +182,14 @@ def build_timeline(words):
     for si in range(n):
         s0 = starts[si]
         s1 = starts[si + 1] if si + 1 < n else end
-        local = {}
+        local, every = {}, {}
         for w in words:
-            if w["scene"] == si and w["n"] not in local:
-                local[w["n"]] = w["t"] - s0
+            if w["scene"] == si:
+                if w["n"] not in local:
+                    local[w["n"]] = w["t"] - s0
+                every.setdefault(w["n"], []).append(round(w["t"] - s0, 3))
         scenes.append({"i": si, "kind": story.SCENES[si]["kind"], "start": s0, "end": s1, "words": local,
-                       "cfg": story.SCENES[si]})
+                       "word_times": every, "cfg": story.SCENES[si]})
     add_dynamics(scenes, words)
     tl = {"scenes": scenes, "words": words, "story_end": end, "duration": end + OUTRO}
     tl["flashes"], tl["reveal_T"] = pick_flashes(scenes, words)
@@ -444,6 +446,7 @@ def draw_scene(c, sc, T):
     t = T - sc["start"]
     dur = sc["end"] - sc["start"]
     ctx = Ctx(t, dur, T, sc["words"], seed=sc["i"])
+    ctx.every = sc.get("word_times", {})          # all local times of each word (repeated words)
     c.save()
     z = scene_zoom(sc, t)
     if z != 1.0:
