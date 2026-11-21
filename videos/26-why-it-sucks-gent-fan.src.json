@@ -1,0 +1,124 @@
+{
+  "title": "Why it sucks being a KAA Gent fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "kaa",
+  "article": "A",
+  "fanKit": {
+    "shirt": "#0b4ea2",
+    "trim": "#ffffff",
+    "pants": "#ffffff"
+  },
+  "flatCrowd": [
+    "#0b4ea2",
+    "#0b4ea2",
+    "#ffffff",
+    "#5a8ad6"
+  ],
+  "scarf": [
+    "#0b4ea2",
+    "#ffffff"
+  ],
+  "tagLine": "NOT A GENK FAN 😤",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... KAA Gent fan!",
+      "club": "KAA GENT",
+      "seed": 26,
+      "duration": 4.2,
+      "cues": {
+        "land": 2.6
+      }
+    },
+    {
+      "shot": "ge6",
+      "text": "It starts when you're six. Your friends support Barça or Real Madrid. You support... the Buffalos. Nobody knows why. Something about a circus in 1906.",
+      "club": "KAA GENT",
+      "seed": 26,
+      "cueWords": {
+        "buff": "You",
+        "nobody": "Nobody",
+        "circus": "Something"
+      }
+    },
+    {
+      "shot": "ge8",
+      "text": "Age eight. A local kid plays in your youth team. Kevin De Bruyne. At fourteen, he leaves. For Genk. Then he becomes one of the best players in the world.",
+      "club": "KAA GENT",
+      "seed": 26,
+      "cueWords": {
+        "kevin": "Kevin",
+        "leave": "At",
+        "world": "Then"
+      }
+    },
+    {
+      "shot": "ge12",
+      "text": "Age twelve. You win the league! For the first time. Ever. After more than a hundred years.",
+      "club": "KAA GENT",
+      "seed": 26,
+      "cueWords": {
+        "first": "For",
+        "years": "After"
+      }
+    },
+    {
+      "shot": "ge13",
+      "text": "Age thirteen. Champions League! Last sixteen! Your friend says: \"Congrats, Genk!\" It's Gent.",
+      "club": "KAA GENT",
+      "seed": 26,
+      "cueWords": {
+        "genk": "Congrats",
+        "its": "It's"
+      }
+    },
+    {
+      "shot": "ge15",
+      "text": "Age fifteen. You finish top of the table. Then Belgium cuts everyone's points in half. Welcome to the play-offs.",
+      "club": "KAA GENT",
+      "seed": 26,
+      "cueWords": {
+        "half": "Then",
+        "play": "Welcome"
+      }
+    },
+    {
+      "shot": "ge17",
+      "text": "Age seventeen. Cup final against Anderlecht. Penalties. You win! Your friend texts: \"Well done, Genk!\"",
+      "club": "KAA GENT",
+      "seed": 26,
+      "cueWords": {
+        "win": "You",
+        "text": "Your"
+      }
+    },
+    {
+      "shot": "gething",
+      "text": "That's the thing about being a Gent fan. Nobody spells it right.",
+      "club": "KAA GENT",
+      "seed": 26,
+      "cueWords": {
+        "spell": "Nobody"
+      }
+    },
+    {
+      "shot": "gebuff",
+      "text": "But you know exactly who you are. The Buffalos.",
+      "club": "KAA GENT",
+      "seed": 26,
+      "cueWords": {
+        "buff": "The"
+      }
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a Gent fan. Not a Genk fan. And which club is next? Drop it in the comments!",
+      "club": "KAA GENT",
+      "seed": 26,
+      "cueWords": {
+        "next": "And"
+      }
+    }
+  ]
+}
