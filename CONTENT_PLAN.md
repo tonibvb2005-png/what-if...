@@ -27,7 +27,7 @@ Status: ✅ fertig gerendert · ✍️ Skript fertig · leer = offen
 | 3 | Black Shuck | 🇬🇧 | ✅ | If you see a black dog with burning eyes… you won't live the year. |
 | 4 | Baba Yaga | 🇷🇺 | ✅ | If you see a hut walking on chicken legs… don't knock. |
 | 5 | Der Erlkönig | 🇩🇪 | ✅ | If a voice in the forest promises your child gifts… ride faster. |
-| 6 | Teke Teke | 🇯🇵 | | If you hear "teke… teke…" behind you at night… don't look down. |
+| 6 | Teke Teke | 🇯🇵 | ✍️ | If you hear "teke… teke…" behind you at night… don't look down. |
 | 7 | Banshee | 🇮🇪 | | If you hear a woman screaming outside… someone in your family will die. |
 | 8 | Der Nachzehrer | 🇩🇪 | | If you hear chewing from inside a grave… the whole village is in danger. |
 | 9 | Wendigo | 🇨🇦 | | If you're starving in the frozen woods… never take the first bite. |
