@@ -447,6 +447,7 @@ def draw_scene(c, sc, T):
     dur = sc["end"] - sc["start"]
     ctx = Ctx(t, dur, T, sc["words"], seed=sc["i"])
     ctx.every = sc.get("word_times", {})          # all local times of each word (repeated words)
+    ctx.scene_index = sc["i"]
     c.save()
     z = scene_zoom(sc, t)
     if z != 1.0:
@@ -479,8 +480,7 @@ def render_frame(c, tl, chunks, T):
             c.drawRect(R(0, 0, W, H), paint((120, 0, 0), 0.25))
     vignette(c)
     # fade in at very start, dip at the end of the story
-    if T < 0.4:
-        c.drawRect(R(0, 0, W, H), paint((0, 0, 0), 1 - T / 0.4))
+    # (no fade-in: the very first frame must already grab attention)
     end_dip = ramp(T, tl["story_end"] - 0.35, tl["story_end"])
     draw_location(c, tl, T)
     draw_title(c, tl, T)
