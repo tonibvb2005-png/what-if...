@@ -24,8 +24,11 @@ WOOD = (62, 44, 32)
 
 # ================================================================== elements
 def dog(c, x, y, s, phase=0.0, walking=True, run=False, eyes=1.0, facing=1, T=0.0, seed=3, eye_color=FIRE,
-        silhouette=True):
-    """Huge shaggy black dog, side view facing right. Paws at (x, y), shoulder ~ 230*s."""
+        silhouette=True, body_col=None, rim_col=None, far_col=None, hooves=False):
+    """Huge shaggy dog, side view facing right. Paws at (x, y), shoulder ~ 230*s.
+    body_col/rim_col/far_col recolour it (e.g. the white Cadejo); hooves=True draws goat hooves."""
+    body_col = body_col or BEAST
+    rim_col = rim_col or BEAST_RIM
     rng = np.random.default_rng(seed)
     c.save()
     c.translate(x, y)
@@ -43,9 +46,14 @@ def dog(c, x, y, s, phase=0.0, walking=True, run=False, eyes=1.0, facing=1, T=0.
         c.drawPath(poly([(hx - 26, -170), (hx + 26, -170), (kx + 13, ky), (kx - 13, ky)]), paint(colr))
         c.drawCircle(kx, ky, 13, paint(colr))
         c.drawPath(poly([(kx - 12, ky), (kx + 12, ky), (fx + 9, fy), (fx - 9, fy)]), paint(colr))
-        c.drawOval(R(fx - 12, fy - 10, fx + 26, fy + 4), paint(colr))
+        if hooves:
+            c.drawPath(poly([(fx - 11, fy - 12), (fx + 13, fy - 12), (fx + 17, fy + 4), (fx - 13, fy + 4)]),
+                       paint((34, 26, 22)))
+            c.drawLine(fx + 2, fy - 6, fx + 2, fy + 4, paint((8, 6, 6), stroke=3))
+        else:
+            c.drawOval(R(fx - 12, fy - 10, fx + 26, fy + 4), paint(colr))
 
-    far = (6, 6, 9)
+    far = far_col or (6, 6, 9)
     leg(92, math.pi, far)
     leg(-104, 0.0, far)
     sway = math.sin(T * 1.6) * 12
@@ -55,7 +63,7 @@ def dog(c, x, y, s, phase=0.0, walking=True, run=False, eyes=1.0, facing=1, T=0.
     tail = skia.Path()
     tail.moveTo(-132, -190)
     tail.cubicTo(-200, -190 + sway, -236, -140 + sway, -232, -80 + sway)
-    for off, colr in ((5, BEAST_RIM), (0, BEAST)):
+    for off, colr in ((5, rim_col), (0, body_col)):
         c.save()
         c.translate(-off, -off * 0.7)
         for pth in (body, chest, head):
@@ -65,8 +73,8 @@ def dog(c, x, y, s, phase=0.0, walking=True, run=False, eyes=1.0, facing=1, T=0.
         c.drawPath(poly([(170, -280), (172, -326), (194, -282)]), paint(colr))
         c.drawPath(tail, paint(colr, stroke=26, cap_round=True))
         c.restore()
-    leg(112, 0.0, BEAST)
-    leg(-86, math.pi, BEAST)
+    leg(112, 0.0, body_col)
+    leg(-86, math.pi, body_col)
     if eyes > 0:
         fl = 0.85 + 0.15 * math.sin(T * 17)
         glow(c, 200, -252, 70 * eyes, eye_color, 0.7 * eyes * fl)
