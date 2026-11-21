@@ -37,9 +37,9 @@ function buildVillage() {
   R.add(box(8, 3, 0.1, lam(0xe8d8b8), 0, 1.5, -3), box(0.1, 3, 8, lam(0xe8d8b8), -3.5, 1.5, 0), box(0.1, 3, 8, lam(0xe8d8b8), 3.5, 1.5, 0), box(8, 0.1, 8, lam(0x6a4a30), 0, 3, 0));
   const rwin = box(1.0, 0.8, 0.05, basic(0x0c1630), -1.8, 1.8, -2.94); R.add(rwin);
   // Bett mit Tante, Wiege, rotes Band, Stuhl, Kerze
-  R.add(box(1.6, 0.45, 2.2, lam(0x6a4a30), 1.6, 0.22, -1.6), box(1.5, 0.18, 2.1, lam(0xf2ece0), 1.6, 0.5, -1.6), box(1.6, 1.1, 0.1, lam(0x6a4a30), 1.6, 0.55, -2.7));
+  R.add(box(1.6, 0.44, 2.2, lam(0x6a4a30), 1.6, 0.22, -1.6), box(1.46, 0.17, 2.06, lam(0xf2ece0), 1.6, 0.525, -1.62), box(1.66, 1.1, 0.1, lam(0x6a4a30), 1.6, 0.55, -2.76));
   const auntS = sprite(C.aunt(), 1.25, 0.3); auntS.userData.noBB = true; auntS.children[0].visible = false; auntS.position.set(1.6, 0.25, -2.2); R.add(auntS);
-  R.add(box(1.5, 0.25, 1.4, lam(0xb03a3a), 1.6, 0.66, -1.2));
+  R.add(box(1.54, 0.22, 1.36, lam(0xb03a3a), 1.6, 0.695, -1.19));
   const ribbon = new THREE.Group(); ribbon.position.set(0.82, 1.05, -2.65); R.add(ribbon); ribbon.add(box(0.06, 0.06, 0.06, basic(0xd01818), 0, 0, 0), box(0.04, 0.35, 0.02, basic(0xd01818), 0.03, -0.2, 0.02), box(0.04, 0.3, 0.02, basic(0xd01818), -0.04, -0.18, 0.03));
   const cradle = new THREE.Group(); cradle.position.set(0.2, 0, -1.0); R.add(cradle); cradle.add(box(0.8, 0.35, 0.5, lam(0x8a6a40), 0, 0.5, 0), box(0.05, 0.5, 0.05, lam(0x6a4a30), -0.4, 0.25, 0), box(0.05, 0.5, 0.05, lam(0x6a4a30), 0.4, 0.25, 0));
   const babyS = sprite(C.baby(), 0.35, 0.3); babyS.userData.noBB = true; babyS.children[0].visible = false; babyS.position.set(0, 0.55, 0.05); cradle.add(babyS);
@@ -54,7 +54,7 @@ function buildVillage() {
   const door = new THREE.Group(); door.position.set(-0.8, 0, -3); D.add(door); door.add(box(1.6, 2.1, 0.08, lam(0x6a4a30), 0.8, 1.05, 0));
   const nb = sprite(C.alkarisi('neighbor'), 1.8, 0.3); nb.userData.noBB = true; nb.children[0].visible = false; nb.position.set(70.05, 0, -3.6); S.add(nb);
   const dl = new THREE.PointLight(0xffd8a0, 3, 7, 1.4); dl.position.set(70, 2.2, -1); S.add(dl);
-  const T = { boyS: C.boy('front', 'scared_sweat'), boyF: C.boy('front', 'neutral'), boyB: C.boy('back'), omaN: C.oma('neutral'), omaS: C.oma('shocked') };
+  const T = { sit: C.boySit('scared_sweat'), boyS: C.boy('front', 'scared_sweat'), boyF: C.boy('front', 'neutral'), boyB: C.boy('back'), omaN: C.oma('neutral'), omaS: C.oma('shocked') };
   const boy = sprite(T.boyF, 1.3); boy.userData.noBB = true; boy.children[0].visible = false; S.add(boy);
   const oma = sprite(T.omaN, 1.35); oma.userData.noBB = true; oma.children[0].visible = false; S.add(oma);
   const walker = sprite(C.alkarisi('neighbor'), 1.8, 0.2); walker.userData.noBB = true; walker.children[0].visible = false; S.add(walker);
@@ -76,11 +76,11 @@ export const SHOTS = {
   ribbon(W, p, t, sh) { const A = W.Vl; base(A, t); const s1 = sh.segs[1] ? sh.segs[1].s : 1e9, k = ease(sm(0, 1, clamp((t - s1 + 0.8) / 1.2)));
     A.oma.visible = true; setTex(A.oma, A.T.omaN); A.oma.position.set(40.3, 0, -2.0); A.ribbon.rotation.z = Math.sin(t * 2) * 0.08;
     look(A.cam, lerpV(V(40.85, 1.1, -2.0), V(40.35, 1.15, -0.95), k), lerpV(V(40.82, 0.95, -2.65), V(40.3, 1.12, -2.0), k)); fov(A.cam, L(40, 50, k)); return { world: A, vig: 0.6 }; },
-  vigil(W, p, t) { const A = W.Vl; base(A, t); A.boy.visible = true; setTex(A.boy, A.T.boyF); A.boy.position.set(39.0, 0.12, -0.55); A.boy.scale.set(0.9, 0.9, 1);
-    look(A.cam, lerpV(V(41.6, 1.3, 1.6), V(41.2, 1.2, 1.0), ease(p)), V(39.6, 0.85, -0.8)); return { world: A, vig: 0.7 }; },
+  vigil(W, p, t) { const A = W.Vl; base(A, t); A.boy.visible = true; setTex(A.boy, A.T.sit); A.boy.position.set(39.0, 0.3, -0.32); A.boy.scale.set(0.82, 0.82, 1);
+    look(A.cam, lerpV(V(39.5, 1.2, 1.9), V(39.4, 1.1, 1.3), ease(p)), V(39.3, 0.75, -0.6)); return { world: A, vig: 0.7 }; },
   window_barn(W, p, t) { const A = W.Vl; base(A, t); horsesAnim(A, t, 1.2); look(A.cam, lerpV(V(4, 2.2, 3), V(5, 2.0, 2.2), ease(p)), V(12, 1.3, -4.8)); fov(A.cam, 38); return { world: A, vig: 0.85, shake: 0.001 }; },
-  boy_rule(W, p, t) { const A = W.Vl; base(A, t); A.boy.visible = true; setTex(A.boy, A.T.boyS); A.boy.position.set(39.0, 0.12, -0.55); A.boy.scale.set(0.9, 0.9, 1);
-    look(A.cam, V(39.02, 1.05, L(0.25, 0.15, ease(p))), V(39.0, 0.95, -0.55)); fov(A.cam, 58); return { world: A, vig: 0.75 }; },
+  boy_rule(W, p, t) { const A = W.Vl; base(A, t); A.boy.visible = true; setTex(A.boy, A.T.sit); A.boy.position.set(39.0, 0.3, -0.32); A.boy.scale.set(0.82, 0.82, 1);
+    look(A.cam, V(39.02, 0.95, L(0.6, 0.48, ease(p))), V(39.0, 0.85, -0.32)); fov(A.cam, 58); return { world: A, vig: 0.75 }; },
   door_knock(W, p, t, sh) { const A = W.Vl; base(A, t); const s1 = sh.segs[1] ? sh.segs[1].s : 1e9; A.door.rotation.y = -0.55 * ease(sm(0, 0.35, p)); A.nb.visible = true;
     const k = ease(clamp((t - s1 + 0.3) / 1.2)); look(A.cam, lerpV(V(70.6, 1.55, 0.6), V(70.15, 1.55, -2.35), k), lerpV(V(70.0, 1.3, -3.4), V(70.05, 1.55, -3.6), k)); fov(A.cam, L(50, 42, k));
     return { world: A, vig: 0.8 }; },
@@ -103,8 +103,10 @@ function redAl(g, p, t) { if (!AT) AT = C.alkarisi('true'); redSky(g); g.fillSty
   const hh = 2400, top = L(-hh + 1850, 150, ease(p)); g.save(); g.shadowColor = 'rgba(0,0,0,.6)'; g.shadowBlur = 40; g.drawImage(AT, CW / 2 - hh / 4, top, hh / 2, hh); g.restore(); return { vig: 0.8, tint: 0.15 }; }
 function redPress(g, p, t) { if (!AT) AT = C.alkarisi('true'); redSky(g);
   g.fillStyle = '#4a0709'; g.beginPath(); g.roundRect(80, 1100, CW - 160, 380, 30); g.fill(); g.fillRect(80, 950, 60, 650); g.fillStyle = '#6a0b0e'; g.beginPath(); g.ellipse(260, 1110, 140, 55, 0, 0, 7); g.fill();
-  const k = ease(p); g.save(); g.translate(CW / 2 + 200, 1480); g.rotate(L(0, -0.28, k)); g.filter = 'brightness(0.12)'; g.drawImage(AT, -380, -1520, 760, 1520); g.restore();
-  for (const dx of [-40, 40]) { const ex = CW / 2 + 200 + dx + L(0, -200, k) * 0.9, ey = 1480 - 1520 * 0.75 + L(0, 60, k), gr = g.createRadialGradient(ex, ey, 1, ex, ey, 26); gr.addColorStop(0, 'rgba(255,80,60,1)'); gr.addColorStop(1, 'rgba(255,0,0,0)'); g.fillStyle = gr; g.beginPath(); g.arc(ex, ey, 26, 0, 7); g.fill(); }
+  const k = ease(p); g.save(); g.translate(CW / 2 + 200, 1480); g.rotate(L(0, -0.28, k)); g.filter = 'brightness(0.12)'; g.drawImage(AT, -380, -1520, 760, 1520); g.filter = 'none';
+  // Augen im selben (gedrehten) Koordinatensystem wie die Figur -> sie bewegen sich mit dem Kopf
+  for (const ex of [-59, 59]) { const ey = -1125, gr = g.createRadialGradient(ex, ey, 1, ex, ey, 24); gr.addColorStop(0, 'rgba(255,90,70,1)'); gr.addColorStop(1, 'rgba(255,0,0,0)'); g.fillStyle = gr; g.beginPath(); g.arc(ex, ey, 24, 0, 7); g.fill(); }
+  g.restore();
   return { vig: 0.8, tint: 0.15 }; }
 function soupFace(g, p, t, shot) { if (!AN) AN = C.alFaceBig('smile', true); g.fillStyle = '#05060a'; g.fillRect(0, 0, CW, CH);
   const s = L(1000, 1200, ease(p)); g.drawImage(AN, CW / 2 - s / 2, 900 - s / 2, s, s); const gr = g.createRadialGradient(CW / 2, 900, 200, CW / 2, 900, 900); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,.9)'); g.fillStyle = gr; g.fillRect(0, 0, CW, CH);
