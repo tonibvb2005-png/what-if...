@@ -776,3 +776,51 @@ export function akaManto(pose = 'stand') {
 MONSTERS['AKA MANTO'] = () => akaManto('hands');
 export function redCloth() { const c = cv2(512, 256), g = c.getContext('2d'); P(g, g => { g.moveTo(10, 40); g.quadraticCurveTo(256, 10, 500, 50); g.lineTo(480, 230); g.quadraticCurveTo(256, 250, 30, 220); g.closePath(); }, ARED, 8, 0.15);
   g.strokeStyle = 'rgba(60,0,0,.5)'; g.lineWidth = 7; for (const x of [90, 180, 270, 360, 440]) { g.beginPath(); g.moveTo(x, 40); g.quadraticCurveTo(x + 20, 140, x - 10, 230); g.stroke(); } return c; }
+
+// ------------------------------------------------------------- Folge 11: Alkarisi, Baby, Pferd, Tante
+const ALSK = '#e3d6cc', ALHAIR = '#b8321e', ALHAIR2 = '#8a2214';
+function alHead(g, cx, cy, r, mood = 'calm', scarf = false) {
+  if (!scarf) P(g, g => { g.moveTo(cx - r * 1.3, cy + r * 3.2); g.bezierCurveTo(cx - r * 1.9, cy + r * 0.5, cx - r * 1.4, cy - r * 1.4, cx, cy - r * 1.35); g.bezierCurveTo(cx + r * 1.4, cy - r * 1.4, cx + r * 1.9, cy + r * 0.5, cx + r * 1.3, cy + r * 3.2);
+    for (let i = 12; i >= 0; i--) { const x = cx - r * 1.3 + i * r * 0.217; g.lineTo(x + r * 0.1, cy + r * 3.0); g.lineTo(x, cy + r * (3.25 + (i % 3) * 0.12)); } g.closePath(); }, ALHAIR, r * 0.05, 0.1);
+  if (scarf) P(g, g => { g.moveTo(cx - r * 1.15, cy + r * 1.45); g.bezierCurveTo(cx - r * 1.35, cy - r * 1.5, cx + r * 1.35, cy - r * 1.5, cx + r * 1.15, cy + r * 1.45); g.quadraticCurveTo(cx, cy + r * 1.7, cx - r * 1.15, cy + r * 1.45); }, '#3f7a5a', r * 0.05, 0.12);
+  P(g, ell(cx, cy, r * 0.82, r), ALSK, r * 0.05, 0.12);
+  if (scarf) { P(g, g => { g.moveTo(cx - r * 0.95, cy - r * 0.2); g.bezierCurveTo(cx - r * 1.0, cy - r * 1.3, cx + r * 1.0, cy - r * 1.3, cx + r * 0.95, cy - r * 0.2); g.quadraticCurveTo(cx, cy - r * 0.75, cx - r * 0.95, cy - r * 0.2); }, '#3f7a5a', r * 0.05, 0.08);
+    g.fillStyle = 'rgba(255,240,200,.35)'; for (let i = 0; i < 14; i++) { g.beginPath(); g.arc(cx + Math.cos(i * 2.4) * r * 0.95, cy + Math.sin(i * 2.4) * r * 0.9 - r * 0.2, r * 0.05, 0, 7); g.fill(); }
+    P(g, g => { g.moveTo(cx + r * 0.5, cy - r * 0.5); g.quadraticCurveTo(cx + r * 0.75, cy, cx + r * 0.62, cy + r * 0.5); g.lineTo(cx + r * 0.55, cy + r * 0.45); g.quadraticCurveTo(cx + r * 0.62, cy, cx + r * 0.45, cy - r * 0.45); g.closePath(); }, ALHAIR, 0, 0); } // rote Straehne
+  else P(g, g => { g.moveTo(cx - r * 0.85, cy - r * 0.1); g.bezierCurveTo(cx - r * 0.95, cy - r * 1.2, cx + r * 0.95, cy - r * 1.2, cx + r * 0.85, cy - r * 0.1); g.quadraticCurveTo(cx + r * 0.2, cy - r * 0.8, cx - r * 0.85, cy - r * 0.1); }, ALHAIR, 0, 0);
+  for (const s of [-1, 1]) { const ex = cx + s * r * 0.34, ey = cy + r * 0.05;
+    if (mood === 'smile') curve(g, [ex - r * 0.16, ey + r * 0.04], [ex, ey - r * 0.12], [ex + r * 0.16, ey + r * 0.04], r * 0.05);
+    else { P(g, ell(ex, ey, r * 0.17, r * 0.13), '#f6f1ea', r * 0.03, 0); P(g, circ(ex, ey + r * 0.01, r * 0.07), mood === 'evil' ? '#a01818' : '#1a1210', 0, 0); P(g, circ(ex, ey + r * 0.01, r * 0.03), '#050404', 0, 0); }
+    line(g, [[ex - r * 0.18, ey - r * 0.25], [ex + r * 0.16, ey - r * 0.3 + s * r * 0.03]], r * 0.045); }
+  if (mood === 'evil') { const m = g => { g.moveTo(cx - r * 0.5, cy + r * 0.45); g.quadraticCurveTo(cx, cy + r * 0.6, cx + r * 0.5, cy + r * 0.45); g.quadraticCurveTo(cx, cy + r * 1.0, cx - r * 0.5, cy + r * 0.45); g.closePath(); };
+    g.save(); g.beginPath(); m(g); g.fillStyle = '#1a0606'; g.fill(); g.clip(); g.fillStyle = '#ece2cc'; for (let i = -5; i <= 5; i++) { g.beginPath(); g.moveTo(cx + i * r * 0.09 - r * 0.035, cy + r * 0.47); g.lineTo(cx + i * r * 0.09, cy + r * 0.62); g.lineTo(cx + i * r * 0.09 + r * 0.035, cy + r * 0.47); g.fill(); } g.restore(); g.beginPath(); m(g); g.lineWidth = r * 0.04; g.strokeStyle = OL; g.stroke(); }
+  else curve(g, [cx - r * 0.3, cy + r * 0.52], [cx, cy + r * 0.68], [cx + r * 0.3, cy + r * 0.52], r * 0.045);
+}
+export function alkarisi(form = 'true') { // 'true' = wahre Gestalt (lange rote Haare, verdrehte Fuesse), 'neighbor' = Nachbarin mit Kopftuch und Topf
+  const c = cv2(512, 1024), g = c.getContext('2d'), nb = form === 'neighbor';
+  // Fuesse nach hinten gedreht: Fersen vorne, Zehen zeigen nach hinten (zur Seite/oben im Bild angedeutet)
+  for (const s of [-1, 1]) { P(g, rr(256 + s * 40 - 16, 880, 32, 100, 12), ALSK, 7, 0); P(g, g => { g.moveTo(256 + s * 40 - 22, 975); g.lineTo(256 + s * 40 + 22, 975); g.lineTo(256 + s * 40 + 16, 1000); g.lineTo(256 + s * 40 - 16, 1000); g.closePath(); }, ALSK, 7, 0);
+    if (!nb) for (let k = 0; k < 4; k++) P(g, circ(256 + s * 40 - 14 + k * 9, 962, 6), '#c9b8a8', 3, 0); }
+  P(g, g => { g.moveTo(176, 400); g.lineTo(336, 400); g.lineTo(380, 900); g.lineTo(132, 900); g.closePath(); }, nb ? '#6a4a8a' : '#efe8dc', 10, 0.12);
+  if (nb) { P(g, rr(150, 640, 212, 260, 20), '#8a6a3a', 9, 0.1); g.strokeStyle = 'rgba(255,230,180,.4)'; g.lineWidth = 6; for (let y = 670; y < 890; y += 40) { g.beginPath(); g.moveTo(160, y); g.lineTo(352, y); g.stroke(); } }
+  else { g.strokeStyle = 'rgba(120,110,100,.4)'; g.lineWidth = 6; for (const x of [200, 256, 312]) { g.beginPath(); g.moveTo(x, 420); g.quadraticCurveTo(x + (x - 256) * 0.4, 680, x + (x - 256) * 0.6, 900); g.stroke(); } }
+  if (nb) { P(g, rr(110, 420, 56, 230, 26), '#6a4a8a', 8, 0.1); P(g, rr(346, 420, 56, 230, 26), '#6a4a8a', 8, 0.1); P(g, rr(170, 560, 172, 110, 20), '#9aa0a8', 9, 0.1); P(g, rr(160, 550, 192, 22, 8), '#7a8088', 6, 0); g.fillStyle = 'rgba(255,255,255,.5)'; for (let i = 0; i < 3; i++) { g.beginPath(); g.moveTo(220 + i * 36, 540); g.quadraticCurveTo(210 + i * 36, 500, 226 + i * 36, 470); g.lineWidth = 6; g.strokeStyle = 'rgba(255,255,255,.4)'; g.stroke(); } P(g, circ(170, 610, 24), ALSK, 7, 0); P(g, circ(342, 610, 24), ALSK, 7, 0); }
+  else for (const s of [-1, 1]) { line(g, [[256 + s * 76, 420], [256 + s * 110, 620], [256 + s * 120, 800]], 30, OL); line(g, [[256 + s * 76, 420], [256 + s * 110, 620], [256 + s * 120, 800]], 22, ALSK); for (let k = -1; k <= 2; k++) line(g, [[256 + s * 120, 800], [256 + s * (118 + k * 8), 880]], 7, ALSK); }
+  alHead(g, 256, 260, 118, nb ? 'smile' : 'evil', nb);
+  return c;
+}
+MONSTERS['ALKARISI'] = () => alkarisi('true');
+export function alFaceBig(mood = 'evil', scarf = false) { const c = cv(512, 512), g = c.getContext('2d'); alHead(g, 256, 250, 170, mood, scarf); return c; }
+export function baby() { const c = cv2(256, 256), g = c.getContext('2d'); P(g, ell(128, 150, 100, 70), '#f6f2ea', 7, 0.08); P(g, circ(128, 110, 46), '#f2cfa8', 6, 0.1); curve(g, [110, 112], [116, 118], [122, 112], 4); curve(g, [134, 112], [140, 118], [146, 112], 4); P(g, circ(128, 128, 5), '#d89a8a', 0, 0); P(g, g => { g.moveTo(80, 100); g.quadraticCurveTo(128, 40, 176, 100); g.quadraticCurveTo(128, 70, 80, 100); }, '#f6f2ea', 6, 0); return c; }
+export function horse(braid = false, ph = 0) { const c = cv2(1024, 768), g = c.getContext('2d'), b = Math.sin(ph * Math.PI * 2) * 6;
+  const H = '#5a3a26', H2 = '#3a2416';
+  for (const x of [330, 380, 640, 690]) line(g, [[x, 450], [x + 6, 600], [x, 700]], 30, OL), line(g, [[x, 450], [x + 6, 600], [x, 700]], 22, x % 2 ? H2 : H);
+  P(g, ell(510, 400, 240, 110), H, 10, 0.12);
+  line(g, [[290, 360], [230, 420], [220, 520]], 22, H2);
+  P(g, g => { g.moveTo(680, 340); g.lineTo(780, 170 + b); g.lineTo(860, 200 + b); g.lineTo(760, 400); g.closePath(); }, H, 10, 0.12);
+  P(g, g => { g.moveTo(780, 160 + b); g.quadraticCurveTo(900, 170 + b, 920, 250 + b); g.quadraticCurveTo(900, 290 + b, 850, 270 + b); g.quadraticCurveTo(800, 230 + b, 770, 210 + b); g.closePath(); }, H, 9, 0.12);
+  P(g, circ(845, 205 + b, 11), '#fff', 4, 0); P(g, circ(848, 206 + b, 5), OL, 0, 0); P(g, g => { g.moveTo(790, 150 + b); g.lineTo(800, 110 + b); g.lineTo(815, 155 + b); g.closePath(); }, H, 6, 0);
+  if (braid) for (let i = 0; i < 6; i++) { const x = 700 + i * 16, y = 250 - i * 20 + b * (i / 6); for (let k = 0; k < 4; k++) P(g, ell(x - 26 + k * 2, y + 10 + k * 18, 10, 9), '#1a1210', 4, 0); }
+  else P(g, g => { g.moveTo(690, 330); g.quadraticCurveTo(700, 220, 790, 160 + b); g.lineTo(770, 250); g.quadraticCurveTo(740, 300, 720, 360); g.closePath(); }, '#1a1210', 6, 0);
+  return c; }
+export const aunt = () => mia('front', 'neutral', false, ['#d9a0b0', '#b87a8c', '#3a2418']);

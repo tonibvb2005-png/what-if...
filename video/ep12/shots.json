@@ -1,0 +1,352 @@
+{
+ "monster": "ALKARISI",
+ "shots": [
+  {
+   "id": "hook",
+   "scene": "roulette",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Eines dieser Monster ist ausgebrochen. Mal sehen, wer es ist.",
+     "sub": "EINES DIESER MONSTER IST *AUSGEBROCHEN.* MAL SEHEN, WER ES IST."
+    }
+   ],
+   "hold": 0.56,
+   "sfx": [
+    {
+     "n": "alarm",
+     "at": 0
+    },
+    {
+     "n": "ticks",
+     "atEnd": -8.31
+    }
+   ],
+   "noHeader": true
+  },
+  {
+   "id": "name",
+   "scene": "barn_open",
+   "clock": "00:00",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Alkarısı. Mitternacht.",
+     "sub": "*ALKARISI.* MITTERNACHT."
+    }
+   ],
+   "hold": 0.3,
+   "sfx": [
+    {
+     "n": "boom",
+     "at": -0.05
+    },
+    {
+     "n": "neigh",
+     "at": 0.1
+    },
+    {
+     "n": "hooves",
+     "at": 0.2
+    },
+    {
+     "n": "hit_soft",
+     "at": 0.5
+    }
+   ],
+   "amb": "snow"
+  },
+  {
+   "id": "aunt",
+   "scene": "room",
+   "clock": "20:00",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Deine Tante hat ein Baby bekommen. Ihr besucht sie im Dorf deiner Oma.",
+     "sub": "DEINE TANTE HAT EIN *BABY* BEKOMMEN. IHR BESUCHT SIE IM DORF DEINER OMA."
+    }
+   ],
+   "amb": "hearth"
+  },
+  {
+   "id": "ribbon",
+   "scene": "ribbon",
+   "clock": "20:05",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Oma bindet ein rotes Band an das Bett. Und legt eine Schere unter das Kissen.",
+     "sub": "OMA BINDET EIN *ROTES BAND* AN DAS BETT. UND LEGT EINE *SCHERE* UNTER DAS KISSEN."
+    },
+    {
+     "v": "oma2",
+     "t": "Nimm das Band niemals ab. Und lass die beiden nachts nie allein.",
+     "sub": "„NIMM DAS BAND *NIEMALS* AB. UND LASS DIE BEIDEN NACHTS NIE ALLEIN.“"
+    }
+   ],
+   "amb": "hearth"
+  },
+  {
+   "id": "watch",
+   "scene": "vigil",
+   "clock": "23:30",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Heute Nacht musst du Wache halten.",
+     "sub": "HEUTE NACHT MUSST DU *WACHE HALTEN.*"
+    }
+   ],
+   "amb": "hearth"
+  },
+  {
+   "id": "horses",
+   "scene": "window_barn",
+   "clock": "02:10",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Draußen im Stall schreien die Pferde.",
+     "sub": "DRAUSSEN IM STALL *SCHREIEN DIE PFERDE.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "neigh",
+     "at": 0.4
+    },
+    {
+     "n": "hooves",
+     "at": 0.6
+    }
+   ],
+   "amb": "snow"
+  },
+  {
+   "id": "name2",
+   "scene": "red_al",
+   "clock": "02:10",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Alkarısı. Eine alte Legende aus der Türkei.",
+     "sub": "*ALKARISI.* EINE ALTE LEGENDE AUS DER TÜRKEI."
+    }
+   ],
+   "sfx": [
+    {
+     "n": "boom",
+     "at": 0
+    }
+   ]
+  },
+  {
+   "id": "press",
+   "scene": "red_press",
+   "clock": "02:10",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Sie kommt zu Müttern und Neugeborenen. Und drückt sie im Schlaf nieder.",
+     "sub": "SIE KOMMT ZU MÜTTERN UND NEUGEBORENEN. UND *DRÜCKT SIE IM SCHLAF NIEDER.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "whisper",
+     "at": 0.4
+    }
+   ]
+  },
+  {
+   "id": "rule",
+   "scene": "boy_rule",
+   "clock": "02:11",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Die Regel: Nimm das rote Band nie ab. Und lass die beiden nie allein.",
+     "sub": "DIE REGEL: *NIMM DAS ROTE BAND NIE AB.* UND LASS DIE BEIDEN NIE ALLEIN."
+    }
+   ],
+   "rule": {
+    "title": "REGEL #1",
+    "text": "NIMM DAS ROTE BAND NIE AB",
+    "atSeg": [
+     0,
+     0.6
+    ]
+   },
+   "sfx": [
+    {
+     "n": "pop",
+     "atSeg": [
+      0,
+      0.6
+     ]
+    }
+   ],
+   "amb": "hearth"
+  },
+  {
+   "id": "knock",
+   "scene": "door_knock",
+   "clock": "03:00",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Um drei Uhr klopft es. Eine Nachbarin. Mit einem Topf Suppe.",
+     "sub": "UM 3 UHR *KLOPFT ES.* EINE NACHBARIN. MIT EINEM TOPF SUPPE."
+    },
+    {
+     "v": "nachbarin",
+     "t": "Ich bringe nur Suppe. Nimm doch das rote Band ab. Es stört sie beim Schlafen.",
+     "sub": "„ICH BRINGE NUR SUPPE. NIMM DOCH *DAS ROTE BAND AB.* ES STÖRT SIE BEIM SCHLAFEN.“"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "knock2",
+     "at": 0.2
+    },
+    {
+     "n": "doorcreak",
+     "at": 1.0
+    }
+   ],
+   "amb": "snow"
+  },
+  {
+   "id": "shake",
+   "scene": "door_close",
+   "clock": "03:01",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Du schüttelst den Kopf. Du lässt sie nicht herein.",
+     "sub": "DU SCHÜTTELST DEN KOPF. DU LÄSST SIE *NICHT HEREIN.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "slide",
+     "atSeg": [
+      0,
+      -0.8
+     ]
+    }
+   ],
+   "amb": "hearth"
+  },
+  {
+   "id": "leaves",
+   "scene": "walk_away",
+   "clock": "03:01",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Sie lächelt. Und geht.",
+     "sub": "SIE LÄCHELT. *UND GEHT.*"
+    }
+   ],
+   "amb": "snow"
+  },
+  {
+   "id": "tracks",
+   "scene": "tracks",
+   "clock": "03:02",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Ihre Spuren im Schnee zeigen zum Haus hin.",
+     "sub": "IHRE SPUREN IM SCHNEE *ZEIGEN ZUM HAUS HIN.*"
+    }
+   ],
+   "hold": 0.3,
+   "sfx": [
+    {
+     "n": "hit_soft",
+     "atSeg": [
+      0,
+      -0.8
+     ]
+    }
+   ],
+   "amb": "snow"
+  },
+  {
+   "id": "morning",
+   "scene": "morning",
+   "clock": "07:30",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Am Morgen erzählst du Oma von der Nachbarin.",
+     "sub": "AM MORGEN ERZÄHLST DU OMA VON DER NACHBARIN."
+    },
+    {
+     "v": "oma2",
+     "t": "Welche Nachbarin? Das nächste Haus ist zehn Kilometer weit weg.",
+     "sub": "„WELCHE NACHBARIN? DAS NÄCHSTE HAUS IST *ZEHN KILOMETER* WEIT WEG.“"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "birds",
+     "at": 0.2
+    }
+   ],
+   "amb": "hearth"
+  },
+  {
+   "id": "scissors",
+   "scene": "pillow",
+   "clock": "07:31",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Unter dem Kissen fehlt die Schere.",
+     "sub": "UNTER DEM KISSEN *FEHLT DIE SCHERE.*"
+    }
+   ],
+   "hold": 1.0,
+   "sfx": [
+    {
+     "n": "stinger",
+     "atSeg": [
+      0,
+      -0.2
+     ]
+    }
+   ],
+   "amb": "hearth"
+  },
+  {
+   "id": "cta",
+   "scene": "cta",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Folge mir, um zu sehen, wen du als Nächstes bekommst.",
+     "sub": "FOLGE MIR, UM ZU SEHEN, WEN DU ALS *NÄCHSTES* BEKOMMST."
+    }
+   ],
+   "hold": 0.3,
+   "noHeader": true,
+   "sfx": [
+    {
+     "n": "sparkle",
+     "at": 0
+    }
+   ]
+  },
+  {
+   "id": "endcard",
+   "scene": "endcard",
+   "segs": [],
+   "hold": 2.2,
+   "noHeader": true
+  }
+ ]
+}

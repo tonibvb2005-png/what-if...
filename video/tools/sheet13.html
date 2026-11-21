@@ -1,0 +1,7 @@
+<!doctype html><html><body style="margin:0;background:#556"><canvas id=c width=2000 height=760></canvas>
+<script type=module>
+import * as C from '../src/chars.js';
+const g=document.getElementById('c').getContext('2d');
+g.drawImage(C.alkarisi('true'),0,0,370,740); g.drawImage(C.alkarisi('neighbor'),380,0,370,740); g.drawImage(C.alFaceBig('evil'),760,0,300,300); g.drawImage(C.alFaceBig('smile',true),760,310,300,300);
+g.drawImage(C.horse(false),1070,0,450,340); g.drawImage(C.horse(true),1070,350,450,340); g.drawImage(C.baby(),1530,0,200,200); g.drawImage(C.aunt(),1530,220,240,480); window.done=true;
+</script></body></html>
