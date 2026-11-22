@@ -31,7 +31,8 @@ Status: ✅ fertig gerendert · ✍️ Skript fertig · leer = offen
 | 6b | La Ciguapa (Test: Lateinamerika-Thema, starker Einstieg) | 🇩🇴 | ✅ | If you find footprints in the forest leading away from you… you're walking toward her. |
 | 6c | El Cadejo | 🇸🇻🇬🇹 | ✅ | If a dog with burning red eyes starts following you home at night… pray it's white. |
 | 7 | Banshee | 🇮🇪 | ✅ | If you hear a woman screaming outside… someone in your family will die. |
-| 8 | Der Nachzehrer | 🇩🇪 | | If you hear chewing from inside a grave… the whole village is in danger. |
+| 7b | Kuchisake-Onna (eigener Winkel: echte Panik 1979) | 🇯🇵 | ✍️ | In 1979, children in Japan were too afraid to walk home alone. |
+| 8 | Der Nachzehrer | 🇩🇪 | ✍️ | If you hear chewing from inside a grave… the whole village is in danger. |
 | 9 | Wendigo | 🇨🇦 | | If you're starving in the frozen woods… never take the first bite. |
 | 10 | Huldra | 🇳🇴 | | If a beautiful woman in the forest hides her back… run. |
 | 11 | La Mula Sin Cabeza | 🇧🇷 | | If you hear hooves but see no head… hide your eyes. |
