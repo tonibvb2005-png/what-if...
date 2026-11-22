@@ -1,0 +1,128 @@
+{
+  "title": "Why it sucks being a Liverpool fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "liverpool",
+  "article": "A",
+  "fanKit": {
+    "shirt": "#c8102e",
+    "trim": "#ffffff",
+    "pants": "#c8102e"
+  },
+  "flatCrowd": [
+    "#c8102e",
+    "#c8102e",
+    "#ffffff",
+    "#e8364f"
+  ],
+  "scarf": [
+    "#c8102e",
+    "#ffffff"
+  ],
+  "tagLine": "WHO STILL TALKS ABOUT ISTANBUL",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Liverpool fan!",
+      "club": "LIVERPOOL",
+      "seed": 28
+    },
+    {
+      "shot": "lp7",
+      "text": "It starts when you're seven. Top of the league. Three games left. Your captain... slips. Your dad still doesn't talk about it.",
+      "club": "LIVERPOOL",
+      "seed": 28,
+      "cueWords": {
+        "slip": "slips",
+        "dad": [
+          "Your",
+          2
+        ]
+      }
+    },
+    {
+      "shot": "lp11",
+      "text": "Age eleven. Champions League final. Your keeper throws the ball out... straight to their striker. Your dad doesn't talk about that either.",
+      "club": "LIVERPOOL",
+      "seed": 28,
+      "cueWords": {
+        "throw": "straight",
+        "either": [
+          "Your",
+          2
+        ]
+      }
+    },
+    {
+      "shot": "lp12",
+      "text": "Age twelve. Ninety-seven points. Amazing! Second place.",
+      "club": "LIVERPOOL",
+      "seed": 28,
+      "cueWords": {
+        "amazing": "Amazing",
+        "second": "Second"
+      }
+    },
+    {
+      "shot": "lp13",
+      "text": "Age thirteen. You finally win the league! After thirty years! Fans aren't allowed in the stadium. You celebrate... on your sofa.",
+      "club": "LIVERPOOL",
+      "seed": 28,
+      "cueWords": {
+        "fans": "Fans",
+        "sofa": [
+          "You",
+          2
+        ]
+      }
+    },
+    {
+      "shot": "lp15",
+      "text": "Age fifteen. You're chasing four trophies. You win two. Your dad calls it... a disappointing season.",
+      "club": "LIVERPOOL",
+      "seed": 28,
+      "cueWords": {
+        "two": "You",
+        "dad": "Your"
+      }
+    },
+    {
+      "shot": "lp17",
+      "text": "Age seventeen. Klopp leaves. You cry for a week. Next season, you win the league anyway! Now you feel guilty.",
+      "club": "LIVERPOOL",
+      "seed": 28,
+      "cueWords": {
+        "bye": "Klopp",
+        "next": "Next",
+        "guilty": "Now"
+      }
+    },
+    {
+      "shot": "lpthing",
+      "text": "That's the thing about being a Liverpool fan. Even the good days hurt a little.",
+      "club": "LIVERPOOL",
+      "seed": 28,
+      "cueWords": {
+        "hurt": "Even"
+      }
+    },
+    {
+      "shot": "lpwalk",
+      "text": "But you'll never walk alone. Even when you really want to.",
+      "club": "LIVERPOOL",
+      "seed": 28,
+      "cueWords": {
+        "want": "Even"
+      }
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a Liverpool fan who still talks about Istanbul. And which club is next? Drop it in the comments!",
+      "club": "LIVERPOOL",
+      "seed": 28,
+      "cueWords": {
+        "next": "And"
+      }
+    }
+  ]
+}

@@ -1,0 +1,121 @@
+{
+  "title": "Why it sucks being a KV Mechelen fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "mech",
+  "article": "A",
+  "fanKit": {
+    "shirt": "#ffd400",
+    "stripes": "#e30613",
+    "trim": "#e30613",
+    "pants": "#111111"
+  },
+  "flatCrowd": [
+    "#ffd400",
+    "#e30613",
+    "#ffd400",
+    "#111111"
+  ],
+  "scarf": [
+    "#ffd400",
+    "#e30613"
+  ],
+  "tagLine": "REAL MALINWA ONLY 💛❤️",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Mechelen fan!",
+      "club": "KV MECHELEN",
+      "seed": 27
+    },
+    {
+      "shot": "me6",
+      "text": "It starts when you're six. Your friends support Anderlecht or Club Brugge. You support... Malinwa. Nobody knows what that means.",
+      "club": "KV MECHELEN",
+      "seed": 27,
+      "cueWords": {
+        "mal": "Malinwa",
+        "nobody": "Nobody"
+      }
+    },
+    {
+      "shot": "me8",
+      "text": "Age eight. Your dad tells you about 1988. Mechelen beat Ajax. You won a European trophy! He tells you every day. Every. Single. Day.",
+      "club": "KV MECHELEN",
+      "seed": 27,
+      "cueWords": {
+        "every": "He"
+      }
+    },
+    {
+      "shot": "me11",
+      "text": "Age eleven. Relegated. Your dad says: \"In 1988, this never happened.\"",
+      "club": "KV MECHELEN",
+      "seed": 27,
+      "cueWords": {
+        "dad": "Your"
+      }
+    },
+    {
+      "shot": "me12",
+      "text": "Age twelve. You're in the second division... and you win the Belgian Cup! Against Gent. Sorry, Gent fans. Then you get banned from Europe anyway.",
+      "club": "KV MECHELEN",
+      "seed": 27,
+      "cueWords": {
+        "cup": "win",
+        "gent": "Against",
+        "sorry": "Sorry",
+        "ban": "Then"
+      }
+    },
+    {
+      "shot": "me14",
+      "text": "Age fourteen. Your friends ask: \"Where is Mechelen?\" \"Between Brussels and Antwerp.\" They still don't know.",
+      "club": "KV MECHELEN",
+      "seed": 27,
+      "cueWords": {
+        "where": "Your",
+        "between": "Between",
+        "still": "They"
+      }
+    },
+    {
+      "shot": "me17",
+      "text": "Age seventeen. Your dad tells the 1988 story again. This time... you won five nil.",
+      "club": "KV MECHELEN",
+      "seed": 27,
+      "cueWords": {
+        "five": "This"
+      }
+    },
+    {
+      "shot": "mething",
+      "text": "That's the thing about being a Mechelen fan. Your best season happened before you were born.",
+      "club": "KV MECHELEN",
+      "seed": 27,
+      "cueWords": {
+        "best": "Your"
+      }
+    },
+    {
+      "shot": "mekids",
+      "text": "But one day... you'll tell your kids about it too. Every. Single. Day.",
+      "club": "KV MECHELEN",
+      "seed": 27,
+      "cueWords": {
+        "kids": "you'll",
+        "every": "Every"
+      }
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a real Malinwa. And which club is next? Drop it in the comments!",
+      "club": "KV MECHELEN",
+      "seed": 27,
+      "cueWords": {
+        "next": "And"
+      }
+    }
+  ],
+  "titleBg": "#e30613"
+}

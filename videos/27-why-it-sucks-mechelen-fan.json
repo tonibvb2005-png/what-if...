@@ -1,0 +1,360 @@
+{
+  "title": "Why it sucks being a KV Mechelen fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "mech",
+  "article": "A",
+  "fanKit": {
+    "shirt": "#ffd400",
+    "stripes": "#e30613",
+    "trim": "#e30613",
+    "pants": "#111111"
+  },
+  "flatCrowd": [
+    "#ffd400",
+    "#e30613",
+    "#ffd400",
+    "#111111"
+  ],
+  "scarf": [
+    "#ffd400",
+    "#e30613"
+  ],
+  "tagLine": "REAL MALINWA ONLY 💛❤️",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Mechelen fan!",
+      "club": "KV MECHELEN",
+      "seed": 27,
+      "audio": "../audio/27-why-it-sucks-mechelen-fan/01.wav",
+      "wordTimes": [
+        0.0,
+        0.28,
+        0.5,
+        0.92,
+        1.44,
+        3.2,
+        3.8
+      ],
+      "cues": {
+        "land": 3.2
+      },
+      "pad": 0.35
+    },
+    {
+      "shot": "me6",
+      "text": "It starts when you're six. Your friends support Anderlecht or Club Brugge. You support... Malinwa. Nobody knows what that means.",
+      "club": "KV MECHELEN",
+      "seed": 27,
+      "cueWords": {
+        "mal": "Malinwa",
+        "nobody": "Nobody"
+      },
+      "audio": "../audio/27-why-it-sucks-mechelen-fan/02.wav",
+      "wordTimes": [
+        0.1,
+        0.14,
+        0.44,
+        0.62,
+        0.84,
+        1.48,
+        1.48,
+        1.76,
+        2.06,
+        2.64,
+        2.8,
+        3.06,
+        3.7,
+        3.86,
+        4.3,
+        5.74,
+        5.88,
+        6.14,
+        6.3,
+        6.42
+      ],
+      "cues": {
+        "mal": 4.3,
+        "nobody": 5.74
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "me8",
+      "text": "Age eight. Your dad tells you about 1988. Mechelen beat Ajax. You won a European trophy! He tells you every day. Every. Single. Day.",
+      "club": "KV MECHELEN",
+      "seed": 27,
+      "cueWords": {
+        "every": "He"
+      },
+      "audio": "../audio/27-why-it-sucks-mechelen-fan/03.wav",
+      "wordTimes": [
+        0.1,
+        0.14,
+        0.92,
+        0.94,
+        1.18,
+        1.46,
+        1.64,
+        1.84,
+        3.28,
+        3.58,
+        3.78,
+        4.56,
+        4.68,
+        4.84,
+        4.94,
+        5.28,
+        6.04,
+        6.14,
+        6.32,
+        6.58,
+        6.94,
+        7.54,
+        7.78,
+        8.58
+      ],
+      "cues": {
+        "every": 6.04
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "me11",
+      "text": "Age eleven. Relegated. Your dad says: \"In 1988, this never happened.\"",
+      "club": "KV MECHELEN",
+      "seed": 27,
+      "cueWords": {
+        "dad": "Your"
+      },
+      "audio": "../audio/27-why-it-sucks-mechelen-fan/04.wav",
+      "wordTimes": [
+        0.1,
+        0.58,
+        1.06,
+        1.62,
+        1.68,
+        1.9,
+        2.62,
+        2.66,
+        3.92,
+        3.96,
+        4.24
+      ],
+      "cues": {
+        "dad": 1.62
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "me12",
+      "text": "Age twelve. You're in the second division... and you win the Belgian Cup! Against Gent. Sorry, Gent fans. Then you get banned from Europe anyway.",
+      "club": "KV MECHELEN",
+      "seed": 27,
+      "cueWords": {
+        "cup": "win",
+        "gent": "Against",
+        "sorry": "Sorry",
+        "ban": "Then"
+      },
+      "audio": "../audio/27-why-it-sucks-mechelen-fan/05.wav",
+      "wordTimes": [
+        0.1,
+        0.54,
+        0.98,
+        1.08,
+        1.16,
+        1.28,
+        1.52,
+        1.88,
+        2.28,
+        2.42,
+        2.6,
+        2.78,
+        3.06,
+        3.36,
+        3.9,
+        4.52,
+        5.12,
+        5.22,
+        5.82,
+        5.92,
+        6.02,
+        6.16,
+        6.36,
+        6.56,
+        6.8
+      ],
+      "cues": {
+        "cup": 2.42,
+        "gent": 3.36,
+        "sorry": 4.52,
+        "ban": 5.82
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "me14",
+      "text": "Age fourteen. Your friends ask: \"Where is Mechelen?\" \"Between Brussels and Antwerp.\" They still don't know.",
+      "club": "KV MECHELEN",
+      "seed": 27,
+      "cueWords": {
+        "where": "Your",
+        "between": "Between",
+        "still": "They"
+      },
+      "audio": "../audio/27-why-it-sucks-mechelen-fan/06.wav",
+      "wordTimes": [
+        0.1,
+        0.52,
+        0.94,
+        1.02,
+        1.26,
+        1.94,
+        2.04,
+        2.28,
+        2.82,
+        3.08,
+        3.36,
+        3.58,
+        4.16,
+        4.24,
+        4.44,
+        4.64
+      ],
+      "cues": {
+        "where": 0.94,
+        "between": 2.82,
+        "still": 4.16
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "me17",
+      "text": "Age seventeen. Your dad tells the 1988 story again. This time... you won five nil.",
+      "club": "KV MECHELEN",
+      "seed": 27,
+      "cueWords": {
+        "five": "This"
+      },
+      "audio": "../audio/27-why-it-sucks-mechelen-fan/07.wav",
+      "wordTimes": [
+        0.1,
+        0.59,
+        1.08,
+        1.2,
+        1.4,
+        1.7,
+        1.88,
+        2.42,
+        2.9,
+        3.62,
+        3.78,
+        4.24,
+        4.34,
+        4.54,
+        4.98
+      ],
+      "cues": {
+        "five": 3.62
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "mething",
+      "text": "That's the thing about being a Mechelen fan. Your best season happened before you were born.",
+      "club": "KV MECHELEN",
+      "seed": 27,
+      "cueWords": {
+        "best": "Your"
+      },
+      "audio": "../audio/27-why-it-sucks-mechelen-fan/08.wav",
+      "wordTimes": [
+        0.1,
+        0.34,
+        0.44,
+        0.6,
+        0.82,
+        1.0,
+        1.16,
+        1.5,
+        1.96,
+        2.08,
+        2.34,
+        2.66,
+        3.1,
+        3.64,
+        3.82,
+        3.96
+      ],
+      "cues": {
+        "best": 1.96
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "mekids",
+      "text": "But one day... you'll tell your kids about it too. Every. Single. Day.",
+      "club": "KV MECHELEN",
+      "seed": 27,
+      "cueWords": {
+        "kids": "you'll",
+        "every": "Every"
+      },
+      "audio": "../audio/27-why-it-sucks-mechelen-fan/09.wav",
+      "wordTimes": [
+        0.1,
+        0.18,
+        0.38,
+        0.78,
+        0.92,
+        1.08,
+        1.3,
+        1.5,
+        1.74,
+        1.92,
+        2.36,
+        2.7,
+        3.44
+      ],
+      "cues": {
+        "kids": 0.78,
+        "every": 2.36
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a real Malinwa. And which club is next? Drop it in the comments!",
+      "club": "KV MECHELEN",
+      "seed": 27,
+      "cueWords": {
+        "next": "And"
+      },
+      "audio": "../audio/27-why-it-sucks-mechelen-fan/10.wav",
+      "wordTimes": [
+        0.1,
+        0.18,
+        0.36,
+        0.56,
+        1.3,
+        1.42,
+        1.6,
+        1.78,
+        1.9,
+        2.54,
+        2.66,
+        2.76,
+        2.84,
+        3.0
+      ],
+      "cues": {
+        "next": 1.3
+      },
+      "pad": 0.9
+    }
+  ],
+  "punch": true,
+  "titleBg": "#e30613"
+}
