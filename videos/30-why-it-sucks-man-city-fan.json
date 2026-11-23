@@ -1,0 +1,400 @@
+{
+  "title": "Why it sucks being a Man City fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "man",
+  "article": "A",
+  "fanKit": {
+    "shirt": "#6cabdd",
+    "trim": "#ffffff",
+    "pants": "#ffffff"
+  },
+  "flatCrowd": [
+    "#6cabdd",
+    "#6cabdd",
+    "#ffffff",
+    "#1c2c5b"
+  ],
+  "scarf": [
+    "#6cabdd",
+    "#ffffff"
+  ],
+  "tagLine": "WHO'S NOT A GLORY HUNTER",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Man City fan!",
+      "club": "MAN CITY",
+      "seed": 30,
+      "audio": "../audio/30-why-it-sucks-man-city-fan/01.wav",
+      "wordTimes": [
+        0,
+        0.36,
+        0.52,
+        0.98,
+        1.46,
+        2.78,
+        3.03,
+        3.33
+      ],
+      "cues": {
+        "land": 2.78
+      },
+      "pad": 0.35
+    },
+    {
+      "shot": "mc5",
+      "text": "It starts when you're five. Ninety-three minutes, twenty seconds. Agüero scores. You win the league! You think football is always like this. Your dad cries for a week.",
+      "club": "MAN CITY",
+      "seed": 30,
+      "cueWords": {
+        "goal": "Agüero",
+        "win": [
+          "You",
+          1
+        ],
+        "think": [
+          "You",
+          2
+        ],
+        "dad": "Your"
+      },
+      "audio": "../audio/30-why-it-sucks-man-city-fan/02.wav",
+      "wordTimes": [
+        0.1,
+        0.1,
+        0.34,
+        0.56,
+        0.82,
+        1.31,
+        1.8,
+        2.18,
+        2.56,
+        3.48,
+        3.76,
+        4.48,
+        4.6,
+        4.76,
+        4.92,
+        5.64,
+        5.7,
+        5.86,
+        6.12,
+        6.42,
+        6.76,
+        7.04,
+        7.68,
+        7.76,
+        8.0,
+        8.34,
+        8.58,
+        8.72
+      ],
+      "cues": {
+        "goal": 3.48,
+        "win": 4.48,
+        "think": 5.64,
+        "dad": 7.68
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "mc8",
+      "text": "Age eight. Your dad tells you about the third division. A play-off final against Gillingham. You think he's making it up.",
+      "club": "MAN CITY",
+      "seed": 30,
+      "cueWords": {
+        "gill": "A",
+        "you": "You"
+      },
+      "audio": "../audio/30-why-it-sucks-man-city-fan/03.wav",
+      "wordTimes": [
+        0.1,
+        0.1,
+        0.92,
+        0.98,
+        1.2,
+        1.42,
+        1.62,
+        1.76,
+        1.96,
+        2.2,
+        2.86,
+        2.9,
+        3.14,
+        3.58,
+        3.94,
+        4.68,
+        4.8,
+        4.96,
+        5.16,
+        5.32,
+        5.5
+      ],
+      "cues": {
+        "gill": 2.86,
+        "you": 4.68
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "mc12",
+      "text": "Age twelve. You win every trophy in England. Your friends call you a glory hunter. You're twelve. You live in Manchester.",
+      "club": "MAN CITY",
+      "seed": 30,
+      "cueWords": {
+        "glory": "Your",
+        "live": "You're"
+      },
+      "audio": "../audio/30-why-it-sucks-man-city-fan/04.wav",
+      "wordTimes": [
+        0.1,
+        0.53,
+        0.96,
+        1.14,
+        1.3,
+        1.78,
+        2.14,
+        2.44,
+        3.06,
+        3.16,
+        3.42,
+        3.66,
+        3.84,
+        3.96,
+        4.22,
+        4.92,
+        5.36,
+        5.8,
+        5.9,
+        6.04,
+        6.18
+      ],
+      "cues": {
+        "glory": 3.06,
+        "live": 4.92
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "mc14",
+      "text": "Age fourteen. Your first Champions League final! You lose to Chelsea. Your friends laugh for a whole year.",
+      "club": "MAN CITY",
+      "seed": 30,
+      "cueWords": {
+        "lose": "You",
+        "laugh": [
+          "Your",
+          2
+        ]
+      },
+      "audio": "../audio/30-why-it-sucks-man-city-fan/05.wav",
+      "wordTimes": [
+        0.1,
+        0.6,
+        1.1,
+        1.2,
+        1.6,
+        2.04,
+        2.34,
+        2.76,
+        3.3,
+        3.62,
+        3.96,
+        4.74,
+        4.8,
+        5.08,
+        5.4,
+        5.62,
+        5.74,
+        5.94
+      ],
+      "cues": {
+        "lose": 2.76,
+        "laugh": 4.74
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "mc16",
+      "text": "Age sixteen. You finally win the Champions League! The treble! Your friends say: \"Bought it.\" You say: \"Still counts.\"",
+      "club": "MAN CITY",
+      "seed": 30,
+      "cueWords": {
+        "bought": "Your",
+        "counts": [
+          "You",
+          2
+        ]
+      },
+      "audio": "../audio/30-why-it-sucks-man-city-fan/06.wav",
+      "wordTimes": [
+        0.1,
+        0.58,
+        1.06,
+        1.18,
+        1.6,
+        2.0,
+        2.18,
+        2.56,
+        3.06,
+        3.18,
+        3.94,
+        4.04,
+        4.28,
+        4.98,
+        5.04,
+        5.52,
+        5.68,
+        6.36,
+        6.48
+      ],
+      "cues": {
+        "bought": 3.94,
+        "counts": 5.52
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "mc17",
+      "text": "Age seventeen. Four league titles in a row. Historic! Your friends say: \"Boring.\"",
+      "club": "MAN CITY",
+      "seed": 30,
+      "cueWords": {
+        "hist": "Historic",
+        "boring": "Your"
+      },
+      "audio": "../audio/30-why-it-sucks-man-city-fan/07.wav",
+      "wordTimes": [
+        0.1,
+        0.58,
+        1.06,
+        1.34,
+        1.56,
+        1.94,
+        2.22,
+        2.36,
+        2.96,
+        4.04,
+        4.2,
+        4.42,
+        5.22
+      ],
+      "cues": {
+        "hist": 2.96,
+        "boring": 4.04
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "mcthing",
+      "text": "That's the thing about being a City fan. When you win, it's boring. When you lose, it's a party. For everyone else.",
+      "club": "MAN CITY",
+      "seed": 30,
+      "cueWords": {
+        "win": [
+          "When",
+          1
+        ],
+        "lose": [
+          "When",
+          2
+        ],
+        "party": "For"
+      },
+      "audio": "../audio/30-why-it-sucks-man-city-fan/08.wav",
+      "wordTimes": [
+        0.1,
+        0.28,
+        0.4,
+        0.54,
+        0.74,
+        0.92,
+        1.14,
+        1.2,
+        1.84,
+        1.96,
+        2.14,
+        2.58,
+        2.72,
+        3.32,
+        3.44,
+        3.58,
+        4.14,
+        4.32,
+        4.44,
+        4.76,
+        5.14,
+        5.44
+      ],
+      "cues": {
+        "win": 1.84,
+        "lose": 3.32,
+        "party": 4.76
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "mcgill",
+      "text": "But your dad remembers Gillingham. So he's never bored.",
+      "club": "MAN CITY",
+      "seed": 30,
+      "cueWords": {
+        "never": "So"
+      },
+      "audio": "../audio/30-why-it-sucks-man-city-fan/09.wav",
+      "wordTimes": [
+        0.1,
+        0.26,
+        0.4,
+        0.66,
+        1.14,
+        1.8,
+        1.88,
+        2.18,
+        2.46
+      ],
+      "cues": {
+        "never": 1.8
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a City fan who's not a glory hunter. And which club is next? Drop it in the comments!",
+      "club": "MAN CITY",
+      "seed": 30,
+      "cueWords": {
+        "next": "And"
+      },
+      "audio": "../audio/30-why-it-sucks-man-city-fan/10.wav",
+      "wordTimes": [
+        0.1,
+        0.2,
+        0.38,
+        0.52,
+        0.82,
+        1.08,
+        1.32,
+        1.56,
+        1.72,
+        2.38,
+        2.5,
+        2.64,
+        2.8,
+        2.92,
+        3.52,
+        3.62,
+        3.72,
+        3.82,
+        3.94
+      ],
+      "cues": {
+        "next": 2.38
+      },
+      "pad": 0.9
+    }
+  ],
+  "titleBg": "#1c2c5b",
+  "punch": true
+}

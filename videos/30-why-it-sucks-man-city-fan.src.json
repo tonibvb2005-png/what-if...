@@ -1,0 +1,141 @@
+{
+  "title": "Why it sucks being a Man City fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "man",
+  "article": "A",
+  "fanKit": {
+    "shirt": "#6cabdd",
+    "trim": "#ffffff",
+    "pants": "#ffffff"
+  },
+  "flatCrowd": [
+    "#6cabdd",
+    "#6cabdd",
+    "#ffffff",
+    "#1c2c5b"
+  ],
+  "scarf": [
+    "#6cabdd",
+    "#ffffff"
+  ],
+  "tagLine": "WHO'S NOT A GLORY HUNTER",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Man City fan!",
+      "club": "MAN CITY",
+      "seed": 30
+    },
+    {
+      "shot": "mc5",
+      "text": "It starts when you're five. Ninety-three minutes, twenty seconds. Agüero scores. You win the league! You think football is always like this. Your dad cries for a week.",
+      "club": "MAN CITY",
+      "seed": 30,
+      "cueWords": {
+        "goal": "Agüero",
+        "win": [
+          "You",
+          1
+        ],
+        "think": [
+          "You",
+          2
+        ],
+        "dad": "Your"
+      }
+    },
+    {
+      "shot": "mc8",
+      "text": "Age eight. Your dad tells you about the third division. A play-off final against Gillingham. You think he's making it up.",
+      "club": "MAN CITY",
+      "seed": 30,
+      "cueWords": {
+        "gill": "A",
+        "you": "You"
+      }
+    },
+    {
+      "shot": "mc12",
+      "text": "Age twelve. You win every trophy in England. Your friends call you a glory hunter. You're twelve. You live in Manchester.",
+      "club": "MAN CITY",
+      "seed": 30,
+      "cueWords": {
+        "glory": "Your",
+        "live": "You're"
+      }
+    },
+    {
+      "shot": "mc14",
+      "text": "Age fourteen. Your first Champions League final! You lose to Chelsea. Your friends laugh for a whole year.",
+      "club": "MAN CITY",
+      "seed": 30,
+      "cueWords": {
+        "lose": "You",
+        "laugh": [
+          "Your",
+          2
+        ]
+      }
+    },
+    {
+      "shot": "mc16",
+      "text": "Age sixteen. You finally win the Champions League! The treble! Your friends say: \"Bought it.\" You say: \"Still counts.\"",
+      "club": "MAN CITY",
+      "seed": 30,
+      "cueWords": {
+        "bought": "Your",
+        "counts": [
+          "You",
+          2
+        ]
+      }
+    },
+    {
+      "shot": "mc17",
+      "text": "Age seventeen. Four league titles in a row. Historic! Your friends say: \"Boring.\"",
+      "club": "MAN CITY",
+      "seed": 30,
+      "cueWords": {
+        "hist": "Historic",
+        "boring": "Your"
+      }
+    },
+    {
+      "shot": "mcthing",
+      "text": "That's the thing about being a City fan. When you win, it's boring. When you lose, it's a party. For everyone else.",
+      "club": "MAN CITY",
+      "seed": 30,
+      "cueWords": {
+        "win": [
+          "When",
+          1
+        ],
+        "lose": [
+          "When",
+          2
+        ],
+        "party": "For"
+      }
+    },
+    {
+      "shot": "mcgill",
+      "text": "But your dad remembers Gillingham. So he's never bored.",
+      "club": "MAN CITY",
+      "seed": 30,
+      "cueWords": {
+        "never": "So"
+      }
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a City fan who's not a glory hunter. And which club is next? Drop it in the comments!",
+      "club": "MAN CITY",
+      "seed": 30,
+      "cueWords": {
+        "next": "And"
+      }
+    }
+  ],
+  "titleBg": "#1c2c5b"
+}

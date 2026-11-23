@@ -1,0 +1,133 @@
+{
+  "title": "Why it sucks being a Club Brugge fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "club",
+  "article": "A",
+  "fanKit": {
+    "shirt": "#0a5eb0",
+    "stripes": "#111111",
+    "trim": "#111111",
+    "pants": "#111111"
+  },
+  "flatCrowd": [
+    "#0a5eb0",
+    "#111111",
+    "#0a5eb0",
+    "#ffffff"
+  ],
+  "scarf": [
+    "#0a5eb0",
+    "#111111"
+  ],
+  "tagLine": "NOT A CERCLE FAN 💙🖤",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Club Brugge fan!",
+      "club": "CLUB BRUGGE",
+      "seed": 29
+    },
+    {
+      "shot": "cb6",
+      "text": "It starts when you're six. Your club is called... Club. Your friends ask: \"Club what?\" \"Just Club.\"",
+      "club": "CLUB BRUGGE",
+      "seed": 29,
+      "cueWords": {
+        "what": [
+          "Your",
+          2
+        ],
+        "just": "Just"
+      }
+    },
+    {
+      "shot": "cb8",
+      "text": "Age eight. You share your stadium with your rivals. Cercle. Same stadium. Same seats. Very different moods.",
+      "club": "CLUB BRUGGE",
+      "seed": 29,
+      "cueWords": {
+        "seats": [
+          "Same",
+          2
+        ],
+        "moods": "Very"
+      }
+    },
+    {
+      "shot": "cb9",
+      "text": "Age nine. The club promises a new stadium. \"Next year!\" It's still next year.",
+      "club": "CLUB BRUGGE",
+      "seed": 29,
+      "cueWords": {
+        "next": "Next",
+        "still": "It's"
+      }
+    },
+    {
+      "shot": "cb12",
+      "text": "Age twelve. You win the league! Again! Now everyone in Belgium hates you.",
+      "club": "CLUB BRUGGE",
+      "seed": 29,
+      "cueWords": {
+        "again": "Again",
+        "hate": "Now"
+      }
+    },
+    {
+      "shot": "cb14",
+      "text": "Age fourteen. Your dad tells you about two European finals. Both against Liverpool. Both lost. He still can't watch the Premier League.",
+      "club": "CLUB BRUGGE",
+      "seed": 29,
+      "cueWords": {
+        "both": [
+          "Both",
+          1
+        ],
+        "lost": [
+          "Both",
+          2
+        ],
+        "pl": "He"
+      }
+    },
+    {
+      "shot": "cb17",
+      "text": "Age seventeen. Champions League! You knock out a giant! Next round... Aston Villa. Back to Belgium.",
+      "club": "CLUB BRUGGE",
+      "seed": 29,
+      "cueWords": {
+        "villa": "Aston",
+        "back": "Back"
+      }
+    },
+    {
+      "shot": "cbthing",
+      "text": "That's the thing about being a Club Brugge fan. You win so much... nobody feels sorry for you.",
+      "club": "CLUB BRUGGE",
+      "seed": 29,
+      "cueWords": {
+        "sorry": "nobody"
+      }
+    },
+    {
+      "shot": "cbstad",
+      "text": "But you don't need their pity. You've got trophies. And one day... a new stadium. Probably.",
+      "club": "CLUB BRUGGE",
+      "seed": 29,
+      "cueWords": {
+        "troph": "You've",
+        "stad": "And"
+      }
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a Club Brugge fan. Not a Cercle fan. And which club is next? Drop it in the comments!",
+      "club": "CLUB BRUGGE",
+      "seed": 29,
+      "cueWords": {
+        "next": "And"
+      }
+    }
+  ]
+}
