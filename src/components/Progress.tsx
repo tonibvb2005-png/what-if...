@@ -5,11 +5,12 @@ import { badges, currentStreak, level } from '../game/profile';
 import { SOLID_STAGE } from '../srs/srs';
 import { addDays } from '../lib/date';
 import { hasCroatianVoice, onVoicesChanged, speak, speechSupported } from '../lib/speech';
-import { parseState } from '../storage/store';
+import { parseState, type SyncStatus } from '../storage/store';
 
 interface Props {
   state: AppState;
   day: string;
+  sync: SyncStatus;
   onUpdate: (fn: (s: AppState) => AppState) => void;
   onReplace: (s: AppState) => void;
 }
@@ -21,7 +22,15 @@ const GOALS = [
   { xp: 100, label: 'Ehrgeizig', hint: '~20 Min.' },
 ];
 
-export function Progress({ state, day, onUpdate, onReplace }: Props) {
+const SYNC_TEXT: Record<SyncStatus, string> = {
+  connecting: 'Verbinde mit deinem Claude-Konto …',
+  cloud: '✓ Dein Fortschritt wird in deinem Claude-Konto gespeichert – auch auf anderen Geräten.',
+  local:
+    'Dein Fortschritt wird nur in diesem Browser gespeichert und kann verloren gehen. Öffne die App angemeldet über claude.ai, damit er dauerhaft gespeichert wird.',
+  error: 'Speichern im Claude-Konto hat gerade nicht geklappt. Dein Stand ist in diesem Browser gesichert, beim nächsten Lernen wird es erneut versucht.',
+};
+
+export function Progress({ state, day, sync, onUpdate, onReplace }: Props) {
   const p = state.profile;
   const reviews = Object.values(state.reviews);
   const solid = reviews.filter((r) => r.stage >= SOLID_STAGE).length;
@@ -172,10 +181,12 @@ export function Progress({ state, day, onUpdate, onReplace }: Props) {
         </div>
 
         <div className="backup">
-          <strong>Sicherung</strong>
+          <strong>Speicherung</strong>
+          <p className={`small sync sync-${sync}`} role="status">
+            {SYNC_TEXT[sync]}
+          </p>
           <p className="small muted">
-            Dein Fortschritt wird nur in diesem Browser gespeichert. Kopiere ab und zu den Sicherungscode, um ihn auf ein
-            anderes Gerät zu übertragen oder wiederherzustellen.
+            Zusätzlich kannst du einen Sicherungscode kopieren und später wieder einfügen.
           </p>
           <div className="row">
             <button type="button" className="btn ghost" onClick={copyBackup}>

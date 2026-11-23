@@ -1127,3 +1127,19 @@ button:disabled {
   flex-direction: column;
   width: 100%;
 }
+
+.sync {
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  background: var(--surface-2);
+  margin: 0;
+}
+.sync-cloud {
+  background: var(--right-bg);
+  color: var(--text);
+}
+.sync-local,
+.sync-error {
+  background: var(--almost-bg);
+  color: var(--text);
+}

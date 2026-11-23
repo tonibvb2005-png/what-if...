@@ -23,7 +23,7 @@ interface ActiveSession {
 }
 
 export function App() {
-  const [state, update, replace] = useAppState();
+  const [state, update, replace, sync] = useAppState();
   const [tab, setTab] = useState<Tab>('learn');
   const [openLesson, setOpenLesson] = useState<Lesson | null>(null);
   const [session, setSession] = useState<ActiveSession | null>(null);
@@ -168,7 +168,7 @@ export function App() {
           onLearn={startCustom}
         />
       )}
-      {tab === 'progress' && <Progress state={state} day={day} onUpdate={update} onReplace={replace} />}
+      {tab === 'progress' && <Progress state={state} day={day} sync={sync} onUpdate={update} onReplace={replace} />}
 
       <nav className="tabbar" aria-label="Navigation">
         {(
