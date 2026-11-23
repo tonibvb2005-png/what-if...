@@ -398,6 +398,8 @@ function papaHead(g, cx, cy, expr) {
   line(g, [[cx - 92, cy - 18], [cx - 34, cy - 24]], 12, PHAIR); line(g, [[cx + 34, cy - 24], [cx + 92, cy - 18]], 12, PHAIR);
   if (expr === 'eyeshine') {
     for (const s of [-1, 1]) { const x = cx + s * 60, y = cy + 30, gr = g.createRadialGradient(x, y, 1, x, y, 46); gr.addColorStop(0, '#fff'); gr.addColorStop(0.35, 'rgba(255,230,140,1)'); gr.addColorStop(1, 'rgba(255,190,60,0)'); g.fillStyle = gr; g.beginPath(); g.arc(x, y, 46, 0, 7); g.fill(); }
+  } else if (expr === 'stare') {
+    for (const s of [-1, 1]) { P(g, circ(cx + s * 60, cy + 30, 24), '#fff', 6, 0); P(g, circ(cx + s * 60, cy + 30, 5), OL, 0, 0); }
   } else if (expr === 'scared') {
     for (const s of [-1, 1]) { P(g, circ(cx + s * 60, cy + 30, 26), '#fff', 6, 0); P(g, circ(cx + s * 58, cy + 32, 9), OL, 0, 0); }
   } else for (const s of [-1, 1]) P(g, ell(cx + s * 60, cy + 30, 12, 15), OL, 0, 0);
@@ -411,7 +413,7 @@ function papaHead(g, cx, cy, expr) {
     g.beginPath(); mouth(g); g.lineWidth = 7; g.strokeStyle = OL; g.lineJoin = 'round'; g.stroke();
     for (const k of [-1, 1]) curve(g, [cx + k * 112, cy + 70], [cx + k * 128, cy + 80], [cx + k * 124, cy + 96], 5);
     if (expr === 'wide') for (const k of [-1, 1]) curve(g, [cx + k * 84, cy + 50], [cx + k * 60, cy + 58], [cx + k * 36, cy + 50], 5); // gespannte Wangen
-  } else if (expr === 'scared') { line(g, [[cx - 30, cy + 112], [cx + 30, cy + 112]], 8); }
+  } else if (expr === 'scared' || expr === 'stare') { line(g, [[cx - 30, cy + 112], [cx + 30, cy + 112]], 8); }
   else curve(g, [cx - 30, cy + 108], [cx, cy + 118], [cx + 30, cy + 108], 8);
 }
 export function papa(view = 'front', expr = 'neutral') {
@@ -835,3 +837,23 @@ export function horse(braid = false, ph = 0) { const c = cv2(1024, 768), g = c.g
   else P(g, g => { g.moveTo(690, 330); g.quadraticCurveTo(700, 220, 790, 160 + b); g.lineTo(770, 250); g.quadraticCurveTo(740, 300, 720, 360); g.closePath(); }, '#1a1210', 6, 0);
   return c; }
 export const aunt = () => mia('front', 'neutral', false, ['#d9a0b0', '#b87a8c', '#3a2418']);
+
+// ------------------------------------------------------------- Folge 12: Wendigo (Schaedel, Geweih, abgemagert)
+const WD = '#3a2e2a', WD2 = '#241c1a', WBONE = '#e6dccb';
+function antler(g, x, y, s, k = 1) { const br = (pts, w) => { line(g, pts.map(([px, py]) => [x + (px - x) * k, y + (py - y) * k]), w * Math.max(0.7, k) + 6, OL); line(g, pts.map(([px, py]) => [x + (px - x) * k, y + (py - y) * k]), w * Math.max(0.7, k), WBONE); };
+  br([[x, y], [x + s * 40, y - 90], [x + s * 70, y - 200], [x + s * 60, y - 300]], 14); br([[x + s * 40, y - 90], [x + s * 110, y - 140], [x + s * 150, y - 210]], 10);
+  br([[x + s * 70, y - 200], [x + s * 130, y - 260], [x + s * 150, y - 330]], 9); br([[x + s * 58, y - 150], [x + s * 10, y - 230]], 8); }
+function wendigoSkull(g, cx, cy, r) { const k = Math.min(1.3, r / 110); antler(g, cx - r * 0.45, cy - r * 0.6, -1, k); antler(g, cx + r * 0.45, cy - r * 0.6, 1, k);
+  P(g, g => { g.moveTo(cx - r * 0.75, cy - r * 0.6); g.quadraticCurveTo(cx, cy - r * 1.05, cx + r * 0.75, cy - r * 0.6); g.lineTo(cx + r * 0.42, cy + r * 0.55); g.quadraticCurveTo(cx, cy + r * 1.35, cx - r * 0.42, cy + r * 0.55); g.closePath(); }, WBONE, r * 0.06, 0.15);
+  for (const s of [-1, 1]) { P(g, ell(cx + s * r * 0.34, cy - r * 0.2, r * 0.2, r * 0.24, s * 0.4), '#050404', 0, 0); const gr = g.createRadialGradient(cx + s * r * 0.34, cy - r * 0.18, 1, cx + s * r * 0.34, cy - r * 0.18, r * 0.1); gr.addColorStop(0, 'rgba(255,250,235,1)'); gr.addColorStop(1, 'rgba(255,250,235,0)'); g.fillStyle = gr; g.beginPath(); g.arc(cx + s * r * 0.34, cy - r * 0.18, r * 0.1, 0, 7); g.fill(); }
+  P(g, ell(cx - r * 0.08, cy + r * 0.45, r * 0.05, r * 0.1), '#2a2220', 0, 0); P(g, ell(cx + r * 0.08, cy + r * 0.45, r * 0.05, r * 0.1), '#2a2220', 0, 0);
+  g.fillStyle = '#d9cfb8'; for (let i = -3; i <= 3; i++) { g.beginPath(); g.moveTo(cx + i * r * 0.09 - r * 0.035, cy + r * 0.8); g.lineTo(cx + i * r * 0.09, cy + r * 1.0); g.lineTo(cx + i * r * 0.09 + r * 0.035, cy + r * 0.8); g.fill(); } }
+export function wendigo() { const c = cv2(512, 1024), g = c.getContext('2d'); g.translate(20, 70); g.scale(0.92, 0.92);
+  const limb = (pts, w) => { line(g, pts, w + 8, OL); line(g, pts, w, WD); };
+  for (const sd of [-1, 1]) { limb([[256 + sd * 34, 640], [256 + sd * 70, 820], [256 + sd * 46, 990]], 24); line(g, [[256 + sd * 46, 990], [256 + sd * 76, 1004]], 10, WBONE); }
+  P(g, g => { g.moveTo(200, 650); g.quadraticCurveTo(170, 480, 210, 400); g.quadraticCurveTo(256, 370, 302, 400); g.quadraticCurveTo(342, 480, 312, 650); g.quadraticCurveTo(256, 680, 200, 650); }, WD, 9, 0.15);
+  g.strokeStyle = 'rgba(160,140,120,.55)'; g.lineWidth = 6; for (let i = 0; i < 6; i++) { const y = 440 + i * 30; g.beginPath(); g.moveTo(208, y); g.quadraticCurveTo(256, y + 16, 304, y); g.stroke(); }
+  for (const sd of [-1, 1]) { limb([[256 + sd * 50, 410], [256 + sd * 120, 620], [256 + sd * 130, 840]], 18); for (let k = -1; k <= 2; k++) line(g, [[256 + sd * 130, 840], [256 + sd * (128 + k * 10), 920]], 7, WBONE); }
+  P(g, rr(240, 340, 32, 70, 10), WD, 7, 0); wendigoSkull(g, 256, 300, 90); return c; }
+MONSTERS['WENDIGO'] = wendigo;
+export function wendigoFace() { const c = cv(512, 512), g = c.getContext('2d'); wendigoSkull(g, 256, 330, 150); return c; }

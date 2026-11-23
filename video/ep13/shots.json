@@ -1,0 +1,334 @@
+{
+ "monster": "WENDIGO",
+ "shots": [
+  {
+   "id": "hook",
+   "scene": "roulette",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Eines dieser Monster ist ausgebrochen. Mal sehen, wer es ist.",
+     "sub": "EINES DIESER MONSTER IST *AUSGEBROCHEN.* MAL SEHEN, WER ES IST."
+    }
+   ],
+   "hold": 0.75,
+   "sfx": [
+    {
+     "n": "alarm",
+     "at": 0
+    },
+    {
+     "n": "ticks",
+     "atEnd": -8.31
+    }
+   ],
+   "noHeader": true
+  },
+  {
+   "id": "name",
+   "scene": "forest_open",
+   "clock": "22:00",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Der Wendigo. Minus zwanzig Grad.",
+     "sub": "*DER WENDIGO.* MINUS 20 GRAD."
+    }
+   ],
+   "card": {
+    "k": "TEMPERATUR",
+    "v": "−20 °C",
+    "at": 0.4
+   },
+   "hold": 0.3,
+   "sfx": [
+    {
+     "n": "boom",
+     "at": -0.05
+    },
+    {
+     "n": "branch",
+     "at": 0.5
+    },
+    {
+     "n": "hit_soft",
+     "at": 1.5
+    }
+   ],
+   "amb": "fire"
+  },
+  {
+   "id": "camp",
+   "scene": "camp",
+   "clock": "22:05",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Du zeltest mit deinem Papa in den Wäldern Kanadas. Kilometerweit niemand.",
+     "sub": "DU ZELTEST MIT DEINEM PAPA IN DEN WÄLDERN KANADAS. *KILOMETERWEIT NIEMAND.*"
+    }
+   ],
+   "amb": "fire"
+  },
+  {
+   "id": "still",
+   "scene": "quiet",
+   "clock": "00:30",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "In der Nacht hören die Vögel auf zu singen. Alles wird still.",
+     "sub": "IN DER NACHT HÖREN DIE VÖGEL AUF ZU SINGEN. *ALLES WIRD STILL.*"
+    }
+   ],
+   "amb": "winter"
+  },
+  {
+   "id": "moves",
+   "scene": "silhouette",
+   "clock": "00:31",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Zwischen den Bäumen bewegt sich etwas. Größer als ein Elch.",
+     "sub": "ZWISCHEN DEN BÄUMEN BEWEGT SICH ETWAS. *GRÖSSER ALS EIN ELCH.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "branch",
+     "at": 0.6
+    },
+    {
+     "n": "steps",
+     "at": 1.0
+    }
+   ],
+   "amb": "winter"
+  },
+  {
+   "id": "name2",
+   "scene": "red_wendigo",
+   "clock": "00:31",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Der Wendigo. Eine Legende der Ureinwohner Nordamerikas.",
+     "sub": "*DER WENDIGO.* EINE LEGENDE DER UREINWOHNER NORDAMERIKAS."
+    }
+   ],
+   "sfx": [
+    {
+     "n": "boom",
+     "at": 0
+    }
+   ]
+  },
+  {
+   "id": "bones",
+   "scene": "red_hunger",
+   "clock": "00:31",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Er ist nur Haut und Knochen. Und er hat immer Hunger.",
+     "sub": "ER IST NUR HAUT UND KNOCHEN. UND ER HAT *IMMER HUNGER.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "whisper",
+     "at": 0.4
+    }
+   ]
+  },
+  {
+   "id": "rule",
+   "scene": "boy_rule",
+   "clock": "00:32",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Die Regel: Verlass nie den Lichtkreis des Feuers.",
+     "sub": "DIE REGEL: *VERLASS NIE DEN LICHTKREIS DES FEUERS.*"
+    }
+   ],
+   "rule": {
+    "title": "REGEL #1",
+    "text": "BLEIB IM LICHT",
+    "atSeg": [
+     0,
+     0.6
+    ]
+   },
+   "sfx": [
+    {
+     "n": "pop",
+     "atSeg": [
+      0,
+      0.6
+     ]
+    }
+   ],
+   "amb": "fire"
+  },
+  {
+   "id": "fire",
+   "scene": "low_fire",
+   "clock": "03:00",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Um drei Uhr wird das Feuer klein. Das Holz liegt draußen im Dunkeln.",
+     "sub": "UM 3 UHR WIRD DAS FEUER KLEIN. DAS HOLZ LIEGT *DRAUSSEN IM DUNKELN.*"
+    }
+   ],
+   "amb": "fire"
+  },
+  {
+   "id": "papa",
+   "scene": "papa_goes",
+   "clock": "03:01",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Papa steht auf.",
+     "sub": "PAPA *STEHT AUF.*"
+    },
+    {
+     "v": "papa",
+     "t": "Ich hol nur schnell Holz. Bleib im Licht.",
+     "sub": "„ICH HOL NUR SCHNELL HOLZ. *BLEIB IM LICHT.*“"
+    }
+   ],
+   "hold": 0.6,
+   "sfx": [
+    {
+     "n": "steps",
+     "atSeg": [
+      1,
+      0.5
+     ]
+    }
+   ],
+   "amb": "fire"
+  },
+  {
+   "id": "long",
+   "scene": "alone",
+   "clock": "03:14",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Er ist lange weg. Viel zu lange.",
+     "sub": "ER IST LANGE WEG. *VIEL ZU LANGE.*"
+    }
+   ],
+   "hold": 0.3,
+   "sfx": [
+    {
+     "n": "heart",
+     "at": 0.2
+    },
+    {
+     "n": "branch",
+     "at": 1.2
+    }
+   ],
+   "amb": "winter"
+  },
+  {
+   "id": "back",
+   "scene": "papa_back",
+   "clock": "03:21",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Dann kommt er zurück. Mit Holz. Das Feuer brennt wieder.",
+     "sub": "DANN KOMMT ER ZURÜCK. MIT HOLZ. DAS FEUER *BRENNT WIEDER.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "steps",
+     "at": 0.2
+    },
+    {
+     "n": "fireup",
+     "atSeg": [
+      0,
+      -1.6
+     ]
+    }
+   ],
+   "amb": "fire"
+  },
+  {
+   "id": "morning",
+   "scene": "breakfast",
+   "clock": "07:40",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Am Morgen machst du Frühstück. Papa rührt nichts an.",
+     "sub": "AM MORGEN MACHST DU FRÜHSTÜCK. PAPA *RÜHRT NICHTS AN.*"
+    }
+   ],
+   "amb": "winter"
+  },
+  {
+   "id": "stare",
+   "scene": "papa_stare",
+   "clock": "07:41",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Er schaut dich nur an.",
+     "sub": "ER SCHAUT DICH *NUR AN.*"
+    },
+    {
+     "v": "papa_flat",
+     "t": "Ich hab keinen Hunger. Noch nicht.",
+     "sub": "„ICH HAB KEINEN HUNGER. *NOCH NICHT.*“"
+    }
+   ],
+   "hold": 1.0,
+   "sfx": [
+    {
+     "n": "stinger",
+     "atSeg": [
+      1,
+      -0.3
+     ]
+    }
+   ],
+   "amb": "winter"
+  },
+  {
+   "id": "cta",
+   "scene": "cta",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Folge mir, um zu sehen, wen du als Nächstes bekommst.",
+     "sub": "FOLGE MIR, UM ZU SEHEN, WEN DU ALS *NÄCHSTES* BEKOMMST."
+    }
+   ],
+   "hold": 0.3,
+   "noHeader": true,
+   "sfx": [
+    {
+     "n": "sparkle",
+     "at": 0
+    }
+   ]
+  },
+  {
+   "id": "endcard",
+   "scene": "endcard",
+   "segs": [],
+   "hold": 2.2,
+   "noHeader": true
+  }
+ ]
+}
