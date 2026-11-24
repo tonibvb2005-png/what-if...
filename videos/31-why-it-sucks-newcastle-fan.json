@@ -1,0 +1,377 @@
+{
+  "title": "Why it sucks being a Newcastle fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "new",
+  "article": "A",
+  "fanKit": {
+    "shirt": "#ffffff",
+    "stripes": "#111111",
+    "trim": "#111111",
+    "pants": "#111111"
+  },
+  "flatCrowd": [
+    "#111111",
+    "#ffffff",
+    "#111111",
+    "#9aa0aa"
+  ],
+  "scarf": [
+    "#111111",
+    "#ffffff"
+  ],
+  "tagLine": "WHO'S STILL CELEBRATING 🏆",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Newcastle fan!",
+      "club": "NEWCASTLE",
+      "seed": 31,
+      "audio": "../audio/31-why-it-sucks-newcastle-fan/01.wav",
+      "wordTimes": [
+        0,
+        0.3,
+        0.56,
+        1.0,
+        1.5,
+        2.67,
+        3.35
+      ],
+      "cues": {
+        "land": 2.67
+      },
+      "pad": 0.35
+    },
+    {
+      "shot": "nc6",
+      "text": "It starts when you're six. Your dad tells you about 1996. Twelve points clear at the top. Then you lose the league. He still says \"I would love it\" in his sleep.",
+      "club": "NEWCASTLE",
+      "seed": 31,
+      "cueWords": {
+        "lose": "Then",
+        "love": "He"
+      },
+      "audio": "../audio/31-why-it-sucks-newcastle-fan/02.wav",
+      "wordTimes": [
+        0.1,
+        0.12,
+        0.34,
+        0.54,
+        0.74,
+        1.38,
+        1.44,
+        1.66,
+        1.86,
+        2.04,
+        2.24,
+        2.98,
+        3.72,
+        4.04,
+        4.36,
+        4.5,
+        4.64,
+        5.08,
+        5.26,
+        5.42,
+        5.6,
+        5.78,
+        6.22,
+        6.24,
+        6.42,
+        7.06,
+        7.24,
+        7.36,
+        7.6,
+        8.02,
+        8.24,
+        8.36
+      ],
+      "cues": {
+        "lose": 5.08,
+        "love": 6.22
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "nc7",
+      "text": "Age seven. Your stadium gets renamed. After a sports shop. Owned by... your owner.",
+      "club": "NEWCASTLE",
+      "seed": 31,
+      "cueWords": {
+        "shop": "After",
+        "owner": "Owned"
+      },
+      "audio": "../audio/31-why-it-sucks-newcastle-fan/03.wav",
+      "wordTimes": [
+        0.1,
+        0.1,
+        0.84,
+        0.9,
+        1.28,
+        1.52,
+        2.04,
+        2.5,
+        2.62,
+        2.94,
+        3.68,
+        3.9,
+        4.1,
+        4.68
+      ],
+      "cues": {
+        "shop": 2.04,
+        "owner": 3.68
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "nc8",
+      "text": "Age eight. Relegated. Your dad says: \"This is character building.\"",
+      "club": "NEWCASTLE",
+      "seed": 31,
+      "cueWords": {
+        "dad": "Your"
+      },
+      "audio": "../audio/31-why-it-sucks-newcastle-fan/04.wav",
+      "wordTimes": [
+        0.1,
+        0.24,
+        1.06,
+        1.68,
+        1.78,
+        1.98,
+        2.78,
+        2.86,
+        3.4,
+        3.74
+      ],
+      "cues": {
+        "dad": 1.68
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "nc13",
+      "text": "Age thirteen. New owners. Richest club in the world! Finally! Your first big signing... is from Burnley.",
+      "club": "NEWCASTLE",
+      "seed": 31,
+      "cueWords": {
+        "fin": "Finally",
+        "sign": "Your"
+      },
+      "audio": "../audio/31-why-it-sucks-newcastle-fan/05.wav",
+      "wordTimes": [
+        0.1,
+        0.64,
+        1.18,
+        1.36,
+        2.24,
+        2.48,
+        2.72,
+        2.88,
+        3.0,
+        3.86,
+        4.18,
+        4.74,
+        4.94,
+        5.18,
+        5.52,
+        6.08,
+        6.28
+      ],
+      "cues": {
+        "fin": 3.86,
+        "sign": 4.18
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "nc16",
+      "text": "Age sixteen. You win the League Cup! Your first trophy in seventy years! Your dad cries. Your grandad says: \"Took you long enough.\"",
+      "club": "NEWCASTLE",
+      "seed": 31,
+      "cueWords": {
+        "first": [
+          "Your",
+          1
+        ],
+        "dad": [
+          "Your",
+          2
+        ],
+        "gran": [
+          "Your",
+          3
+        ]
+      },
+      "audio": "../audio/31-why-it-sucks-newcastle-fan/06.wav",
+      "wordTimes": [
+        0.1,
+        0.58,
+        1.06,
+        1.08,
+        1.28,
+        1.46,
+        1.7,
+        2.34,
+        2.46,
+        2.72,
+        3.12,
+        3.5,
+        3.88,
+        4.82,
+        4.92,
+        5.12,
+        6.04,
+        6.14,
+        6.56,
+        7.22,
+        7.4,
+        7.56,
+        7.74
+      ],
+      "cues": {
+        "first": 2.34,
+        "dad": 4.82,
+        "gran": 6.04
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "nc17",
+      "text": "Age seventeen. Your best striker... goes on strike. Then he signs for Liverpool. The team you beat in the final.",
+      "club": "NEWCASTLE",
+      "seed": 31,
+      "cueWords": {
+        "strike": "goes",
+        "signs": "Then",
+        "final": "The"
+      },
+      "audio": "../audio/31-why-it-sucks-newcastle-fan/07.wav",
+      "wordTimes": [
+        0.1,
+        0.64,
+        1.18,
+        1.26,
+        1.54,
+        1.98,
+        2.48,
+        2.64,
+        3.18,
+        3.3,
+        3.42,
+        3.6,
+        3.8,
+        4.48,
+        4.56,
+        4.8,
+        5.0,
+        5.28,
+        5.68,
+        5.82
+      ],
+      "cues": {
+        "strike": 1.98,
+        "signs": 3.18,
+        "final": 4.48
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "ncthing",
+      "text": "That's the thing about being a Newcastle fan. Seventy years of waiting... for one cup.",
+      "club": "NEWCASTLE",
+      "seed": 31,
+      "cueWords": {
+        "wait": "Seventy"
+      },
+      "audio": "../audio/31-why-it-sucks-newcastle-fan/08.wav",
+      "wordTimes": [
+        0.1,
+        0.28,
+        0.38,
+        0.52,
+        0.7,
+        0.88,
+        1.02,
+        1.3,
+        1.9,
+        2.5,
+        2.82,
+        3.04,
+        3.28,
+        3.78,
+        4.12
+      ],
+      "cues": {
+        "wait": 1.9
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "ncparty",
+      "text": "But when it finally comes... the whole city parties. Shirtless. In March.",
+      "club": "NEWCASTLE",
+      "seed": 31,
+      "cueWords": {
+        "shirt": "Shirtless",
+        "march": "In"
+      },
+      "audio": "../audio/31-why-it-sucks-newcastle-fan/09.wav",
+      "wordTimes": [
+        0.1,
+        0.18,
+        0.24,
+        0.38,
+        0.6,
+        1.38,
+        1.48,
+        1.84,
+        2.2,
+        3.38,
+        3.6,
+        4.06
+      ],
+      "cues": {
+        "shirt": 3.38,
+        "march": 3.6
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a Newcastle fan who's still celebrating. And which club is next? Drop it in the comments!",
+      "club": "NEWCASTLE",
+      "seed": 31,
+      "cueWords": {
+        "next": "And"
+      },
+      "audio": "../audio/31-why-it-sucks-newcastle-fan/10.wav",
+      "wordTimes": [
+        0.1,
+        0.2,
+        0.32,
+        0.62,
+        0.94,
+        1.16,
+        1.34,
+        1.78,
+        2.14,
+        2.32,
+        2.52,
+        2.64,
+        3.3,
+        3.4,
+        3.5,
+        3.58,
+        3.66
+      ],
+      "cues": {
+        "next": 1.78
+      },
+      "pad": 0.9
+    }
+  ],
+  "titleBg": "#111111",
+  "punch": true
+}

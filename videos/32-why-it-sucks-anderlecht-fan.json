@@ -1,0 +1,364 @@
+{
+  "title": "Why it sucks being an Anderlecht fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "anderlecht",
+  "article": "AN",
+  "fanKit": {
+    "shirt": "#4b2a84",
+    "trim": "#ffffff",
+    "pants": "#ffffff"
+  },
+  "flatCrowd": [
+    "#4b2a84",
+    "#4b2a84",
+    "#ffffff",
+    "#8a6ad0"
+  ],
+  "scarf": [
+    "#4b2a84",
+    "#ffffff"
+  ],
+  "tagLine": "PURPLE FOREVER 💜",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being an... Anderlecht fan!",
+      "club": "ANDERLECHT",
+      "seed": 32,
+      "audio": "../audio/32-why-it-sucks-anderlecht-fan/01.wav",
+      "wordTimes": [
+        0,
+        0.34,
+        0.5,
+        0.88,
+        1.34,
+        3.03,
+        3.72
+      ],
+      "cues": {
+        "land": 3.03
+      },
+      "pad": 0.35
+    },
+    {
+      "shot": "an6",
+      "text": "It starts when you're six. Your dad says: \"We're the biggest club in Belgium. 34 titles!\" You believe him.",
+      "club": "ANDERLECHT",
+      "seed": 32,
+      "cueWords": {
+        "titles": "titles",
+        "believe": "You"
+      },
+      "audio": "../audio/32-why-it-sucks-anderlecht-fan/02.wav",
+      "wordTimes": [
+        0.1,
+        0.2,
+        0.42,
+        0.64,
+        0.86,
+        1.5,
+        1.52,
+        1.76,
+        2.42,
+        2.5,
+        2.64,
+        2.92,
+        3.18,
+        3.36,
+        3.87,
+        4.38,
+        5.32,
+        5.44,
+        5.7
+      ],
+      "cues": {
+        "titles": 4.38,
+        "believe": 5.32
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "an8",
+      "text": "Age eight. You finish third. Your dad calls it... a national emergency.",
+      "club": "ANDERLECHT",
+      "seed": 32,
+      "cueWords": {
+        "emerg": "Your"
+      },
+      "audio": "../audio/32-why-it-sucks-anderlecht-fan/03.wav",
+      "wordTimes": [
+        0.1,
+        0.22,
+        0.96,
+        1.0,
+        1.22,
+        2.14,
+        2.26,
+        2.5,
+        2.72,
+        3.44,
+        3.44,
+        3.84
+      ],
+      "cues": {
+        "emerg": 2.14
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "an10",
+      "text": "Age ten. No European football. For the first time in over fifty years. Your dad doesn't leave the house.",
+      "club": "ANDERLECHT",
+      "seed": 32,
+      "cueWords": {
+        "house": "Your"
+      },
+      "audio": "../audio/32-why-it-sucks-anderlecht-fan/04.wav",
+      "wordTimes": [
+        0.1,
+        0.1,
+        0.94,
+        1.14,
+        1.56,
+        2.36,
+        2.44,
+        2.58,
+        2.82,
+        3.18,
+        3.34,
+        3.52,
+        3.92,
+        4.92,
+        5.08,
+        5.32,
+        5.6,
+        5.74,
+        5.88
+      ],
+      "cues": {
+        "house": 4.92
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "an11",
+      "text": "Age eleven. A club legend comes back. As captain... and manager. He picks himself. Obviously.",
+      "club": "ANDERLECHT",
+      "seed": 32,
+      "cueWords": {
+        "cap": "captain",
+        "man": "manager",
+        "pick": "He",
+        "obv": "Obviously"
+      },
+      "audio": "../audio/32-why-it-sucks-anderlecht-fan/05.wav",
+      "wordTimes": [
+        0.1,
+        0.24,
+        0.96,
+        1.16,
+        1.36,
+        1.68,
+        1.96,
+        2.52,
+        2.68,
+        3.02,
+        3.74,
+        4.54,
+        4.6,
+        4.76,
+        5.46
+      ],
+      "cues": {
+        "cap": 2.68,
+        "man": 3.74,
+        "pick": 4.54,
+        "obv": 5.46
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "an14",
+      "text": "Age fourteen. Cup final against Gent. Penalties. You lose. Somewhere, a Gent fan gets called a Genk fan. Small comfort.",
+      "club": "ANDERLECHT",
+      "seed": 32,
+      "cueWords": {
+        "lose": "You",
+        "some": "Somewhere",
+        "small": "Small"
+      },
+      "audio": "../audio/32-why-it-sucks-anderlecht-fan/06.wav",
+      "wordTimes": [
+        0.1,
+        0.2,
+        0.7,
+        1.32,
+        1.68,
+        2.08,
+        2.74,
+        3.68,
+        3.72,
+        4.88,
+        5.22,
+        5.26,
+        5.44,
+        5.72,
+        5.9,
+        6.28,
+        6.5,
+        6.74,
+        7.6,
+        7.66
+      ],
+      "cues": {
+        "lose": 3.68,
+        "some": 4.88,
+        "small": 7.6
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "an17",
+      "text": "Age seventeen. Union, the small club from your own city... wins the league. Your dad says: \"Who?\"",
+      "club": "ANDERLECHT",
+      "seed": 32,
+      "cueWords": {
+        "win": "wins",
+        "who": [
+          "Your",
+          2
+        ]
+      },
+      "audio": "../audio/32-why-it-sucks-anderlecht-fan/07.wav",
+      "wordTimes": [
+        0.1,
+        0.18,
+        1.12,
+        1.72,
+        1.84,
+        2.16,
+        2.42,
+        2.62,
+        2.78,
+        2.98,
+        3.34,
+        4.0,
+        4.34,
+        4.84,
+        4.94,
+        5.14,
+        6.0
+      ],
+      "cues": {
+        "win": 3.34,
+        "who": 4.84
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "anthing",
+      "text": "That's the thing about being an Anderlecht fan. Your history is huge. Your recent trophy cabinet... is dusty.",
+      "club": "ANDERLECHT",
+      "seed": 32,
+      "cueWords": {
+        "hist": [
+          "Your",
+          1
+        ],
+        "dusty": [
+          "Your",
+          2
+        ]
+      },
+      "audio": "../audio/32-why-it-sucks-anderlecht-fan/08.wav",
+      "wordTimes": [
+        0.1,
+        0.44,
+        0.56,
+        0.74,
+        0.98,
+        1.18,
+        1.38,
+        1.8,
+        2.3,
+        2.42,
+        2.78,
+        3.2,
+        4.2,
+        4.32,
+        4.62,
+        4.88,
+        5.32,
+        5.82
+      ],
+      "cues": {
+        "hist": 2.3,
+        "dusty": 4.2
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "anbig",
+      "text": "But you're still the biggest club in Belgium. Your dad checks every morning.",
+      "club": "ANDERLECHT",
+      "seed": 32,
+      "cueWords": {
+        "check": "Your"
+      },
+      "audio": "../audio/32-why-it-sucks-anderlecht-fan/09.wav",
+      "wordTimes": [
+        0.1,
+        0.24,
+        0.4,
+        0.64,
+        0.84,
+        1.06,
+        1.28,
+        1.46,
+        1.9,
+        2.0,
+        2.2,
+        2.48,
+        2.74
+      ],
+      "cues": {
+        "check": 1.9
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag an Anderlecht fan. Purple forever. And which club is next? Drop it in the comments!",
+      "club": "ANDERLECHT",
+      "seed": 32,
+      "cueWords": {
+        "next": "And"
+      },
+      "audio": "../audio/32-why-it-sucks-anderlecht-fan/10.wav",
+      "wordTimes": [
+        0.1,
+        0.18,
+        0.32,
+        0.72,
+        1.26,
+        1.46,
+        2.32,
+        2.44,
+        2.66,
+        2.84,
+        3.0,
+        3.62,
+        3.74,
+        3.84,
+        3.94,
+        4.04
+      ],
+      "cues": {
+        "next": 2.32
+      },
+      "pad": 0.9
+    }
+  ],
+  "punch": true
+}

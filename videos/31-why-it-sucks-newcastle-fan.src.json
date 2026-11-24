@@ -1,0 +1,131 @@
+{
+  "title": "Why it sucks being a Newcastle fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "new",
+  "article": "A",
+  "fanKit": {
+    "shirt": "#ffffff",
+    "stripes": "#111111",
+    "trim": "#111111",
+    "pants": "#111111"
+  },
+  "flatCrowd": [
+    "#111111",
+    "#ffffff",
+    "#111111",
+    "#9aa0aa"
+  ],
+  "scarf": [
+    "#111111",
+    "#ffffff"
+  ],
+  "tagLine": "WHO'S STILL CELEBRATING 🏆",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Newcastle fan!",
+      "club": "NEWCASTLE",
+      "seed": 31
+    },
+    {
+      "shot": "nc6",
+      "text": "It starts when you're six. Your dad tells you about 1996. Twelve points clear at the top. Then you lose the league. He still says \"I would love it\" in his sleep.",
+      "club": "NEWCASTLE",
+      "seed": 31,
+      "cueWords": {
+        "lose": "Then",
+        "love": "He"
+      }
+    },
+    {
+      "shot": "nc7",
+      "text": "Age seven. Your stadium gets renamed. After a sports shop. Owned by... your owner.",
+      "club": "NEWCASTLE",
+      "seed": 31,
+      "cueWords": {
+        "shop": "After",
+        "owner": "Owned"
+      }
+    },
+    {
+      "shot": "nc8",
+      "text": "Age eight. Relegated. Your dad says: \"This is character building.\"",
+      "club": "NEWCASTLE",
+      "seed": 31,
+      "cueWords": {
+        "dad": "Your"
+      }
+    },
+    {
+      "shot": "nc13",
+      "text": "Age thirteen. New owners. Richest club in the world! Finally! Your first big signing... is from Burnley.",
+      "club": "NEWCASTLE",
+      "seed": 31,
+      "cueWords": {
+        "fin": "Finally",
+        "sign": "Your"
+      }
+    },
+    {
+      "shot": "nc16",
+      "text": "Age sixteen. You win the League Cup! Your first trophy in seventy years! Your dad cries. Your grandad says: \"Took you long enough.\"",
+      "club": "NEWCASTLE",
+      "seed": 31,
+      "cueWords": {
+        "first": [
+          "Your",
+          1
+        ],
+        "dad": [
+          "Your",
+          2
+        ],
+        "gran": [
+          "Your",
+          3
+        ]
+      }
+    },
+    {
+      "shot": "nc17",
+      "text": "Age seventeen. Your best striker... goes on strike. Then he signs for Liverpool. The team you beat in the final.",
+      "club": "NEWCASTLE",
+      "seed": 31,
+      "cueWords": {
+        "strike": "goes",
+        "signs": "Then",
+        "final": "The"
+      }
+    },
+    {
+      "shot": "ncthing",
+      "text": "That's the thing about being a Newcastle fan. Seventy years of waiting... for one cup.",
+      "club": "NEWCASTLE",
+      "seed": 31,
+      "cueWords": {
+        "wait": "Seventy"
+      }
+    },
+    {
+      "shot": "ncparty",
+      "text": "But when it finally comes... the whole city parties. Shirtless. In March.",
+      "club": "NEWCASTLE",
+      "seed": 31,
+      "cueWords": {
+        "shirt": "Shirtless",
+        "march": "In"
+      }
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a Newcastle fan who's still celebrating. And which club is next? Drop it in the comments!",
+      "club": "NEWCASTLE",
+      "seed": 31,
+      "cueWords": {
+        "next": "And"
+      }
+    }
+  ],
+  "titleBg": "#111111"
+}

@@ -1,0 +1,129 @@
+{
+  "title": "Why it sucks being an Anderlecht fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "anderlecht",
+  "article": "AN",
+  "fanKit": {
+    "shirt": "#4b2a84",
+    "trim": "#ffffff",
+    "pants": "#ffffff"
+  },
+  "flatCrowd": [
+    "#4b2a84",
+    "#4b2a84",
+    "#ffffff",
+    "#8a6ad0"
+  ],
+  "scarf": [
+    "#4b2a84",
+    "#ffffff"
+  ],
+  "tagLine": "PURPLE FOREVER 💜",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being an... Anderlecht fan!",
+      "club": "ANDERLECHT",
+      "seed": 32
+    },
+    {
+      "shot": "an6",
+      "text": "It starts when you're six. Your dad says: \"We're the biggest club in Belgium. 34 titles!\" You believe him.",
+      "club": "ANDERLECHT",
+      "seed": 32,
+      "cueWords": {
+        "titles": "titles",
+        "believe": "You"
+      }
+    },
+    {
+      "shot": "an8",
+      "text": "Age eight. You finish third. Your dad calls it... a national emergency.",
+      "club": "ANDERLECHT",
+      "seed": 32,
+      "cueWords": {
+        "emerg": "Your"
+      }
+    },
+    {
+      "shot": "an10",
+      "text": "Age ten. No European football. For the first time in over fifty years. Your dad doesn't leave the house.",
+      "club": "ANDERLECHT",
+      "seed": 32,
+      "cueWords": {
+        "house": "Your"
+      }
+    },
+    {
+      "shot": "an11",
+      "text": "Age eleven. A club legend comes back. As captain... and manager. He picks himself. Obviously.",
+      "club": "ANDERLECHT",
+      "seed": 32,
+      "cueWords": {
+        "cap": "captain",
+        "man": "manager",
+        "pick": "He",
+        "obv": "Obviously"
+      }
+    },
+    {
+      "shot": "an14",
+      "text": "Age fourteen. Cup final against Gent. Penalties. You lose. Somewhere, a Gent fan gets called a Genk fan. Small comfort.",
+      "club": "ANDERLECHT",
+      "seed": 32,
+      "cueWords": {
+        "lose": "You",
+        "some": "Somewhere",
+        "small": "Small"
+      }
+    },
+    {
+      "shot": "an17",
+      "text": "Age seventeen. Union, the small club from your own city... wins the league. Your dad says: \"Who?\"",
+      "club": "ANDERLECHT",
+      "seed": 32,
+      "cueWords": {
+        "win": "wins",
+        "who": [
+          "Your",
+          2
+        ]
+      }
+    },
+    {
+      "shot": "anthing",
+      "text": "That's the thing about being an Anderlecht fan. Your history is huge. Your recent trophy cabinet... is dusty.",
+      "club": "ANDERLECHT",
+      "seed": 32,
+      "cueWords": {
+        "hist": [
+          "Your",
+          1
+        ],
+        "dusty": [
+          "Your",
+          2
+        ]
+      }
+    },
+    {
+      "shot": "anbig",
+      "text": "But you're still the biggest club in Belgium. Your dad checks every morning.",
+      "club": "ANDERLECHT",
+      "seed": 32,
+      "cueWords": {
+        "check": "Your"
+      }
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag an Anderlecht fan. Purple forever. And which club is next? Drop it in the comments!",
+      "club": "ANDERLECHT",
+      "seed": 32,
+      "cueWords": {
+        "next": "And"
+      }
+    }
+  ]
+}
