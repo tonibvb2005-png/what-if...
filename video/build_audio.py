@@ -550,6 +550,21 @@ def A_fire(d):
     m = min(len(a), len(c), len(w)); return (a[:m] + c[:m] + w[:m]).astype(np.float32)
 def A_winter(d): return (lp(noise(d), 400) * 0.07).astype(np.float32)
 
+# ---------------------------------------------------------------- Folge 13: SCP-173
+def R_siren():
+    d = 4.0; tt = t_(d); f = 600 + 250 * np.sin(2 * np.pi * 0.9 * tt); ph = np.cumsum(2 * np.pi * f / SR)
+    x = (np.sign(np.sin(ph)) * 0.25 + np.sin(ph) * 0.3) * env(len(tt), 0.1, 0.8); return norm(reverb(lp(x.astype(np.float32), 3000), 2.0, 0.5), 0.35)
+def R_scrape():
+    d = 1.2; x = bp(noise(d), 300, 2500) * (0.6 + 0.4 * np.sin(2 * np.pi * 13 * t_(d))) * env(int(d * SR), 0.01, 0.3)
+    return norm(reverb(x.astype(np.float32), 1.0, 0.3), 0.6)
+def R_crack():
+    c = hp(noise(0.06), 800) * env(int(0.06 * SR), 0.001, 0.05, 3); x = np.zeros(int(0.8 * SR), np.float32); x[:len(c)] += c; i = int(0.09 * SR); x[i:i + len(c)] += c * 0.7
+    return norm(reverb(x, 1.2, 0.3), 0.8)
+def R_powerdown():
+    d = 1.8; tt = t_(d); f = 120 * np.exp(-tt * 1.8) + 30; ph = np.cumsum(2 * np.pi * f / SR); return norm((np.sin(ph) * np.exp(-tt * 1.5) + lp(noise(d), 200) * 0.3 * np.exp(-tt * 2)).astype(np.float32), 0.5)
+def A_bunker(d):
+    tt = t_(d); a = np.sin(2 * np.pi * 50 * tt) * 0.01 + lp(noise(d), 150) * 0.05 + bp(noise(d), 3000, 5000) * 0.003; return a.astype(np.float32)
+
 SFX = {k[2:]: v for k, v in globals().items() if k.startswith("S_")}
 SFX.update({k[2:]: v for k, v in globals().items() if k.startswith("R_")})
 
@@ -601,7 +616,7 @@ def A_dawn(d):
     w = lp(noise(len(b) / SR), 400) * 0.06; m = min(len(b), len(w)); return (b[:m] + w[:m]).astype(np.float32)
 
 
-AMB = {"fire": A_fire, "winter": A_winter, "snow": A_snow, "hearth": A_hearth, "wc": A_wc, "class": A_class, "metro": A_metro, "wagon": A_wagon, "street": A_street, "bed": A_bed, "pc": A_pc, "pc_off": A_pc_off, "kitchen": A_kitchen, "day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn, "forest": A_forest, "car": A_car, "dusk": A_dusk, "bedroom": A_bedroom, "woods": A_woods, "village": A_village, "tvroom": A_tvroom, "station": A_station, "shop": A_shop, "shop_quiet": A_shop_quiet}
+AMB = {"bunker": A_bunker, "fire": A_fire, "winter": A_winter, "snow": A_snow, "hearth": A_hearth, "wc": A_wc, "class": A_class, "metro": A_metro, "wagon": A_wagon, "street": A_street, "bed": A_bed, "pc": A_pc, "pc_off": A_pc_off, "kitchen": A_kitchen, "day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn, "forest": A_forest, "car": A_car, "dusk": A_dusk, "bedroom": A_bedroom, "woods": A_woods, "village": A_village, "tvroom": A_tvroom, "station": A_station, "shop": A_shop, "shop_quiet": A_shop_quiet}
 
 
 def drone(d):
@@ -690,6 +705,10 @@ def voice(shot, k, seg):
             if seg["v"] == "papa_flat":   # zu ruhig, leicht hohl
                 x = ffx(x, SIL.format(d=0.35) + ",asetrate=44100*0.95,aresample=44100,atempo=0.94,highpass=f=100")
                 return norm(reverb(x, 1.0, 0.25), 0.8), len(x) / SR
+            if seg["v"] == "durchsage":   # alte Deckenlautsprecher, hallig, leicht verzerrt
+                x = ffx(x, SIL.format(d=0.25) + ",atempo=1.15,highpass=f=400,lowpass=f=3000")
+                x = np.tanh(x / (np.abs(x).max() + 1e-9) * 2.2) * 0.6
+                return norm(reverb(x, 2.2, 0.5, 0.05), 0.7), len(x) / SR
             if seg["v"] == "opa":
                 x = ffx(x, SIL.format(d=0.25) + ",asetrate=44100*0.96,aresample=44100,atempo=1.1,highpass=f=120,lowpass=f=5000")
                 return norm(reverb(x, 1.2, 0.35), 0.72), len(x) / SR

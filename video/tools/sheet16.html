@@ -1,0 +1,5 @@
+<!doctype html><html><body style="margin:0;background:#556"><canvas id=c width=1600 height=760></canvas>
+<script type=module>
+import * as C from '../src/chars.js';
+const g=document.getElementById('c').getContext('2d'); ['a','b','c'].forEach((p,i)=>g.drawImage(C.scp173(p),i*370,0,360,720)); g.drawImage(C.scpFace(),1120,0,420,420); window.done=true;
+</script></body></html>

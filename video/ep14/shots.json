@@ -1,0 +1,405 @@
+{
+ "monster": "SCP-173",
+ "shots": [
+  {
+   "id": "hook",
+   "scene": "roulette",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Eines dieser Monster ist ausgebrochen. Mal sehen, wer es ist.",
+     "sub": "EINES DIESER MONSTER IST *AUSGEBROCHEN.* MAL SEHEN, WER ES IST."
+    }
+   ],
+   "hold": 0.64,
+   "sfx": [
+    {
+     "n": "alarm",
+     "at": 0
+    },
+    {
+     "n": "ticks",
+     "atEnd": -8.31
+    }
+   ],
+   "noHeader": true
+  },
+  {
+   "id": "name",
+   "scene": "hall_open",
+   "clock": "02:13",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "SCP-173. Eindämmungsbruch.",
+     "sub": "*SCP-173.* EINDÄMMUNGSBRUCH."
+    },
+    {
+     "v": "durchsage",
+     "t": "Achtung. Eindämmungsbruch in Sektor drei. SCP-173 hat die Zelle verlassen.",
+     "sub": "„ACHTUNG. EINDÄMMUNGSBRUCH IN SEKTOR 3. *SCP-173 HAT DIE ZELLE VERLASSEN.*“"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "boom",
+     "at": -0.05
+    },
+    {
+     "n": "siren",
+     "at": 0.1
+    },
+    {
+     "n": "siren",
+     "at": 4.0
+    },
+    {
+     "n": "flicker",
+     "at": 0.74
+    },
+    {
+     "n": "hit_soft",
+     "at": 0.89
+    },
+    {
+     "n": "flicker",
+     "at": 2.58
+    },
+    {
+     "n": "scrape",
+     "at": 2.73
+    },
+    {
+     "n": "flicker",
+     "at": 4.61
+    },
+    {
+     "n": "hit_soft",
+     "at": 4.76
+    },
+    {
+     "n": "flicker",
+     "at": 6.63
+    },
+    {
+     "n": "scrape",
+     "at": 6.78
+    }
+   ],
+   "amb": "bunker"
+  },
+  {
+   "id": "facility",
+   "scene": "control",
+   "clock": "02:10",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Du arbeitest in einer geheimen Einrichtung. Heute Nacht fällt der Strom aus.",
+     "sub": "DU ARBEITEST IN EINER GEHEIMEN EINRICHTUNG. HEUTE NACHT *FÄLLT DER STROM AUS.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "powerdown",
+     "atSeg": [
+      0,
+      -1.4
+     ]
+    }
+   ],
+   "amb": "bunker"
+  },
+  {
+   "id": "door",
+   "scene": "cell_door",
+   "clock": "02:12",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Die Zellentür von SCP-173 steht offen.",
+     "sub": "DIE ZELLENTÜR VON SCP-173 *STEHT OFFEN.*"
+    }
+   ],
+   "hold": 0.3,
+   "sfx": [
+    {
+     "n": "creak",
+     "at": 0.3
+    },
+    {
+     "n": "heart",
+     "at": 1.0
+    }
+   ],
+   "amb": "bunker"
+  },
+  {
+   "id": "name2",
+   "scene": "red_scp",
+   "clock": "02:13",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "SCP-173. Eine Statue aus Beton.",
+     "sub": "*SCP-173.* EINE STATUE AUS BETON."
+    }
+   ],
+   "sfx": [
+    {
+     "n": "boom",
+     "at": 0
+    }
+   ]
+  },
+  {
+   "id": "moves",
+   "scene": "red_moves",
+   "clock": "02:13",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Sie bewegt sich nur, wenn niemand hinsieht. Dann ist sie schneller als alles, was du kennst.",
+     "sub": "SIE BEWEGT SICH NUR, WENN *NIEMAND HINSIEHT.* DANN IST SIE SCHNELLER ALS ALLES, WAS DU KENNST."
+    }
+   ],
+   "sfx": [
+    {
+     "n": "scrape",
+     "at": 0.2
+    },
+    {
+     "n": "scrape",
+     "at": 1.3
+    },
+    {
+     "n": "scrape",
+     "at": 2.5
+    },
+    {
+     "n": "hit_soft",
+     "at": 3.6
+    }
+   ]
+  },
+  {
+   "id": "rule",
+   "scene": "boy_rule",
+   "clock": "02:14",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Die Regel: Lass sie nie aus den Augen. Und blinzle niemals.",
+     "sub": "DIE REGEL: LASS SIE NIE AUS DEN AUGEN. *UND BLINZLE NIEMALS.*"
+    }
+   ],
+   "rule": {
+    "title": "REGEL #1",
+    "text": "NICHT BLINZELN",
+    "atSeg": [
+     0,
+     0.6
+    ]
+   },
+   "sfx": [
+    {
+     "n": "pop",
+     "atSeg": [
+      0,
+      0.6
+     ]
+    }
+   ],
+   "amb": "bunker"
+  },
+  {
+   "id": "facing",
+   "scene": "facing",
+   "clock": "02:15",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Du und Ben steht ihr gegenüber. Eure Augen brennen.",
+     "sub": "DU UND BEN STEHT IHR GEGENÜBER. *EURE AUGEN BRENNEN.*"
+    },
+    {
+     "v": "ben",
+     "t": "Ich muss blinzeln. Halt sie im Blick. Nicht wegschauen!",
+     "sub": "„ICH MUSS BLINZELN. HALT SIE IM BLICK. *NICHT WEGSCHAUEN!*“"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "heart",
+     "at": 0.4
+    }
+   ],
+   "amb": "bunker"
+  },
+  {
+   "id": "blink",
+   "scene": "eyes_burn",
+   "clock": "02:16",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Ben blinzelt. Du nicht.",
+     "sub": "BEN BLINZELT. *DU NICHT.*"
+    }
+   ],
+   "hold": 0.2,
+   "sfx": [
+    {
+     "n": "heart",
+     "at": 0
+    }
+   ],
+   "amb": "bunker"
+  },
+  {
+   "id": "flicker",
+   "scene": "flick",
+   "clock": "02:16",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Dann flackert das Licht.",
+     "sub": "DANN *FLACKERT DAS LICHT.*"
+    }
+   ],
+   "hold": 0.3,
+   "sfx": [
+    {
+     "n": "flicker",
+     "at": 0.1
+    },
+    {
+     "n": "flicker",
+     "at": 0.6
+    },
+    {
+     "n": "scrape",
+     "at": 0.4
+    }
+   ],
+   "amb": "bunker"
+  },
+  {
+   "id": "scratch",
+   "scene": "scratch_dark",
+   "clock": "02:16",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Ein Kratzen. Ein Knacken.",
+     "sub": "EIN KRATZEN. *EIN KNACKEN.*"
+    }
+   ],
+   "hold": 0.4,
+   "sfx": [
+    {
+     "n": "scrape",
+     "at": 0.1
+    },
+    {
+     "n": "crack",
+     "atSeg": [
+      0,
+      -0.7
+     ]
+    }
+   ]
+  },
+  {
+   "id": "front",
+   "scene": "in_face",
+   "clock": "02:16",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Als es wieder hell wird, steht sie direkt vor dir.",
+     "sub": "ALS ES WIEDER HELL WIRD, STEHT SIE *DIREKT VOR DIR.*"
+    }
+   ],
+   "hold": 0.3,
+   "sfx": [
+    {
+     "n": "hit_soft",
+     "at": 0
+    },
+    {
+     "n": "boom",
+     "at": 0
+    }
+   ],
+   "amb": "bunker"
+  },
+  {
+   "id": "gone",
+   "scene": "ben_gone",
+   "clock": "02:17",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Ben ist weg.",
+     "sub": "BEN IST *WEG.*"
+    }
+   ],
+   "hold": 0.6,
+   "amb": "bunker"
+  },
+  {
+   "id": "eyes",
+   "scene": "eye_close",
+   "clock": "02:17",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Und deine Augen brennen.",
+     "sub": "UND DEINE AUGEN *BRENNEN.*"
+    }
+   ],
+   "hold": 1.2,
+   "sfx": [
+    {
+     "n": "heart",
+     "at": 0
+    },
+    {
+     "n": "stinger",
+     "atSeg": [
+      0,
+      0.35
+     ]
+    }
+   ],
+   "amb": "bunker"
+  },
+  {
+   "id": "cta",
+   "scene": "cta",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Folge mir, um zu sehen, wen du als Nächstes bekommst.",
+     "sub": "FOLGE MIR, UM ZU SEHEN, WEN DU ALS *NÄCHSTES* BEKOMMST."
+    }
+   ],
+   "hold": 0.3,
+   "noHeader": true,
+   "sfx": [
+    {
+     "n": "sparkle",
+     "at": 0
+    }
+   ]
+  },
+  {
+   "id": "endcard",
+   "scene": "endcard",
+   "segs": [],
+   "hold": 2.2,
+   "noHeader": true
+  }
+ ]
+}

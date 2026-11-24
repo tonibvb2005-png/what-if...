@@ -862,3 +862,45 @@ export function wendigo(tilt = 0, step = 0, arm = 0) { const c = cv2(512, 1024),
   P(g, rr(240, 340, 32, 70, 10), WD, 7, 0); g.save(); g.translate(256, 360); g.rotate(tilt); g.translate(-256, -360); wendigoSkull(g, 256, 300, 90); g.restore(); return c; }
 MONSTERS['WENDIGO'] = () => wendigo();
 export function wendigoFace() { const c = cv(512, 512), g = c.getContext('2d'); wendigoSkull(g, 256, 330, 150); return c; }
+
+// ------------------------------------------------------------- Folge 13: SCP-173 (eigene Zeichnung: Betonstatue mit aufgespruehtem Gesicht)
+const CON = '#a8a49a', CON2 = '#8a867c', CON3 = '#6f6b62';
+function concreteTex(g, x, y, w, h) { g.save(); g.globalAlpha = 0.25; for (let i = 0; i < 90; i++) { g.fillStyle = i % 2 ? '#5a564e' : '#c8c4ba'; g.beginPath(); g.arc(x + ((i * 97) % w), y + ((i * 61) % h), 3 + (i % 4), 0, 7); g.fill(); } g.restore(); }
+function scpHead(g, cx, cy, r, tilt = 0) { g.save(); g.translate(cx, cy); g.rotate(tilt);
+  // klumpiger, ungleichmaessiger Betonkopf
+  P(g, g => { g.moveTo(0, -r); g.bezierCurveTo(r * 0.75, -r * 1.02, r * 0.98, -r * 0.3, r * 0.86, r * 0.35); g.bezierCurveTo(r * 0.78, r * 0.95, r * 0.2, r * 1.1, -r * 0.15, r * 1.02); g.bezierCurveTo(-r * 0.8, r * 0.9, -r * 0.98, r * 0.2, -r * 0.86, -r * 0.35); g.bezierCurveTo(-r * 0.75, -r * 0.9, -r * 0.35, -r * 1.0, 0, -r); }, CON, r * 0.05, 0.2);
+  concreteTex(g, -r * 0.85, -r, r * 1.7, r * 2.0);
+  g.fillStyle = 'rgba(40,36,30,.35)'; g.beginPath(); g.ellipse(-r * 0.1, r * 0.8, r * 0.6, r * 0.2, 0, 0, 7); g.fill(); // Schmutz unten
+  // aufgemalte Augen: schwarze Ringe mit rotem Kern, Farbe laeuft herab
+  for (const sd of [-1, 1]) { const ex = sd * r * 0.36, ey = -r * 0.18;
+    g.fillStyle = '#0c0a08'; g.beginPath(); g.ellipse(ex, ey, r * 0.24, r * 0.2, sd * 0.2, 0, 7); g.fill();
+    g.fillStyle = '#b3201a'; g.beginPath(); g.ellipse(ex, ey, r * 0.1, r * 0.08, 0, 0, 7); g.fill();
+    g.strokeStyle = 'rgba(12,10,8,.85)'; g.lineWidth = r * 0.045; g.lineCap = 'round'; g.beginPath(); g.moveTo(ex - sd * r * 0.05, ey + r * 0.15); g.lineTo(ex - sd * r * 0.04, ey + r * 0.5); g.stroke();
+    g.strokeStyle = 'rgba(179,32,26,.8)'; g.lineWidth = r * 0.025; g.beginPath(); g.moveTo(ex + sd * r * 0.08, ey + r * 0.15); g.lineTo(ex + sd * r * 0.09, ey + r * 0.38); g.stroke(); }
+  // gekritzeltes breites Grinsen in Rot, mit Laeufern
+  g.strokeStyle = '#a01a14'; g.lineWidth = r * 0.06; g.beginPath(); g.moveTo(-r * 0.55, r * 0.38); g.quadraticCurveTo(0, r * 0.72, r * 0.58, r * 0.32); g.stroke();
+  g.lineWidth = r * 0.03; for (let i = -4; i <= 4; i++) { const x = i * r * 0.11, y = r * 0.47 + (r * 0.17) * (1 - (i / 5) ** 2); g.beginPath(); g.moveTo(x, y - r * 0.08); g.lineTo(x + r * 0.01, y + r * 0.08); g.stroke(); }
+  g.strokeStyle = 'rgba(160,26,20,.6)'; g.lineWidth = r * 0.022; for (const x of [-0.3, 0.05, 0.4]) { g.beginPath(); g.moveTo(x * r, r * 0.6); g.lineTo(x * r + r * 0.01, r * 0.95); g.stroke(); }
+  g.strokeStyle = 'rgba(40,36,30,.7)'; g.lineWidth = r * 0.02; g.beginPath(); g.moveTo(r * 0.55, -r * 0.85); g.lineTo(r * 0.35, -r * 0.5); g.lineTo(r * 0.5, -r * 0.25); g.lineTo(r * 0.3, 0); g.stroke(); // Riss
+  g.restore(); }
+function scpHand(g, x, y, ang, s = 1) { g.save(); g.translate(x, y); g.rotate(ang); P(g, ell(0, 0, 26 * s, 22 * s), CON2, 7, 0.15);
+  for (let i = 0; i < 4; i++) { const a = (i - 1.5) * 0.3; line(g, [[Math.cos(a) * 18 * s, Math.sin(a) * 18 * s], [Math.cos(a) * 52 * s, Math.sin(a) * 52 * s]], 18 * s, OL); line(g, [[Math.cos(a) * 18 * s, Math.sin(a) * 18 * s], [Math.cos(a) * 52 * s, Math.sin(a) * 52 * s]], 11 * s, CON2); } g.restore(); }
+export function scp173(pose = 'a') { const c = cv2(512, 1024), g = c.getContext('2d');
+  const limb = (pts, w) => { line(g, pts, w + 10, OL); line(g, pts, w, CON2); };
+  const lean = pose === 'c' ? 30 : 0;
+  limb([[228, 700], [218, 860], [212, 990]], 44); limb([[290, 700], [300, 860], [308, 990]], 44);
+  P(g, ell(206, 994, 44, 18), CON3, 7, 0); P(g, ell(314, 994, 44, 18), CON3, 7, 0);
+  // Rumpf: klumpig, nach vorne gebeugt
+  P(g, g => { g.moveTo(190 + lean, 410); g.quadraticCurveTo(256 + lean, 370, 326 + lean, 400); g.quadraticCurveTo(360, 560, 340, 720); g.quadraticCurveTo(256, 750, 178, 724); g.quadraticCurveTo(160, 560, 190 + lean, 410); }, CON, 10, 0.2); concreteTex(g, 180, 400, 170, 330);
+  g.fillStyle = 'rgba(40,36,30,.3)'; g.beginPath(); g.ellipse(256, 700, 80, 30, 0, 0, 7); g.fill();
+  g.strokeStyle = 'rgba(40,36,30,.6)'; g.lineWidth = 4; g.beginPath(); g.moveTo(300, 450); g.lineTo(280, 520); g.lineTo(300, 600); g.stroke();
+  line(g, [[326 + lean, 430], [350 + lean, 392]], 7, '#6a3a20'); line(g, [[184, 650], [164, 668]], 7, '#6a3a20'); // Bewehrungsstahl
+  // Arme: lang, Haende verdreht
+  if (pose === 'b') { limb([[196 + lean, 430], [150, 590], [140, 760]], 30); scpHand(g, 140, 780, Math.PI / 2 + 0.3, 1.1); limb([[322 + lean, 430], [400, 380], [450, 300]], 30); scpHand(g, 462, 284, -0.9, 1.1); }
+  else if (pose === 'c') { limb([[196 + lean, 430], [210, 520], [250, 560]], 32); scpHand(g, 262, 572, 0.4, 1.6); limb([[322 + lean, 430], [330, 520], [300, 580]], 32); scpHand(g, 300, 598, 1.2, 1.6); }
+  else { limb([[196, 430], [160, 600], [158, 770]], 30); scpHand(g, 158, 790, Math.PI / 2 - 0.2, 1.1); limb([[322, 430], [360, 600], [362, 770]], 30); scpHand(g, 362, 790, Math.PI / 2 + 0.2, 1.1); }
+  line(g, [[256 + lean * 0.8, 400], [256 + lean, 360]], 40, OL); line(g, [[256 + lean * 0.8, 400], [256 + lean, 360]], 30, CON2);
+  scpHead(g, 258 + lean * 1.3, 285, 110, pose === 'c' ? -0.3 : pose === 'b' ? 0.22 : 0.06);
+  return c; }
+MONSTERS['SCP-173'] = () => scp173('a');
+export function scpFace() { const c = cv(512, 512), g = c.getContext('2d'); scpHead(g, 256, 250, 210, 0.04); return c; }
