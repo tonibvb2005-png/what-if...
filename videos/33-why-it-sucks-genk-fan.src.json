@@ -1,0 +1,137 @@
+{
+  "title": "Why it sucks being a KRC Genk fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "ga",
+  "article": "A",
+  "fanKit": {
+    "shirt": "#0055a4",
+    "trim": "#ffffff",
+    "pants": "#ffffff"
+  },
+  "flatCrowd": [
+    "#0055a4",
+    "#0055a4",
+    "#ffffff",
+    "#5a8ad6"
+  ],
+  "scarf": [
+    "#0055a4",
+    "#ffffff"
+  ],
+  "tagLine": "NOT A GENT FAN 😤",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Genk fan!",
+      "club": "KRC GENK",
+      "seed": 33
+    },
+    {
+      "shot": "gk6",
+      "text": "It starts when you're six. Everyone calls your club \"Gent\". It's Genk. With a K. Now you know how Gent fans feel.",
+      "club": "KRC GENK",
+      "seed": 33,
+      "cueWords": {
+        "k": "It's",
+        "now": "Now"
+      }
+    },
+    {
+      "shot": "gk8",
+      "text": "Age eight. Your club's nickname is... the Smurfs. Try saying that in a fight.",
+      "club": "KRC GENK",
+      "seed": 33,
+      "cueWords": {
+        "try": "Try"
+      }
+    },
+    {
+      "shot": "gk11",
+      "text": "Age eleven. You win the league! Champions League! First game: Salzburg. A young striker called Haaland scores a hat-trick. Before half-time.",
+      "club": "KRC GENK",
+      "seed": 33,
+      "cueWords": {
+        "first": "First",
+        "young": [
+          "A",
+          1
+        ],
+        "before": "Before"
+      }
+    },
+    {
+      "shot": "gk12",
+      "text": "Age twelve. You finally buy your favourite striker's shirt. One week later... he leaves. For Aston Villa.",
+      "club": "KRC GENK",
+      "seed": 33,
+      "cueWords": {
+        "week": "One",
+        "leave": "For"
+      }
+    },
+    {
+      "shot": "gk14",
+      "text": "Age fourteen. Your academy produces superstars. A world-class keeper. A world-class midfielder. They all leave. The club calls it... a business model.",
+      "club": "KRC GENK",
+      "seed": 33,
+      "cueWords": {
+        "keep": [
+          "A",
+          1
+        ],
+        "mid": [
+          "A",
+          2
+        ],
+        "leave": "They",
+        "biz": "The"
+      }
+    },
+    {
+      "shot": "gk15",
+      "text": "Age fifteen. Last day of the season. You're winning. The title is yours! Ninety-fourth minute... a defender scores a volley. Antwerp win the league. In your stadium.",
+      "club": "KRC GENK",
+      "seed": 33,
+      "cueWords": {
+        "min": "Ninety-fourth",
+        "volley": [
+          "a",
+          1
+        ],
+        "anw": "Antwerp"
+      }
+    },
+    {
+      "shot": "gkthing",
+      "text": "That's the thing about being a Genk fan. You raise superstars... for other clubs.",
+      "club": "KRC GENK",
+      "seed": 33,
+      "cueWords": {
+        "raise": "You"
+      }
+    },
+    {
+      "shot": "gkplayed",
+      "text": "But every weekend, you can point at the TV and say: \"He played for us.\" For about six months.",
+      "club": "KRC GENK",
+      "seed": 33,
+      "cueWords": {
+        "he": "He",
+        "six": [
+          "For",
+          2
+        ]
+      }
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a Genk fan. Not a Gent fan. And which club is next? Drop it in the comments!",
+      "club": "KRC GENK",
+      "seed": 33,
+      "cueWords": {
+        "next": "And"
+      }
+    }
+  ]
+}

@@ -1,0 +1,355 @@
+{
+  "title": "Why it sucks being a Hull City fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "hull",
+  "article": "A",
+  "fanKit": {
+    "shirt": "#f5a12d",
+    "stripes": "#111111",
+    "trim": "#111111",
+    "pants": "#111111"
+  },
+  "flatCrowd": [
+    "#f5a12d",
+    "#111111",
+    "#f5a12d",
+    "#ffffff"
+  ],
+  "scarf": [
+    "#f5a12d",
+    "#111111"
+  ],
+  "tagLine": "WHO'S STILL A TIGER 🐯",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Hull City fan!",
+      "club": "HULL CITY",
+      "seed": 34,
+      "audio": "../audio/34-why-it-sucks-hull-city-fan/01.wav",
+      "wordTimes": [
+        0,
+        0.4,
+        0.62,
+        1.06,
+        1.52,
+        3.1,
+        3.42,
+        3.78
+      ],
+      "cues": {
+        "land": 3.1
+      },
+      "pad": 0.35
+    },
+    {
+      "shot": "hu5",
+      "text": "It starts when you're five. Your owner wants to change the club's name. The fans say no. The FA says no. He asks again.",
+      "club": "HULL CITY",
+      "seed": 34,
+      "cueWords": {
+        "fans": [
+          "The",
+          1
+        ],
+        "fa": [
+          "The",
+          2
+        ],
+        "again": "He"
+      },
+      "audio": "../audio/34-why-it-sucks-hull-city-fan/02.wav",
+      "wordTimes": [
+        0.1,
+        0.18,
+        0.4,
+        0.6,
+        0.84,
+        1.48,
+        1.48,
+        1.76,
+        1.98,
+        2.18,
+        2.4,
+        2.62,
+        2.98,
+        3.44,
+        3.44,
+        3.64,
+        3.9,
+        4.42,
+        4.5,
+        4.82,
+        5.28,
+        5.82,
+        5.9,
+        6.08
+      ],
+      "cues": {
+        "fans": 2.4,
+        "fa": 3.44,
+        "again": 5.82
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "hu6",
+      "text": "Age six. Your first FA Cup final! Two-nil up after eight minutes! You're winning the cup! You lose three-two.",
+      "club": "HULL CITY",
+      "seed": 34,
+      "cueWords": {
+        "win": "You're",
+        "lose": "You"
+      },
+      "audio": "../audio/34-why-it-sucks-hull-city-fan/03.wav",
+      "wordTimes": [
+        0.1,
+        0.1,
+        1.06,
+        1.14,
+        1.5,
+        1.98,
+        2.2,
+        2.86,
+        3.14,
+        3.3,
+        3.54,
+        3.76,
+        4.54,
+        4.76,
+        4.9,
+        5.14,
+        5.64,
+        5.76,
+        5.96
+      ],
+      "cues": {
+        "win": 4.54,
+        "lose": 5.64
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "hu7",
+      "text": "Age seven. Relegated. Age eight. Promoted! Age nine. Relegated. You stop unpacking.",
+      "club": "HULL CITY",
+      "seed": 34,
+      "cueWords": {
+        "r1": [
+          "Relegated",
+          1
+        ],
+        "prom": "Promoted",
+        "r2": [
+          "Relegated",
+          2
+        ],
+        "unpack": "You"
+      },
+      "audio": "../audio/34-why-it-sucks-hull-city-fan/04.wav",
+      "wordTimes": [
+        0.1,
+        0.22,
+        1.0,
+        1.54,
+        1.68,
+        2.4,
+        3.16,
+        3.34,
+        3.98,
+        4.58,
+        4.64,
+        4.9
+      ],
+      "cues": {
+        "r1": 1.0,
+        "prom": 2.4,
+        "r2": 3.98,
+        "unpack": 4.58
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "hu12",
+      "text": "Age twelve. Third division. Your away trips: Accrington. Burton. Rain.",
+      "club": "HULL CITY",
+      "seed": 34,
+      "cueWords": {
+        "acc": "Accrington",
+        "bur": "Burton",
+        "rain": "Rain"
+      },
+      "audio": "../audio/34-why-it-sucks-hull-city-fan/05.wav",
+      "wordTimes": [
+        0.1,
+        0.22,
+        1.0,
+        1.12,
+        1.76,
+        1.88,
+        2.08,
+        2.84,
+        3.6,
+        4.28
+      ],
+      "cues": {
+        "acc": 2.84,
+        "bur": 3.6,
+        "rain": 4.28
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "hu14",
+      "text": "Age fourteen. A TV star from Turkey buys the club. Now your games are on Turkish television. Your nan still can't find them.",
+      "club": "HULL CITY",
+      "seed": 34,
+      "cueWords": {
+        "tv": "Now",
+        "nan": [
+          "Your",
+          2
+        ]
+      },
+      "audio": "../audio/34-why-it-sucks-hull-city-fan/06.wav",
+      "wordTimes": [
+        0.1,
+        0.26,
+        1.14,
+        1.32,
+        1.58,
+        1.92,
+        2.14,
+        2.48,
+        2.74,
+        2.96,
+        3.2,
+        3.68,
+        3.88,
+        4.14,
+        4.36,
+        4.5,
+        4.8,
+        5.66,
+        5.74,
+        5.94,
+        6.3,
+        6.68,
+        6.84
+      ],
+      "cues": {
+        "tv": 3.2,
+        "nan": 5.66
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "huthing",
+      "text": "That's the thing about being a Hull fan. Up. Down. Up. Down. It's basically a lift.",
+      "club": "HULL CITY",
+      "seed": 34,
+      "cueWords": {
+        "up": [
+          "Up",
+          1
+        ],
+        "lift": "It's"
+      },
+      "audio": "../audio/34-why-it-sucks-hull-city-fan/07.wav",
+      "wordTimes": [
+        0.1,
+        0.3,
+        0.4,
+        0.52,
+        0.72,
+        0.9,
+        1.18,
+        1.18,
+        1.92,
+        2.16,
+        2.76,
+        3.18,
+        3.58,
+        3.72,
+        4.02,
+        4.22
+      ],
+      "cues": {
+        "up": 1.92,
+        "lift": 3.58
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "hucity",
+      "text": "But when they tried to change your name... you said no. City till we die.",
+      "club": "HULL CITY",
+      "seed": 34,
+      "cueWords": {
+        "no": "you",
+        "city": "City"
+      },
+      "audio": "../audio/34-why-it-sucks-hull-city-fan/08.wav",
+      "wordTimes": [
+        0.1,
+        0.12,
+        0.24,
+        0.4,
+        0.6,
+        0.78,
+        1.0,
+        1.24,
+        1.82,
+        1.96,
+        2.32,
+        3.22,
+        3.36,
+        3.68,
+        3.96
+      ],
+      "cues": {
+        "no": 1.82,
+        "city": 3.22
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a Hull fan who's still a Tiger. And which club is next? Drop it in the comments!",
+      "club": "HULL CITY",
+      "seed": 34,
+      "cueWords": {
+        "next": "And"
+      },
+      "audio": "../audio/34-why-it-sucks-hull-city-fan/09.wav",
+      "wordTimes": [
+        0.1,
+        0.26,
+        0.42,
+        0.42,
+        0.8,
+        1.12,
+        1.28,
+        1.42,
+        1.9,
+        1.96,
+        2.12,
+        2.28,
+        2.42,
+        3.1,
+        3.22,
+        3.32,
+        3.4,
+        3.52
+      ],
+      "cues": {
+        "next": 1.9
+      },
+      "pad": 0.9
+    }
+  ],
+  "titleBg": "#111111",
+  "clubAt": 3.4,
+  "punch": true
+}

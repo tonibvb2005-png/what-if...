@@ -1,0 +1,135 @@
+{
+  "title": "Why it sucks being a Hull City fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "hull",
+  "article": "A",
+  "fanKit": {
+    "shirt": "#f5a12d",
+    "stripes": "#111111",
+    "trim": "#111111",
+    "pants": "#111111"
+  },
+  "flatCrowd": [
+    "#f5a12d",
+    "#111111",
+    "#f5a12d",
+    "#ffffff"
+  ],
+  "scarf": [
+    "#f5a12d",
+    "#111111"
+  ],
+  "tagLine": "WHO'S STILL A TIGER 🐯",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Hull City fan!",
+      "club": "HULL CITY",
+      "seed": 34
+    },
+    {
+      "shot": "hu5",
+      "text": "It starts when you're five. Your owner wants to change the club's name. The fans say no. The FA says no. He asks again.",
+      "club": "HULL CITY",
+      "seed": 34,
+      "cueWords": {
+        "fans": [
+          "The",
+          1
+        ],
+        "fa": [
+          "The",
+          2
+        ],
+        "again": "He"
+      }
+    },
+    {
+      "shot": "hu6",
+      "text": "Age six. Your first FA Cup final! Two-nil up after eight minutes! You're winning the cup! You lose three-two.",
+      "club": "HULL CITY",
+      "seed": 34,
+      "cueWords": {
+        "win": "You're",
+        "lose": "You"
+      }
+    },
+    {
+      "shot": "hu7",
+      "text": "Age seven. Relegated. Age eight. Promoted! Age nine. Relegated. You stop unpacking.",
+      "club": "HULL CITY",
+      "seed": 34,
+      "cueWords": {
+        "r1": [
+          "Relegated",
+          1
+        ],
+        "prom": "Promoted",
+        "r2": [
+          "Relegated",
+          2
+        ],
+        "unpack": "You"
+      }
+    },
+    {
+      "shot": "hu12",
+      "text": "Age twelve. Third division. Your away trips: Accrington. Burton. Rain.",
+      "club": "HULL CITY",
+      "seed": 34,
+      "cueWords": {
+        "acc": "Accrington",
+        "bur": "Burton",
+        "rain": "Rain"
+      }
+    },
+    {
+      "shot": "hu14",
+      "text": "Age fourteen. A TV star from Turkey buys the club. Now your games are on Turkish television. Your nan still can't find them.",
+      "club": "HULL CITY",
+      "seed": 34,
+      "cueWords": {
+        "tv": "Now",
+        "nan": [
+          "Your",
+          2
+        ]
+      }
+    },
+    {
+      "shot": "huthing",
+      "text": "That's the thing about being a Hull fan. Up. Down. Up. Down. It's basically a lift.",
+      "club": "HULL CITY",
+      "seed": 34,
+      "cueWords": {
+        "up": [
+          "Up",
+          1
+        ],
+        "lift": "It's"
+      }
+    },
+    {
+      "shot": "hucity",
+      "text": "But when they tried to change your name... you said no. City till we die.",
+      "club": "HULL CITY",
+      "seed": 34,
+      "cueWords": {
+        "no": "you",
+        "city": "City"
+      }
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a Hull fan who's still a Tiger. And which club is next? Drop it in the comments!",
+      "club": "HULL CITY",
+      "seed": 34,
+      "cueWords": {
+        "next": "And"
+      }
+    }
+  ],
+  "titleBg": "#111111",
+  "clubAt": 3.4
+}

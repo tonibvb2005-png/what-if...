@@ -1,0 +1,399 @@
+{
+  "title": "Why it sucks being a KRC Genk fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "ga",
+  "article": "A",
+  "fanKit": {
+    "shirt": "#0055a4",
+    "trim": "#ffffff",
+    "pants": "#ffffff"
+  },
+  "flatCrowd": [
+    "#0055a4",
+    "#0055a4",
+    "#ffffff",
+    "#5a8ad6"
+  ],
+  "scarf": [
+    "#0055a4",
+    "#ffffff"
+  ],
+  "tagLine": "NOT A GENT FAN 😤",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Genk fan!",
+      "club": "KRC GENK",
+      "seed": 33,
+      "audio": "../audio/33-why-it-sucks-genk-fan/01.wav",
+      "wordTimes": [
+        0,
+        0.32,
+        0.46,
+        0.82,
+        1.16,
+        2.65,
+        3.0
+      ],
+      "cues": {
+        "land": 2.65
+      },
+      "pad": 0.35
+    },
+    {
+      "shot": "gk6",
+      "text": "It starts when you're six. Everyone calls your club \"Gent\". It's Genk. With a K. Now you know how Gent fans feel.",
+      "club": "KRC GENK",
+      "seed": 33,
+      "cueWords": {
+        "k": "It's",
+        "now": "Now"
+      },
+      "audio": "../audio/33-why-it-sucks-genk-fan/02.wav",
+      "wordTimes": [
+        0.1,
+        0.24,
+        0.46,
+        0.66,
+        0.94,
+        1.46,
+        1.66,
+        1.96,
+        2.16,
+        2.46,
+        3.32,
+        3.7,
+        4.02,
+        4.42,
+        4.58,
+        5.1,
+        5.26,
+        5.4,
+        5.52,
+        5.68,
+        5.98,
+        6.22
+      ],
+      "cues": {
+        "k": 3.32,
+        "now": 5.1
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "gk8",
+      "text": "Age eight. Your club's nickname is... the Smurfs. Try saying that in a fight.",
+      "club": "KRC GENK",
+      "seed": 33,
+      "cueWords": {
+        "try": "Try"
+      },
+      "audio": "../audio/33-why-it-sucks-genk-fan/03.wav",
+      "wordTimes": [
+        0.1,
+        0.1,
+        0.9,
+        0.9,
+        1.24,
+        1.5,
+        1.96,
+        2.46,
+        3.32,
+        3.46,
+        3.7,
+        3.92,
+        4.06,
+        4.18
+      ],
+      "cues": {
+        "try": 3.32
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "gk11",
+      "text": "Age eleven. You win the league! Champions League! First game: Salzburg. A young striker called Haaland scores a hat-trick. Before half-time.",
+      "club": "KRC GENK",
+      "seed": 33,
+      "cueWords": {
+        "first": "First",
+        "young": [
+          "A",
+          1
+        ],
+        "before": "Before"
+      },
+      "audio": "../audio/33-why-it-sucks-genk-fan/04.wav",
+      "wordTimes": [
+        0.1,
+        0.49,
+        0.88,
+        0.9,
+        1.1,
+        1.28,
+        1.96,
+        2.22,
+        2.82,
+        2.98,
+        3.84,
+        4.54,
+        4.66,
+        4.84,
+        5.12,
+        5.44,
+        5.82,
+        6.18,
+        6.36,
+        6.86,
+        7.24
+      ],
+      "cues": {
+        "first": 2.82,
+        "young": 4.54,
+        "before": 6.86
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "gk12",
+      "text": "Age twelve. You finally buy your favourite striker's shirt. One week later... he leaves. For Aston Villa.",
+      "club": "KRC GENK",
+      "seed": 33,
+      "cueWords": {
+        "week": "One",
+        "leave": "For"
+      },
+      "audio": "../audio/33-why-it-sucks-genk-fan/05.wav",
+      "wordTimes": [
+        0.1,
+        0.52,
+        0.94,
+        1.0,
+        1.38,
+        1.76,
+        1.96,
+        2.32,
+        2.9,
+        3.5,
+        3.62,
+        3.78,
+        4.44,
+        4.54,
+        4.86,
+        5.36,
+        5.64
+      ],
+      "cues": {
+        "week": 3.5,
+        "leave": 4.86
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "gk14",
+      "text": "Age fourteen. Your academy produces superstars. A world-class keeper. A world-class midfielder. They all leave. The club calls it... a business model.",
+      "club": "KRC GENK",
+      "seed": 33,
+      "cueWords": {
+        "keep": [
+          "A",
+          1
+        ],
+        "mid": [
+          "A",
+          2
+        ],
+        "leave": "They",
+        "biz": "The"
+      },
+      "audio": "../audio/33-why-it-sucks-genk-fan/06.wav",
+      "wordTimes": [
+        0.1,
+        0.75,
+        1.4,
+        1.4,
+        1.78,
+        2.22,
+        3.32,
+        3.42,
+        3.94,
+        4.66,
+        4.78,
+        5.32,
+        6.2,
+        6.26,
+        6.5,
+        7.06,
+        7.06,
+        7.22,
+        7.48,
+        7.92,
+        8.06,
+        8.36
+      ],
+      "cues": {
+        "keep": 3.32,
+        "mid": 4.66,
+        "leave": 6.2,
+        "biz": 7.06
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "gk15",
+      "text": "Age fifteen. Last day of the season. You're winning. The title is yours! Ninety-fourth minute... a defender scores a volley. Antwerp win the league. In your stadium.",
+      "club": "KRC GENK",
+      "seed": 33,
+      "cueWords": {
+        "min": "Ninety-fourth",
+        "volley": [
+          "a",
+          1
+        ],
+        "anw": "Antwerp"
+      },
+      "audio": "../audio/33-why-it-sucks-genk-fan/07.wav",
+      "wordTimes": [
+        0.1,
+        0.61,
+        1.12,
+        1.2,
+        1.42,
+        1.52,
+        1.62,
+        2.22,
+        2.34,
+        2.82,
+        2.94,
+        3.2,
+        3.46,
+        4.28,
+        4.78,
+        5.36,
+        5.4,
+        5.72,
+        6.08,
+        6.26,
+        6.82,
+        7.16,
+        7.38,
+        7.58,
+        7.98,
+        8.1,
+        8.36
+      ],
+      "cues": {
+        "min": 4.28,
+        "volley": 5.36,
+        "anw": 6.82
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "gkthing",
+      "text": "That's the thing about being a Genk fan. You raise superstars... for other clubs.",
+      "club": "KRC GENK",
+      "seed": 33,
+      "cueWords": {
+        "raise": "You"
+      },
+      "audio": "../audio/33-why-it-sucks-genk-fan/08.wav",
+      "wordTimes": [
+        0.1,
+        0.32,
+        0.42,
+        0.58,
+        0.76,
+        0.96,
+        1.22,
+        1.26,
+        1.76,
+        1.86,
+        2.08,
+        2.78,
+        3.2,
+        3.44
+      ],
+      "cues": {
+        "raise": 1.76
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "gkplayed",
+      "text": "But every weekend, you can point at the TV and say: \"He played for us.\" For about six months.",
+      "club": "KRC GENK",
+      "seed": 33,
+      "cueWords": {
+        "he": "He",
+        "six": [
+          "For",
+          2
+        ]
+      },
+      "audio": "../audio/33-why-it-sucks-genk-fan/09.wav",
+      "wordTimes": [
+        0.1,
+        0.2,
+        0.4,
+        1.1,
+        1.2,
+        1.34,
+        1.56,
+        1.68,
+        1.8,
+        2.04,
+        2.34,
+        3.02,
+        3.1,
+        3.38,
+        3.66,
+        3.92,
+        4.44,
+        4.64,
+        4.9
+      ],
+      "cues": {
+        "he": 3.02,
+        "six": 3.92
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a Genk fan. Not a Gent fan. And which club is next? Drop it in the comments!",
+      "club": "KRC GENK",
+      "seed": 33,
+      "cueWords": {
+        "next": "And"
+      },
+      "audio": "../audio/33-why-it-sucks-genk-fan/10.wav",
+      "wordTimes": [
+        0.1,
+        0.22,
+        0.4,
+        0.62,
+        1.12,
+        1.3,
+        1.48,
+        1.72,
+        2.06,
+        2.42,
+        2.6,
+        2.78,
+        2.92,
+        3.66,
+        3.76,
+        3.86,
+        3.96,
+        4.02
+      ],
+      "cues": {
+        "next": 2.06
+      },
+      "pad": 0.9
+    }
+  ],
+  "punch": true
+}
