@@ -36,6 +36,14 @@ function face(g, cx, cy, kind) {
     line(g, [[cx - 82, cy - 12], [cx - 30, cy - 26]]); line(g, [[cx + 30, cy - 26], [cx + 82, cy - 12]]);
     P(g, ell(cx, cy + 118, 17, 24), '#5a2a1e', 6, 0);
     if (kind === 'scared_sweat') sweat(g, cx + 140, cy - 60);
+  } else if (kind === 'happy') {
+    curve(g, [cx - 74, cy + 44], [cx - 51, cy + 26], [cx - 28, cy + 44], 8); curve(g, [cx + 28, cy + 44], [cx + 51, cy + 26], [cx + 74, cy + 44], 8);
+    line(g, [[cx - 78, cy - 8], [cx - 28, cy - 14]]); line(g, [[cx + 28, cy - 14], [cx + 78, cy - 8]]);
+    P(g, g => { g.moveTo(cx - 40, cy + 100); g.quadraticCurveTo(cx, cy + 150, cx + 40, cy + 100); g.closePath(); }, '#5a2a1e', 6, 0);
+  } else if (kind === 'count') {
+    for (const s of [-1, 1]) { P(g, circ(cx + s * 52, cy + 40, 26), '#fff', 6, 0); P(g, circ(cx + s * 50, cy + 36, 9), OL, 0, 0); }
+    line(g, [[cx - 80, cy - 8], [cx - 30, cy - 20]]); line(g, [[cx + 30, cy - 20], [cx + 80, cy - 8]]);
+    P(g, ell(cx, cy + 112, 14, 12), '#5a2a1e', 6, 0);
   } else if (kind === 'closed') {
     curve(g, [cx - 78, cy + 40], [cx - 52, cy + 56], [cx - 26, cy + 40], 8);
     curve(g, [cx + 26, cy + 40], [cx + 52, cy + 56], [cx + 78, cy + 40], 8);
@@ -904,3 +912,54 @@ export function scp173(pose = 'a') { const c = cv2(512, 1024), g = c.getContext(
   return c; }
 MONSTERS['SCP-173'] = () => scp173('a');
 export function scpFace() { const c = cv(512, 512), g = c.getContext('2d'); scpHead(g, 256, 250, 210, 0.04); return c; }
+
+// ------------------------------------------------------------- Folge 14 (Duell): Ruebezahl, Nachzehrer
+const ROCK = '#7a746a', ROCK2 = '#5c574f', SNOW = '#eef3f8', ICE = '#cfe6f4', MOSS = '#4f6a3a';
+function rockFill(g, x, y, w, h) { g.save(); g.globalAlpha = 0.35; for (let i = 0; i < 40; i++) { g.strokeStyle = '#3a3630'; g.lineWidth = 4; const px = x + (i * 89) % w, py = y + (i * 53) % h; g.beginPath(); g.moveTo(px, py); g.lineTo(px + 20, py + 12); g.lineTo(px + 8, py + 30); g.stroke(); } g.restore(); }
+export function ruebezahl(mood = 'calm') { const c = cv2(512, 1024), g = c.getContext('2d'), eye = mood === 'angry' ? '255,70,40' : '140,210,255';
+  const limb = (pts, w) => { line(g, pts, w + 10, OL); line(g, pts, w, ROCK2); };
+  limb([[200, 700], [188, 860], [180, 1000]], 62); limb([[312, 700], [324, 860], [332, 1000]], 62);
+  P(g, g => { g.moveTo(130, 360); g.quadraticCurveTo(256, 300, 382, 360); g.lineTo(400, 560); g.quadraticCurveTo(360, 740, 256, 740); g.quadraticCurveTo(152, 740, 112, 560); g.closePath(); }, ROCK, 11, 0.2); rockFill(g, 120, 360, 280, 380);
+  g.fillStyle = MOSS; for (let i = 0; i < 8; i++) { g.beginPath(); g.ellipse(150 + i * 32, 700 + Math.sin(i) * 12, 22, 10, 0, 0, 7); g.fill(); }
+  for (const sd of [-1, 1]) { limb([[256 + sd * 120, 390], [256 + sd * 190, 560], [256 + sd * 200, 720]], 52); P(g, circ(256 + sd * 200, 750, 50), ROCK2, 10, 0.2); }
+  // Schnee auf den Schultern
+  for (const sd of [-1, 1]) P(g, g => { g.moveTo(256 + sd * 40, 350); g.quadraticCurveTo(256 + sd * 140, 300, 256 + sd * 190, 370); g.quadraticCurveTo(256 + sd * 140, 360, 256 + sd * 40, 380); g.closePath(); }, SNOW, 7, 0);
+  // Kopf: Felsgesicht, Augenbrauen aus Stein, Eisbart
+  P(g, g => { g.moveTo(256, 120); g.bezierCurveTo(360, 120, 380, 230, 360, 320); g.lineTo(152, 320); g.bezierCurveTo(132, 230, 152, 120, 256, 120); }, ROCK, 10, 0.2); rockFill(g, 150, 120, 210, 200);
+  P(g, g => { g.moveTo(170, 120); g.quadraticCurveTo(256, 70, 342, 120); g.quadraticCurveTo(256, 110, 170, 130); g.closePath(); }, SNOW, 6, 0);
+  for (const sd of [-1, 1]) { P(g, g => { g.moveTo(256 + sd * 20, 200); g.lineTo(256 + sd * 100, 185 + (mood === 'angry' ? -20 : 0) * -1); g.lineTo(256 + sd * 96, 210); g.closePath(); }, ROCK2, 7, 0);
+    const ex = 256 + sd * 56, ey = 232, gr = g.createRadialGradient(ex, ey, 1, ex, ey, 34); gr.addColorStop(0, '#fff'); gr.addColorStop(0.3, `rgba(${eye},1)`); gr.addColorStop(1, `rgba(${eye},0)`); P(g, ell(ex, ey, 22, 14), '#0a0a0c', 0, 0); g.fillStyle = gr; g.beginPath(); g.arc(ex, ey, 34, 0, 7); g.fill(); }
+  P(g, g => { g.moveTo(240, 240); g.lineTo(272, 240); g.lineTo(280, 290); g.lineTo(232, 290); g.closePath(); }, ROCK2, 7, 0);
+  // Eisbart mit Zapfen
+  P(g, g => { g.moveTo(160, 290); g.quadraticCurveTo(256, 330, 352, 290); g.lineTo(340, 420); for (let i = 0; i < 9; i++) { const x = 340 - i * 22.5; g.lineTo(x - 11, 500 + (i % 3) * 30 + (i === 4 ? 60 : 0)); g.lineTo(x - 22, 430); } g.closePath(); }, ICE, 8, 0.12);
+  g.strokeStyle = 'rgba(255,255,255,.7)'; g.lineWidth = 5; for (let i = 0; i < 5; i++) { g.beginPath(); g.moveTo(190 + i * 30, 330); g.lineTo(186 + i * 30, 430); g.stroke(); }
+  if (mood === 'angry') { P(g, g => { g.moveTo(206, 312); g.quadraticCurveTo(256, 290, 306, 312); g.quadraticCurveTo(256, 360, 206, 312); }, '#1a0a08', 6, 0); }
+  return c; }
+MONSTERS['RÜBEZAHL'] = () => ruebezahl('calm');
+export function ruebFace(mood = 'angry') { const c = cv2(512, 512), g = c.getContext('2d'); g.drawImage(ruebezahl(mood), -128 - 100, -150, 768 + 200, 1536 + 400); return c; }
+const CORPSE = '#a7ae98', CORPSE2 = '#7d846f', SHROUD = '#ddd8cc';
+function nachHead(g, cx, cy, r, mood = 'chew') {
+  P(g, ell(cx, cy, r * 0.8, r), CORPSE, r * 0.05, 0.2);
+  g.fillStyle = 'rgba(60,70,50,.4)'; for (const sd of [-1, 1]) { g.beginPath(); g.ellipse(cx + sd * r * 0.45, cy + r * 0.35, r * 0.15, r * 0.3, 0, 0, 7); g.fill(); }
+  for (const sd of [-1, 1]) { P(g, ell(cx + sd * r * 0.32, cy - r * 0.12, r * 0.22, r * 0.2), '#1a1612', 0, 0); const gr = g.createRadialGradient(cx + sd * r * 0.32, cy - r * 0.1, 1, cx + sd * r * 0.32, cy - r * 0.1, r * 0.1); gr.addColorStop(0, 'rgba(230,240,200,1)'); gr.addColorStop(1, 'rgba(230,240,200,0)'); g.fillStyle = gr; g.beginPath(); g.arc(cx + sd * r * 0.32, cy - r * 0.1, r * 0.1, 0, 7); g.fill(); }
+  // Mund mit Leichentuch-Fetzen (kauend) oder Muenze
+  P(g, g => { g.moveTo(cx - r * 0.35, cy + r * 0.45); g.quadraticCurveTo(cx, cy + r * 0.38, cx + r * 0.35, cy + r * 0.45); g.quadraticCurveTo(cx, cy + r * 0.85, cx - r * 0.35, cy + r * 0.45); g.closePath(); }, '#1a0e0a', r * 0.04, 0);
+  g.fillStyle = '#d9cfb0'; for (let i = -3; i <= 3; i++) { g.beginPath(); g.moveTo(cx + i * r * 0.09 - r * 0.03, cy + r * 0.45); g.lineTo(cx + i * r * 0.09, cy + r * 0.56); g.lineTo(cx + i * r * 0.09 + r * 0.03, cy + r * 0.45); g.fill(); }
+  if (mood === 'coin') { P(g, circ(cx, cy + r * 0.62, r * 0.17), '#d8b040', r * 0.03, 0.1); g.strokeStyle = '#a07820'; g.lineWidth = r * 0.02; g.beginPath(); g.arc(cx, cy + r * 0.62, r * 0.11, 0, 7); g.stroke(); }
+  else P(g, g => { g.moveTo(cx - r * 0.1, cy + r * 0.55); g.quadraticCurveTo(cx + r * 0.25, cy + r * 0.7, cx + r * 0.15, cy + r * 1.3); g.lineTo(cx - r * 0.05, cy + r * 1.25); g.quadraticCurveTo(cx, cy + r * 0.8, cx - r * 0.2, cy + r * 0.62); g.closePath(); }, SHROUD, r * 0.03, 0.1);
+  // Kapuze aus Leichentuch
+  P(g, g => { g.moveTo(cx - r * 0.95, cy + r * 0.5); g.bezierCurveTo(cx - r * 1.05, cy - r * 1.2, cx + r * 1.05, cy - r * 1.2, cx + r * 0.95, cy + r * 0.5); g.quadraticCurveTo(cx + r * 0.75, cy - r * 0.3, cx, cy - r * 0.78); g.quadraticCurveTo(cx - r * 0.75, cy - r * 0.3, cx - r * 0.95, cy + r * 0.5); }, SHROUD, r * 0.05, 0.15);
+}
+export function nachzehrer(pose = 'walk', mood = 'chew') { const c = cv2(512, 1024), g = c.getContext('2d');
+  const limb = (pts, w) => { line(g, pts, w + 8, OL); line(g, pts, w, CORPSE2); };
+  if (pose !== 'crawl') { limb([[226, 700], [210, 860], [196, 1000]], 26); limb([[286, 700], [306, 860], [322, 1000]], 26); }
+  // zerrissenes Leichentuch als Gewand
+  P(g, g => { g.moveTo(180, 380); g.quadraticCurveTo(256, 340, 332, 380); g.lineTo(360, 760); for (let i = 0; i < 8; i++) { g.lineTo(360 - i * 25 - 12, 800 + (i % 2) * 40); g.lineTo(360 - (i + 1) * 25, 760); } g.closePath(); }, SHROUD, 9, 0.18);
+  g.strokeStyle = 'rgba(120,110,90,.5)'; g.lineWidth = 6; for (const x of [210, 256, 300]) { g.beginPath(); g.moveTo(x, 400); g.quadraticCurveTo(x + 10, 600, x - 6, 780); g.stroke(); }
+  g.fillStyle = 'rgba(90,80,60,.35)'; g.beginPath(); g.ellipse(270, 620, 50, 70, 0.3, 0, 7); g.fill(); // Erdflecken
+  const arms = pose === 'reach' ? [[[200, 400], [150, 470], [110, 540]], [[312, 400], [380, 460], [430, 520]]] : pose === 'crawl' ? [[[200, 420], [130, 600], [120, 760]], [[312, 420], [390, 600], [400, 760]]] : [[[200, 400], [168, 560], [176, 700]], [[312, 400], [350, 560], [344, 700]]];
+  for (const a of arms) { limb(a, 22); const [x, y] = a[2]; for (let k = -1; k <= 2; k++) line(g, [[x, y], [x + k * 9, y + 46]], 6, '#3a3428'); }
+  nachHead(g, 256, 280, 100, mood);
+  return c; }
+MONSTERS['NACHZEHRER'] = () => nachzehrer('walk');
+export function nachFace(mood = 'chew') { const c = cv(512, 512), g = c.getContext('2d'); nachHead(g, 256, 230, 200, mood); return c; }

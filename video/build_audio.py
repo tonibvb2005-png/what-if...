@@ -565,6 +565,38 @@ def R_powerdown():
 def A_bunker(d):
     tt = t_(d); a = np.sin(2 * np.pi * 50 * tt) * 0.01 + lp(noise(d), 150) * 0.05 + bp(noise(d), 3000, 5000) * 0.003; return a.astype(np.float32)
 
+
+# ---------------------------------------------------------------- Folge 14: Duell Ruebezahl / Nachzehrer
+def R_toll():     # tiefe Kirchenglocke
+    d = 4.0; tt = t_(d); x = sum(np.sin(2 * np.pi * f * tt + k) * a * np.exp(-tt * dk) for k, (f, a, dk) in enumerate([(196, 0.5, 0.7), (233, 0.3, 0.9), (392, 0.25, 1.2), (587, 0.15, 1.8), (98, 0.35, 0.5)]))
+    x = x * env(len(tt), 0.003, 1.0); return norm(reverb(x.astype(np.float32), 3.2, 0.5, 0.04), 0.55)
+def R_chew():     # nasses Schmatzen / Kauen
+    d = 2.4; x = np.zeros(int(d * SR), np.float32); t0 = 0.05
+    while t0 < d - 0.3:
+        c = bp(noise(0.16), 300, 2400) * env(int(0.16 * SR), 0.01, 0.12, 2) * rng.uniform(0.6, 1); i = int(t0 * SR); x[i:i + len(c)] += c[: len(x) - i]; t0 += rng.uniform(0.28, 0.42)
+    return norm(reverb(lp(x, 2000), 0.7, 0.2), 0.45)
+def R_earth():    # Erde bricht auf
+    d = 2.2; tt = t_(d); x = lp(noise(d), 500) * np.exp(-tt * 1.6) + bp(noise(d), 200, 1500) * (rng.random(len(tt)) > 0.997) * 2.0 * np.exp(-tt * 1.2)
+    b = S_boom(0.9, d); m = min(len(x), len(b)); x[:m] += b[:m] * 0.7; return norm(reverb(x.astype(np.float32), 1.4, 0.3), 0.8)
+def R_rumble():   # Berg bebt
+    d = 4.5; tt = t_(d); x = lp(noise(d), 90) * 1.0 + np.sin(2 * np.pi * 31 * tt) * 0.4 + lp(noise(d), 600) * 0.15 * (rng.random(len(tt)) > 0.5)
+    x *= env(len(tt), 0.6, 1.5); return norm(reverb(x.astype(np.float32), 2.0, 0.3), 0.75)
+def R_rewind():   # VHS-Zurueckspulen
+    d = 1.2; tt = t_(d); f = 2400 - 1600 * tt / d; ph = np.cumsum(2 * np.pi * f / SR)
+    x = np.sign(np.sin(ph)) * 0.15 * (0.5 + 0.5 * np.sin(2 * np.pi * 17 * tt)) + hp(noise(d), 3000) * 0.25; return norm((x * env(len(tt), 0.02, 0.1)).astype(np.float32), 0.4)
+def R_ding():     # Regel gebrochen
+    d = 0.9; tt = t_(d); x = (np.sin(2 * np.pi * 220 * tt) * 0.6 + np.sign(np.sin(2 * np.pi * 110 * tt)) * 0.25) * env(len(tt), 0.003, 0.5)
+    return norm(lp(x.astype(np.float32), 2500), 0.5)
+def R_stamp():
+    x = S_boom(0.6, 1.0).copy(); c = hp(noise(1.0), 1500) * env(int(SR), 0.001, 0.08, 3); m = min(len(x), len(c)); x[:m] += c[:m] * 0.6; return norm(x.astype(np.float32), 0.7)
+def R_coin():
+    d = 1.6; tt = t_(d); x = sum(np.sin(2 * np.pi * f * tt) * a for f, a in [(2600, 0.4), (3900, 0.25), (5200, 0.12)]) * np.exp(-tt * 3.5)
+    return norm(reverb(x.astype(np.float32), 1.2, 0.3), 0.35)
+def R_roar():
+    r = lp(_pitch(rec("2953", 0.3, 3.2, 0.9, 0.05, 0.8), 0.5), 1200); u = R_rumble(); m = min(len(r), len(u)); r = r[:m] + u[:m] * 0.5; return norm(reverb(r, 2.4, 0.4), 0.8)
+def A_blizzard(d):
+    tt = t_(d); w = lp(noise(d), 700) * (0.6 + 0.4 * np.sin(2 * np.pi * 0.23 * tt) ** 2) * 0.26 + bp(noise(d), 1500, 4000) * 0.03; return w.astype(np.float32)
+
 SFX = {k[2:]: v for k, v in globals().items() if k.startswith("S_")}
 SFX.update({k[2:]: v for k, v in globals().items() if k.startswith("R_")})
 
@@ -616,7 +648,7 @@ def A_dawn(d):
     w = lp(noise(len(b) / SR), 400) * 0.06; m = min(len(b), len(w)); return (b[:m] + w[:m]).astype(np.float32)
 
 
-AMB = {"bunker": A_bunker, "fire": A_fire, "winter": A_winter, "snow": A_snow, "hearth": A_hearth, "wc": A_wc, "class": A_class, "metro": A_metro, "wagon": A_wagon, "street": A_street, "bed": A_bed, "pc": A_pc, "pc_off": A_pc_off, "kitchen": A_kitchen, "day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn, "forest": A_forest, "car": A_car, "dusk": A_dusk, "bedroom": A_bedroom, "woods": A_woods, "village": A_village, "tvroom": A_tvroom, "station": A_station, "shop": A_shop, "shop_quiet": A_shop_quiet}
+AMB = {"bunker": A_bunker, "fire": A_fire, "winter": A_winter, "snow": A_snow, "hearth": A_hearth, "wc": A_wc, "class": A_class, "metro": A_metro, "wagon": A_wagon, "street": A_street, "bed": A_bed, "pc": A_pc, "pc_off": A_pc_off, "kitchen": A_kitchen, "day": A_day, "day_fade": A_day_fade, "room": A_room, "night": A_night, "dawn": A_dawn, "forest": A_forest, "car": A_car, "dusk": A_dusk, "bedroom": A_bedroom, "woods": A_woods, "village": A_village, "tvroom": A_tvroom, "station": A_station, "shop": A_shop, "shop_quiet": A_shop_quiet, "blizzard": A_blizzard}
 
 
 def drone(d):
@@ -709,6 +741,11 @@ def voice(shot, k, seg):
                 x = ffx(x, SIL.format(d=0.25) + ",atempo=1.15,highpass=f=400,lowpass=f=3000")
                 x = np.tanh(x / (np.abs(x).max() + 1e-9) * 2.2) * 0.6
                 return norm(reverb(x, 2.2, 0.5, 0.05), 0.7), len(x) / SR
+            if seg["v"] == "ruebezahl":   # Berg: tief, grollend, riesiger Hall
+                x = ffx(x, SIL.format(d=0.35) + ",asetrate=44100*0.86,aresample=44100,atempo=1.05,highpass=f=50,lowpass=f=3600")
+                sub = ffx(x, "asetrate=44100*0.5,aresample=44100,atempo=2.0,lowpass=f=400")[: len(x)]
+                x = x[: len(sub)] + sub * 0.35
+                return norm(reverb(x, 3.0, 0.5, 0.05), 0.85), len(x) / SR
             if seg["v"] == "opa":
                 x = ffx(x, SIL.format(d=0.25) + ",asetrate=44100*0.96,aresample=44100,atempo=1.1,highpass=f=120,lowpass=f=5000")
                 return norm(reverb(x, 1.2, 0.35), 0.72), len(x) / SR
@@ -771,6 +808,7 @@ def main():
         s0 = cur
         segs = []
         for k, seg in enumerate(sh["segs"]):
+            NARR_TEMPO = seg.get("tempo", sh.get("tempo", data.get("tempo", 1.15)))
             x, d = voice(sh, k, seg)
             vox_parts.append((cur, x))
             segs.append({"v": seg["v"], "s": round(cur, 3), "e": round(cur + d, 3), "chunks": chunks(seg["sub"], cur, d)})

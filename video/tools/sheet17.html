@@ -1,0 +1,6 @@
+<!doctype html><html><body style="margin:0;background:#556"><canvas id=c width=2000 height=760></canvas>
+<script type=module>
+import * as C from '../src/chars.js';
+const g=document.getElementById('c').getContext('2d'); g.drawImage(C.ruebezahl('calm'),0,0,370,740); g.drawImage(C.ruebezahl('angry'),380,0,370,740);
+['walk','reach','crawl'].forEach((p,i)=>g.drawImage(C.nachzehrer(p, i==2?'coin':'chew'),760+i*300,0,300,600)); g.drawImage(C.nachFace(),1660,0,300,300); window.done=true;
+</script></body></html>

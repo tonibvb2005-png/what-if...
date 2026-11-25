@@ -1,0 +1,675 @@
+{
+ "monster": "RÜBEZAHL VS. NACHZEHRER",
+ "tempo": 1.25,
+ "pause": 0.15,
+ "shots": [
+  {
+   "id": "hook",
+   "scene": "duel_roulette",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Zwei Monster sind los. Eins beschützt dich. Eins jagt dich.",
+     "sub": "ZWEI MONSTER SIND LOS. EINS *BESCHÜTZT* DICH. EINS *JAGT* DICH."
+    }
+   ],
+   "tempo": 1.32,
+   "hold": 0.47,
+   "noHeader": true,
+   "sfx": [
+    {
+     "n": "ticks",
+     "atEnd": -8.31
+    }
+   ]
+  },
+  {
+   "id": "name",
+   "scene": "reveal_prot",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Dein Beschützer? Rübezahl. Aus dem Riesengebirge.",
+     "sub": "DEIN BESCHÜTZER? *RÜBEZAHL.* AUS DEM RIESENGEBIRGE."
+    }
+   ],
+   "tempo": 1.32,
+   "hold": 0.05,
+   "sfx": [
+    {
+     "n": "boom",
+     "at": 0
+    },
+    {
+     "n": "rumble",
+     "at": 0.1
+    }
+   ],
+   "amb": "winter"
+  },
+  {
+   "id": "hunt",
+   "scene": "reveal_hunt",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Dein Jäger? Der Nachzehrer. Aus dem alten Friedhof.",
+     "sub": "DEIN JÄGER? DER *NACHZEHRER.* AUS DEM ALTEN FRIEDHOF."
+    }
+   ],
+   "tempo": 1.32,
+   "hold": 0.05,
+   "sfx": [
+    {
+     "n": "boom",
+     "at": 0
+    },
+    {
+     "n": "chew",
+     "at": 0.6
+    }
+   ],
+   "amb": "winter"
+  },
+  {
+   "id": "who",
+   "scene": "versus",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Wer gewinnt?",
+     "sub": "WER *GEWINNT?*"
+    }
+   ],
+   "tempo": 1.32,
+   "hold": 0.35,
+   "sfx": [
+    {
+     "n": "hit_soft",
+     "at": 0
+    },
+    {
+     "n": "crack",
+     "at": 0.05
+    }
+   ],
+   "amb": "winter"
+  },
+  {
+   "id": "village",
+   "scene": "village",
+   "clock": "20:00",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Winterferien bei Opa. Ein Bergdorf, eingeschneit.",
+     "sub": "WINTERFERIEN BEI *OPA.* EIN BERGDORF, EINGESCHNEIT."
+    }
+   ],
+   "tempo": 1.28,
+   "hold": 0.1,
+   "amb": "snow"
+  },
+  {
+   "id": "rule1",
+   "scene": "rules",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Opas Regeln. Eins: Wenn nachts die Kirchenglocke läutet, zähl nicht mit.",
+     "sub": "OPAS REGELN. EINS: WENN DIE *KIRCHENGLOCKE* LÄUTET, *ZÄHL NICHT MIT.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "paper",
+     "at": 0.1
+    }
+   ],
+   "amb": "hearth"
+  },
+  {
+   "id": "rule2",
+   "scene": "rules",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Zwei: Hab immer eine Münze dabei.",
+     "sub": "ZWEI: HAB IMMER EINE *MÜNZE* DABEI."
+    }
+   ],
+   "sfx": [
+    {
+     "n": "coin",
+     "atSeg": [
+      0,
+      -0.3
+     ]
+    }
+   ],
+   "amb": "hearth"
+  },
+  {
+   "id": "rule3",
+   "scene": "rules",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Drei: Nenn den Berggeist niemals Rübezahl.",
+     "sub": "DREI: NENN DEN BERGGEIST *NIEMALS* RÜBEZAHL."
+    },
+    {
+     "v": "opa",
+     "t": "Merk dir das gut. Der Berg hört alles.",
+     "sub": "„MERK DIR DAS GUT. DER BERG *HÖRT ALLES.*“"
+    }
+   ],
+   "hold": 0.1,
+   "sfx": [
+    {
+     "n": "rumble",
+     "atSeg": [
+      1,
+      -0.8
+     ]
+    }
+   ],
+   "amb": "hearth"
+  },
+  {
+   "id": "buried",
+   "scene": "grave",
+   "clock": "23:40",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Vor drei Tagen wurde der alte Nachbar beerdigt. Seitdem hört man nachts ein Schmatzen. Aus seinem Grab.",
+     "sub": "VOR 3 TAGEN WURDE DER NACHBAR BEERDIGT. SEITDEM HÖRT MAN EIN *SCHMATZEN.* AUS SEINEM *GRAB.*"
+    }
+   ],
+   "sfx": [
+    {
+     "n": "chew",
+     "atSeg": [
+      0,
+      2.8
+     ]
+    },
+    {
+     "n": "chew",
+     "atSeg": [
+      0,
+      -0.6
+     ]
+    }
+   ],
+   "amb": "night"
+  },
+  {
+   "id": "midnight",
+   "scene": "tower",
+   "clock": "00:00",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Mitternacht. Die Kirchenglocke läutet.",
+     "sub": "*MITTERNACHT.* DIE KIRCHENGLOCKE LÄUTET."
+    }
+   ],
+   "hold": 0.2,
+   "sfx": [
+    {
+     "n": "toll",
+     "at": 0.05
+    },
+    {
+     "n": "toll",
+     "atSeg": [
+      0,
+      -0.4
+     ]
+    }
+   ],
+   "amb": "night"
+  },
+  {
+   "id": "count",
+   "scene": "window",
+   "clock": "00:00",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Du zählst mit, ohne es zu wollen. Neun. Zehn. Elf.",
+     "sub": "DU ZÄHLST MIT, OHNE ES ZU WOLLEN. *NEUN. ZEHN. ELF.*"
+    }
+   ],
+   "hold": 0.3,
+   "sfx": [
+    {
+     "n": "toll",
+     "at": 0.0
+    },
+    {
+     "n": "ding",
+     "atSeg": [
+      0,
+      -0.05
+     ]
+    }
+   ],
+   "amb": "night"
+  },
+  {
+   "id": "bricht",
+   "scene": "burst",
+   "clock": "00:01",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Die Erde auf dem Grab bricht auf.",
+     "sub": "DIE ERDE AUF DEM GRAB *BRICHT AUF.*"
+    }
+   ],
+   "hold": 0.25,
+   "sfx": [
+    {
+     "n": "earth",
+     "at": 0
+    },
+    {
+     "n": "hit_soft",
+     "at": 0
+    }
+   ],
+   "amb": "night"
+  },
+  {
+   "id": "intro",
+   "scene": "red_nach",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Der Nachzehrer. Ein Toter, der sein Leichentuch zerkaut. Und der seine Familie zu sich holt. Einen nach dem anderen.",
+     "sub": "DER *NACHZEHRER.* EIN TOTER, DER SEIN *LEICHENTUCH* ZERKAUT. UND SEINE FAMILIE HOLT. *EINEN NACH DEM ANDEREN.*"
+    }
+   ],
+   "tint": "red",
+   "sfx": [
+    {
+     "n": "boom",
+     "at": 0
+    },
+    {
+     "n": "chew",
+     "atSeg": [
+      0,
+      -2.6
+     ]
+    }
+   ]
+  },
+  {
+   "id": "comes",
+   "scene": "comes",
+   "clock": "00:02",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Er zieht sich aus dem Grab. Und kommt auf dich zu.",
+     "sub": "ER ZIEHT SICH AUS DEM GRAB. UND KOMMT *AUF DICH ZU.*"
+    }
+   ],
+   "hold": 0.15,
+   "sfx": [
+    {
+     "n": "scrape",
+     "at": 0.1
+    },
+    {
+     "n": "steps",
+     "atSeg": [
+      0,
+      -1.2
+     ]
+    }
+   ],
+   "amb": "night"
+  },
+  {
+   "id": "run",
+   "scene": "run",
+   "clock": "00:03",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Du rennst in den Wald. Den Berg hinauf. Er holt auf.",
+     "sub": "DU *RENNST* IN DEN WALD. DEN BERG HINAUF. ER *HOLT AUF.*"
+    }
+   ],
+   "tempo": 1.28,
+   "hold": 0.1,
+   "sfx": [
+    {
+     "n": "run",
+     "at": 0
+    },
+    {
+     "n": "breath",
+     "at": 0.3
+    },
+    {
+     "n": "heart",
+     "atSeg": [
+      0,
+      -1.5
+     ]
+    }
+   ],
+   "amb": "snow"
+  },
+  {
+   "id": "quake",
+   "scene": "quake",
+   "clock": "00:04",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Dann bebt der Berg.",
+     "sub": "DANN *BEBT* DER BERG."
+    }
+   ],
+   "hold": 0.35,
+   "sfx": [
+    {
+     "n": "rumble",
+     "at": 0
+    }
+   ],
+   "amb": "snow"
+  },
+  {
+   "id": "giant",
+   "scene": "giant",
+   "clock": "00:04",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Aus Fels und Schnee steht ein Riese auf. Mit einem Bart aus Eis.",
+     "sub": "AUS FELS UND SCHNEE STEHT EIN *RIESE* AUF. MIT EINEM BART AUS *EIS.*"
+    }
+   ],
+   "hold": 0.2,
+   "sfx": [
+    {
+     "n": "collapse",
+     "at": 0
+    },
+    {
+     "n": "roar",
+     "atSeg": [
+      0,
+      -1.2
+     ]
+    }
+   ],
+   "amb": "snow"
+  },
+  {
+   "id": "lord",
+   "scene": "lord",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Der Herr der Berge. Er beschützt die, die gut zu ihm sind.",
+     "sub": "DER *HERR DER BERGE.* ER BESCHÜTZT DIE, DIE *GUT ZU IHM* SIND."
+    }
+   ],
+   "sfx": [
+    {
+     "n": "sparkle",
+     "at": 0.1
+    }
+   ]
+  },
+  {
+   "id": "fight",
+   "scene": "fight",
+   "clock": "00:05",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Der Riese packt den Toten.",
+     "sub": "DER RIESE *PACKT* DEN TOTEN."
+    },
+    {
+     "v": "narr",
+     "t": "Doch der beißt und reißt sich los.",
+     "sub": "DOCH DER *BEISST* UND REISST SICH LOS."
+    }
+   ],
+   "hold": 0.15,
+   "sfx": [
+    {
+     "n": "hit_soft",
+     "at": 0
+    },
+    {
+     "n": "rumble",
+     "at": 0.1
+    },
+    {
+     "n": "crack",
+     "atSeg": [
+      1,
+      0
+     ]
+    },
+    {
+     "n": "boom",
+     "atSeg": [
+      1,
+      0.1
+     ]
+    }
+   ],
+   "amb": "snow"
+  },
+  {
+   "id": "coin",
+   "scene": "coin",
+   "clock": "00:05",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Du erinnerst dich an Opas Münze. Du wirfst sie. Mitten in sein Maul.",
+     "sub": "DU ERINNERST DICH AN OPAS *MÜNZE.* DU WIRFST SIE. MITTEN IN SEIN *MAUL.*"
+    }
+   ],
+   "hold": 0.5,
+   "sfx": [
+    {
+     "n": "coin",
+     "at": 0.2
+    },
+    {
+     "n": "whoosh",
+     "atSeg": [
+      0,
+      -1.9
+     ]
+    },
+    {
+     "n": "hit_soft",
+     "atSeg": [
+      0,
+      -0.05
+     ]
+    },
+    {
+     "n": "ding",
+     "atSeg": [
+      0,
+      0.1
+     ]
+    }
+   ],
+   "amb": "snow"
+  },
+  {
+   "id": "swallow",
+   "scene": "swallow",
+   "clock": "00:06",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Der Nachzehrer erstarrt. Der Berg verschluckt ihn.",
+     "sub": "DER NACHZEHRER *ERSTARRT.* DER BERG *VERSCHLUCKT* IHN."
+    }
+   ],
+   "hold": 0.2,
+   "sfx": [
+    {
+     "n": "crack",
+     "at": 0.1
+    },
+    {
+     "n": "earth",
+     "atSeg": [
+      0,
+      -2.0
+     ]
+    },
+    {
+     "n": "rumble",
+     "atSeg": [
+      0,
+      -2.0
+     ]
+    }
+   ],
+   "amb": "snow"
+  },
+  {
+   "id": "survived",
+   "scene": "survived",
+   "clock": "00:07",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Stille. Du hast überlebt.",
+     "sub": "STILLE. DU HAST *ÜBERLEBT.*"
+    }
+   ],
+   "hold": 0.45,
+   "sfx": [
+    {
+     "n": "stamp",
+     "atSeg": [
+      0,
+      0.75
+     ]
+    }
+   ],
+   "amb": "winter"
+  },
+  {
+   "id": "thanks",
+   "scene": "thanks",
+   "clock": "00:07",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Du rufst: Danke, Rübezahl!",
+     "sub": "DU RUFST: „DANKE, *RÜBEZAHL!*“"
+    }
+   ],
+   "hold": 0.25,
+   "amb": "winter"
+  },
+  {
+   "id": "turns",
+   "scene": "turns",
+   "clock": "00:07",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Der Riese dreht sich langsam um.",
+     "sub": "DER RIESE DREHT SICH *LANGSAM UM.*"
+    },
+    {
+     "v": "ruebezahl",
+     "t": "Wie... hast du mich genannt?",
+     "sub": "„WIE ... HAST DU MICH *GENANNT?*“"
+    }
+   ],
+   "hold": 0.5,
+   "sfx": [
+    {
+     "n": "rewind",
+     "at": 0.1
+    },
+    {
+     "n": "ding",
+     "atSeg": [
+      0,
+      0.95
+     ]
+    },
+    {
+     "n": "rumble",
+     "atSeg": [
+      0,
+      -0.8
+     ]
+    },
+    {
+     "n": "stinger",
+     "atSeg": [
+      1,
+      0
+     ]
+    }
+   ],
+   "amb": "winter"
+  },
+  {
+   "id": "nobody",
+   "scene": "storm",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Seitdem findet niemand mehr den Weg aus dem Dorf.",
+     "sub": "SEITDEM FINDET NIEMAND MEHR DEN *WEG AUS DEM DORF.*"
+    }
+   ],
+   "hold": 0.5,
+   "amb": "blizzard"
+  },
+  {
+   "id": "question",
+   "scene": "question",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Hättest du seinen Namen gesagt? Schreib es in die Kommentare.",
+     "sub": "HÄTTEST DU SEINEN NAMEN GESAGT? SCHREIB ES IN DIE *KOMMENTARE.*"
+    }
+   ],
+   "hold": 0.6,
+   "noHeader": true,
+   "sfx": [
+    {
+     "n": "sparkle",
+     "at": 0
+    }
+   ]
+  },
+  {
+   "id": "endcard",
+   "scene": "endcard",
+   "segs": [],
+   "hold": 2.0,
+   "noHeader": true
+  }
+ ]
+}
