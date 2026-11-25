@@ -32,7 +32,7 @@ Tipp: Mach 3–4 Varianten und nimm die, bei der die Spannung im Mittelteil am s
 ```
 [urgent] This plane ran out of fuel at forty-one thousand feet, [dramatic] and the only place to land is a racetrack full of kids.
 
-[casual] You see, it's 1983. A brand-new jet takes off with sixty-nine people. [ominous] But someone counted the fuel in pounds, not kilograms. [serious] Now they have less than half of what they need.
+[casual] You see, it's nineteen eighty-three. A brand-new jet takes off with sixty-nine people. [ominous] But someone counted the fuel in pounds, not kilograms. [serious] Now they have less than half of what they need.
 
 [tense] Halfway across Canada, an alarm goes off. [quietly] The left engine dies. [pause] Then the right. [whispering] Then the whole cockpit goes dark.
 
@@ -50,10 +50,10 @@ Tipp: Mach 3–4 Varianten und nimm die, bei der die Spannung im Mittelteil am s
 ## 3. Text zum Einfügen – ohne Tags (Multilingual v2 / Turbo)
 
 ```
-This plane ran out of fuel at forty-one thousand feet, and the only place to land is a racetrack full of kids. You see, it's 1983. A brand-new jet takes off with sixty-nine people. But someone counted the fuel in pounds, not kilograms. Now they have less than half of what they need. Halfway across Canada, an alarm goes off. The left engine dies. Then the right. Then the whole cockpit goes dark. They're flying a giant glider. The nearest big airport? Way too far. But the co-pilot remembers an old air base nearby. What he doesn't know? It's now a racetrack. And today is family day. They're coming in way too high. So the captain does something you never do in a jet. He turns the plane sideways. Passengers look out and see... the ground. The jet drops like a brick. Kids on bikes scatter. The wheels slam down. The nose gear collapses. Sparks everywhere. The plane stops right in front of the crowd. So how did he do it? Well, it's called a forward slip. Fly sideways, and the whole plane becomes an air brake. And the captain? He flew gliders on weekends. The plane flew for twenty-five more years. They call it... the Gimli Glider.
+This plane ran out of fuel at forty-one thousand feet, and the only place to land is a racetrack full of kids. You see, it's nineteen eighty-three. A brand-new jet takes off with sixty-nine people. But someone counted the fuel in pounds, not kilograms. Now they have less than half of what they need. Halfway across Canada, an alarm goes off. The left engine dies. Then the right. Then the whole cockpit goes dark. They're flying a giant glider. The nearest big airport? Way too far. But the co-pilot remembers an old air base nearby. What he doesn't know? It's now a racetrack. And today is family day. They're coming in way too high. So the captain does something you never do in a jet. He turns the plane sideways. Passengers look out and see... the ground. The jet drops like a brick. Kids on bikes scatter. The wheels slam down. The nose gear collapses. Sparks everywhere. The plane stops right in front of the crowd. So how did he do it? Well, it's called a forward slip. Fly sideways, and the whole plane becomes an air brake. And the captain? He flew gliders on weekends. The plane flew for twenty-five more years. They call it... the Gimli Glider.
 ```
 
-**Wichtig:** Den Wortlaut nicht ändern. Bilder und Untertitel hängen an genau diesen Wörtern.
+**Wichtig:** Den Wortlaut nicht ändern. Bilder und Untertitel hängen an genau diesen Wörtern. Alle Zahlen sind ausgeschrieben, damit ElevenLabs sie englisch ausspricht.
 
 ---
 
@@ -65,7 +65,7 @@ Die Spannungskurve: Hook (hoch) → ruhig erklären → langsam steigend → **S
 |---|---|---|---|
 | 1 | This plane ran out of fuel at forty-one thousand feet, | Hook! Dringend, aber nicht schreiend. **forty-one thousand** betonen | 0–3 s |
 | 2 | and the only place to land is a racetrack full of kids. | Steigern, **full of kids** fast ungläubig | 3–7 s |
-| 3 | You see, it's 1983. | Plötzlich locker, Plauderton | 7–9 s |
+| 3 | You see, it's nineteen eighty-three. | Plötzlich locker, Plauderton | 7–9 s |
 | 4 | A brand-new jet takes off with sixty-nine people. | Neutral erzählend, **brand-new** leicht stolz | 9–12 s |
 | 5 | But someone counted the fuel in pounds, not kilograms. | Ernster, **pounds** und **kilograms** klar trennen | 12–15 s |
 | 6 | Now they have less than half of what they need. | Ruhig, schwer, kurze Pause danach | 15–18 s |
@@ -114,7 +114,7 @@ Die Spannungskurve: Hook (hoch) → ruhig erklären → langsam steigend → **S
 |---|---|---|
 | This plane ran out of fuel… | Jet hoch über Wolken, Sonne, Höhen-Zähler „41,000 ft“ blinkt | Drohne fliegt neben dem Jet |
 | …racetrack full of kids | Flash-Forward: Rennstrecke von oben, Go-Karts, Kinder winken, Schatten eines Jets zieht drüber | Top-down, schneller Push-in |
-| You see, it's 1983. | Flughafen, Retro-Look, Jahreszahl „1983“ als Schild | Langsame Totale |
+| You see, it's nineteen eighty-three. | Flughafen, Retro-Look, Jahreszahl „1983“ als Schild | Langsame Totale |
 | brand-new jet… sixty-nine people | Passagiere steigen ein, einer winkt | Seitliche Fahrt |
 | counted the fuel in pounds, not kilograms | Tankwart mit Klemmbrett rechnet, Schild „LBS“ statt „KG“, Fragezeichen über dem Kopf | Close-up auf Klemmbrett, dann Gesicht |
 | less than half of what they need | Tankanzeige: Balken halbiert sich, rotes Blinken | Punch-in |
