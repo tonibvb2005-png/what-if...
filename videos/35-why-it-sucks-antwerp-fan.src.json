@@ -1,0 +1,126 @@
+{
+  "title": "Why it sucks being an Antwerp fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "antwerp",
+  "clubAt": 2.95,
+  "article": "AN",
+  "fanKit": {
+    "shirt": "#d8102e",
+    "trim": "#ffffff",
+    "pants": "#ffffff"
+  },
+  "flatCrowd": [
+    "#d8102e",
+    "#d8102e",
+    "#ffffff",
+    "#ff6a7a"
+  ],
+  "scarf": [
+    "#d8102e",
+    "#ffffff"
+  ],
+  "tagLine": "THE GREAT OLD 🔴⚪",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being an... Antwerp fan!",
+      "club": "ANTWERP",
+      "seed": 35
+    },
+    {
+      "shot": "aw6",
+      "text": "It starts when you're six. Your dad says: \"We're the oldest club in Belgium. Number one!\" He mentions it. Constantly.",
+      "club": "ANTWERP",
+      "seed": 35,
+      "cueWords": {
+        "men": "He",
+        "const": "Constantly"
+      }
+    },
+    {
+      "shot": "aw8",
+      "text": "Age eight. The oldest club in Belgium... plays in the second division. Your dad stops mentioning it.",
+      "club": "ANTWERP",
+      "seed": 35,
+      "cueWords": {
+        "div": "plays",
+        "dad": "Your"
+      }
+    },
+    {
+      "shot": "aw9",
+      "text": "Age nine. Promoted! After thirteen years! Your dad mentions it again. Constantly.",
+      "club": "ANTWERP",
+      "seed": 35,
+      "cueWords": {
+        "dad": "Your"
+      }
+    },
+    {
+      "shot": "aw12",
+      "text": "Age twelve. You win the cup! Your dad says: \"Nice. But our last league title was 1957.\"",
+      "club": "ANTWERP",
+      "seed": 35,
+      "cueWords": {
+        "dad": "Your"
+      }
+    },
+    {
+      "shot": "aw15",
+      "text": "Age fifteen. Last day of the season. Ninety-fourth minute. Your defender scores a volley. Champions! After sixty-six years! Sorry, Genk fans.",
+      "club": "ANTWERP",
+      "seed": 35,
+      "cueWords": {
+        "volley": "Your",
+        "champ": "Champions",
+        "sorry": "Sorry"
+      }
+    },
+    {
+      "shot": "aw16",
+      "text": "Age sixteen. Champions League. You beat Barcelona! Barcelona! You still finish last in the group.",
+      "club": "ANTWERP",
+      "seed": 35,
+      "cueWords": {
+        "beat": [
+          "You",
+          1
+        ],
+        "last": [
+          "You",
+          2
+        ]
+      }
+    },
+    {
+      "shot": "awthing",
+      "text": "That's the thing about being an Antwerp fan. The oldest club in Belgium... and sixty-six years to win the league.",
+      "club": "ANTWERP",
+      "seed": 35,
+      "cueWords": {
+        "old": "The",
+        "wait": "and"
+      }
+    },
+    {
+      "shot": "aw94",
+      "text": "But when it finally happens... it happens in the ninety-fourth minute. Your dad still hasn't calmed down.",
+      "club": "ANTWERP",
+      "seed": 35,
+      "cueWords": {
+        "min": "ninety-fourth",
+        "dad": "Your"
+      }
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag an Antwerp fan. The Great Old. And which club is next? Drop it in the comments!",
+      "club": "ANTWERP",
+      "seed": 35,
+      "cueWords": {
+        "next": "And"
+      }
+    }
+  ]
+}

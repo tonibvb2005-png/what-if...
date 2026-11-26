@@ -1,0 +1,138 @@
+{
+  "title": "Why it sucks being a Barcelona fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "barcelona",
+  "clubAt": 3.0,
+  "article": "A",
+  "fanKit": {
+    "shirt": "#a50044",
+    "stripes": "#004d98",
+    "trim": "#ffd400",
+    "pants": "#004d98"
+  },
+  "flatCrowd": [
+    "#a50044",
+    "#004d98",
+    "#a50044",
+    "#ffd400"
+  ],
+  "scarf": [
+    "#a50044",
+    "#004d98"
+  ],
+  "tagLine": "WHO STILL TALKS ABOUT THE REMONTADA",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Barcelona fan!",
+      "club": "BARCELONA",
+      "seed": 36
+    },
+    {
+      "shot": "bc7",
+      "text": "It starts when you're seven. You win the treble. Messi. Neymar. Suárez. You think this is normal.",
+      "club": "BARCELONA",
+      "seed": 36,
+      "cueWords": {
+        "m": "Messi",
+        "n": "Neymar",
+        "s": "Suárez",
+        "normal": [
+          "You",
+          2
+        ]
+      }
+    },
+    {
+      "shot": "bc10",
+      "text": "Age ten. Three-nil in Rome. Age eleven. Four-nil at Anfield. A corner taken quickly. Age twelve. Eight-two against Bayern. You stop checking the score.",
+      "club": "BARCELONA",
+      "seed": 36,
+      "cueWords": {
+        "anf": [
+          "Age",
+          2
+        ],
+        "corner": "corner",
+        "bay": [
+          "Age",
+          3
+        ],
+        "stop": "You"
+      }
+    },
+    {
+      "shot": "bc13",
+      "text": "Age thirteen. Messi leaves. Not because he wants to. Because you can't afford him.",
+      "club": "BARCELONA",
+      "seed": 36,
+      "cueWords": {
+        "not": "Not",
+        "because": [
+          "Because",
+          2
+        ]
+      }
+    },
+    {
+      "shot": "bc14",
+      "text": "Age fourteen. The club sells its future TV money... to buy players now. Your dad calls it \"economic levers\". You call it a credit card.",
+      "club": "BARCELONA",
+      "seed": 36,
+      "cueWords": {
+        "dad": "Your",
+        "card": "You"
+      }
+    },
+    {
+      "shot": "bc15",
+      "text": "Age fifteen. Your stadium is being rebuilt. So you play on a mountain. Then you lose to Antwerp. Yes. Antwerp.",
+      "club": "BARCELONA",
+      "seed": 36,
+      "cueWords": {
+        "lose": "Then",
+        "yes": "Yes"
+      }
+    },
+    {
+      "shot": "bc17",
+      "text": "Age seventeen. The best player in the world is seventeen. Same age as you. Your mum asks what you've done with your life.",
+      "club": "BARCELONA",
+      "seed": 36,
+      "cueWords": {
+        "same": "Same",
+        "mum": "Your"
+      }
+    },
+    {
+      "shot": "bcthing",
+      "text": "That's the thing about being a Barça fan. You can't always afford your players... but you can always afford drama.",
+      "club": "BARCELONA",
+      "seed": 36,
+      "cueWords": {
+        "pay": "You",
+        "drama": "but"
+      }
+    },
+    {
+      "shot": "bcacad",
+      "text": "But every few years, a kid from your academy saves everything. More than a club.",
+      "club": "BARCELONA",
+      "seed": 36,
+      "cueWords": {
+        "kid": "kid",
+        "more": "More"
+      }
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a Barça fan who still talks about the Remontada. And which club is next? Drop it in the comments!",
+      "club": "BARCELONA",
+      "seed": 36,
+      "cueWords": {
+        "next": "And"
+      }
+    }
+  ]
+}

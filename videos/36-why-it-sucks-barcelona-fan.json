@@ -1,0 +1,406 @@
+{
+  "title": "Why it sucks being a Barcelona fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "barcelona",
+  "clubAt": 3.0,
+  "article": "A",
+  "fanKit": {
+    "shirt": "#a50044",
+    "stripes": "#004d98",
+    "trim": "#ffd400",
+    "pants": "#004d98"
+  },
+  "flatCrowd": [
+    "#a50044",
+    "#004d98",
+    "#a50044",
+    "#ffd400"
+  ],
+  "scarf": [
+    "#a50044",
+    "#004d98"
+  ],
+  "tagLine": "WHO STILL TALKS ABOUT THE REMONTADA",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Barcelona fan!",
+      "club": "BARCELONA",
+      "seed": 36,
+      "audio": "../audio/36-why-it-sucks-barcelona-fan/01.wav",
+      "wordTimes": [
+        0,
+        0.24,
+        0.36,
+        0.82,
+        1.26,
+        3.0,
+        3.6
+      ],
+      "cues": {
+        "land": 3.0
+      },
+      "pad": 0.35
+    },
+    {
+      "shot": "bc7",
+      "text": "It starts when you're seven. You win the treble. Messi. Neymar. Suárez. You think this is normal.",
+      "club": "BARCELONA",
+      "seed": 36,
+      "cueWords": {
+        "m": "Messi",
+        "n": "Neymar",
+        "s": "Suárez",
+        "normal": [
+          "You",
+          2
+        ]
+      },
+      "audio": "../audio/36-why-it-sucks-barcelona-fan/02.wav",
+      "wordTimes": [
+        0.1,
+        0.12,
+        0.42,
+        0.64,
+        0.9,
+        1.6,
+        1.66,
+        1.82,
+        1.98,
+        2.68,
+        3.26,
+        3.88,
+        4.54,
+        4.66,
+        4.84,
+        4.98,
+        5.16
+      ],
+      "cues": {
+        "m": 2.68,
+        "n": 3.26,
+        "s": 3.88,
+        "normal": 4.54
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "bc10",
+      "text": "Age ten. Three-nil in Rome. Age eleven. Four-nil at Anfield. A corner taken quickly. Age twelve. Eight-two against Bayern. You stop checking the score.",
+      "club": "BARCELONA",
+      "seed": 36,
+      "cueWords": {
+        "anf": [
+          "Age",
+          2
+        ],
+        "corner": "corner",
+        "bay": [
+          "Age",
+          3
+        ],
+        "stop": "You"
+      },
+      "audio": "../audio/36-why-it-sucks-barcelona-fan/03.wav",
+      "wordTimes": [
+        0.1,
+        0.45,
+        0.81,
+        1.16,
+        1.48,
+        2.12,
+        2.54,
+        2.96,
+        3.38,
+        3.58,
+        4.32,
+        4.44,
+        4.7,
+        5.0,
+        5.86,
+        6.37,
+        6.89,
+        7.4,
+        7.72,
+        8.4,
+        8.5,
+        8.72,
+        9.02,
+        9.18
+      ],
+      "cues": {
+        "anf": 2.12,
+        "corner": 4.44,
+        "bay": 5.86,
+        "stop": 8.4
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "bc13",
+      "text": "Age thirteen. Messi leaves. Not because he wants to. Because you can't afford him.",
+      "club": "BARCELONA",
+      "seed": 36,
+      "cueWords": {
+        "not": "Not",
+        "because": [
+          "Because",
+          2
+        ]
+      },
+      "audio": "../audio/36-why-it-sucks-barcelona-fan/04.wav",
+      "wordTimes": [
+        0.1,
+        0.67,
+        1.24,
+        1.42,
+        2.26,
+        2.38,
+        2.62,
+        2.8,
+        3.0,
+        3.52,
+        3.68,
+        3.84,
+        4.2,
+        4.28
+      ],
+      "cues": {
+        "not": 2.26,
+        "because": 3.52
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "bc14",
+      "text": "Age fourteen. The club sells its future TV money... to buy players now. Your dad calls it \"economic levers\". You call it a credit card.",
+      "club": "BARCELONA",
+      "seed": 36,
+      "cueWords": {
+        "dad": "Your",
+        "card": "You"
+      },
+      "audio": "../audio/36-why-it-sucks-barcelona-fan/05.wav",
+      "wordTimes": [
+        0.1,
+        0.59,
+        1.08,
+        1.22,
+        1.38,
+        1.74,
+        1.96,
+        2.3,
+        2.6,
+        2.92,
+        2.92,
+        3.48,
+        3.82,
+        4.54,
+        4.54,
+        4.74,
+        4.98,
+        5.4,
+        5.82,
+        6.94,
+        6.96,
+        7.16,
+        7.38,
+        7.52,
+        7.74
+      ],
+      "cues": {
+        "dad": 4.54,
+        "card": 6.94
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "bc15",
+      "text": "Age fifteen. Your stadium is being rebuilt. So you play on a mountain. Then you lose to Antwerp. Yes. Antwerp.",
+      "club": "BARCELONA",
+      "seed": 36,
+      "cueWords": {
+        "lose": "Then",
+        "yes": "Yes"
+      },
+      "audio": "../audio/36-why-it-sucks-barcelona-fan/06.wav",
+      "wordTimes": [
+        0.1,
+        0.55,
+        1.0,
+        1.0,
+        1.34,
+        1.58,
+        1.76,
+        2.58,
+        2.6,
+        2.72,
+        2.9,
+        3.02,
+        3.12,
+        3.8,
+        3.96,
+        4.3,
+        4.5,
+        4.72,
+        5.4,
+        6.08
+      ],
+      "cues": {
+        "lose": 3.8,
+        "yes": 5.4
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "bc17",
+      "text": "Age seventeen. The best player in the world is seventeen. Same age as you. Your mum asks what you've done with your life.",
+      "club": "BARCELONA",
+      "seed": 36,
+      "cueWords": {
+        "same": "Same",
+        "mum": "Your"
+      },
+      "audio": "../audio/36-why-it-sucks-barcelona-fan/07.wav",
+      "wordTimes": [
+        0.1,
+        0.66,
+        1.22,
+        1.24,
+        1.5,
+        1.88,
+        2.1,
+        2.2,
+        2.6,
+        3.27,
+        3.94,
+        4.08,
+        4.28,
+        4.44,
+        4.92,
+        5.02,
+        5.2,
+        5.58,
+        5.78,
+        6.0,
+        6.14,
+        6.32,
+        6.46
+      ],
+      "cues": {
+        "same": 3.94,
+        "mum": 4.92
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "bcthing",
+      "text": "That's the thing about being a Barça fan. You can't always afford your players... but you can always afford drama.",
+      "club": "BARCELONA",
+      "seed": 36,
+      "cueWords": {
+        "pay": "You",
+        "drama": "but"
+      },
+      "audio": "../audio/36-why-it-sucks-barcelona-fan/08.wav",
+      "wordTimes": [
+        0.1,
+        0.26,
+        0.4,
+        0.58,
+        0.8,
+        1.02,
+        1.22,
+        1.46,
+        2.1,
+        2.24,
+        2.52,
+        2.74,
+        3.04,
+        3.22,
+        3.94,
+        4.18,
+        4.3,
+        4.46,
+        4.84,
+        5.2
+      ],
+      "cues": {
+        "pay": 2.1,
+        "drama": 3.94
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "bcacad",
+      "text": "But every few years, a kid from your academy saves everything. More than a club.",
+      "club": "BARCELONA",
+      "seed": 36,
+      "cueWords": {
+        "kid": "kid",
+        "more": "More"
+      },
+      "audio": "../audio/36-why-it-sucks-barcelona-fan/09.wav",
+      "wordTimes": [
+        0.1,
+        0.12,
+        0.34,
+        0.56,
+        1.28,
+        1.44,
+        1.6,
+        1.82,
+        2.02,
+        2.42,
+        2.94,
+        3.6,
+        4.08,
+        4.3,
+        4.42
+      ],
+      "cues": {
+        "kid": 1.44,
+        "more": 3.6
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a Barça fan who still talks about the Remontada. And which club is next? Drop it in the comments!",
+      "club": "BARCELONA",
+      "seed": 36,
+      "cueWords": {
+        "next": "And"
+      },
+      "audio": "../audio/36-why-it-sucks-barcelona-fan/10.wav",
+      "wordTimes": [
+        0.1,
+        0.22,
+        0.36,
+        0.66,
+        0.9,
+        1.04,
+        1.34,
+        1.7,
+        1.94,
+        2.08,
+        3.14,
+        3.3,
+        3.5,
+        3.7,
+        3.82,
+        4.48,
+        4.58,
+        4.72,
+        4.8,
+        4.88
+      ],
+      "cues": {
+        "next": 3.14
+      },
+      "pad": 0.9
+    }
+  ],
+  "punch": true
+}

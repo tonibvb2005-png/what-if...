@@ -2027,7 +2027,7 @@
     { n: 'INTER', t: 'I', c1: '#0b4ea2', c2: '#111111', p: 'stripes' }, { n: 'KAA GENT', t: 'KAAG', c1: '#0b4ea2', c2: '#ffffff', p: 'band' }, { n: 'TOTTENHAM', t: 'THFC', c1: '#ffffff', c2: '#132257', p: 'chief', tc: '#132257' },
     { n: 'KV MECHELEN', t: 'KVM', c1: '#ffd400', c2: '#e30613', p: 'stripes', tc: '#111' }, { n: 'CLUB BRUGGE', t: 'CB', c1: '#0a5eb0', c2: '#111111', p: 'stripes' },
     { n: 'NEWCASTLE', t: 'NUFC', c1: '#ffffff', c2: '#111111', p: 'stripes' }, { n: 'ANDERLECHT', t: 'RSCA', c1: '#4b2a84', c2: '#ffffff', p: 'chief' },
-    { n: 'KRC GENK', t: 'KRC', c1: '#0055a4', c2: '#ffffff', p: 'vband', tc: '#ffffff' }, { n: 'HULL CITY', t: 'HULL', c1: '#f5a12d', c2: '#111111', p: 'stripes' }
+    { n: 'KRC GENK', t: 'KRC', c1: '#0055a4', c2: '#ffffff', p: 'vband', tc: '#ffffff' }, { n: 'HULL CITY', t: 'HULL', c1: '#f5a12d', c2: '#111111', p: 'stripes' }, { n: 'ANTWERP', t: 'RAFC', c1: '#d8102e', c2: '#ffffff', p: 'sash' }
   ];
   function rouletteOrder(seed) { const r = R7(seed || 7), a = CLUBS.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(r() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
   // float position (index under the pointer) at local time lt
@@ -2546,6 +2546,73 @@
       extra: (lt) => { pill(0, 480, '"HULL TIGERS"? ❌', eb(P(lt, .1, .4)), '#fff', OUT, 40); pill(0, 570, 'NO. 🙅', eb(P(lt, cue('no', .45), cue('no', .45) + .3)), '#e8364f', '#fff', 40); pill(0, 660, 'CITY TILL WE DIE 🧡🖤', eb(P(lt, cue('city', .75), cue('city', .75) + .3)), '#f5a12d', OUT, 44); } }
   });
 
+  // ---------- Royal Antwerp ----------
+  Object.assign(SHOTS, {
+    aw6: { set: 'flat', flat: (t) => bgStadium(t, false), clubCrowd: true, age: 'AGE 6', captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { dad: { x: -230, scale: 1 }, finn: { x: 230, scale: .64 } },
+      acts: { dad: [[0, { e: 'ecstatic', p: 'pointR', m: { lookX: 1 } }], ['men', .5, { e: 'confident', p: 'cheer' }]], finn: [[0, { e: 'surprised', m: { lookX: -1 } }], ['const', .8, { e: 'neutral', p: 'crossed', ex: { eyeOpen: .6 } }]] },
+      extra: (lt) => { scoreboard('OLDEST · Nº 1', ''); const M = cue('men', .5); [[-330, 760], [-130, 700], [-260, 880]].forEach(([x, y], i) => bubble(x, y, 'Nº 1!', eb(P(lt, M + i * .2, M + i * .2 + .25)), 0)); pill(230, 860, '🔁 CONSTANTLY', eb(P(lt, cue('const', .8), cue('const', .8) + .3)), '#fff', OUT, 30); } },
+    aw8: { set: 'flat', flat: (t, lt) => bgClass(t, (x, y) => { txt('OLDEST CLUB ✓', x, y - 70, 54, '#7dff9a', 900); if (lt > cue('div', .45)) txt('DIVISION: 2 ⬇️', x, y + 40, 54, '#ff8a8a', 900); }), age: 'AGE 8', captionTop: 1600, cam: [[0, FC], [1, FC]], cast: { dad: { x: -230, scale: 1 }, finn: { x: 230, scale: .68 } },
+      acts: { dad: [[0, { e: 'confident', p: 'pointR' }], ['div', .45, { e: 'shock', p: 'handsOnHead' }], ['dad', .75, { e: 'despair', p: 'crossed' }]], finn: [[0, { e: 'happy' }], ['div', .45, { e: 'surprised', p: 'shrug' }]] },
+      extra: (lt) => pill(-230, 700, 'DAD: 🤐', eb(P(lt, cue('dad', .75), cue('dad', .75) + .3)), '#fff', OUT, 40) },
+    aw9: { set: 'flat', flat: bgCityNight, age: 'AGE 9', captionTop: 1600, cam: [[0, FC], [1, FC]], cast: { dad: { x: -230, scale: 1 }, finn: { x: 230, scale: .7 } },
+      acts: { dad: [[0, { e: 'ecstatic', p: 'cheer', m: { jump: .5 } }], ['dad', .6, { e: 'ecstatic', p: 'pointR', m: { jump: 0, lookX: 1 } }]], finn: [[0, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: .6 } }], ['dad', .6, { e: 'neutral', p: 'crossed', ex: { eyeOpen: .6 }, m: { jump: 0 } }]] },
+      extra: (lt, t) => { confetti2d(t, 1, ['#d8102e', '#ffffff']); pill(0, 400, 'PROMOTED! ⬆️ AFTER 13 YEARS', eb(P(lt, .1, .4)), '#2fbf71', '#fff', 34); bubble(-230, 760, 'Nº 1!! OLDEST CLUB!', eb(P(lt, cue('dad', .6), cue('dad', .6) + .3)), 0); } },
+    aw12: { set: 'flat', flat: (t, lt) => bgLiving(t, tvLines([['BELGIAN CUP', 26, '#ffd400'], ['WINNERS 🏆', 30, '#7dff9a']])), age: 'AGE 12', captionTop: 1600, cam: [[0, FC], [1, FC]], cast: { dad: { x: -250, scale: 1 }, finn: { x: 200, scale: .74 } },
+      acts: { dad: [[0, { e: 'happy', p: 'cheer' }], ['dad', .45, { e: 'neutral', p: 'crossed' }]], finn: [[0, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: .6 } }], ['dad', .45, { e: 'neutral', p: 'idle', m: { jump: 0, lookX: -1 } }]] },
+      extra: (lt) => bubble(-250, 760, 'LAST TITLE: 1957 🙄', eb(P(lt, cue('dad', .45) + .5, cue('dad', .45) + .8)), 0) },
+    aw15: { set: 'flat', flat: (t) => bgStadium(t, true), age: 'AGE 15', captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { finn: { x: 0, scale: .84 } },
+      acts: { finn: [[0, { e: 'tense', p: 'pleading', m: { tremble: .6 } }], ['volley', .4, { e: 'shock', p: 'handsOnHead', m: { tremble: 0 } }], ['champ', .6, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: .8 } }], ['sorry', .85, { e: 'smirk', p: 'shrug', m: { jump: 0 } }]] },
+      extra: (lt, t) => { scoreboard(lt < cue('volley', .4) ? "90+4' · 2–1 GENK" : 'GENK 2–2 RAFC', ''); confetti2d(t, P(lt, cue('champ', .6), cue('champ', .6) + .2), ['#d8102e', '#ffffff', '#ffd400']); pill(0, 560, 'CHAMPIONS! 🏆 AFTER 66 YEARS', eb(P(lt, cue('champ', .6), cue('champ', .6) + .3)), '#d8102e', '#fff', 34); pill(0, 650, 'SORRY, GENK FANS 💙😅', eb(P(lt, cue('sorry', .85), cue('sorry', .85) + .3)), '#0055a4', '#fff', 34); } },
+    aw16: { set: 'flat', flat: (t) => bgStadium(t, true), age: 'AGE 16', captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { finn: { x: 0, scale: .86 } },
+      acts: { finn: [[0, { e: 'tense', p: 'pleading' }], ['beat', .3, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: .8 } }], ['last', .75, { e: 'despair', p: 'idle', m: { jump: 0 } }]] },
+      extra: (lt, t) => { scoreboard(lt < cue('beat', .3) ? 'UCL vs BARÇA' : 'RAFC 3–2 BARÇA', ''); confetti2d(t, P(lt, cue('beat', .3), cue('beat', .3) + .2) * (1 - P(lt, cue('last', .75), cue('last', .75) + .2)), ['#d8102e', '#ffffff']); pill(0, 620, 'GROUP: 4TH (LAST) 🙃', eb(P(lt, cue('last', .75), cue('last', .75) + .3)), '#fff', OUT, 36); } },
+    awthing: { set: 'flat', flat: (t) => bgStadium(t, false), clubCrowd: true, captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { finn: { x: 0, scale: .96 } },
+      acts: { finn: [[0, { e: 'confident', p: 'hips' }], ['wait', .65, { e: 'despair', p: 'shrug' }]] },
+      extra: (lt) => { pill(0, 520, 'OLDEST CLUB ✓', eb(P(lt, cue('old', .4), cue('old', .4) + .3)), '#d8102e', '#fff', 42); pill(0, 610, '66 YEARS TO WIN IT ⏳', eb(P(lt, cue('wait', .65), cue('wait', .65) + .3)), '#fff', OUT, 40); } },
+    aw94: { set: 'flat', flat: bgDark, captionTop: 1700, cam: [[0, FC], [1, { x: 0, y: 930, z: 1.08 }]], cast: { dad: { x: -200, scale: 1 }, finn: { x: 220, scale: .9 } },
+      acts: { dad: [[0, { e: 'neutral' }], ['min', .45, { e: 'ecstatic', p: 'cheer' }], ['dad', .75, { e: 'ecstatic', p: 'cheer', m: { jump: .8, tremble: .5 } }]], finn: [[0, { e: 'happy', p: 'cheer', propR: 'scarf' }], ['dad', .75, { e: 'smirk', p: 'crossed', m: { lookX: -1 } }]] },
+      extra: (lt) => { pill(0, 560, "90+4' 🤯", eb(P(lt, cue('min', .45), cue('min', .45) + .3)), '#d8102e', '#fff', 52); pill(-200, 660, 'DAD: STILL NOT CALM', eb(P(lt, cue('dad', .75), cue('dad', .75) + .3)), '#fff', OUT, 30); } }
+  });
+
+  // ---------- Barcelona ----------
+  CH.b10 = { skin: '#ffd9b8', shirt: '#a50044', stripes: '#004d98', trim: '#ffd400', number: '10', pants: '#004d98', shoes: '#111', hair: 'short', hairColor: '#5a3a20', stubble: true, bw: .92, blinkPh: .5 };
+  CH.b11 = { skin: '#e8b08a', shirt: '#a50044', stripes: '#004d98', trim: '#ffd400', number: '11', pants: '#004d98', shoes: '#111', hair: 'spiky', hairColor: '#120a05', bw: .95, blinkPh: 1.5 };
+  CH.bKid = { skin: '#8a5a3c', shirt: '#a50044', stripes: '#004d98', trim: '#ffd400', number: '19', pants: '#004d98', shoes: '#111', hair: 'short', hairColor: '#120a05', bw: .9, blinkPh: 1.1 };
+  CH.mum = { skin: '#f0c19a', shirt: '#2fbf71', trim: '#ffffff', pants: '#3a3f52', shoes: '#111', hair: 'short', hairColor: '#7a3a1a', bw: 1, blinkPh: 2.2 };
+  function bgMountain(t) { const g = ctx.createLinearGradient(0, 0, 0, 1250); g.addColorStop(0, '#7fc6f5'); g.addColorStop(1, '#dff1ff'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#fff'; for (let i = 0; i < 3; i++) { const x = ((t * 18 + i * 380) % (W + 300)) - 150; ctx.beginPath(); ctx.arc(x, 220 + i * 50, 50, 0, 7); ctx.arc(x + 55, 200 + i * 50, 60, 0, 7); ctx.arc(x + 110, 225 + i * 50, 45, 0, 7); ctx.fill(); }
+    ctx.fillStyle = '#6aa86a'; ctx.strokeStyle = OUT; ctx.lineWidth = 6; ctx.beginPath(); ctx.moveTo(-50, 1250); ctx.lineTo(540, 520); ctx.lineTo(1130, 1250); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#e8e2d0'; ctx.beginPath(); ctx.roundRect(390, 470, 300, 110, 30); ctx.fill(); ctx.stroke(); ctx.fillStyle = '#a50044'; ctx.fillRect(410, 500, 260, 16); ctx.fillStyle = '#004d98'; ctx.fillRect(410, 530, 260, 16);
+    floor(1250, '#7cc46a', '#6ab45a'); }
+  Object.assign(SHOTS, {
+    bc7: { set: 'flat', flat: (t) => bgStadium(t, false), clubCrowd: true, age: 'AGE 7', captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { b10: { x: -330, scale: .8 }, b11: { x: -110, scale: .86 }, barcaKid: { x: 110, scale: .9 }, finn: { x: 340, scale: .6 } },
+      acts: { b10: [[0, { e: 'neutral' }], ['m', .3, { e: 'ecstatic', p: 'cheer' }]], b11: [[0, { e: 'neutral' }], ['n', .4, { e: 'ecstatic', p: 'cheer' }]], barcaKid: [[0, { e: 'neutral' }], ['s', .5, { e: 'ecstatic', p: 'cheer' }]], finn: [[0, { e: 'ecstatic', p: 'cheer', propR: 'scarf', m: { jump: .6 } }], ['normal', .8, { e: 'confident', p: 'hips', m: { jump: 0 } }]] },
+      extra: (lt) => { pill(0, 460, 'TREBLE 🏆🏆🏆', eb(P(lt, .1, .4)), '#ffd400', OUT, 44); [['m', .3, -330], ['n', .4, -110], ['s', .5, 110]].forEach(([c, f, x]) => pill(x, 600, '⭐', eb(P(lt, cue(c, f), cue(c, f) + .3)), '#fff', OUT, 40)); pill(340, 900, 'NORMAL 😎', eb(P(lt, cue('normal', .8), cue('normal', .8) + .3)), '#fff', OUT, 30); } },
+    bc10: { set: 'flat', flat: (t, lt) => { const A = cue('anf', .35), B = cue('bay', .65); bgLiving(t, tvLines(lt < A ? [['ROME', 26, '#ffd400'], ['ROMA 3–0 BARÇA', 26, '#ff8a8a']] : lt < B ? [['ANFIELD', 26, '#ffd400'], ['LIVERPOOL 4–0 BARÇA', 22, '#ff8a8a'], [lt > cue('corner', .5) ? 'CORNER TAKEN QUICKLY 🏃' : '', 18, '#fff']] : [['LISBON', 26, '#ffd400'], ['BARÇA 2–8 BAYERN', 26, '#ff8a8a']])); }, age: 'AGE 10–12', captionTop: 1600, cam: [[0, FC], [1, FC]], cast: { finn: { x: -120, scale: .74 } },
+      acts: { finn: [[0, { e: 'shock', p: 'handsOnHead' }], ['anf', .35, { e: 'despair', p: 'handsOnHead' }], ['bay', .65, { e: 'despair', p: 'idle', m: { tremble: .5 } }], ['stop', .85, { e: 'neutral', p: 'crossed', ex: { eyeOpen: .5 }, m: { tremble: 0 } }]] },
+      extra: (lt) => pill(-120, 760, '📵 STOPPED CHECKING', eb(P(lt, cue('stop', .85), cue('stop', .85) + .3)), '#fff', OUT, 32) },
+    bc13: { set: 'flat', flat: bgAirport, age: 'AGE 13', captionTop: 1600, cam: [[0, FC], [1, FC]], cast: { finn: { x: -260, scale: .78 }, b10: { x: 200, scale: .86 } },
+      move: { b10: [[0, 200], ['because', .7, 200], [1, 700]] },
+      acts: { finn: [[0, { e: 'despair', p: 'idle', m: { tremble: .4 } }]], b10: [[0, { e: 'despair', p: 'waveR', m: { wave: 1 } }], ['because', .7, { e: 'despair', p: 'waveR', m: { wave: 1, walk: 1 } }]] },
+      extra: (lt, t) => { tears(200, 1400 - 553 * .86 + 50, t); pill(0, 600, 'NOT HIS CHOICE 😢', eb(P(lt, cue('not', .4), cue('not', .4) + .3)), '#fff', OUT, 36); pill(0, 690, 'REASON: 💸 NO MONEY', eb(P(lt, cue('because', .7), cue('because', .7) + .3)), '#e8364f', '#fff', 36); } },
+    bc14: { set: 'flat', flat: (t, lt) => bgClass(t, (x, y) => { txt('FUTURE TV MONEY 📺', x, y - 80, 46, '#7fd8ff', 900); txt('⬇', x, y - 10, 46, '#fff', 900); txt('PLAYERS NOW ⚽', x, y + 60, 46, '#7dff9a', 900); }), age: 'AGE 14', captionTop: 1600, cam: [[0, FC], [1, FC]], cast: { dad: { x: -250, scale: 1 }, finn: { x: 200, scale: .78 } },
+      acts: { dad: [[0, { e: 'confident', p: 'pointR' }], ['dad', .5, { e: 'confident', p: 'thumbsUpR', handR: 'thumb' }]], finn: [[0, { e: 'neutral' }], ['card', .8, { e: 'smirk', p: 'crossed', m: { lookX: -1 } }]] },
+      extra: (lt) => { bubble(-250, 760, '"ECONOMIC LEVERS" 🧠', eb(P(lt, cue('dad', .5), cue('dad', .5) + .3)), 0); pill(200, 860, '💳 CREDIT CARD', eb(P(lt, cue('card', .8), cue('card', .8) + .3)), '#fff', OUT, 32); } },
+    bc15: { set: 'flat', flat: bgMountain, age: 'AGE 15', captionTop: 1600, cam: [[0, FC], [1, FC]], cast: { finn: { x: 0, scale: .8 } },
+      acts: { finn: [[0, { e: 'happy', p: 'cheer', propR: 'scarf' }], ['lose', .55, { e: 'shock', p: 'handsOnHead' }], ['yes', .8, { e: 'despair', p: 'idle' }]] },
+      extra: (lt) => { pill(0, 380, '🏔️ HOME GAMES: ON A MOUNTAIN', eb(P(lt, .1, .4)), '#fff', OUT, 32); pill(0, 700, 'ANTWERP 3–2 BARÇA', eb(P(lt, cue('lose', .55), cue('lose', .55) + .3)), '#d8102e', '#fff', 40); pill(0, 790, 'YES. ANTWERP. 🔴⚪', eb(P(lt, cue('yes', .8), cue('yes', .8) + .3)), '#fff', OUT, 36); } },
+    bc17: { set: 'flat', flat: (t, lt) => bgLiving(t, tvLines([['BEST PLAYER IN THE WORLD', 18, '#ffd400'], ['AGE: 17 ⭐', 30, '#fff']])), age: 'AGE 17', captionTop: 1600, cam: [[0, FC], [1, FC]], cast: { mum: { x: -250, scale: .98 }, finn: { x: 200, scale: .84 } },
+      acts: { mum: [[0, { e: 'neutral', m: { lookX: 1 } }], ['mum', .7, { e: 'angry', p: 'hips', m: { lookX: 1 } }]], finn: [[0, { e: 'happy', m: { lookX: -1 } }], ['same', .45, { e: 'surprised' }], ['mum', .7, { e: 'nervous', p: 'nervous' }]] },
+      extra: (lt) => { pill(200, 860, 'SAME AGE AS YOU 😳', eb(P(lt, cue('same', .45), cue('same', .45) + .3)), '#fff', OUT, 30); bubble(-250, 760, 'AND YOU? 🤨', eb(P(lt, cue('mum', .7), cue('mum', .7) + .3)), 0); } },
+    bcthing: { set: 'flat', flat: (t) => bgStadium(t, false), clubCrowd: true, captionTop: 1235, cam: [[0, FC], [1, FC]], cast: { finn: { x: 0, scale: .96 } },
+      acts: { finn: [[0, { e: 'despair', p: 'shrug' }], ['drama', .65, { e: 'smirk', p: 'hips' }]] },
+      extra: (lt) => { pill(0, 520, 'PLAYERS 💸 ❌', eb(P(lt, cue('pay', .35), cue('pay', .35) + .3)), '#fff', OUT, 40); pill(0, 610, 'DRAMA 🎭 ✓', eb(P(lt, cue('drama', .65), cue('drama', .65) + .3)), '#a50044', '#fff', 44); } },
+    bcacad: { set: 'flat', flat: bgDark, captionTop: 1700, cam: [[0, FC], [1, { x: 0, y: 930, z: 1.08 }]], cast: { finn: { x: -200, scale: 1 }, bKid: { x: 230, scale: .78 } },
+      move: { bKid: [[0, 800], ['kid', .3, 800], ['kid', .3, 800], [.6, 230]] },
+      acts: { finn: [[0, { e: 'neutral', p: 'idle' }], ['kid', .3, { e: 'happy', m: { lookX: 1 } }], ['more', .75, { e: 'confident', p: 'cheer', propR: 'scarf' }]], bKid: [[0, { e: 'confident', m: { walk: 1, lookX: -1 } }], [.6, { e: 'ecstatic', p: 'cheer', m: { walk: 0 } }]] },
+      extra: (lt) => { pill(230, 560, 'ACADEMY KID 🎓⭐', eb(P(lt, cue('kid', .3) + .4, cue('kid', .3) + .7)), '#ffd400', OUT, 32); pill(0, 470, 'MÉS QUE UN CLUB 💙❤️', eb(P(lt, cue('more', .75), cue('more', .75) + .3)), '#a50044', '#fff', 40); } }
+  });
+
   // ---------- timeline ----------
   let spec, scenes = [], total = 0;
   function camAt(keys, lt, d) {
@@ -2915,6 +2982,22 @@
         case 'hu14': add(st + .2, 'sparkle', -15); add(st + C('nan', .75), 'pop', -15); break;
         case 'huthing': add(st + C('up', .3), 'pop', -15); add(st + C('lift', .7), 'ding', -14); break;
         case 'hucity': add(st + C('no', .45), 'thump', -13); add(st + C('city', .75), 'cheer', -15); break;
+        case 'aw6': add(st + .2, 'pop', -15); [0, .2, .4].forEach(o => add(st + C('men', .5) + o, 'pop', -16)); add(st + C('const', .8), 'pop', -15); break;
+        case 'aw8': add(st + C('div', .45), 'thump', -12); add(st + C('dad', .75), 'pop', -15); break;
+        case 'aw9': add(st, 'cheer', -14); add(st + C('dad', .6), 'pop', -15); break;
+        case 'aw12': add(st, 'cheer', -15); add(st + C('dad', .45) + .5, 'pop', -15); break;
+        case 'aw15': for (let x = .2; x < C('volley', .4); x += .7) add(st + x, 'heartbeat', -15); add(st + C('volley', .4), 'thump', -11); add(st + C('champ', .6), 'cheer', -12); add(st + C('sorry', .85), 'pop', -15); break;
+        case 'aw16': add(st + C('beat', .3), 'cheer', -13); add(st + C('last', .75), 'thump', -13); break;
+        case 'awthing': add(st + C('old', .4), 'pop', -15); add(st + C('wait', .65), 'pop', -15); break;
+        case 'aw94': add(st + C('min', .45), 'cheer', -14); add(st + C('dad', .75), 'pop', -15); break;
+        case 'bc7': add(st, 'cheer', -15); ['m', 'n', 's'].forEach((c, i) => add(st + C(c, .3 + i * .1), 'sparkle', -16)); add(st + C('normal', .8), 'pop', -15); break;
+        case 'bc10': add(st, 'thump', -13); add(st + C('anf', .35), 'thump', -13); add(st + C('bay', .65), 'thump', -12); add(st + C('stop', .85), 'click', -14); break;
+        case 'bc13': add(st + .1, 'whoosh_long', -16); add(st + C('because', .7), 'kaching', -16); break;
+        case 'bc14': add(st + C('dad', .5), 'ding', -15); add(st + C('card', .8), 'kaching', -15); break;
+        case 'bc15': add(st + .1, 'pop', -15); add(st + C('lose', .55), 'thump', -12); add(st + C('yes', .8), 'pop', -15); break;
+        case 'bc17': add(st + C('same', .45), 'pop', -15); add(st + C('mum', .7), 'thump', -14); break;
+        case 'bcthing': add(st + C('pay', .35), 'pop', -15); add(st + C('drama', .65), 'sparkle', -14); break;
+        case 'bcacad': add(st + C('kid', .3), 'whoosh_soft', -15); add(st + C('more', .75), 'cheer', -15); break;
         case 'gebuff': add(st + C('buff', .6), 'sparkle', -14); break;
         case 'imate': add(st + .1, 'whoosh_soft', -20); add(st + C('follow', .75) + .1, 'pop', -14); break;
       }
