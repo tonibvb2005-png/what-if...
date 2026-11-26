@@ -1,0 +1,381 @@
+{
+ "monster": "RYŌMEN SUKUNA",
+ "tempo": 1.2,
+ "pause": 0.18,
+ "shots": [
+  {
+   "id": "hook",
+   "scene": "roulette",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Eines dieser Monster ist ausgebrochen. Mal sehen, wer es ist.",
+     "sub": "EINES DIESER MONSTER IST *AUSGEBROCHEN.* MAL SEHEN, WER ES IST."
+    }
+   ],
+   "hold": 0.79,
+   "noHeader": true,
+   "sfx": [
+    {
+     "n": "alarm",
+     "at": 0
+    },
+    {
+     "n": "ticks",
+     "atEnd": -8.31
+    }
+   ]
+  },
+  {
+   "id": "name",
+   "scene": "statue_open",
+   "clock": "23:58",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Ryomen Sukuna. Zwei Gesichter.",
+     "sub": "*RYŌMEN SUKUNA.* ZWEI *GESICHTER.*"
+    }
+   ],
+   "hold": 1.0,
+   "sfx": [
+    {
+     "n": "boom",
+     "at": -0.05
+    },
+    {
+     "n": "whisper",
+     "at": 0.6
+    },
+    {
+     "n": "creak",
+     "atEnd": -1.25
+    },
+    {
+     "n": "lightoff",
+     "atEnd": -0.55
+    }
+   ],
+   "amb": "night"
+  },
+  {
+   "id": "trip",
+   "scene": "trip",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Klassenfahrt nach Japan. Ihr übernachtet in einem Tempel in den Bergen.",
+     "sub": "KLASSENFAHRT NACH *JAPAN.* IHR ÜBERNACHTET IN EINEM *TEMPEL* IN DEN BERGEN."
+    }
+   ],
+   "sfx": [
+    {
+     "n": "toll",
+     "at": 0.3
+    }
+   ],
+   "amb": "snow"
+  },
+  {
+   "id": "statue",
+   "scene": "statue_day",
+   "clock": "19:00",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "In der Halle steht eine alte Holzstatue. Mit einem Gesicht vorne. Und einem hinten.",
+     "sub": "IN DER HALLE STEHT EINE ALTE HOLZSTATUE. MIT EINEM GESICHT VORNE. *UND EINEM HINTEN.*"
+    }
+   ],
+   "hold": 0.2,
+   "sfx": [
+    {
+     "n": "hit_soft",
+     "atSeg": [
+      0,
+      -0.9
+     ]
+    }
+   ],
+   "amb": "hearth"
+  },
+  {
+   "id": "legend",
+   "scene": "red_legend",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Ryomen Sukuna. Eine Legende, über tausend Jahre alt.",
+     "sub": "*RYŌMEN SUKUNA.* EINE LEGENDE, ÜBER *1000 JAHRE* ALT."
+    }
+   ],
+   "tint": "red",
+   "sfx": [
+    {
+     "n": "boom",
+     "at": 0
+    }
+   ]
+  },
+  {
+   "id": "body",
+   "scene": "body_beats",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Ein Körper. Zwei Gesichter. Vier Arme.",
+     "sub": "EIN KÖRPER. *ZWEI GESICHTER.* *VIER ARME.*"
+    },
+    {
+     "v": "opa",
+     "t": "Er beschützt dieses Tal. Aber sein zweites Gesicht vergisst nie, wer ihm nachsieht.",
+     "sub": "„ER BESCHÜTZT DIESES TAL. ABER SEIN ZWEITES GESICHT *VERGISST NIE,* WER IHM NACHSIEHT.“"
+    }
+   ],
+   "tint": "red",
+   "sfx": [
+    {
+     "n": "hit_soft",
+     "at": 0
+    },
+    {
+     "n": "hit_soft",
+     "atSeg": [
+      0,
+      0.9
+     ]
+    },
+    {
+     "n": "hit_soft",
+     "atSeg": [
+      0,
+      -0.6
+     ]
+    }
+   ],
+   "amb": "hearth"
+  },
+  {
+   "id": "rule",
+   "scene": "rule",
+   "clock": "22:00",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Die Regel: Wenn er an dir vorbeigeht, schau ihm nicht hinterher.",
+     "sub": "DIE REGEL: WENN ER AN DIR VORBEIGEHT, *SCHAU IHM NICHT HINTERHER.*"
+    }
+   ],
+   "hold": 0.3,
+   "rule": {
+    "title": "DIE REGEL",
+    "text": "NICHT HINTERHERSCHAUEN",
+    "atSeg": [
+     0,
+     0.5
+    ]
+   },
+   "sfx": [
+    {
+     "n": "hit_soft",
+     "atSeg": [
+      0,
+      0.5
+     ]
+    }
+   ],
+   "amb": "night"
+  },
+  {
+   "id": "empty",
+   "scene": "empty",
+   "clock": "03:12",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Nachts knarrt der Holzboden. Der Sockel in der Halle ist leer.",
+     "sub": "NACHTS KNARRT DER HOLZBODEN. DER SOCKEL IN DER HALLE IST *LEER.*"
+    }
+   ],
+   "hold": 0.3,
+   "sfx": [
+    {
+     "n": "creak",
+     "at": 0.3
+    },
+    {
+     "n": "hit_soft",
+     "atSeg": [
+      0,
+      -0.4
+     ]
+    }
+   ],
+   "amb": "night"
+  },
+  {
+   "id": "hall",
+   "scene": "corridor",
+   "clock": "03:13",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Etwas kommt den Flur entlang. Langsam. Auf vier Beinen.",
+     "sub": "ETWAS KOMMT DEN FLUR ENTLANG. LANGSAM. *AUF VIER BEINEN.*"
+    }
+   ],
+   "hold": 0.3,
+   "sfx": [
+    {
+     "n": "creak",
+     "at": 0.4
+    },
+    {
+     "n": "creak",
+     "atSeg": [
+      0,
+      -1.2
+     ]
+    },
+    {
+     "n": "breath",
+     "at": 1.0
+    }
+   ],
+   "amb": "night"
+  },
+  {
+   "id": "pass",
+   "scene": "pass",
+   "clock": "03:13",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Du schließt die Augen. Es geht an dir vorbei.",
+     "sub": "DU *SCHLIESST DIE AUGEN.* ES GEHT AN DIR VORBEI."
+    },
+    {
+     "v": "ben",
+     "t": "Ich will nur sehen, wohin er geht.",
+     "sub": "„ICH WILL NUR SEHEN, *WOHIN ER GEHT.*“"
+    }
+   ],
+   "hold": 0.15,
+   "sfx": [
+    {
+     "n": "creak",
+     "at": 0.5
+    },
+    {
+     "n": "heart",
+     "at": 0.2
+    }
+   ],
+   "amb": "night"
+  },
+  {
+   "id": "turn",
+   "scene": "turn",
+   "clock": "03:14",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Ben dreht sich um.",
+     "sub": "BEN *DREHT SICH UM.*"
+    }
+   ],
+   "hold": 1.5,
+   "sfx": [
+    {
+     "n": "whisper",
+     "atSeg": [
+      0,
+      0.2
+     ]
+    },
+    {
+     "n": "boom",
+     "atEnd": -0.65
+    },
+    {
+     "n": "scratch",
+     "atEnd": -0.6
+    }
+   ],
+   "amb": "night"
+  },
+  {
+   "id": "morning",
+   "scene": "morning",
+   "clock": "07:00",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Am Morgen steht die Statue wieder in der Halle.",
+     "sub": "AM MORGEN STEHT DIE STATUE *WIEDER* IN DER HALLE."
+    }
+   ],
+   "hold": 0.3,
+   "sfx": [
+    {
+     "n": "birds",
+     "at": 0
+    }
+   ],
+   "amb": "dawn"
+  },
+  {
+   "id": "faces",
+   "scene": "faces",
+   "clock": "07:01",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Aber jetzt hat sie drei Gesichter. Und eins davon sieht aus wie Ben.",
+     "sub": "ABER JETZT HAT SIE *DREI GESICHTER.* UND EINS DAVON SIEHT AUS *WIE BEN.*"
+    }
+   ],
+   "hold": 1.3,
+   "sfx": [
+    {
+     "n": "heart",
+     "at": 0
+    },
+    {
+     "n": "stinger",
+     "atSeg": [
+      0,
+      -0.35
+     ]
+    }
+   ],
+   "amb": "dawn"
+  },
+  {
+   "id": "cta",
+   "scene": "cta",
+   "segs": [
+    {
+     "v": "narr",
+     "t": "Folge mir, um zu sehen, wen du als Nächstes bekommst.",
+     "sub": "FOLGE MIR, UM ZU SEHEN, WEN DU ALS *NÄCHSTES* BEKOMMST."
+    }
+   ],
+   "hold": 0.3,
+   "noHeader": true,
+   "sfx": [
+    {
+     "n": "sparkle",
+     "at": 0
+    }
+   ]
+  },
+  {
+   "id": "endcard",
+   "scene": "endcard",
+   "segs": [],
+   "hold": 2.2,
+   "noHeader": true
+  }
+ ]
+}

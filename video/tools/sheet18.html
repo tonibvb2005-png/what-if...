@@ -1,0 +1,8 @@
+<!doctype html><html><body style="margin:0;background:#556"><canvas id=c width=2200 height=1000></canvas>
+<script type=module>
+import * as C from '../src/chars.js';
+const g=document.getElementById('c').getContext('2d');
+g.drawImage(C.sukuna('front','wood'),0,0,300,600); g.drawImage(C.sukuna('back','wood'),300,0,300,600); g.drawImage(C.sukuna('front','live',true,0.8),600,0,300,600); g.drawImage(C.sukuna('back','live',true),900,0,300,600);
+g.drawImage(C.silhouette(C.sukuna('front','live',false,1)),1200,0,300,600); g.drawImage(C.monk(),1500,0,300,600);
+g.drawImage(C.sukFace('demon','live',true),0,600,380,380); g.drawImage(C.sukJanus(),400,600,380,380); g.drawImage(C.sukThree(false),800,600,380,380); g.drawImage(C.sukThree(true),1200,600,380,380); g.drawImage(C.sukFace('calm','wood',false),1600,600,380,380); window.done=true;
+</script></body></html>

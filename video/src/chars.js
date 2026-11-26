@@ -963,3 +963,82 @@ export function nachzehrer(pose = 'walk', mood = 'chew') { const c = cv2(512, 10
   return c; }
 MONSTERS['NACHZEHRER'] = () => nachzehrer('walk');
 export function nachFace(mood = 'chew') { const c = cv(512, 512), g = c.getContext('2d'); nachHead(g, 256, 230, 200, mood); return c; }
+
+// ------------------------------------------------------------- Folge 15: Ryomen Sukuna (nach der Sage: ein Koerper, zwei Gesichter, vier Arme, vier Beine)
+const SKP = { wood: { skin: '#8a5a32', skin2: '#6a4024', robe: '#5a3a20', robe2: '#4a2e18', hair: '#3a2414' }, live: { skin: '#b9b4ae', skin2: '#8e8882', robe: '#4a1616', robe2: '#2e0c0c', hair: '#0e0b0a' } };
+function grain(g, x, y, w, h, a = 0.25) { g.save(); g.globalAlpha = a; g.strokeStyle = '#2a160a'; g.lineWidth = 3; for (let i = 0; i < 14; i++) { const yy = y + (i + 0.5) * h / 14; g.beginPath(); g.moveTo(x, yy); g.bezierCurveTo(x + w * 0.3, yy - 8, x + w * 0.6, yy + 10, x + w, yy - 4); g.stroke(); } g.restore(); }
+function sukFaceDraw(g, cx, cy, r, kind, mat, open = false) { const C = SKP[mat];
+  if (kind === 'calm') {   // ruhiges Gesicht, Augen geschlossen (oder schmal offen)
+    for (const s of [-1, 1]) { if (open) { P(g, ell(cx + s * r * 0.36, cy - r * 0.05, r * 0.17, r * 0.06), '#0a0606', 0, 0); const gr = g.createRadialGradient(cx + s * r * 0.36, cy - r * 0.05, 1, cx + s * r * 0.36, cy - r * 0.05, r * 0.12); gr.addColorStop(0, '#fff6d0'); gr.addColorStop(0.4, 'rgba(255,200,80,.8)'); gr.addColorStop(1, 'rgba(255,200,80,0)'); g.fillStyle = gr; g.beginPath(); g.arc(cx + s * r * 0.36, cy - r * 0.05, r * 0.12, 0, 7); g.fill(); }
+      else curve(g, [cx + s * r * 0.52, cy - r * 0.05], [cx + s * r * 0.36, cy + r * 0.06], [cx + s * r * 0.2, cy - r * 0.05], r * 0.05);
+      line(g, [[cx + s * r * 0.55, cy - r * 0.25], [cx + s * r * 0.16, cy - r * 0.2]], r * 0.05); }
+    P(g, g => { g.moveTo(cx - r * 0.08, cy - r * 0.05); g.lineTo(cx - r * 0.12, cy + r * 0.3); g.lineTo(cx + r * 0.12, cy + r * 0.3); g.closePath(); }, C.skin2, r * 0.03, 0);
+    line(g, [[cx - r * 0.2, cy + r * 0.5], [cx + r * 0.2, cy + r * 0.5]], r * 0.05);
+  } else if (kind === 'demon') {  // hinteres Gesicht: weit aufgerissene Augen, viel zu breites Grinsen
+    for (const s of [-1, 1]) { P(g, ell(cx + s * r * 0.36, cy - r * 0.08, r * 0.2, r * 0.22), '#f2ead8', r * 0.04, 0); const gr = g.createRadialGradient(cx + s * r * 0.34, cy - r * 0.06, 1, cx + s * r * 0.34, cy - r * 0.06, r * 0.14);
+      if (open) { gr.addColorStop(0, '#fff'); gr.addColorStop(0.3, '#ff2a1a'); gr.addColorStop(1, 'rgba(120,0,0,1)'); } else { gr.addColorStop(0, '#1a0a06'); gr.addColorStop(1, '#1a0a06'); } g.fillStyle = gr; g.beginPath(); g.arc(cx + s * r * 0.34, cy - r * 0.06, r * 0.09, 0, 7); g.fill();
+      line(g, [[cx + s * r * 0.62, cy - r * 0.42], [cx + s * r * 0.14, cy - r * 0.28]], r * 0.07); }
+    P(g, g => { g.moveTo(cx - r * 0.62, cy + r * 0.3); g.quadraticCurveTo(cx, cy + r * 0.42, cx + r * 0.62, cy + r * 0.3); g.quadraticCurveTo(cx, cy + r * 0.95, cx - r * 0.62, cy + r * 0.3); g.closePath(); }, '#1a0606', r * 0.04, 0);
+    g.fillStyle = mat === 'wood' ? '#d8c09a' : '#ece4d0'; for (let i = -6; i <= 6; i++) { const x = cx + i * r * 0.085, y0 = cy + r * 0.33 + Math.abs(i) * -0.004 * r; g.beginPath(); g.moveTo(x - r * 0.035, y0); g.lineTo(x, y0 + r * 0.14); g.lineTo(x + r * 0.035, y0); g.fill(); const y1 = cy + r * 0.62 - Math.abs(i) * r * 0.035; g.beginPath(); g.moveTo(x - r * 0.03, y1 + r * 0.05); g.lineTo(x, y1 - r * 0.08); g.lineTo(x + r * 0.03, y1 + r * 0.05); g.fill(); }
+  } else if (kind === 'ben') {  // drittes Gesicht: Bens Gesicht, ins Holz geschnitzt, schreiend
+    P(g, g => { g.moveTo(cx - r * 0.75, cy - r * 0.35); g.quadraticCurveTo(cx - r * 0.4, cy - r * 0.9, cx, cy - r * 0.6); g.quadraticCurveTo(cx + r * 0.4, cy - r * 0.95, cx + r * 0.75, cy - r * 0.35); g.lineTo(cx + r * 0.5, cy - r * 0.45); g.lineTo(cx + r * 0.2, cy - r * 0.3); g.lineTo(cx - r * 0.1, cy - r * 0.48); g.lineTo(cx - r * 0.45, cy - r * 0.3); g.closePath(); }, C.skin2, r * 0.04, 0);
+    for (const s of [-1, 1]) { P(g, circ(cx + s * r * 0.34, cy, r * 0.17), open ? '#f2ead8' : '#2a160a', r * 0.04, 0); if (open) P(g, circ(cx + s * r * 0.33, cy + r * 0.02, r * 0.07), '#0a0606', 0, 0); line(g, [[cx + s * r * 0.55, cy - r * 0.2], [cx + s * r * 0.15, cy - r * 0.3]], r * 0.05); }
+    P(g, ell(cx, cy + r * 0.48, r * 0.16, r * 0.24), '#140a06', r * 0.04, 0);
+  } }
+function sukHead(g, cx, cy, r, mat, kind, open) { const C = SKP[mat];
+  P(g, ell(cx, cy, r * 0.86, r), C.skin, r * 0.06, 0.15); if (mat === 'wood') { g.save(); g.beginPath(); g.ellipse(cx, cy, r * 0.86, r, 0, 0, 7); g.clip(); grain(g, cx - r, cy - r, 2 * r, 2 * r, 0.22); g.restore(); }
+  // Haarknoten oben, Haar seitlich
+  P(g, ell(cx, cy - r * 0.95, r * 0.32, r * 0.22), C.hair, r * 0.05, 0);
+  P(g, g => { g.moveTo(cx - r * 0.86, cy + r * 0.1); g.bezierCurveTo(cx - r * 0.95, cy - r * 1.05, cx + r * 0.95, cy - r * 1.05, cx + r * 0.86, cy + r * 0.1); g.quadraticCurveTo(cx + r * 0.7, cy - r * 0.55, cx, cy - r * 0.62); g.quadraticCurveTo(cx - r * 0.7, cy - r * 0.55, cx - r * 0.86, cy + r * 0.1); }, C.hair, r * 0.05, 0);
+  sukFaceDraw(g, cx, cy + r * 0.1, r, kind, mat, open); }
+// Ganzkoerper. view: 'front' (ruhiges Gesicht) | 'back' (Daemonengesicht). mat: 'wood' | 'live'. walk: Schrittphase
+export function sukuna(view = 'front', mat = 'wood', open = false, walk = 0) { const c = cv2(512, 1024), g = c.getContext('2d'), C = SKP[mat];
+  const limb = (pts, w, col) => { line(g, pts, w + 9, OL); line(g, pts, w, col); };
+  const sw = Math.sin(walk) * 26;
+  if (mat === 'live') { g.strokeStyle = C.hair; g.lineCap = 'round'; for (let i = 0; i < 22; i++) { const x = 160 + i * 9, w = 10 + (i % 3) * 3; g.lineWidth = w; g.beginPath(); g.moveTo(256 + (x - 256) * 0.5, 170); g.bezierCurveTo(x - 30, 330, x + Math.sin(i * 1.7) * 30, 480, x + Math.sin(i * 2.3) * 24, 560 + (i % 5) * 26); g.stroke(); } }
+  // hinteres Beinpaar (dunkler), vorderes Beinpaar
+  for (const [x, d] of [[176, -sw], [336, sw]]) { limb([[x + 10, 700], [x - 2 + d * 0.5, 850], [x - 8 + d, 990]], 34, C.skin2); P(g, ell(x - 8 + d, 1000, 36, 16), C.skin2, 7, 0); }
+  for (const [x, d] of [[222, sw], [290, -sw]]) { limb([[x, 700], [x + d * 0.4, 850], [x + d, 992]], 38, C.skin); P(g, ell(x + d, 1002, 38, 17), C.skin, 7, 0); }
+  // unteres Armpaar (hinter dem Koerper ansetzend)
+  for (const s of [-1, 1]) { limb([[256 + s * 80, 500], [256 + s * 170, 600], [256 + s * 190, 740]], 30, C.skin2); claw(g, 256 + s * 190, 742, s, C.skin2); }
+  // Gewand
+  P(g, g => { g.moveTo(170, 360); g.quadraticCurveTo(256, 330, 342, 360); g.lineTo(372, 720); g.lineTo(140, 720); g.closePath(); }, C.robe, 9, 0.2);
+  P(g, g => { g.moveTo(256, 352); g.lineTo(226, 720); g.lineTo(286, 720); g.closePath(); }, C.robe2, 6, 0);
+  P(g, rr(160, 520, 192, 34, 8), mat === 'wood' ? '#3a2414' : '#c9a040', 6, 0);
+  if (mat === 'wood') { g.save(); g.beginPath(); g.moveTo(170, 360); g.lineTo(342, 360); g.lineTo(372, 720); g.lineTo(140, 720); g.clip(); grain(g, 140, 360, 232, 360, 0.3); g.restore(); }
+  // oberes Armpaar
+  for (const s of [-1, 1]) { limb([[256 + s * 86, 380], [256 + s * 175, 470], [256 + s * 215, 600]], 34, C.skin); claw(g, 256 + s * 215, 602, s, C.skin); }
+  sukHead(g, 256, 230, 112, mat, view === 'front' ? 'calm' : 'demon', open);
+  return c; }
+function claw(g, x, y, s, col) { P(g, circ(x, y, 24), col, 7, 0); for (let k = -1; k <= 2; k++) line(g, [[x + k * 9 * s, y + 10], [x + k * 13 * s, y + 52], [x + k * 15 * s, y + 70]], 7, '#2a1a12'); }
+export function sukFace(kind = 'demon', mat = 'live', open = true) { const c = cv(512, 512), g = c.getContext('2d'); sukHead(g, 256, 270, 210, mat, kind, open); return c; }
+// Zwei Gesichter im Profil: links ruhig, rechts Daemon
+export function sukJanus(mat = 'live', open = true) { const c = cv(512, 512), g = c.getContext('2d'), C = SKP[mat], cx = 256, cy = 280, r = 200;
+  P(g, ell(cx, cy, r * 0.8, r * 0.95), C.skin, 10, 0.12); P(g, ell(cx, cy - r * 0.95, r * 0.3, r * 0.2), C.hair, 8, 0);
+  P(g, g => { g.ellipse(cx, cy - r * 0.45, r * 0.78, r * 0.55, 0, Math.PI, 2 * Math.PI); g.quadraticCurveTo(cx, cy - r * 0.62, cx - r * 0.78, cy - r * 0.45); }, C.hair, 8, 0);
+  g.strokeStyle = C.hair; g.lineWidth = 7; for (let i = 0; i < 9; i++) { const x = cx - r * 0.5 + i * r * 0.125; g.beginPath(); g.moveTo(x, cy - r * 0.6); g.quadraticCurveTo(x + Math.sin(i) * 20, cy - r * 0.2, x + Math.sin(i * 2) * 14, cy + r * (0.05 + (i % 3) * 0.08)); g.stroke(); }
+  // linke Nase + ruhiges Auge
+  P(g, g => { g.moveTo(cx - r * 0.78, cy - r * 0.1); g.lineTo(cx - r * 0.98, cy + r * 0.2); g.lineTo(cx - r * 0.78, cy + r * 0.25); g.closePath(); }, C.skin, 8, 0); curve(g, [cx - r * 0.66, cy - r * 0.1], [cx - r * 0.56, cy - r * 0.02], [cx - r * 0.46, cy - r * 0.1], 8); line(g, [[cx - r * 0.8, cy + r * 0.45], [cx - r * 0.6, cy + r * 0.45]], 8);
+  // rechte Nase, aufgerissenes Auge, Grinsen bis zum Ohr
+  P(g, g => { g.moveTo(cx + r * 0.78, cy - r * 0.1); g.lineTo(cx + r * 0.98, cy + r * 0.2); g.lineTo(cx + r * 0.78, cy + r * 0.25); g.closePath(); }, C.skin, 8, 0); P(g, circ(cx + r * 0.55, cy - r * 0.1, r * 0.14), '#f2ead8', 7, 0);
+  const gr = g.createRadialGradient(cx + r * 0.58, cy - r * 0.1, 1, cx + r * 0.58, cy - r * 0.1, r * 0.08); gr.addColorStop(0, '#fff'); gr.addColorStop(0.4, open ? '#ff2a1a' : '#1a0a06'); gr.addColorStop(1, open ? '#800' : '#1a0a06'); g.fillStyle = gr; g.beginPath(); g.arc(cx + r * 0.58, cy - r * 0.1, r * 0.07, 0, 7); g.fill();
+  P(g, g => { g.moveTo(cx + r * 0.85, cy + r * 0.4); g.quadraticCurveTo(cx + r * 0.5, cy + r * 0.5, cx + r * 0.25, cy + r * 0.3); g.quadraticCurveTo(cx + r * 0.5, cy + r * 0.8, cx + r * 0.8, cy + r * 0.55); g.closePath(); }, '#1a0606', 7, 0);
+  g.fillStyle = '#ece4d0'; for (let i = 0; i < 6; i++) { const x = cx + r * (0.32 + i * 0.09); g.beginPath(); g.moveTo(x, cy + r * 0.36 + i * 4); g.lineTo(x + 6, cy + r * 0.46 + i * 4); g.lineTo(x + 12, cy + r * 0.37 + i * 4); g.fill(); }
+  return c; }
+// Statue mit drittem Gesicht (Ben) an der Seite des Kopfes
+export function sukThree(open = false) { const c = cv(512, 512), g = c.getContext('2d'); sukHead(g, 210, 290, 170, 'wood', 'calm', false);
+  g.save(); g.translate(400, 300); g.rotate(0.25); P(g, ell(0, 0, 100, 125), SKP.wood.skin, 8, 0.2); sukFaceDraw(g, 0, 10, 120, 'ben', 'wood', open); g.restore(); return c; }
+export function silhouette(src, col = '#000') { const c = cv(src.width, src.height), g = c.getContext('2d'); g.drawImage(src, 0, 0); g.globalCompositeOperation = 'source-in'; g.fillStyle = col; g.fillRect(0, 0, c.width, c.height); return c; }
+export function monk(lamp = true) { const c = cv2(512, 1024), g = c.getContext('2d'), SKM = '#e8c39a';
+  P(g, ell(214, 990, 40, 18), '#2a2420', 7, 0); P(g, ell(298, 990, 40, 18), '#2a2420', 7, 0);
+  P(g, g => { g.moveTo(170, 430); g.quadraticCurveTo(256, 400, 342, 430); g.lineTo(380, 980); g.lineTo(132, 980); g.closePath(); }, '#55524c', 10, 0.18);
+  P(g, g => { g.moveTo(190, 430); g.lineTo(330, 430); g.lineTo(300, 980); g.lineTo(230, 980); g.lineTo(196, 700); g.closePath(); }, '#c8762a', 8, 0.15);
+  P(g, rr(110, 470, 66, 260, 30), '#55524c'); P(g, rr(336, 470, 66, 220, 30), '#55524c'); P(g, circ(142, 740, 28), SKM, 8, 0);
+  if (lamp) { line(g, [[372, 690], [372, 760]], 6); const gr = g.createRadialGradient(372, 830, 10, 372, 830, 130); gr.addColorStop(0, 'rgba(255,200,110,.6)'); gr.addColorStop(1, 'rgba(255,200,110,0)'); g.fillStyle = gr; g.fillRect(242, 700, 260, 260); P(g, rr(330, 760, 84, 120, 30), '#ffd890', 7, 0); line(g, [[332, 800], [412, 800]], 4, '#c08040'); line(g, [[332, 840], [412, 840]], 4, '#c08040'); }
+  P(g, circ(368, 690, 28), SKM, 8, 0);
+  // Kopf: kahl, alt, ernst
+  P(g, ell(256, 290, 118, 132), SKM, 10, 0.14); P(g, circ(142, 300, 24), SKM, 8, 0); P(g, circ(370, 300, 24), SKM, 8, 0);
+  for (const s of [-1, 1]) { line(g, [[256 + s * 70, 268], [256 + s * 30, 262]], 10, '#e8e4dc'); curve(g, [256 + s * 66, 296], [256 + s * 50, 302], [256 + s * 34, 296], 7); curve(g, [256 + s * 90, 340], [256 + s * 80, 360], [256 + s * 70, 372], 4, 'rgba(60,30,10,.5)'); }
+  line(g, [[220, 380], [292, 380]], 7); curve(g, [226, 214], [256, 206], [286, 214], 4, 'rgba(60,30,10,.4)'); curve(g, [232, 232], [256, 226], [280, 232], 4, 'rgba(60,30,10,.4)');
+  return c; }
+MONSTERS['RYŌMEN SUKUNA'] = () => sukuna('back', 'live', true);
