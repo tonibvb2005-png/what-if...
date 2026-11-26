@@ -5,7 +5,7 @@ Bild für Bild gemessen: Farbe, Helligkeit, jeder Schnitt, Einstellungsgrößen,
 **Datengrundlage**
 - 1 komplettes Referenzvideo in 30 fps („The Ancient Jar That Warned An Empire“, TikTok, 64,8 s)
 - 10 Referenz-Shorts über die YouTube-Storyboards (etwa 1 Bild pro Sekunde) mit den Wort-Zeitstempeln der Untertitel
-- Unsere Videos #01 Leuchtturm und #02 Gimli in der alten Fassung
+- Unsere Videos #01 Leuchtturm und #02 Gimli in der alten Fassung. Neu umgesetzt wurde nur #02 Gimli, #01 Leuchtturm war bereits gepostet und bleibt unverändert.
 
 Die Messwerte sind gerundet. Die Skripte zur Messung liegen nicht im Repo, nur die Ergebnisse.
 
@@ -13,10 +13,10 @@ Die Messwerte sind gerundet. Die Skripte zur Messung liegen nicht im Repo, nur d
 
 ## 1. Timing und Tempo
 
-| | Referenz | Unsere alte Fassung | Neue Fassung |
+| | Referenz | Unsere alte Fassung | Gimli neu |
 |---|---|---|---|
-| Wörter pro Sekunde | **3,3 – 3,8** (Mittel ≈ 3,6) | 2,9 | **3,5 / 3,6** |
-| Videolänge | 55 – 67 s | 70 / 73 s | 57 / 60 s |
+| Wörter pro Sekunde | **3,3 – 3,8** (Mittel ≈ 3,6) | 2,9 | **3,5** |
+| Videolänge | 55 – 67 s | 70 / 73 s | 60 s |
 | Pausen > 0,15 s (Summe) | kurz und knapp | ≈ 13 s pro Video | ≈ 5 s |
 
 **Was wir geändert haben:** Die Pausen in der Sprachspur sind gekürzt, nur dramatische Pausen („…“) bleiben länger. Dazu ist die Stimme um 8 % schneller, die Tonhöhe bleibt gleich. Alle Schnitte und Soundeffekte sind danach neu getimt.
@@ -58,12 +58,12 @@ Figuren sind bei der Referenz in etwa 75 % der Einstellungen im Bild. Gimli hatt
 
 Mittelwerte über alle Bilder (Helligkeit 0–1):
 
-| | Referenz (11 Videos) | #01 alt | #02 alt | Neu (Vorschau) |
+| | Referenz (11 Videos) | #01 alt | #02 alt | Gimli neu |
 |---|---|---|---|---|
-| Helligkeit | **0,41** | 0,50 | 0,55 | ≈ 0,41 |
+| Helligkeit | **0,41** | 0,50 | 0,55 | 0,43 |
 | Schwankung über die Zeit | 0,11 | 0,12 | 0,08 | – |
-| Sättigung | 0,40 | 0,40 | 0,35 | ≈ 0,40 |
-| Warm/Kalt (R−B) | **+0,02** (neutral bis warm) | −0,12 (kalt) | −0,07 (kalt) | ≈ +0,05 |
+| Sättigung | 0,40 | 0,40 | 0,35 | 0,48 |
+| Warm/Kalt (R−B) | **+0,02** (neutral bis warm) | −0,12 (kalt) | −0,07 (kalt) | +0,01 |
 | Farbanteile | ≈ ⅓ Rot/Orange, ⅓ Cyan/Blau | ≈ ⅔ Himmelblau | ≈ ⅔ Himmelblau | ausgeglichener |
 
 **So sieht die Referenz aus:**
@@ -87,7 +87,7 @@ Mittelwerte über alle Bilder (Helligkeit 0–1):
 5. **Auflösung (≈ 45–55 s):** „Well, it's called X.“ Mit Erklärgrafik oder einem Blick ins Innere.
 6. **Pointe (letzte 3–5 s):** ein Callback auf eine Nebenfigur oder ein ironisches Ende.
 
-Unsere beiden Skripte folgen diesem Muster schon. Mit dem neuen Tempo landen die Beats jetzt auch an den richtigen Sekunden.
+Unsere beiden Skripte folgen diesem Muster schon. Im neuen Gimli-Video landen die Beats durch das schnellere Tempo jetzt auch an den richtigen Sekunden.
 
 ## Checkliste für neue Videos
 
