@@ -1018,12 +1018,16 @@ export function sukJanus(mat = 'live', open = true) { const c = cv(512, 512), g 
   P(g, g => { g.ellipse(cx, cy - r * 0.45, r * 0.78, r * 0.55, 0, Math.PI, 2 * Math.PI); g.quadraticCurveTo(cx, cy - r * 0.62, cx - r * 0.78, cy - r * 0.45); }, C.hair, 8, 0);
   g.strokeStyle = C.hair; g.lineWidth = 7; for (let i = 0; i < 9; i++) { const x = cx - r * 0.5 + i * r * 0.125; g.beginPath(); g.moveTo(x, cy - r * 0.6); g.quadraticCurveTo(x + Math.sin(i) * 20, cy - r * 0.2, x + Math.sin(i * 2) * 14, cy + r * (0.05 + (i % 3) * 0.08)); g.stroke(); }
   // linke Nase + ruhiges Auge
-  P(g, g => { g.moveTo(cx - r * 0.78, cy - r * 0.1); g.lineTo(cx - r * 0.98, cy + r * 0.2); g.lineTo(cx - r * 0.78, cy + r * 0.25); g.closePath(); }, C.skin, 8, 0); curve(g, [cx - r * 0.66, cy - r * 0.1], [cx - r * 0.56, cy - r * 0.02], [cx - r * 0.46, cy - r * 0.1], 8); line(g, [[cx - r * 0.8, cy + r * 0.45], [cx - r * 0.6, cy + r * 0.45]], 8);
+  P(g, g => { g.moveTo(cx - r * 0.78, cy - r * 0.1); g.lineTo(cx - r * 0.98, cy + r * 0.2); g.lineTo(cx - r * 0.78, cy + r * 0.25); g.closePath(); }, C.skin, 8, 0); curve(g, [cx - r * 0.66, cy - r * 0.1], [cx - r * 0.56, cy - r * 0.02], [cx - r * 0.46, cy - r * 0.1], 8); line(g, [[cx - r * 0.7, cy + r * 0.45], [cx - r * 0.52, cy + r * 0.45]], 8);
   // rechte Nase, aufgerissenes Auge, Grinsen bis zum Ohr
   P(g, g => { g.moveTo(cx + r * 0.78, cy - r * 0.1); g.lineTo(cx + r * 0.98, cy + r * 0.2); g.lineTo(cx + r * 0.78, cy + r * 0.25); g.closePath(); }, C.skin, 8, 0); P(g, circ(cx + r * 0.55, cy - r * 0.1, r * 0.14), '#f2ead8', 7, 0);
   const gr = g.createRadialGradient(cx + r * 0.58, cy - r * 0.1, 1, cx + r * 0.58, cy - r * 0.1, r * 0.08); gr.addColorStop(0, '#fff'); gr.addColorStop(0.4, open ? '#ff2a1a' : '#1a0a06'); gr.addColorStop(1, open ? '#800' : '#1a0a06'); g.fillStyle = gr; g.beginPath(); g.arc(cx + r * 0.58, cy - r * 0.1, r * 0.07, 0, 7); g.fill();
-  P(g, g => { g.moveTo(cx + r * 0.85, cy + r * 0.4); g.quadraticCurveTo(cx + r * 0.5, cy + r * 0.5, cx + r * 0.25, cy + r * 0.3); g.quadraticCurveTo(cx + r * 0.5, cy + r * 0.8, cx + r * 0.8, cy + r * 0.55); g.closePath(); }, '#1a0606', 7, 0);
-  g.fillStyle = '#ece4d0'; for (let i = 0; i < 6; i++) { const x = cx + r * (0.32 + i * 0.09); g.beginPath(); g.moveTo(x, cy + r * 0.36 + i * 4); g.lineTo(x + 6, cy + r * 0.46 + i * 4); g.lineTo(x + 12, cy + r * 0.37 + i * 4); g.fill(); }
+  // Grinsen im Profil: beginnt an der Gesichtskante unter der Nase und reisst bis zur Wange auf (innerhalb des Kopfes)
+  g.save(); g.beginPath(); g.ellipse(cx, cy, r * 0.8 - 5, r * 0.95 - 5, 0, 0, 7); g.clip();
+  const mouth = g => { g.moveTo(cx + r * 0.82, cy + r * 0.34); g.quadraticCurveTo(cx + r * 0.5, cy + r * 0.4, cx + r * 0.22, cy + r * 0.26); g.quadraticCurveTo(cx + r * 0.42, cy + r * 0.72, cx + r * 0.82, cy + r * 0.62); g.closePath(); };
+  P(g, mouth, '#1a0606', 7, 0); g.beginPath(); mouth(g); g.clip();
+  g.fillStyle = '#ece4d0'; for (let i = 0; i < 6; i++) { const x = cx + r * (0.3 + i * 0.085), yt = cy + r * (0.31 + (5 - i) * 0.012), yb = cy + r * (0.56 + i * 0.012); g.beginPath(); g.moveTo(x - 7, yt - 6); g.lineTo(x, yt + 20); g.lineTo(x + 7, yt - 6); g.fill(); g.beginPath(); g.moveTo(x - 6, yb + 30); g.lineTo(x, yb + 4); g.lineTo(x + 6, yb + 30); g.fill(); }
+  g.restore();
   return c; }
 // Statue mit drittem Gesicht (Ben) an der Seite des Kopfes
 export function sukThree(open = false) { const c = cv(512, 512), g = c.getContext('2d'); sukHead(g, 210, 290, 170, 'wood', 'calm', false);

@@ -1,0 +1,5 @@
+<!doctype html><html><body style="margin:0;background:#556"><canvas id=c width=1000 height=520></canvas>
+<script type=module>
+import * as C from '../src/chars.js';
+const g=document.getElementById('c').getContext('2d'); g.drawImage(C.sukJanus('live',true),0,0,500,500); g.drawImage(C.sukJanus('wood',false),500,0,500,500); window.done=true;
+</script></body></html>
