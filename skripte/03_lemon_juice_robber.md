@@ -28,7 +28,7 @@
 | Stimme | **Hank**, dieselbe wie bei #01 und #02 |
 | Modell / Settings | wie bisher (v3, Stability „Natural“) |
 | **Speed** | **1,08–1,10** (neu, Ergebnis der Referenz-Analyse) |
-| Tempo-Ziel | ca. **3,5 Wörter pro Sekunde**. 212 Wörter ergeben ca. **60 s** |
+| Tempo-Ziel | ca. **3,5 Wörter pro Sekunde**. 211 Wörter ergeben ca. **60 s** |
 | Pausen | kurz halten. Nur die zwei „…“-Stellen dürfen länger sein |
 | Export | **eine** Datei, MP3 oder WAV, ohne Musik |
 
