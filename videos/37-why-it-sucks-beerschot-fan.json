@@ -1,0 +1,388 @@
+{
+  "title": "Why it sucks being a Beerschot fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "beer",
+  "clubAt": 2.8,
+  "article": "A",
+  "fanKit": {
+    "shirt": "#5b2d86",
+    "trim": "#ffffff",
+    "pants": "#ffffff"
+  },
+  "flatCrowd": [
+    "#5b2d86",
+    "#5b2d86",
+    "#ffffff",
+    "#8a6ad0"
+  ],
+  "scarf": [
+    "#5b2d86",
+    "#ffffff"
+  ],
+  "tagLine": "NOT AN ANTWERP FAN 💜",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Beerschot fan!",
+      "club": "BEERSCHOT",
+      "seed": 37,
+      "audio": "../audio/37-why-it-sucks-beerschot-fan/01.wav",
+      "wordTimes": [
+        0,
+        0.28,
+        0.42,
+        0.84,
+        1.32,
+        2.8,
+        3.35
+      ],
+      "cues": {
+        "land": 2.8
+      },
+      "pad": 0.35
+    },
+    {
+      "shot": "bs5",
+      "text": "It starts when you're five. Your club goes bankrupt. Gone. So the fans start again. In the fourth division.",
+      "club": "BEERSCHOT",
+      "seed": 37,
+      "cueWords": {
+        "gone": "Gone",
+        "start": "So"
+      },
+      "audio": "../audio/37-why-it-sucks-beerschot-fan/02.wav",
+      "wordTimes": [
+        0.1,
+        0.52,
+        1.32,
+        1.5,
+        1.7,
+        2.24,
+        2.26,
+        2.44,
+        2.68,
+        3.66,
+        4.12,
+        4.12,
+        4.24,
+        4.46,
+        4.72,
+        5.36,
+        5.44,
+        5.58,
+        5.86
+      ],
+      "cues": {
+        "gone": 3.66,
+        "start": 4.12
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "bs8",
+      "text": "Age eight. Your away games are against villages. One of them has a cow next to the pitch. The cow has more fans than you.",
+      "club": "BEERSCHOT",
+      "seed": 37,
+      "cueWords": {
+        "one": "One",
+        "cow": [
+          "The",
+          2
+        ]
+      },
+      "audio": "../audio/37-why-it-sucks-beerschot-fan/03.wav",
+      "wordTimes": [
+        0.1,
+        0.1,
+        1.08,
+        1.08,
+        1.32,
+        1.64,
+        1.82,
+        2.04,
+        3.02,
+        3.1,
+        3.2,
+        3.28,
+        3.42,
+        3.64,
+        3.9,
+        4.14,
+        4.3,
+        4.4,
+        4.96,
+        5.06,
+        5.42,
+        5.7,
+        5.9,
+        6.28,
+        6.54
+      ],
+      "cues": {
+        "one": 3.02,
+        "cow": 4.96
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "bs11",
+      "text": "Age eleven. Promoted to the first division! You made it back! Two years later... you finish last.",
+      "club": "BEERSCHOT",
+      "seed": 37,
+      "cueWords": {
+        "two": "Two"
+      },
+      "audio": "../audio/37-why-it-sucks-beerschot-fan/04.wav",
+      "wordTimes": [
+        0.1,
+        0.18,
+        0.84,
+        1.12,
+        1.26,
+        1.38,
+        1.6,
+        2.32,
+        2.42,
+        2.62,
+        2.76,
+        3.48,
+        3.66,
+        3.86,
+        4.58,
+        4.68,
+        4.94
+      ],
+      "cues": {
+        "two": 3.48
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "bs13",
+      "text": "Age thirteen. Your colours are purple and white. Everyone thinks you're Anderlecht. That's worse than relegation.",
+      "club": "BEERSCHOT",
+      "seed": 37,
+      "cueWords": {
+        "and": "Everyone",
+        "worse": "That's"
+      },
+      "audio": "../audio/37-why-it-sucks-beerschot-fan/05.wav",
+      "wordTimes": [
+        0.1,
+        0.2,
+        0.98,
+        1.06,
+        1.36,
+        1.64,
+        1.92,
+        2.26,
+        2.98,
+        3.16,
+        3.44,
+        3.68,
+        4.3,
+        4.52,
+        4.66,
+        4.88
+      ],
+      "cues": {
+        "and": 2.98,
+        "worse": 4.3
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "bs15",
+      "text": "Age fifteen. Your city rival wins the league. You win... the second division. Your Antwerp friends send you a congratulations card. It says: \"Cute.\"",
+      "club": "BEERSCHOT",
+      "seed": 37,
+      "cueWords": {
+        "win": "You",
+        "card": [
+          "Your",
+          2
+        ],
+        "cute": "It"
+      },
+      "audio": "../audio/37-why-it-sucks-beerschot-fan/06.wav",
+      "wordTimes": [
+        0.1,
+        0.26,
+        0.98,
+        1.04,
+        1.28,
+        1.64,
+        1.92,
+        2.14,
+        2.38,
+        2.66,
+        2.94,
+        3.46,
+        3.72,
+        4.4,
+        4.42,
+        4.88,
+        5.08,
+        5.3,
+        5.46,
+        5.56,
+        6.08,
+        6.78,
+        6.84,
+        7.62
+      ],
+      "cues": {
+        "win": 2.38,
+        "card": 4.4,
+        "cute": 6.78
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "bs17",
+      "text": "Age seventeen. Relegated. Again. At this point, the second division feels like home.",
+      "club": "BEERSCHOT",
+      "seed": 37,
+      "cueWords": {
+        "home": "At"
+      },
+      "audio": "../audio/37-why-it-sucks-beerschot-fan/07.wav",
+      "wordTimes": [
+        0.1,
+        0.1,
+        1.06,
+        1.68,
+        2.24,
+        2.3,
+        2.46,
+        2.96,
+        3.16,
+        3.36,
+        3.68,
+        3.94,
+        4.18
+      ],
+      "cues": {
+        "home": 2.24
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "bsthing",
+      "text": "That's the thing about being a Beerschot fan. Your club died... and you still showed up.",
+      "club": "BEERSCHOT",
+      "seed": 37,
+      "cueWords": {
+        "died": "Your",
+        "showed": "and"
+      },
+      "audio": "../audio/37-why-it-sucks-beerschot-fan/08.wav",
+      "wordTimes": [
+        0.1,
+        0.28,
+        0.4,
+        0.54,
+        0.76,
+        0.98,
+        1.16,
+        1.5,
+        1.96,
+        2.08,
+        2.34,
+        2.74,
+        3.04,
+        3.2,
+        3.46,
+        3.76
+      ],
+      "cues": {
+        "died": 1.96,
+        "showed": 2.74
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "bsstill",
+      "text": "Bankrupt. Fourth division. Relegated twice. Still here. Still purple. Still not Anderlecht.",
+      "club": "BEERSCHOT",
+      "seed": 37,
+      "cueWords": {
+        "bank": "Bankrupt",
+        "fourth": "Fourth",
+        "rel": "Relegated",
+        "s1": [
+          "Still",
+          1
+        ],
+        "s2": [
+          "Still",
+          2
+        ],
+        "s3": [
+          "Still",
+          3
+        ]
+      },
+      "audio": "../audio/37-why-it-sucks-beerschot-fan/09.wav",
+      "wordTimes": [
+        0.1,
+        0.52,
+        0.52,
+        1.16,
+        1.56,
+        2.4,
+        2.54,
+        3.3,
+        3.48,
+        4.28,
+        4.46,
+        4.76
+      ],
+      "cues": {
+        "bank": 0.1,
+        "fourth": 0.52,
+        "rel": 1.16,
+        "s1": 2.4,
+        "s2": 3.3,
+        "s3": 4.28
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a Beerschot fan. Not an Antwerp fan. And which club is next? Drop it in the comments!",
+      "club": "BEERSCHOT",
+      "seed": 37,
+      "cueWords": {
+        "next": "And"
+      },
+      "audio": "../audio/37-why-it-sucks-beerschot-fan/10.wav",
+      "wordTimes": [
+        0.1,
+        0.22,
+        0.34,
+        0.74,
+        1.36,
+        1.42,
+        1.6,
+        2.08,
+        2.48,
+        2.7,
+        2.88,
+        3.1,
+        3.24,
+        3.94,
+        4.08,
+        4.18,
+        4.26,
+        4.38
+      ],
+      "cues": {
+        "next": 2.48
+      },
+      "pad": 0.9
+    }
+  ],
+  "punch": true
+}

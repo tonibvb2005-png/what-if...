@@ -1,0 +1,126 @@
+{
+  "title": "Why it sucks being a Leeds United fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "leeds",
+  "clubAt": 3.0,
+  "article": "A",
+  "fanKit": {
+    "shirt": "#ffffff",
+    "trim": "#1d428a",
+    "pants": "#ffffff"
+  },
+  "flatCrowd": [
+    "#ffffff",
+    "#1d428a",
+    "#ffcd00",
+    "#ffffff"
+  ],
+  "scarf": [
+    "#1d428a",
+    "#ffcd00"
+  ],
+  "tagLine": "WHO'S STILL MARCHING 💛💙",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Leeds United fan!",
+      "club": "LEEDS UNITED",
+      "seed": 38
+    },
+    {
+      "shot": "ld5",
+      "text": "It starts when you're five. You're in the third division. Your dad talks about Champions League nights. You think the Champions League is a video game.",
+      "club": "LEEDS UNITED",
+      "seed": 38,
+      "cueWords": {
+        "dad": "Your",
+        "game": "You"
+      }
+    },
+    {
+      "shot": "ld9",
+      "text": "Age nine. New owner. Six managers in two years. You stop learning their names. So does the owner.",
+      "club": "LEEDS UNITED",
+      "seed": 38,
+      "cueWords": {
+        "stop": "You",
+        "owner": "So"
+      }
+    },
+    {
+      "shot": "ld13",
+      "text": "Age thirteen. A legendary coach arrives. He sends a spy to watch the other team's training. He gets caught. So he gives a press conference... explaining how spying works. For an hour.",
+      "club": "LEEDS UNITED",
+      "seed": 38,
+      "cueWords": {
+        "spy": [
+          "He",
+          1
+        ],
+        "caught": [
+          "He",
+          2
+        ],
+        "press": "So",
+        "hour": "For"
+      }
+    },
+    {
+      "shot": "ld15",
+      "text": "Age fifteen. Promoted! After sixteen years! Fans aren't allowed in the stadium. So the whole city parties outside it instead.",
+      "club": "LEEDS UNITED",
+      "seed": 38,
+      "cueWords": {
+        "fans": "Fans",
+        "party": "So"
+      }
+    },
+    {
+      "shot": "ld17",
+      "text": "Age seventeen. Last day of the season. You survive! Safe! The next season... you don't.",
+      "club": "LEEDS UNITED",
+      "seed": 38,
+      "cueWords": {
+        "safe": "You",
+        "next": [
+          "The",
+          2
+        ]
+      }
+    },
+    {
+      "shot": "ldthing",
+      "text": "That's the thing about being a Leeds fan. Everyone calls you \"Dirty Leeds\". You take it as a compliment.",
+      "club": "LEEDS UNITED",
+      "seed": 38,
+      "cueWords": {
+        "dirty": "Everyone",
+        "comp": "You"
+      }
+    },
+    {
+      "shot": "ldmot",
+      "text": "Up. Down. Spied on. Sold out. Marching on together.",
+      "club": "LEEDS UNITED",
+      "seed": 38,
+      "cueWords": {
+        "up": "Up",
+        "down": "Down",
+        "spied": "Spied",
+        "sold": "Sold",
+        "mot": "Marching"
+      }
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a Leeds fan who's still marching. And which club is next? Drop it in the comments!",
+      "club": "LEEDS UNITED",
+      "seed": 38,
+      "cueWords": {
+        "next": "And"
+      }
+    }
+  ],
+  "titleBg": "#1d428a"
+}

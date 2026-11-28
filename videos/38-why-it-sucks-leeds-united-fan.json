@@ -1,0 +1,366 @@
+{
+  "title": "Why it sucks being a Leeds United fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "leeds",
+  "clubAt": 3.0,
+  "article": "A",
+  "fanKit": {
+    "shirt": "#ffffff",
+    "trim": "#1d428a",
+    "pants": "#ffffff"
+  },
+  "flatCrowd": [
+    "#ffffff",
+    "#1d428a",
+    "#ffcd00",
+    "#ffffff"
+  ],
+  "scarf": [
+    "#1d428a",
+    "#ffcd00"
+  ],
+  "tagLine": "WHO'S STILL MARCHING 💛💙",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Leeds United fan!",
+      "club": "LEEDS UNITED",
+      "seed": 38,
+      "audio": "../audio/38-why-it-sucks-leeds-united-fan/01.wav",
+      "wordTimes": [
+        0,
+        0.32,
+        0.46,
+        0.92,
+        1.42,
+        3.0,
+        3.3,
+        3.9
+      ],
+      "cues": {
+        "land": 3.0
+      },
+      "pad": 0.35
+    },
+    {
+      "shot": "ld5",
+      "text": "It starts when you're five. You're in the third division. Your dad talks about Champions League nights. You think the Champions League is a video game.",
+      "club": "LEEDS UNITED",
+      "seed": 38,
+      "cueWords": {
+        "dad": "Your",
+        "game": "You"
+      },
+      "audio": "../audio/38-why-it-sucks-leeds-united-fan/02.wav",
+      "wordTimes": [
+        0.1,
+        0.16,
+        0.4,
+        0.62,
+        0.86,
+        1.38,
+        1.44,
+        1.52,
+        1.64,
+        1.88,
+        2.58,
+        2.64,
+        2.9,
+        3.16,
+        3.42,
+        3.92,
+        4.14,
+        4.94,
+        5.02,
+        5.2,
+        5.34,
+        5.64,
+        5.86,
+        5.96,
+        6.08,
+        6.26
+      ],
+      "cues": {
+        "dad": 2.58,
+        "game": 4.94
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "ld9",
+      "text": "Age nine. New owner. Six managers in two years. You stop learning their names. So does the owner.",
+      "club": "LEEDS UNITED",
+      "seed": 38,
+      "cueWords": {
+        "stop": "You",
+        "owner": "So"
+      },
+      "audio": "../audio/38-why-it-sucks-leeds-united-fan/03.wav",
+      "wordTimes": [
+        0.1,
+        0.1,
+        0.8,
+        0.84,
+        1.58,
+        1.66,
+        2.12,
+        2.48,
+        2.76,
+        3.58,
+        3.68,
+        3.92,
+        4.14,
+        4.36,
+        5.14,
+        5.28,
+        5.42,
+        5.54
+      ],
+      "cues": {
+        "stop": 3.58,
+        "owner": 5.14
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "ld13",
+      "text": "Age thirteen. A legendary coach arrives. He sends a spy to watch the other team's training. He gets caught. So he gives a press conference... explaining how spying works. For an hour.",
+      "club": "LEEDS UNITED",
+      "seed": 38,
+      "cueWords": {
+        "spy": [
+          "He",
+          1
+        ],
+        "caught": [
+          "He",
+          2
+        ],
+        "press": "So",
+        "hour": "For"
+      },
+      "audio": "../audio/38-why-it-sucks-leeds-united-fan/04.wav",
+      "wordTimes": [
+        0.1,
+        0.55,
+        1.0,
+        1.1,
+        1.48,
+        1.84,
+        2.84,
+        3.02,
+        3.18,
+        3.34,
+        3.66,
+        3.9,
+        4.08,
+        4.26,
+        4.46,
+        4.8,
+        5.4,
+        5.5,
+        5.62,
+        6.3,
+        6.52,
+        6.62,
+        6.74,
+        6.9,
+        7.1,
+        7.58,
+        8.18,
+        8.52,
+        8.86,
+        9.28,
+        9.8,
+        9.94
+      ],
+      "cues": {
+        "spy": 2.84,
+        "caught": 5.4,
+        "press": 6.3,
+        "hour": 9.28
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "ld15",
+      "text": "Age fifteen. Promoted! After sixteen years! Fans aren't allowed in the stadium. So the whole city parties outside it instead.",
+      "club": "LEEDS UNITED",
+      "seed": 38,
+      "cueWords": {
+        "fans": "Fans",
+        "party": "So"
+      },
+      "audio": "../audio/38-why-it-sucks-leeds-united-fan/05.wav",
+      "wordTimes": [
+        0.1,
+        0.63,
+        1.16,
+        1.64,
+        2.16,
+        2.68,
+        3.22,
+        3.8,
+        4.08,
+        4.32,
+        4.48,
+        4.58,
+        5.16,
+        5.32,
+        5.44,
+        5.66,
+        5.88,
+        6.26,
+        6.7,
+        7.0
+      ],
+      "cues": {
+        "fans": 3.22,
+        "party": 5.16
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "ld17",
+      "text": "Age seventeen. Last day of the season. You survive! Safe! The next season... you don't.",
+      "club": "LEEDS UNITED",
+      "seed": 38,
+      "cueWords": {
+        "safe": "You",
+        "next": [
+          "The",
+          2
+        ]
+      },
+      "audio": "../audio/38-why-it-sucks-leeds-united-fan/06.wav",
+      "wordTimes": [
+        0.1,
+        0.61,
+        1.12,
+        1.26,
+        1.5,
+        1.6,
+        1.72,
+        2.32,
+        2.4,
+        3.22,
+        3.96,
+        4.04,
+        4.22,
+        4.98,
+        5.04
+      ],
+      "cues": {
+        "safe": 2.32,
+        "next": 3.96
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "ldthing",
+      "text": "That's the thing about being a Leeds fan. Everyone calls you \"Dirty Leeds\". You take it as a compliment.",
+      "club": "LEEDS UNITED",
+      "seed": 38,
+      "cueWords": {
+        "dirty": "Everyone",
+        "comp": "You"
+      },
+      "audio": "../audio/38-why-it-sucks-leeds-united-fan/07.wav",
+      "wordTimes": [
+        0.1,
+        0.3,
+        0.4,
+        0.6,
+        0.82,
+        1.04,
+        1.28,
+        1.46,
+        1.98,
+        2.22,
+        2.54,
+        2.92,
+        3.4,
+        4.18,
+        4.26,
+        4.4,
+        4.52,
+        4.62,
+        4.74
+      ],
+      "cues": {
+        "dirty": 1.98,
+        "comp": 4.18
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "ldmot",
+      "text": "Up. Down. Spied on. Sold out. Marching on together.",
+      "club": "LEEDS UNITED",
+      "seed": 38,
+      "cueWords": {
+        "up": "Up",
+        "down": "Down",
+        "spied": "Spied",
+        "sold": "Sold",
+        "mot": "Marching"
+      },
+      "audio": "../audio/38-why-it-sucks-leeds-united-fan/08.wav",
+      "wordTimes": [
+        0.1,
+        0.36,
+        1.08,
+        1.22,
+        1.76,
+        1.98,
+        2.58,
+        2.76,
+        3.16
+      ],
+      "cues": {
+        "up": 0.1,
+        "down": 0.36,
+        "spied": 1.08,
+        "sold": 1.76,
+        "mot": 2.58
+      },
+      "pad": 0.1
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a Leeds fan who's still marching. And which club is next? Drop it in the comments!",
+      "club": "LEEDS UNITED",
+      "seed": 38,
+      "cueWords": {
+        "next": "And"
+      },
+      "audio": "../audio/38-why-it-sucks-leeds-united-fan/09.wav",
+      "wordTimes": [
+        0.1,
+        0.2,
+        0.34,
+        0.54,
+        0.78,
+        1.1,
+        1.28,
+        1.98,
+        2.16,
+        2.34,
+        2.54,
+        2.68,
+        3.36,
+        3.48,
+        3.58,
+        3.64,
+        3.76
+      ],
+      "cues": {
+        "next": 1.98
+      },
+      "pad": 0.9
+    }
+  ],
+  "titleBg": "#1d428a",
+  "punch": true
+}

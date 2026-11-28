@@ -1,0 +1,139 @@
+{
+  "title": "Why it sucks being a Beerschot fan",
+  "page": "cartoon/index.html",
+  "sfx": "cartoon/sfx",
+  "clubWord": "beer",
+  "clubAt": 2.8,
+  "article": "A",
+  "fanKit": {
+    "shirt": "#5b2d86",
+    "trim": "#ffffff",
+    "pants": "#ffffff"
+  },
+  "flatCrowd": [
+    "#5b2d86",
+    "#5b2d86",
+    "#ffffff",
+    "#8a6ad0"
+  ],
+  "scarf": [
+    "#5b2d86",
+    "#ffffff"
+  ],
+  "tagLine": "NOT AN ANTWERP FAN 💜",
+  "scenes": [
+    {
+      "shot": "fanhook",
+      "text": "Why it sucks being a... Beerschot fan!",
+      "club": "BEERSCHOT",
+      "seed": 37
+    },
+    {
+      "shot": "bs5",
+      "text": "It starts when you're five. Your club goes bankrupt. Gone. So the fans start again. In the fourth division.",
+      "club": "BEERSCHOT",
+      "seed": 37,
+      "cueWords": {
+        "gone": "Gone",
+        "start": "So"
+      }
+    },
+    {
+      "shot": "bs8",
+      "text": "Age eight. Your away games are against villages. One of them has a cow next to the pitch. The cow has more fans than you.",
+      "club": "BEERSCHOT",
+      "seed": 37,
+      "cueWords": {
+        "one": "One",
+        "cow": [
+          "The",
+          2
+        ]
+      }
+    },
+    {
+      "shot": "bs11",
+      "text": "Age eleven. Promoted to the first division! You made it back! Two years later... you finish last.",
+      "club": "BEERSCHOT",
+      "seed": 37,
+      "cueWords": {
+        "two": "Two"
+      }
+    },
+    {
+      "shot": "bs13",
+      "text": "Age thirteen. Your colours are purple and white. Everyone thinks you're Anderlecht. That's worse than relegation.",
+      "club": "BEERSCHOT",
+      "seed": 37,
+      "cueWords": {
+        "and": "Everyone",
+        "worse": "That's"
+      }
+    },
+    {
+      "shot": "bs15",
+      "text": "Age fifteen. Your city rival wins the league. You win... the second division. Your Antwerp friends send you a congratulations card. It says: \"Cute.\"",
+      "club": "BEERSCHOT",
+      "seed": 37,
+      "cueWords": {
+        "win": "You",
+        "card": [
+          "Your",
+          2
+        ],
+        "cute": "It"
+      }
+    },
+    {
+      "shot": "bs17",
+      "text": "Age seventeen. Relegated. Again. At this point, the second division feels like home.",
+      "club": "BEERSCHOT",
+      "seed": 37,
+      "cueWords": {
+        "home": "At"
+      }
+    },
+    {
+      "shot": "bsthing",
+      "text": "That's the thing about being a Beerschot fan. Your club died... and you still showed up.",
+      "club": "BEERSCHOT",
+      "seed": 37,
+      "cueWords": {
+        "died": "Your",
+        "showed": "and"
+      }
+    },
+    {
+      "shot": "bsstill",
+      "text": "Bankrupt. Fourth division. Relegated twice. Still here. Still purple. Still not Anderlecht.",
+      "club": "BEERSCHOT",
+      "seed": 37,
+      "cueWords": {
+        "bank": "Bankrupt",
+        "fourth": "Fourth",
+        "rel": "Relegated",
+        "s1": [
+          "Still",
+          1
+        ],
+        "s2": [
+          "Still",
+          2
+        ],
+        "s3": [
+          "Still",
+          3
+        ]
+      }
+    },
+    {
+      "shot": "fanout",
+      "text": "Tag a Beerschot fan. Not an Antwerp fan. And which club is next? Drop it in the comments!",
+      "club": "BEERSCHOT",
+      "seed": 37,
+      "cueWords": {
+        "next": "And"
+      }
+    }
+  ]
+}
